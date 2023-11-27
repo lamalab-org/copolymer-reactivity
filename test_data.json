@@ -1,0 +1,219 @@
+{
+  "data": [
+    {
+      "source": "https://doi.org/10.1002/macp.1985.021860820",
+      "reaction": [
+        {
+         "monomers": ["Methylacrylic acid", "Styren"],
+      "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "carbon tetrachloride",
+          "method": "solvent",
+          "temperature": 60,
+          "reaction_constants": {
+            "constant_1": 0.54,
+            "constant_2": 0.06
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.01,
+            "constant_conf_2": 0.03
+          }
+        },
+        {
+          "polymerization_type": "free radical polymerization",
+           "solvent": "chloroform",
+          "method": "solvent",
+          "temperature": 60,
+          "reaction_constants": {
+            "constant_1": 0.51,
+            "constant_2": 0.08
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.01,
+            "constant_conf_2": 0.03
+          }
+          },
+        {
+          "polymerization_type": "free radical polymerization",
+           "solvent": "acetone",
+          "method": "solvent",
+          "temperature": 60,
+          "reaction_constants": {
+            "constant_1": 0.43,
+            "constant_2": 0.65
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.00,
+            "constant_conf_2": 0.02
+          }
+        },
+        {
+          "polymerization_type": "free radical polymerization",
+           "solvent": "1,4-dioxane",
+          "method": "solvent",
+          "temperature": 60,
+          "reaction_constants": {
+            "constant_1": 0.41,
+            "constant_2": 0.59
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.02,
+            "constant_conf_2": 0.05
+          }
+        },
+        {
+          "polymerization_type": "free radical polymerization",
+           "solvent": "acetonitrile",
+          "method": "solvent",
+          "temperature": 60,
+          "reaction_constants": {
+            "constant_1": 0.06,
+            "constant_2": 0.29
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.02,
+            "constant_conf_2": 0.00
+          }
+        }
+      ]
+        }
+      ]
+
+    },
+    {
+      "source": "https://pubs.acs.org/doi/abs/10.1021/ja01122a046",
+      "reaction": [
+        {
+         "monomers": ["2-Vinylpyridine", "Methacrylic acid"],
+          "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "none",
+          "method": "bulk",
+          "temperature": 70,
+          "reaction_constants": {
+            "constant_1": 1.55,
+            "constant_2": 0.58
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.1,
+            "constant_conf_2": 0.05
+          }
+        }
+      ]
+        }
+      ]
+
+    },
+   {
+      "source": "https://doi.org/10.1002/app.1994.070531307",
+     "reaction": [
+       {
+        "monomers": ["Methacrylic acid", "Ethylacrylate"],
+      "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "water",
+          "method": "emulsion",
+          "temperature": 50,
+          "reaction_constants": {
+            "constant_1": 2.9,
+            "constant_2": 0.162,
+            "determination_method": "Kelen-Tudos method"
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": null,
+            "constant_conf_2": null
+          }
+        },
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "water",
+          "method": "emulsion",
+          "temperature": 50,
+          "reaction_constants": {
+            "constant_1": 2.58,
+            "constant_2": 0.157,
+            "determination_method": "EVM program"
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.13,
+            "constant_conf_2": 0.08
+          }
+        }
+      ]
+       }
+     ]
+    },
+    {
+      "source": "https://doi.org/10.1002/pol.1963.100010635",
+      "reaction": [
+        {
+         "monomers": ["2-Chloro-1,3-butadiene", "Methyl isopropenyl ketone"],
+          "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "water",
+          "method": "emulsion",
+          "temperature": 40,
+          "reaction_constants": {
+            "constant_1": 3.6,
+            "constant_2": 0.1
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": null,
+            "constant_conf_2": null
+          }
+        }
+      ]
+        },
+        {
+         "monomers": ["2-Chloro-1,3-butadiene", "Methyl acrylic acid"],
+      "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "water",
+          "method": "emulsion",
+          "temperature": 40,
+          "reaction_constants": {
+            "constant_1": 2.68,
+            "constant_2": 0.15
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": null,
+            "constant_conf_2": null
+          }
+        }
+      ]
+        }
+      ]
+    },
+    {
+      "source": "https://doi.org/10.1002/pol.1971.150090810",
+      "reaction": [
+        {
+         "monomers": ["Ethylen", "Vinyl acetat"],
+          "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "tert-butyl alcohol",
+          "method": "solvent",
+          "temperature": 62,
+          "reaction_constants": {
+            "constant_1": 0.743,
+            "constant_2": 1.515
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.005,
+            "constant_conf_2": 0.007
+          }
+        }
+      ]
+        }
+      ]
+
+    }
+  ]
+}
+
