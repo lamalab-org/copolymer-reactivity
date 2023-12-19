@@ -6,7 +6,7 @@ input_folder = 'markdown_output'
 output_folder = 'model_output'
 
 client = OpenAI(
-    api_key="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"
+    api_key=os.environ.get('OPENAI_API_KEY')
 )
 
 prompt = ""

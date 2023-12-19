@@ -1,19 +1,58 @@
 {
     "polymerizations": [
         {
-            "source": "Muroi20",
-            "polymerization reaction": "Emulsion polymerization",
-            "involved monomers": "Methacrylic acid (MAA) and Ethyl acrylate (EA)",
-            "used solvent": "Water",
-            "used polymerization method": "Semicontinuous emulsion polymerization technique",
-            "temperature": "50\u00b0C",
-            "polymerization reaction constants": {
-                "r1": "2.58",
-                "r2": "0.157"
+            "source": "The influence of molecular interaction on polymerization, 10a",
+            "polymerization reaction": "Free radical copolymerization",
+            "involved monomers": [
+                "methacrylic acid",
+                "styrene"
+            ],
+            "used solvent": "Various solvents: carbon tetrachloride, chloroform, acetone, 1,4-dioxane, acetonitrile",
+            "used polymerization method": "Free radical copolymerization initiated by 2,2'-azoisobutrynonitrile (AIBN)",
+            "temperature": "60 degC",
+            "polymerization reaction constants r1 and r2": {
+                "carbon tetrachloride": {
+                    "r_MA": 0.54,
+                    "r_St": 0.06
+                },
+                "chloroform": {
+                    "r_MA": 0.51,
+                    "r_St": 0.08
+                },
+                "acetone": {
+                    "r_MA": 0.43,
+                    "r_St": 0.65
+                },
+                "1,4-dioxane": {
+                    "r_MA": 0.41,
+                    "r_St": 0.59
+                },
+                "acetonitrile": {
+                    "r_MA": 0.06,
+                    "r_St": 0.29
+                }
             },
-            "confidence interval of polymerization reaction constant": {
-                "r1": "2.58 \u00b1 0.13",
-                "r2": "0.157 \u00b1 0.08"
+            "confidence interval of polymerization reaction constant r1 and r2": {
+                "carbon tetrachloride": {
+                    "r_MA": "0.01",
+                    "r_St": "0.03"
+                },
+                "chloroform": {
+                    "r_MA": "0.01",
+                    "r_St": "0.03"
+                },
+                "acetone": {
+                    "r_MA": "0.00",
+                    "r_St": "0.02"
+                },
+                "1,4-dioxane": {
+                    "r_MA": "0.02",
+                    "r_St": "0.05"
+                },
+                "acetonitrile": {
+                    "r_MA": "0.02",
+                    "r_St": "0.00"
+                }
             }
         }
     ]
