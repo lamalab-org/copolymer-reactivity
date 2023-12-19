@@ -1,34 +1,23 @@
 {
-    "polymerizations": [
-        {
-            "source": "NA",
-            "polymerization reaction": "NA",
-            "involved monomers": "NA",
-            "used solvent": "NA",
-            "used polymerization method": "NA",
-            "temperature": "NA",
-            "polymerization reaction constants r1 and r2": "NA",
-            "confidence interval of polymerization reaction constant r1 and r2": "NA"
+    "source": "E. I. du Pont de Nemours and Company, Inc., Elastomer Chemicals Department, Wilmington, Delaware",
+    "polymerization reaction": "Free-radical, emulsion copolymerization",
+    "involved monomers": [
+        "2-chloro-1,3-butadiene",
+        "methyl isopropenyl ketone",
+        "methacrylic acid"
+    ],
+    "used solvent": "Distilled water",
+    "used polymerization method": "Emulsion polymerization",
+    "temperature": "40\u00b0C",
+    "polymerization reaction constants": {
+        "2-chloro-1,3-butadiene/methyl isopropenyl ketone": {
+            "r1": 3.6,
+            "r2": 0.1
         },
-        {
-            "source": "NA",
-            "polymerization reaction": "NA",
-            "involved monomers": "NA",
-            "used solvent": "NA",
-            "used polymerization method": "NA",
-            "temperature": "NA",
-            "polymerization reaction constants r1 and r2": "NA",
-            "confidence interval of polymerization reaction constant r1 and r2": "NA"
-        },
-        {
-            "source": "NA",
-            "polymerization reaction": "NA",
-            "involved monomers": "NA",
-            "used solvent": "NA",
-            "used polymerization method": "NA",
-            "temperature": "NA",
-            "polymerization reaction constants r1 and r2": "NA",
-            "confidence interval of polymerization reaction constant r1 and r2": "NA"
+        "2-chloro-1,3-butadiene/methacrylic acid": {
+            "r1": 2.7,
+            "r2": 0.15
         }
-    ]
+    },
+    "confidence interval of polymerization reaction constant r1 and r2": "0.2-0.5 (for 2-chloro-1,3-butadiene/methyl isopropenyl ketone), 0.2-0.5 (for 2-chloro-1,3-butadiene/methacrylic acid)"
 }

@@ -1,22 +1,51 @@
 {
     "polymerizations": [
         {
-            "source": "Gamma Pool Facility at Brookhaven National Laboratory",
-            "polymerization reaction": "Copolymerization of ethylene and carbon monoxide",
-            "involved monomers": [
+            "source": "U. S. Atomic Energy Commission",
+            "polymerization_reaction": "Copolymerization of ethylene and carbon monoxide",
+            "involved_monomers": [
                 "ethylene",
                 "carbon monoxide"
             ],
-            "used solvent": "no solvent",
-            "used polymerization method": "gamma radiation initiated",
-            "temperature": "20\u00b0C",
-            "polymerization reaction constants r1 and r2": {
-                "r1": "22.0",
-                "r2": "NA"
-            },
-            "confidence interval of polymerization reaction constant r1 and r2": {
-                "r1": "NA",
-                "r2": "NA"
+            "used_solvent": "NA",
+            "used_polymerization_method": "gamma-ray initiated",
+            "temperature": "NA",
+            "polymerization_reaction_constants": {
+                "r1": "K**aa",
+                "r2": "K**ab",
+                "confidence_interval": "NA"
+            }
+        },
+        {
+            "source": "Brubaker et al. (1)",
+            "polymerization_reaction": "Copolymerization of ethylene and carbon monoxide",
+            "involved_monomers": [
+                "ethylene",
+                "carbon monoxide"
+            ],
+            "used_solvent": "cyclohexane",
+            "used_polymerization_method": "conventional peroxide initiators",
+            "temperature": "135\u00b0C",
+            "polymerization_reaction_constants": {
+                "r1": "K**aa",
+                "r2": "K**ab",
+                "confidence_interval": "NA"
+            }
+        },
+        {
+            "source": "Coffman et al. (2)",
+            "polymerization_reaction": "Copolymerization of ethylene and carbon monoxide",
+            "involved_monomers": [
+                "ethylene",
+                "carbon monoxide"
+            ],
+            "used_solvent": "NA",
+            "used_polymerization_method": "conventional peroxide initiators",
+            "temperature": "120-130\u00b0C",
+            "polymerization_reaction_constants": {
+                "r1": "K**aa",
+                "r2": "K**ab",
+                "confidence_interval": "NA"
             }
         }
     ]
