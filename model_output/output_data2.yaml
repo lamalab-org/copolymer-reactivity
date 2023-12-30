@@ -1,0 +1,26 @@
+Monomers: Methacrylic acid and styrene
+additional polymerization:
+  Monomers: Methacrylic acid and styrene
+  method: Initiated by benzoyl peroxide
+  polymerization type: Free radical copolymerization
+  reaction constant conf:
+    r_MA: 0.02
+    r_St: 0.03
+  reaction constants:
+    r_MA: 0.65
+    r_St: 0.21
+  solvent:
+  - chloroform
+  source: 10.1002/pola.24303
+  temperature: 70 degC
+method: Complexation-induced polymerization
+polymerization type: Complexation-induced polymerization
+reaction constant conf:
+  r_MA: NA
+  r_St: NA
+reaction constants:
+  r_MA: NA
+  r_St: NA
+solvent: deuterochloroform
+source: 10.1021/ma400245r
+temperature: Not provided

@@ -1,52 +1,48 @@
 {
-    "polymerizations": [
-        {
-            "source": "U. S. Atomic Energy Commission",
-            "polymerization_reaction": "Copolymerization of ethylene and carbon monoxide",
-            "involved_monomers": [
-                "ethylene",
-                "carbon monoxide"
-            ],
-            "used_solvent": "NA",
-            "used_polymerization_method": "gamma-ray initiated",
-            "temperature": "NA",
-            "polymerization_reaction_constants": {
-                "r1": "K**aa",
-                "r2": "K**ab",
-                "confidence_interval": "NA"
-            }
+    "source": "DOI: 10.1021/ma025582j",
+    "polymerization type": "Copolymerization",
+    "Monomers": "ethylene and vinyl acetate",
+    "solvent": "tert-butyl alcohol",
+    "method": "quantitative gas chromatography",
+    "temperature": "62\u00b0C",
+    "reaction constants": {
+        "r1": 0.743,
+        "r2": 1.515
+    },
+    "reaction constant conf": {
+        "r1_conf": "0.005",
+        "r2_conf": "0.007"
+    },
+    "polymerization_2": {
+        "source": "DOI: 10.1021/ma025582j",
+        "polymerization type": "Copolymerization",
+        "Monomers": "ethylene and vinyl acetate",
+        "solvent": "tert-butyl alcohol",
+        "method": "quantitative gas chromatography",
+        "temperature": "62\u00b0C",
+        "reaction constants": {
+            "r1": "NA",
+            "r2": "NA"
         },
-        {
-            "source": "Brubaker et al. (1)",
-            "polymerization_reaction": "Copolymerization of ethylene and carbon monoxide",
-            "involved_monomers": [
-                "ethylene",
-                "carbon monoxide"
-            ],
-            "used_solvent": "cyclohexane",
-            "used_polymerization_method": "conventional peroxide initiators",
-            "temperature": "135\u00b0C",
-            "polymerization_reaction_constants": {
-                "r1": "K**aa",
-                "r2": "K**ab",
-                "confidence_interval": "NA"
-            }
-        },
-        {
-            "source": "Coffman et al. (2)",
-            "polymerization_reaction": "Copolymerization of ethylene and carbon monoxide",
-            "involved_monomers": [
-                "ethylene",
-                "carbon monoxide"
-            ],
-            "used_solvent": "NA",
-            "used_polymerization_method": "conventional peroxide initiators",
-            "temperature": "120-130\u00b0C",
-            "polymerization_reaction_constants": {
-                "r1": "K**aa",
-                "r2": "K**ab",
-                "confidence_interval": "NA"
-            }
+        "reaction constant conf": {
+            "r1_conf": "NA",
+            "r2_conf": "NA"
         }
-    ]
+    },
+    "polymerization_3": {
+        "source": "DOI: NA",
+        "polymerization type": "N/A",
+        "Monomers": "N/A",
+        "solvent": "N/A",
+        "method": "N/A",
+        "temperature": "N/A",
+        "reaction constants": {
+            "r1": "NA",
+            "r2": "NA"
+        },
+        "reaction constant conf": {
+            "r1_conf": "NA",
+            "r2_conf": "NA"
+        }
+    }
 }

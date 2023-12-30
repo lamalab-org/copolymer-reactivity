@@ -1,20 +1,64 @@
 {
-    "polymerizations": [
-        {
-            "source": "Amphoteric Polyelectrolytes. I. 2-Vinylpyridine-Metacrylic Acid Copolymers",
-            "polymerization reaction": "bulk polymerization",
-            "involved monomers": "2-Vinylpyridine, methacrylic acid",
-            "used solvent": "NA",
-            "used polymerization method": "bulk polymerization",
-            "temperature": "70\u00b0C",
-            "polymerization reaction constants r1 and r2": {
-                "r1": 1.56,
-                "r2": 0.58
-            },
-            "confidence interval of polymerization reaction constant r1 and r2": {
-                "r1": "0.1",
-                "r2": "0.05"
-            }
+    "source": "DOI: NA",
+    "polymerization type": "Emulsion copolymerization",
+    "Monomers": "2-Chloro-1,3-butadiene and Methacrylic acid",
+    "solvent": "Water",
+    "method": "Free-radical polymerization",
+    "temperature": "40 \b0C",
+    "reaction constants": {
+        "r1": 4.6,
+        "r2": 0.1
+    },
+    "reaction constant conf": {
+        "r1_conf": "0.3",
+        "r2_conf": "0.05"
+    },
+    "polymerization_2": {
+        "source": "DOI: 10.1021/ma025582j",
+        "polymerization type": "Copolymerization",
+        "Monomers": "ethylene and vinyl acetate",
+        "solvent": "tert-butyl alcohol",
+        "method": "quantitative gas chromatography",
+        "temperature": "62\u00b0C",
+        "reaction constants": {
+            "r1": "NA",
+            "r2": "NA"
+        },
+        "reaction constant conf": {
+            "r1_conf": "NA",
+            "r2_conf": "NA"
         }
-    ]
+    },
+    "polymerization_3": {
+        "source": "DOI: NA",
+        "polymerization type": "Emulsion copolymerization",
+        "Monomers": "2-Chloro-1,3-butadiene and Methacrylic acid",
+        "solvent": "Water",
+        "method": "Free-radical polymerization",
+        "temperature": "40 \b0C",
+        "reaction constants": {
+            "r1": 2.7,
+            "r2": 0.15
+        },
+        "reaction constant conf": {
+            "r1_conf": "0.2",
+            "r2_conf": "0.05"
+        }
+    },
+    "polymerization_4": {
+        "source": "DOI: NA",
+        "polymerization type": "Emulsion copolymerization",
+        "Monomers": "2-Chloro-1,3-butadiene and Methylisopropenylketone",
+        "solvent": "NA",
+        "method": "radical polymerization",
+        "temperature": "NA",
+        "reaction constants": {
+            "r1": 3.6,
+            "r2": 0.1
+        },
+        "reaction constant conf": {
+            "r1_conf": "NA",
+            "r2_conf": "NA"
+        }
+    }
 }
