@@ -1,23 +1,13 @@
 {
-    "source": "E. I. du Pont de Nemours and Company, Inc., Elastomer Chemicals Department, Wilmington, Delaware",
-    "polymerization reaction": "Free-radical, emulsion copolymerization",
-    "involved monomers": [
-        "2-chloro-1,3-butadiene",
-        "methyl isopropenyl ketone",
-        "methacrylic acid"
-    ],
-    "used solvent": "Distilled water",
-    "used polymerization method": "Emulsion polymerization",
-    "temperature": "40\u00b0C",
-    "polymerization reaction constants": {
-        "2-chloro-1,3-butadiene/methyl isopropenyl ketone": {
-            "r1": 3.6,
-            "r2": 0.1
-        },
-        "2-chloro-1,3-butadiene/methacrylic acid": {
-            "r1": 2.7,
-            "r2": 0.15
-        }
+    "source": "DOi url",
+    "polymerization type": "Copolymerization",
+    "Monomers": "methacrylic acid and styrene",
+    "solvent": "chloroform",
+    "method": "gel permeation chromatography (GPC)",
+    "temperature": "NA",
+    "reaction constants": {
+        "r_MA": 0.66,
+        "r_St": 0.2
     },
-    "confidence interval of polymerization reaction constant r1 and r2": "0.2-0.5 (for 2-chloro-1,3-butadiene/methyl isopropenyl ketone), 0.2-0.5 (for 2-chloro-1,3-butadiene/methacrylic acid)"
+    "reaction constant conf": "NA"
 }

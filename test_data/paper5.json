@@ -1,0 +1,24 @@
+{
+  "source": "https://doi.org/10.1002/pol.1971.150090810",
+      "reaction": [
+        {
+         "monomers": ["Ethylen", "Vinyl acetat"],
+          "combinations": [
+        {
+          "polymerization_type": "free radical polymerization",
+          "solvent": "tert-butyl alcohol",
+          "method": "solvent",
+          "temperature": 62,
+          "reaction_constants": {
+            "constant_1": 0.743,
+            "constant_2": 1.515
+          },
+          "reaction_constant_conf": {
+            "constant_conf_1": 0.005,
+            "constant_conf_2": 0.007
+          }
+        }
+      ]
+        }
+      ]
+}

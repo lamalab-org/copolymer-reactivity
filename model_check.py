@@ -1,4 +1,5 @@
 import json
+import os
 import pubchempy as pcp
 
 
@@ -13,45 +14,56 @@ def get_smiles_from_name(monomer):
         return f"PubChem Error: {str(e)}"
 
 
-with open('test_data.json', 'r') as file:
-    test_data = json.load(file)
-
-with open('extracted_data.json', 'r') as file:
-    extracted_data = json.load(file)
-
 monomer_error = 0
 reaction_const_error = 0
 sum_error = 0
 not_found_error = 0
 
-# Iteration über beide Datensätze gleichzeitig
-for test_entry, extracted_entry in zip(test_data['reaction'], extracted_data['reaction']):
-    for test_combination, extracted_combination in zip(test_entry['combinations'], extracted_entry['combinations']):
+print(monomer_error)
 
-        test_monomer = test_combination['monomers']
-        extracted_monomer = extracted_combination['monomers']
+model_folder = 'model_output'
+test_folder = 'test_data'
+
+model_files = sorted(os.listdir(model_folder))
+test_files = sorted(os.listdir(test_folder))
+
+for model_file, test_file in zip(model_files, test_files):
+
+    model_path = os.path.join(model_folder, model_file)
+    test_path = os.path.join(test_folder, test_file)
+    with open(model_path, 'r') as file:
+        model_data = json.load(file)
+    with open(test_path, 'r') as file:
+        test_data = json.load(file)
+
+    for model_reaction, test_reaction in zip(model_data['polymerizations'], test_data['reaction']):
+
+        model_monomer = model_reaction['involved monomers']
+        test_monomer = test_reaction['monomers']
+        smiles_model_monomer = get_smiles_from_name(model_monomer)
         smiles_test_monomer = get_smiles_from_name(test_monomer)
-        smiles_extracted_monomer = get_smiles_from_name(extracted_monomer)
 
-        if set(smiles_test_monomer) == set(smiles_extracted_monomer):
+        if set(smiles_test_monomer) == set(smiles_model_monomer):
             print("Monomers match:", test_monomer)
         else:
             monomer_error += 1
-            print("Monomers do not match:", test_monomer, "vs", extracted_monomer)
+            print("Monomers do not match:", test_monomer, "vs", model_monomer)
 
-        test_constants = test_combination['reaction_constants']
-        extracted_constants = extracted_combination['reaction_constants']
+        for model_combination, test_combination in zip(model_data['combinations'], test_data['combinations']):
 
-        for key, value in test_constants.items():
-            if key in extracted_constants:
-                if abs(value - extracted_constants[key]) == 0:
-                    print(f"Reaction constant {key} matches:", value)
+            test_constants = test_combination['reaction_constants']
+            model_constants = model_combination['polymerization_reaction_constants']
+
+            for key, value in test_constants.items():
+                if key in model_constants:
+                    if abs(value - model_constants[key]) == 0:
+                        print(f"Reaction constant {key} matches:", value)
+                    else:
+                        reaction_const_error += 1
+                        print(f"Reaction constant {key} does not match:", value, "vs", model_constants[key])
                 else:
-                    reaction_const_error += 1
-                    print(f"Reaction constant {key} does not match:", value, "vs", extracted_constants[key])
-            else:
-                not_found_error += 1
-                print(f"Reaction constant {key} not found in extracted data")
+                    not_found_error += 1
+                    print(f"Reaction constant {key} not found in extracted data")
 
 sum_error = monomer_error + reaction_const_error + not_found_error
 print("monomer names do not match:" + str(monomer_error))
