@@ -17,9 +17,9 @@ from rdkit import Chem
         ("ethanoate", "CC(=O)[O-]"),
         ("ethanoic acid", "CC(=O)O"),
         ("ethanenitrile", "CC#N"),
-        ('carbon tetrachloride', 'ClC(Cl)(Cl)Cl'),
-        ('2-Chloro-1,3-butadiene', 'C=CC(=C)Cl'),
-        ('Methyl acrylic acid', 'CC(=C)C(=O)O'),
+        ("carbon tetrachloride", "ClC(Cl)(Cl)Cl"),
+        ("2-Chloro-1,3-butadiene", "C=CC(=C)Cl"),
+        ("Methyl acrylic acid", "CC(=C)C(=O)O"),
     ],
 )
 def test_name_to_smiles(name, smiles):
