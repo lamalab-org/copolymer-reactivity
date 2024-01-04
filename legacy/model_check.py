@@ -36,9 +36,7 @@ for model_file, test_file in zip(model_files, test_files):
     with open(test_path, "r") as file:
         test_data = json.load(file)
 
-    for model_reaction, test_reaction in zip(
-        model_data["polymerizations"], test_data["reaction"]
-    ):
+    for model_reaction, test_reaction in zip(model_data["polymerizations"], test_data["reaction"]):
 
         model_monomer = model_reaction["involved monomers"]
         test_monomer = test_reaction["monomers"]
