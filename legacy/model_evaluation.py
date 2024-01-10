@@ -1,35 +1,37 @@
-import yaml
 import os
+import src.copolextractor.analyzer as az
 
 
 def load_yaml_combinations(file_path):
-    with open(file_path, "r") as file:
-        data = yaml.safe_load(file)
-        combinations_count = 0
-        for reaction in data["reaction"]:
-            combinations_count += len(reaction["combinations"])
-        return combinations_count
+    data = az.load_yaml(file_path)
+    combinations_count = az.get_total_number_of_combinations(data)
+    return combinations_count
 
 
 def load_yaml_reactions(file_path):
-    with open(file_path, "r") as file:
-        yaml.safe_load(file)
-        reaction_count = 0
-        reaction_count += len("reaction")
-        return reaction_count
+    data = az.load_yaml(file_path)
+    reaction_count = az.get_number_of_reactions(data)
+    return reaction_count
+
+
+def get_file_path(path, file):
+    file_path = os.path.join(path, file)
+    return file_path
 
 
 reaction_number_error = 0
 combination_number_error = 0
+matching_monomer_error = 0
 
-test_path = "test_data"
-model_path = "test_data2"
+
+test_path = "./../test_data"
+model_path = "./../test_data2"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
 for test_file, model_file in zip(test_files, model_files):
-    test_file_path = os.path.join(test_path, test_file)
-    model_file_path = os.path.join(model_path, model_file)
+    test_file_path = get_file_path(test_path, test_file)
+    model_file_path = get_file_path(model_path, model_file)
 
     len_combinations_test = load_yaml_combinations(test_file_path)
     len_combinations_model = load_yaml_combinations(model_file_path)
@@ -56,3 +58,16 @@ for test_file, model_file in zip(test_files, model_files):
 
 print(f"reaction-number-error is {reaction_number_error}")
 print(f"combination-number-error is {combination_number_error}")
+
+for test_file, model_file in zip(test_files, model_files):
+    test_file_path = get_file_path(test_path, test_file)
+    model_file_path = get_file_path(model_path, model_file)
+    test_data = az.load_yaml(test_file_path)
+    model_data = az.load_yaml(model_file_path)
+    matching_monomer_error += az.find_matching_reaction(model_data, test_data)
+    #entweder vorher alle in eine liste oder hier wieder beide sachen von model und test eingeben
+    #gibt die anzahl der gefundenen matching combinations und den matching score aus als tupel
+    #matching_combinations_count = az.find_matching_combination(combination: List[dict], polymerization_type: str, solvent: str, temperature: Union[str, float, int], method: str)
+
+print("matching-monomer-error: ", matching_monomer_error)
+
