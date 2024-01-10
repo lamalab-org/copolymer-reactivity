@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 from typing import Union, List, Tuple
-from copolextractor.utils import name_to_smiles
+from src.copolextractor.utils import name_to_smiles
 from thefuzz import fuzz
 
 
@@ -38,12 +38,12 @@ def _compare_monomers(test_monomers: List[str], model_monomers: List[str]) -> bo
         return set(test_monomer_smiles) == set(model_monomer_smiles)
 
 
-def find_matching_reaction(data: dict, monomers: List[str]) -> int:
+def find_matching_reaction(model_data: dict, test_data: dict) -> int:
     """Find matching reaction in data
 
     Args:
-        data (dict): Extracted data
-        monomers (List[str]): Expected monomers
+        model_data (dict): Extracted data
+        test_data (dict): test data
 
     Raises:
         ValueError: Multiple matching reactions found
@@ -52,17 +52,18 @@ def find_matching_reaction(data: dict, monomers: List[str]) -> int:
         int: Index of matching reaction
     """
     matching_rxn_ids = []
-    rxns = _extract_reactions(data)
-    for i, rxn in enumerate(rxns):
-        if _compare_monomers(monomers, rxn["monomers"]):
+    rxns_model = _extract_reactions(model_data)
+    rxns_test = _extract_reactions(test_data)
+    for i, (rxn_model, rxn_test) in enumerate(zip(rxns_model, rxns_test)):
+        if _compare_monomers(rxn_model['monomers'], rxn_model["monomers"]):
             matching_rxn_ids.append(i)
 
     if len(matching_rxn_ids) == 0:
-        return None
+        return 1
     elif len(matching_rxn_ids) > 1:
         raise ValueError("Multiple matching reactions found")
     else:
-        return matching_rxn_ids[0]
+        return 0
 
 
 def find_matching_combination(combination: List[dict], polymerization_type: str, solvent: str, temperature: Union[str, float, int], method: str) -> Tuple[int, float]:
