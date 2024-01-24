@@ -1,5 +1,6 @@
 import os
 import src.copolextractor.analyzer as az
+from sklearn.metrics import mean_squared_error
 
 
 def load_yaml_combinations(file_path):
@@ -22,6 +23,13 @@ def get_file_path(path, file):
 reaction_number_error = 0
 combination_number_error = 0
 matching_monomer_error = 0
+reaction_const_conf_error = 0
+reaction_const_error = 0
+test_reaction_constants = []
+model_reaction_constants = []
+combined_score = []
+combined_mse_const = []
+combined_mse_conf = []
 
 
 test_path = "./../test_data"
@@ -56,18 +64,58 @@ for test_file, model_file in zip(test_files, model_files):
         print("Number of combinations is different.")
         combination_number_error += 1
 
-print(f"reaction-number-error is {reaction_number_error}")
-print(f"combination-number-error is {combination_number_error}")
 
 for test_file, model_file in zip(test_files, model_files):
+    print(test_file)
+    print(model_file)
     test_file_path = get_file_path(test_path, test_file)
     model_file_path = get_file_path(model_path, model_file)
     test_data = az.load_yaml(test_file_path)
     model_data = az.load_yaml(model_file_path)
-    matching_monomer_error += az.find_matching_reaction(model_data, test_data)
-    #entweder vorher alle in eine liste oder hier wieder beide sachen von model und test eingeben
-    #gibt die anzahl der gefundenen matching combinations und den matching score aus als tupel
-    #matching_combinations_count = az.find_matching_combination(combination: List[dict], polymerization_type: str, solvent: str, temperature: Union[str, float, int], method: str)
+    for i, reaction in enumerate(test_data['reaction']):
+        print('iteration: ', i)
+        test_monomers = reaction['monomers']
+        model_monomer_index = az.find_matching_reaction(model_data, test_monomers)
+        test_monomer_index = i
+        if model_monomer_index is not None:
+            for j, combination in enumerate(reaction['combinations']):
 
+                print('matching_monomer_error: ', matching_monomer_error)
+                specific_reaction = model_data['reaction'][model_monomer_index]
+                specific_combination = specific_reaction['combinations']
+                model_combinations = az.extract_combinations(specific_combination)
+                temperature, polym_method, polym_type, solvent, reaction_constants, reaction_constant_confidence, determination_method = az.get_metadata_polymerization(combination)
+                index, score = az.find_matching_combination(model_combinations, polym_type,
+                                                            solvent, temperature, polym_method, determination_method)
+                print("combination match: ", score)
+                combined_score.append(score)
+
+                test_reaction_constants, test_reaction_const_conf = az.get_reaction_constant(reaction_constants, reaction_constant_confidence)
+                model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(combination['reaction_constants'], combination['reaction_constant_conf'])
+                if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
+                    reaction_const_error += 1
+                else:
+                    mse_const = mean_squared_error(test_reaction_constants, model_reaction_constants)
+
+                if test_reaction_const_conf == model_reaction_const_conf == [None, None]:
+                    continue
+                elif model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
+                    reaction_const_conf_error += 1
+                else:
+                    mse_conf = mean_squared_error(test_reaction_const_conf, model_reaction_const_conf)
+                combined_mse_const.append(mse_const)
+                combined_mse_conf.append(mse_conf)
+        else:
+            matching_monomer_error += 1
+
+average_mse_const = sum(combined_mse_const) / len(combined_mse_const)
+average_mse_conf = sum(combined_mse_conf) / len(combined_mse_conf)
+average_score = sum(combined_score) / len(combined_score)
 print("matching-monomer-error: ", matching_monomer_error)
-
+print(f"reaction-number-error is {reaction_number_error}")
+print(f"combination-number-error is {combination_number_error}")
+print(f"reaction constant error is {reaction_const_error}")
+print(f"reaction constant confidence error is {reaction_const_conf_error}")
+print(f"average score of fuzzy matching is {average_score}")
+print(f"average mse of reaction constants is {average_mse_const}")
+print(f"average mse of reaction constants confidence is {average_mse_conf}")
