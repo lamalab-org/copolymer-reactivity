@@ -1,0 +1,47 @@
+reaction:
+- combinations:
+  - method: bulk
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 1.5
+      constant_2: 0.22
+    solvent:
+    temperature: 40
+    determination_method:
+  monomers:
+  - Methacrylic acid sulpholanate
+  - Styrene
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.25
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 3.34
+      constant_2: 0.67
+    solvent:
+    temperature: 50
+    determination_method:
+  monomers:
+  - Methacrylic acid sulpholanate
+  - Methyl methacrylat
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 1.0
+      constant_2: 0.83
+    solvent:
+    temperature: 60
+    determination_method:
+  monomers:
+  - Methacrylic acid sulpholanate
+  - Methylacrylic acid
+source: https://doi.org/10.1016/0032-3950(74)90567-X
