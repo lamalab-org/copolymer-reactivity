@@ -55,6 +55,16 @@ def test_get_total_number_of_combinations():
             ["water", "ethanol"],
             1,
         ),
+(
+            {
+                "reaction": [
+                    {"monomers": ["styrol", "benzene"]},
+                    {"monomers": ["oxidane", "ethanol"]},
+                ]
+            },
+            ["styren", "benzene"],
+            0,
+        ),
     ],
 )
 def test_find_matching_reaction(data, monomers, expected):

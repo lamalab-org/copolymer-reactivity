@@ -40,7 +40,7 @@ def name_to_smiles(name: str) -> str:
         return canonicalize_smiles(smiles)
     except Exception:
         try:
-            compound = pcp.get_compounds(smiles, "name")
+            compound = pcp.get_compounds(name, "name")
             return canonicalize_smiles(compound[0].canonical_smiles)
         except Exception:
             return None
