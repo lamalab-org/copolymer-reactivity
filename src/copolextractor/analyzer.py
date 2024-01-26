@@ -46,17 +46,15 @@ def _extract_monomers(data: dict) -> list:
 def get_metadata_polymerization(data: dict):
     temp = data['temperature']
     method = data['method']
-    type = data['polymerization_type']
+    polymer_type = data['polymerization_type']
     solvent = data['solvent']
     reaction_constants = data['reaction_constants']
     reaction_constant_confidence = data['reaction_constant_conf']
     determination_method = data['determination_method']
-    return temp, method, type, solvent, reaction_constants, reaction_constant_confidence, determination_method
+    return temp, method, polymer_type, solvent, reaction_constants, reaction_constant_confidence, determination_method
 
 
 def _compare_monomers(test_monomers: List[str], model_monomers: dict[str]) -> bool:
-    print(test_monomers)
-    print(model_monomers)
     if set(test_monomers) == set(model_monomers):
         return True
     else:
@@ -82,7 +80,6 @@ def find_matching_reaction(data1: dict, data2: dict) -> int:
     monomers1 = _extract_monomers(data1)
     for i, rxn1 in enumerate(monomers1):
         if _compare_monomers(rxn1, data2):
-                print('Matching monomers:', data2, rxn1)
                 matching_rxn_ids.append(i)
 
     if len(matching_rxn_ids) == 0:
@@ -108,11 +105,7 @@ def find_matching_combination(combination: List[dict], polymerization_type: str,
                 and comb["method"] == method
                 and comb['determination_method'] == determination_method
         ):
-            print(i)
-            print(solvent)
-            print(comb["solvent"])
             matching_idxs.append(i)
-    print(matching_idxs)
     if len(matching_idxs) == 1:
         return matching_idxs[0], 1
     elif len(matching_idxs) > 1:
