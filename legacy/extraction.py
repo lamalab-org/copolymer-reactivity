@@ -13,18 +13,27 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 prompt_template = """Here is the content of a section of the file: {}
                    Extract the polymerization information from each polymerization and report it in json format. 
                    Extract the following information:
-
-                   source: source as doi url
-                   polymerization type: polymerization reaction type
-                   Monomers: name of pair of involved monomers 
-                   solvent: used solvent
-                   method: used polymerization method
-                   temperature: used polymerization temperature
-                   reaction constants: polymerization reaction constants r1 and r2
-                   reaction constant conf: confidence interval of polymerization reaction constant r1 and r2
+                   
+                   reaction: 
+                   -combinations:
+                    -polymerization_type: polymerization reaction type (free radical polymerization, anionic polymerization, cationic polymerizatio,...)
+                     solvent: used solvent
+                     method: used polymerization method (solvent bulk,...)
+                     temperature: used polymerization temperature
+                     temperature_unit: unit of temperature
+                     reaction_constants: polymerization reaction constants r1 and r2
+                        -constant_1:
+                        -constant_2:
+                     reaction_constant_conf: confidence interval of polymerization reaction constant r1 and r2
+                        -constant_conf_1:
+                        -constant_conf_2:
+                     determination_method: method for determination of the r-values (Kelen-Tudor, ...)
+                    monomers: name of pair of involved monomers 
+                   source: doi url  
+                   
 
                    If the information is not provided put NA. If there are multiple polymerization's with different 
-                   parameters report as a separate polymerization."""
+                   parameters report as a separate reaction and combinations."""
 # load_dotenv()
 # langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 # llm = OpenAI()
