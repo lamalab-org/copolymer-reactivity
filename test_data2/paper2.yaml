@@ -3,14 +3,15 @@ reaction:
   - method: emulsion
     polymerization_type: free radical polymerization
     reaction_constant_conf:
-      constant_conf_1: null
-      constant_conf_2: null
+      constant_conf_1:
+      constant_conf_2:
     reaction_constants:
       constant_1: 2.9
       constant_2: 0.162
     determination_method: Kelen-Tudos method
     solvent: water
     temperature: 50
+    temperature_unit: °C
   - method: emulsion
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -22,6 +23,7 @@ reaction:
     determination_method: EVM program
     solvent: water
     temperature: 50
+    temperature_unit: °C
   monomers:
   - Methacrylic acid
   - Ethylacrylate
