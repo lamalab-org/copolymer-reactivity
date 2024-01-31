@@ -1,26 +1,66 @@
-Monomers: Methacrylic acid and styrene
-additional polymerization:
-  Monomers: Methacrylic acid and styrene
-  method: Initiated by benzoyl peroxide
-  polymerization type: Free radical copolymerization
-  reaction constant conf:
-    r_MA: 0.02
-    r_St: 0.03
-  reaction constants:
-    r_MA: 0.65
-    r_St: 0.21
-  solvent:
-  - chloroform
-  source: 10.1002/pola.24303
-  temperature: 70 degC
-method: Complexation-induced polymerization
-polymerization type: Complexation-induced polymerization
-reaction constant conf:
-  r_MA: NA
-  r_St: NA
-reaction constants:
-  r_MA: NA
-  r_St: NA
-solvent: deuterochloroform
-source: 10.1021/ma400245r
-temperature: Not provided
+reactions:
+- combinations:
+  - determination_method: Kelen-Tudos method
+    method: initiated by 2,2'-azoisobutyronitrile
+    polymerization_type: free radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 0.54
+      constant_2: 0.06
+    solvent: carbon tetrachloride
+    temperature: 60
+    temperature_unit: degC
+  - determination_method: Kelen-Tudos method
+    method: initiated by 2,2'-azoisobutyronitrile
+    polymerization_type: free radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 0.51
+      constant_2: 0.08
+    solvent: chloroform
+    temperature: 60
+    temperature_unit: degC
+  - determination_method: Kelen-Tudos method
+    method: initiated by 2,2'-azoisobutyronitrile
+    polymerization_type: free radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.0
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 0.43
+      constant_2: 0.65
+    solvent: acetone
+    temperature: 60
+    temperature_unit: degC
+  - determination_method: Kelen-Tudos method
+    method: initiated by 2,2'-azoisobutyronitrile
+    polymerization_type: free radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.41
+      constant_2: 0.59
+    solvent: 1,4-dioxane
+    temperature: 60
+    temperature_unit: degC
+  - determination_method: Kelen-Tudos method
+    method: initiated by 2,2'-azoisobutyronitrile
+    polymerization_type: free radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.0
+    reaction_constants:
+      constant_1: 0.06
+      constant_2: 0.29
+    solvent: acetonitrile
+    temperature: 60
+    temperature_unit: degC
+  monomers:
+  - methacrylic acid
+  - styrene
+  source: '10a: Part 9: H. Boudevska, V. Sinigersky, Makromol. Chem. 185, 531 (1984)'
