@@ -1,8 +1,18 @@
-Monomers: Methacrylic acid and N,N-diethylaminoethyl methacrylate
-method: Suspension polymerization
-polymerization type: Suspension polymerization
-reaction constant conf: NA
-reaction constants: NA
-solvent: Not specified
-source: https://doi.org/N/A
-temperature: Not specified
+reactions:
+- combinations:
+  - determination_method: NA
+    method: Bulk polymerization
+    polymerization_type: Bulk polymerization
+    reaction_constant_conf:
+      constant_conf_1: '0.1'
+      constant_conf_2: '0.05'
+    reaction_constants:
+      constant_1: '1.56'
+      constant_2: '0.58'
+    solvent: NA
+    temperature: '70'
+    temperature_unit: degC
+  monomers:
+  - 2-Vinylpyridine
+  - Methacrylic acid
+  source: NA
