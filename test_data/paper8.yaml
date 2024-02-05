@@ -1,0 +1,18 @@
+reaction:
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1:
+      constant_conf_2:
+    reaction_constants:
+      constant_1: 7
+      constant_2: 0
+    solvent: toluene
+    temperature: 20
+    temperature_unit: °C
+    determination_method:
+  monomers:
+  - Acrylonitrile
+  - Ethylene
+source: https://doi.org/10.1016/0032-3950(62)90554-3
