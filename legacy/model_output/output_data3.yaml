@@ -1,51 +1,46 @@
-Monomers: Ethylene and vinyl acetate
-additional polymerization:
-  Monomers: Methacrylic acid and styrene
-  method: Initiated by benzoyl peroxide
-  polymerization type: Free radical copolymerization
-  reaction constant conf:
-    r_MA: 0.02
-    r_St: 0.03
-  reaction constants:
-    r_MA: 0.65
-    r_St: 0.21
-  solvent:
-  - chloroform
-  source: 10.1002/pola.24303
-  temperature: 70 degC
-additional polymerizations:
-- Monomers: Methacrylic acid and styrene
-  method: Initiated by benzoyl peroxide
-  polymerization type: Free radical copolymerization
-  reaction constant conf:
-    r_MA: 0.02
-    r_St: 0.03
-  reaction constants:
-    r_MA: 0.65
-    r_St: 0.21
-  solvent: chloroform
-  source: 10.1002/pola.24303
-  temperature: 70 degC
-- Monomers: Ethylene and vinyl acetate
-  method: Free-radical initiated
-  polymerization type: Radical copolymerization
-  reaction constant conf:
-    r_E: 0.005
-    r_VA: 0.007
-  reaction constants:
-    r_E: 0.743
-    r_VA: 1.515
-  solvent: tert-butyl alcohol
-  source: 10.1002/pola.24303
-  temperature: 62 degC
-method: Initiated by free radicals
-polymerization type: Free-radical copolymerization
-reaction constant conf:
-  r_E: 0.005
-  r_VA: 0.007
-reaction constants:
-  r_E: 0.743
-  r_VA: 1.515
-solvent: NA
-source: https://pubs.acs.org/doi/abs/10.1021/ma00693a003
-temperature: 62 degC
+reactions:
+- combinations:
+    determination_method: NA
+    method: free-radical initiation
+    monomers: ethylene and vinyl acetate
+    polymerization_type: free-radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: liquid phase
+    source: NA
+    temperature: '62'
+    temperature_unit: degC
+- combinations:
+    determination_method: NA
+    method: NA
+    monomers: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
+    source: NA
+    temperature: NA
+    temperature_unit: NA
+- combinations:
+    determination_method: NA
+    method: NA
+    monomers: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
+    source: NA
+    temperature: NA
+    temperature_unit: NA

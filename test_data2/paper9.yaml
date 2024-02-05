@@ -1,0 +1,82 @@
+reaction:
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1:
+      constant_conf_2:
+    reaction_constants:
+      constant_1: 1.01
+      constant_2: 1
+    solvent:
+    temperature: 150
+    temperature_unit: °C
+    determination_method:
+  monomers:
+  - Ethylene
+  - Vinyl acetate
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1:
+      constant_conf_2:
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 11
+    solvent:
+    temperature: 150
+    temperature_unit: °C
+    determination_method:
+  monomers:
+  - Ethylene
+  - Methyl acrylate
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1:
+      constant_conf_2:
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 17
+    solvent:
+    temperature: 150
+    temperature_unit: °C
+    determination_method:
+  monomers:
+  - Ethylene
+  - Methyl methacrylate
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1:
+      constant_conf_2:
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 10
+    solvent:
+    temperature: 150
+    temperature_unit: °C
+    determination_method:
+  monomers:
+  - Ethylene
+  - Diethyl maleate
+- combinations:
+  - method: solvent
+    polymerization_type: free radical polymerization
+    reaction_constant_conf:
+      constant_conf_1:
+      constant_conf_2:
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 10
+    solvent:
+    temperature: 150
+    temperature_unit: °C
+    determination_method:
+  monomers:
+  - Ethylene
+  - Diethyl fumarate
+source: https://doi.org/10.1002/pol.1964.100020820
