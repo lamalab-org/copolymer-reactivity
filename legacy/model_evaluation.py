@@ -1,5 +1,5 @@
 import os
-import src.copolextractor.analyzer as az
+import copolextractor.analyzer as az
 from sklearn.metrics import mean_squared_error
 import wandb
 
