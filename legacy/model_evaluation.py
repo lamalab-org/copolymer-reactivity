@@ -1,6 +1,7 @@
 import os
 import src.copolextractor.analyzer as az
 from sklearn.metrics import mean_squared_error
+import wandb
 
 
 def load_yaml_combinations(file_path):
@@ -41,6 +42,17 @@ test_path = "./../test_data"
 model_path = "./../test_data2"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
+
+
+wandb.init(
+    project="Copolymer_reactivity",
+
+    config={
+        "model": "GPT3.5 turbo",
+        "temperature": 0.0,
+        "paper number": 10,
+    }
+)
 
 for test_file, model_file in zip(test_files, model_files):
     test_file_path = get_file_path(test_path, test_file)
@@ -137,3 +149,5 @@ print(f"average score of fuzzy matching is {average_score}")
 print(f"average mse of reaction constants is {average_mse_const}")
 print(f"average mse of reaction constants confidence is {average_mse_conf}")
 print(f"average mse of temperature is {average_mse_temp}")
+
+wandb.log({"monomer-error": matching_monomer_error, "reaction-number-error": reaction_number_error, "combination-error": combination_number_error, "reaction-constant-error": reaction_const_error, "reaction-const-conf-error": reaction_const_conf_error, "fuzzy matching score": average_score, "mse reaction const": average_mse_const, "mse const conf": average_mse_conf, "mse temperature": average_mse_temp})
