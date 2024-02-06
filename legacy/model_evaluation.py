@@ -28,18 +28,24 @@ def calculate_mse(x1, x2):
 reaction_number_error = 0
 combination_number_error = 0
 matching_monomer_error = 0
-reaction_const_conf_error = 0
-reaction_const_error = 0
+reaction_const_conf_error = None
+reaction_const_error = None
 test_reaction_constants = []
 model_reaction_constants = []
 combined_score = []
 combined_mse_const = []
 combined_mse_conf = []
 mse_temp = []
+total_monomer_count = 0
+combined_len_reactions_test = 0
+combined_len_reactions_model = 0
+combined_len_combinations_test = 0
+combined_len_combinations_model = 0
+
 
 
 test_path = "./../test_data"
-model_path = "./../test_data2"
+model_path = "./model_output"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -69,6 +75,10 @@ for test_file, model_file in zip(test_files, model_files):
     print(f"Number of different reactions in model data: {len_reactions_model}")
     print(f"Number of different combinations in test data: {len_combinations_test}")
     print(f"Number of different combinations in model data: {len_combinations_model}")
+    combined_len_reactions_test = combined_len_reactions_test + len_reactions_test
+    combined_len_reactions_model = combined_len_reactions_model + len_reactions_model
+    combined_len_combinations_test = combined_len_combinations_test + len_combinations_test
+    combined_len_combinations_model = combined_len_combinations_model + len_combinations_model
 
     if len_reactions_test == len_reactions_model:
         print("Number of reactions is equal.")
@@ -89,8 +99,9 @@ for test_file, model_file in zip(test_files, model_files):
     model_file_path = get_file_path(model_path, model_file)
     test_data = az.load_yaml(test_file_path)
     model_data = az.load_yaml(model_file_path)
-    for i, reaction in enumerate(test_data['reaction']):
-        print('iteration: ', i)
+    for i , reaction in enumerate(test_data['reaction']):
+        print('iteration: ', i+1)
+        total_monomer_count += 1
         test_monomers = reaction['monomers']
         model_monomer_index, sequence_change = az.find_matching_reaction(model_data, test_monomers)
         test_monomer_index = i
@@ -119,7 +130,10 @@ for test_file, model_file in zip(test_files, model_files):
                     test_reaction_const_conf, model_reaction_const_conf = az.change_sequence(test_reaction_const_conf, model_reaction_const_conf)
 
                 if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
-                    reaction_const_error += 1
+                    if reaction_const_conf_error is None:
+                        reaction_const_error = 1
+                    else:
+                        reaction_const_error += 1
                 else:
                     for test_val, model_val in zip(test_reaction_constants, model_reaction_constants):
                         mse_const_individual = mean_squared_error([test_val], [model_val])
@@ -128,7 +142,11 @@ for test_file, model_file in zip(test_files, model_files):
                 if test_reaction_const_conf == model_reaction_const_conf == [None, None]:
                     continue
                 elif model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
-                    reaction_const_conf_error += 1
+                    if reaction_const_conf_error is None:
+                        reaction_const_conf_error = 1
+                    else:
+                        reaction_const_conf_error += 1
+
                 else:
                     for test_val, model_val in zip(test_reaction_const_conf, model_reaction_const_conf):
                         mse_conf_individual = mean_squared_error([test_val], [model_val])
@@ -136,13 +154,17 @@ for test_file, model_file in zip(test_files, model_files):
         else:
             matching_monomer_error += 1
 
-average_mse_const = sum(combined_mse_const) / len(combined_mse_const)
-average_mse_conf = sum(combined_mse_conf) / len(combined_mse_conf)
-average_mse_temp = sum(mse_temp) / len(mse_temp)
-average_score = sum(combined_score) / len(combined_score)
+monomer_error_rate = (matching_monomer_error/ total_monomer_count)
+average_mse_const = az.average(combined_mse_const)
+average_mse_conf = az.average(combined_mse_conf)
+average_mse_temp = az.average(mse_temp)
+average_score = az.average(combined_score)
+combination_error_rate = (abs(combined_len_combinations_model/combined_len_combinations_test))
+reaction_error_rate = (abs(combined_len_reactions_model/combined_len_reactions_test))
 print("matching-monomer-error: ", matching_monomer_error)
-print(f"reaction-number-error is {reaction_number_error}")
-print(f"combination-number-error is {combination_number_error}")
+print(f"{matching_monomer_error} of {total_monomer_count} Monomer pairs are not found. Error rate: {round(((matching_monomer_error/total_monomer_count)*100), 1)} %")
+print(f"reaction-number-error is {reaction_number_error}. The reaction error rate is {round(reaction_error_rate *100, 1)} %.")
+print(f"combination-number-error is {combination_number_error}. The combination error rate is {round(combination_error_rate*100, 1)} %")
 print(f"reaction constant error is {reaction_const_error}")
 print(f"reaction constant confidence error is {reaction_const_conf_error}")
 print(f"average score of fuzzy matching is {average_score}")
@@ -150,4 +172,4 @@ print(f"average mse of reaction constants is {average_mse_const}")
 print(f"average mse of reaction constants confidence is {average_mse_conf}")
 print(f"average mse of temperature is {average_mse_temp}")
 
-wandb.log({"monomer-error": matching_monomer_error, "reaction-number-error": reaction_number_error, "combination-error": combination_number_error, "reaction-constant-error": reaction_const_error, "reaction-const-conf-error": reaction_const_conf_error, "fuzzy matching score": average_score, "mse reaction const": average_mse_const, "mse const conf": average_mse_conf, "mse temperature": average_mse_temp})
+wandb.log({"monomer-error": matching_monomer_error, "monomer-error-rate": monomer_error_rate, "reaction-number-error": reaction_number_error, "reaction-error-rate": reaction_error_rate, "combination-error": combination_number_error, "combination-error-rate": combination_error_rate, "reaction-constant-error": reaction_const_error, "reaction-const-conf-error": reaction_const_conf_error, "fuzzy matching score": average_score, "mse reaction const": average_mse_const, "mse const conf": average_mse_conf, "mse temperature": average_mse_temp})
