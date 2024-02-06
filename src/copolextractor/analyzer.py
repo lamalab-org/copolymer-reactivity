@@ -20,8 +20,12 @@ def get_number_of_reactions(data: dict) -> int:
 
 def get_total_number_of_combinations(data: dict) -> int:
     combinations_count = 0
-    for reaction in data["reaction"]:
-        combinations_count += len(reaction["combinations"])
+    if isinstance(data['reaction'], list):
+        for reaction in data['reaction']:
+            if 'combinations' in reaction:
+                combinations_count += len(reaction['combinations'])
+    elif 'combinations' in data['reaction']:
+        combinations_count = len(data['reaction']['combinations'])
     return combinations_count
 
 
@@ -41,8 +45,12 @@ def _extract_reactions(data: dict) -> list:
 
 def _extract_monomers(data: dict) -> list:
     monomers = []
-    for reaction in data['reaction']:
-            monomers.append(reaction['monomers'])
+    if isinstance(data['reaction'], list):
+        for reaction in data['reaction']:
+            if 'monomers' in reaction:
+                monomers.extend(reaction['monomers'])
+    elif 'monomers' in data['reaction']:
+        monomers.extend(data['reaction']['monomers'])
     return monomers
 
 
@@ -88,7 +96,6 @@ def _get_sequence_of_monomers(test_monomers, model_monomers):
         else:
             sequence_change = 1
     return sequence_change
-
 
 
 def _compare_monomers(test_monomers: List[str], model_monomers: dict[str]) -> bool:
@@ -187,3 +194,10 @@ def change_sequence(constant1: list, constant2: list):
     constant1[0], constant1[1] = constant1[1], constant1[0]
     constant2[0], constant2[1] = constant2[1], constant2[0]
     return constant1, constant2
+
+
+def average(const):
+    if len(const) != 0:
+        average = sum(const) / len(const)
+        return average
+
