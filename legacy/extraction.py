@@ -30,7 +30,7 @@ prompt_template = """Here is the content of a section of the file: {}
                        solvent: used solvent
                        method: used polymerization method (solvent, bulk,...)
                        temperature: used polymerization temperature
-                       temperature_unit: unit of temperature (degC, degF, ...)
+                       temperature_unit: unit of temperature (°C, °F, ...)
                        reaction_constants: polymerization reaction constants r1 and r2
                         -constant_1:
                         -constant_2:
@@ -38,7 +38,7 @@ prompt_template = """Here is the content of a section of the file: {}
                         -constant_conf_1:
                         -constant_conf_2:
                        determination_method: method for determination of the r-values (Kelen-Tudor, ...)
-                   source: doi url 
+                   source: doi url or source  
                 
     
                    If the information is not provided put NA. If there are multiple polymerization's with different 
