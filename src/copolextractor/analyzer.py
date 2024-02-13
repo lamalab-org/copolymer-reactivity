@@ -129,18 +129,25 @@ def find_matching_reaction(data1: dict, data2: list):
         int: Index of matching test reaction
     """
     matching_rxn_ids = []
-    for i, rxn1 in enumerate(data1['reactions']):
-        monomers1 = rxn1['monomers']
-        print(monomers1)
-        if _compare_monomers(monomers1, data2):
-            matching_rxn_ids.append(i)
+    if isinstance(data1.get('reactions'), list):
+        matching_rxn_ids = []
+        for i, rxn in enumerate(data1['reactions']):
+            monomers1 = rxn['monomers']
+            if _compare_monomers(monomers1, data2):
+                matching_rxn_ids.append(i)
 
-    if len(matching_rxn_ids) == 0:
-        return None
-    elif len(matching_rxn_ids) > 1:
-        raise ValueError("Multiple matching reactions found")
+        if len(matching_rxn_ids) == 0:
+            return None
+        elif len(matching_rxn_ids) > 1:
+            raise ValueError("Multiple matching reactions found")
+        else:
+            return matching_rxn_ids[0]
     else:
-        return matching_rxn_ids[0]
+        monomers1 = data1['reactions']['monomers']
+        if _compare_monomers(monomers1, data2):
+            return 0  # Gibt den Index der einzigen vorhandenen Reaktion zurück
+        else:
+            return None
 
 
 def find_matching_combination(combination: List[dict], polymerization_type: str, method: str,
@@ -212,5 +219,5 @@ def change_sequence(constant1: list, constant2: list):
 
 def average(const):
     if len(const) != 0:
-        average = sum(const) / len(const)
-        return average
+        average_value = sum(const) / len(const)
+        return average_value

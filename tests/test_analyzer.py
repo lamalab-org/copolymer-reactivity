@@ -3,7 +3,9 @@ from copolextractor.analyzer import (
     find_matching_reaction,
     find_matching_combination,
     convert_unit,
-    get_sequence_of_monomers
+    get_sequence_of_monomers,
+    get_number_of_reactions,
+    change_sequence
 )
 import pytest
 
@@ -168,3 +170,55 @@ def test_covert_unit(temp1, temp2, unit1, unit2, expected_temp1, expected_temp2)
 def test_get_sequence_of_monomers(monomers1, monomers2, exp_sequence_change):
     sequence_change = get_sequence_of_monomers(monomers1, monomers2)
     assert sequence_change == exp_sequence_change
+
+
+def test_get_number_of_reactions():
+    assert (
+            get_number_of_reactions(
+                {
+                    "reactions": [
+                        {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                        {"combinations": [{"monomers": ["e", "f"]}, {"monomers": ["g", "h"]}]},
+                    ]
+                }
+            )
+            == 2
+    )
+    assert (
+            get_number_of_reactions(
+                {
+                    "reactions": [
+                        {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                        {
+                            "combinations": [
+                                {"monomers": ["e", "f"]},
+                                {"monomers": ["g", "h"]},
+                                {"monomers": ["i", "j"]},
+                            ]
+                        },
+                    ]
+                }
+            )
+            == 2
+    )
+    assert (
+            get_number_of_reactions(
+                {
+                    "reactions": [
+                        {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                    ]
+                }
+            )
+            == 1
+    )
+
+
+@pytest.mark.parametrize(
+    "const1, const2, exp_output1, exp_output2",
+    [
+        (["e","f"], ["a", "b"], ["f","e"], ["b", "a"]),
+        (["a", "b"], ["b", "a"], ["b", "a"], ["a", "b"])
+    ]
+)
+def test_change_sequence(const1, const2, exp_output1, exp_output2):
+    assert change_sequence(const1, const2) == (exp_output1, exp_output2)
