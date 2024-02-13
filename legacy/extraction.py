@@ -8,22 +8,12 @@ from langchain.cache import SQLiteCache
 from langchain.llms import OpenAI
 
 
-load_dotenv()
-langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
-llm = OpenAI()
-
-
-input_folder = "markdown_output"
-output_folder = "model_output"
-max_section_length = 16385
-
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
-prompt_template = """Here is the content of a section of the file: {}
+def get_prompt_template():
+    prompt = """Here is the content of a section of the file: {}
                    Extract the polymerization information from each polymerization and report it in json format. 
                    Extract the following information:
                    
-                   reaction: 
+                   reactions: 
                     monomers: [name of pair of involved monomers] 
                     -combinations: 
                      -polymerization_type: polymerization reaction type (free radical polymerization, anionic polymerization, cationic polymerizatio,...)
@@ -43,7 +33,22 @@ prompt_template = """Here is the content of a section of the file: {}
     
                    If the information is not provided put NA. If there are multiple polymerization's with different 
                    parameters report as a separate reaction and combinations."""
+    return prompt
 
+
+
+load_dotenv()
+langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
+llm = OpenAI()
+
+
+input_folder = "markdown_output"
+output_folder = "model_output"
+max_section_length = 16385
+
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+prompt_template = get_prompt_template()
 
 for i, filename in enumerate(os.listdir(input_folder)):
     if filename.endswith(".mmd"):

@@ -15,58 +15,66 @@ def load_yaml(file_path: Union[str, Path]) -> dict:
 
 
 def get_number_of_reactions(data: dict) -> int:
-    return len(data["reaction"])
+    return len(data["reactions"])
 
 
 def get_total_number_of_combinations(data: dict) -> int:
     combinations_count = 0
-    if isinstance(data['reaction'], list):
-        for reaction in data['reaction']:
+    if isinstance(data['reactions'], list):
+        for reaction in data['reactions']:
             if 'combinations' in reaction:
                 combinations_count += len(reaction['combinations'])
-    elif 'combinations' in data['reaction']:
-        combinations_count = len(data['reaction']['combinations'])
+    elif 'combinations' in data['reactions']:
+        combinations_count = len(data['reactions']['combinations'])
     return combinations_count
 
 
 def extract_combinations(data: list) -> list:
     combinations = []
     for combination in data:
-            combinations.append(combination)
+        combinations.append(combination)
     return combinations
 
 
 def _extract_reactions(data: dict) -> list:
     reactions = []
-    for reaction in data["reaction"]:
+    for reaction in data["reactions"]:
         reactions.append(reaction)
     return reactions
 
 
 def _extract_monomers(data: dict) -> list:
     monomers = []
-    if isinstance(data['reaction'], list):
-        for reaction in data['reaction']:
+    if isinstance(data['reactions'], list):
+        for reaction in data['reactions']:
             if 'monomers' in reaction:
                 monomers.extend(reaction['monomers'])
-    elif 'monomers' in data['reaction']:
-        monomers.extend(data['reaction']['monomers'])
+    elif 'monomers' in data['reactions']:
+        monomers.extend(data['reactions']['monomers'])
     return monomers
 
 
-def get_temp(data: dict):
-    temp = data['temperature']
-    temp_unit = data['temperature_unit']
+def get_temp(data: dict, index: int) -> tuple:
+    specific_comb = data['combinations'][index]
+    temp = specific_comb['temperature']
+    temp_unit = specific_comb['temperature_unit']
     return temp, temp_unit
+
+
+def get_solvent(data: dict, index: int) -> tuple:
+    specific_comb = data['combinations'][index]
+    solvent = specific_comb['solvent']
+    solvent_smiles = name_to_smiles(solvent)
+    return solvent, solvent_smiles
 
 
 def convert_unit(temp1: int, temp2: int, unit1: str, unit2: str):
     temp1_unit = ureg.Quantity(temp1, ureg.parse_units(unit1))
     temp2_unit = ureg.Quantity(temp2, ureg.parse_units(unit2))
     if ureg.parse_units(unit1) is not ureg.degC:
-            temp1_unit.ito(ureg.degC)
+        temp1_unit.ito(ureg.degC)
     if ureg.parse_units(unit2) is not ureg.degC:
-            temp2_unit.ito(ureg.degC)
+        temp2_unit.ito(ureg.degC)
     return temp1_unit.magnitude, temp2_unit.magnitude
 
 
@@ -82,7 +90,7 @@ def get_metadata_polymerization(data: dict):
     return temp, temp_unit, method, polymer_type, solvent, reaction_constants, reaction_constant_confidence, determination_method
 
 
-def _get_sequence_of_monomers(test_monomers, model_monomers):
+def get_sequence_of_monomers(test_monomers, model_monomers):
     if set(test_monomers) == set(model_monomers):
         if test_monomers[0] == model_monomers[0]:
             sequence_change = 0
@@ -98,7 +106,7 @@ def _get_sequence_of_monomers(test_monomers, model_monomers):
     return sequence_change
 
 
-def _compare_monomers(test_monomers: List[str], model_monomers: dict[str]) -> bool:
+def _compare_monomers(test_monomers: List[str], model_monomers: List[str]) -> bool:
     if set(test_monomers) == set(model_monomers):
         return True
     else:
@@ -107,7 +115,7 @@ def _compare_monomers(test_monomers: List[str], model_monomers: dict[str]) -> bo
         return set(test_monomer_smiles) == set(model_monomer_smiles)
 
 
-def find_matching_reaction(data1: dict, data2: dict):
+def find_matching_reaction(data1: dict, data2: list):
     """Find matching reaction in data
 
     Args:
@@ -121,30 +129,29 @@ def find_matching_reaction(data1: dict, data2: dict):
         int: Index of matching test reaction
     """
     matching_rxn_ids = []
-    monomers1 = _extract_monomers(data1)
-    for i, rxn1 in enumerate(monomers1):
-        if _compare_monomers(rxn1, data2):
-                matching_rxn_ids.append(i)
-                sequence = _get_sequence_of_monomers(rxn1, data2)
+    for i, rxn1 in enumerate(data1['reactions']):
+        monomers1 = rxn1['monomers']
+        print(monomers1)
+        if _compare_monomers(monomers1, data2):
+            matching_rxn_ids.append(i)
 
     if len(matching_rxn_ids) == 0:
-        return None, None
+        return None
     elif len(matching_rxn_ids) > 1:
         raise ValueError("Multiple matching reactions found")
     else:
-        return matching_rxn_ids[0], sequence
+        return matching_rxn_ids[0]
 
 
-def find_matching_combination(combination: List[dict], polymerization_type: str, solvent: str, method: str, determination_method: str) -> Tuple[int, float]:
+def find_matching_combination(combination: List[dict], polymerization_type: str, method: str,
+                              determination_method: str) -> Tuple[int, float]:
     # We need to do fuzzy matching here and take the best match but also return the confidence
     # of the match
     # first we check if we are lucky and find an exact match, then confidence would
-    solvent_smiles = name_to_smiles(solvent)
     matching_idxs = []
     for i, comb in enumerate(combination):
         if (
                 comb["polymerization_type"] == polymerization_type
-                and name_to_smiles(comb["solvent"]) == solvent_smiles
                 and comb["method"] == method
                 and comb['determination_method'] == determination_method
         ):
@@ -155,15 +162,22 @@ def find_matching_combination(combination: List[dict], polymerization_type: str,
         raise ValueError("Multiple matching combinations found")
 
     # if we are not lucky we need to do fuzzy matching
-    combination_string = f"{polymerization_type} {solvent} {method} {determination_method}"
+    combination_string = f"{polymerization_type} {method} {determination_method}"
     combination_strings = [
-        f"{comb['polymerization_type']} {comb['solvent']} {comb['method']} {comb['determination_method']}"
+        f"{comb['polymerization_type']} {comb['method']} {comb['determination_method']}"
         for comb in combination
     ]
     scores = [fuzz.ratio(combination_string, comb_string) / 100 for comb_string in combination_strings]
     best_score = max(scores)
     best_score_index = scores.index(best_score)
     return best_score_index, best_score
+
+
+def compare_smiles(smiles1: str, smiles2: str):
+    if smiles1 == smiles2:
+        return 0
+    else:
+        return 1
 
 
 def compare_number_of_reactions(test_file: Union[str, Path], model_file: Union[str, Path]) -> dict:
@@ -200,4 +214,3 @@ def average(const):
     if len(const) != 0:
         average = sum(const) / len(const)
         return average
-
