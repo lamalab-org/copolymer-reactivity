@@ -1,18 +1,64 @@
-reaction:
-  combinations:
+reactions:
+- combinations:
   - determination_method: NA
-    method: Bulk polymerization
-    polymerization_type: Bulk polymerization
+    method: semicontinuous emulsion polymerization
+    polymerization_type: emulsion polymerization
     reaction_constant_conf:
-      constant_conf_1: '0.1'
-      constant_conf_2: '0.05'
+      constant_conf_1: NA
+      constant_conf_2: NA
     reaction_constants:
-      constant_1: '1.56'
-      constant_2: '0.58'
-    solvent: NA
-    temperature: '70'
-    temperature_unit: degC
+      constant_1: NA
+      constant_2: NA
+    solvent: aqueous medium
+    temperature: '50'
+    temperature_unit: °C
   monomers:
-  - 2-Vinylpyridine
-  - Methacrylic acid
+  - methacrylic acid
+  - ethyl acrylate
+  source: 10.1002/pol.1994.130320308
+- combinations:
+  - determination_method: NA
+    method: semicontinuous emulsion polymerization
+    polymerization_type: emulsion polymerization
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: aqueous medium
+    temperature: '50'
+    temperature_unit: °C
+  - determination_method: EVM program
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: '0.13'
+      constant_conf_2: '0.08'
+    reaction_constants:
+      constant_1: '2.58'
+      constant_2: '0.157'
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
+  monomers:
+  - methacrylic acid
+  - ethyl acrylate
+  source: NA
+- combinations:
+  - determination_method: NA
+    method: semicontinuous emulsion polymerization
+    polymerization_type: emulsion polymerization
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: aqueous medium
+    temperature: NA
+    temperature_unit: NA
+  monomers:
+  - methacrylic acid
+  - ethyl acrylate
   source: NA

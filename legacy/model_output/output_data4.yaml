@@ -1,0 +1,18 @@
+reactions:
+- combinations:
+  - determination_method: nonlinear least-squares methods
+    method: liquid phase
+    polymerization_type: radical copolymerization
+    reaction_constant_conf:
+      constant_conf_1: '0.005'
+      constant_conf_2: '0.007'
+    reaction_constants:
+      constant_1: 0.743
+      constant_2: 1.515
+    solvent: tert-butyl alcohol
+    source: https://doi.org/10.1021/ma60001a022
+    temperature: 62
+    temperature_unit: °C
+  monomers:
+  - ethylene
+  - vinyl acetate

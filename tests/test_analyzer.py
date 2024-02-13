@@ -3,7 +3,7 @@ from copolextractor.analyzer import (
     find_matching_reaction,
     find_matching_combination,
     convert_unit,
-    _get_sequence_of_monomers
+    get_sequence_of_monomers
 )
 import pytest
 
@@ -12,7 +12,7 @@ def test_get_total_number_of_combinations():
     assert (
         get_total_number_of_combinations(
             {
-                "reaction": [
+                "reactions": [
                     {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
                     {"combinations": [{"monomers": ["e", "f"]}, {"monomers": ["g", "h"]}]},
                 ]
@@ -23,7 +23,7 @@ def test_get_total_number_of_combinations():
     assert (
         get_total_number_of_combinations(
             {
-                "reaction": [
+                "reactions": [
                     {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
                     {
                         "combinations": [
@@ -44,7 +44,7 @@ def test_get_total_number_of_combinations():
     [
         (
             {
-                "reaction": [
+                "reactions": [
                     {"monomers": ["water", "benzene"]},
                     {"monomers": ["water", "ethanol"]}
                 ]
@@ -54,7 +54,7 @@ def test_get_total_number_of_combinations():
         ),
         (
             {
-                "reaction": [
+                "reactions": [
                     {"monomers": ["water", "benzene"]},
                     {"monomers": ["oxidane", "ethanol"]},
                 ]
@@ -64,7 +64,7 @@ def test_get_total_number_of_combinations():
         ),
 (
             {
-                "reaction": [
+                "reactions": [
                     {"monomers": ["styrol", "benzene"]},
                     {"monomers": ["oxidane", "ethanol"]},
                 ]
@@ -85,18 +85,16 @@ def test_find_matching_reaction(data, monomers, expected):
             [
                 {
                     "polymerization_type": "radical",
-                    "solvent": "water",
                     "method": "A",
                     "determination_method": "Tudor"
                 },
                 {
                     "polymerization_type": "radical",
-                    "solvent": "ethanol",
                     "method": "A",
                     "determination_method": "Tudor"
                 },
             ],
-            ("radical", "water", "A", "Tudor"),
+            ("radical", "A", "Tudor"),
             0,
             1,
         ),
@@ -104,18 +102,16 @@ def test_find_matching_reaction(data, monomers, expected):
             [
                 {
                     "polymerization_type": "radical (A)",
-                    "solvent": "water",
                     "method": "A",
                     "determination_method": "Tudor"
                 },
                 {
                     "polymerization_type": "radical",
-                    "solvent": "ethanol",
                     "method": "A",
                     "determination_method": "B"
                 },
             ],
-            ("radical", "water", "A", "Tudor"),
+            ("radical", "A", "Tudor"),
             0,
             0.9,
         ),
@@ -123,7 +119,6 @@ def test_find_matching_reaction(data, monomers, expected):
             [
                 {
                     "polymerization_type": "radical (A)",
-                    "solvent": "oxidane",
                     "method": "A",
                     "determination_method": "B"
                 },
@@ -134,7 +129,7 @@ def test_find_matching_reaction(data, monomers, expected):
                     "determination_method": "Tudor"
                 },
             ],
-            ("radical", "water", "A", "B"),
+            ("radical", "A", "B"),
             0,
             0.9,
         )
@@ -152,9 +147,8 @@ def test_find_matching_combination(data, ground_truth, expected_index, expected_
 @pytest.mark.parametrize(
     "temp1, temp2, unit1, unit2, expected_temp1, expected_temp2",
         [
-            (30, 35, "DegC", "DegC", 30, 35),
-            (30, 35, "°C", "DegC", 30, 35),
-            (32, 50, "DegF", "K", 0, -223.15),
+            (30, 35, "°C", "°C", 30, 35),
+            (32, 50, "°F", "K", 0, -223.15),
             (200, 200, "K", "°C", -73.15, 200)
         ]
     )
@@ -171,6 +165,6 @@ def test_covert_unit(temp1, temp2, unit1, unit2, expected_temp1, expected_temp2)
         (["a", "b"], ["b", "a"], 1)
     ]
 )
-def test__get_sequence_of_monomers(monomers1, monomers2, exp_sequence_change):
-    sequence_change = _get_sequence_of_monomers(monomers1, monomers2)
+def test_get_sequence_of_monomers(monomers1, monomers2, exp_sequence_change):
+    sequence_change = get_sequence_of_monomers(monomers1, monomers2)
     assert sequence_change == exp_sequence_change
