@@ -6,7 +6,7 @@ import copolextractor.prompter as prompter
 import langchain
 from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
-from langchain.llms import OpenAI
+from langchain.llms import OpenAI as LangChainOpenAI
 
 
 def get_prompt_template():
@@ -47,7 +47,6 @@ max_section_length = 16385
 model = "gpt-4-1106-preview"
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-thread = openai.Thread.create()
 
 
 assistant = client.beta.assistants.create(
