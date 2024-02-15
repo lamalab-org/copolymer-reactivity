@@ -1,3 +1,4 @@
+import openai
 from openai import OpenAI
 import os
 import yaml
@@ -12,7 +13,7 @@ def get_prompt_template():
     prompt = """Here is the content of a section of the file: {}
                    Extract the polymerization information from each polymerization and report it in json format. 
                    Extract the following information:
-                   
+
                    reactions: 
                     monomers: [name of pair of involved monomers] 
                     -combinations: 
@@ -29,34 +30,42 @@ def get_prompt_template():
                         -constant_conf_2:
                        determination_method: method for determination of the r-values (Kelen-Tudor, ...)
                    source: doi url or source  
-                
-    
+
+
                    If the information is not provided put NA. If there are multiple polymerization's with different 
                    parameters report as a separate reaction and combinations."""
     return prompt
-
 
 
 load_dotenv()
 langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 llm = OpenAI()
 
-
-input_folder = "markdown_output"
+input_folder = "./../pdfs"
 output_folder = "model_output"
 max_section_length = 16385
-model = "gpt-3.5-turbo-1106"
+model = "gpt-4-1106-preview"
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+thread = openai.Thread.create()
+
+
+assistant = client.beta.assistants.create(
+  instructions="You are a scientific assistant, extracting important information about polymerization conditions out of pdfs.",
+  model="gpt-4-turbo-preview",
+  tools=[{"type": "code_interpreter"}],
+)
 
 prompt_template = get_prompt_template()
 
 for i, filename in enumerate(os.listdir(input_folder)):
-    if filename.endswith(".mmd"):
-        file_path = os.path.join(input_folder, filename)
-        with open(file_path, "r", encoding="utf-8") as file:
-            file_content = file.read()
-        output = prompter.repeated_call_model(file_content, prompt_template, max_section_length, model, prompter.call_openai)
+    if filename.endswith(".pdf"):
+        file_response = client.files.create(
+            file=open(filename, "rb"),
+            purpose="assistants"
+        )
+        file_id = file_response["id"]
+        output = prompter.repeated_call_model(file_id, prompt_template, max_section_length, model, prompter.call_openai_agent)
         print('Output: ', output)
         output_name = os.path.join(output_folder, f"output_data{i + 1}.yaml")
         with open(output_name, "w") as yaml_file:
