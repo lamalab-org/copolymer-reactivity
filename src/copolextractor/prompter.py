@@ -42,19 +42,19 @@ def call_openai(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0, **kw
     return new_data
 
 
-def call_openai_agent(file_id, prompt, temperature: float = 0, **kwargs):
+def call_openai_agent(thread, assistant, file, prompt, temperature: float = 0, **kwargs):
+    client = OpenAI()
     completion = client.beta.threads.create(
+        thread_id=thread.id,
         assistant_id=assistant.id,
         response_format={"type": "json_object"},
         messages=[
             {
-                "role": "system",
-                "content": "You are a scientific assistant, extracting important information about polymerization conditions out of text"
-            },
-            {"role": "user", "content": prompt, "file_id": file_id}
-        ],
-        temperature=temperature,
-        **kwargs,
+                "role": "user",
+                "content": prompt,
+                "file_ids": [file.id]
+            }
+        ]
     )
     message_content = completion.choices[0].message.content
     new_data = json.loads(message_content)

@@ -86,53 +86,70 @@ def test_find_matching_reaction(data, monomers, expected):
         (
             [
                 {
+                    "solvent": "H2O",
+                    "temperature": 10,
+                    "temperature_unit": "°C",
                     "polymerization_type": "radical",
                     "method": "A",
                     "determination_method": "Tudor"
                 },
                 {
+                    "solvent": "ethanol",
+                    "temperature": 10,
+                    "temperature_unit": "°C",
                     "polymerization_type": "radical",
                     "method": "A",
-                    "determination_method": "Tudor"
+                    "determination_method": "B"
                 },
             ],
-            ("radical", "A", "Tudor"),
+            ("water", 10, "°C", "radical", "A", "Tudor"),
             0,
             1,
         ),
         (
             [
                 {
+                    "solvent": "H2O",
+                    "temperature": 10,
+                    "temperature_unit": "°C",
                     "polymerization_type": "radical (A)",
                     "method": "A",
                     "determination_method": "Tudor"
                 },
                 {
+                    "solvent": "ethanol",
+                    "temperature": 10,
+                    "temperature_unit": "°C",
                     "polymerization_type": "radical",
                     "method": "A",
                     "determination_method": "B"
                 },
             ],
-            ("radical", "A", "Tudor"),
+            ("water", 10, "°C", "radical", "A", "Tudor"),
             0,
             0.9,
         ),
         (
             [
                 {
+                    "solvent": "water",
+                    "temperature": 10,
+                    "temperature_unit": "°C",
                     "polymerization_type": "radical (A)",
                     "method": "A",
                     "determination_method": "B"
                 },
                 {
-                    "polymerization_type": "radical",
                     "solvent": "ethanol",
+                    "temperature": 20,
+                    "temperature_unit": "K",
+                    "polymerization_type": "radical",
                     "method": "A",
                     "determination_method": "Tudor"
                 },
             ],
-            ("radical", "A", "B"),
-            0,
+            ("ethanol", 20, "K" "radical", "A", "Tudor"),
+            1,
             0.9,
         )
     ],
