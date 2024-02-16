@@ -117,9 +117,8 @@ for test_file, model_file in zip(test_files, model_files):
                 temperature, temp_unit, polym_method, polym_type, solvent, reaction_constants, reaction_constant_confidence, determination_method = az.get_metadata_polymerization(
                     combination)
                 print(model_combinations)
-                # comparison and fuzzy matching of polymerization method and type and determination method
-                index, score = az.find_matching_combination(model_combinations, polym_type, polym_method,
-                                                            determination_method)
+                # try to find mathing reaction conditions or find best matching reaction conditions
+                index, score = az.find_matching_combination(model_combinations, solvent, temperature, temp_unit, polym_type, polym_method, determination_method)
                 print("combination match: ", score)
                 combined_score.append(score)
 

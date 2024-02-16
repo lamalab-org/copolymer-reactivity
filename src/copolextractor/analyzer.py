@@ -150,15 +150,18 @@ def find_matching_reaction(data1: dict, data2: list):
             return None
 
 
-def find_matching_combination(combination: List[dict], polymerization_type: str, method: str,
+def find_matching_combination(combination: List[dict], solvent: str, temperature: int, temp_unit: str, polymerization_type: str, method: str,
                               determination_method: str) -> Tuple[int, float]:
     # We need to do fuzzy matching here and take the best match but also return the confidence
     # of the match
     # first we check if we are lucky and find an exact match, then confidence would
     matching_idxs = []
     for i, comb in enumerate(combination):
+        temperature_model, temp = convert_unit(comb['temperature'], temperature, comb['temperature_unit'], temp_unit)
         if (
-                comb["polymerization_type"] == polymerization_type
+                name_to_smiles(comb["solvent"]) == name_to_smiles(solvent)
+                and temperature_model == temp
+                and comb["polymerization_type"] == polymerization_type
                 and comb["method"] == method
                 and comb['determination_method'] == determination_method
         ):
@@ -169,9 +172,9 @@ def find_matching_combination(combination: List[dict], polymerization_type: str,
         raise ValueError("Multiple matching combinations found")
 
     # if we are not lucky we need to do fuzzy matching
-    combination_string = f"{polymerization_type} {method} {determination_method}"
+    combination_string = f"{solvent} {temperature} {polymerization_type} {method} {determination_method}"
     combination_strings = [
-        f"{comb['polymerization_type']} {comb['method']} {comb['determination_method']}"
+        f"{comb['solvent']} {comb['temperature']} {comb['polymerization_type']} {comb['method']} {comb['determination_method']}"
         for comb in combination
     ]
     scores = [fuzz.ratio(combination_string, comb_string) / 100 for comb_string in combination_strings]

@@ -53,18 +53,23 @@ assistant = client.beta.assistants.create(
   instructions="You are a scientific assistant, extracting important information about polymerization conditions out of pdfs.",
   model="gpt-4-turbo-preview",
   tools=[{"type": "code_interpreter"}],
+  name="Extractor",
 )
-
 prompt_template = get_prompt_template()
+thread = client.beta.threads.create()
 
 for i, filename in enumerate(os.listdir(input_folder)):
     if filename.endswith(".pdf"):
-        file_response = client.files.create(
-            file=open(filename, "rb"),
-            purpose="assistants"
-        )
-        file_id = file_response["id"]
-        output = prompter.repeated_call_model(file_id, prompt_template, max_section_length, model, prompter.call_openai_agent)
+        file_path = os.path.join(input_folder, filename)
+        print(file_path)
+        print(filename)
+        with open(file_path, "rb") as file:
+            file_response = client.files.create(
+                file=file,
+                purpose="assistants"
+            )
+        print(file_response)
+        output = prompter.call_openai_agent(thread, assistant, file_response, prompt_template)
         print('Output: ', output)
         output_name = os.path.join(output_folder, f"output_data{i + 1}.yaml")
         with open(output_name, "w") as yaml_file:
