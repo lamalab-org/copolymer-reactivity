@@ -10,9 +10,8 @@ from langchain.llms import OpenAI as LangChainOpenAI
 
 
 def get_prompt_template():
-    prompt = """Here is the content of a section of the file: {}
-                   Extract the polymerization information from each polymerization and report it in json format. 
-                   Extract the following information:
+    prompt = """From the PDF,extract the polymerization information from each polymerization and report it in json format. 
+                Extract the following information:
 
                    reactions: 
                     monomers: [name of pair of involved monomers] 
@@ -49,28 +48,25 @@ model = "gpt-4-1106-preview"
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
-assistant = client.beta.assistants.create(
-  instructions="You are a scientific assistant, extracting important information about polymerization conditions out of pdfs.",
-  model="gpt-4-turbo-preview",
-  tools=[{"type": "code_interpreter"}],
-  name="Extractor",
-)
-prompt_template = get_prompt_template()
-thread = client.beta.threads.create()
-
 for i, filename in enumerate(os.listdir(input_folder)):
     if filename.endswith(".pdf"):
         file_path = os.path.join(input_folder, filename)
         print(file_path)
         print(filename)
-        with open(file_path, "rb") as file:
-            file_response = client.files.create(
-                file=file,
-                purpose="assistants"
-            )
-        print(file_response)
-        output = prompter.call_openai_agent(thread, assistant, file_response, prompt_template)
+        file = client.files.create(
+            file=open(file_path, "rb"),
+            purpose="assistants"
+        )
+        assistant = client.beta.assistants.create(
+            instructions="You are a scientific assistant, extracting important information about polymerization conditions out of pdfs.",
+            model="gpt-4-turbo-preview",
+            tools=[{"type": "retrieval"}],
+            name="Extractor",
+            file_ids=[file.id]
+        )
+        prompt_template = get_prompt_template()
+        output = prompter.call_openai_agent(assistant, file, prompt_template)
         print('Output: ', output)
-        output_name = os.path.join(output_folder, f"output_data{i + 1}.yaml")
+        output_name = os.path.join(output_folder, f"output_data_assistant{i + 1}.yaml")
         with open(output_name, "w") as yaml_file:
             yaml.dump(output, yaml_file, allow_unicode=True)

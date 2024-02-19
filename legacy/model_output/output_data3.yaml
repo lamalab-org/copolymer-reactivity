@@ -1,66 +1,26 @@
-reactions:
-- combinations:
-  - determination_method: Kelen-Tudos method
-    method: solution
-    polymerization_type: free radical copolymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: 0.03
-    reaction_constants:
-      constant_1: 0.54
-      constant_2: 0.06
-    solvent: carbon tetrachloride
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudos method
-    method: solution
-    polymerization_type: free radical copolymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: 0.03
-    reaction_constants:
-      constant_1: 0.51
-      constant_2: 0.08
-    solvent: chloroform
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudos method
-    method: solution
-    polymerization_type: free radical copolymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.0
-      constant_conf_2: 0.02
-    reaction_constants:
-      constant_1: 0.43
-      constant_2: 0.65
-    solvent: acetone
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudos method
-    method: solution
-    polymerization_type: free radical copolymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.02
-      constant_conf_2: 0.05
-    reaction_constants:
-      constant_1: 0.41
-      constant_2: 0.59
-    solvent: 1,4-dioxane
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudos method
-    method: solution
-    polymerization_type: free radical copolymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.02
-      constant_conf_2: 0.0
-    reaction_constants:
-      constant_1: 0.06
-      constant_2: 0.29
-    solvent: acetonitrile
-    temperature: 60
-    temperature_unit: °C
-  monomers:
-  - methacrylic acid
-  - styrene
-  source: NA
+!!python/object:openai.types.beta.threads.message_content_text.Text
+__dict__:
+  annotations: []
+  value: "Here is the content of a section of the file: {}\n                   Extract\
+    \ the polymerization information from each polymerization and report it in json\
+    \ format. \n                   Extract the following information:\n\n        \
+    \           reactions: \n                    monomers: [name of pair of involved\
+    \ monomers] \n                    -combinations: \n                     -polymerization_type:\
+    \ polymerization reaction type (free radical polymerization, anionic polymerization,\
+    \ cationic polymerizatio,...)\n                       solvent: used solvent\n\
+    \                       method: used polymerization method (solvent, bulk,...)\n\
+    \                       temperature: used polymerization temperature\n       \
+    \                temperature_unit: unit of temperature (°C, °F, ...)\n       \
+    \                reaction_constants: polymerization reaction constants r1 and\
+    \ r2\n                        -constant_1:\n                        -constant_2:\n\
+    \                       reaction_constant_conf: confidence interval of polymerization\
+    \ reaction constant r1 and r2\n                        -constant_conf_1:\n   \
+    \                     -constant_conf_2:\n                       determination_method:\
+    \ method for determination of the r-values (Kelen-Tudor, ...)\n              \
+    \     source: doi url or source  \n\n\n                   If the information is\
+    \ not provided put NA. If there are multiple polymerization's with different \n\
+    \                   parameters report as a separate reaction and combinations."
+__fields_set__: !!set
+  annotations: null
+  value: null
+__private_attribute_values__: {}
