@@ -1,3 +1,5 @@
+import time
+
 from openai import OpenAI
 import json
 from typing import List
@@ -42,23 +44,37 @@ def call_openai(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0, **kw
     return new_data
 
 
-def call_openai_agent(thread, assistant, file, prompt, temperature: float = 0, **kwargs):
+def call_openai_agent(assistant, file, prompt, **kwargs):
     client = OpenAI()
-    completion = client.beta.threads.create(
+    thread = client.beta.threads.create()
+    message = client.beta.threads.messages.create(
         thread_id=thread.id,
-        assistant_id=assistant.id,
-        response_format={"type": "json_object"},
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-                "file_ids": [file.id]
-            }
-        ]
+        role="user",
+        content=prompt
     )
-    message_content = completion.choices[0].message.content
-    new_data = json.loads(message_content)
-    return new_data
+    run = client.beta.threads.runs.create(
+        thread_id=thread.id,
+        assistant_id=assistant.id
+    )
+    run = client.beta.threads.runs.retrieve(
+        thread_id=thread.id,
+        run_id=run.id
+    )
+
+    while run.status != "completed":
+        run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+        print("Run Satus: {run.status}")
+        time.sleep(1)
+    else:
+        print("Run completed!")
+
+    message_response = client.beta.threads.messages.list(
+        thread_id=thread.id
+    )
+    messages = message_response.data
+    latest_message = messages[0]
+    output = latest_message.content[0].text.value
+    return output
 
 
 def update_data(new_data: dict) -> str:
