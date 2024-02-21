@@ -5,7 +5,7 @@ __dict__:
     \ the polymerization information from each polymerization and report it in json\
     \ format. \n                   Extract the following information:\n\n        \
     \           reactions: \n                    monomers: [name of pair of involved\
-    \ monomers] \n                    -combinations: \n                     -polymerization_type:\
+    \ monomers] \n                    -reaction_conditions: \n                     -polymerization_type:\
     \ polymerization reaction type (free radical polymerization, anionic polymerization,\
     \ cationic polymerizatio,...)\n                       solvent: used solvent\n\
     \                       method: used polymerization method (solvent, bulk,...)\n\
@@ -19,7 +19,7 @@ __dict__:
     \ method for determination of the r-values (Kelen-Tudor, ...)\n              \
     \     source: doi url or source  \n\n\n                   If the information is\
     \ not provided put NA. If there are multiple polymerization's with different \n\
-    \                   parameters report as a separate reaction and combinations."
+    \                   parameters report as a separate reaction and reaction_conditions."
 __fields_set__: !!set
   annotations: null
   value: null

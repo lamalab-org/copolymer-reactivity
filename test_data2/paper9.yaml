@@ -1,5 +1,5 @@
 reactions:
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -15,7 +15,7 @@ reactions:
   monomers:
   - Ethylene
   - Vinyl acetate
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -31,7 +31,7 @@ reactions:
   monomers:
   - Ethylene
   - Methyl acrylate
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -47,7 +47,7 @@ reactions:
   monomers:
   - Ethylene
   - Methyl methacrylate
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -63,7 +63,7 @@ reactions:
   monomers:
   - Ethylene
   - Diethyl maleate
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:

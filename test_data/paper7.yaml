@@ -1,5 +1,5 @@
 reactions:
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -15,7 +15,7 @@ reactions:
   monomers:
   - n-Butyl acrylate
   - Ethylene
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -31,7 +31,7 @@ reactions:
   monomers:
   - Vinyl chloride
   - Ethylene
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -47,7 +47,7 @@ reactions:
   monomers:
   - Vinyl acetate
   - Ethylene
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:

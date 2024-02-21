@@ -1,5 +1,5 @@
 reactions:
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -39,7 +39,7 @@ reactions:
   monomers:
   - 3-Methylstyrene
   - Methyl acrylate
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -79,7 +79,7 @@ reactions:
   monomers:
   - 3-Methylstyrene
   - Methyl methacrylate
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:

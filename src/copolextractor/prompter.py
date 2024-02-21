@@ -5,6 +5,39 @@ import json
 from typing import List
 
 
+def get_prompt_template():
+    prompt = """The content of the PDF are scientific papers about Copolymerization of Monomers. In each paper there 
+                could be multiple different reaction with different pairs of monomers and same reactions with different 
+                reaction conditions. From the PDF,extract the polymerization information from each polymerization 
+                and report it in valid json format. Exclude comments out of the json output. Give the Output as one 
+                json object. 
+                
+                Extract the following information:
+
+                   reactions: 
+                    monomers: [name of pair of involved monomers] 
+                    -reaction_conditions: 
+                     -polymerization_type: polymerization reaction type (free radical polymerization, anionic polymerization, cationic polymerizatio,...)
+                       solvent: used solvent
+                       method: used polymerization method (solvent, bulk,...)
+                       temperature: used polymerization temperature
+                       temperature_unit: unit of temperature (°C, °F, ...)
+                       reaction_constants: polymerization reaction constants r1 and r2
+                        -constant_1:
+                        -constant_2:
+                       reaction_constant_conf: confidence interval of polymerization reaction constant r1 and r2
+                        -constant_conf_1:
+                        -constant_conf_2:
+                       determination_method: method for determination of the r-values (Kelen-Tudor, ...)
+                   source: doi url or source  
+
+
+                   If the information is not provided put NA. If there are multiple polymerization's with different 
+                   parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions(for 
+                   different reaction conditions of the same monomers)."""
+    return prompt
+
+
 def split_document(document: str, max_length: int) -> List[str]:
     return [document[j : j + max_length] for j in range(0, len(document), max_length)]
 
@@ -63,7 +96,7 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
 
     while run.status != "completed":
         run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
-        print("Run Satus: {run.status}")
+        print(f"Run Satus: {run.status}")
         time.sleep(1)
     else:
         print("Run completed!")
