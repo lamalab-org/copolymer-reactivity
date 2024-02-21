@@ -474,9 +474,9 @@ in the growing chain is methyl methacrylate. In the region where this effect is 
 Whether similar effects exist in the copolymerization of ethylene and methyl acrylate cannot be now ascertained because of the paucity of data in the intermediate region. It is probable that such effects are smaller 
 (because of the greater configurational flexibility of methyl acrylate as a chain component). 
 
-It is interesting to examine the ternary system methyl methacrylatemethyl acrylate-ethylene and the three binary copolymer combinations which comprise it in the light of a new theory advanced by Ham.5 This theory states that for systems of three monomers the following relationship holds : 
+It is interesting to examine the ternary system methyl methacrylatemethyl acrylate-ethylene and the three binary copolymer reaction_conditions which comprise it in the light of a new theory advanced by Ham.5 This theory states that for systems of three monomers the following relationship holds : 
 where 6 is a constant. It follows that Where the system is comprised of two conjugated monomers and one unconjugated monomer, experience has shown that 6 = **0.006.** Thus, to examine the system methyl methacrylate (MI)-methyl acrylate (MJ- 
-ethylene (M3) *six* reactivity ratios: r12, rZl, *rI3,* r3], *rZ3,* and *r32* are required to check the theory, or four ratios to predict the reactivity ratios for an untried combination. Thus, if r12, rzl, *rz3,* and *r32* are known, *rI3* and *r3]* can be predicted. For trial are chosen the values 
+ethylene (M3) *six* reactivity ratios: r12, rZl, *rI3,* r3], *rZ3,* and *r32* are required to check the theory, or four ratios to predict the reactivity ratios for an untried reaction_conditions. Thus, if r12, rzl, *rz3,* and *r32* are known, *rI3* and *r3]* can be predicted. For trial are chosen the values 
 
 $ r_{12}$ = 2.3 (Ref. 6)
 

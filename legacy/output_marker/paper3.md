@@ -41,7 +41,7 @@ lution polymerization simultaneously. Copolymers obtained at high conversions we
 ## Experimental Materials
 
 MAA (Fluka product) was distilled at 75"C/12 
-mmHg and EA (BDH Chemicals, India) was distilled at 5O0C/8O mmHg before use. A combination of sodium lauryl sulfate (Glaxo Laboratories, India) 
+mmHg and EA (BDH Chemicals, India) was distilled at 5O0C/8O mmHg before use. A reaction_conditions of sodium lauryl sulfate (Glaxo Laboratories, India) 
 and Hyoxide AAO, a nonyl phenyl ethylene oxide condensate (Hico Products) was used as an emulsifier. Potassium persulfate and sodium metabisulfite (BDH Chemicals, India) were used as redox initiators. 
 
 ## Polymer Synthesis
@@ -160,12 +160,12 @@ of an emulsifier decides its suitability for different systems.39 The HLB value 
 
 to be suitable for an oil-in-water system:' 
 On the basis of the HLB value, a nonionic emulsifier, Hyoxide AAO (a nonyl phenyl ethylene oxide condensate) , having an HLB value of 12.8, was chosen 
-( 3% on the wt of monomers) for the present system, but no improvement in the stability of emulsion was observed. However, when a combination of anionic, sodium lauryl sulfate, and nonionic Hyoxide AAO 
+( 3% on the wt of monomers) for the present system, but no improvement in the stability of emulsion was observed. However, when a reaction_conditions of anionic, sodium lauryl sulfate, and nonionic Hyoxide AAO 
 was used, an emulsion, stable for more than 6 
 months, was obtained in all the cases except one formulation containing 82.3 mol % MAA (in the feed), which showed a tendency toward coagulation. 
 
 A similar observation was made by Ugelstad et al.41 
-during the emulsion polymerization of styrene, where significant differences were found in the stability of the emulsion obtained with the sodium lauryl sulfate-cetyl alcohol combination and sodium lauryl sulfate alone. 
+during the emulsion polymerization of styrene, where significant differences were found in the stability of the emulsion obtained with the sodium lauryl sulfate-cetyl alcohol reaction_conditions and sodium lauryl sulfate alone. 
 
 ## Intrinsic Viscosity Polymer Characterization Elemental Analysis
 

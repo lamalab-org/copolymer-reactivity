@@ -1,5 +1,5 @@
 reactions:
-- combinations:
+- reaction_conditions:
   - method: bulk
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -15,7 +15,7 @@ reactions:
   monomers:
   - Methacrylic acid sulpholanate
   - Styrene
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -31,7 +31,7 @@ reactions:
   monomers:
   - Methacrylic acid sulpholanate
   - Methyl methacrylat
-- combinations:
+- reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:

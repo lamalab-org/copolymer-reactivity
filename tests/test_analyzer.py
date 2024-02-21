@@ -1,7 +1,7 @@
 from copolextractor.analyzer import (
-    get_total_number_of_combinations,
+    get_total_number_of_reaction_conditions,
     find_matching_reaction,
-    find_matching_combination,
+    find_matching_reaction_conditions,
     convert_unit,
     get_sequence_of_monomers,
     get_number_of_reactions,
@@ -10,25 +10,25 @@ from copolextractor.analyzer import (
 import pytest
 
 
-def test_get_total_number_of_combinations():
+def test_get_total_number_of_reaction_conditions():
     assert (
-        get_total_number_of_combinations(
+        get_total_number_of_reaction_conditions(
             {
                 "reactions": [
-                    {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
-                    {"combinations": [{"monomers": ["e", "f"]}, {"monomers": ["g", "h"]}]},
+                    {"reaction_conditions": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                    {"reaction_conditions": [{"monomers": ["e", "f"]}, {"monomers": ["g", "h"]}]},
                 ]
             }
         )
         == 4
     )
     assert (
-        get_total_number_of_combinations(
+        get_total_number_of_reaction_conditions(
             {
                 "reactions": [
-                    {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                    {"reaction_conditions": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
                     {
-                        "combinations": [
+                        "reaction_conditions": [
                             {"monomers": ["e", "f"]},
                             {"monomers": ["g", "h"]},
                             {"monomers": ["i", "j"]},
@@ -154,8 +154,8 @@ def test_find_matching_reaction(data, monomers, expected):
         )
     ],
 )
-def test_find_matching_combination(data, ground_truth, expected_index, expected_score):
-    idx, score = find_matching_combination(data, *ground_truth)
+def test_find_matching_reaction_conditions(data, ground_truth, expected_index, expected_score):
+    idx, score = find_matching_reaction_conditions(data, *ground_truth)
     assert idx == expected_index
     if expected_score != 1:
         assert score <= 1
@@ -194,8 +194,8 @@ def test_get_number_of_reactions():
             get_number_of_reactions(
                 {
                     "reactions": [
-                        {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
-                        {"combinations": [{"monomers": ["e", "f"]}, {"monomers": ["g", "h"]}]},
+                        {"reaction_conditions": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                        {"reaction_conditions": [{"monomers": ["e", "f"]}, {"monomers": ["g", "h"]}]},
                     ]
                 }
             )
@@ -205,9 +205,9 @@ def test_get_number_of_reactions():
             get_number_of_reactions(
                 {
                     "reactions": [
-                        {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                        {"reaction_conditions": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
                         {
-                            "combinations": [
+                            "reaction_conditions": [
                                 {"monomers": ["e", "f"]},
                                 {"monomers": ["g", "h"]},
                                 {"monomers": ["i", "j"]},
@@ -222,7 +222,7 @@ def test_get_number_of_reactions():
             get_number_of_reactions(
                 {
                     "reactions": [
-                        {"combinations": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
+                        {"reaction_conditions": [{"monomers": ["a", "b"]}, {"monomers": ["c", "d"]}]},
                     ]
                 }
             )

@@ -227,7 +227,7 @@ a Compared with methyl acrylate.
 
 It is of further interest to compare the results obtained here with those recently published by James and MacCallum13 on the rates of addition of ethyl radicals to various monomers. When a value of **1014** ~m.~/rnole-sec. 
 
-is taken as the bimolecular rate constant for the recombination of ethyl radicals,lZ one obtains a value of *lc3* = 1.0 x lo' ~m.~/rnole-sec. for the reaction 
+is taken as the bimolecular rate constant for the rereaction_conditions of ethyl radicals,lZ one obtains a value of *lc3* = 1.0 x lo' ~m.~/rnole-sec. for the reaction 
 
 0  0  II  C2Hs. + CH2=CH-O--CCH3  .-f C2HsCH~CH-O--kCH3 
 k3 

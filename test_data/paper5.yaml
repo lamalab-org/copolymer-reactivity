@@ -1,5 +1,5 @@
 reactions:
-- combinations:
+- reaction_conditions:
   - method: emulsion
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -15,7 +15,7 @@ reactions:
   monomers:
   - 2-Chloro-1,3-butadiene
   - Methyl isopropenyl ketone
-- combinations:
+- reaction_conditions:
   - method: emulsion
     polymerization_type: free radical polymerization
     reaction_constant_conf:

@@ -4,7 +4,7 @@
   \ other table detailing the copolymerization of MAS with various vinyl monomers\
   \ including their respective polymerization constants, confidence intervals, and\
   \ temperatures【10†source】.\n\n```json\n{\n  \"reactions\": [\n    {\n      \"monomers\"\
-  : [\"MAS\", \"Styrene\", \"MM\", \"MA\"],\n      \"combinations\": [\n        {\n\
+  : [\"MAS\", \"Styrene\", \"MM\", \"MA\"],\n      \"reaction_conditions\": [\n        {\n\
   \          \"polymerization_type\": \"Bulk copolymerization\",\n          \"solvent\"\
   : \"DMF, DMSO, Benzene\",\n          \"method\": \"NA\",\n          \"temperature\"\
   : \"40, 50, 60, 70\",\n          \"temperature_unit\": \"°C\",\n          \"reaction_constants\"\
@@ -12,7 +12,7 @@
   \         },\n          \"reaction_constant_conf\": {\n            \"constant_conf_1\"\
   : \"NA\",\n            \"constant_conf_2\": \"NA\"\n          },\n          \"determination_method\"\
   : \"NA\"\n        }\n      ]\n    },\n    {\n      \"monomers\": [\"MAS\", \"Styrene\"\
-  , \"MM\", \"MA\"],\n      \"combinations\": [\n        {\n          \"polymerization_type\"\
+  , \"MM\", \"MA\"],\n      \"reaction_conditions\": [\n        {\n          \"polymerization_type\"\
   : \"Bulk copolymerization\",\n          \"solvent\": \"Benzene, DMF\",\n       \
   \   \"method\": \"NA\",\n          \"temperature\": \"50, 60\",\n          \"temperature_unit\"\
   : \"°C\",\n          \"reaction_constants\": {\n            \"constant_1\": [\n\
