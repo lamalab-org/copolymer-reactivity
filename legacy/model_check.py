@@ -49,12 +49,12 @@ for model_file, test_file in zip(model_files, test_files):
             monomer_error += 1
             print("Monomers do not match:", test_monomer, "vs", model_monomer)
 
-        for model_combination, test_combination in zip(
-            model_data["combinations"], test_data["combinations"]
+        for model_reaction_conditions, test_reaction_conditions in zip(
+            model_data["reaction_conditions"], test_data["reaction_conditions"]
         ):
 
-            test_constants = test_combination["reaction_constants"]
-            model_constants = model_combination["polymerization_reaction_constants"]
+            test_constants = test_reaction_conditions["reaction_constants"]
+            model_constants = model_reaction_conditions["polymerization_reaction_constants"]
 
             for key, value in test_constants.items():
                 if key in model_constants:

@@ -18,22 +18,22 @@ def get_number_of_reactions(data: dict) -> int:
     return len(data["reactions"])
 
 
-def get_total_number_of_combinations(data: dict) -> int:
-    combinations_count = 0
+def get_total_number_of_reaction_conditions(data: dict) -> int:
+    reaction_conditions_count = 0
     if isinstance(data['reactions'], list):
         for reaction in data['reactions']:
-            if 'combinations' in reaction:
-                combinations_count += len(reaction['combinations'])
-    elif 'combinations' in data['reactions']:
-        combinations_count = len(data['reactions']['combinations'])
-    return combinations_count
+            if 'reaction_conditions' in reaction:
+                reaction_conditions_count += len(reaction['reaction_conditions'])
+    elif 'reaction_conditions' in data['reactions']:
+        reaction_conditions_count = len(data['reactions']['reaction_conditions'])
+    return reaction_conditions_count
 
 
-def extract_combinations(data: list) -> list:
-    combinations = []
-    for combination in data:
-        combinations.append(combination)
-    return combinations
+def extract_reaction_conditions(data: list) -> list:
+    reaction_conditions = []
+    for reaction_conditions in data:
+        reaction_conditions.append(reaction_conditions)
+    return reaction_conditions
 
 
 def _extract_reactions(data: dict) -> list:
@@ -55,14 +55,14 @@ def _extract_monomers(data: dict) -> list:
 
 
 def get_temp(data: dict, index: int) -> tuple:
-    specific_comb = data['combinations'][index]
+    specific_comb = data['reaction_conditions'][index]
     temp = specific_comb['temperature']
     temp_unit = specific_comb['temperature_unit']
     return temp, temp_unit
 
 
 def get_solvent(data: dict, index: int) -> tuple:
-    specific_comb = data['combinations'][index]
+    specific_comb = data['reaction_conditions'][index]
     solvent = specific_comb['solvent']
     solvent_smiles = name_to_smiles(solvent)
     return solvent, solvent_smiles
@@ -150,13 +150,13 @@ def find_matching_reaction(data1: dict, data2: list):
             return None
 
 
-def find_matching_combination(combination: List[dict], solvent: str, temperature: int, temp_unit: str, polymerization_type: str, method: str,
+def find_matching_reaction_conditions(reaction_conditions: List[dict], solvent: str, temperature: int, temp_unit: str, polymerization_type: str, method: str,
                               determination_method: str) -> Tuple[int, float]:
     # We need to do fuzzy matching here and take the best match but also return the confidence
     # of the match
     # first we check if we are lucky and find an exact match, then confidence would
     matching_idxs = []
-    for i, comb in enumerate(combination):
+    for i, comb in enumerate(reaction_conditions):
         temperature_model, temp = convert_unit(comb['temperature'], temperature, comb['temperature_unit'], temp_unit)
         if (
                 name_to_smiles(comb["solvent"]) == name_to_smiles(solvent)
@@ -169,15 +169,15 @@ def find_matching_combination(combination: List[dict], solvent: str, temperature
     if len(matching_idxs) == 1:
         return matching_idxs[0], 1
     elif len(matching_idxs) > 1:
-        raise ValueError("Multiple matching combinations found")
+        raise ValueError("Multiple matching reaction_conditions found")
 
     # if we are not lucky we need to do fuzzy matching
-    combination_string = f"{solvent} {temperature} {polymerization_type} {method} {determination_method}"
-    combination_strings = [
+    reaction_conditions_string = f"{solvent} {temperature} {polymerization_type} {method} {determination_method}"
+    reaction_conditions_strings = [
         f"{comb['solvent']} {comb['temperature']} {comb['polymerization_type']} {comb['method']} {comb['determination_method']}"
-        for comb in combination
+        for comb in reaction_conditions
     ]
-    scores = [fuzz.ratio(combination_string, comb_string) / 100 for comb_string in combination_strings]
+    scores = [fuzz.ratio(reaction_conditions_string, comb_string) / 100 for comb_string in reaction_conditions_strings]
     best_score = max(scores)
     best_score_index = scores.index(best_score)
     return best_score_index, best_score

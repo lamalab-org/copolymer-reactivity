@@ -15,7 +15,7 @@ def get_prompt_template():
                    
                    reactions: 
                     monomers: [name of pair of involved monomers] 
-                    -combinations: 
+                    -reaction_conditions: 
                      -polymerization_type: polymerization reaction type (free radical polymerization, anionic polymerization, cationic polymerizatio,...)
                        solvent: used solvent
                        method: used polymerization method (solvent, bulk,...)
@@ -32,7 +32,7 @@ def get_prompt_template():
                 
     
                    If the information is not provided put NA. If there are multiple polymerization's with different 
-                   parameters report as a separate reaction and combinations."""
+                   parameters report as a separate reaction and reaction_conditions."""
     return prompt
 
 
@@ -43,7 +43,7 @@ llm = OpenAI()
 
 
 input_folder = "markdown_output"
-output_folder = "model_output"
+output_folder = "model_output_assistant"
 max_section_length = 16385
 model = "gpt-3.5-turbo-1106"
 
