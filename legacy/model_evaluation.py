@@ -101,93 +101,100 @@ for test_file, model_file in zip(test_files, model_files):
         if reaction_conditions_test_count != reaction_conditions_model_count:
             reaction_conditions_number_error += 1
 
-        # comparison of the data of each unique reaction and reaction_conditions
-        for test_file, model_file in zip(test_files, model_files):
-            print(test_file)
-            print(model_file)
-            test_file_path = get_file_path(test_path, test_file)
-            model_file_path = get_file_path(model_path, model_file)
-            test_data = az.load_yaml(test_file_path)
-            model_data = az.load_yaml(model_file_path)
-            for i, reaction in enumerate(test_data['reactions']):
-                print('iteration: ', i + 1)
-                total_monomer_count += 1
-                test_monomers = reaction['monomers']
-                print(test_monomers)
-                # try to find a matching monomer pair
-                model_monomer_index = az.find_matching_reaction(model_data, test_monomers)
-                test_monomer_index = i
-                # if a monomer match is found: compare reaction conditions of this specific match
-                if model_monomer_index is not None:
-                    sequence_change = az.get_sequence_of_monomers(
-                        model_data['reactions'][model_monomer_index]['monomers'],
-                        test_monomers)
-                    for j, reaction_conditions in enumerate(reaction['reaction_conditions']):
-                        print('matching_monomer_error: ', matching_monomer_error)
-                        specific_reaction = model_data['reactions'][model_monomer_index]
-                        specific_reaction_conditions = specific_reaction['reaction_conditions']
-                        model_reaction_conditions = az.extract_reaction_conditions(specific_reaction_conditions)
-                        temperature, temp_unit, polym_method, polym_type, solvent, reaction_constants, reaction_constant_confidence, determination_method = az.get_metadata_polymerization(
-                            reaction_conditions)
-                        print(model_reaction_conditions)
-                        # try to find mathing reaction conditions or find best matching reaction conditions
-                        index, score = az.find_matching_reaction_conditions(model_reaction_conditions, solvent, temperature, temp_unit,
-                                                                    polym_type, polym_method, determination_method)
-                        print("reaction_conditions match: ", score)
-                        combined_score.append(score)
+        # comparing reactions and reaction conditions
+        test_data = az.load_yaml(test_file_path)
+        model_data = az.load_yaml(model_file_path)
+        # iteration over each monomer pair of test data
+        for i, reaction in enumerate(test_data['reactions']):
+            print('iteration: ', i + 1)
+            total_monomer_count += 1
+            test_monomers = reaction['monomers']
 
-                        # comparison of temperature
-                        temperature_model, temp_unit_model = az.get_temp(reaction_conditions, index)
-                        temperature_model, temperature = az.convert_unit(temperature_model, temperature,
-                                                                         temp_unit_model,
-                                                                         temp_unit)
-                        mse_temp_individual = calculate_mse(temperature_model, temperature)
-                        mse_temp.append(mse_temp_individual)
-                        print(temperature_model, temperature)
+            # try to find a matching monomer pair
+            model_monomer_index = az.find_matching_reaction(model_data, test_monomers)
+            test_monomer_index = i
+            # if a monomer match is found: compare reaction conditions of this specific match
+            if model_monomer_index is not None:
+                sequence_change = az.get_sequence_of_monomers(
+                    model_data['reactions'][model_monomer_index]['monomers'],
+                    test_monomers)
+                # iteration over each reaction condition of the test monomer pair with found index
+                for j, reaction_conditions in enumerate(reaction['reaction_conditions']):
+                    print('matching_monomer_error: ', matching_monomer_error)
+                    # model data: specific reaction condition
+                    specific_reaction = model_data['reactions'][model_monomer_index]
+                    specific_reaction_conditions = specific_reaction['reaction_conditions']
+                    model_reaction_conditions = az.extract_reaction_conditions(specific_reaction_conditions)
+                    # test data: specific reaction condition for this iteration
+                    temperature, temp_unit, polym_method, polym_type, solvent, reaction_constants, reaction_constant_confidence, determination_method = az.get_metadata_polymerization(
+                        reaction_conditions)
+                    print(model_reaction_conditions)
+                    # try to find matching or best matching reaction conditions of model data to specific test conditions
+                    index, score = az.find_matching_reaction_conditions(model_reaction_conditions, solvent,
+                                                                        temperature, temp_unit,
+                                                                        polym_type, polym_method,
+                                                                        determination_method)
+                    print("reaction_conditions match: ", score)
+                    combined_score.append(score)
 
-                        # comparison of solvents
-                        solvent_model, smiles_solvent_model = az.get_solvent(reaction_conditions, index)
-                        smiles_solvent_test = az.name_to_smiles(solvent)
-                        solvent_error += az.compare_smiles(smiles_solvent_test, smiles_solvent_model)
+                    # comparison of temperature
+                    temperature_model, temp_unit_model = az.get_temp(model_reaction_conditions, index)
+                    temperature_model, temperature = az.convert_unit(temperature_model, temperature,
+                                                                     temp_unit_model,
+                                                                     temp_unit)
+                    mse_temp_individual = calculate_mse(temperature_model, temperature)
+                    mse_temp.append(mse_temp_individual)
+                    print(temperature_model, temperature)
 
-                        # comparison of reactivity constant and confidence of reactivity constant
-                        test_reaction_constants, test_reaction_const_conf = az.get_reaction_constant(reaction_constants,
-                                                                                                     reaction_constant_confidence)
-                        model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(
-                            reaction_conditions['reaction_constants'], reaction_conditions['reaction_constant_conf'])
-                        if sequence_change == 1:
-                            test_reaction_constants, model_reaction_constants = az.change_sequence(
-                                test_reaction_constants,
-                                model_reaction_constants)
-                            test_reaction_const_conf, model_reaction_const_conf = az.change_sequence(
-                                test_reaction_const_conf,
-                                model_reaction_const_conf)
+                    # comparison of solvents
+                    solvent_model, smiles_solvent_model = az.get_solvent(model_reaction_conditions, index)
+                    smiles_solvent_test = az.name_to_smiles(solvent)
+                    solvent_error += az.compare_smiles(smiles_solvent_test, smiles_solvent_model)
 
-                        if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
-                            if reaction_const_conf_error is None:
-                                reaction_const_error = 1
-                            else:
-                                reaction_const_error += 1
+                    # comparison of reactivity constant and confidence of reactivity constant
+                    reaction_constants, reaction_constant_confidence = az.get_reaction_const_list(
+                        reaction_constants, reaction_constant_confidence)
+                    print(
+                        f'reaction_const: {reaction_constants}, reaction_const_confidence: {reaction_constant_confidence}')
+                    model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(
+                        model_reaction_conditions, index)
+                    if sequence_change == 1:
+                        test_reaction_constants, model_reaction_constants = az.change_sequence(
+                            test_reaction_constants,
+                            model_reaction_constants)
+                        reaction_constant_confidence, model_reaction_const_conf = az.change_sequence(
+                            reaction_constant_confidence,
+                            model_reaction_const_conf)
+                    print(f'model_reaction_constants: {model_reaction_constants}')
+                    if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
+                        if reaction_const_conf_error is None:
+                            reaction_const_error = 1
                         else:
-                            for test_val, model_val in zip(test_reaction_constants, model_reaction_constants):
-                                mse_const_individual = mean_squared_error([test_val], [model_val])
-                                combined_mse_const.append(mse_const_individual)
+                            reaction_const_error += 1
+                    else:
+                        for test_val, model_val in zip(test_reaction_constants, model_reaction_constants):
+                            mse_const_individual = mean_squared_error([test_val], [model_val])
+                            combined_mse_const.append(mse_const_individual)
 
-                        if test_reaction_const_conf == model_reaction_const_conf == [None, None]:
-                            continue
-                        elif model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
-                            if reaction_const_conf_error is None:
-                                reaction_const_conf_error = 1
-                            else:
-                                reaction_const_conf_error += 1
-
+                    if reaction_constant_confidence == model_reaction_const_conf == [None, None]:
+                        continue
+                    elif model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
+                        if reaction_const_conf_error is None:
+                            reaction_const_conf_error = 1
                         else:
-                            for test_val, model_val in zip(test_reaction_const_conf, model_reaction_const_conf):
-                                mse_conf_individual = mean_squared_error([test_val], [model_val])
-                                combined_mse_conf.append(mse_conf_individual)
-                else:
-                    matching_monomer_error += 1
+                            reaction_const_conf_error += 1
+
+                    else:
+                        for test_val, model_val in zip(reaction_constant_confidence, model_reaction_const_conf):
+                            mse_conf_individual = mean_squared_error([test_val], [model_val])
+                            combined_mse_conf.append(mse_conf_individual)
+            else:
+                matching_monomer_error += 1
+
+
+
     except TypeError:
+        print(TypeError)
         print(f"file {test_file} not parsable")
         parsing_error += 1
 

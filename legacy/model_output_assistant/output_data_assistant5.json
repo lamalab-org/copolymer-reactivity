@@ -1,125 +1,26 @@
 {
     "reactions": [
         {
-            "monomers": [
-                "Ethylene",
-                "Vinyl acetate"
-            ],
+            "monomers": "Ethylene and Vinyl Acetate",
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free radical catalysis",
-                    "solvent": "NA",
+                    "polymerization_type": "free-radical copolymerization",
+                    "solvent": "tert-butyl alcohol",
                     "method": "NA",
-                    "temperature": "150",
+                    "temperature": 62,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": "1.01",
-                        "constant_2": "1"
+                        "constant_1": 0.743,
+                        "constant_2": 1.515
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 0.007
                     },
-                    "determination_method": "NA"
+                    "determination_method": "feed compositional analysis (FCA) method"
                 }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Methyl acrylate"
             ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical catalysis",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": "150",
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": "0.2",
-                        "constant_2": "11"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Methyl methacrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical catalysis",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": "150",
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": "0.2",
-                        "constant_2": "17"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Diethyl maleate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical catalysis",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": "150",
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": "0.25",
-                        "constant_2": "108"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Diethyl fumarate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical catalysis",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": "150",
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": "0.25",
-                        "constant_2": "10"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
-                }
-            ]
+            "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1971.150090810"
         }
-    ],
-    "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820"
+    ]
 }

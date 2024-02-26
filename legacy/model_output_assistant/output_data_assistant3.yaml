@@ -1,66 +1,16 @@
 reactions:
-- monomers:
-  - n-Butyl acrylate
-  - Ethylene
+- monomers: Methacrylic acid (MAA) - Ethyl acrylate (EA)
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: NA
+  - determination_method: EVM program and Kelen-Tudos method
+    method: emulsion
+    polymerization_type: semicontinuous emulsion polymerization
     reaction_constant_conf:
-      constant_conf_1: ±2.5
-      constant_conf_2: ±0.01
+      constant_conf_1: 0.13
+      constant_conf_2: 0.08
     reaction_constants:
-      constant_1: '11.9'
-      constant_2: '0.03'
-    solvent: NA
-    temperature: '70'
+      constant_1: 2
+      constant_2: 0.162
+    solvent: water
+    temperature: 50
     temperature_unit: °C
-- monomers:
-  - Vinyl chloride
-  - Ethylene
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: ±0.30
-      constant_conf_2: ±0.07
-    reaction_constants:
-      constant_1: '3.60'
-      constant_2: '0.24'
-    solvent: NA
-    temperature: '90'
-    temperature_unit: °C
-- monomers:
-  - Vinyl acetate
-  - Ethylene
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: ±0.19
-      constant_conf_2: ±0.06
-    reaction_constants:
-      constant_1: '1.08'
-      constant_2: '1.07'
-    solvent: NA
-    temperature: '90'
-    temperature_unit: °C
-- monomers:
-  - Vinyl fluoride
-  - Ethylene
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: ±0.05
-      constant_conf_2: ±0.77
-    reaction_constants:
-      constant_1: '0.16'
-      constant_2: '4.39'
-    solvent: NA
-    temperature: '160'
-    temperature_unit: °C
-source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010406
+  source: https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307

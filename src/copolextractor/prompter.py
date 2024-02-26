@@ -15,21 +15,21 @@ def get_prompt_template():
                 Extract the following information:
 
                    reactions: 
-                    monomers: [name of pair of involved monomers] 
+                    monomers: [name of pair of involved monomers] as Str
                     -reaction_conditions: 
-                     -polymerization_type: polymerization reaction type (free radical polymerization, anionic polymerization, cationic polymerizatio,...)
-                       solvent: used solvent
-                       method: used polymerization method (solvent, bulk,...)
-                       temperature: used polymerization temperature
-                       temperature_unit: unit of temperature (°C, °F, ...)
-                       reaction_constants: polymerization reaction constants r1 and r2
+                     -polymerization_type: polymerization reaction type (free radical polymerization, anionic polymerization, cationic polymerizatio,...) as Str
+                       solvent: used solvent as Str
+                       method: used polymerization method (solvent, bulk,...) as Str
+                       temperature: used polymerization temperature as Int
+                       temperature_unit: unit of temperature (°C, °F, ...) as Str
+                       reaction_constants: polymerization reaction constants r1 and r2 as Int
                         -constant_1:
                         -constant_2:
-                       reaction_constant_conf: confidence interval of polymerization reaction constant r1 and r2
+                       reaction_constant_conf: confidence interval of polymerization reaction constant r1 and r2 as Int
                         -constant_conf_1:
                         -constant_conf_2:
-                       determination_method: method for determination of the r-values (Kelen-Tudor, ...)
-                   source: doi url or source  
+                       determination_method: method for determination of the r-values (Kelen-Tudor, ...) as Str
+                   source: doi url or source as Str
 
 
                    If the information is not provided put NA. If there are multiple polymerization's with different 

@@ -1,18 +1,32 @@
 reactions:
 - monomers:
-  - Methylvinylsilyl-bis-e-caprolactam (MVSC)
-  - methyl methacrylate (MM) or styrene
+  - 2-Vinylpyridine
+  - NA
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: computed
     method: bulk
-    polymerization_type: Bulk polymerization
+    polymerization_type: bulk polymerization
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+    - constant_conf_1: 0.1
+      constant_conf_2: 0.05
     reaction_constants:
-      constant_1: NA
-      constant_2: NA
-    solvent: NA
-    temperature: '120'
+    - constant_1: 12.2
+      constant_2: 24.8
+    solvent: dimethylformamide for purification, dioxane as non-solvent for precipitation
+    temperature: 70
     temperature_unit: °C
+  source: NA
+- monomers:
+  - Methacrylic Acid
+  - -Diethylaminoethyl Methacrylate
+  reaction_conditions:
+  - determination_method: viscometric studies
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf: NA
+    reaction_constants: NA
+    solvent: water, nitromethane, dimethyl formamide, pyridine, acetic acid, methanol
+      with small amounts of water
+    temperature: NA
+    temperature_unit: NA
   source: NA

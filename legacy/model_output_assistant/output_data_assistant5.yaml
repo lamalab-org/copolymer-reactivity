@@ -1,82 +1,16 @@
 reactions:
-- monomers:
-  - Ethylene
-  - Vinyl acetate
+- monomers: Ethylene and Vinyl Acetate
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: feed compositional analysis (FCA) method
     method: NA
-    polymerization_type: free radical catalysis
+    polymerization_type: free-radical copolymerization
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.005
+      constant_conf_2: 0.007
     reaction_constants:
-      constant_1: '1.01'
-      constant_2: '1'
-    solvent: NA
-    temperature: '150'
+      constant_1: 0.743
+      constant_2: 1.515
+    solvent: tert-butyl alcohol
+    temperature: 62
     temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Methyl acrylate
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free radical catalysis
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: '0.2'
-      constant_2: '11'
-    solvent: NA
-    temperature: '150'
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Methyl methacrylate
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free radical catalysis
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: '0.2'
-      constant_2: '17'
-    solvent: NA
-    temperature: '150'
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl maleate
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free radical catalysis
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: '0.25'
-      constant_2: '108'
-    solvent: NA
-    temperature: '150'
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl fumarate
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free radical catalysis
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: '0.25'
-      constant_2: '10'
-    solvent: NA
-    temperature: '150'
-    temperature_unit: °C
-source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820
+  source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1971.150090810
