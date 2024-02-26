@@ -1,46 +1,82 @@
-"Based on the information extracted from the PDF, here is the polymerization information\
-  \ from each polymerization formatted as requested:\n\n```json\n{\n  \"reactions\"\
-  : [\n    {\n      \"monomers\": [\"ethylene\", \"vinyl acetate\"],\n      \"reaction_conditions\"\
-  : [\n        {\n          \"polymerization_type\": \"NA\",\n          \"solvent\"\
-  : \"NA\",\n          \"method\": \"NA\",\n          \"temperature\": \"150\",\n\
-  \          \"temperature_unit\": \"°C\",\n          \"reaction_constants\": {\n\
-  \            \"constant_1\": \"NA\",\n            \"constant_2\": \"NA\"\n     \
-  \     },\n          \"reaction_constant_conf\": {\n            \"constant_conf_1\"\
-  : \"NA\",\n            \"constant_conf_2\": \"NA\"\n          },\n          \"determination_method\"\
-  : \"NA\"\n        }\n      ]\n    },\n    {\n      \"monomers\": [\"ethylene\",\
-  \ \"methyl acrylate\"],\n      \"reaction_conditions\": [\n        {\n          \"polymerization_type\"\
-  : \"NA\",\n          \"solvent\": \"NA\",\n          \"method\": \"NA\",\n     \
-  \     \"temperature\": \"150\",\n          \"temperature_unit\": \"°C\",\n     \
-  \     \"reaction_constants\": {\n            \"constant_1\": \"NA\",\n         \
-  \   \"constant_2\": \"NA\"\n          },\n          \"reaction_constant_conf\":\
-  \ {\n            \"constant_conf_1\": \"NA\",\n            \"constant_conf_2\":\
-  \ \"NA\"\n          },\n          \"determination_method\": \"NA\"\n        }\n\
-  \      ]\n    },\n    {\n      \"monomers\": [\"ethylene\", \"methyl methacrylate\"\
-  ],\n      \"reaction_conditions\": [\n        {\n          \"polymerization_type\": \"\
-  NA\",\n          \"solvent\": \"NA\",\n          \"method\": \"NA\",\n         \
-  \ \"temperature\": \"150\",\n          \"temperature_unit\": \"°C\",\n         \
-  \ \"reaction_constants\": {\n            \"constant_1\": \"NA\",\n            \"\
-  constant_2\": \"NA\"\n          },\n          \"reaction_constant_conf\": {\n  \
-  \          \"constant_conf_1\": \"NA\",\n            \"constant_conf_2\": \"NA\"\
-  \n          },\n          \"determination_method\": \"NA\"\n        }\n      ]\n\
-  \    },\n    {\n      \"monomers\": [\"ethylene\", \"diethyl maleate\"],\n     \
-  \ \"reaction_conditions\": [\n        {\n          \"polymerization_type\": \"NA\",\n \
-  \         \"solvent\": \"NA\",\n          \"method\": \"NA\",\n          \"temperature\"\
-  : \"150\",\n          \"temperature_unit\": \"°C\",\n          \"reaction_constants\"\
-  : {\n            \"constant_1\": \"NA\",\n            \"constant_2\": \"NA\"\n \
-  \         },\n          \"reaction_constant_conf\": {\n            \"constant_conf_1\"\
-  : \"NA\",\n            \"constant_conf_2\": \"NA\"\n          },\n          \"determination_method\"\
-  : \"NA\"\n        }\n      ]\n    },\n    {\n      \"monomers\": [\"ethylene\",\
-  \ \"diethyl fumarate\"],\n      \"reaction_conditions\": [\n        {\n          \"polymerization_type\"\
-  : \"NA\",\n          \"solvent\": \"NA\",\n          \"method\": \"NA\",\n     \
-  \     \"temperature\": \"150\",\n          \"temperature_unit\": \"°C\",\n     \
-  \     \"reaction_constants\": {\n            \"constant_1\": \"NA\",\n         \
-  \   \"constant_2\": \"NA\"\n          },\n          \"reaction_constant_conf\":\
-  \ {\n            \"constant_conf_1\": \"NA\",\n            \"constant_conf_2\":\
-  \ \"NA\"\n          },\n          \"determination_method\": \"NA\"\n        }\n\
-  \      ]\n    }\n  ],\n  \"source\": \"https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820\"\
-  \n}\n```\n\nThis JSON structure outlines the copolymerization of ethylene with various\
-  \ monomers. Specific details regarding polymerization type, solvent, method, reaction\
-  \ constants, and their confidence intervals are marked as \"NA\" since the information\
-  \ was not directly provided or discernible from the text extracted. The polymerizations\
-  \ were carried out at a temperature of 150°C, and all other details are noted accordingly."
+reactions:
+- monomers:
+  - Ethylene
+  - Vinyl acetate
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: free radical catalysis
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: '1.01'
+      constant_2: '1'
+    solvent: NA
+    temperature: '150'
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Methyl acrylate
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: free radical catalysis
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: '0.2'
+      constant_2: '11'
+    solvent: NA
+    temperature: '150'
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Methyl methacrylate
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: free radical catalysis
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: '0.2'
+      constant_2: '17'
+    solvent: NA
+    temperature: '150'
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Diethyl maleate
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: free radical catalysis
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: '0.25'
+      constant_2: '108'
+    solvent: NA
+    temperature: '150'
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Diethyl fumarate
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: free radical catalysis
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: '0.25'
+      constant_2: '10'
+    solvent: NA
+    temperature: '150'
+    temperature_unit: °C
+source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820

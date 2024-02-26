@@ -10,7 +10,7 @@ from doctr.io import DocumentFile
 
 model = ocr_predictor(det_arch='db_resnet50', reco_arch='crnn_vgg16_bn', pretrained=True, export_as_straight_boxes=True)
 
-doc = DocumentFile.from_pdf("./../pdfs/paper1.pdf")
+doc = DocumentFile.from_pdf("../pdfs/paper01.pdf")
 result = model(doc)
 
 json_output = result.export()

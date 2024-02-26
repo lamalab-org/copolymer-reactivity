@@ -1,23 +1,32 @@
-"Based on the provided pdf, I have extracted the following details about the polymerizations\
-  \ described in the document:\n\n```json\n{\n  \"reactions\": [\n    {\n      \"\
-  monomers\": [\"2-chloro-13-butadiene\", \"methyl isopropenyl ketone\"],\n      \"\
-  reaction_conditions\": [\n        {\n          \"polymerization_type\": \"free-radical\
-  \ copolymerization\",\n          \"solvent\": \"NA\",\n          \"method\": \"\
-  emulsion\",\n          \"temperature\": \"40\",\n          \"temperature_unit\"\
-  : \"°C\",\n          \"reaction_constants\": {\n            \"constant_1\": \"3.6\"\
-  ,\n            \"constant_2\": \"0.1\"\n          },\n          \"reaction_constant_conf\"\
-  : {\n            \"constant_conf_1\": \"±0.2\",\n            \"constant_conf_2\"\
-  : \"±0.05\"\n          },\n          \"determination_method\": \"NA\"\n        }\n\
-  \      ]\n    },\n    {\n      \"monomers\": [\"2-chloro-13-butadiene\", \"methacrylic\
-  \ acid\"],\n      \"reaction_conditions\": [\n        {\n          \"polymerization_type\"\
-  : \"free-radical copolymerization\",\n          \"solvent\": \"NA\",\n         \
-  \ \"method\": \"emulsion\",\n          \"temperature\": \"40\",\n          \"temperature_unit\"\
-  : \"°C\",\n          \"reaction_constants\": {\n            \"constant_1\": \"2.7\"\
-  ,\n            \"constant_2\": \"0.15\"\n          },\n          \"reaction_constant_conf\"\
-  : {\n            \"constant_conf_1\": \"±0.2\",\n            \"constant_conf_2\"\
-  : \"±0.05\"\n          },\n          \"determination_method\": \"NA\"\n        }\n\
-  \      ]\n    }\n  ],\n  \"source\": \"https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635\"\
-  \n}\n```\n\nEach reaction involves different reaction_conditions of monomers, and the details\
-  \ such as polymerization type, method, temperature, reaction constants, and their\
-  \ confidence intervals have been provided. The source link directs to the document\
-  \ where this information is recorded【7†source】【19†source】."
+reactions:
+- monomers: MAS and various Vinyl monomers
+  reaction_conditions:
+    determination_method: Alfrey-Price method
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: DMF
+    temperature: 60
+    temperature_unit: °C
+  source: NA
+- monomers: methylvinylsilyl-bis-e-caprolactam (MVSC) and methylvinylsilyl-bis-β-pyrrolidone
+    (MVSP) with methyl methacrylate (MM) or styrene
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: Bulk polymerization
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
+    temperature: 120
+    temperature_unit: °C
+  source: 'Vysokomol. soyed. A16: No 2 354-358 1974'

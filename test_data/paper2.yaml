@@ -1,30 +1,18 @@
 reactions:
 - reaction_conditions:
-  - method: emulsion
+  - method: bulk
     polymerization_type: free radical polymerization
     reaction_constant_conf:
-      constant_conf_1:
-      constant_conf_2:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.05
     reaction_constants:
-      constant_1: 2.9
-      constant_2: 0.162
-    determination_method: Kelen-Tudos method
-    solvent: water
-    temperature: 50
+      constant_1: 1.55
+      constant_2: 0.58
+    solvent: none
+    temperature: 70
     temperature_unit: °C
-  - method: emulsion
-    polymerization_type: free radical polymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.13
-      constant_conf_2: 0.08
-    reaction_constants:
-      constant_1: 2.58
-      constant_2: 0.157
-    determination_method: EVM program
-    solvent: water
-    temperature: 50
-    temperature_unit: °C
+    determination_method:
   monomers:
+  - 2-Vinylpyridine
   - Methacrylic acid
-  - Ethylacrylate
-source: https://doi.org/10.1002/app.1994.070531307
+source: https://pubs.acs.org/doi/abs/10.1021/ja01122a046
