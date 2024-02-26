@@ -1,5 +1,8 @@
 reactions:
-- reaction_conditions:
+- monomers:
+    - Methylacrylic acid
+    - Styrol
+  reaction_conditions:
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -11,7 +14,7 @@ reactions:
     solvent: carbon tetrachloride
     temperature: 60
     temperature_unit: °C
-    determination_method:
+    determination_method: Kelen Tudos
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -23,7 +26,7 @@ reactions:
     solvent: Trichlormethan
     temperature: 60
     temperature_unit: °C
-    determination_method:
+    determination_method: Kelen Tudos
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -35,7 +38,7 @@ reactions:
     solvent: acetone
     temperature: 60
     temperature_unit: °C
-    determination_method:
+    determination_method: Kelen Tudos
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -47,7 +50,7 @@ reactions:
     solvent: 1,4-dioxane
     temperature: 60
     temperature_unit: °C
-    determination_method:
+    determination_method: Kelen Tudos
   - method: solvent
     polymerization_type: free radical polymerization
     reaction_constant_conf:
@@ -59,8 +62,5 @@ reactions:
     solvent: acetonitrile
     temperature: 60
     temperature_unit: °C
-    determination_method:
-  monomers:
-  - Methylacrylic acid
-  - Styrol
+    determination_method: Kelen Tudos
 source: https://doi.org/10.1002/macp.1985.021860820

@@ -1,37 +1,31 @@
 reactions:
-- monomers:
-  - Acrylonitrile
-  - Ethylene
+- monomers: 2-Chloro-1,3-butadiene/Methyl Isopropenyl Ketone
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: Gamma-ray induced copolymerization
+    determination_method: NA
+    method: Emulsion
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.2
+      constant_conf_2: 0.05
     reaction_constants:
-      constant_1: ~7
-      constant_2: n0
-    solvent: Toluene
-    temperature: '20'
-    temperature_unit: °C
-  source: 'Vysokomol. soedin. 3: No. 7 1015-1019 1961.'
-- monomers:
-  - Vinyl Ether of 4-Chlorophenol
-  - Vinyl Ether of 4-Bromophenol
-  - Vinyl Ether of 2,4-Dichlorophenol
-  - Vinyl Ether of Pentachlorophenol
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: Cationic polymerization
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: NA
-      constant_2: NA
+      constant_1: 3.6
+      constant_2: 0.1
     solvent: NA
-    temperature: NA
-    temperature_unit: NA
-  source: 'Vysokomol. soedin. 3: No. 7 1020-1026 1961.'
+    temperature: 40
+    temperature_unit: °C
+  source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635
+- monomers: 2-Chloro-1,3-butadiene/Methacrylic Acid
+  reaction_conditions:
+    determination_method: NA
+    method: Emulsion
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.2
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 2.7
+      constant_2: 0.15
+    solvent: NA
+    temperature: 40
+    temperature_unit: °C
+  source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635

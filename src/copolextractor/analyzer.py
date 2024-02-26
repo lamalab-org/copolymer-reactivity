@@ -31,8 +31,8 @@ def get_total_number_of_reaction_conditions(data: dict) -> int:
 
 def extract_reaction_conditions(data: list) -> list:
     reaction_conditions = []
-    for reaction_conditions in data:
-        reaction_conditions.append(reaction_conditions)
+    for reaction_condition in data:
+        reaction_conditions.append(reaction_condition)
     return reaction_conditions
 
 
@@ -54,15 +54,15 @@ def _extract_monomers(data: dict) -> list:
     return monomers
 
 
-def get_temp(data: dict, index: int) -> tuple:
-    specific_comb = data['reaction_conditions'][index]
-    temp = specific_comb['temperature']
-    temp_unit = specific_comb['temperature_unit']
+def get_temp(data: list, index: int) -> tuple:
+    specific_cond = data[index]
+    temp = specific_cond['temperature']
+    temp_unit = specific_cond['temperature_unit']
     return temp, temp_unit
 
 
-def get_solvent(data: dict, index: int) -> tuple:
-    specific_comb = data['reaction_conditions'][index]
+def get_solvent(data: list, index: int) -> tuple:
+    specific_comb = data[index]
     solvent = specific_comb['solvent']
     solvent_smiles = name_to_smiles(solvent)
     return solvent, solvent_smiles
@@ -107,6 +107,7 @@ def get_sequence_of_monomers(test_monomers, model_monomers):
 
 
 def _compare_monomers(test_monomers: List[str], model_monomers: List[str]) -> bool:
+    print(f"test monomers: {test_monomers} vs model monomers: {model_monomers}")
     if set(test_monomers) == set(model_monomers):
         return True
     else:
@@ -204,17 +205,25 @@ def compare_number_of_reactions(test_file: Union[str, Path], model_file: Union[s
     return output
 
 
-def get_reaction_constant(reaction_constant: dict, reaction_const_conf: dict):
+def get_reaction_constant(data: list, index: int) -> tuple:
+    specific_comb = data[index]
+    reaction_const = specific_comb['reaction_constants']
+    reaction_const_conf = specific_comb['reaction_constant_conf']
+    reaction_const, reaction_const_conf= get_reaction_const_list(reaction_const, reaction_const_conf)
+    return reaction_const, reaction_const_conf
+
+
+def get_reaction_const_list(reaction_const: list, reaction_const_conf: list):
     reaction_constants = []
     reaction_constants_conf = []
-    for constant in reaction_constant:
-        reaction_constants.append(reaction_constant[constant])
+    for constant in reaction_const:
+        reaction_constants.append(reaction_const[constant])
     for conf in reaction_const_conf:
         reaction_constants_conf.append(reaction_const_conf[conf])
     return reaction_constants, reaction_constants_conf
 
 
-def change_sequence(constant1: list, constant2: list):
+def change_sequence(constt1: list, constant2: list):
     constant1[0], constant1[1] = constant1[1], constant1[0]
     constant2[0], constant2[1] = constant2[1], constant2[0]
     return constant1, constant2
