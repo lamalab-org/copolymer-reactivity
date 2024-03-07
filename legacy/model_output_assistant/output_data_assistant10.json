@@ -2,114 +2,116 @@
     "reactions": [
         {
             "monomers": [
-                "Ethylene",
-                "Vinyl acetate"
+                "3-Methylstyrene",
+                "Methyl Acrylate"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical catalysis",
-                "solvent": "NA",
-                "method": "NA",
-                "temperature": "150",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "1.01",
-                    "constant_2": "1"
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Toluene",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Kelen-Tudos"
                 },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Isopropanol",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.33,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos"
                 },
-                "determination_method": "NA"
-            }
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Acetone",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.51
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
         },
         {
             "monomers": [
-                "Ethylene",
-                "Methyl acrylate"
+                "3-Methylstyrene",
+                "Methyl Methacrylate"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical catalysis",
-                "solvent": "NA",
-                "method": "NA",
-                "temperature": "150",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "0.2",
-                    "constant_2": "11"
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Toluene",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.53,
+                        "constant_2": 0.48
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudos"
                 },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Isopropanol",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.36,
+                        "constant_2": 0.38
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos"
                 },
-                "determination_method": "NA"
-            }
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Methyl methacrylate"
-            ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical catalysis",
-                "solvent": "NA",
-                "method": "NA",
-                "temperature": "150",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "0.2",
-                    "constant_2": "17"
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Diethyl maleate"
-            ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical catalysis",
-                "solvent": "NA",
-                "method": "NA",
-                "temperature": "150",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "0.25",
-                    "constant_2": "108"
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Diethyl fumarate"
-            ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical catalysis",
-                "solvent": "NA",
-                "method": "NA",
-                "temperature": "150",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "0.25",
-                    "constant_2": "10"
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Acetone",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
         }
     ],
-    "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820"
+    "source": "GEORGIEV DAKOVA AND SIMPSON"
 }

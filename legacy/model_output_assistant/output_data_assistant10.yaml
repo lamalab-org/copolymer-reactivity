@@ -1,82 +1,82 @@
 reactions:
 - monomers:
-  - Ethylene
-  - Vinyl acetate
+  - 3-Methylstyrene
+  - Methyl Acrylate
   reaction_conditions:
-    determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
-    polymerization_type: free radical catalysis
+    polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.03
+      constant_conf_2: 0.08
     reaction_constants:
-      constant_1: '1.01'
-      constant_2: '1'
-    solvent: NA
-    temperature: '150'
+      constant_1: 0.06
+      constant_2: 0.35
+    solvent: Toluene
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: NA
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 0.33
+      constant_2: 0.18
+    solvent: Isopropanol
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: NA
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.42
+      constant_2: 0.51
+    solvent: Acetone
+    temperature: 70
     temperature_unit: °C
 - monomers:
-  - Ethylene
-  - Methyl acrylate
+  - 3-Methylstyrene
+  - Methyl Methacrylate
   reaction_conditions:
-    determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
-    polymerization_type: free radical catalysis
+    polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.04
+      constant_conf_2: 0.04
     reaction_constants:
-      constant_1: '0.2'
-      constant_2: '11'
-    solvent: NA
-    temperature: '150'
+      constant_1: 0.53
+      constant_2: 0.48
+    solvent: Toluene
+    temperature: 70
     temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Methyl methacrylate
-  reaction_conditions:
-    determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
-    polymerization_type: free radical catalysis
+    polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.06
+      constant_conf_2: 0.03
     reaction_constants:
-      constant_1: '0.2'
-      constant_2: '17'
-    solvent: NA
-    temperature: '150'
+      constant_1: 0.36
+      constant_2: 0.38
+    solvent: Isopropanol
+    temperature: 70
     temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl maleate
-  reaction_conditions:
-    determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
-    polymerization_type: free radical catalysis
+    polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.05
+      constant_conf_2: 0.04
     reaction_constants:
-      constant_1: '0.25'
-      constant_2: '108'
-    solvent: NA
-    temperature: '150'
+      constant_1: 0.51
+      constant_2: 0.41
+    solvent: Acetone
+    temperature: 70
     temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl fumarate
-  reaction_conditions:
-    determination_method: NA
-    method: NA
-    polymerization_type: free radical catalysis
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: '0.25'
-      constant_2: '10'
-    solvent: NA
-    temperature: '150'
-    temperature_unit: °C
-source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820
+source: GEORGIEV DAKOVA AND SIMPSON

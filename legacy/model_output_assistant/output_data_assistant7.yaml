@@ -1,54 +1,62 @@
 reactions:
-- monomers: ethylene and n-Butyl acrylate
+- monomers:
+  - Ethylene
+  - n-Butyl acrylate
   reaction_conditions:
     determination_method: NA
-    method: NA
+    method: high pressure
     polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 2.5
-      constant_conf_2: 0.01
+      constant_conf_1: NA
+      constant_conf_2: NA
     reaction_constants:
       constant_1: 11.9
       constant_2: 0.03
     solvent: NA
     temperature: 70
     temperature_unit: °C
-- monomers: ethylene and Vinyl chloride
+- monomers:
+  - Ethylene
+  - Vinyl chloride
   reaction_conditions:
     determination_method: NA
-    method: NA
+    method: high pressure
     polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 0.3
-      constant_conf_2: 0.07
+      constant_conf_1: NA
+      constant_conf_2: NA
     reaction_constants:
       constant_1: 3.6
       constant_2: 0.24
     solvent: NA
     temperature: 90
     temperature_unit: °C
-- monomers: ethylene and Vinyl acetate
+- monomers:
+  - Ethylene
+  - Vinyl acetate
   reaction_conditions:
     determination_method: NA
-    method: NA
+    method: high pressure
     polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 0.19
-      constant_conf_2: 0.06
+      constant_conf_1: NA
+      constant_conf_2: NA
     reaction_constants:
       constant_1: 1.08
       constant_2: 1.07
     solvent: NA
     temperature: 90
     temperature_unit: °C
-- monomers: ethylene and Vinyl fluoride
+- monomers:
+  - Ethylene
+  - Vinyl fluoride
   reaction_conditions:
     determination_method: NA
-    method: NA
+    method: high pressure
     polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 0.05
-      constant_conf_2: 0.77
+      constant_conf_1: NA
+      constant_conf_2: NA
     reaction_constants:
       constant_1: 0.16
       constant_2: 4.39

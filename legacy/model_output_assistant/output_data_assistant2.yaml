@@ -1,32 +1,35 @@
 reactions:
 - monomers:
   - 2-Vinylpyridine
-  - NA
+  - Methacrylic Acid
   reaction_conditions:
-  - determination_method: computed
+  - determination_method: azole-bis-isobutyronitrile catalyst
     method: bulk
-    polymerization_type: bulk polymerization
+    polymerization_type: bulk
     reaction_constant_conf:
-    - constant_conf_1: 0.1
-      constant_conf_2: 0.05
+      constant_conf_1: NA
+      constant_conf_2: NA
     reaction_constants:
-    - constant_1: 12.2
-      constant_2: 24.8
-    solvent: dimethylformamide for purification, dioxane as non-solvent for precipitation
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
     temperature: 70
     temperature_unit: °C
   source: NA
 - monomers:
   - Methacrylic Acid
-  - -Diethylaminoethyl Methacrylate
+  - Diethylaminoethyl Methacrylate
   reaction_conditions:
-  - determination_method: viscometric studies
+  - determination_method: NA
     method: NA
     polymerization_type: NA
-    reaction_constant_conf: NA
-    reaction_constants: NA
-    solvent: water, nitromethane, dimethyl formamide, pyridine, acetic acid, methanol
-      with small amounts of water
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
     temperature: NA
     temperature_unit: NA
-  source: NA
+  source: Received July 27 1951

@@ -2,13 +2,13 @@
     "reactions": [
         {
             "monomers": [
-                "methacrylic acid",
-                "styrene"
+                "Methacrylic Acid",
+                "Styrene"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "Free radical copolymerization",
-                    "solvent": "carbon tetrachloride",
+                    "solvent": "Carbon Tetrachloride",
                     "method": "NA",
                     "temperature": 60,
                     "temperature_unit": "°C",
@@ -24,7 +24,7 @@
                 },
                 {
                     "polymerization_type": "Free radical copolymerization",
-                    "solvent": "chloroform",
+                    "solvent": "Chloroform",
                     "method": "NA",
                     "temperature": 60,
                     "temperature_unit": "°C",
@@ -40,7 +40,7 @@
                 },
                 {
                     "polymerization_type": "Free radical copolymerization",
-                    "solvent": "acetone",
+                    "solvent": "Acetone",
                     "method": "NA",
                     "temperature": 60,
                     "temperature_unit": "°C",
@@ -56,7 +56,7 @@
                 },
                 {
                     "polymerization_type": "Free radical copolymerization",
-                    "solvent": "1,4-dioxane",
+                    "solvent": "1,4-Dioxane",
                     "method": "NA",
                     "temperature": 60,
                     "temperature_unit": "°C",
@@ -72,7 +72,7 @@
                 },
                 {
                     "polymerization_type": "Free radical copolymerization",
-                    "solvent": "acetonitrile",
+                    "solvent": "Acetonitrile",
                     "method": "NA",
                     "temperature": 60,
                     "temperature_unit": "°C",
@@ -81,13 +81,13 @@
                         "constant_2": 0.29
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
+                        "constant_conf_1": 0.002,
                         "constant_conf_2": 0.0
                     },
                     "determination_method": "Kelen-Tudos method"
                 }
-            ],
-            "source": "https://onlinelibrary.wiley.com/doi/10.1002/macp.1985.021860820"
+            ]
         }
-    ]
+    ],
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/macp.1985.021860820"
 }
