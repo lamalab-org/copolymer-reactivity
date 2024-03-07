@@ -158,7 +158,12 @@ def find_matching_reaction_conditions(reaction_conditions: List[dict], solvent: 
     # first we check if we are lucky and find an exact match, then confidence would
     matching_idxs = []
     for i, comb in enumerate(reaction_conditions):
-        temperature_model, temp = convert_unit(comb['temperature'], temperature, comb['temperature_unit'], temp_unit)
+        if comb['temperature'] != 'NA' and comb['temperature_unit'] != 'NA':
+            temperature_model, temp = convert_unit(comb['temperature'], temperature, comb['temperature_unit'],
+                                                   temp_unit)
+        else:
+            temperature_model = comb['temperature']
+            temp = temperature
         if (
                 name_to_smiles(comb["solvent"]) == name_to_smiles(solvent)
                 and temperature_model == temp
@@ -223,9 +228,11 @@ def get_reaction_const_list(reaction_const: list, reaction_const_conf: list):
     return reaction_constants, reaction_constants_conf
 
 
-def change_sequence(constt1: list, constant2: list):
-    constant1[0], constant1[1] = constant1[1], constant1[0]
-    constant2[0], constant2[1] = constant2[1], constant2[0]
+def change_sequence(constant1: list, constant2: list):
+    print(constant1, constant2)
+    if constant1 and constant2:
+        constant1[0], constant1[1] = constant1[1], constant1[0]
+        constant2[0], constant2[1] = constant2[1], constant2[0]
     return constant1, constant2
 
 
@@ -233,3 +240,38 @@ def average(const):
     if len(const) != 0:
         average_value = sum(const) / len(const)
         return average_value
+
+
+def count_na_values(data, na_value="NA"):
+    na_count = 0
+
+    if isinstance(data, dict):
+        for value in data.values():
+            na_count += count_na_values(value, na_value)
+    elif isinstance(data, list):
+        for item in data:
+            na_count += count_na_values(item, na_value)
+    elif data == na_value:
+        na_count += 1
+    return na_count
+
+
+def count_total_entries(data):
+    count = 0
+    if isinstance(data, dict):
+        for value in data.values():
+            count += count_total_entries(value)
+    elif isinstance(data, list):
+        for item in data:
+            count += count_total_entries(item)
+    else:
+        count += 1
+    return count
+
+
+def calculate_rate(x1, x2):
+    if x2 != 0:
+        rate = abs(x1 / x2)
+        return rate
+    else:
+        return None

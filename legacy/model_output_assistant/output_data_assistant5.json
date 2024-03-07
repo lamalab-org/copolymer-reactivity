@@ -1,11 +1,14 @@
 {
     "reactions": [
         {
-            "monomers": "Ethylene and Vinyl Acetate",
+            "monomers": [
+                "Ethylene",
+                "Vinyl Acetate"
+            ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free-radical copolymerization",
-                    "solvent": "tert-butyl alcohol",
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-Butyl alcohol",
                     "method": "NA",
                     "temperature": 62,
                     "temperature_unit": "°C",
@@ -17,10 +20,10 @@
                         "constant_conf_1": 0.005,
                         "constant_conf_2": 0.007
                     },
-                    "determination_method": "feed compositional analysis (FCA) method"
+                    "determination_method": "NA"
                 }
-            ],
-            "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1971.150090810"
+            ]
         }
-    ]
+    ],
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1971.150090810"
 }
