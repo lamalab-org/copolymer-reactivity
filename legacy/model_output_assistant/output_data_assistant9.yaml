@@ -1,36 +1,82 @@
 reactions:
 - monomers:
-  - ethylene
-  - acrylonitrile
+  - Ethylene
+  - Vinyl acetate
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: gamma-ray induced copolymerization
+    determination_method: NA
+    method: Bulk
+    polymerization_type: Free radical
     reaction_constant_conf:
       constant_conf_1: NA
       constant_conf_2: NA
     reaction_constants:
-      constant_1: r1(AN) ~7
-      constant_2: r2= n0
-    solvent: toluene
-    temperature: '20'
-    temperature_unit: °C
-  source: 'Vysokomol. soedin. 3: No. 7 1015-1019 1961.'
-- monomers:
-  - vinyl ethers of chlorophenols
-  - methylmethacrylate
-  - styrene
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: cationic polymerization
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: NA
-      constant_2: NA
+      constant_1: 1.01
+      constant_2: 1
     solvent: NA
-    temperature: 60-80
+    temperature: 150
     temperature_unit: °C
-  source: 'Vysokomol. soedin. 3: No. 7 1020-1026 1961.'
+- monomers:
+  - Ethylene
+  - Methyl acrylate
+  reaction_conditions:
+    determination_method: NA
+    method: Bulk
+    polymerization_type: Free radical
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 11
+    solvent: NA
+    temperature: 150
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Methyl methacrylate
+  reaction_conditions:
+    determination_method: NA
+    method: Bulk
+    polymerization_type: Free radical
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 17
+    solvent: NA
+    temperature: 150
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Diethyl maleate
+  reaction_conditions:
+    determination_method: NA
+    method: Bulk
+    polymerization_type: Free radical
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 108
+    solvent: NA
+    temperature: 150
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Diethyl fumarate
+  reaction_conditions:
+    determination_method: NA
+    method: Bulk
+    polymerization_type: Free radical
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 10
+    solvent: NA
+    temperature: 150
+    temperature_unit: °C
+source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820

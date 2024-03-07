@@ -1,32 +1,52 @@
 reactions:
-- monomers: MAS and various Vinyl monomers
-  reaction_conditions:
-    determination_method: Alfrey-Price method
-    method: NA
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: NA
-      constant_2: NA
-    solvent: DMF
-    temperature: 60
-    temperature_unit: °C
-  source: NA
-- monomers: methylvinylsilyl-bis-e-caprolactam (MVSC) and methylvinylsilyl-bis-β-pyrrolidone
-    (MVSP) with methyl methacrylate (MM) or styrene
+- monomers:
+  - Methacrylic Acid Sulpholanate
+  - Styrene
   reaction_conditions:
     determination_method: NA
     method: NA
-    polymerization_type: Bulk polymerization
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 54
+      constant_conf_2: 0.1
     reaction_constants:
-      constant_1: NA
-      constant_2: NA
+      constant_1: 1
+      constant_2: 2
     solvent: NA
-    temperature: 120
+    temperature: NA
+    temperature_unit: NA
+- monomers:
+  - Methacrylic Acid Sulpholanate
+  - Methyl Methacrylate
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 25
+      constant_conf_2: 0.674
+    reaction_constants:
+      constant_1: 3
+      constant_2: 344
+    solvent: benzene
+    temperature: NA
+    temperature_unit: NA
+- monomers:
+  - Methacrylic Acid Sulpholanate
+  - Methacrylic Acid
+  reaction_conditions:
+    determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.83
+    reaction_constants:
+      constant_1: 1
+      constant_2: 4
+    solvent: DMF
+    temperature: 60
     temperature_unit: °C
-  source: 'Vysokomol. soyed. A16: No 2 354-358 1974'
+source:
+- 'Vysokomol soyed. AI6: No. 2 349-353 1974'
+- 'Vysokomol. soyed. A16: No 2 354-358 1974'

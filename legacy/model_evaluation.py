@@ -2,7 +2,8 @@ import os
 import copolextractor.analyzer as az
 from sklearn.metrics import mean_squared_error
 import wandb
-from copolextractor.prompter import get_prompt_template
+import copolextractor.prompter as prompter
+import traceback
 
 
 def count_reaction_conditions(file_path):
@@ -28,7 +29,7 @@ def calculate_mse(x1, x2):
 
 def calculate_rate(x1, x2):
     if x2 != 0:
-        rate = abs(x1/x2)
+        rate = abs(x1 / x2)
         return rate
     else:
         return None
@@ -37,8 +38,8 @@ def calculate_rate(x1, x2):
 reaction_number_error = 0
 reaction_conditions_number_error = 0
 matching_monomer_error = 0
-reaction_const_conf_error = None
-reaction_const_error = None
+reaction_const_conf_NA_count = 0
+reaction_const_NA_count = 0
 test_reaction_constants = []
 model_reaction_constants = []
 combined_score = []
@@ -53,8 +54,11 @@ combined_count_reaction_conditions_model = 0
 solvent_error = 0
 parsing_error = 0
 file_count = 0
-prompt = get_prompt_template()
-
+prompt = prompter.get_prompt_template()
+prompt_addition = prompter.get_prompt_addition()
+reaction_condition_count = 0
+total_entries_count = 0
+na_count = 0
 
 test_path = "./../test_data"
 model_path = "./model_output_assistant"
@@ -66,10 +70,11 @@ wandb.init(
 
     config={
         "model": "gpt-4-turbo-preview",
-        "temperature": 0.0,
         "paper number": 10,
         "token length": "",
-        "input": "PDF"
+        "input": "PDF",
+        "number of model calls": 2
+
     }
 )
 
@@ -91,10 +96,10 @@ for test_file, model_file in zip(test_files, model_files):
         print(f"Number of different reactions in model data: {reactions_model_count}")
         print(f"Number of different reaction_conditions in test data: {reaction_conditions_test_count}")
         print(f"Number of different reaction_conditions in model data: {reaction_conditions_model_count}")
-        combined_count_reactions_test = combined_count_reactions_test + reactions_test_count
-        combined_count_reactions_model = combined_count_reactions_model + reactions_model_count
-        combined_count_reaction_conditions_test = combined_count_reaction_conditions_test + reaction_conditions_test_count
-        combined_count_reaction_conditions_model = combined_count_reaction_conditions_model + reaction_conditions_model_count
+        combined_count_reactions_test += reactions_test_count
+        combined_count_reactions_model += reactions_model_count
+        combined_count_reaction_conditions_test += reaction_conditions_test_count
+        combined_count_reaction_conditions_model += reaction_conditions_model_count
 
         if reactions_test_count != reactions_model_count:
             reaction_number_error += 1
@@ -104,6 +109,10 @@ for test_file, model_file in zip(test_files, model_files):
         # comparing reactions and reaction conditions
         test_data = az.load_yaml(test_file_path)
         model_data = az.load_yaml(model_file_path)
+
+        # counting empty entries
+        total_entries_count += az.count_total_entries(model_data)
+        na_count += az.count_na_values(model_data)
         # iteration over each monomer pair of test data
         for i, reaction in enumerate(test_data['reactions']):
             print('iteration: ', i + 1)
@@ -120,6 +129,7 @@ for test_file, model_file in zip(test_files, model_files):
                     test_monomers)
                 # iteration over each reaction condition of the test monomer pair with found index
                 for j, reaction_conditions in enumerate(reaction['reaction_conditions']):
+                    reaction_condition_count += 1
                     print('matching_monomer_error: ', matching_monomer_error)
                     # model data: specific reaction condition
                     specific_reaction = model_data['reactions'][model_monomer_index]
@@ -139,12 +149,14 @@ for test_file, model_file in zip(test_files, model_files):
 
                     # comparison of temperature
                     temperature_model, temp_unit_model = az.get_temp(model_reaction_conditions, index)
-                    temperature_model, temperature = az.convert_unit(temperature_model, temperature,
-                                                                     temp_unit_model,
-                                                                     temp_unit)
-                    mse_temp_individual = calculate_mse(temperature_model, temperature)
-                    mse_temp.append(mse_temp_individual)
-                    print(temperature_model, temperature)
+                    if temperature_model != 'NA' and temp_unit_model != 'NA':
+                        temperature_model, temperature = az.convert_unit(temperature_model, temperature,
+                                                                         temp_unit_model,
+                                                                         temp_unit)
+                    if temperature_model != 'NA':
+                        mse_temp_individual = calculate_mse(temperature_model, temperature)
+                        mse_temp.append(mse_temp_individual)
+                        print(temperature_model, temperature)
 
                     # comparison of solvents
                     solvent_model, smiles_solvent_model = az.get_solvent(model_reaction_conditions, index)
@@ -158,6 +170,11 @@ for test_file, model_file in zip(test_files, model_files):
                         f'reaction_const: {reaction_constants}, reaction_const_confidence: {reaction_constant_confidence}')
                     model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(
                         model_reaction_conditions, index)
+                    if not model_reaction_constants and not model_reaction_const_conf:
+                        reaction_const_conf_NA_count += 1
+                        reaction_const_NA_count += 1
+                        continue
+
                     if sequence_change == 1:
                         test_reaction_constants, model_reaction_constants = az.change_sequence(
                             test_reaction_constants,
@@ -167,10 +184,7 @@ for test_file, model_file in zip(test_files, model_files):
                             model_reaction_const_conf)
                     print(f'model_reaction_constants: {model_reaction_constants}')
                     if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
-                        if reaction_const_conf_error is None:
-                            reaction_const_error = 1
-                        else:
-                            reaction_const_error += 1
+                        reaction_const_NA_count += 1
                     else:
                         for test_val, model_val in zip(test_reaction_constants, model_reaction_constants):
                             mse_const_individual = mean_squared_error([test_val], [model_val])
@@ -178,52 +192,67 @@ for test_file, model_file in zip(test_files, model_files):
 
                     if reaction_constant_confidence == model_reaction_const_conf == [None, None]:
                         continue
-                    elif model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
-                        if reaction_const_conf_error is None:
-                            reaction_const_conf_error = 1
-                        else:
-                            reaction_const_conf_error += 1
+                    elif model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None or \
+                            model_reaction_const_conf[0] == "NA" or model_reaction_const_conf[1] == "NA":
+                        reaction_const_conf_NA_count += 1
+                        continue
 
                     else:
                         for test_val, model_val in zip(reaction_constant_confidence, model_reaction_const_conf):
-                            mse_conf_individual = mean_squared_error([test_val], [model_val])
-                            combined_mse_conf.append(mse_conf_individual)
+                            print(model_val)
+                            if model_val != 'NA' and test_val != 'NA':
+                                mse_conf_individual = mean_squared_error([test_val], [model_val])
+                                combined_mse_conf.append(mse_conf_individual)
             else:
                 matching_monomer_error += 1
-
-
-
-    except TypeError:
-        print(TypeError)
+    except (TypeError, KeyError) as e:
+        print(TypeError, e)
+        print(KeyError,e)
+        error_details = traceback.format_exc()
+        print("error details: " + error_details)
         print(f"file {test_file} not parsable")
         parsing_error += 1
 
-
 # comparative metrics for each model run
-monomer_error_rate = calculate_rate(matching_monomer_error, total_monomer_count)
+monomer_error_rate = calculate_rate(matching_monomer_error, total_monomer_count) * 100
 average_mse_const = az.average(combined_mse_const)
 average_mse_conf = az.average(combined_mse_conf)
 average_mse_temp = az.average(mse_temp)
 average_score = az.average(combined_score)
-reaction_conditions_error_rate = calculate_rate(combined_count_reaction_conditions_model, combined_count_reaction_conditions_test)
-reaction_error_rate = calculate_rate(combined_count_reactions_model, combined_count_reactions_test)
-parsing_error_rate = calculate_rate(parsing_error, file_count)
+reaction_conditions_number_error_rate = calculate_rate(combined_count_reaction_conditions_model,
+                                                       combined_count_reaction_conditions_test) * 100
+reaction_number_error_rate = calculate_rate(combined_count_reactions_model, combined_count_reactions_test) * 100
+parsing_error_rate = calculate_rate(parsing_error, file_count) * 100
+reaction_constant_NA_rate = calculate_rate(reaction_const_NA_count, reaction_condition_count) * 100
+reaction_constant_conf_NA_rate = calculate_rate(reaction_const_conf_NA_count, reaction_condition_count) * 100
+na_entry_rate = calculate_rate(na_count, total_entries_count) * 100
+
+print(f"number of empty entries: {na_count}. rate of empty entries is: {na_entry_rate} %.")
 print(f"parsing error is {parsing_error}. The parsing error rate is {parsing_error_rate}.")
 print("matching-monomer-error: ", matching_monomer_error)
-print(f"{matching_monomer_error} of {total_monomer_count} Monomer pairs are not found. Error rate: {calculate_rate(matching_monomer_error, total_monomer_count)}.")
-print(f"reaction-number-error is {reaction_number_error}. The reaction error rate is {reaction_error_rate}.")
-print(f"reaction_conditions-number-error is {reaction_conditions_number_error}. The reaction_conditions error rate is {reaction_conditions_error_rate}.")
-print(f"reaction constant error is {reaction_const_error}")
-print(f"reaction constant confidence error is {reaction_const_conf_error}")
+print(
+    f"{matching_monomer_error} of {total_monomer_count} Monomer pairs are not found. Error rate: {calculate_rate(matching_monomer_error, total_monomer_count) * 100} %.")
+print(f"reaction-number-error is {reaction_number_error}. The reaction error rate is {reaction_number_error_rate} %.")
+print(
+    f"reaction_conditions-number-error is {reaction_conditions_number_error}. The reaction_conditions error rate is {reaction_conditions_number_error_rate} %.")
+print(
+    f"reaction constant error is {reaction_const_NA_count}. The reaction constant error rate is {reaction_constant_NA_rate} %.")
+print(
+    f"reaction constant confidence error is {reaction_const_conf_NA_count}. The reaction constant confidence error rate is {reaction_constant_conf_NA_rate} %.")
 print(f"average score of fuzzy matching is {average_score}")
 print(f"average mse of reaction constants is {average_mse_const}")
 print(f"average mse of reaction constants confidence is {average_mse_conf}")
 print(f"average mse of temperature is {average_mse_temp}")
 
 # metrics saved on weights and biases
-wandb.log({"prompt": prompt, "parsing-error-rate": parsing_error_rate, "monomer-error": matching_monomer_error, "monomer-error-rate": monomer_error_rate,
-           "reaction-number-error": reaction_number_error, "reaction-error-rate": reaction_error_rate,
-           "reaction_conditions-error": reaction_conditions_number_error, "reaction_conditions-error-rate": reaction_conditions_error_rate,
-           "reaction-constant-error": reaction_const_error, "reaction-const-conf-error": reaction_const_conf_error,
+wandb.log({"prompt": prompt, "prompt_addition": prompt_addition, "parsing-error": parsing_error, "parsing-error-rate": parsing_error_rate,
+           "number of empty entries": na_count, "rate of empty entries": na_entry_rate,
+           "matching-monomer-error": matching_monomer_error, "matching-monomer-error-rate": monomer_error_rate,
+           "reaction-number-error": reaction_number_error, "reaction-number-error-rate": reaction_number_error_rate,
+           "reaction_conditions-error": reaction_conditions_number_error,
+           "reaction_conditions-number-error-rate": reaction_conditions_number_error_rate,
+           "reaction-constant-NA-count": reaction_const_NA_count, "reaction-const-NA-rate": reaction_constant_NA_rate,
+           "reaction-const-conf-NA-rate": reaction_constant_conf_NA_rate,
+           "reaction-const-conf-NA-count": reaction_const_conf_NA_count,
            "fuzzy matching score": average_score, "mse reaction const": average_mse_const,
-           "mse const conf": average_mse_conf, "mse temperature": average_mse_temp})
+           "mse reaction const conf": average_mse_conf, "mse temperature": average_mse_temp})

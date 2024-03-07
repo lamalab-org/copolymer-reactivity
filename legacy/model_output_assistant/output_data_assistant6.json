@@ -1,7 +1,54 @@
 {
     "reactions": [
         {
-            "monomers": "MAS and various Vinyl monomers",
+            "monomers": [
+                "Methacrylic Acid Sulpholanate",
+                "Styrene"
+            ],
+            "reaction_conditions": {
+                "polymerization_type": "NA",
+                "solvent": "NA",
+                "method": "NA",
+                "temperature": "NA",
+                "temperature_unit": "NA",
+                "reaction_constants": {
+                    "constant_1": 1,
+                    "constant_2": 2
+                },
+                "reaction_constant_conf": {
+                    "constant_conf_1": 54,
+                    "constant_conf_2": 0.1
+                },
+                "determination_method": "NA"
+            }
+        },
+        {
+            "monomers": [
+                "Methacrylic Acid Sulpholanate",
+                "Methyl Methacrylate"
+            ],
+            "reaction_conditions": {
+                "polymerization_type": "NA",
+                "solvent": "benzene",
+                "method": "NA",
+                "temperature": "NA",
+                "temperature_unit": "NA",
+                "reaction_constants": {
+                    "constant_1": 3,
+                    "constant_2": 344
+                },
+                "reaction_constant_conf": {
+                    "constant_conf_1": 25,
+                    "constant_conf_2": 0.674
+                },
+                "determination_method": "NA"
+            }
+        },
+        {
+            "monomers": [
+                "Methacrylic Acid Sulpholanate",
+                "Methacrylic Acid"
+            ],
             "reaction_conditions": {
                 "polymerization_type": "NA",
                 "solvent": "DMF",
@@ -9,36 +56,19 @@
                 "temperature": 60,
                 "temperature_unit": "°C",
                 "reaction_constants": {
-                    "constant_1": "NA",
-                    "constant_2": "NA"
+                    "constant_1": 1,
+                    "constant_2": 4
                 },
                 "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "Alfrey-Price method"
-            },
-            "source": "NA"
-        },
-        {
-            "monomers": "methylvinylsilyl-bis-e-caprolactam (MVSC) and methylvinylsilyl-bis-β-pyrrolidone (MVSP) with methyl methacrylate (MM) or styrene",
-            "reaction_conditions": {
-                "polymerization_type": "Bulk polymerization",
-                "solvent": "NA",
-                "method": "NA",
-                "temperature": 120,
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "NA",
-                    "constant_2": "NA"
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
+                    "constant_conf_1": 0.1,
+                    "constant_conf_2": 0.83
                 },
                 "determination_method": "NA"
-            },
-            "source": "Vysokomol. soyed. A16: No 2 354-358 1974"
+            }
         }
+    ],
+    "source": [
+        "Vysokomol soyed. AI6: No. 2 349-353 1974",
+        "Vysokomol. soyed. A16: No 2 354-358 1974"
     ]
 }

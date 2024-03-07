@@ -1,13 +1,10 @@
-import openai
 from openai import OpenAI
 import os
-import yaml
-import json
 import copolextractor.prompter as prompter
+import copolextractor.analyzer as az
 import langchain
 from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
-from langchain.llms import OpenAI as LangChainOpenAI
 
 
 
@@ -20,6 +17,7 @@ output_folder = "model_output_assistant"
 input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
 max_section_length = 16385
 model = "gpt-4-1106-preview"
+number_of_model_calls = 2
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
@@ -33,7 +31,8 @@ for i, filename in enumerate(input_files):
         purpose="assistants"
     )
     assistant = client.beta.assistants.create(
-        instructions="You are a scientific assistant, extracting important information about polymerization conditions out of pdfs.",
+        instructions="You are a scientific assistant, extracting important information about polymerization conditions"
+                     "out of pdfs in valid json format.",
         model="gpt-4-turbo-preview",
         tools=[{"type": "retrieval"}],
         name="Extractor",
@@ -41,31 +40,17 @@ for i, filename in enumerate(input_files):
     )
     prompt_template = prompter.get_prompt_template()
     output = prompter.call_openai_agent(assistant, file, prompt_template)
-    print('Output: ', output)
 
-    parts = output.split("```")
+    # format output and convert into json and yaml file
+    output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
 
-    if len(parts) >= 3:
-        output_part = parts[1]
-        print(output_part)
-    else:
-        output_part = ""
-        print("Output in json format is empty.")
-    output_name_json = os.path.join(output_folder, f"output_data_assistant{i+1}.json")
-    output_name_yaml = os.path.join(output_folder, f"output_data_assistant{i+1}.yaml")
-
-    if output_part.startswith("json\n"):
-        output_cleaned = output_part.split("json\n", 1)[1]
-    else:
-        output_cleaned = output_part
-    print(output_cleaned)
-    try:
-        json_data = json.loads(output_cleaned)
-
-        with open(output_name_json, "w", encoding="utf-8") as json_file:
-            json.dump(json_data, json_file, ensure_ascii=False, indent=4)
-        print("output saved as JSON-file.")
-        with open(output_name_yaml, "w") as yaml_file:
-            yaml.dump(json_data, yaml_file, allow_unicode=True)
-    except json.JSONDecodeError as e:
-        print("error at parsing the output to JSON-file:", e)
+    # if there are more than 30 % "NA" entries it calls again the model (max 2 times)
+    for a in range(number_of_model_calls):
+        na_count = az.count_na_values(output_model)
+        total_entry_count = az.count_total_entries(output_model)
+        rate = az.calculate_rate(na_count, total_entry_count)
+        if rate > 0.3:
+            print(f"model call number {a+2} of {filename}")
+            prompt = prompter.update_prompt(prompt_template, output_model)
+            output = prompter.call_openai_agent(assistant, file, prompt)
+            prompter.format_output_as_json_and_yaml(i, output, output_folder)
