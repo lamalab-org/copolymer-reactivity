@@ -1,66 +1,66 @@
 reactions:
 - monomers:
-  - Ethylene
   - n-Butyl acrylate
+  - Ethylene
   reaction_conditions:
-    determination_method: NA
-    method: high pressure
+  - determination_method: NA
+    method: NA
     polymerization_type: NA
     reaction_constant_conf:
       constant_conf_1: NA
       constant_conf_2: NA
     reaction_constants:
-      constant_1: 11.9
-      constant_2: 0.03
+      constant_1: 5
+      constant_2: 4
     solvent: NA
-    temperature: 70
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
 - monomers:
-  - Ethylene
   - Vinyl chloride
+  - Ethylene
   reaction_conditions:
-    determination_method: NA
-    method: high pressure
+  - determination_method: NA
+    method: NA
     polymerization_type: NA
     reaction_constant_conf:
       constant_conf_1: NA
       constant_conf_2: NA
     reaction_constants:
-      constant_1: 3.6
-      constant_2: 0.24
+      constant_1: 2.1
+      constant_2: 3.7
     solvent: NA
-    temperature: 90
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
 - monomers:
-  - Ethylene
+  - n-Butyl acrylate
+  - Methyl acrylate
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 2.5
+      constant_conf_2: 0.1
+    reaction_constants:
+      constant_1: 9
+      constant_2: 0.1
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
+- monomers:
   - Vinyl acetate
-  reaction_conditions:
-    determination_method: NA
-    method: high pressure
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 1.08
-      constant_2: 1.07
-    solvent: NA
-    temperature: 90
-    temperature_unit: °C
-- monomers:
   - Ethylene
-  - Vinyl fluoride
   reaction_conditions:
-    determination_method: NA
-    method: high pressure
+  - determination_method: NA
+    method: NA
     polymerization_type: NA
     reaction_constant_conf:
       constant_conf_1: NA
       constant_conf_2: NA
     reaction_constants:
-      constant_1: 0.16
-      constant_2: 4.39
+      constant_1: NA
+      constant_2: NA
     solvent: NA
-    temperature: 160
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
 source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010406

@@ -2,26 +2,28 @@
     "reactions": [
         {
             "monomers": [
-                "Ethylene",
-                "Acrylonitrile"
+                "Acrylonitrile",
+                "Ethylene"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "gamma-ray induced",
-                "solvent": "Toluene",
-                "method": "NA",
-                "temperature": 20,
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": "7",
-                    "constant_2": "NA"
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            },
-            "source": "Vysokomol. soedin. 3: No. 7 1015-1019 1961"
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "Gamma-ray induced",
+                    "solvent": "Toluene",
+                    "method": "NA",
+                    "temperature": 20,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 7,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         }
-    ]
+    ],
+    "source": "Vysokomol. soedin. 3: No. 7 1015-1019 1961"
 }
