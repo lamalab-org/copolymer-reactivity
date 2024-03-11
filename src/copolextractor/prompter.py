@@ -6,6 +6,11 @@ import json
 from typing import List
 
 
+class RunTimeExpired(Exception):
+    "Raised when the run status of the open-ai call is expired"
+    pass
+
+
 def get_prompt_template():
     prompt = """The content of the PDF is a scientific paper about Copolymerization of Monomers. There are only 
                 Copolymerization with 2 different monomers. If you find a polymerisation with just one or more than 2 
@@ -16,29 +21,47 @@ def get_prompt_template():
                 important information.
                 If there are polymerization's without these constants, ignore these. From the PDF,extract the 
                 polymerisation information from each polymerisation and report it in valid json format. Try to keep the 
-                str short. Exclude comments out of the json output. Give the Output as one json object. 
+                str short. Exclude comments out of the json output. Give the Output as one json object. Stick to the 
+                given output datatype (String or Integer).
                 
                 Extract the following information:
 
-                   reactions: 
-                    monomers: ["Monomer 1", "Monomer 2"] as Str (only the whole Monomer name without abbreviation)
-                    -reaction_conditions: 
-                     -polymerization_type: polymerization reaction type (free radical, anionic, cationic,...) as Str
-                       solvent: used solvent for the polymerization reaction as Str (whole name without abbreviation)
-                       method: used polymerisation method (solvent, bulk, emulsion...) as Str
-                       temperature: used polymerization temperature as Int
-                       temperature_unit: unit of temperature (°C, °F, ...) as Str
-                       reaction_constants: polymerization reaction constants r1 and r2 as Int
-                        -constant_1:
-                        -constant_2:
-                       reaction_constant_conf: confidence interval of polymerization reaction constant r1 and r2 as Int
-                        -constant_conf_1:
-                        -constant_conf_2:
-                       determination_method: method for determination of the r-values (Kelen-Tudor, ...) as Str
-                   source: doi url or source as Str (just one source)
+                   reactions: [
+                   {
+                    "monomers": ["Monomer 1", "Monomer 2"] as STRING (only the whole Monomer name without abbreviation)
+                    "reaction_conditions": [
+                    {
+                       "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
+                       "solvent": used solvent for the polymerization reaction as STRING (whole name without abbreviation, just name no futher details),
+                       "method": used polymerisation method (solvent, bulk, emulsion...) as STRING,
+                       "temperature": used polymerization temperature as INTEGER,
+                       "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
+                       "reaction_constants": { polymerization reaction constants r1 and r2 as INTEGER
+                        "constant_1":
+                        "constant_2": },
+                       "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as INTEGER
+                        "constant_conf_1":
+                        "constant_conf_2": },
+                       "determination_method": method for determination of the r-values (Kelen-Tudor, ...) as STRING
+                    },
+                    {
+                        "polymerization_type": 
+                        "solvent":
+                        ...
+                     }   
+                    ]
+                    },
+                    {
+                    "monomers":
+                    "reaction_condition": [
+                    { ... }
+                    ]
+                    }
+                   "source": doi url or source as STRING (just one source)
+                   ]
 
 
-                   If the information is not provided put NA. If there are multiple polymerization's with different 
+                   If the information is not provided put 'NA'. If there are multiple polymerization's with different 
                    parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions(for 
                    different reaction conditions of the same monomers)."""
     return prompt
@@ -119,6 +142,8 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
         run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
         print(f"Run Satus: {run.status}")
         time.sleep(5)
+        if run.status == "expired":
+            raise RunTimeExpired
     else:
         print("Run completed!")
 
@@ -181,6 +206,6 @@ def format_output_as_json_and_yaml(i, output, output_folder, ):
         print("output saved as JSON-file.")
         with open(output_name_yaml, "w") as yaml_file:
             yaml.dump(json_data, yaml_file, allow_unicode=True)
+        return json_data
     except json.JSONDecodeError as e:
         print("error at parsing the output to JSON-file:", e)
-    return json_data

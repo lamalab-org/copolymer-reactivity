@@ -2,91 +2,99 @@
     "reactions": [
         {
             "monomers": [
-                "Ethylene",
-                "n-Butyl acrylate"
+                "n-Butyl acrylate",
+                "Ethylene"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "NA",
-                "solvent": "NA",
-                "method": "high pressure",
-                "temperature": 70,
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": 11.9,
-                    "constant_2": 0.03
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": 5,
+                        "constant_2": 4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         },
         {
             "monomers": [
-                "Ethylene",
-                "Vinyl chloride"
+                "Vinyl chloride",
+                "Ethylene"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "NA",
-                "solvent": "NA",
-                "method": "high pressure",
-                "temperature": 90,
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": 3.6,
-                    "constant_2": 0.24
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": 2.1,
+                        "constant_2": 3.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         },
         {
             "monomers": [
-                "Ethylene",
-                "Vinyl acetate"
+                "n-Butyl acrylate",
+                "Methyl acrylate"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "NA",
-                "solvent": "NA",
-                "method": "high pressure",
-                "temperature": 90,
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": 1.08,
-                    "constant_2": 1.07
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": 9,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.5,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         },
         {
             "monomers": [
-                "Ethylene",
-                "Vinyl fluoride"
+                "Vinyl acetate",
+                "Ethylene"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "NA",
-                "solvent": "NA",
-                "method": "high pressure",
-                "temperature": 160,
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": 0.16,
-                    "constant_2": 4.39
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": "NA",
+                        "constant_2": "NA"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         }
     ],
     "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010406"
