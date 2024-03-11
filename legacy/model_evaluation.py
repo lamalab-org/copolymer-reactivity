@@ -199,13 +199,14 @@ for test_file, model_file in zip(test_files, model_files):
 
                     else:
                         for test_val, model_val in zip(reaction_constant_confidence, model_reaction_const_conf):
-                            print(model_val)
+                            print(model_val, test_val)
                             if model_val != 'NA' and test_val != 'NA':
                                 mse_conf_individual = mean_squared_error([test_val], [model_val])
                                 combined_mse_conf.append(mse_conf_individual)
             else:
                 matching_monomer_error += 1
-    except (TypeError, KeyError) as e:
+    except (TypeError, KeyError, ValueError) as e:
+        print(ValueError, e)
         print(TypeError, e)
         print(KeyError,e)
         error_details = traceback.format_exc()

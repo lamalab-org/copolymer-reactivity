@@ -3,9 +3,9 @@ reactions:
   - Methacrylic Acid
   - Styrene
   reaction_conditions:
-  - determination_method: Kelen-Tudos method
+  - determination_method: Kelen-Tudor
     method: NA
-    polymerization_type: Free radical copolymerization
+    polymerization_type: Free radical
     reaction_constant_conf:
       constant_conf_1: 0.01
       constant_conf_2: 0.03
@@ -15,9 +15,9 @@ reactions:
     solvent: Carbon Tetrachloride
     temperature: 60
     temperature_unit: °C
-  - determination_method: Kelen-Tudos method
+  - determination_method: Kelen-Tudor
     method: NA
-    polymerization_type: Free radical copolymerization
+    polymerization_type: Free radical
     reaction_constant_conf:
       constant_conf_1: 0.01
       constant_conf_2: 0.03
@@ -27,9 +27,9 @@ reactions:
     solvent: Chloroform
     temperature: 60
     temperature_unit: °C
-  - determination_method: Kelen-Tudos method
+  - determination_method: Kelen-Tudor
     method: NA
-    polymerization_type: Free radical copolymerization
+    polymerization_type: Free radical
     reaction_constant_conf:
       constant_conf_1: 0.0
       constant_conf_2: 0.02
@@ -39,9 +39,9 @@ reactions:
     solvent: Acetone
     temperature: 60
     temperature_unit: °C
-  - determination_method: Kelen-Tudos method
+  - determination_method: Kelen-Tudor
     method: NA
-    polymerization_type: Free radical copolymerization
+    polymerization_type: Free radical
     reaction_constant_conf:
       constant_conf_1: 0.02
       constant_conf_2: 0.05
@@ -51,14 +51,14 @@ reactions:
     solvent: 1,4-Dioxane
     temperature: 60
     temperature_unit: °C
-  - determination_method: Kelen-Tudos method
+  - determination_method: Kelen-Tudor
     method: NA
-    polymerization_type: Free radical copolymerization
+    polymerization_type: Free radical
     reaction_constant_conf:
-      constant_conf_1: 0.002
+      constant_conf_1: 0.02
       constant_conf_2: 0.0
     reaction_constants:
-      constant_1: 0.006
+      constant_1: 0.06
       constant_2: 0.29
     solvent: Acetonitrile
     temperature: 60

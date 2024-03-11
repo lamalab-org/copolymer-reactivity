@@ -3,16 +3,16 @@ reactions:
   - Ethylene
   - Vinyl Acetate
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: Mayo-Alfrey model
     method: NA
-    polymerization_type: free radical
+    polymerization_type: free-radical
     reaction_constant_conf:
       constant_conf_1: 0.005
       constant_conf_2: 0.007
     reaction_constants:
       constant_1: 0.743
       constant_2: 1.515
-    solvent: tert-Butyl alcohol
+    solvent: NA
     temperature: 62
     temperature_unit: °C
 source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1971.150090810

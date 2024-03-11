@@ -5,23 +5,25 @@
                 "Methacrylic Acid",
                 "Ethyl Acrylate"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "NA",
-                "solvent": "water",
-                "method": "emulsion",
-                "temperature": "NA",
-                "temperature_unit": "NA",
-                "reaction_constants": {
-                    "constant_1": 2.58,
-                    "constant_2": 0.157
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": 0.13,
-                    "constant_conf_2": 0.08
-                },
-                "determination_method": "EVM program & Kelen-Tudos method"
-            },
-            "source": "https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307"
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "emulsion",
+                    "solvent": "water",
+                    "method": "semicontinuous",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 13,
+                        "constant_conf_2": 8
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
         }
-    ]
+    ],
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307"
 }

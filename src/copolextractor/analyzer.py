@@ -106,7 +106,7 @@ def get_sequence_of_monomers(test_monomers, model_monomers):
     return sequence_change
 
 
-def _compare_monomers(test_monomers: List[str], model_monomers: List[str]) -> bool:
+def _compare_monomers(model_monomers: List[str], test_monomers: List[str]) -> bool:
     print(f"test monomers: {test_monomers} vs model monomers: {model_monomers}")
     if set(test_monomers) == set(model_monomers):
         return True
@@ -146,7 +146,7 @@ def find_matching_reaction(data1: dict, data2: list):
     else:
         monomers1 = data1['reactions']['monomers']
         if _compare_monomers(monomers1, data2):
-            return 0  # Gibt den Index der einzigen vorhandenen Reaktion zurück
+            return 0
         else:
             return None
 

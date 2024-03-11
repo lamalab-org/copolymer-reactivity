@@ -5,44 +5,48 @@
                 "2-Chloro-1,3-Butadiene",
                 "Methyl Isopropenyl Ketone"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical",
-                "solvent": "emulsion",
-                "method": "NA",
-                "temperature": "NA",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": 3.6,
-                    "constant_2": 0.1
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "NA",
+                    "method": "emulsion",
+                    "temperature": 40,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         },
         {
             "monomers": [
                 "2-Chloro-1,3-Butadiene",
                 "Methacrylic Acid"
             ],
-            "reaction_conditions": {
-                "polymerization_type": "free radical",
-                "solvent": "emulsion",
-                "method": "NA",
-                "temperature": "NA",
-                "temperature_unit": "°C",
-                "reaction_constants": {
-                    "constant_1": 2.7,
-                    "constant_2": 0.15
-                },
-                "reaction_constant_conf": {
-                    "constant_conf_1": "NA",
-                    "constant_conf_2": "NA"
-                },
-                "determination_method": "NA"
-            }
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "NA",
+                    "method": "emulsion",
+                    "temperature": 40,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "NA"
+                }
+            ]
         }
     ],
     "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635"

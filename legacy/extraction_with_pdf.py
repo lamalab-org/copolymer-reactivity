@@ -1,5 +1,6 @@
 from openai import OpenAI
 import os
+import json
 import copolextractor.prompter as prompter
 import copolextractor.analyzer as az
 import langchain
@@ -18,6 +19,8 @@ input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")]
 max_section_length = 16385
 model = "gpt-4-1106-preview"
 number_of_model_calls = 2
+parsing_error = 0
+run_time_expired_error = 0
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
@@ -42,7 +45,16 @@ for i, filename in enumerate(input_files):
     output = prompter.call_openai_agent(assistant, file, prompt_template)
 
     # format output and convert into json and yaml file
-    output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
+    try:
+        output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
+    except prompter.RunTimeExpired:
+        run_time_expired_error += 1
+        continue
+
+    except json.JSONDecodeError as e:
+        parsing_error += 1
+        print(f"json format of output of {filename} is not valid")
+        continue
 
     # if there are more than 30 % "NA" entries it calls again the model (max 2 times)
     for a in range(number_of_model_calls):
@@ -51,6 +63,13 @@ for i, filename in enumerate(input_files):
         rate = az.calculate_rate(na_count, total_entry_count)
         if rate > 0.3:
             print(f"model call number {a+2} of {filename}")
-            prompt = prompter.update_prompt(prompt_template, output_model)
+            try:
+                prompt = prompter.update_prompt(prompt_template, output_model)
+            except prompter.RunTimeExpired:
+                run_time_expired_error += 1
+                continue
+
             output = prompter.call_openai_agent(assistant, file, prompt)
             prompter.format_output_as_json_and_yaml(i, output, output_folder)
+
+print("parsing error:", parsing_error)
