@@ -1,0 +1,45 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methacrylic acid",
+                "Ethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.9,
+                        "constant_2": 0.162
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "Kelen-Tudos method"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.58,
+                        "constant_2": 0.157
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "EVM program"
+                }
+            ]
+        }
+    ],
+    "source": "NA"
+}

@@ -2,23 +2,23 @@
     "reactions": [
         {
             "monomers": [
-                "methylvinylsilyl-bis-e-caprolactam",
-                "methyl methacrylate"
+                "Vinylidene chloride",
+                "Benzyl methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "Bulk",
                     "solvent": "NA",
-                    "method": "1% w/w dieumyl peroxide under a nitrogen stream",
-                    "temperature": 120,
+                    "method": "Bulk",
+                    "temperature": 60,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": "NA",
-                        "constant_2": "NA"
+                        "constant_1": 3,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 5,
+                        "constant_conf_2": 5
                     },
                     "determination_method": "NA"
                 }
@@ -26,76 +26,28 @@
         },
         {
             "monomers": [
-                "methylvinylsilyl-bis-?-pyrrolidone",
-                "methyl methacrylate"
+                "Vinylidene chloride",
+                "Vinyl acetate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "Bulk",
                     "solvent": "NA",
-                    "method": "1% w/w dieumyl peroxide under a nitrogen stream",
-                    "temperature": 120,
+                    "method": "Bulk",
+                    "temperature": 60,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": "NA",
-                        "constant_2": "NA"
+                        "constant_1": 0,
+                        "constant_2": 6
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "methylvinylsilyl-bis-e-caprolactam",
-                "styrene"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "Bulk",
-                    "solvent": "NA",
-                    "method": "1% w/w dieumyl peroxide under a nitrogen stream",
-                    "temperature": 120,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": "NA",
-                        "constant_2": "NA"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "methylvinylsilyl-bis-?-pyrrolidone",
-                "styrene"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "Bulk",
-                    "solvent": "NA",
-                    "method": "1% w/w dieumyl peroxide under a nitrogen stream",
-                    "temperature": 120,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": "NA",
-                        "constant_2": "NA"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 3,
+                        "constant_conf_2": 5
                     },
                     "determination_method": "NA"
                 }
             ]
         }
     ],
-    "source": "Vysokomol. soyed. A16: No 2 354-358 1974"
+    "source": "Die Makromolekulare Chemie, 110(1), 233–245"
 }

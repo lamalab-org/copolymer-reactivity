@@ -1,0 +1,34 @@
+reactions:
+- monomers:
+  - 2-vinylpyridine
+  - methacrylic acid
+  reaction_conditions:
+  - determination_method: NA
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.39
+      constant_2: 0.21
+    solvent: water
+    temperature: 70
+    temperature_unit: °C
+- monomers:
+  - methacrylic acid
+  - N,N-diethylaminoethyl methacrylate
+  reaction_conditions:
+  - determination_method: NA
+    method: solution
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 0.53
+      constant_2: 0.46
+    solvent: water
+    temperature: NA
+    temperature_unit: NA
+source: NA

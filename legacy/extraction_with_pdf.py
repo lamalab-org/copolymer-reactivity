@@ -6,16 +6,19 @@ import copolextractor.analyzer as az
 import langchain
 from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
-
+import random
 
 
 load_dotenv()
 langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 llm = OpenAI()
 
-input_folder = "./../pdfs"
+input_folder = "./PDF_from_scidownl/paper"
 output_folder = "model_output_assistant"
 input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
+random_pdf_selection = random.sample(input_files, 20)
+print("random selection of PDFs: ", random_pdf_selection)
+
 max_section_length = 16385
 model = "gpt-4-1106-preview"
 number_of_model_calls = 2
@@ -25,7 +28,7 @@ run_time_expired_error = 0
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
-for i, filename in enumerate(input_files):
+for i, filename in enumerate(random_pdf_selection):
     file_path = os.path.join(input_folder, filename)
     print(file_path)
     print(filename)
@@ -70,6 +73,6 @@ for i, filename in enumerate(input_files):
                 continue
 
             output = prompter.call_openai_agent(assistant, file, prompt)
-            prompter.format_output_as_json_and_yaml(i, output, output_folder)
+            output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
 
 print("parsing error:", parsing_error)

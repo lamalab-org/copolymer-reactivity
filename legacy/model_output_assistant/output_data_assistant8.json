@@ -3,27 +3,147 @@
         {
             "monomers": [
                 "Acrylonitrile",
-                "Ethylene"
+                "Phenylacetylene"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "Gamma-ray induced",
-                    "solvent": "Toluene",
+                    "polymerization_type": "NA",
+                    "solvent": "Acetone",
                     "method": "NA",
-                    "temperature": 20,
+                    "temperature": 60,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 7,
-                        "constant_2": 0
+                        "constant_1": 0.26,
+                        "constant_2": 0.33
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Graphical"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Acrylate",
+                "Phenylacetylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": 65,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Graphical"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Acrylonitrile",
+                "Diphenylacetylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "Alcohol and Hexane",
+                    "method": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 13.6,
+                        "constant_2": "NA"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.0,
                         "constant_conf_2": "NA"
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Acrylate",
+                "Diphenylacetylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": 55,
+                        "constant_2": "NA"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 5,
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Acrylonitrile",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "Hexane",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": 0.04,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Acrylate",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.75
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
                     },
                     "determination_method": "NA"
                 }
             ]
         }
     ],
-    "source": "Vysokomol. soedin. 3: No. 7 1015-1019 1961"
+    "source": "NA"
 }

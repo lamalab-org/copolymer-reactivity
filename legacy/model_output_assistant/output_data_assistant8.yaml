@@ -1,18 +1,98 @@
 reactions:
 - monomers:
   - Acrylonitrile
-  - Ethylene
+  - Phenylacetylene
+  reaction_conditions:
+  - determination_method: Graphical
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.03
+      constant_conf_2: 0.06
+    reaction_constants:
+      constant_1: 0.26
+      constant_2: 0.33
+    solvent: Acetone
+    temperature: 60
+    temperature_unit: °C
+- monomers:
+  - Methyl Acrylate
+  - Phenylacetylene
+  reaction_conditions:
+  - determination_method: Graphical
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.04
+    reaction_constants:
+      constant_1: 0.62
+      constant_2: 0.27
+    solvent: NA
+    temperature: 65
+    temperature_unit: °C
+- monomers:
+  - Acrylonitrile
+  - Diphenylacetylene
   reaction_conditions:
   - determination_method: NA
     method: NA
-    polymerization_type: Gamma-ray induced
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
+      constant_conf_1: 1.0
       constant_conf_2: NA
     reaction_constants:
-      constant_1: 7
-      constant_2: 0
-    solvent: Toluene
-    temperature: 20
+      constant_1: 13.6
+      constant_2: NA
+    solvent: Alcohol and Hexane
+    temperature: 60
     temperature_unit: °C
-source: 'Vysokomol. soedin. 3: No. 7 1015-1019 1961'
+- monomers:
+  - Methyl Acrylate
+  - Diphenylacetylene
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 5
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 55
+      constant_2: NA
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
+- monomers:
+  - Acrylonitrile
+  - Styrene
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.04
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.04
+      constant_2: 0.4
+    solvent: Hexane
+    temperature: NA
+    temperature_unit: NA
+- monomers:
+  - Methyl Acrylate
+  - Styrene
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 0.18
+      constant_2: 0.75
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
+source: NA

@@ -3,16 +3,16 @@ reactions:
   - Methacrylic Acid
   - Ethyl Acrylate
   reaction_conditions:
-  - determination_method: Kelen-Tudos
-    method: semicontinuous
-    polymerization_type: emulsion
+  - determination_method: Kelen-Tudos method, EVM program
+    method: NA
+    polymerization_type: NA
     reaction_constant_conf:
       constant_conf_1: 13
       constant_conf_2: 8
     reaction_constants:
       constant_1: 2
       constant_2: 0
-    solvent: water
+    solvent: Distilled deionized water
     temperature: 50
     temperature_unit: °C
 source: https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307
