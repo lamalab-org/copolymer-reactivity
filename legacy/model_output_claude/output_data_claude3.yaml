@@ -1,0 +1,30 @@
+reactions:
+- monomers:
+  - Methacrylic acid
+  - Ethyl acrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudos method
+    method: emulsion
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 2.9
+      constant_2: 0.162
+    solvent: water
+    temperature: 50
+    temperature_unit: °C
+  - determination_method: EVM program
+    method: emulsion
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: 2.58
+      constant_2: 0.157
+    solvent: water
+    temperature: 50
+    temperature_unit: °C
+source: NA

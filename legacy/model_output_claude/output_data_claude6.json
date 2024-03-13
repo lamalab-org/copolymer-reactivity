@@ -1,0 +1,109 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methacrylic acid sulpholanate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "DMF",
+                    "method": "solution",
+                    "temperature": 40,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 8,
+                        "constant_conf_2": 35
+                    },
+                    "determination_method": "Mayo and Lewis"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "DMSO",
+                    "method": "solution",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2,
+                        "constant_2": 5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 24,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "Mayo and Lewis"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solution",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0,
+                        "constant_2": 83
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 83,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solution",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0,
+                        "constant_2": 33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 22,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "Alfrey-Price"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methylvinylsilyl-bis-ε-caprolactam",
+                "methylvinylsilyl-bis-γ-pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "NA",
+                    "method": "bulk",
+                    "temperature": 120,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1,
+                        "constant_2": 1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        }
+    ],
+    "source": "Vysokomol. soyed. A16: No 2, 349-353, 1974"
+}

@@ -1,82 +1,54 @@
 reactions:
 - monomers:
-  - Ethylene
-  - Vinyl acetate
+  - Divinyl Ether
+  - Tetracyanoethylene
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: Linear method of Fineman and Ross
     method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 1.01
-      constant_2: 1
-    solvent: NA
-    temperature: 150
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Methyl acrylate
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+    polymerization_type: NA
+    reaction_constant_conf: NA
     reaction_constants:
       constant_1: 0.2
-      constant_2: 11
+      constant_2: 0.11
     solvent: NA
-    temperature: 150
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
+  - determination_method: Alfrey-Price equation
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf: NA
+    reaction_constants:
+      constant_1: 0.23
+      constant_2: 0.12
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
 - monomers:
-  - Ethylene
-  - Methyl methacrylate
+  - Divinyl Ether
+  - 4-Vinylpyridine
   reaction_conditions:
   - determination_method: NA
     method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+    polymerization_type: NA
+    reaction_constant_conf: NA
     reaction_constants:
-      constant_1: 0.2
-      constant_2: 17
+      constant_1: 0.032
+      constant_2: 32.1
     solvent: NA
-    temperature: 150
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
 - monomers:
-  - Ethylene
-  - Diethyl maleate
+  - Divinyl Ether
+  - Fumaronitrile
   reaction_conditions:
   - determination_method: NA
     method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+    polymerization_type: Free Radical
+    reaction_constant_conf: NA
     reaction_constants:
-      constant_1: 0.25
-      constant_2: 108
-    solvent: NA
-    temperature: 150
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl fumarate
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 0.25
-      constant_2: 10
-    solvent: NA
-    temperature: 150
-    temperature_unit: °C
-source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1964.100020820
+      constant_1: 0.23
+      constant_2: 0.12
+    solvent: Azobisisobutyronitrile
+    temperature: NA
+    temperature_unit: NA
+source: NA

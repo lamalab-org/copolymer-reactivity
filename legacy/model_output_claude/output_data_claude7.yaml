@@ -1,0 +1,66 @@
+reactions:
+- monomers:
+  - n-Butyl acrylate
+  - Vinyl chloride
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: free-radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.07
+    reaction_constants:
+      constant_1: 0.03
+      constant_2: 0.24
+    solvent: NA
+    temperature: 70
+    temperature_unit: °C
+- monomers:
+  - Vinyl chloride
+  - Vinyl acetate
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: free-radical
+    reaction_constant_conf:
+      constant_conf_1: 0.3
+      constant_conf_2: 0.19
+    reaction_constants:
+      constant_1: 3.6
+      constant_2: 1.08
+    solvent: NA
+    temperature: 90
+    temperature_unit: °C
+- monomers:
+  - Vinyl acetate
+  - Vinyl fluoride
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: free-radical
+    reaction_constant_conf:
+      constant_conf_1: 0.06
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 1.08
+      constant_2: 0.16
+    solvent: NA
+    temperature: 90
+    temperature_unit: °C
+- monomers:
+  - Vinyl fluoride
+  - Ethylene
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: free-radical
+    reaction_constant_conf:
+      constant_conf_1: 0.25
+      constant_conf_2: 0.6
+    reaction_constants:
+      constant_1: 0.16
+      constant_2: 4.39
+    solvent: NA
+    temperature: 160
+    temperature_unit: °C
+source: NA

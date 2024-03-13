@@ -1,0 +1,82 @@
+reactions:
+- monomers:
+  - 3-methylstyrene
+  - methacrylic acid
+  reaction_conditions:
+  - determination_method: Kelen-Tüdös
+    method: solution
+    polymerization_type: radical
+    reaction_constant_conf:
+      constant_conf_1: 0.06
+      constant_conf_2: 0.35
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 0.5
+    solvent: toluene
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tüdös
+    method: solution
+    polymerization_type: radical
+    reaction_constant_conf:
+      constant_conf_1: 0.18
+      constant_conf_2: 0.33
+    reaction_constants:
+      constant_1: 0.3
+      constant_2: 0.4
+    solvent: acetone
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tüdös
+    method: solution
+    polymerization_type: radical
+    reaction_constant_conf:
+      constant_conf_1: 0.32
+      constant_conf_2: 0.53
+    reaction_constants:
+      constant_1: 0.4
+      constant_2: 0.5
+    solvent: isopropyl alcohol
+    temperature: 70
+    temperature_unit: °C
+- monomers:
+  - 3-methylstyrene
+  - methyl methacrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tüdös
+    method: solution
+    polymerization_type: radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 1.07
+      constant_2: 0.06
+    solvent: toluene
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tüdös
+    method: solution
+    polymerization_type: radical
+    reaction_constant_conf:
+      constant_conf_1: 0.31
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 1.07
+      constant_2: 0.05
+    solvent: isopropyl alcohol
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tüdös
+    method: solution
+    polymerization_type: radical
+    reaction_constant_conf:
+      constant_conf_1: 0.32
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 1.06
+      constant_2: 0.02
+    solvent: acetone
+    temperature: 70
+    temperature_unit: °C
+source: https://doi.org/10.1080/10601329508013679

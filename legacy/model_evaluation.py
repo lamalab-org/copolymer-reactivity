@@ -61,7 +61,7 @@ total_entries_count = 0
 na_count = 0
 
 test_path = "./../test_data"
-model_path = "./model_output_assistant"
+model_path = "./model_output_claude"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -69,11 +69,12 @@ wandb.init(
     project="Copolymer_extraction",
 
     config={
-        "model": "gpt-4-turbo-preview",
+        "model": "claude-3-opus-20240229",
         "paper number": 10,
-        "token length": "",
-        "input": "PDF",
-        "number of model calls": 2
+        "token length": "1024",
+        "input": "images",
+        "number of model calls": 3,
+        "temperature": 0.0
 
     }
 )

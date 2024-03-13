@@ -1,0 +1,74 @@
+reactions:
+- monomers:
+  - methacrylic acid sulpholanate
+  - methyl methacrylate
+  reaction_conditions:
+  - determination_method: Mayo and Lewis
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 8
+      constant_conf_2: 35
+    reaction_constants:
+      constant_1: 2
+      constant_2: 0
+    solvent: DMF
+    temperature: 40
+    temperature_unit: °C
+  - determination_method: Mayo and Lewis
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 24
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 2
+      constant_2: 5
+    solvent: DMSO
+    temperature: 50
+    temperature_unit: °C
+  - determination_method: NA
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 83
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 0
+      constant_2: 83
+    solvent: benzene
+    temperature: 50
+    temperature_unit: °C
+- monomers:
+  - styrene
+  - methyl methacrylate
+  reaction_conditions:
+  - determination_method: Alfrey-Price
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 22
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 0
+      constant_2: 33
+    solvent: benzene
+    temperature: 60
+    temperature_unit: °C
+- monomers:
+  - methylvinylsilyl-bis-ε-caprolactam
+  - methylvinylsilyl-bis-γ-pyrrolidone
+  reaction_conditions:
+  - determination_method: NA
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 1
+      constant_2: 1
+    solvent: NA
+    temperature: 120
+    temperature_unit: °C
+source: 'Vysokomol. soyed. A16: No 2, 349-353, 1974'
