@@ -2,28 +2,52 @@
     "reactions": [
         {
             "monomers": [
-                "2-Vinylpyridine",
-                "Methacrylic Acid"
+                "Hydroxyethylcarbazolyl Acrylate",
+                "Acryloyl-Hydroxyethyl-Dinitrobenzoate"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "bulk",
-                    "solvent": "NA",
+                    "polymerization_type": "NA",
+                    "solvent": "Dioxane",
                     "method": "bulk",
-                    "temperature": 70,
+                    "temperature": 60,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 1,
-                        "constant_2": 55
+                        "constant_1": 0.62,
+                        "constant_2": 0.37
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 10,
-                        "constant_conf_2": 5
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
                     },
-                    "determination_method": "NA"
+                    "determination_method": "Kelen-Tudor method"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Hydroxyethylcarbazolyl Methacrylate",
+                "Acryloyl-Hydroxyethyl-Dinitrobenzoate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "Dioxane",
+                    "method": "bulk",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.04,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "Kelen-Tudor method"
                 }
             ]
         }
     ],
-    "source": "https://pubs.acs.org/sharingguidelines"
+    "source": "NA"
 }

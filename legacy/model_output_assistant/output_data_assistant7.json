@@ -2,100 +2,124 @@
     "reactions": [
         {
             "monomers": [
-                "n-Butyl acrylate",
-                "Ethylene"
+                "N-Vinylacetamide",
+                "Acrylamide"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
+                    "polymerization_type": "free radical",
+                    "solvent": "Ethanol",
                     "method": "NA",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 5,
-                        "constant_2": 4
+                        "constant_1": 0.3,
+                        "constant_2": 1.4
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": "NA",
                         "constant_conf_2": "NA"
                     },
-                    "determination_method": "NA"
+                    "determination_method": "Fineman-Ross"
                 }
             ]
         },
         {
             "monomers": [
-                "Vinyl chloride",
-                "Ethylene"
+                "N-Vinylacetamide",
+                "Vinyl acetate"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
+                    "polymerization_type": "free radical",
+                    "solvent": "Methanol",
                     "method": "NA",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 2.1,
-                        "constant_2": 3.7
+                        "constant_1": 5.5,
+                        "constant_2": 0.6
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": "NA",
                         "constant_conf_2": "NA"
                     },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "n-Butyl acrylate",
-                "Methyl acrylate"
-            ],
-            "reaction_conditions": [
+                    "determination_method": "Fineman-Ross"
+                },
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
+                    "polymerization_type": "free radical",
+                    "solvent": "Benzene",
                     "method": "NA",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 9,
-                        "constant_2": 0.1
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 2.5,
-                        "constant_conf_2": 0.1
-                    },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Vinyl acetate",
-                "Ethylene"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
-                    "reaction_constants": {
-                        "constant_1": "NA",
-                        "constant_2": "NA"
+                        "constant_1": 21,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": "NA",
                         "constant_conf_2": "NA"
                     },
-                    "determination_method": "NA"
+                    "determination_method": "Fineman-Ross"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-Vinylacetamide",
+                "Methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Ethanol",
+                    "method": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.19,
+                        "constant_2": 2.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Benzene",
+                    "method": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.71,
+                        "constant_2": 1.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "DMF",
+                    "method": "NA",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 2.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
+                    },
+                    "determination_method": "Fineman-Ross"
                 }
             ]
         }
     ],
-    "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010406"
+    "source": "Journal of Polymer Science Part A: Polymer Chemistry, 28(12), 3487–3497"
 }

@@ -4,6 +4,7 @@ import yaml
 from openai import OpenAI
 import json
 from typing import List
+import anthropic
 
 
 class RunTimeExpired(Exception):
@@ -58,6 +59,7 @@ def get_prompt_template():
                     ]
                     }
                    "source": doi url or source as STRING (just one source)
+                   "PDF_name": name of the pdf document
                    ]
 
 
@@ -209,3 +211,46 @@ def format_output_as_json_and_yaml(i, output, output_folder, ):
         return json_data
     except json.JSONDecodeError as e:
         print("error at parsing the output to JSON-file:", e)
+
+
+def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
+    for content_block in content_blocks:
+        if hasattr(content_block, 'text'):
+            json_str = content_block.text
+        elif hasattr(content_block, 'get'):
+            json_str = content_block.get('text')
+        else:
+            print("ContentBlock hat kein zugängliches 'text'-Attribut oder eine 'get'-Methode.")
+            return
+        output_name_json = os.path.join(output_folder, f"output_data_claude{i + 1}.json")
+        output_name_yaml = os.path.join(output_folder, f"output_data_claude{i + 1}.yaml")
+
+        try:
+            json_data = json.loads(json_str)
+
+            with open(output_name_json, "w", encoding="utf-8") as json_file:
+                json.dump(json_data, json_file, ensure_ascii=False, indent=4)
+            print(f"Output saved as JSON-file at {output_name_json}.")
+
+            with open(output_name_yaml, "w", encoding="utf-8") as yaml_file:
+                yaml.dump(json_data, yaml_file, allow_unicode=True)
+            print(f"Output saved as YAML-file at {output_name_yaml}.")
+            return json_data
+        except Exception as e:
+            print(f"Error parsing the output: {e}")
+
+
+def call_claude3(prompt):
+    client = anthropic.Anthropic(
+        api_key=os.environ.get("ANTHROPIC_API_KEY"),
+    )
+    message = client.messages.create(
+        model="claude-3-opus-20240229",
+        max_tokens=1024,
+        system="You are a scientific assistant, extracting important information about polymerization conditions "
+               "out of pdfs in valid json format. If the info is not found put 'NA'.",
+        temperature=0.0,
+        messages=prompt
+    )
+    print(message.content)
+    return message.content

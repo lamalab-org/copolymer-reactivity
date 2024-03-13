@@ -1,66 +1,18 @@
 reactions:
 - monomers:
-  - Methacrylic Acid
+  - 4-Cyclopentene-1,3-dione
   - Styrene
   reaction_conditions:
-  - determination_method: Kelen-Tudor
-    method: NA
+  - determination_method: Alfrev-Price
+    method: Sealed tube heating
     polymerization_type: Free radical
     reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: 0.03
+      constant_conf_1: 15
+      constant_conf_2: 35
     reaction_constants:
-      constant_1: 0.54
-      constant_2: 0.06
-    solvent: Carbon Tetrachloride
-    temperature: 60
+      constant_1: 0
+      constant_2: 0
+    solvent: Benzene
+    temperature: 50
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: NA
-    polymerization_type: Free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: 0.03
-    reaction_constants:
-      constant_1: 0.51
-      constant_2: 0.08
-    solvent: Chloroform
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: NA
-    polymerization_type: Free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.0
-      constant_conf_2: 0.02
-    reaction_constants:
-      constant_1: 0.43
-      constant_2: 0.65
-    solvent: Acetone
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: NA
-    polymerization_type: Free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.02
-      constant_conf_2: 0.05
-    reaction_constants:
-      constant_1: 0.41
-      constant_2: 0.59
-    solvent: 1,4-Dioxane
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: NA
-    polymerization_type: Free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.02
-      constant_conf_2: 0.0
-    reaction_constants:
-      constant_1: 0.06
-      constant_2: 0.29
-    solvent: Acetonitrile
-    temperature: 60
-    temperature_unit: °C
-source: https://onlinelibrary.wiley.com/doi/10.1002/macp.1985.021860820
+source: NA
