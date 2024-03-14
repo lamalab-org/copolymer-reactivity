@@ -1,86 +1,67 @@
+PDF_name: paper07.pdf
 reactions:
 - monomers:
-  - N-Vinylacetamide
-  - Acrylamide
+  - n-Butyl acrylate
+  - Ethylene
   reaction_conditions:
-  - determination_method: Fineman-Ross
-    method: NA
-    polymerization_type: free radical
+  - determination_method: NA
+    method: bulk
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 2.5
+      constant_conf_2: 0.01
     reaction_constants:
-      constant_1: 0.3
-      constant_2: 1.4
-    solvent: Ethanol
-    temperature: 60
+      constant_1: 11.9
+      constant_2: 0.03
+    solvent: None
+    temperature: 70
     temperature_unit: °C
 - monomers:
-  - N-Vinylacetamide
+  - Vinyl chloride
+  - Ethylene
+  reaction_conditions:
+  - determination_method: NA
+    method: bulk
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0.3
+      constant_conf_2: 0.07
+    reaction_constants:
+      constant_1: 3.6
+      constant_2: 0.24
+    solvent: None
+    temperature: 90
+    temperature_unit: °C
+- monomers:
   - Vinyl acetate
+  - Ethylene
   reaction_conditions:
-  - determination_method: Fineman-Ross
-    method: NA
-    polymerization_type: free radical
+  - determination_method: NA
+    method: bulk
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.19
+      constant_conf_2: 0.06
     reaction_constants:
-      constant_1: 5.5
-      constant_2: 0.6
-    solvent: Methanol
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Fineman-Ross
-    method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 21
-      constant_2: 0
-    solvent: Benzene
-    temperature: 60
+      constant_1: 1.08
+      constant_2: 1.07
+    solvent: None
+    temperature: 90
     temperature_unit: °C
 - monomers:
-  - N-Vinylacetamide
-  - Methyl methacrylate
+  - Vinyl fluoride
+  - Ethylene
   reaction_conditions:
-  - determination_method: Fineman-Ross
-    method: NA
-    polymerization_type: free radical
+  - determination_method: NA
+    method: bulk
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.05
+      constant_conf_2: 0.77
     reaction_constants:
-      constant_1: 0.19
-      constant_2: 2.65
-    solvent: Ethanol
-    temperature: 60
+      constant_1: 0.16
+      constant_2: 4.39
+    solvent: None
+    temperature: 160
     temperature_unit: °C
-  - determination_method: Fineman-Ross
-    method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 0.71
-      constant_2: 1.18
-    solvent: Benzene
-    temperature: 60
-    temperature_unit: °C
-  - determination_method: Fineman-Ross
-    method: NA
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 0.01
-      constant_2: 2.1
-    solvent: DMF
-    temperature: 60
-    temperature_unit: °C
-source: 'Journal of Polymer Science Part A: Polymer Chemistry, 28(12), 3487–3497'
+source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010406

@@ -13,11 +13,11 @@ load_dotenv()
 langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 llm = OpenAI()
 
-input_folder = "./PDF_from_scidownl/paper"
+input_folder = "../pdfs"
 output_folder = "model_output_assistant"
 input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
-random_pdf_selection = random.sample(input_files, 20)
-print("random selection of PDFs: ", random_pdf_selection)
+#random_pdf_selection = random.sample(input_files, 20) enumerate(random_pdf_selection)
+#print("random selection of PDFs: ", random_pdf_selection)
 
 max_section_length = 16385
 model = "gpt-4-1106-preview"
@@ -28,7 +28,7 @@ run_time_expired_error = 0
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
-for i, filename in enumerate(random_pdf_selection):
+for i, filename in enumerate(input_files):
     file_path = os.path.join(input_folder, filename)
     print(file_path)
     print(filename)
@@ -38,7 +38,8 @@ for i, filename in enumerate(random_pdf_selection):
     )
     assistant = client.beta.assistants.create(
         instructions="You are a scientific assistant, extracting important information about polymerization conditions"
-                     "out of pdfs in valid json format.",
+                     "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                     "accuracy. Keep the entries short without details. Be careful with numbers.",
         model="gpt-4-turbo-preview",
         tools=[{"type": "retrieval"}],
         name="Extractor",

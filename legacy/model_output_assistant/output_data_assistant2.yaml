@@ -1,34 +1,19 @@
+PDF_name: paper02.pdf
 reactions:
 - monomers:
-  - Hydroxyethylcarbazolyl Acrylate
-  - Acryloyl-Hydroxyethyl-Dinitrobenzoate
+  - 2-Vinylpyridine
+  - Methacrylic Acid
   reaction_conditions:
-  - determination_method: Kelen-Tudor method
-    method: bulk
-    polymerization_type: NA
+  - determination_method: NA
+    method: NA
+    polymerization_type: bulk
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0.1
+      constant_conf_2: 0.05
     reaction_constants:
-      constant_1: 0.62
-      constant_2: 0.37
-    solvent: Dioxane
-    temperature: 60
-    temperature_unit: °C
-- monomers:
-  - Hydroxyethylcarbazolyl Methacrylate
-  - Acryloyl-Hydroxyethyl-Dinitrobenzoate
-  reaction_conditions:
-  - determination_method: Kelen-Tudor method
-    method: bulk
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 1.04
-      constant_2: 0.1
-    solvent: Dioxane
-    temperature: 60
+      constant_1: 1.55
+      constant_2: 0.58
+    solvent: None
+    temperature: 70
     temperature_unit: °C
 source: NA

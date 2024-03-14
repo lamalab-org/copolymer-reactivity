@@ -1,82 +1,99 @@
+PDF_name: paper10.pdf
 reactions:
 - monomers:
-  - Ethylene
-  - Propylene
+  - 3MS
+  - MA
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 3.2
-      constant_2: NA
-    solvent: NA
-    temperature: 13
+      constant_1: 0
+      constant_2: 0
+    solvent: T
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: NA
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 0
+      constant_2: 0
+    solvent: IPA
+    temperature: 70
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: NA
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 0
+      constant_2: 0
+    solvent: A
+    temperature: 70
     temperature_unit: °C
 - monomers:
-  - Ethylene
-  - Butene-1
+  - 3MS
+  - MMA
   reaction_conditions:
   - determination_method: NA
     method: NA
-    polymerization_type: free radical
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 3.2
-      constant_2: NA
+      constant_1: 0
+      constant_2: 0
     solvent: NA
-    temperature: 13
+    temperature: 70
     temperature_unit: °C
 - monomers:
-  - Ethylene
-  - Octene-1
+  - MA
+  - MMA
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 3.2
-      constant_2: NA
-    solvent: NA
-    temperature: 13
+      constant_1: 1
+      constant_2: 0
+    solvent: T
+    temperature: 70
     temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Isobutylene
-  reaction_conditions:
-  - determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 2.1
-      constant_2: NA
-    solvent: NA
-    temperature: 13
+      constant_1: 0
+      constant_2: 0
+    solvent: IPA
+    temperature: 70
     temperature_unit: °C
-- monomers:
-  - Ethylene
-  - trans-Butene-2
-  reaction_conditions:
-  - determination_method: NA
+  - determination_method: Kelen-Tudos
     method: NA
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 7.5
-      constant_2: NA
-    solvent: NA
-    temperature: 13
+      constant_1: 0
+      constant_2: 0
+    solvent: A
+    temperature: 70
     temperature_unit: °C
 source: NA
