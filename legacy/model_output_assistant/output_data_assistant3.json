@@ -8,22 +8,39 @@
             "reaction_conditions": [
                 {
                     "polymerization_type": "NA",
-                    "solvent": "Distilled deionized water",
+                    "solvent": "Water",
                     "method": "NA",
                     "temperature": 50,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 2,
-                        "constant_2": 0
+                        "constant_1": 2.9,
+                        "constant_2": 0.162
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 13,
-                        "constant_conf_2": 8
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
                     },
-                    "determination_method": "Kelen-Tudos method, EVM program"
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "Water",
+                    "method": "NA",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.58,
+                        "constant_2": 0.157
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "EVM program"
                 }
             ]
         }
     ],
-    "source": "https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307"
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307",
+    "PDF_name": "paper03.pdf"
 }

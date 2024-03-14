@@ -2,52 +2,29 @@
     "reactions": [
         {
             "monomers": [
-                "Hydroxyethylcarbazolyl Acrylate",
-                "Acryloyl-Hydroxyethyl-Dinitrobenzoate"
+                "2-Vinylpyridine",
+                "Methacrylic Acid"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "Dioxane",
-                    "method": "bulk",
-                    "temperature": 60,
+                    "polymerization_type": "bulk",
+                    "solvent": "None",
+                    "method": "NA",
+                    "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.62,
-                        "constant_2": 0.37
+                        "constant_1": 1.55,
+                        "constant_2": 0.58
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
                     },
-                    "determination_method": "Kelen-Tudor method"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Hydroxyethylcarbazolyl Methacrylate",
-                "Acryloyl-Hydroxyethyl-Dinitrobenzoate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "Dioxane",
-                    "method": "bulk",
-                    "temperature": 60,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 1.04,
-                        "constant_2": 0.1
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "Kelen-Tudor method"
+                    "determination_method": "NA"
                 }
             ]
         }
     ],
-    "source": "NA"
+    "source": "NA",
+    "PDF_name": "paper02.pdf"
 }

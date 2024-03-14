@@ -1,34 +1,35 @@
+PDF_name: paper06.pdf
 reactions:
 - monomers:
-  - Vinylidene chloride
-  - Benzyl methacrylate
+  - Styrene
+  - Maleic anhydride
   reaction_conditions:
   - determination_method: NA
-    method: Bulk
-    polymerization_type: Bulk
+    method: bulk
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 5
-      constant_conf_2: 5
+      constant_conf_1: 0.1
+      constant_conf_2: 0.01
     reaction_constants:
-      constant_1: 3
-      constant_2: 0
-    solvent: NA
-    temperature: 60
-    temperature_unit: °C
+      constant_1: 1.54
+      constant_2: 0.224
+    solvent: None
+    temperature: NA
+    temperature_unit: NA
 - monomers:
-  - Vinylidene chloride
-  - Vinyl acetate
+  - Methyl methacrylate
+  - Maleic anhydride
   reaction_conditions:
   - determination_method: NA
-    method: Bulk
-    polymerization_type: Bulk
+    method: bulk
+    polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 3
-      constant_conf_2: 5
+      constant_conf_1: 0.25
+      constant_conf_2: 0.02
     reaction_constants:
-      constant_1: 0
-      constant_2: 6
-    solvent: NA
-    temperature: 60
-    temperature_unit: °C
-source: Die Makromolekulare Chemie, 110(1), 233–245
+      constant_1: 3.344
+      constant_2: 0.674
+    solvent: None
+    temperature: NA
+    temperature_unit: NA
+source: NA
