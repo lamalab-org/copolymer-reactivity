@@ -2,23 +2,79 @@
     "reactions": [
         {
             "monomers": [
-                "Ethylene",
-                "Propylene"
+                "3MS",
+                "MA"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "NA",
+                    "solvent": "T",
                     "method": "NA",
-                    "temperature": 13,
+                    "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 3.2,
-                        "constant_2": "NA"
+                        "constant_1": 0,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "IPA",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "A",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "3MS",
+                "MMA"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": 70,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
                     },
                     "determination_method": "NA"
                 }
@@ -26,100 +82,61 @@
         },
         {
             "monomers": [
-                "Ethylene",
-                "Butene-1"
+                "MA",
+                "MMA"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "NA",
+                    "solvent": "T",
                     "method": "NA",
-                    "temperature": 13,
+                    "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 3.2,
-                        "constant_2": "NA"
+                        "constant_1": 1,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
                     },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Octene-1"
-            ],
-            "reaction_conditions": [
+                    "determination_method": "Kelen-Tudos"
+                },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "NA",
+                    "solvent": "IPA",
                     "method": "NA",
-                    "temperature": 13,
+                    "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 3.2,
-                        "constant_2": "NA"
+                        "constant_1": 0,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
                     },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Isobutylene"
-            ],
-            "reaction_conditions": [
+                    "determination_method": "Kelen-Tudos"
+                },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "NA",
+                    "solvent": "A",
                     "method": "NA",
-                    "temperature": 13,
+                    "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 2.1,
-                        "constant_2": "NA"
+                        "constant_1": 0,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
                     },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "trans-Butene-2"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": 13,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 7.5,
-                        "constant_2": "NA"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "NA"
+                    "determination_method": "Kelen-Tudos"
                 }
             ]
         }
     ],
-    "source": "NA"
+    "source": "NA",
+    "PDF_name": "paper10.pdf"
 }

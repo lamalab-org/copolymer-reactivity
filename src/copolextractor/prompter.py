@@ -19,7 +19,7 @@ def get_prompt_template():
                 the PDF. Ignore these. In each paper there 
                 could be multiple different reaction with different pairs of monomers and same reactions with different 
                 reaction conditions. The reaction constants for the copolymerization with the monomer pair is the most 
-                important information.
+                important information. Be careful with numbers and do not miss the decimal points.
                 If there are polymerization's without these constants, ignore these. From the PDF,extract the 
                 polymerisation information from each polymerisation and report it in valid json format. Try to keep the 
                 str short. Exclude comments out of the json output. Give the Output as one json object. Stick to the 
@@ -33,11 +33,13 @@ def get_prompt_template():
                     "reaction_conditions": [
                     {
                        "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
-                       "solvent": used solvent for the polymerization reaction as STRING (whole name without abbreviation, just name no futher details),
+                       "solvent": used solvent for the polymerization reaction as STRING (whole name without 
+                                abbreviation, just name no further details) if the polymerization method is bulk put 
+                                solvent: None; if the solvent is water put just "water"; ,
                        "method": used polymerisation method (solvent, bulk, emulsion...) as STRING,
-                       "temperature": used polymerization temperature as INTEGER,
+                       "temperature": used polymerization temperature as INTEGER ,
                        "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
-                       "reaction_constants": { polymerization reaction constants r1 and r2 as INTEGER
+                       "reaction_constants": { polymerization reaction constants r1 and r2 as INTEGER, 
                         "constant_1":
                         "constant_2": },
                        "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as INTEGER
@@ -71,7 +73,7 @@ def get_prompt_template():
 
 def get_prompt_addition():
     prompt_addition = """Here is the previously collected data from the same PDF: {}. Try to fill up the 
-        entries with NA and correct entries if they are wrong. Combine different reaction if they belong to the same 
+        entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. Combine different reaction if they belong to the same 
         polymerization with the same reaction conditions. Report every different polymerization and every different 
         reaction condition separately. Do this based on this prompt:"""
     return prompt_addition
