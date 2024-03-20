@@ -1,8 +1,8 @@
 PDF_name: paper08.pdf
 reactions:
 - monomers:
-  - Ethylene
   - Acrylonitrile
+  - Ethylene
   reaction_conditions:
   - determination_method: NA
     method: NA
@@ -12,8 +12,24 @@ reactions:
       constant_conf_2: NA
     reaction_constants:
       constant_1: 7
-      constant_2: 110
+      constant_2: 0
     solvent: Toluene
     temperature: 20
     temperature_unit: °C
-source: 'Vysokomol. soedin. 3: No. 7 1015-1019 1961.'
+- monomers:
+  - Vinyl ethers of chlorophenols
+  - Methyl methacrylate and styrene
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: cationic
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
+source: 'Vysokomol. soedin. 3: No. 7 1015-1019, 1020-1026 1961.'

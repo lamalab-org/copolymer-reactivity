@@ -1,35 +1,51 @@
 PDF_name: paper06.pdf
 reactions:
 - monomers:
+  - MAS
   - Styrene
-  - Maleic anhydride
   reaction_conditions:
   - determination_method: NA
     method: bulk
     polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 0.1
-      constant_conf_2: 0.01
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 1.54
-      constant_2: 0.224
-    solvent: None
-    temperature: NA
-    temperature_unit: NA
+      constant_1: 1
+      constant_2: 0
+    solvent: NA
+    temperature: 40
+    temperature_unit: °C
 - monomers:
-  - Methyl methacrylate
-  - Maleic anhydride
+  - MAS
+  - MM
   reaction_conditions:
   - determination_method: NA
-    method: bulk
+    method: solution
     polymerization_type: NA
     reaction_constant_conf:
-      constant_conf_1: 0.25
-      constant_conf_2: 0.02
+      constant_conf_1: 0
+      constant_conf_2: 0
     reaction_constants:
-      constant_1: 3.344
-      constant_2: 0.674
-    solvent: None
-    temperature: NA
-    temperature_unit: NA
+      constant_1: 0
+      constant_2: 0
+    solvent: Benzene
+    temperature: 50
+    temperature_unit: °C
+- monomers:
+  - MAS
+  - MA
+  reaction_conditions:
+  - determination_method: NA
+    method: solution
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: 0
+      constant_conf_2: 0
+    reaction_constants:
+      constant_1: 0
+      constant_2: 0
+    solvent: DMF
+    temperature: 60
+    temperature_unit: °C
 source: NA

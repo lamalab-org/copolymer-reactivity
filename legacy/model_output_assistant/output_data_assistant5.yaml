@@ -4,8 +4,8 @@ reactions:
   - Ethylene
   - Vinyl Acetate
   reaction_conditions:
-  - determination_method: feed compositional analysis (FCA)
-    method: NA
+  - determination_method: nonlinear least-squares methods
+    method: bulk
     polymerization_type: radical
     reaction_constant_conf:
       constant_conf_1: 0.005

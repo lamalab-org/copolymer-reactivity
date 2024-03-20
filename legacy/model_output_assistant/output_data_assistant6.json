@@ -2,23 +2,23 @@
     "reactions": [
         {
             "monomers": [
-                "Styrene",
-                "Maleic anhydride"
+                "MAS",
+                "Styrene"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "NA",
-                    "solvent": "None",
+                    "solvent": "NA",
                     "method": "bulk",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
+                    "temperature": 40,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 1.54,
-                        "constant_2": 0.224
+                        "constant_1": 1,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.1,
-                        "constant_conf_2": 0.01
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
                     },
                     "determination_method": "NA"
                 }
@@ -26,23 +26,47 @@
         },
         {
             "monomers": [
-                "Methyl methacrylate",
-                "Maleic anhydride"
+                "MAS",
+                "MM"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "NA",
-                    "solvent": "None",
-                    "method": "bulk",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
+                    "solvent": "Benzene",
+                    "method": "solution",
+                    "temperature": 50,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 3.344,
-                        "constant_2": 0.674
+                        "constant_1": 0,
+                        "constant_2": 0
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.25,
-                        "constant_conf_2": 0.02
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "MAS",
+                "MA"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "DMF",
+                    "method": "solution",
+                    "temperature": 60,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0,
+                        "constant_2": 0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0,
+                        "constant_conf_2": 0
                     },
                     "determination_method": "NA"
                 }
