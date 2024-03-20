@@ -34,7 +34,7 @@ def get_prompt_template():
                     {
                        "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
                        "solvent": used solvent for the polymerization reaction as STRING (whole name without 
-                                abbreviation, just name no further details) if the polymerization method is bulk put 
+                                abbreviation, just name no further details) if the polymerization method is 'bulk' put 
                                 solvent: None; if the solvent is water put just "water"; ,
                        "method": used polymerisation method (solvent, bulk, emulsion...) as STRING,
                        "temperature": used polymerization temperature as INTEGER ,
@@ -93,7 +93,7 @@ def format_prompt(template, data):
     return template.format(data)
 
 
-def call_openai(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0, **kwargs):
+def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0, **kwargs):
     """Call chat openai model
 
     Args:
@@ -111,8 +111,9 @@ def call_openai(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0, **kw
         messages=[
             {
                 "role": "system",
-                "content": "You are a scientific assistant, extracting important information about polymerization "
-                "conditions out of text.",
+                "content": "You are a scientific assistant, extracting important information about polymerization conditions"
+                     "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                     "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
         ],
@@ -222,7 +223,6 @@ def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
         elif hasattr(content_block, 'get'):
             json_str = content_block.get('text')
         else:
-            print("ContentBlock hat kein zugängliches 'text'-Attribut oder eine 'get'-Methode.")
             return
         output_name_json = os.path.join(output_folder, f"output_data_claude{i + 1}.json")
         output_name_yaml = os.path.join(output_folder, f"output_data_claude{i + 1}.yaml")
@@ -256,3 +256,10 @@ def call_claude3(prompt):
     )
     print(message.content)
     return message.content
+
+
+def update_prompt_with_text_and_images(original_prompt_str, new_text):
+    original_prompt = json.loads(original_prompt_str)
+    original_prompt[0]['content'][-1]['text'] = new_text
+    updated_prompt_str = json.dumps(original_prompt)
+    return updated_prompt_str

@@ -7,34 +7,18 @@
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "Water",
-                    "method": "NA",
-                    "temperature": 50,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 2.9,
-                        "constant_2": 0.162
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
-                    },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "Water",
-                    "method": "NA",
-                    "temperature": 50,
-                    "temperature_unit": "°C",
+                    "polymerization_type": "emulsion",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
                     "reaction_constants": {
                         "constant_1": 2.58,
                         "constant_2": 0.157
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.13,
-                        "constant_conf_2": 0.08
+                        "constant_conf_1": 13,
+                        "constant_conf_2": 8
                     },
                     "determination_method": "EVM program"
                 }

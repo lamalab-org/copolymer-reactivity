@@ -238,7 +238,7 @@ for test_file, model_file in zip(test_files, model_files):
 correct_reaction_rate = calculate_rate(correct_reaction_count, reaction_condition_count)*100
 
 print(f"out of {reaction_condition_count} matching reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, reaction_condition_count)*100} %)")
-print(f"out of {combined_count_reactions_model} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_model)*100} %)")
+print(f"out of {combined_count_reactions_model} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_test)*100} %)")
 
 # comparative metrics for each model run
 monomer_error_rate = calculate_rate(matching_monomer_error, total_monomer_count) * 100

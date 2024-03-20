@@ -9,7 +9,7 @@
                 {
                     "polymerization_type": "bulk",
                     "solvent": "None",
-                    "method": "NA",
+                    "method": "free radical",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
@@ -19,6 +19,30 @@
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.1,
                         "constant_conf_2": 0.05
+                    },
+                    "determination_method": "NA"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methacrylic Acid",
+                "Diethylaminoethyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "NA",
+                    "solvent": "NA",
+                    "method": "NA",
+                    "temperature": "NA",
+                    "temperature_unit": "NA",
+                    "reaction_constants": {
+                        "constant_1": "NA",
+                        "constant_2": "NA"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "NA",
+                        "constant_conf_2": "NA"
                     },
                     "determination_method": "NA"
                 }
