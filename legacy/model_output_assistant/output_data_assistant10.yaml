@@ -1,99 +1,83 @@
 PDF_name: paper10.pdf
 reactions:
 - monomers:
-  - 3MS
-  - MA
+  - 3-Methylstyrene
+  - Methyl Methacrylate
   reaction_conditions:
-  - determination_method: Kelen-Tudos
-    method: NA
+  - determination_method: KT
+    method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.04
+      constant_conf_2: 0.04
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: T
+      constant_1: 0.53
+      constant_2: 0.48
+    solvent: Toluene
     temperature: 70
     temperature_unit: °C
-  - determination_method: Kelen-Tudos
-    method: NA
+  - determination_method: KT
+    method: solvent
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.06
+      constant_conf_2: 0.03
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: IPA
+      constant_1: 0.36
+      constant_2: 0.38
+    solvent: Isopropanol
     temperature: 70
     temperature_unit: °C
-  - determination_method: Kelen-Tudos
-    method: NA
+  - determination_method: KT
+    method: solvent
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.05
+      constant_conf_2: 0.04
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: A
-    temperature: 70
-    temperature_unit: °C
-- monomers:
-  - 3MS
-  - MMA
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: NA
-    reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
-    reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: NA
+      constant_1: 0.51
+      constant_2: 0.41
+    solvent: Acetone
     temperature: 70
     temperature_unit: °C
 - monomers:
   - MA
   - MMA
   reaction_conditions:
-  - determination_method: Kelen-Tudos
-    method: NA
+  - determination_method: KT
+    method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.02
+      constant_conf_2: 0.01
     reaction_constants:
-      constant_1: 1
-      constant_2: 0
-    solvent: T
+      constant_1: 1.06
+      constant_2: 0.1
+    solvent: Toluene
     temperature: 70
     temperature_unit: °C
-  - determination_method: Kelen-Tudos
-    method: NA
+  - determination_method: KT
+    method: solvent
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.02
+      constant_conf_2: 0.03
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: IPA
+      constant_1: 0.33
+      constant_2: 0.78
+    solvent: Isopropanol
     temperature: 70
     temperature_unit: °C
-  - determination_method: Kelen-Tudos
-    method: NA
+  - determination_method: KT
+    method: solvent
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.02
+      constant_conf_2: 0.02
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: A
+      constant_1: 0.63
+      constant_2: 0.32
+    solvent: Acetone
     temperature: 70
     temperature_unit: °C
 source: NA

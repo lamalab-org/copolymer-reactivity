@@ -1,8 +1,8 @@
 PDF_name: paper04.pdf
 reactions:
 - monomers:
-  - 2-Chloro-1,3-Butadiene
-  - Methyl Isopropenyl Ketone
+  - 2-chloro-13-butadiene
+  - methyl isopropenyl ketone
   reaction_conditions:
   - determination_method: NA
     method: emulsion
@@ -14,11 +14,11 @@ reactions:
       constant_1: 3.6
       constant_2: 0.1
     solvent: water
-    temperature: 40
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
 - monomers:
-  - 2-Chloro-1,3-Butadiene
-  - Methacrylic Acid
+  - 2-chloro-13-butadiene
+  - methacrylic acid
   reaction_conditions:
   - determination_method: NA
     method: emulsion
@@ -30,6 +30,6 @@ reactions:
       constant_1: 2.7
       constant_2: 0.15
     solvent: water
-    temperature: 40
-    temperature_unit: °C
+    temperature: NA
+    temperature_unit: NA
 source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635

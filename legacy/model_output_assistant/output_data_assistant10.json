@@ -2,81 +2,57 @@
     "reactions": [
         {
             "monomers": [
-                "3MS",
-                "MA"
+                "3-Methylstyrene",
+                "Methyl Methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "T",
-                    "method": "NA",
+                    "solvent": "Toluene",
+                    "method": "bulk",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 0.53,
+                        "constant_2": 0.48
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.04
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "KT"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "IPA",
-                    "method": "NA",
+                    "solvent": "Isopropanol",
+                    "method": "solvent",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 0.36,
+                        "constant_2": 0.38
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.03
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "KT"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "A",
-                    "method": "NA",
+                    "solvent": "Acetone",
+                    "method": "solvent",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 0.51,
+                        "constant_2": 0.41
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.04
                     },
-                    "determination_method": "Kelen-Tudos"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "3MS",
-                "MMA"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": 70,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
-                    },
-                    "determination_method": "NA"
+                    "determination_method": "KT"
                 }
             ]
         },
@@ -88,51 +64,51 @@
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "T",
-                    "method": "NA",
+                    "solvent": "Toluene",
+                    "method": "bulk",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 1,
-                        "constant_2": 0
+                        "constant_1": 1.06,
+                        "constant_2": 0.1
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "KT"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "IPA",
-                    "method": "NA",
+                    "solvent": "Isopropanol",
+                    "method": "solvent",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 0.33,
+                        "constant_2": 0.78
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "KT"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "A",
-                    "method": "NA",
+                    "solvent": "Acetone",
+                    "method": "solvent",
                     "temperature": 70,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 0.63,
+                        "constant_2": 0.32
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "KT"
                 }
             ]
         }

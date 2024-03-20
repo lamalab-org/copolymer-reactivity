@@ -5,7 +5,7 @@ reactions:
   - Methacrylic Acid
   reaction_conditions:
   - determination_method: NA
-    method: NA
+    method: free radical
     polymerization_type: bulk
     reaction_constant_conf:
       constant_conf_1: 0.1
@@ -16,4 +16,20 @@ reactions:
     solvent: None
     temperature: 70
     temperature_unit: °C
+- monomers:
+  - Methacrylic Acid
+  - Diethylaminoethyl Methacrylate
+  reaction_conditions:
+  - determination_method: NA
+    method: NA
+    polymerization_type: NA
+    reaction_constant_conf:
+      constant_conf_1: NA
+      constant_conf_2: NA
+    reaction_constants:
+      constant_1: NA
+      constant_2: NA
+    solvent: NA
+    temperature: NA
+    temperature_unit: NA
 source: NA
