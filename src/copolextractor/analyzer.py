@@ -76,13 +76,20 @@ def get_solvent(data: list, index: int) -> tuple:
 
 
 def convert_unit(temp1: int, temp2: int, unit1: str, unit2: str):
-    temp1_unit = ureg.Quantity(temp1, ureg.parse_units(unit1))
-    temp2_unit = ureg.Quantity(temp2, ureg.parse_units(unit2))
-    if ureg.parse_units(unit1) is not ureg.degC:
-        temp1_unit.ito(ureg.degC)
-    if ureg.parse_units(unit2) is not ureg.degC:
-        temp2_unit.ito(ureg.degC)
-    return temp1_unit.magnitude, temp2_unit.magnitude
+    try:
+        temp1_unit = ureg.Quantity(temp1, ureg.parse_units(unit1))
+        temp2_unit = ureg.Quantity(temp2, ureg.parse_units(unit2))
+        if ureg.parse_units(unit1) is not ureg.degC:
+            temp1_unit.ito(ureg.degC)
+        if ureg.parse_units(unit2) is not ureg.degC:
+            temp2_unit.ito(ureg.degC)
+        return temp1_unit.magnitude, temp2_unit.magnitude
+    except (AttributeError, ValueError, TypeError, KeyError) as e:
+        print(AttributeError, e)
+        print(ValueError, e)
+        print(TypeError, e)
+        print(KeyError,e)
+        return temp1, temp2
 
 
 def get_metadata_polymerization(data: dict):
@@ -228,10 +235,17 @@ def get_reaction_constant(data: list, index: int) -> tuple:
 def get_reaction_const_list(reaction_const: list, reaction_const_conf: list):
     reaction_constants = []
     reaction_constants_conf = []
-    for constant in reaction_const:
-        reaction_constants.append(reaction_const[constant])
-    for conf in reaction_const_conf:
-        reaction_constants_conf.append(reaction_const_conf[conf])
+    print("rxn const: ", reaction_const)
+    print("rxm const conf: ", reaction_const_conf)
+    if reaction_const is None:
+        reaction_constants = [None, None]
+    else:
+        reaction_constants = list(reaction_const.values())
+    if reaction_const_conf is None:
+        reaction_constants_conf = [None, None]
+    else:
+        reaction_constants_conf = [None if value == 'None' else value for value in reaction_const_conf.values()]
+
     return reaction_constants, reaction_constants_conf
 
 
@@ -249,18 +263,18 @@ def average(const):
         return average_value
 
 
-def count_na_values(data, na_value="NA"):
-    na_count = 0
+def count_na_values(data, null_value=None):
+    null_count = 0
 
     if isinstance(data, dict):
         for value in data.values():
-            na_count += count_na_values(value, na_value)
+            null_count += count_na_values(value, null_value)
     elif isinstance(data, list):
         for item in data:
-            na_count += count_na_values(item, na_value)
-    elif data == na_value:
-        na_count += 1
-    return na_count
+            null_count += count_na_values(item, null_value)
+    elif data == null_value:
+        null_count += 1
+    return null_count
 
 
 def count_total_entries(data):

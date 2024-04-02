@@ -1,82 +1,63 @@
+PDF_name: Journal of Macromolecular Science, Part A Pure and Applied Chemistry
 reactions:
 - monomers:
   - 3-methylstyrene
   - methacrylic acid
   reaction_conditions:
-  - determination_method: Kelen-Tüdös
+  - determination_method: null
     method: solution
     polymerization_type: radical
-    reaction_constant_conf:
-      constant_conf_1: 0.06
-      constant_conf_2: 0.35
+    reaction_constant_conf: null
     reaction_constants:
-      constant_1: 0.2
-      constant_2: 0.5
+      constant_1: 0.5
+      constant_2: 0.43
+    solvent: dimethyl sulfoxide
+    temperature: 70.0
+    temperature_unit: °C
+  - determination_method: null
+    method: null
+    polymerization_type: radical
+    reaction_constant_conf: null
+    reaction_constants:
+      constant_1: 0.33
+      constant_2: 0.18
     solvent: toluene
-    temperature: 70
+    temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    method: solution
+  - determination_method: null
+    method: null
     polymerization_type: radical
-    reaction_constant_conf:
-      constant_conf_1: 0.18
-      constant_conf_2: 0.33
+    reaction_constant_conf: null
     reaction_constants:
-      constant_1: 0.3
-      constant_2: 0.4
-    solvent: acetone
-    temperature: 70
-    temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    method: solution
-    polymerization_type: radical
-    reaction_constant_conf:
-      constant_conf_1: 0.32
-      constant_conf_2: 0.53
-    reaction_constants:
-      constant_1: 0.4
-      constant_2: 0.5
+      constant_1: 0.51
+      constant_2: 0.42
     solvent: isopropyl alcohol
-    temperature: 70
+    temperature: 70.0
+    temperature_unit: °C
+  - determination_method: null
+    method: null
+    polymerization_type: radical
+    reaction_constant_conf: null
+    reaction_constants:
+      constant_1: 0.41
+      constant_2: 0.25
+    solvent: acetone
+    temperature: 70.0
     temperature_unit: °C
 - monomers:
   - 3-methylstyrene
   - methyl methacrylate
   reaction_conditions:
   - determination_method: Kelen-Tüdös
-    method: solution
+    method: null
     polymerization_type: radical
     reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: 0.03
-    reaction_constants:
-      constant_1: 1.07
-      constant_2: 0.06
-    solvent: toluene
-    temperature: 70
-    temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    method: solution
-    polymerization_type: radical
-    reaction_constant_conf:
-      constant_conf_1: 0.31
+      constant_conf_1: 0.03
       constant_conf_2: 0.02
     reaction_constants:
-      constant_1: 1.07
-      constant_2: 0.05
-    solvent: isopropyl alcohol
-    temperature: 70
-    temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    method: solution
-    polymerization_type: radical
-    reaction_constant_conf:
-      constant_conf_1: 0.32
-      constant_conf_2: 0.01
-    reaction_constants:
-      constant_1: 1.06
-      constant_2: 0.02
-    solvent: acetone
-    temperature: 70
+      constant_1: 0.62
+      constant_2: 0.4
+    solvent: null
+    temperature: 70.0
     temperature_unit: °C
 source: https://doi.org/10.1080/10601329508013679

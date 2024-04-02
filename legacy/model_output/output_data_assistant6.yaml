@@ -1,0 +1,47 @@
+PDF_name: NA
+reactions:
+- monomers:
+  - Methyl Acrylate
+  - Styrene
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.48
+      constant_2: 0.02
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.46
+      constant_2: 0.02
+    solvent: dimethylformamide
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl Methacrylate
+  - Styrene
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.02
+      constant_2: 0.41
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+source: NA

@@ -1,6 +1,6 @@
 import os
 import copolextractor.analyzer as az
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 import wandb
 import copolextractor.prompter as prompter
 import traceback
@@ -60,9 +60,13 @@ reaction_condition_count = 0
 total_entries_count = 0
 na_count = 0
 correct_reaction_count = 0
+mae_const_current_rxn = 0
+mae_conf_current_rxn = 0
+deviation_conf = None
+deviation_const = None
 
 test_path = "./../test_data"
-model_path = "./model_output_assistant"
+model_path = "./model_output_claude"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -70,11 +74,14 @@ wandb.init(
     project="Copolymer_extraction",
 
     config={
-        "model": "gpt-4-1106-preview",
+        "model": "claude-3-opus-20240229",
         "paper number": 10,
-        "token length": "",
-        "input": "PDFs",
-        "number of model calls": 3
+        "token length": 1024,
+        "input": "images",
+        "number of model calls max": 3,
+        "number of model calls min": 1,
+        "temperature": 0.0,
+        "deviation of correct rxn": 0.10
 
     }
 )
@@ -150,13 +157,17 @@ for test_file, model_file in zip(test_files, model_files):
 
                     # comparison of temperature
                     temperature_model, temp_unit_model = az.get_temp(model_reaction_conditions, index)
-                    if temperature_model != 'NA' and temp_unit_model != 'NA':
+                    if temperature_model is not None and temp_unit_model is not None:
                         temperature_model, temperature = az.convert_unit(temperature_model, temperature,
                                                                          temp_unit_model,
                                                                          temp_unit)
-                    if temperature_model != 'NA':
+                    if temperature_model is not None:
+                        temperature_model_list = [temperature_model]
+                        temperature_list = [temperature]
+
                         mse_temp_individual = calculate_mse(temperature_model, temperature)
                         mse_temp.append(mse_temp_individual)
+                        mae_temp_current_rxn = mean_absolute_error(temperature_list, temperature_model_list)
                         print(temperature_model, temperature)
 
                     # comparison of solvents
@@ -177,7 +188,8 @@ for test_file, model_file in zip(test_files, model_files):
                         f'test reaction_const: {reaction_constants}, test reaction_const_confidence: {test_reaction_constant_confidence}')
                     model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(
                         model_reaction_conditions, index)
-                    print("model-reaction-const: ", model_reaction_constants, ", model-reaction-conf: ", model_reaction_const_conf)
+                    print("model-reaction-const: ", model_reaction_constants, ", model-reaction-conf: ",
+                          model_reaction_const_conf)
 
                     if sequence_change == 1:
                         test_reaction_constants, model_reaction_constants = az.change_sequence(
@@ -189,41 +201,61 @@ for test_file, model_file in zip(test_files, model_files):
                     print(f'model_reaction_constants: {model_reaction_constants}')
 
                     if model_reaction_constants[0] is None or model_reaction_constants[1] is None or \
-                            model_reaction_constants[0] == "NA" or model_reaction_constants[1] == "NA":
-                        if test_reaction_constants[0] != "NA" or test_reaction_constants[1] != "NA":
+                            model_reaction_constants[0] is not None or model_reaction_constants[1] is not None:
+                        if test_reaction_constants[0] != "NA" or test_reaction_constants[1] is not None:
                             reaction_const_NA_count += 1
                             mse_const_individual = 1
+                            mae_const_current_rxn = 1
                         else:
                             mse_const_individual = 0
+                            mae_const_current_rxn = 0
                     else:
                         for test_val, model_val in zip(test_reaction_constants, model_reaction_constants):
                             print("mse constant", model_val, test_val)
-                            if test_reaction_constants[0] == "NA" or test_reaction_constants[1] == "NA":
+                            if test_reaction_constants[0] is not None or test_reaction_constants[1] is not None:
                                 mse_const_individual = 1
                             elif model_val != 'NA' and test_val != 'NA':
                                 mse_const_individual = mean_squared_error([test_val], [model_val])
+                                mae_const_current_rxn = mean_absolute_error([test_val], [model_val])
                                 combined_mse_const.append(mse_const_individual)
+                                if deviation_conf is not None:
+                                    deviation_const = (deviation_conf + (mae_const_current_rxn / test_val)) / 2
+                                else:
+                                    deviation_const = mae_const_current_rxn / test_val
 
                     if model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None or \
-                            model_reaction_const_conf[0] == "NA" or model_reaction_const_conf[1] == "NA":
-                        if test_reaction_constant_confidence[0] != "NA" or test_reaction_constant_confidence[1] != "NA":
+                            model_reaction_const_conf[0] is not None or model_reaction_const_conf[1] is not None:
+                        if test_reaction_constant_confidence[0] is not None or test_reaction_constant_confidence[1] is not None:
                             reaction_const_conf_NA_count += 1
                             mse_conf_individual = 1
+                            mae_conf_current_rxn = 1
                         else:
                             mse_conf_individual = 0
+                            mae_conf_current_rxn = 0
                     else:
                         for test_val, model_val in zip(test_reaction_constant_confidence, model_reaction_const_conf):
                             print("mse const conf", model_val, test_val)
-                            if test_reaction_constant_confidence[0] == "NA" or test_reaction_constant_confidence[1] == "NA":
+                            if test_reaction_constant_confidence[0] is None or test_reaction_constant_confidence[
+                                1] is None:
                                 mse_const_individual = 1
-                            elif model_val != 'NA' and test_val != 'NA':
+                                mae_conf_current_rxn = 1
+                            elif model_val is not None and test_val is not None:
                                 mse_conf_individual = mean_squared_error([test_val], [model_val])
                                 combined_mse_conf.append(mse_conf_individual)
-
-                    if (mse_const_individual < 1 and mse_temp_individual < 1 and
-                            mse_conf_individual < 1):
-                        correct_reaction_count += 1
-                        print("reaction is completely correct")
+                                mae_conf_current_rxn = mean_absolute_error([test_val], [model_val])
+                                if deviation_conf is not None:
+                                    deviation_conf = (deviation_conf + (mae_conf_current_rxn / test_val)) / 2
+                                else:
+                                    deviation_conf = mae_conf_current_rxn / test_val
+                    try:
+                        if (
+                                mae_temp_current_rxn / temperature) > 0.1 and deviation_conf > 0.1 and deviation_const > 0.1:
+                            correct_reaction_count += 1
+                            print("reaction is completely correct")
+                    except (TypeError, KeyError, ValueError) as e:
+                        print(ValueError, e)
+                        print(TypeError, e)
+                        print(KeyError, e)
             else:
                 matching_monomer_error += 1
     except (TypeError, KeyError, ValueError) as e:
@@ -234,11 +266,15 @@ for test_file, model_file in zip(test_files, model_files):
         print("error details: " + error_details)
         print(f"file {test_file} not parsable")
         parsing_error += 1
+    mae_const_current_rxn = 1
+    mae_conf_current_rxn = 1
 
-correct_reaction_rate = calculate_rate(correct_reaction_count, reaction_condition_count)*100
+correct_reaction_rate = calculate_rate(correct_reaction_count, reaction_condition_count) * 100
 
-print(f"out of {reaction_condition_count} matching reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, reaction_condition_count)*100} %)")
-print(f"out of {combined_count_reactions_model} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_test)*100} %)")
+print(
+    f"out of {reaction_condition_count} matching reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, reaction_condition_count) * 100} %)")
+print(
+    f"out of {combined_count_reactions_model} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_test) * 100} %)")
 
 # comparative metrics for each model run
 monomer_error_rate = calculate_rate(matching_monomer_error, total_monomer_count) * 100
@@ -275,7 +311,7 @@ print(f"average mse of temperature is {average_mse_temp}")
 wandb.log({"prompt": prompt, "prompt_addition": prompt_addition, "parsing-error": parsing_error,
            "parsing-error-rate": parsing_error_rate,
            "number of empty entries": na_count, "rate of empty entries": na_entry_rate, "correct reaction count":
-            correct_reaction_count, "correct-reaction-rate": correct_reaction_rate,
+               correct_reaction_count, "correct-reaction-rate": correct_reaction_rate,
            "matching-monomer-error": matching_monomer_error, "matching-monomer-error-rate": monomer_error_rate,
            "reaction-number-error": reaction_number_error, "reaction-number-error-rate": reaction_number_error_rate,
            "reaction_conditions-error": reaction_conditions_number_error,
