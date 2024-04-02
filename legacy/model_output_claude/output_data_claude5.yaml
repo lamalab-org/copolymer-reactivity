@@ -1,11 +1,12 @@
+PDF_name: 'JOURNAL OF POLYMER SCIENCE: PART A-1 VOL. 9, 2225-2232 (1971)'
 reactions:
 - monomers:
-  - Ethylene
-  - Vinyl Acetate
+  - ethylene
+  - vinyl acetate
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: free-radical copolymerization
+  - determination_method: null
+    method: solution
+    polymerization_type: free-radical
     reaction_constant_conf:
       constant_conf_1: 0.743
       constant_conf_2: 1.515
@@ -13,6 +14,6 @@ reactions:
       constant_1: 0.743
       constant_2: 1.515
     solvent: tert-butyl alcohol
-    temperature: 62
+    temperature: 62.0
     temperature_unit: °C
-source: NA
+source: null

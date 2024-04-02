@@ -1,30 +1,45 @@
+PDF_name: 'Journal of Polymer Science: Part A Vol. 1, pp. 2163-2169 (1963)'
 reactions:
 - monomers:
   - 2-chloro-1,3-butadiene
   - methyl isopropenyl ketone
   reaction_conditions:
-  - determination_method: Fineman and Ross
+  - determination_method: null
     method: emulsion
-    polymerization_type: free-radical copolymerization
-    reaction_constant_conf:
-      constant_conf_1: 0.2
-      constant_conf_2: 0.05
+    polymerization_type: free radical
+    reaction_constant_conf: null
     reaction_constants:
       constant_1: 3.6
-      constant_2: 0.1
-    solvent: xylene
-    temperature: 40
+      constant_2: 0.2
+    solvent: water
+    temperature: 40.0
     temperature_unit: °C
   - determination_method: Fineman and Ross
-    method: emulsion
-    polymerization_type: free-radical copolymerization
+    method: bulk
+    polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.2
       constant_conf_2: 0.05
     reaction_constants:
       constant_1: 2.7
       constant_2: 0.2
-    solvent: methacrylic acid
-    temperature: 40
+    solvent: null
+    temperature: 40.0
     temperature_unit: °C
-source: 'JOURNAL OF POLYMER SCIENCE: PART A VOL. 1, PP. 2163-2169 (1963)'
+- monomers:
+  - 2-chloro-1,3-butadiene
+  - methacrylic acid
+  reaction_conditions:
+  - determination_method: null
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.2
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 2.7
+      constant_2: 0.15
+    solvent: null
+    temperature: 40.0
+    temperature_unit: °C
+source: null

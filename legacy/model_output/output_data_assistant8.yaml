@@ -1,0 +1,51 @@
+PDF_name: NA
+reactions:
+- monomers:
+  - vinyl acetate
+  - vinyl chloride
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.04
+    reaction_constants:
+      constant_1: 0.01
+      constant_2: 0.4
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - vinyl acetate
+  - acrylonitrile
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 0.02
+      constant_2: 0.1
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - vinyl acetate
+  - methacrylonitrile
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.01
+      constant_conf_2: 0.06
+    reaction_constants:
+      constant_1: 0.02
+      constant_2: 0.6
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+source: NA

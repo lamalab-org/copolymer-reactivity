@@ -1,0 +1,55 @@
+PDF_name: The influence of molecular interaction on polymerization, 10a
+reactions:
+- monomers:
+  - methacrylic acid
+  - styrene
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.48
+      constant_2: 0.05
+    solvent: chloroform
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.46
+      constant_2: 0.04
+    solvent: carbon tetrachloride
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.04
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.4
+      constant_2: 0.05
+    solvent: acetone
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.04
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 0.41
+      constant_2: 0.06
+    solvent: acetonitrile
+    temperature: 60.0
+    temperature_unit: °C
+source: doi:10.1002/macp.1985.021860711
