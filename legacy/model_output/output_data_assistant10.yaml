@@ -1,0 +1,60 @@
+PDF_name: Solvent Effects on 3-Methylstyrene Radical Copolymerization with Methyl
+  Methacrylate and Methyl Acrylate
+reactions:
+- monomers:
+  - 3-Methylstyrene
+  - Methyl Methacrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudos
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.48
+      constant_2: 0.5
+    solvent: Tetrahydrofuran
+    temperature: 70.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.04
+      constant_conf_2: 0.04
+    reaction_constants:
+      constant_1: 0.46
+      constant_2: 0.47
+    solvent: Isopropanol
+    temperature: 70.0
+    temperature_unit: °C
+- monomers:
+  - Methyl Acrylate
+  - Methyl Methacrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudos
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.05
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.5
+      constant_2: 0.46
+    solvent: Tetrahydrofuran
+    temperature: 70.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.04
+      constant_conf_2: 0.04
+    reaction_constants:
+      constant_1: 0.4
+      constant_2: 0.41
+    solvent: Isopropanol
+    temperature: 70.0
+    temperature_unit: °C
+source: https://doi.org/10.1080/10601329508010273

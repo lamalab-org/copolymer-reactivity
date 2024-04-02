@@ -1,0 +1,30 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methacrylic Acid",
+                "Ethyl Acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudor"
+                }
+            ]
+        }
+    ],
+    "source": "NA",
+    "PDF_name": "METHACRYLIC ACID-ETHYL ACRYLATE COPOLYMERS"
+}

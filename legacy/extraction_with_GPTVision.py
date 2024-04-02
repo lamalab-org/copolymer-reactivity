@@ -4,7 +4,6 @@ import copolextractor.prompter as prompter
 import base64
 import copolextractor.analyzer as az
 from openai import OpenAI
-import json
 from PIL import Image
 import time
 import io
@@ -52,14 +51,6 @@ def process_image(image, max_size):
     )
 
 
-def create_image_content(image, maxdim=1024, detail_threshold=1024):
-    detail = "low" if maxdim <= detail_threshold else "high"
-    return {
-        "type": "image_url",
-        "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},
-    }
-
-
 input_folder = "./../pdfs"
 output_folder_images = "./images"
 output_folder = "model_output"
@@ -70,37 +61,39 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 prompt_text = prompter.get_prompt_template()
 
 
-for i, filename in enumerate(input_files[:1]):
+for i, filename in enumerate(input_files):
     file_path = os.path.join(input_folder, filename)
     print(file_path)
     print(filename)
     pdf_images = convert_from_path(file_path)
 
     images_base64 = [process_image(image, 1024)[0] for image in pdf_images]
-    content = []
 
-    for index, data in enumerate(images_base64):
-        # content.append({"type": "text", "text": f"Image {index}:"})
-
-        content.append(create_image_content(data, maxdim=1024, detail_threshold=1024))
-
-    content.append({"type": "text", "text": prompt_text})
+    content = prompter.get_prompt_vision_model(images_base64, prompt_text)
 
     print("model call starts")
-    output = prompter.call_openai(prompt=None, content=content)
+    output = prompter.call_openai(prompt=content)
     output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
     print("output_model: ", output_model)
+    print(f"model call number 2 of {filename}")
+    updated_prompt = prompter.update_prompt(prompt_text, output_model)
+    content = prompter.get_prompt_vision_model(images_base64, updated_prompt)
+    print(updated_prompt)
+    output = prompter.call_openai(content)
+
+    output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
 
     for a in range(number_of_model_calls):
         na_count = az.count_na_values(output_model)
         total_entry_count = az.count_total_entries(output_model)
         rate = az.calculate_rate(na_count, total_entry_count)
         print("NA-rate: ", rate)
-        if rate > 0.3:
-            print(f"model call number {a+2} of {filename}")
-            prompt = prompter.update_prompt_with_text_and_images(prompt_text, output_model)
-            print(prompt)
-            # output = prompter.call_openai(prompt)
-            # output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
+        if rate > 0.3 or output_model is None:
+            print(f"model call number {a+3} of {filename}")
+            updated_prompt = prompter.update_prompt(prompt_text, output_model)
+            content = prompter.get_prompt_vision_model(images_base64, updated_prompt)
+            print(updated_prompt)
+            output = prompter.call_openai(content)
+            output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
         else:
             print("NA-rate under 30%")

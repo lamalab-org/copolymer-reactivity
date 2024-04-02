@@ -1,0 +1,46 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Ethylene",
+                "Vinyl Acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Toluene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.007
+                    },
+                    "determination_method": "Finneman-Ross and Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Toluene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.008,
+                        "constant_conf_2": 0.008
+                    },
+                    "determination_method": "Finneman-Ross and Kelen-Tudos"
+                }
+            ]
+        }
+    ],
+    "source": "doi:10.1002/pol.1971.110091102",
+    "PDF_name": "Copolymerization of Ethylene and Vinyl Acetate at Low Pressures: Determination of the Kinetics by Sequential Sampling"
+}

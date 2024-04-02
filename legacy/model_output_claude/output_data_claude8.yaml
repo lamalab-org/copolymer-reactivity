@@ -1,50 +1,67 @@
+PDF_name: Image 1
 reactions:
 - monomers:
-  - divinylpropional
-  - divinylbutyryl
-  reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 7
-      constant_2: 0
-    solvent: NA
-    temperature: 20
-    temperature_unit: °C
-- monomers:
-  - ethylene
   - acrylonitrile
+  - ethylene
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: gamma-ray induced
+  - determination_method: null
+    method: null
+    polymerization_type: gamma-ray induced copolymerization
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 7
-      constant_2: 0
+      constant_1: 7.0
+      constant_2: 0.0
     solvent: toluene
-    temperature: 20
+    temperature: 20.0
     temperature_unit: °C
 - monomers:
-  - vinyl ethers of 4-chloro-4-bromo-2,4-dichlorobutane
-  - pentachlorophenols
+  - vinyl ethers of 4-chloro-4-bromo-3,5-dichloro and pentachlorophenols
+  - boron trifluoride
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: cationic
+  - determination_method: null
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: NA
-      constant_2: NA
-    solvent: 4-bromophenol
-    temperature: 1500
-    temperature_unit: NA
-source: NA
+      constant_1: null
+      constant_2: null
+    solvent: null
+    temperature: null
+    temperature_unit: null
+- monomers:
+  - vinyl ethers of chlorophenols
+  - methyl methacrylate
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: null
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 1500.0
+      constant_2: 0.8
+    solvent: null
+    temperature: null
+    temperature_unit: null
+- monomers:
+  - vinyl ethers of chlorophenols
+  - styrene
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: null
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 60.0
+      constant_2: 0.8
+    solvent: null
+    temperature: null
+    temperature_unit: null
+source: null

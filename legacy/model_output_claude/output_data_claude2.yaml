@@ -1,34 +1,48 @@
+PDF_name: Amphoteric Polyelectrolytes. II. Copolymers of Methacrylic Acid and Diethylaminoethyl
+  Methacrylate
 reactions:
 - monomers:
   - 2-vinylpyridine
   - methacrylic acid
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: null
     method: solution
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.05
-      constant_conf_2: 0.05
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 0.39
-      constant_2: 0.21
+      constant_1: 0.37
+      constant_2: 0.31
     solvent: water
-    temperature: 70
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: null
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.58
+      constant_2: null
+    solvent: water
+    temperature: 70.0
     temperature_unit: °C
 - monomers:
   - methacrylic acid
   - N,N-diethylaminoethyl methacrylate
   reaction_conditions:
-  - determination_method: NA
-    method: solution
-    polymerization_type: NA
+  - determination_method: null
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 0.53
+      constant_1: 0.59
       constant_2: 0.46
     solvent: water
-    temperature: NA
-    temperature_unit: NA
-source: NA
+    temperature: null
+    temperature_unit: null
+source: null

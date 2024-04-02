@@ -5,6 +5,7 @@ from openai import OpenAI
 import json
 from typing import List
 import anthropic
+import base64
 
 
 class RunTimeExpired(Exception):
@@ -13,66 +14,65 @@ class RunTimeExpired(Exception):
 
 
 def get_prompt_template():
-    prompt = """The content of the PDF is a scientific paper about Copolymerization of Monomers. There are only 
-                Copolymerization with 2 different monomers. If you find a polymerisation with just one or more than 2 
-                monomers ignore them. Its possible, that there is also the beginning of a new paper about polymers on 
-                the PDF. Ignore these. In each paper there 
-                could be multiple different reaction with different pairs of monomers and same reactions with different 
-                reaction conditions. The reaction constants for the copolymerization with the monomer pair is the most 
-                important information. Be careful with numbers and do not miss the decimal points.
-                If there are polymerization's without these constants, ignore these. From the PDF,extract the 
-                polymerisation information from each polymerisation and report it in valid json format. Try to keep the 
-                str short. Exclude comments out of the json output. Give the Output as one json object. Stick to the 
-                given output datatype (String or Integer).
-                
-                Extract the following information:
+    prompt = """The content of the PDF is a scientific paper about copolymerization of monomers. We only consider
+ copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2
+ monomers ignore them. Its possible, that there is also the beginning of a new paper about polymers in
+ the PDF. Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different
+ reaction conditions. The reaction constants for the copolymerization with the monomer pair is the most
+ important information. Be careful with numbers and do not miss the decimal points.
+ If there are polymerization's without these constants, ignore these.
+ From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
+ Don't use any abbreviations, always use the whole word.
+ Try to keep the string short. Exclude comments out of the json output. Return one json object. Stick to the
+ given output datatype (string, or float).
 
-                   reactions: [
-                   {
-                    "monomers": ["Monomer 1", "Monomer 2"] as STRING (only the whole Monomer name without abbreviation)
-                    "reaction_conditions": [
-                    {
-                       "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
-                       "solvent": used solvent for the polymerization reaction as STRING (whole name without 
-                                abbreviation, just name no further details) if the polymerization method is 'bulk' put 
-                                solvent: None; if the solvent is water put just "water"; ,
-                       "method": used polymerisation method (solvent, bulk, emulsion...) as STRING,
-                       "temperature": used polymerization temperature as INTEGER ,
-                       "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
-                       "reaction_constants": { polymerization reaction constants r1 and r2 as INTEGER, 
-                        "constant_1":
-                        "constant_2": },
-                       "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as INTEGER
-                        "constant_conf_1":
-                        "constant_conf_2": },
-                       "determination_method": method for determination of the r-values (Kelen-Tudor, ...) as STRING
-                    },
-                    {
-                        "polymerization_type": 
-                        "solvent":
-                        ...
-                     }   
-                    ]
-                    },
-                    {
-                    "monomers":
-                    "reaction_condition": [
-                    { ... }
-                    ]
-                    }
-                   "source": doi url or source as STRING (just one source)
-                   "PDF_name": name of the pdf document
-                   ]
+ Extract the following information:
+
+    reactions: [
+    {
+    "monomers": ["Monomer 1", "Monomer 2"] as STRING (only the whole Monomer name without abbreviation)
+    "reaction_conditions": [
+    {
+        "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
+        "solvent": used solvent for the polymerization reaction as STRING (whole name without
+                abbreviation, just name no further details); if the solvent is water put just "water"; ,
+        "method": used polymerization method (solvent, bulk, emulsion...) as STRING,
+        "temperature": used polymerization temperature as FLOAT ,
+        "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
+        "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT,
+        "constant_1":
+        "constant_2": },
+        "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as FLOAT
+        "constant_conf_1":
+        "constant_conf_2": },
+        "determination_method": method for determination of the r-values (Kelen-Tudor, ...) as STRING
+    },
+    {
+        "polymerization_type":
+        "solvent":
+        ...
+        }
+    ]
+    },
+    {
+    "monomers":
+    "reaction_condition": [
+    { ... }
+    ]
+    }
+    "source": doi url or source as STRING (just one source)
+    "PDF_name": name of the pdf document
+    ]
 
 
-                   If the information is not provided put 'NA'. If there are multiple polymerization's with different 
-                   parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions(for 
-                   different reaction conditions of the same monomers)."""
+    If the information is not provided put null. If there are multiple polymerization's with different
+    parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions(for
+    different reaction conditions of the same monomers)."""
     return prompt
 
 
 def get_prompt_addition():
-    prompt_addition = """Here is the previously collected data from the same PDF: {}. Try to fill up the 
+    prompt_addition = """Here is the previously collected data from the same Images: {}. Try to fill up the 
         entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. Combine different reaction if they belong to the same 
         polymerization with the same reaction conditions. Report every different polymerization and every different 
         reaction condition separately. Do this based on this prompt:"""
@@ -107,7 +107,6 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0, **
     client = OpenAI()
     completion = client.chat.completions.create(
         model=model,
-        response_format={"type": "json_object"},
         messages=[
             {
                 "role": "system",
@@ -121,8 +120,7 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0, **
         **kwargs,
     )
     message_content = completion.choices[0].message.content
-    new_data = json.loads(message_content)
-    return new_data
+    return message_content
 
 
 def call_openai_agent(assistant, file, prompt, **kwargs):
@@ -224,8 +222,8 @@ def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
             json_str = content_block.get('text')
         else:
             return
-        output_name_json = os.path.join(output_folder, f"output_data_claude{i + 1}.json")
-        output_name_yaml = os.path.join(output_folder, f"output_data_claude{i + 1}.yaml")
+        output_name_json = os.path.join(output_folder, f"output_data_claude{i}.json")
+        output_name_yaml = os.path.join(output_folder, f"output_data_claude{i}.yaml")
 
         try:
             json_data = json.loads(json_str)
@@ -250,7 +248,8 @@ def call_claude3(prompt):
         model="claude-3-opus-20240229",
         max_tokens=1024,
         system="You are a scientific assistant, extracting important information about polymerization conditions "
-               "out of pdfs in valid json format. If the info is not found put 'NA'.",
+               "out of images in valid json format. If the info is not found put 'NA'. Always be thruthful and do not "
+               "extract anything false or made up.",
         temperature=0.0,
         messages=prompt
     )
@@ -258,8 +257,70 @@ def call_claude3(prompt):
     return message.content
 
 
-def update_prompt_with_text_and_images(original_prompt_str, new_text):
-    original_prompt = json.loads(original_prompt_str)
-    original_prompt[0]['content'][-1]['text'] = new_text
+def update_prompt_with_text_and_images(original_prompt, data, prompt):
+    new_text = update_prompt(prompt, data)
+    original_prompt[-1]['text'] = new_text
     updated_prompt_str = json.dumps(original_prompt)
+    print(f"updated_prompt_str after update: {updated_prompt_str}")
     return updated_prompt_str
+
+
+def create_image_content(image, maxdim=1024, detail_threshold=1024):
+    detail = "low" if maxdim <= detail_threshold else "high"
+    return {
+        "type": "image_url",
+        "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},
+    }
+
+
+def get_prompt_vision_model(images_base64, prompt_text):
+    content = []
+    for index, data in enumerate(images_base64):
+        content.append(create_image_content(data, maxdim=1024, detail_threshold=1024))
+
+    content.append({"type": "text", "text": prompt_text})
+    return content
+
+
+def encode_image_to_base64(filepath):
+    with open(filepath, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+
+def get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text):
+    images = [
+        ("image/png", encode_image_to_base64(os.path.join(output_folder_images, f"{filename}_page_{idx + 1}.png"))) for
+        idx in range(len(pdf_images))]
+    prompt = [
+        {
+            "role": "user",
+            "content": []
+        }
+    ]
+
+    for index, (media_type, data) in enumerate(images, start=1):
+        prompt[0]["content"].append(
+            {
+                "type": "text",
+                "text": f"Image {index}:"
+            }
+        )
+
+        prompt[0]["content"].append(
+            {
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": media_type,
+                    "data": data,
+                },
+            }
+        )
+
+    prompt[0]["content"].append(
+        {
+            "type": "text",
+            "text": prompt_text
+        }
+    )
+    return prompt
