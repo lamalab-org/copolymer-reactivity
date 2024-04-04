@@ -5,15 +5,15 @@ reactions:
   - Ethyl Acrylate
   reaction_conditions:
   - determination_method: EVM program
-    method: emulsion
-    polymerization_type: emulsion
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: 13
-      constant_conf_2: 8
+      constant_conf_1: 0.13
+      constant_conf_2: 0.08
     reaction_constants:
       constant_1: 2.58
       constant_2: 0.157
     solvent: water
-    temperature: NA
-    temperature_unit: NA
+    temperature: 50.0
+    temperature_unit: °C
 source: https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307

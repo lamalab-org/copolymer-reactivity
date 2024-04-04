@@ -145,7 +145,8 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
         run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
         print(f"Run Satus: {run.status}")
         time.sleep(5)
-        if run.status == "expired":
+        if run.status == "expired" or run.status == 'failed':
+            print(run.last_error)
             raise RunTimeExpired
     else:
         print("Run completed!")
@@ -265,8 +266,8 @@ def update_prompt_with_text_and_images(original_prompt, data, prompt):
     return updated_prompt_str
 
 
-def create_image_content(image, maxdim=1024, detail_threshold=1024):
-    detail = "low" if maxdim <= detail_threshold else "high"
+def create_image_content(image, maxdim=2048, detail_threshold=1024):
+    detail = "high"
     return {
         "type": "image_url",
         "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},
@@ -276,7 +277,7 @@ def create_image_content(image, maxdim=1024, detail_threshold=1024):
 def get_prompt_vision_model(images_base64, prompt_text):
     content = []
     for index, data in enumerate(images_base64):
-        content.append(create_image_content(data, maxdim=1024, detail_threshold=1024))
+        content.append(create_image_content(data, maxdim=2048, detail_threshold=2048))
 
     content.append({"type": "text", "text": prompt_text})
     return content

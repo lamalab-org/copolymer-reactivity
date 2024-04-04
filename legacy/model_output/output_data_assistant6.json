@@ -2,69 +2,77 @@
     "reactions": [
         {
             "monomers": [
-                "Methyl Acrylate",
+                "Methacrylic acid sulphonate",
                 "Styrene"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
+                    "solvent": "null",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": null,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.48,
-                        "constant_2": 0.02
+                        "constant_1": 1.5,
+                        "constant_2": 0.22
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.05,
+                        "constant_conf_1": 0.1,
                         "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudor"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "dimethylformamide",
-                    "method": "bulk",
-                    "temperature": 60.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.46,
-                        "constant_2": 0.02
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.05,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": "Kelen-Tudor"
+                    "determination_method": "null"
                 }
             ]
         },
         {
             "monomers": [
-                "Methyl Methacrylate",
-                "Styrene"
+                "Methacrylic acid sulphonate",
+                "Methyl methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
+                    "solvent": "null",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": null,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.02,
-                        "constant_2": 0.41
+                        "constant_1": 3.34,
+                        "constant_2": 0.67
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.05
+                        "constant_conf_1": 0.25,
+                        "constant_conf_2": 0.02
                     },
-                    "determination_method": "Kelen-Tudor"
+                    "determination_method": "null"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methacrylic acid sulphonate",
+                "Methacrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "null",
+                    "method": "bulk",
+                    "temperature": null,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.83
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "null"
                 }
             ]
         }
     ],
-    "source": "NA",
-    "PDF_name": "NA"
+    "source": "null",
+    "PDF_name": "null"
 }

@@ -9,8 +9,8 @@
                 {
                     "polymerization_type": "radical",
                     "solvent": "tert-butyl alcohol",
-                    "method": "bulk",
-                    "temperature": 62,
+                    "method": null,
+                    "temperature": 62.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 0.743,
@@ -20,7 +20,7 @@
                         "constant_conf_1": 0.005,
                         "constant_conf_2": 0.007
                     },
-                    "determination_method": "nonlinear least-squares methods"
+                    "determination_method": "feed compositional analysis (FCA) method"
                 }
             ]
         }

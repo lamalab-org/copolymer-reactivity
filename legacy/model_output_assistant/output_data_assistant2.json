@@ -3,14 +3,14 @@
         {
             "monomers": [
                 "2-Vinylpyridine",
-                "Methacrylic Acid"
+                "Unknown Monomer"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "bulk",
-                    "solvent": "None",
-                    "method": "free radical",
-                    "temperature": 70,
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 1.55,
@@ -20,7 +20,7 @@
                         "constant_conf_1": 0.1,
                         "constant_conf_2": 0.05
                     },
-                    "determination_method": "NA"
+                    "determination_method": null
                 }
             ]
         },
@@ -31,24 +31,24 @@
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
-                    "method": "NA",
-                    "temperature": "NA",
-                    "temperature_unit": "NA",
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
                     "reaction_constants": {
-                        "constant_1": "NA",
-                        "constant_2": "NA"
+                        "constant_1": null,
+                        "constant_2": null
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": "NA",
-                        "constant_conf_2": "NA"
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "NA"
+                    "determination_method": null
                 }
             ]
         }
     ],
-    "source": "NA",
+    "source": null,
     "PDF_name": "paper02.pdf"
 }

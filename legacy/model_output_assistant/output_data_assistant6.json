@@ -2,77 +2,61 @@
     "reactions": [
         {
             "monomers": [
-                "MAS",
-                "Styrene"
+                "Methylvinylsilyl-bis-epsilon-caprolactam",
+                "Methyl Methacrylate or Styrene"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "NA",
-                    "method": "bulk",
-                    "temperature": 40,
-                    "temperature_unit": "°C",
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
                     "reaction_constants": {
-                        "constant_1": 1,
-                        "constant_2": 0
+                        "constant_1": 1.54,
+                        "constant_2": 0.224
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "MAS",
-                "MM"
-            ],
-            "reaction_conditions": [
+                    "determination_method": null
+                },
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "Benzene",
-                    "method": "solution",
-                    "temperature": 50,
-                    "temperature_unit": "°C",
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 3.344,
+                        "constant_2": 0.674
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.25,
+                        "constant_conf_2": 0.02
                     },
-                    "determination_method": "NA"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "MAS",
-                "MA"
-            ],
-            "reaction_conditions": [
+                    "determination_method": null
+                },
                 {
-                    "polymerization_type": "NA",
-                    "solvent": "DMF",
-                    "method": "solution",
-                    "temperature": 60,
-                    "temperature_unit": "°C",
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
                     "reaction_constants": {
-                        "constant_1": 0,
-                        "constant_2": 0
+                        "constant_1": 1.04,
+                        "constant_2": 0.83
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
-                        "constant_conf_2": 0
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.002
                     },
-                    "determination_method": "NA"
+                    "determination_method": null
                 }
             ]
         }
     ],
-    "source": "NA",
+    "source": null,
     "PDF_name": "paper06.pdf"
 }

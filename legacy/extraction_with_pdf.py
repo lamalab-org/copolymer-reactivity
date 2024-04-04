@@ -46,15 +46,15 @@ for i, filename in enumerate(input_files):
         file_ids=[file.id]
     )
     prompt_template = prompter.get_prompt_template()
-    output = prompter.call_openai_agent(assistant, file, prompt_template)
-
-    # format output and convert into json and yaml file
     try:
-        output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
+        output = prompter.call_openai_agent(assistant, file, prompt_template)
     except prompter.RunTimeExpired:
         run_time_expired_error += 1
         continue
 
+    # format output and convert into json and yaml file
+    try:
+        output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
     except json.JSONDecodeError as e:
         parsing_error += 1
         print(f"json format of output of {filename} is not valid")
