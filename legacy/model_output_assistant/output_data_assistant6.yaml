@@ -1,51 +1,43 @@
 PDF_name: paper06.pdf
 reactions:
 - monomers:
-  - MAS
-  - Styrene
+  - Methylvinylsilyl-bis-epsilon-caprolactam
+  - Methyl Methacrylate or Styrene
   reaction_conditions:
-  - determination_method: NA
-    method: bulk
-    polymerization_type: NA
+  - determination_method: null
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.1
+      constant_conf_2: 0.01
     reaction_constants:
-      constant_1: 1
-      constant_2: 0
-    solvent: NA
-    temperature: 40
-    temperature_unit: °C
-- monomers:
-  - MAS
-  - MM
-  reaction_conditions:
-  - determination_method: NA
-    method: solution
-    polymerization_type: NA
+      constant_1: 1.54
+      constant_2: 0.224
+    solvent: null
+    temperature: null
+    temperature_unit: null
+  - determination_method: null
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.25
+      constant_conf_2: 0.02
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: Benzene
-    temperature: 50
-    temperature_unit: °C
-- monomers:
-  - MAS
-  - MA
-  reaction_conditions:
-  - determination_method: NA
-    method: solution
-    polymerization_type: NA
+      constant_1: 3.344
+      constant_2: 0.674
+    solvent: null
+    temperature: null
+    temperature_unit: null
+  - determination_method: null
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: 0
-      constant_conf_2: 0
+      constant_conf_1: 0.1
+      constant_conf_2: 0.002
     reaction_constants:
-      constant_1: 0
-      constant_2: 0
-    solvent: DMF
-    temperature: 60
-    temperature_unit: °C
-source: NA
+      constant_1: 1.04
+      constant_2: 0.83
+    solvent: null
+    temperature: null
+    temperature_unit: null
+source: null

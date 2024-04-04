@@ -1,47 +1,51 @@
-PDF_name: NA
+PDF_name: 'null'
 reactions:
 - monomers:
-  - Methyl Acrylate
+  - Methacrylic acid sulphonate
   - Styrene
   reaction_conditions:
-  - determination_method: Kelen-Tudor
+  - determination_method: 'null'
     method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.05
+      constant_conf_1: 0.1
       constant_conf_2: 0.01
     reaction_constants:
-      constant_1: 0.48
-      constant_2: 0.02
-    solvent: benzene
-    temperature: 60.0
-    temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: bulk
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.05
-      constant_conf_2: 0.01
-    reaction_constants:
-      constant_1: 0.46
-      constant_2: 0.02
-    solvent: dimethylformamide
-    temperature: 60.0
+      constant_1: 1.5
+      constant_2: 0.22
+    solvent: 'null'
+    temperature: null
     temperature_unit: °C
 - monomers:
-  - Methyl Methacrylate
-  - Styrene
+  - Methacrylic acid sulphonate
+  - Methyl methacrylate
   reaction_conditions:
-  - determination_method: Kelen-Tudor
+  - determination_method: 'null'
     method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: 0.05
+      constant_conf_1: 0.25
+      constant_conf_2: 0.02
     reaction_constants:
-      constant_1: 0.02
-      constant_2: 0.41
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 3.34
+      constant_2: 0.67
+    solvent: 'null'
+    temperature: null
     temperature_unit: °C
-source: NA
+- monomers:
+  - Methacrylic acid sulphonate
+  - Methacrylic acid
+  reaction_conditions:
+  - determination_method: 'null'
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 1.0
+      constant_2: 0.83
+    solvent: 'null'
+    temperature: null
+    temperature_unit: °C
+source: 'null'

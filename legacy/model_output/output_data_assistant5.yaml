@@ -1,32 +1,19 @@
-PDF_name: 'Copolymerization of Ethylene and Vinyl Acetate at Low Pressures: Determination
-  of the Kinetics by Sequential Sampling'
+PDF_name: Copolymerization_of_Ethylene_and_Vinyl_Acetate_at_Low_Pressure_Determination_of_the_Kinetics_by_Sequential_Sampling.pdf
 reactions:
 - monomers:
   - Ethylene
   - Vinyl Acetate
   reaction_conditions:
-  - determination_method: Finneman-Ross and Kelen-Tudos
+  - determination_method: Sequential Sampling
     method: bulk
-    polymerization_type: free radical
+    polymerization_type: free-radical
     reaction_constant_conf:
-      constant_conf_1: 0.007
+      constant_conf_1: 0.005
       constant_conf_2: 0.007
     reaction_constants:
-      constant_1: 0.01
-      constant_2: 0.02
-    solvent: Toluene
-    temperature: 60.0
+      constant_1: 0.743
+      constant_2: 1.515
+    solvent: tert-butyl alcohol
+    temperature: 62.0
     temperature_unit: °C
-  - determination_method: Finneman-Ross and Kelen-Tudos
-    method: bulk
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.008
-      constant_conf_2: 0.008
-    reaction_constants:
-      constant_1: 0.01
-      constant_2: 0.02
-    solvent: Toluene
-    temperature: 60.0
-    temperature_unit: °C
-source: doi:10.1002/pol.1971.110091102
+source: null

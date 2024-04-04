@@ -4,8 +4,8 @@ reactions:
   - Ethylene
   - Vinyl Acetate
   reaction_conditions:
-  - determination_method: nonlinear least-squares methods
-    method: bulk
+  - determination_method: feed compositional analysis (FCA) method
+    method: null
     polymerization_type: radical
     reaction_constant_conf:
       constant_conf_1: 0.005
@@ -14,6 +14,6 @@ reactions:
       constant_1: 0.743
       constant_2: 1.515
     solvent: tert-butyl alcohol
-    temperature: 62
+    temperature: 62.0
     temperature_unit: °C
 source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1971.150090810

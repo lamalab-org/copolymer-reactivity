@@ -35,6 +35,16 @@ def calculate_rate(x1, x2):
         return None
 
 
+def calculate_deviation(mae, y_true):
+    if y_true != 0:
+        deviation = (mae / y_true)
+    else:
+        deviation = mae
+    return deviation
+
+
+
+
 reaction_number_error = 0
 reaction_conditions_number_error = 0
 matching_monomer_error = 0
@@ -64,9 +74,10 @@ mae_const_current_rxn = 0
 mae_conf_current_rxn = 0
 deviation_conf = None
 deviation_const = None
+deviation_temp = None
 
 test_path = "./../test_data"
-model_path = "./model_output_claude"
+model_path = "./model_output"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -74,14 +85,14 @@ wandb.init(
     project="Copolymer_extraction",
 
     config={
-        "model": "claude-3-opus-20240229",
+        "model": "gpt-4-vision-preview",
         "paper number": 10,
-        "token length": 1024,
+        "token length": "",
         "input": "images",
         "number of model calls max": 3,
         "number of model calls min": 1,
         "temperature": 0.0,
-        "deviation of correct rxn": 0.10
+        "deviation of correct rxn": 0.01
 
     }
 )
@@ -168,6 +179,8 @@ for test_file, model_file in zip(test_files, model_files):
                         mse_temp_individual = calculate_mse(temperature_model, temperature)
                         mse_temp.append(mse_temp_individual)
                         mae_temp_current_rxn = mean_absolute_error(temperature_list, temperature_model_list)
+                        deviation_temp = mae_temp_current_rxn / temperature
+                        print("mae temp: ", mae_temp_current_rxn, "deviation: ", deviation_temp)
                         print(temperature_model, temperature)
 
                     # comparison of solvents
@@ -184,8 +197,8 @@ for test_file, model_file in zip(test_files, model_files):
                     # comparison of reactivity constant and confidence of reactivity constant
                     test_reaction_constants, test_reaction_constant_confidence = az.get_reaction_const_list(
                         reaction_constants, reaction_constant_confidence)
-                    print(
-                        f'test reaction_const: {reaction_constants}, test reaction_const_confidence: {test_reaction_constant_confidence}')
+                    print(f'test reaction_const: {reaction_constants}, test reaction_const_confidence:'
+                          f' {test_reaction_constant_confidence}')
                     model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(
                         model_reaction_conditions, index)
                     print("model-reaction-const: ", model_reaction_constants, ", model-reaction-conf: ",
@@ -200,43 +213,43 @@ for test_file, model_file in zip(test_files, model_files):
                             model_reaction_const_conf)
                     print(f'model_reaction_constants: {model_reaction_constants}')
 
-                    if model_reaction_constants[0] is None or model_reaction_constants[1] is None or \
-                            model_reaction_constants[0] is not None or model_reaction_constants[1] is not None:
-                        if test_reaction_constants[0] != "NA" or test_reaction_constants[1] is not None:
+                    if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
+                        if test_reaction_constants[0] is not None or test_reaction_constants[1] is not None:
                             reaction_const_NA_count += 1
                             mse_const_individual = 1
                             mae_const_current_rxn = 1
+                            deviation_const = 1
                         else:
                             mse_const_individual = 0
                             mae_const_current_rxn = 0
+                            deviation_const = 0
                     else:
                         for test_val, model_val in zip(test_reaction_constants, model_reaction_constants):
-                            print("mse constant", model_val, test_val)
-                            if test_reaction_constants[0] is not None or test_reaction_constants[1] is not None:
-                                mse_const_individual = 1
-                            elif model_val != 'NA' and test_val != 'NA':
+                            if model_val is not None and test_val is not None:
                                 mse_const_individual = mean_squared_error([test_val], [model_val])
                                 mae_const_current_rxn = mean_absolute_error([test_val], [model_val])
                                 combined_mse_const.append(mse_const_individual)
                                 if deviation_conf is not None:
-                                    deviation_const = (deviation_conf + (mae_const_current_rxn / test_val)) / 2
+                                    deviation_const = (deviation_conf + (calculate_deviation(mae_const_current_rxn,test_val))) / 2
                                 else:
-                                    deviation_const = mae_const_current_rxn / test_val
+                                    deviation_const = calculate_deviation(mae_const_current_rxn, test_val)
 
-                    if model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None or \
-                            model_reaction_const_conf[0] is not None or model_reaction_const_conf[1] is not None:
-                        if test_reaction_constant_confidence[0] is not None or test_reaction_constant_confidence[1] is not None:
+                    if model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
+                        if (test_reaction_constant_confidence[0] is not None or test_reaction_constant_confidence[1]
+                                is not None):
                             reaction_const_conf_NA_count += 1
                             mse_conf_individual = 1
                             mae_conf_current_rxn = 1
+                            deviation_conf = 1
                         else:
                             mse_conf_individual = 0
                             mae_conf_current_rxn = 0
+                            deviation_conf = 0
                     else:
                         for test_val, model_val in zip(test_reaction_constant_confidence, model_reaction_const_conf):
                             print("mse const conf", model_val, test_val)
-                            if test_reaction_constant_confidence[0] is None or test_reaction_constant_confidence[
-                                1] is None:
+                            if (test_reaction_constant_confidence[0] is None or test_reaction_constant_confidence[1] is
+                                    None):
                                 mse_const_individual = 1
                                 mae_conf_current_rxn = 1
                             elif model_val is not None and test_val is not None:
@@ -244,14 +257,17 @@ for test_file, model_file in zip(test_files, model_files):
                                 combined_mse_conf.append(mse_conf_individual)
                                 mae_conf_current_rxn = mean_absolute_error([test_val], [model_val])
                                 if deviation_conf is not None:
-                                    deviation_conf = (deviation_conf + (mae_conf_current_rxn / test_val)) / 2
+                                    deviation_conf = (deviation_conf + (calculate_deviation(mae_conf_current_rxn,test_val))) / 2
                                 else:
-                                    deviation_conf = mae_conf_current_rxn / test_val
+                                    deviation_conf = calculate_deviation(mae_conf_current_rxn, test_val)
                     try:
-                        if (
-                                mae_temp_current_rxn / temperature) > 0.1 and deviation_conf > 0.1 and deviation_const > 0.1:
+                        print(
+                            f"deviation temp: {deviation_temp}, deviation const: {deviation_const}, deviation conf: {deviation_conf}")
+                        if deviation_temp < 0.01 and deviation_conf < 0.01 and deviation_const < 0.01:
                             correct_reaction_count += 1
                             print("reaction is completely correct")
+                        else:
+                            print("rxn is not completely correct")
                     except (TypeError, KeyError, ValueError) as e:
                         print(ValueError, e)
                         print(TypeError, e)
@@ -268,13 +284,15 @@ for test_file, model_file in zip(test_files, model_files):
         parsing_error += 1
     mae_const_current_rxn = 1
     mae_conf_current_rxn = 1
+    deviation_conf = None
+    deviation_const = None
 
-correct_reaction_rate = calculate_rate(correct_reaction_count, reaction_condition_count) * 100
+correct_reaction_rate = calculate_rate(correct_reaction_count, combined_count_reactions_test) * 100
 
 print(
     f"out of {reaction_condition_count} matching reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, reaction_condition_count) * 100} %)")
 print(
-    f"out of {combined_count_reactions_model} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_test) * 100} %)")
+    f"out of {combined_count_reactions_test} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_test) * 100} %)")
 
 # comparative metrics for each model run
 monomer_error_rate = calculate_rate(matching_monomer_error, total_monomer_count) * 100

@@ -2,93 +2,93 @@
     "reactions": [
         {
             "monomers": [
-                "methacrylic acid",
-                "styrene"
+                "Methacrylic acid",
+                "Styrene"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "NA",
+                    "polymerization_type": "Free radical",
                     "solvent": "Carbon tetrachloride",
-                    "method": "NA",
-                    "temperature": 60,
+                    "method": null,
+                    "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.5,
-                        "constant_2": 0.54
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": "Fineman-Ross"
-                },
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "Chloroform",
-                    "method": "NA",
-                    "temperature": 60,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.55,
-                        "constant_2": 0.51
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": "Fineman-Ross"
-                },
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "Acetone",
-                    "method": "NA",
-                    "temperature": 60,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.42,
-                        "constant_2": 0.43
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0
-                    },
-                    "determination_method": "Fineman-Ross"
-                },
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "1,4-Dioxane",
-                    "method": "NA",
-                    "temperature": 60,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.35,
-                        "constant_2": 0.41
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.02
-                    },
-                    "determination_method": "Fineman-Ross"
-                },
-                {
-                    "polymerization_type": "NA",
-                    "solvent": "Acetonitrile",
-                    "method": "NA",
-                    "temperature": 60,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.12,
+                        "constant_1": 0.54,
                         "constant_2": 0.06
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0,
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "Free radical",
+                    "solvent": "Chloroform",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "Free radical",
+                    "solvent": "Acetone",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
                         "constant_conf_2": 0.02
                     },
-                    "determination_method": "Fineman-Ross"
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "Free radical",
+                    "solvent": "1,4-Dioxane",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.41,
+                        "constant_2": 0.59
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "Free radical",
+                    "solvent": "Acetonitrile",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 0.29
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos"
                 }
-            ],
-            "source": "https://onlinelibrary.wiley.com/doi/10.1002/macp.1985.021860820",
-            "PDF_name": "paper01.pdf"
+            ]
         }
-    ]
+    ],
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/macp.1985.021860820",
+    "PDF_name": "paper01.pdf"
 }

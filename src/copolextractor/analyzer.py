@@ -228,15 +228,13 @@ def get_reaction_constant(data: list, index: int) -> tuple:
     specific_comb = data[index]
     reaction_const = specific_comb['reaction_constants']
     reaction_const_conf = specific_comb['reaction_constant_conf']
-    reaction_const, reaction_const_conf= get_reaction_const_list(reaction_const, reaction_const_conf)
+    reaction_const, reaction_const_conf = get_reaction_const_list(reaction_const, reaction_const_conf)
     return reaction_const, reaction_const_conf
 
 
 def get_reaction_const_list(reaction_const: list, reaction_const_conf: list):
     reaction_constants = []
     reaction_constants_conf = []
-    print("rxn const: ", reaction_const)
-    print("rxm const conf: ", reaction_const_conf)
     if reaction_const is None:
         reaction_constants = [None, None]
     else:
