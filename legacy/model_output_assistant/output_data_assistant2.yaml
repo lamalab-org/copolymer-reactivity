@@ -2,10 +2,10 @@ PDF_name: paper02.pdf
 reactions:
 - monomers:
   - 2-Vinylpyridine
-  - Methacrylic Acid
+  - Unknown Monomer
   reaction_conditions:
-  - determination_method: NA
-    method: free radical
+  - determination_method: null
+    method: bulk
     polymerization_type: bulk
     reaction_constant_conf:
       constant_conf_1: 0.1
@@ -13,23 +13,23 @@ reactions:
     reaction_constants:
       constant_1: 1.55
       constant_2: 0.58
-    solvent: None
-    temperature: 70
+    solvent: null
+    temperature: 70.0
     temperature_unit: °C
 - monomers:
   - Methacrylic Acid
   - Diethylaminoethyl Methacrylate
   reaction_conditions:
-  - determination_method: NA
-    method: NA
-    polymerization_type: NA
+  - determination_method: null
+    method: null
+    polymerization_type: null
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: NA
-      constant_2: NA
-    solvent: NA
-    temperature: NA
-    temperature_unit: NA
-source: NA
+      constant_1: null
+      constant_2: null
+    solvent: null
+    temperature: null
+    temperature_unit: null
+source: null

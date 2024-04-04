@@ -7,48 +7,24 @@
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free radical",
-                    "solvent": "water",
+                    "polymerization_type": "bulk",
+                    "solvent": null,
                     "method": "bulk",
-                    "temperature": 50.0,
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.21,
-                        "constant_2": 0.78
+                        "constant_1": 0.28,
+                        "constant_2": 0.02
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.03
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Kelen-Tudor"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "2-Vinylpyridine",
-                "Diethylaminoethyl Methacrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "water",
-                    "method": "bulk",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.02,
-                        "constant_2": 5.1
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.3
-                    },
-                    "determination_method": "Kelen-Tudor"
+                    "determination_method": null
                 }
             ]
         }
     ],
-    "source": "doi:10.1021/ma50001a036",
-    "PDF_name": "Amphoteric Polyelectrolytes. I"
+    "source": null,
+    "PDF_name": null
 }

@@ -1,67 +1,67 @@
-PDF_name: NA
+PDF_name: COPOLYMERIZATION OF ETHYLENE
 reactions:
 - monomers:
   - Ethylene
-  - Methyl acrylate
+  - Vinyl acetate
   reaction_conditions:
-  - determination_method: NA
-    method: bulk
+  - determination_method: null
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.005
-      constant_conf_2: 1.0
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 0.01
-      constant_2: 17.0
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 1.01
+      constant_2: 1
+    solvent: null
+    temperature: 150.0
     temperature_unit: °C
 - monomers:
   - Ethylene
   - Methyl methacrylate
   reaction_conditions:
-  - determination_method: NA
-    method: bulk
+  - determination_method: null
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 0.02
-      constant_2: 0.67
-    solvent: benzene
-    temperature: 60.0
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl fumarate
-  reaction_conditions:
-  - determination_method: NA
-    method: bulk
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
-    reaction_constants:
-      constant_1: 0.05
-      constant_2: 0.06
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 0.2
+      constant_2: 17
+    solvent: null
+    temperature: 150.0
     temperature_unit: °C
 - monomers:
   - Ethylene
   - Diethyl maleate
   reaction_conditions:
-  - determination_method: NA
-    method: bulk
+  - determination_method: null
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: NA
-      constant_conf_2: NA
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 0.05
-      constant_2: 0.06
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 0.25
+      constant_2: 10
+    solvent: null
+    temperature: 150.0
     temperature_unit: °C
-source: NA
+- monomers:
+  - Ethylene
+  - Diethyl fumarate
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 10
+    solvent: null
+    temperature: 150.0
+    temperature_unit: °C
+source: null

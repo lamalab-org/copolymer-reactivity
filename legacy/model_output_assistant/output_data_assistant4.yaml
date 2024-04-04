@@ -1,10 +1,10 @@
 PDF_name: paper04.pdf
 reactions:
 - monomers:
-  - 2-chloro-13-butadiene
-  - methyl isopropenyl ketone
+  - 2-Chloro-13-Butadiene
+  - Methyl Isopropenyl Ketone
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: null
     method: emulsion
     polymerization_type: free-radical
     reaction_constant_conf:
@@ -13,14 +13,14 @@ reactions:
     reaction_constants:
       constant_1: 3.6
       constant_2: 0.1
-    solvent: water
-    temperature: NA
-    temperature_unit: NA
+    solvent: null
+    temperature: null
+    temperature_unit: null
 - monomers:
-  - 2-chloro-13-butadiene
-  - methacrylic acid
+  - 2-Chloro-13-Butadiene
+  - Methacrylic Acid
   reaction_conditions:
-  - determination_method: NA
+  - determination_method: null
     method: emulsion
     polymerization_type: free-radical
     reaction_constant_conf:
@@ -29,7 +29,7 @@ reactions:
     reaction_constants:
       constant_1: 2.7
       constant_2: 0.15
-    solvent: water
-    temperature: NA
-    temperature_unit: NA
+    solvent: null
+    temperature: null
+    temperature_unit: null
 source: https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635
