@@ -27,7 +27,7 @@ def correct_text_orientation(image, save_directory, file_path, i):
 
     base_filename = os.path.basename(file_path)
     name_without_ext, _ = os.path.splitext(base_filename)
-    new_filename = os.path.join(save_directory, f"corrected_{name_without_ext}_page{i+1}.jpg")
+    new_filename = os.path.join(save_directory, f"corrected_{name_without_ext}_page{i+1}.png")
 
     cv2.imwrite(new_filename, rotated)
     print(f"[INFO] {file_path} - corrected image saved as {new_filename}")
@@ -70,8 +70,6 @@ def convert_to_jpeg2(cv2_image):
     retval, buffer = cv2.imencode('.jpg', cv2_image)
     if retval:
         return buffer
-    else:
-        raise ValueError("Das Bild konnte nicht als JPEG kodiert werden.")
 
 
 def process_image(image, max_size, output_folder, file_path, i):

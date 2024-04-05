@@ -5,11 +5,12 @@ reactions:
   - styrene
   reaction_conditions:
   - determination_method: Kelen-Tüdös
-    method: null
+    initiator: 2,2'-azoisobutyronitrile
+    method: solution
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.01
-      constant_conf_2: null
+      constant_conf_1: 0.06
+      constant_conf_2: 0.03
     reaction_constants:
       constant_1: 0.51
       constant_2: 0.01
@@ -17,16 +18,43 @@ reactions:
     temperature: 60.0
     temperature_unit: °C
   - determination_method: Kelen-Tüdös
-    method: null
+    initiator: 2,2'-azoisobutyronitrile
+    method: solution
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.03
-      constant_conf_2: null
+      constant_conf_1: 0.65
+      constant_conf_2: 0.02
     reaction_constants:
-      constant_1: 0.66
-      constant_2: 0.03
+      constant_1: 0.43
+      constant_2: 0.06
     solvent: solvents not capable of forming hydrogen bonds but exhibiting different
       dielectric constants
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tüdös
+    initiator: 2,2'-azoisobutyronitrile
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.59
+      constant_conf_2: 0.05
+    reaction_constants:
+      constant_1: 0.41
+      constant_2: 0.02
+    solvent: 1,4-dioxane
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tüdös
+    initiator: 2,2'-azoisobutyronitrile
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.29
+      constant_conf_2: 0.0
+    reaction_constants:
+      constant_1: 0.06
+      constant_2: 0.02
+    solvent: acetonitrile
     temperature: 60.0
     temperature_unit: °C
 source: 0025-116X/85/$03.00

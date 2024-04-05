@@ -7,11 +7,13 @@ reactions:
   - determination_method: null
     method: null
     polymerization_type: gamma-ray induced
-    reaction_constant_conf: null
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
       constant_1: 7.0
-      constant_2: 0.0
+      constant_2: null
     solvent: Toluene
     temperature: 20.0
     temperature_unit: °C
-source: 'Vysokomol. soedin. 3: No. 7 1015-1019 1961.'
+source: null

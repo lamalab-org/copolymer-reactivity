@@ -5,8 +5,8 @@ reactions:
   - 3-Methylstyrene
   - Methacrylic Acid
   reaction_conditions:
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.03
@@ -14,11 +14,11 @@ reactions:
     reaction_constants:
       constant_1: 0.06
       constant_2: 0.35
-    solvent: toluene
+    solvent: Toluene
     temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.02
@@ -26,11 +26,11 @@ reactions:
     reaction_constants:
       constant_1: 0.33
       constant_2: 0.18
-    solvent: isopropyl alcohol
+    solvent: Isopropyl Alcohol
     temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.01
@@ -38,15 +38,15 @@ reactions:
     reaction_constants:
       constant_1: 0.42
       constant_2: 0.51
-    solvent: acetone
+    solvent: Acetone
     temperature: 70.0
     temperature_unit: °C
 - monomers:
   - 3-Methylstyrene
   - Methyl Methacrylate
   reaction_conditions:
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.04
@@ -54,11 +54,11 @@ reactions:
     reaction_constants:
       constant_1: 0.53
       constant_2: 0.48
-    solvent: toluene
+    solvent: Toluene
     temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.06
@@ -66,11 +66,11 @@ reactions:
     reaction_constants:
       constant_1: 0.36
       constant_2: 0.38
-    solvent: isopropyl alcohol
+    solvent: Isopropyl Alcohol
     temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.05
@@ -78,15 +78,15 @@ reactions:
     reaction_constants:
       constant_1: 0.51
       constant_2: 0.41
-    solvent: acetone
+    solvent: Acetone
     temperature: 70.0
     temperature_unit: °C
 - monomers:
   - Methacrylic Acid
   - Methyl Methacrylate
   reaction_conditions:
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.02
@@ -94,11 +94,11 @@ reactions:
     reaction_constants:
       constant_1: 1.06
       constant_2: 0.1
-    solvent: toluene
+    solvent: Toluene
     temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.02
@@ -106,11 +106,11 @@ reactions:
     reaction_constants:
       constant_1: 0.33
       constant_2: 0.78
-    solvent: isopropyl alcohol
+    solvent: Isopropyl Alcohol
     temperature: 70.0
     temperature_unit: °C
-  - determination_method: Kelen-Tudor
-    method: solvent
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: 0.02
@@ -118,7 +118,7 @@ reactions:
     reaction_constants:
       constant_1: 0.63
       constant_2: 0.32
-    solvent: acetone
+    solvent: Acetone
     temperature: 70.0
     temperature_unit: °C
 source: https://doi.org/10.1080/10601329508013679

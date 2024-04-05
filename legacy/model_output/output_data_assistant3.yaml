@@ -1,8 +1,8 @@
 PDF_name: Synthesis and Characterization of Methacrylic Acid–Ethyl Acrylate Copolymers
 reactions:
 - monomers:
-  - Methacrylic Acid
-  - Ethyl Acrylate
+  - Methacrylic acid
+  - Ethyl acrylate
   reaction_conditions:
   - determination_method: EVM program
     method: emulsion
@@ -12,7 +12,19 @@ reactions:
       constant_conf_2: null
     reaction_constants:
       constant_1: 2.58
-      constant_2: 0.157
+      constant_2: 0.0157
+    solvent: water
+    temperature: 50.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos method
+    method: emulsion
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 2.9
+      constant_2: 0.162
     solvent: water
     temperature: 50.0
     temperature_unit: °C
