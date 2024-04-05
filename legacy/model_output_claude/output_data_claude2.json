@@ -1,0 +1,70 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-vinylpyridine",
+                "methacrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solution",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 10.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solution",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 12.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methacrylic acid",
+                "N,N-diethylaminoethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": null,
+                    "solvent": "water",
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 0.45,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                }
+            ]
+        }
+    ],
+    "source": null,
+    "PDF_name": "Amphioteric Polyelectrolytes. I. 2-Vinylpyridine-Methacrylic Acid Copolymers and Amphioteric Polyelectrolytes. II. Copolymers of Methacrylic Acid and Diethylaminoethyl Methacrylate"
+}

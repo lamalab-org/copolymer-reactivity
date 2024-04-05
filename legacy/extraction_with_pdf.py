@@ -7,7 +7,10 @@ import langchain
 from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
 import random
+import time
 
+
+start = time.time()
 
 load_dotenv()
 langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
@@ -24,6 +27,9 @@ model = "gpt-4-1106-preview"
 number_of_model_calls = 2
 parsing_error = 0
 run_time_expired_error = 0
+total_input_tokens = 0
+total_output_token = 0
+number_of_calls = 0
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
@@ -47,7 +53,10 @@ for i, filename in enumerate(input_files):
     )
     prompt_template = prompter.get_prompt_template()
     try:
-        output = prompter.call_openai_agent(assistant, file, prompt_template)
+        output, input_token, output_token = prompter.call_openai_agent(assistant, file, prompt_template)
+        total_input_tokens += input_token
+        total_output_token += output_token
+        number_of_calls += 1
     except prompter.RunTimeExpired:
         run_time_expired_error += 1
         continue
@@ -73,7 +82,17 @@ for i, filename in enumerate(input_files):
                 run_time_expired_error += 1
                 continue
 
-            output = prompter.call_openai_agent(assistant, file, prompt)
+            output, input_tokens, output_token = prompter.call_openai_agent(assistant, file, prompt)
+            total_input_tokens += input_token
+            total_output_token += output_token
+            number_of_calls += 1
             output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
-
+    print("input tokens used: ", total_input_tokens)
+    print("output tokens used: ", total_output_token)
+    print("total number of model call: ", number_of_calls)
 print("parsing error:", parsing_error)
+
+end = time.time()
+execution_time = start-end
+
+print("execution time: ", execution_time)
