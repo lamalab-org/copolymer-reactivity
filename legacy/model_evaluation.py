@@ -92,7 +92,11 @@ wandb.init(
         "number of model calls max": 3,
         "number of model calls min": 1,
         "temperature": 0.0,
-        "deviation of correct rxn": 0.01
+        "deviation of correct rxn": 0.01,
+        "input tokens used": 130587,
+        "output tokens used": 7342,
+        "total model calls": 15,
+        "time used": 571.9001705646515
 
     }
 )
@@ -287,12 +291,12 @@ for test_file, model_file in zip(test_files, model_files):
     deviation_conf = None
     deviation_const = None
 
-correct_reaction_rate = calculate_rate(correct_reaction_count, combined_count_reactions_test) * 100
+correct_reaction_rate = calculate_rate(correct_reaction_count, combined_count_reaction_conditions_test) * 100
 
 print(
     f"out of {reaction_condition_count} matching reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, reaction_condition_count) * 100} %)")
 print(
-    f"out of {combined_count_reactions_test} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reactions_test) * 100} %)")
+    f"out of {combined_count_reaction_conditions_test} reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, combined_count_reaction_conditions_test) * 100} %)")
 
 # comparative metrics for each model run
 monomer_error_rate = calculate_rate(matching_monomer_error, total_monomer_count) * 100

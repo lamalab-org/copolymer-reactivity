@@ -3,116 +3,172 @@
         {
             "monomers": [
                 "3-Methylstyrene",
-                "Methyl Methacrylate"
+                "Maleic Anhydride"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free radical",
+                    "polymerization_type": "radical",
                     "solvent": "Toluene",
-                    "method": "bulk",
-                    "temperature": 70,
+                    "method": null,
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.53,
-                        "constant_2": 0.48
+                        "constant_1": 0.08,
+                        "constant_2": 0.36
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.04,
                         "constant_conf_2": 0.04
                     },
-                    "determination_method": "KT"
+                    "determination_method": "Kelen-Tudos"
                 },
                 {
-                    "polymerization_type": "free radical",
+                    "polymerization_type": "radical",
                     "solvent": "Isopropanol",
-                    "method": "solvent",
-                    "temperature": 70,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.36,
-                        "constant_2": 0.38
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.06,
-                        "constant_conf_2": 0.03
-                    },
-                    "determination_method": "KT"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Acetone",
-                    "method": "solvent",
-                    "temperature": 70,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.51,
-                        "constant_2": 0.41
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.05,
-                        "constant_conf_2": 0.04
-                    },
-                    "determination_method": "KT"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "MA",
-                "MMA"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Toluene",
-                    "method": "bulk",
-                    "temperature": 70,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 1.06,
-                        "constant_2": 0.1
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": "KT"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Isopropanol",
-                    "method": "solvent",
-                    "temperature": 70,
+                    "method": null,
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 0.33,
-                        "constant_2": 0.78
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.03
-                    },
-                    "determination_method": "KT"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Acetone",
-                    "method": "solvent",
-                    "temperature": 70,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.63,
-                        "constant_2": 0.32
+                        "constant_2": 0.18
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.02,
                         "constant_conf_2": 0.02
                     },
-                    "determination_method": "KT"
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Acetone",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.51
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "3-Methylstyrene",
+                "Methyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Toluene",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Isopropanol",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Acetone",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.39
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Maleic Anhydride",
+                "Methyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Toluene",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.09,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Isopropanol",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.81
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "Acetone",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.64,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos"
                 }
             ]
         }
     ],
-    "source": "NA",
+    "source": null,
     "PDF_name": "paper10.pdf"
 }

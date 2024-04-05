@@ -2,13 +2,13 @@
     "reactions": [
         {
             "monomers": [
-                "Methacrylic acid",
+                "Methacrylic Acid",
                 "Styrene"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "Free radical",
-                    "solvent": "Carbon tetrachloride",
+                    "polymerization_type": "free radical",
+                    "solvent": "carbon tetrachloride",
                     "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
@@ -18,13 +18,13 @@
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.03
+                        "constant_conf_2": 0.003
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
-                    "polymerization_type": "Free radical",
-                    "solvent": "Chloroform",
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
                     "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
@@ -34,13 +34,13 @@
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.03
+                        "constant_conf_2": 0.003
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
-                    "polymerization_type": "Free radical",
-                    "solvent": "Acetone",
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
                     "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
@@ -50,13 +50,13 @@
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.0,
-                        "constant_conf_2": 0.02
+                        "constant_conf_2": 0.002
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
-                    "polymerization_type": "Free radical",
-                    "solvent": "1,4-Dioxane",
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
                     "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
@@ -65,14 +65,14 @@
                         "constant_2": 0.59
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.05
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.005
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
-                    "polymerization_type": "Free radical",
-                    "solvent": "Acetonitrile",
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
                     "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
@@ -81,10 +81,10 @@
                         "constant_2": 0.29
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
+                        "constant_conf_1": 0.002,
                         "constant_conf_2": 0.0
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 }
             ]
         }

@@ -12,7 +12,23 @@ reactions:
       constant_conf_2: null
     reaction_constants:
       constant_1: 1.01
-      constant_2: 1
+      constant_2: 1.0
+    solvent: null
+    temperature: 150.0
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Methyl acrylate
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 2.5
     solvent: null
     temperature: 150.0
     temperature_unit: °C
@@ -28,23 +44,7 @@ reactions:
       constant_conf_2: null
     reaction_constants:
       constant_1: 0.2
-      constant_2: 17
-    solvent: null
-    temperature: 150.0
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Diethyl maleate
-  reaction_conditions:
-  - determination_method: null
-    method: null
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: null
-      constant_conf_2: null
-    reaction_constants:
-      constant_1: 0.25
-      constant_2: 10
+      constant_2: 17.0
     solvent: null
     temperature: 150.0
     temperature_unit: °C
@@ -60,7 +60,23 @@ reactions:
       constant_conf_2: null
     reaction_constants:
       constant_1: 0.25
-      constant_2: 10
+      constant_2: 10.0
+    solvent: null
+    temperature: 150.0
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Diethyl maleate
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 10.0
     solvent: null
     temperature: 150.0
     temperature_unit: °C

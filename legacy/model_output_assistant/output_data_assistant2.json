@@ -3,12 +3,12 @@
         {
             "monomers": [
                 "2-Vinylpyridine",
-                "Unknown Monomer"
+                "null"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "bulk",
-                    "solvent": null,
+                    "solvent": "null",
                     "method": "bulk",
                     "temperature": 70.0,
                     "temperature_unit": "°C",
@@ -20,7 +20,7 @@
                         "constant_conf_1": 0.1,
                         "constant_conf_2": 0.05
                     },
-                    "determination_method": null
+                    "determination_method": "null"
                 }
             ]
         },
@@ -31,24 +31,24 @@
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": null,
-                    "temperature": null,
-                    "temperature_unit": null,
+                    "polymerization_type": "null",
+                    "solvent": "null",
+                    "method": "null",
+                    "temperature": "null",
+                    "temperature_unit": "null",
                     "reaction_constants": {
-                        "constant_1": null,
-                        "constant_2": null
+                        "constant_1": "null",
+                        "constant_2": "null"
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": "null",
+                        "constant_conf_2": "null"
                     },
-                    "determination_method": null
+                    "determination_method": "null"
                 }
             ]
         }
     ],
-    "source": null,
+    "source": "null",
     "PDF_name": "paper02.pdf"
 }

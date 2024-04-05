@@ -4,7 +4,7 @@ reactions:
   - 2-Vinylpyridine
   - Methacrylic Acid
   reaction_conditions:
-  - determination_method: null
+  - determination_method: 'null'
     method: bulk
     polymerization_type: bulk
     reaction_constant_conf:
@@ -12,8 +12,8 @@ reactions:
       constant_conf_2: null
     reaction_constants:
       constant_1: 0.28
-      constant_2: 0.02
-    solvent: null
+      constant_2: 0.62
+    solvent: 'null'
     temperature: 70.0
     temperature_unit: °C
 source: null

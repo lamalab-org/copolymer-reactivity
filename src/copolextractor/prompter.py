@@ -119,8 +119,10 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0, **
         temperature=temperature,
         **kwargs,
     )
+    input_tokens = completion.usage.prompt_tokens
+    output_token = completion.usage.completion_tokens
     message_content = completion.choices[0].message.content
-    return message_content
+    return message_content, input_tokens, output_token
 
 
 def call_openai_agent(assistant, file, prompt, **kwargs):
@@ -157,7 +159,9 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
     messages = message_response.data
     latest_message = messages[0]
     output = latest_message.content[0].text.value
-    return output
+    input_token = run.usage.prompt_tokens
+    output_token = run.usage.completion_tokens
+    return output, input_token, output_token
 
 
 def update_data(new_data: dict) -> str:
@@ -254,8 +258,9 @@ def call_claude3(prompt):
         temperature=0.0,
         messages=prompt
     )
+    token = message.usage.input_tokens + message.usage.output_tokens
     print(message.content)
-    return message.content
+    return message.content, token
 
 
 def update_prompt_with_text_and_images(original_prompt, data, prompt):
@@ -289,8 +294,9 @@ def encode_image_to_base64(filepath):
 
 
 def get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text):
+    name_without_ext, _ = os.path.splitext(filename)
     images = [
-        ("image/png", encode_image_to_base64(os.path.join(output_folder_images, f"{filename}_page_{idx + 1}.png"))) for
+        ("image/png", encode_image_to_base64(os.path.join(output_folder_images, f"corrected_{name_without_ext}_page{idx + 1}.png"))) for
         idx in range(len(pdf_images))]
     prompt = [
         {

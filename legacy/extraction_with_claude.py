@@ -1,16 +1,21 @@
 from pdf2image import convert_from_path
 import os
 import anthropic
+import time
 import copolextractor.prompter as prompter
-import base64
 import copolextractor.analyzer as az
+import copolextractor.image_processer as ip
 
+
+start = time.time()
 
 input_folder = "./../pdfs"
 output_folder_images = "./images"
 output_folder = "model_output_claude"
 number_of_model_calls = 2
 parsing_error = 0
+total_tokens = 0
+number_of_calls = 0
 input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
 client = anthropic.Anthropic(
     api_key=os.environ.get("ANTHROPIC_API_KEY"),
@@ -29,10 +34,16 @@ for i, filename in enumerate(input_files):
         image_path = os.path.join(output_folder_images, f"{filename}_page_{idx + 1}.png")
         pdf_images[idx].save(image_path, 'PNG')
     print("Successfully converted PDF to images")
+    for j, image in enumerate(pdf_images):
+        resized_image = ip.resize_image(image, 2048)
+        rotate_image = ip.correct_text_orientation(resized_image, output_folder_images, file_path, j)
+
     prompt = prompter.get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text)
 
     print("model call starts")
-    output = prompter.call_claude3(prompt)
+    output, tokens = prompter.call_claude3(prompt)
+    total_tokens += tokens
+    number_of_calls += 1
     output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
     print("output_model: ", output_model)
 
@@ -45,11 +56,22 @@ for i, filename in enumerate(input_files):
             print(f"model call number {a+2} of {filename}")
             updated_prompt_text = prompter.update_prompt(prompt_text, output_model)
             prompt = prompter.get_prompt_claude_vision(output_folder_images, filename, pdf_images, updated_prompt_text)
-            output = prompter.call_claude3(prompt)
+            output, tokens = prompter.call_claude3(prompt)
+            total_tokens += tokens
+            number_of_calls += 1
             output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
         else:
             print("NA-rate under 30%")
+        print("tokens used: ", total_tokens)
+        print("total number of model call: ", number_of_calls)
     if output_model is None:
         parsing_error += 1
 
 print(f"out of {i} papers, {parsing_error} papers are extracted in invalid json format")
+
+
+end = time.time()
+execution_time = start-end
+
+print("execution time: ", execution_time)
+
