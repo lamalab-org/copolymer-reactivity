@@ -44,7 +44,7 @@ for i, filename in enumerate(input_files):
         rate = az.calculate_rate(na_count, total_entry_count)
         print("NA-rate: ", rate)
         if rate > 0.3 or output_model is None:
-            print(f"model call number {a+3} of {filename}")
+            print(f"model call number {a+2} of {filename}")
             updated_prompt = prompter.update_prompt(prompt_text, output_model)
             content = prompter.get_prompt_vision_model(images_base64, updated_prompt)
             output, input_token, output_token = prompter.call_openai(content)

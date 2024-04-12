@@ -2,91 +2,82 @@
     "reactions": [
         {
             "monomers": [
-                "n-butyl acrylate",
+                "acrylonitrile",
                 "ethylene"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free-radical",
-                    "solvent": null,
-                    "method": null,
-                    "temperature": 1000.0,
-                    "temperature_unit": "atm",
-                    "reaction_constants": {
-                        "constant_1": 11.9,
-                        "constant_2": 0.03
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 2.5,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "vinyl chloride",
-                "ethylene"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free-radical",
-                    "solvent": null,
-                    "method": null,
-                    "temperature": 1000.0,
-                    "temperature_unit": "atm",
-                    "reaction_constants": {
-                        "constant_1": 3.6,
-                        "constant_2": 0.24
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.3,
-                        "constant_conf_2": 0.07
-                    },
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "vinyl acetate",
-                "ethylene"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free-radical",
-                    "solvent": null,
-                    "method": null,
-                    "temperature": 1000.0,
-                    "temperature_unit": "atm",
-                    "reaction_constants": {
-                        "constant_1": 1.08,
-                        "constant_2": 1.07
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.19,
-                        "constant_conf_2": 0.06
-                    },
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "vinyl fluoride",
-                "ethylene"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free-radical",
-                    "solvent": null,
-                    "method": null,
-                    "temperature": 160.0,
+                    "polymerization_type": "gamma-ray induced copolymerization",
+                    "solvent": "toluene",
+                    "method": "solution",
+                    "temperature": 20.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.16,
-                        "constant_2": 4.39
+                        "constant_1": 0.7,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl ethers of 4-chlorophenol",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl ethers of 4-bromophenol",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl ethers of 4-iodophenol",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.3
                     },
                     "reaction_constant_conf": null,
                     "determination_method": null
@@ -95,5 +86,5 @@
         }
     ],
     "source": null,
-    "PDF_name": "JOURNAL OF POLYMER SCIENCE: PART A VOL. 1, PP. 1137-1145 (1963)"
+    "PDF_name": "image_1.pdf"
 }

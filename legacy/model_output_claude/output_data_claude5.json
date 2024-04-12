@@ -2,66 +2,29 @@
     "reactions": [
         {
             "monomers": [
-                "2-chloro-1,3-butadiene",
-                "methyl isopropenyl ketone"
+                "ethylene",
+                "vinyl acetate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "water",
-                    "method": "emulsion",
-                    "temperature": 40.0,
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solution",
+                    "temperature": 62.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 3.6,
-                        "constant_2": 0.2
-                    },
-                    "reaction_constant_conf": null,
-                    "determination_method": null
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": null,
-                    "method": "bulk",
-                    "temperature": 40.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 2.7,
-                        "constant_2": 0.2
+                        "constant_1": 0.73,
+                        "constant_2": 1.515
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.2,
-                        "constant_conf_2": 0.05
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 0.007
                     },
-                    "determination_method": "Fineman and Ross"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "2-chloro-1,3-butadiene",
-                "methacrylic acid"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": null,
-                    "method": "bulk",
-                    "temperature": 40.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 2.7,
-                        "constant_2": 0.15
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.2,
-                        "constant_conf_2": 0.05
-                    },
-                    "determination_method": null
+                    "determination_method": "Mayo-Alfrey"
                 }
             ]
         }
     ],
-    "source": null,
-    "PDF_name": "Journal of Polymer Science: Part A Vol. 1, pp. 2163-2169 (1963)"
+    "source": "© 1974 by John Wiley & Sons, Inc.",
+    "PDF_name": "JOURNAL OF POLYMER SCIENCE: PART A-l VOL. 9, 2225-2232 (1971)"
 }

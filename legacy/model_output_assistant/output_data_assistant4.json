@@ -2,16 +2,16 @@
     "reactions": [
         {
             "monomers": [
-                "2-Chloro-13-Butadiene",
-                "Methyl Isopropenyl Ketone"
+                "2-Chloro-1,3-butadiene",
+                "Methyl isopropenyl ketone"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free-radical",
-                    "solvent": null,
+                    "solvent": "water",
                     "method": "emulsion",
-                    "temperature": null,
-                    "temperature_unit": null,
+                    "temperature": 40.0,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 3.6,
                         "constant_2": 0.1
@@ -26,16 +26,16 @@
         },
         {
             "monomers": [
-                "2-Chloro-13-Butadiene",
-                "Methacrylic Acid"
+                "2-Chloro-1,3-butadiene",
+                "Methacrylic acid"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free-radical",
-                    "solvent": null,
+                    "solvent": "water",
                     "method": "emulsion",
-                    "temperature": null,
-                    "temperature_unit": null,
+                    "temperature": 40.0,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 2.7,
                         "constant_2": 0.15

@@ -1,60 +1,67 @@
-PDF_name: The influence of molecular interaction on polymerization, 10
+PDF_name: null
 reactions:
 - monomers:
   - methacrylic acid
   - styrene
   reaction_conditions:
-  - determination_method: Kelen-Tüdös
-    initiator: 2,2'-azoisobutyronitrile
-    method: solution
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.06
-      constant_conf_2: 0.03
+      constant_conf_1: 0.01
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 0.51
+      constant_1: 0.54
       constant_2: 0.01
-    solvent: hydrogen-bond forming solvents
+    solvent: deuterochloroform
     temperature: 60.0
     temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    initiator: 2,2'-azoisobutyronitrile
-    method: solution
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.65
+      constant_conf_1: 0.01
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.31
+      constant_2: 0.01
+    solvent: chloroform
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: null
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.0
       constant_conf_2: 0.02
     reaction_constants:
       constant_1: 0.43
-      constant_2: 0.06
-    solvent: solvents not capable of forming hydrogen bonds but exhibiting different
-      dielectric constants
+      constant_2: 0.0
+    solvent: acetone
     temperature: 60.0
     temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    initiator: 2,2'-azoisobutyronitrile
-    method: solution
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.59
-      constant_conf_2: 0.05
+      constant_conf_1: 0.02
+      constant_conf_2: null
     reaction_constants:
       constant_1: 0.41
       constant_2: 0.02
-    solvent: 1,4-dioxane
+    solvent: dioxane
     temperature: 60.0
     temperature_unit: °C
-  - determination_method: Kelen-Tüdös
-    initiator: 2,2'-azoisobutyronitrile
-    method: solution
+  - determination_method: Kelen-Tudos
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.29
-      constant_conf_2: 0.0
+      constant_conf_1: 0.02
+      constant_conf_2: null
     reaction_constants:
       constant_1: 0.06
       constant_2: 0.02
     solvent: acetonitrile
     temperature: 60.0
     temperature_unit: °C
-source: 0025-116X/85/$03.00
+source: null

@@ -9,86 +9,70 @@
                 {
                     "polymerization_type": "free radical",
                     "solvent": "carbon tetrachloride",
-                    "method": "solvent",
+                    "method": "bulk",
                     "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.54,
+                        "constant_1": 0.52,
                         "constant_2": 0.06
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.03
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
                     "polymerization_type": "free radical",
                     "solvent": "chloroform",
-                    "method": "solvent",
-                    "temperature": 60.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.51,
-                        "constant_2": 0.08
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.03
-                    },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "acetone",
-                    "method": "solvent",
+                    "method": "bulk",
                     "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 0.43,
-                        "constant_2": 0.65
+                        "constant_2": 0.06
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.0,
-                        "constant_conf_2": 0.02
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "1,4-dioxane",
-                    "method": "solvent",
+                    "solvent": "acetone",
+                    "method": "bulk",
                     "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 0.41,
-                        "constant_2": 0.59
+                        "constant_2": 0.06
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.05
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 },
                 {
                     "polymerization_type": "free radical",
                     "solvent": "acetonitrile",
-                    "method": "solvent",
+                    "method": "bulk",
                     "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.06,
-                        "constant_2": 0.29
+                        "constant_1": 0.29,
+                        "constant_2": 0.06
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.0
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Kelen-Tudor"
                 }
             ]
         }
     ],
-    "source": null,
-    "PDF_name": "Makromol. Chem. 186, 1711 – 1720 (1985)"
+    "source": "doi:10.1002/macp.1985.021860711",
+    "PDF_name": "The influence of molecular interaction on polymerization, 10a"
 }

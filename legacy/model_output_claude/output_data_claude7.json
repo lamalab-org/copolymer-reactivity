@@ -2,112 +2,63 @@
     "reactions": [
         {
             "monomers": [
-                "methyl methacrylate",
-                "styrene"
+                "n-butyl acrylate",
+                "ethylene"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free radical",
-                    "solvent": "dimethylformamide",
+                    "polymerization_type": "free-radical",
+                    "solvent": "toluene",
                     "method": "solution",
-                    "temperature": 60.0,
+                    "temperature": 180.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.35,
-                        "constant_2": 0.48
+                        "constant_1": 0.03,
+                        "constant_2": 0.22
                     },
                     "reaction_constant_conf": null,
                     "determination_method": null
                 },
                 {
-                    "polymerization_type": "free radical",
-                    "solvent": "dimethyl sulfoxide",
+                    "polymerization_type": "free-radical",
+                    "solvent": "toluene",
                     "method": "solution",
+                    "temperature": 90.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.16,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl chloride",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": null,
+                    "solvent": null,
+                    "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.45,
-                        "constant_2": 0.75
+                        "constant_1": 3.7,
+                        "constant_2": 0.22
                     },
-                    "reaction_constant_conf": null,
-                    "determination_method": null
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "benzene",
-                    "method": "solution",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.43,
-                        "constant_2": null
-                    },
-                    "reaction_constant_conf": null,
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "methyl methacrylate",
-                "methyl acrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": null,
-                    "solvent": "dimethylformamide",
-                    "method": "solution",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 2.24,
-                        "constant_2": 0.4
-                    },
-                    "reaction_constant_conf": null,
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "styrene",
-                "methyl methacrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": "bulk",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.52,
-                        "constant_2": 0.46
-                    },
-                    "reaction_constant_conf": null,
-                    "determination_method": "Mayo and Lewis"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "methylvinylsilyl-bis-ε-caprolactam",
-                "methylvinylsilyl-bis-γ-pyrrolidone"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": "bulk",
-                    "temperature": 120.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": null,
                     "reaction_constant_conf": null,
                     "determination_method": null
                 }
             ]
         }
     ],
-    "source": "Vysokomol. soyed. A16: No. 2, 349-353, 1974",
-    "PDF_name": "Kinetics of polymerization and copolymerization of MAS"
+    "source": null,
+    "PDF_name": "JOURNAL OF POLYMER SCIENCE: PART A VOL. 1, PP. 1137-1145 (1963)"
 }
