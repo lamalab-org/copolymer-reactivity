@@ -2,69 +2,60 @@
     "reactions": [
         {
             "monomers": [
-                "2-vinylpyridine",
-                "methacrylic acid"
+                "methacrylic acid",
+                "ethyl acrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
                     "solvent": "water",
-                    "method": "solution",
-                    "temperature": 60.0,
+                    "method": "emulsion",
+                    "temperature": 50.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.37,
-                        "constant_2": 0.31
+                        "constant_1": 0.36,
+                        "constant_2": 0.28
                     },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
-                    "determination_method": null
+                    "reaction_constant_conf": null,
+                    "determination_method": "Kelen-Tudos method"
                 },
                 {
                     "polymerization_type": "free radical",
                     "solvent": "water",
-                    "method": "solution",
-                    "temperature": 70.0,
+                    "method": "emulsion",
+                    "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.58,
-                        "constant_2": null
+                        "constant_1": 0.46,
+                        "constant_2": 0.27
                     },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
-                    "determination_method": null
+                    "reaction_constant_conf": null,
+                    "determination_method": "EVM program"
                 }
             ]
         },
         {
             "monomers": [
                 "methacrylic acid",
-                "N,N-diethylaminoethyl methacrylate"
+                "butyl acrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": null,
-                    "solvent": "water",
+                    "solvent": null,
                     "method": null,
                     "temperature": null,
                     "temperature_unit": null,
                     "reaction_constants": {
-                        "constant_1": 0.59,
-                        "constant_2": 0.46
+                        "constant_1": 0.39,
+                        "constant_2": 0.51
                     },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
+                    "reaction_constant_conf": null,
                     "determination_method": null
                 }
             ]
         }
     ],
-    "source": null,
-    "PDF_name": "Amphoteric Polyelectrolytes. II. Copolymers of Methacrylic Acid and Diethylaminoethyl Methacrylate"
+    "source": "10.1021/ma60077a011",
+    "PDF_name": "bajaj1994.pdf"
 }

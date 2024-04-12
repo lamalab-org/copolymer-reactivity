@@ -2,75 +2,35 @@
     "reactions": [
         {
             "monomers": [
-                "3-Methylstyrene",
-                "Methacrylic Acid"
+                "3-methylstyrene",
+                "methyl methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "Toluene",
-                    "method": null,
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
                     "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.06,
-                        "constant_2": 0.35
+                        "constant_1": 0.48,
+                        "constant_2": 1.08
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.03,
-                        "constant_conf_2": 0.08
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.12
                     },
                     "determination_method": "Kelen-Tudos"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "Isopropyl Alcohol",
-                    "method": null,
+                    "solvent": "isopropanol",
+                    "method": "solvent",
                     "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.33,
-                        "constant_2": 0.18
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.02
-                    },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Acetone",
-                    "method": null,
-                    "temperature": 70.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.42,
-                        "constant_2": 0.51
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": "Kelen-Tudos"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "3-Methylstyrene",
-                "Methyl Methacrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Toluene",
-                    "method": null,
-                    "temperature": 70.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.53,
-                        "constant_2": 0.48
+                        "constant_1": 0.51,
+                        "constant_2": 0.86
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.04,
@@ -80,95 +40,23 @@
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "Isopropyl Alcohol",
-                    "method": null,
-                    "temperature": 70.0,
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.36,
-                        "constant_2": 0.38
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.06,
-                        "constant_conf_2": 0.03
-                    },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Acetone",
-                    "method": null,
-                    "temperature": 70.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.51,
-                        "constant_2": 0.41
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.05,
-                        "constant_conf_2": 0.04
-                    },
-                    "determination_method": "Kelen-Tudos"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Methacrylic Acid",
-                "Methyl Methacrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Toluene",
-                    "method": null,
-                    "temperature": 70.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 1.06,
-                        "constant_2": 0.1
+                        "constant_1": 0.32,
+                        "constant_2": 0.82
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.01
-                    },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Isopropyl Alcohol",
-                    "method": null,
-                    "temperature": 70.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.33,
-                        "constant_2": 0.78
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.03
-                    },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "Acetone",
-                    "method": null,
-                    "temperature": 70.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.63,
-                        "constant_2": 0.32
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.02,
-                        "constant_conf_2": 0.02
+                        "constant_conf_2": 0.05
                     },
                     "determination_method": "Kelen-Tudos"
                 }
             ]
         }
     ],
-    "source": "https://doi.org/10.1080/10601329508013679",
-    "PDF_name": "Solvent Effect on 3-Methylstyrene Radical Copolymerization with Methacrylic Acid and Methyl Methacrylate"
+    "source": "https://doi.org/10.1080/10601329508010237",
+    "PDF_name": "Pure and Applied Chemistry (Science Journal), Part A"
 }

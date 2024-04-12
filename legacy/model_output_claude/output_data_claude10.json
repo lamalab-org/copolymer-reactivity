@@ -2,19 +2,48 @@
     "reactions": [
         {
             "monomers": [
-                "Ethylene",
-                "Vinyl acetate"
+                "3-methylstyrene",
+                "methacrylic acid"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free radical",
-                    "solvent": null,
-                    "method": null,
-                    "temperature": 150.0,
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
+                    "initiator": "azobisisobutyronitrile",
                     "reaction_constants": {
-                        "constant_1": 1.01,
-                        "constant_2": 1.0
+                        "constant_1": 0.5,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "isopropyl alcohol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "initiator": "azobisisobutyronitrile",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "initiator": null,
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.49
                     },
                     "reaction_constant_conf": null,
                     "determination_method": null
@@ -23,82 +52,48 @@
         },
         {
             "monomers": [
-                "Ethylene",
-                "Methyl acrylate"
+                "3-methylstyrene",
+                "methyl methacrylate"
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": null,
-                    "temperature": null,
-                    "temperature_unit": null,
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "initiator": "azobisisobutyronitrile",
                     "reaction_constants": {
-                        "constant_1": 0.2,
-                        "constant_2": 11.0
+                        "constant_1": 0.32,
+                        "constant_2": 0.38
                     },
                     "reaction_constant_conf": null,
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Methyl methacrylate"
-            ],
-            "reaction_conditions": [
+                    "determination_method": "Kelen-Tudos"
+                },
                 {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": null,
-                    "temperature": null,
-                    "temperature_unit": null,
+                    "polymerization_type": "radical",
+                    "solvent": "isopropyl alcohol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "initiator": "azobisisobutyronitrile",
                     "reaction_constants": {
-                        "constant_1": 0.03,
-                        "constant_2": 17.0
+                        "constant_1": 0.31,
+                        "constant_2": 0.46
                     },
                     "reaction_constant_conf": null,
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Diethyl maleate"
-            ],
-            "reaction_conditions": [
+                    "determination_method": "Kelen-Tudos"
+                },
                 {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": null,
-                    "temperature": null,
-                    "temperature_unit": null,
+                    "polymerization_type": "radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "initiator": null,
                     "reaction_constants": {
-                        "constant_1": 0.25,
-                        "constant_2": 10.0
-                    },
-                    "reaction_constant_conf": null,
-                    "determination_method": null
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Ethylene",
-                "Diethyl fumarate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": null,
-                    "solvent": null,
-                    "method": null,
-                    "temperature": null,
-                    "temperature_unit": null,
-                    "reaction_constants": {
-                        "constant_1": 0.25,
-                        "constant_2": 17.0
+                        "constant_1": 0.62,
+                        "constant_2": 0.05
                     },
                     "reaction_constant_conf": null,
                     "determination_method": null
@@ -106,6 +101,6 @@
             ]
         }
     ],
-    "source": null,
-    "PDF_name": null
+    "source": "https://doi.org/10.1080/10601329508013679",
+    "PDF_name": "Solvent Effect on 3-Methylstyrene Radical Copolymerization with Methacrylic Acid and Methyl Methacrylate"
 }
