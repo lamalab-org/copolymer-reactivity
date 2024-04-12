@@ -1,19 +1,43 @@
-PDF_name: null
+PDF_name: Amphoteric Polyelectrolytes. I
 reactions:
 - monomers:
   - 2-Vinylpyridine
   - Methacrylic Acid
   reaction_conditions:
-  - determination_method: 'null'
+  - determination_method: Kelen-Tudor
     method: bulk
-    polymerization_type: bulk
+    polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: null
       constant_conf_2: null
     reaction_constants:
-      constant_1: 0.28
-      constant_2: 0.62
-    solvent: 'null'
-    temperature: 70.0
+      constant_1: 0.5
+      constant_2: 0.1
+    solvent: water
+    temperature: 50.0
     temperature_unit: °C
-source: null
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 4.3
+      constant_2: 0.04
+    solvent: N,N-Dimethylformamide
+    temperature: 50.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 4.0
+      constant_2: 0.05
+    solvent: N,N-Dimethylformamide
+    temperature: 23.0
+    temperature_unit: °C
+source: doi:10.1021/ba-1973-0126.ch034

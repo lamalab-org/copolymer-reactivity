@@ -7,27 +7,11 @@
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": null,
+                    "polymerization_type": "emulsion",
                     "solvent": "water",
-                    "method": "emulsion",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 2.9,
-                        "constant_2": 0.162
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
-                    "determination_method": "Kelen-Tudos method"
-                },
-                {
-                    "polymerization_type": null,
-                    "solvent": "water",
-                    "method": "emulsion",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
                     "reaction_constants": {
                         "constant_1": 2.58,
                         "constant_2": 0.157
@@ -36,11 +20,11 @@
                         "constant_conf_1": 0.13,
                         "constant_conf_2": 0.08
                     },
-                    "determination_method": "EVM program"
+                    "determination_method": "EVM program using the Kelen-Tudos method"
                 }
             ]
         }
     ],
-    "source": "https://onlinelibrary.wiley.com/doi/10.1002/app.1994.070531307",
+    "source": "Journal of Applied Polymer Science, Volume 53, Pages 1771-1783 (1994)",
     "PDF_name": "paper03.pdf"
 }

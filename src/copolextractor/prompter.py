@@ -14,7 +14,7 @@ class RunTimeExpired(Exception):
 
 
 def get_prompt_template():
-    prompt = """The content of the PDF is a scientific paper about copolymerization of monomers. We only consider
+    prompt = """The content of the Markdown is a scientific paper about copolymerization of monomers. We only consider
  copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2
  monomers ignore them. Its possible, that there is also the beginning of a new paper about polymers in
  the PDF. Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different
@@ -72,7 +72,7 @@ def get_prompt_template():
 
 
 def get_prompt_addition():
-    prompt_addition = """Here is the previously collected data from the same Images: {}. Try to fill up the 
+    prompt_addition = """Here is the previously collected data from the same Markdowns: {}. Try to fill up the 
         entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. Combine different reaction if they belong to the same 
         polymerization with the same reaction conditions. Report every different polymerization and every different 
         reaction condition separately. Do this based on this prompt:"""
@@ -90,10 +90,10 @@ def split_document(document: str, max_length: int) -> List[str]:
 
 
 def format_prompt(template, data):
-    return template.format(data)
+    return template.format(**data)
 
 
-def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0, **kwargs):
+def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 1.0, **kwargs):
     """Call chat openai model
 
     Args:
@@ -123,6 +123,38 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0, **
     output_token = completion.usage.completion_tokens
     message_content = completion.choices[0].message.content
     return message_content, input_tokens, output_token
+
+
+def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0, **kwargs):
+    """Call chat openai model
+    Args:
+        prompt (str): Prompt to send to model
+        model (str, optional): Name of the API. Defaults to "gpt-3.5-turbo-1106".
+        temperature (float, optional): inference temperature. Defaults to 0.
+    Returns:
+        dict: new data
+    """
+    client = OpenAI()
+    completion = client.chat.completions.create(
+        model=model,
+        response_format={"type": "json_object"},
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a scientific assistant, extracting important information about polymerization conditions"
+                     "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                     "accuracy. Keep the entries short without details. Be careful with numbers.",
+            },
+            {"role": "user", "content": prompt},
+        ],
+        temperature=temperature,
+        **kwargs,
+    )
+    message_content = completion.choices[0].message.content
+    input_tokens = completion.usage.prompt_tokens
+    output_token = completion.usage.completion_tokens
+    new_data = json.loads(message_content)
+    return new_data, input_tokens, output_token
 
 
 def call_openai_agent(assistant, file, prompt, **kwargs):
@@ -174,18 +206,34 @@ def update_prompt(prompt, data):
     return new_prompt
 
 
-def repeated_call_model(text, prompt_template, max_length: int, model: str, model_call_fn) -> dict:
+def update_prompt_chucked(prompt, data):
+    new_prompt = update_data_chucked(data) + prompt
+    return new_prompt
+
+
+def update_data_chucked(new_data: dict) -> str:
+    old_data_template = f"""Here are the previously collected data: {new_data}. Please add more information based on"""
+    return old_data_template
+
+
+def repeated_call_model(text, prompt_template, max_length: int, model_call_fn) -> dict:
     chunks = split_document(text, max_length=max_length)
     output = {}
     extracted = ""
+    input_tokens = 0
+    output_tokens = 0
+    number_of_model_calls = 0
     for chunk in chunks:
         prompt = format_prompt(prompt_template, {"text": chunk})
         prompt += extracted
 
-        new_data = model_call_fn(prompt, model)
+        new_data, input_token, output_token = model_call_fn(prompt)
+        number_of_model_calls += 1
+        input_tokens += input_token
+        output_tokens += output_token
         extracted = update_data(new_data)
         output.update(new_data)
-    return output
+    return output, input_token, output_token, number_of_model_calls
 
 
 def format_output_as_json_and_yaml(i, output, output_folder, ):
@@ -258,9 +306,10 @@ def call_claude3(prompt):
         temperature=0.0,
         messages=prompt
     )
-    token = message.usage.input_tokens + message.usage.output_tokens
+    input_token = message.usage.input_tokens
+    output_token = message.usage.output_tokens
     print(message.content)
-    return message.content, token
+    return message.content, input_token, output_token
 
 
 def update_prompt_with_text_and_images(original_prompt, data, prompt):
@@ -272,7 +321,7 @@ def update_prompt_with_text_and_images(original_prompt, data, prompt):
 
 
 def create_image_content(image, maxdim=2048, detail_threshold=1024):
-    detail = "high"
+    detail = "low"
     return {
         "type": "image_url",
         "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},

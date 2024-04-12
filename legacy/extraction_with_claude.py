@@ -14,7 +14,8 @@ output_folder_images = "./images"
 output_folder = "model_output_claude"
 number_of_model_calls = 2
 parsing_error = 0
-total_tokens = 0
+total_input_token = 0
+total_output_token = 0
 number_of_calls = 0
 input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
 client = anthropic.Anthropic(
@@ -35,14 +36,15 @@ for i, filename in enumerate(input_files):
         pdf_images[idx].save(image_path, 'PNG')
     print("Successfully converted PDF to images")
     for j, image in enumerate(pdf_images):
-        resized_image = ip.resize_image(image, 2048)
+        resized_image = ip.resize_image(image, 1024)
         rotate_image = ip.correct_text_orientation(resized_image, output_folder_images, file_path, j)
 
     prompt = prompter.get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text)
 
     print("model call starts")
-    output, tokens = prompter.call_claude3(prompt)
-    total_tokens += tokens
+    output, input_token, output_token = prompter.call_claude3(prompt)
+    total_input_token += input_token
+    total_output_token += output_token
     number_of_calls += 1
     output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
     print("output_model: ", output_model)
@@ -56,13 +58,15 @@ for i, filename in enumerate(input_files):
             print(f"model call number {a+2} of {filename}")
             updated_prompt_text = prompter.update_prompt(prompt_text, output_model)
             prompt = prompter.get_prompt_claude_vision(output_folder_images, filename, pdf_images, updated_prompt_text)
-            output, tokens = prompter.call_claude3(prompt)
-            total_tokens += tokens
+            output, input_token, output_token = prompter.call_claude3(prompt)
+            total_input_token += input_token
+            total_output_token += output_token
             number_of_calls += 1
             output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
         else:
             print("NA-rate under 30%")
-        print("tokens used: ", total_tokens)
+        print("tokens input used: ", input_token)
+        print("tokens output used: ", output_token)
         print("total number of model call: ", number_of_calls)
     if output_model is None:
         parsing_error += 1

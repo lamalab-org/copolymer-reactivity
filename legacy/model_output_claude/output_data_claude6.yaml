@@ -1,77 +1,47 @@
-PDF_name: Kinetics of polymerization and copolymerization of MAS
+PDF_name: polymerization_kinetics.pdf
 reactions:
 - monomers:
-  - methyl methacrylate
-  - styrene
-  reaction_conditions:
-  - determination_method: null
-    method: solution
-    polymerization_type: free radical
-    reaction_constant_conf: null
-    reaction_constants:
-      constant_1: 0.35
-      constant_2: 0.48
-    solvent: dimethylformamide
-    temperature: 60.0
-    temperature_unit: °C
-  - determination_method: null
-    method: solution
-    polymerization_type: free radical
-    reaction_constant_conf: null
-    reaction_constants:
-      constant_1: 0.45
-      constant_2: 0.75
-    solvent: dimethyl sulfoxide
-    temperature: 60.0
-    temperature_unit: °C
-  - determination_method: null
-    method: solution
-    polymerization_type: free radical
-    reaction_constant_conf: null
-    reaction_constants:
-      constant_1: 0.43
-      constant_2: null
-    solvent: benzene
-    temperature: 50.0
-    temperature_unit: °C
-- monomers:
-  - methyl methacrylate
-  - methyl acrylate
-  reaction_conditions:
-  - determination_method: null
-    method: solution
-    polymerization_type: null
-    reaction_constant_conf: null
-    reaction_constants:
-      constant_1: 2.24
-      constant_2: 0.4
-    solvent: dimethylformamide
-    temperature: 50.0
-    temperature_unit: °C
-- monomers:
-  - styrene
+  - methacrylic acid
   - methyl methacrylate
   reaction_conditions:
   - determination_method: Mayo and Lewis
-    method: bulk
-    polymerization_type: null
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf: null
+    reaction_constants:
+      constant_1: 0.33
+      constant_2: 2.0
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - methyl methacrylate
+  - styrene
+  reaction_conditions:
+  - determination_method: Mayo and Lewis
+    method: solution
+    polymerization_type: free radical
     reaction_constant_conf: null
     reaction_constants:
       constant_1: 0.52
       constant_2: 0.46
-    solvent: null
+    solvent: benzene
     temperature: 50.0
     temperature_unit: °C
 - monomers:
-  - methylvinylsilyl-bis-ε-caprolactam
+  - methylvinylsilyl-bis-e-caprolactam
   - methylvinylsilyl-bis-γ-pyrrolidone
   reaction_conditions:
   - determination_method: null
     method: bulk
-    polymerization_type: null
-    reaction_constant_conf: null
-    reaction_constants: null
+    polymerization_type: bulk
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 1.5
+      constant_2: 0.22
     solvent: null
     temperature: 120.0
     temperature_unit: °C
-source: 'Vysokomol. soyed. A16: No. 2, 349-353, 1974'
+source: 'Vysokomol. soyed. A16: No. 2, 354-358, 1974'

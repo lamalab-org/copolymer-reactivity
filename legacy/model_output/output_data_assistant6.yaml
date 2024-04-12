@@ -1,51 +1,63 @@
-PDF_name: 'null'
+PDF_name: null
 reactions:
 - monomers:
-  - Methacrylic acid sulphonate
+  - Methyl acrylate
   - Styrene
   reaction_conditions:
-  - determination_method: 'null'
+  - determination_method: Kelen-Tudos
     method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.1
-      constant_conf_2: 0.01
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 1.5
-      constant_2: 0.22
-    solvent: 'null'
-    temperature: null
+      constant_1: 0.56
+      constant_2: 0.03
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Kelen-Tudos
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.38
+      constant_2: 0.31
+    solvent: ethyl acetate
+    temperature: 60.0
     temperature_unit: °C
 - monomers:
-  - Methacrylic acid sulphonate
-  - Methyl methacrylate
+  - Methyl acrylate
+  - Vinyl acetate
   reaction_conditions:
-  - determination_method: 'null'
+  - determination_method: Kelen-Tudos
     method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.25
-      constant_conf_2: 0.02
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 3.34
-      constant_2: 0.67
-    solvent: 'null'
-    temperature: null
+      constant_1: 0.74
+      constant_2: 0.01
+    solvent: benzene
+    temperature: 60.0
     temperature_unit: °C
 - monomers:
-  - Methacrylic acid sulphonate
-  - Methacrylic acid
+  - Methyl acrylate
+  - Vinyl acetate
   reaction_conditions:
-  - determination_method: 'null'
+  - determination_method: Kelen-Tudos
     method: bulk
     polymerization_type: free radical
     reaction_constant_conf:
-      constant_conf_1: 0.1
-      constant_conf_2: 0.02
+      constant_conf_1: null
+      constant_conf_2: null
     reaction_constants:
-      constant_1: 1.0
-      constant_2: 0.83
-    solvent: 'null'
-    temperature: null
+      constant_1: 0.52
+      constant_2: 0.05
+    solvent: benzene
+    temperature: 60.0
     temperature_unit: °C
-source: 'null'
+source: null

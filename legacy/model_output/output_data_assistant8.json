@@ -2,25 +2,49 @@
     "reactions": [
         {
             "monomers": [
-                "ethylene",
-                "acrylonitrile"
+                "vinyl acetate",
+                "ethylene"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "toluene",
-                    "method": null,
-                    "temperature": 20.0,
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 60.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 7.0,
-                        "constant_2": 0.0
+                        "constant_1": 0.01,
+                        "constant_2": 5.0
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": null,
                         "constant_conf_2": null
                     },
-                    "determination_method": null
+                    "determination_method": "Kelen-Tudor"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "vinyl chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 18.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 2.0
+                    },
+                    "determination_method": "Kelen-Tudor"
                 }
             ]
         }

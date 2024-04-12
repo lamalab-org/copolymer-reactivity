@@ -91,12 +91,13 @@ wandb.init(
         "input": "images",
         "number of model calls max": 3,
         "number of model calls min": 1,
-        "temperature": 0.0,
+        "temperature": 1.0,
+        "max resolution": "high",
         "deviation of correct rxn": 0.01,
-        "input tokens used": 130587,
-        "output tokens used": 7342,
-        "total model calls": 15,
-        "time used": 571.9001705646515
+        "input tokens used": 15837,
+        "output tokens used": 5497,
+        "total model calls": 11,
+        "time used": 431.7084050178528
 
     }
 )
@@ -311,6 +312,7 @@ parsing_error_rate = calculate_rate(parsing_error, file_count) * 100
 reaction_constant_NA_rate = calculate_rate(reaction_const_NA_count, reaction_condition_count) * 100
 reaction_constant_conf_NA_rate = calculate_rate(reaction_const_conf_NA_count, reaction_condition_count) * 100
 na_entry_rate = calculate_rate(na_count, total_entries_count) * 100
+solvent_error_rate = calculate_rate(solvent_error, combined_count_reaction_conditions_test) * 100
 
 print(f"number of empty entries: {na_count}. rate of empty entries is: {na_entry_rate} %.")
 print(f"parsing error is {parsing_error}. The parsing error rate is {parsing_error_rate}.")
@@ -343,4 +345,4 @@ wandb.log({"prompt": prompt, "prompt_addition": prompt_addition, "parsing-error"
            "reaction-const-conf-NA-count": reaction_const_conf_NA_count,
            "fuzzy matching score": average_score, "mse reaction const": average_mse_const,
            "mse reaction const conf": average_mse_conf, "mse temperature": average_mse_temp,
-           "solvent error": solvent_error})
+           "solvent error": solvent_error, "solvent error rate": solvent_error_rate})

@@ -3,13 +3,13 @@
         {
             "monomers": [
                 "2-Vinylpyridine",
-                "null"
+                "Methacrylic Acid"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "bulk",
-                    "solvent": "null",
-                    "method": "bulk",
+                    "solvent": null,
+                    "method": null,
                     "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
@@ -20,35 +20,11 @@
                         "constant_conf_1": 0.1,
                         "constant_conf_2": 0.05
                     },
-                    "determination_method": "null"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "Methacrylic Acid",
-                "Diethylaminoethyl Methacrylate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "null",
-                    "solvent": "null",
-                    "method": "null",
-                    "temperature": "null",
-                    "temperature_unit": "null",
-                    "reaction_constants": {
-                        "constant_1": "null",
-                        "constant_2": "null"
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": "null",
-                        "constant_conf_2": "null"
-                    },
-                    "determination_method": "null"
+                    "determination_method": null
                 }
             ]
         }
     ],
-    "source": "null",
+    "source": null,
     "PDF_name": "paper02.pdf"
 }

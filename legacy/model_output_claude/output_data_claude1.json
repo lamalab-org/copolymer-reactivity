@@ -8,75 +8,87 @@
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "hydrogen-bond forming solvents",
-                    "method": "solution",
+                    "solvent": "deuterochloroform",
+                    "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
-                    "initiator": "2,2'-azoisobutyronitrile",
                     "reaction_constants": {
-                        "constant_1": 0.51,
+                        "constant_1": 0.54,
                         "constant_2": 0.01
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.06,
-                        "constant_conf_2": 0.03
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Kelen-Tüdös"
+                    "determination_method": "Kelen-Tudos"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "solvents not capable of forming hydrogen bonds but exhibiting different dielectric constants",
-                    "method": "solution",
+                    "solvent": "chloroform",
+                    "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
-                    "initiator": "2,2'-azoisobutyronitrile",
                     "reaction_constants": {
-                        "constant_1": 0.43,
-                        "constant_2": 0.06
+                        "constant_1": 0.31,
+                        "constant_2": 0.01
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.65,
-                        "constant_conf_2": 0.02
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Kelen-Tüdös"
+                    "determination_method": "Kelen-Tudos"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "1,4-dioxane",
-                    "method": "solution",
+                    "solvent": "acetone",
+                    "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
-                    "initiator": "2,2'-azoisobutyronitrile",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
                     "reaction_constants": {
                         "constant_1": 0.41,
                         "constant_2": 0.02
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.59,
-                        "constant_conf_2": 0.05
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Kelen-Tüdös"
+                    "determination_method": "Kelen-Tudos"
                 },
                 {
                     "polymerization_type": "free radical",
                     "solvent": "acetonitrile",
-                    "method": "solution",
+                    "method": null,
                     "temperature": 60.0,
                     "temperature_unit": "°C",
-                    "initiator": "2,2'-azoisobutyronitrile",
                     "reaction_constants": {
                         "constant_1": 0.06,
                         "constant_2": 0.02
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.29,
-                        "constant_conf_2": 0.0
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Kelen-Tüdös"
+                    "determination_method": "Kelen-Tudos"
                 }
             ]
         }
     ],
-    "source": "0025-116X/85/$03.00",
-    "PDF_name": "The influence of molecular interaction on polymerization, 10"
+    "source": null,
+    "PDF_name": null
 }
