@@ -3,7 +3,7 @@ import os
 import yaml
 from openai import OpenAI
 import json
-from typing import List
+from typing import List, Tuple
 import anthropic
 import base64
 
@@ -14,72 +14,70 @@ class RunTimeExpired(Exception):
 
 
 def get_prompt_template():
-    prompt = """The content of the Markdown is a scientific paper about copolymerization of monomers. We only consider
- copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2
- monomers ignore them. Its possible, that there is also the beginning of a new paper about polymers in
- the PDF. Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different
- reaction conditions. The reaction constants for the copolymerization with the monomer pair is the most
- important information. Be careful with numbers and do not miss the decimal points.
- If there are polymerization's without these constants, ignore these.
- From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
- Don't use any abbreviations, always use the whole word.
- Try to keep the string short. Exclude comments out of the json output. Return one json object. Stick to the
- given output datatype (string, or float).
+    prompt = """The content of the Markdown is a scientific paper about copolymerization of monomers. 
+We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
+Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
+Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
+The reaction constants for the copolymerization with the monomer pair is the most important information. Be careful with numbers and do not miss the decimal points.
+If there are polymerization's without these constants, ignore these.
+From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
+Don't use any abbreviations, always use the whole word.
+Try to keep the string short. Exclude comments out of the json output. Return one json object. 
+Stick to the given output datatype (string, or float).
 
- Extract the following information:
+Extract the following information:
 
-    reactions: [
+reactions: [
     {
-    "monomers": ["Monomer 1", "Monomer 2"] as STRING (only the whole Monomer name without abbreviation)
-    "reaction_conditions": [
-    {
-        "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
-        "solvent": used solvent for the polymerization reaction as STRING (whole name without
-                abbreviation, just name no further details); if the solvent is water put just "water"; ,
-        "method": used polymerization method (solvent, bulk, emulsion...) as STRING,
-        "temperature": used polymerization temperature as FLOAT ,
-        "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
-        "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT,
-        "constant_1":
-        "constant_2": },
-        "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as FLOAT
-        "constant_conf_1":
-        "constant_conf_2": },
-        "determination_method": method for determination of the r-values (Kelen-Tudor, ...) as STRING
+        "monomers": ["Monomer 1", "Monomer 2"] as STRING (only the whole Monomer name without abbreviation)
+        "reaction_conditions": [
+            {
+                "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
+                "solvent": used solvent for the polymerization reaction as STRING (whole name without
+                        abbreviation, just name no further details); if the solvent is water put just "water"; ,
+                "method": used polymerization method (solvent, bulk, emulsion...) as STRING,
+                "temperature": used polymerization temperature as FLOAT ,
+                "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
+                "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT,
+                "constant_1":
+                "constant_2": },
+                "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as FLOAT
+                "constant_conf_1":
+                "constant_conf_2": },
+                "determination_method": method for determination of the r-values (Kelen-Tudor, ...) as STRING
+            },
+            {
+                "polymerization_type":
+                "solvent":
+                ...
+            }
+        ]
     },
     {
-        "polymerization_type":
-        "solvent":
-        ...
-        }
-    ]
-    },
-    {
-    "monomers":
-    "reaction_condition": [
-    { ... }
-    ]
+        "monomers":
+            "reaction_condition": [
+                { ... }
+            ]
     }
     "source": doi url or source as STRING (just one source)
     "PDF_name": name of the pdf document
-    ]
+]
 
 
-    If the information is not provided put null. If there are multiple polymerization's with different
-    parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions(for
-    different reaction conditions of the same monomers)."""
+If the information is not provided put null.
+If there are multiple polymerization's with different parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions (for different reaction conditions of the same monomers)."""
     return prompt
 
 
-def get_prompt_addition():
-    prompt_addition = """Here is the previously collected data from the same Markdowns: {}. Try to fill up the 
-        entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. Combine different reaction if they belong to the same 
-        polymerization with the same reaction conditions. Report every different polymerization and every different 
-        reaction condition separately. Do this based on this prompt:"""
+def get_prompt_addition() -> str:
+    prompt_addition = """Here is the previously collected data from the same Markdowns: {}. 
+Try to fill up the entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. 
+Combine different reaction if they belong to the same polymerization with the same reaction conditions. 
+Report every different polymerization and every different reaction condition separately. Do this based on this prompt:"""
     return prompt_addition
 
 
-def get_prompt_addition_with_data(new_data):
+def get_prompt_addition_with_data(new_data) -> str:
     prompt_addition_base = get_prompt_addition()
     prompt_addition_with_data = prompt_addition_base.format(new_data)
     return prompt_addition_with_data
@@ -89,16 +87,16 @@ def split_document(document: str, max_length: int) -> List[str]:
     return [document[j : j + max_length] for j in range(0, len(document), max_length)]
 
 
-def format_prompt(template, data):
+def format_prompt(template: str, data: dict) -> str:
     return template.format(**data)
 
 
-def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 1.0, **kwargs):
+def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0.0, **kwargs):
     """Call chat openai model
 
     Args:
         prompt (str): Prompt to send to model
-        model (str, optional): Name of the API. Defaults to "gpt-3.5-turbo-1106".
+        model (str, optional): Name of the API. Defaults to ""gpt-4-vision-preview".
         temperature (float, optional): inference temperature. Defaults to 0.
 
     Returns:
@@ -111,8 +109,8 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 1.0, 
             {
                 "role": "system",
                 "content": "You are a scientific assistant, extracting important information about polymerization conditions"
-                     "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
-                     "accuracy. Keep the entries short without details. Be careful with numbers.",
+                "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
         ],
@@ -125,12 +123,14 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 1.0, 
     return message_content, input_tokens, output_token
 
 
-def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0, **kwargs):
+def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs):
     """Call chat openai model
+
     Args:
         prompt (str): Prompt to send to model
         model (str, optional): Name of the API. Defaults to "gpt-3.5-turbo-1106".
         temperature (float, optional): inference temperature. Defaults to 0.
+
     Returns:
         dict: new data
     """
@@ -142,8 +142,8 @@ def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float =
             {
                 "role": "system",
                 "content": "You are a scientific assistant, extracting important information about polymerization conditions"
-                     "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
-                     "accuracy. Keep the entries short without details. Be careful with numbers.",
+                "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
         ],
@@ -161,33 +161,21 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
     print("openai call has started")
     client = OpenAI()
     thread = client.beta.threads.create()
-    message = client.beta.threads.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=prompt
-    )
-    run = client.beta.threads.runs.create(
-        thread_id=thread.id,
-        assistant_id=assistant.id
-    )
-    run = client.beta.threads.runs.retrieve(
-        thread_id=thread.id,
-        run_id=run.id
-    )
+    message = client.beta.threads.messages.create(thread_id=thread.id, role="user", content=prompt)
+    run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id=assistant.id)
+    run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
 
     while run.status != "completed":
         run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
         print(f"Run Satus: {run.status}")
         time.sleep(5)
-        if run.status == "expired" or run.status == 'failed':
+        if run.status == "expired" or run.status == "failed":
             print(run.last_error)
             raise RunTimeExpired
     else:
         print("Run completed!")
 
-    message_response = client.beta.threads.messages.list(
-        thread_id=thread.id
-    )
+    message_response = client.beta.threads.messages.list(thread_id=thread.id)
     messages = message_response.data
     latest_message = messages[0]
     output = latest_message.content[0].text.value
@@ -216,7 +204,9 @@ def update_data_chucked(new_data: dict) -> str:
     return old_data_template
 
 
-def repeated_call_model(text, prompt_template, max_length: int, model_call_fn) -> dict:
+def repeated_call_model(
+    text, prompt_template, max_length: int, model_call_fn
+) -> Tuple[dict, int, int, int]:
     chunks = split_document(text, max_length=max_length)
     output = {}
     extracted = ""
@@ -236,7 +226,11 @@ def repeated_call_model(text, prompt_template, max_length: int, model_call_fn) -
     return output, input_token, output_token, number_of_model_calls
 
 
-def format_output_as_json_and_yaml(i, output, output_folder, ):
+def format_output_as_json_and_yaml(
+    i,
+    output,
+    output_folder,
+):
 
     parts = output.split("```")
 
@@ -269,10 +263,10 @@ def format_output_as_json_and_yaml(i, output, output_folder, ):
 
 def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
     for content_block in content_blocks:
-        if hasattr(content_block, 'text'):
+        if hasattr(content_block, "text"):
             json_str = content_block.text
-        elif hasattr(content_block, 'get'):
-            json_str = content_block.get('text')
+        elif hasattr(content_block, "get"):
+            json_str = content_block.get("text")
         else:
             return
         output_name_json = os.path.join(output_folder, f"output_data_claude{i}.json")
@@ -301,10 +295,10 @@ def call_claude3(prompt):
         model="claude-3-opus-20240229",
         max_tokens=1024,
         system="You are a scientific assistant, extracting important information about polymerization conditions "
-               "out of images in valid json format. If the info is not found put 'NA'. Always be thruthful and do not "
-               "extract anything false or made up.",
+        "out of images in valid json format. If the info is not found put 'NA'. Always be truthful and do not "
+        "extract anything false or made up.",
         temperature=0.0,
-        messages=prompt
+        messages=prompt,
     )
     input_token = message.usage.input_tokens
     output_token = message.usage.output_tokens
@@ -314,14 +308,13 @@ def call_claude3(prompt):
 
 def update_prompt_with_text_and_images(original_prompt, data, prompt):
     new_text = update_prompt(prompt, data)
-    original_prompt[-1]['text'] = new_text
+    original_prompt[-1]["text"] = new_text
     updated_prompt_str = json.dumps(original_prompt)
     print(f"updated_prompt_str after update: {updated_prompt_str}")
     return updated_prompt_str
 
 
-def create_image_content(image, maxdim=2048, detail_threshold=1024):
-    detail = "low"
+def create_image_content(image, detail="high"):
     return {
         "type": "image_url",
         "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},
@@ -330,8 +323,8 @@ def create_image_content(image, maxdim=2048, detail_threshold=1024):
 
 def get_prompt_vision_model(images_base64, prompt_text):
     content = []
-    for index, data in enumerate(images_base64):
-        content.append(create_image_content(data, maxdim=2048, detail_threshold=2048))
+    for data in images_base64:
+        content.append(create_image_content(data))
 
     content.append({"type": "text", "text": prompt_text})
     return content
@@ -339,28 +332,26 @@ def get_prompt_vision_model(images_base64, prompt_text):
 
 def encode_image_to_base64(filepath):
     with open(filepath, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode('utf-8')
+        return base64.b64encode(image_file.read()).decode("utf-8")
 
 
 def get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text):
     name_without_ext, _ = os.path.splitext(filename)
     images = [
-        ("image/png", encode_image_to_base64(os.path.join(output_folder_images, f"corrected_{name_without_ext}_page{idx + 1}.png"))) for
-        idx in range(len(pdf_images))]
-    prompt = [
-        {
-            "role": "user",
-            "content": []
-        }
+        (
+            "image/png",
+            encode_image_to_base64(
+                os.path.join(
+                    output_folder_images, f"corrected_{name_without_ext}_page{idx + 1}.png"
+                )
+            ),
+        )
+        for idx in range(len(pdf_images))
     ]
+    prompt = [{"role": "user", "content": []}]
 
     for index, (media_type, data) in enumerate(images, start=1):
-        prompt[0]["content"].append(
-            {
-                "type": "text",
-                "text": f"Image {index}:"
-            }
-        )
+        prompt[0]["content"].append({"type": "text", "text": f"Image {index}:"})
 
         prompt[0]["content"].append(
             {
@@ -373,10 +364,5 @@ def get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_
             }
         )
 
-    prompt[0]["content"].append(
-        {
-            "type": "text",
-            "text": prompt_text
-        }
-    )
+    prompt[0]["content"].append({"type": "text", "text": prompt_text})
     return prompt
