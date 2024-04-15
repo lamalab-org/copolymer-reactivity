@@ -1,24 +1,10 @@
-import yaml
 from pathlib import Path
 from typing import Union, List, Tuple
-from copolextractor.utils import name_to_smiles
+from copolextractor.utils import name_to_smiles, load_yaml
 from thefuzz import fuzz
 from pint import UnitRegistry
-import json
 
 ureg = UnitRegistry()
-
-
-def load_yaml(file_path: Union[str, Path]) -> dict:
-    with open(file_path, "r") as file:
-        data = yaml.safe_load(file)
-    return data
-
-
-def load_json(file_path: Union[str, Path]) -> dict:
-    with open(file_path, "r") as file:
-        data = json.load(file)
-    return data
 
 
 def get_number_of_reactions(data: dict) -> int:
@@ -27,12 +13,12 @@ def get_number_of_reactions(data: dict) -> int:
 
 def get_total_number_of_reaction_conditions(data: dict) -> int:
     reaction_conditions_count = 0
-    if isinstance(data['reactions'], list):
-        for reaction in data['reactions']:
-            if 'reaction_conditions' in reaction:
-                reaction_conditions_count += len(reaction['reaction_conditions'])
-    elif 'reaction_conditions' in data['reactions']:
-        reaction_conditions_count = len(data['reactions']['reaction_conditions'])
+    if isinstance(data["reactions"], list):
+        for reaction in data["reactions"]:
+            if "reaction_conditions" in reaction:
+                reaction_conditions_count += len(reaction["reaction_conditions"])
+    elif "reaction_conditions" in data["reactions"]:
+        reaction_conditions_count = len(data["reactions"]["reaction_conditions"])
     return reaction_conditions_count
 
 
@@ -52,25 +38,25 @@ def _extract_reactions(data: dict) -> list:
 
 def _extract_monomers(data: dict) -> list:
     monomers = []
-    if isinstance(data['reactions'], list):
-        for reaction in data['reactions']:
-            if 'monomers' in reaction:
-                monomers.extend(reaction['monomers'])
-    elif 'monomers' in data['reactions']:
-        monomers.extend(data['reactions']['monomers'])
+    if isinstance(data["reactions"], list):
+        for reaction in data["reactions"]:
+            if "monomers" in reaction:
+                monomers.extend(reaction["monomers"])
+    elif "monomers" in data["reactions"]:
+        monomers.extend(data["reactions"]["monomers"])
     return monomers
 
 
 def get_temp(data: list, index: int) -> tuple:
     specific_cond = data[index]
-    temp = specific_cond['temperature']
-    temp_unit = specific_cond['temperature_unit']
+    temp = specific_cond["temperature"]
+    temp_unit = specific_cond["temperature_unit"]
     return temp, temp_unit
 
 
 def get_solvent(data: list, index: int) -> tuple:
     specific_comb = data[index]
-    solvent = specific_comb['solvent']
+    solvent = specific_comb["solvent"]
     solvent_smiles = name_to_smiles(solvent)
     return solvent, solvent_smiles
 
@@ -88,20 +74,29 @@ def convert_unit(temp1: int, temp2: int, unit1: str, unit2: str):
         print(AttributeError, e)
         print(ValueError, e)
         print(TypeError, e)
-        print(KeyError,e)
+        print(KeyError, e)
         return temp1, temp2
 
 
 def get_metadata_polymerization(data: dict):
-    temp = data['temperature']
-    temp_unit = data['temperature_unit']
-    method = data['method']
-    polymer_type = data['polymerization_type']
-    solvent = data['solvent']
-    reaction_constants = data['reaction_constants']
-    reaction_constant_confidence = data['reaction_constant_conf']
-    determination_method = data['determination_method']
-    return temp, temp_unit, method, polymer_type, solvent, reaction_constants, reaction_constant_confidence, determination_method
+    temp = data["temperature"]
+    temp_unit = data["temperature_unit"]
+    method = data["method"]
+    polymer_type = data["polymerization_type"]
+    solvent = data["solvent"]
+    reaction_constants = data["reaction_constants"]
+    reaction_constant_confidence = data["reaction_constant_conf"]
+    determination_method = data["determination_method"]
+    return (
+        temp,
+        temp_unit,
+        method,
+        polymer_type,
+        solvent,
+        reaction_constants,
+        reaction_constant_confidence,
+        determination_method,
+    )
 
 
 def get_sequence_of_monomers(test_monomers, model_monomers):
@@ -144,10 +139,10 @@ def find_matching_reaction(data1: dict, data2: list):
         int: Index of matching test reaction
     """
     matching_rxn_ids = []
-    if isinstance(data1.get('reactions'), list):
+    if isinstance(data1.get("reactions"), list):
         matching_rxn_ids = []
-        for i, rxn in enumerate(data1['reactions']):
-            monomers1 = rxn['monomers']
+        for i, rxn in enumerate(data1["reactions"]):
+            monomers1 = rxn["monomers"]
             if _compare_monomers(monomers1, data2):
                 matching_rxn_ids.append(i)
 
@@ -158,32 +153,40 @@ def find_matching_reaction(data1: dict, data2: list):
         else:
             return matching_rxn_ids[0]
     else:
-        monomers1 = data1['reactions']['monomers']
+        monomers1 = data1["reactions"]["monomers"]
         if _compare_monomers(monomers1, data2):
             return 0
         else:
             return None
 
 
-def find_matching_reaction_conditions(reaction_conditions: List[dict], solvent: str, temperature: int, temp_unit: str, polymerization_type: str, method: str,
-                              determination_method: str) -> Tuple[int, float]:
+def find_matching_reaction_conditions(
+    reaction_conditions: List[dict],
+    solvent: str,
+    temperature: int,
+    temp_unit: str,
+    polymerization_type: str,
+    method: str,
+    determination_method: str,
+) -> Tuple[int, float]:
     # We need to do fuzzy matching here and take the best match but also return the confidence
     # of the match
     # first we check if we are lucky and find an exact match, then confidence would
     matching_idxs = []
     for i, comb in enumerate(reaction_conditions):
-        if comb['temperature'] != 'NA' and comb['temperature_unit'] != 'NA':
-            temperature_model, temp = convert_unit(comb['temperature'], temperature, comb['temperature_unit'],
-                                                   temp_unit)
+        if comb["temperature"] != "NA" and comb["temperature_unit"] != "NA":
+            temperature_model, temp = convert_unit(
+                comb["temperature"], temperature, comb["temperature_unit"], temp_unit
+            )
         else:
-            temperature_model = comb['temperature']
+            temperature_model = comb["temperature"]
             temp = temperature
         if (
-                name_to_smiles(comb["solvent"]) == name_to_smiles(solvent)
-                and temperature_model == temp
-                and comb["polymerization_type"] == polymerization_type
-                and comb["method"] == method
-                and comb['determination_method'] == determination_method
+            name_to_smiles(comb["solvent"]) == name_to_smiles(solvent)
+            and temperature_model == temp
+            and comb["polymerization_type"] == polymerization_type
+            and comb["method"] == method
+            and comb["determination_method"] == determination_method
         ):
             matching_idxs.append(i)
     if len(matching_idxs) == 1:
@@ -192,25 +195,29 @@ def find_matching_reaction_conditions(reaction_conditions: List[dict], solvent: 
         raise ValueError("Multiple matching reaction_conditions found")
 
     # if we are not lucky we need to do fuzzy matching
-    reaction_conditions_string = f"{solvent} {temperature} {polymerization_type} {method} {determination_method}"
+    reaction_conditions_string = (
+        f"{solvent} {temperature} {polymerization_type} {method} {determination_method}"
+    )
     reaction_conditions_strings = [
         f"{comb['solvent']} {comb['temperature']} {comb['polymerization_type']} {comb['method']} {comb['determination_method']}"
         for comb in reaction_conditions
     ]
-    scores = [fuzz.ratio(reaction_conditions_string, comb_string) / 100 for comb_string in reaction_conditions_strings]
+    scores = [
+        fuzz.ratio(reaction_conditions_string, comb_string) / 100
+        for comb_string in reaction_conditions_strings
+    ]
     best_score = max(scores)
     best_score_index = scores.index(best_score)
     return best_score_index, best_score
 
 
 def compare_smiles(smiles1: str, smiles2: str):
-    if smiles1 == smiles2:
-        return 0
-    else:
-        return 1
+    return int(smiles1 != smiles2)
 
 
-def compare_number_of_reactions(test_file: Union[str, Path], model_file: Union[str, Path]) -> dict:
+def compare_number_of_reactions(
+    test_file: Union[str, Path], model_file: Union[str, Path]
+) -> dict:
     test_data = load_yaml(test_file)
     model_data = load_yaml(model_file)
     test_number_of_reactions = get_number_of_reactions(test_data)
@@ -226,9 +233,11 @@ def compare_number_of_reactions(test_file: Union[str, Path], model_file: Union[s
 
 def get_reaction_constant(data: list, index: int) -> tuple:
     specific_comb = data[index]
-    reaction_const = specific_comb['reaction_constants']
-    reaction_const_conf = specific_comb['reaction_constant_conf']
-    reaction_const, reaction_const_conf = get_reaction_const_list(reaction_const, reaction_const_conf)
+    reaction_const = specific_comb["reaction_constants"]
+    reaction_const_conf = specific_comb["reaction_constant_conf"]
+    reaction_const, reaction_const_conf = get_reaction_const_list(
+        reaction_const, reaction_const_conf
+    )
     return reaction_const, reaction_const_conf
 
 
@@ -242,7 +251,9 @@ def get_reaction_const_list(reaction_const: list, reaction_const_conf: list):
     if reaction_const_conf is None:
         reaction_constants_conf = [None, None]
     else:
-        reaction_constants_conf = [None if value == 'None' else value for value in reaction_const_conf.values()]
+        reaction_constants_conf = [
+            None if value == "None" else value for value in reaction_const_conf.values()
+        ]
 
     return reaction_constants, reaction_constants_conf
 
