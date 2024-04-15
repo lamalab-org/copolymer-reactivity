@@ -10,6 +10,7 @@ import base64
 
 class RunTimeExpired(Exception):
     "Raised when the run status of the open-ai call is expired"
+
     pass
 
 
@@ -91,7 +92,9 @@ def format_prompt(template: str, data: dict) -> str:
     return template.format(**data)
 
 
-def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0.0, **kwargs):
+def call_openai(
+    prompt, model="gpt-4-vision-preview", temperature: float = 0.0, **kwargs
+):
     """Call chat openai model
 
     Args:
@@ -123,7 +126,9 @@ def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0.0, 
     return message_content, input_tokens, output_token
 
 
-def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs):
+def call_openai_chucked(
+    prompt, model="gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs
+):
     """Call chat openai model
 
     Args:
@@ -161,8 +166,12 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
     print("openai call has started")
     client = OpenAI()
     thread = client.beta.threads.create()
-    message = client.beta.threads.messages.create(thread_id=thread.id, role="user", content=prompt)
-    run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id=assistant.id)
+    message = client.beta.threads.messages.create(
+        thread_id=thread.id, role="user", content=prompt
+    )
+    run = client.beta.threads.runs.create(
+        thread_id=thread.id, assistant_id=assistant.id
+    )
     run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
 
     while run.status != "completed":
@@ -231,7 +240,6 @@ def format_output_as_json_and_yaml(
     output,
     output_folder,
 ):
-
     parts = output.split("```")
 
     if len(parts) >= 3:
@@ -342,7 +350,8 @@ def get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_
             "image/png",
             encode_image_to_base64(
                 os.path.join(
-                    output_folder_images, f"corrected_{name_without_ext}_page{idx + 1}.png"
+                    output_folder_images,
+                    f"corrected_{name_without_ext}_page{idx + 1}.png",
                 )
             ),
         )
