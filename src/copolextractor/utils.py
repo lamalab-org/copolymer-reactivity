@@ -3,6 +3,22 @@ import requests
 import pubchempy as pcp
 import diskcache as dc
 from rdkit import Chem
+from pathlib import Path
+from typing import Union
+import yaml
+import json
+
+
+def load_yaml(file_path: Union[str, Path]) -> dict:
+    with open(file_path, "r") as file:
+        data = yaml.safe_load(file)
+    return data
+
+
+def load_json(file_path: Union[str, Path]) -> dict:
+    with open(file_path, "r") as file:
+        data = json.load(file)
+    return data
 
 
 CACTUS = "https://cactus.nci.nih.gov/chemical/structure/{0}/{1}"
