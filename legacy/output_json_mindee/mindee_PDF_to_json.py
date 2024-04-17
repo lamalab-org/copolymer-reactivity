@@ -10,11 +10,11 @@ from doctr.io import DocumentFile
 
 model = ocr_predictor(det_arch='db_resnet50', reco_arch='crnn_vgg16_bn', pretrained=True, export_as_straight_boxes=True)
 
-doc = DocumentFile.from_pdf("../pdfs/paper01.pdf")
+doc = DocumentFile.from_pdf("../../pdfs/paper01.pdf")
 result = model(doc)
 
 json_output = result.export()
-output_file_path = './output_json_mindee/paper1.json'
+output_file_path = 'paper1.json'
 
 
 with open(output_file_path, 'w') as json_file:

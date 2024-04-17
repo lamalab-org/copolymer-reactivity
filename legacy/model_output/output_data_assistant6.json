@@ -2,93 +2,77 @@
     "reactions": [
         {
             "monomers": [
-                "Methyl acrylate",
+                "Methacrylic acid sulphonate",
                 "Styrene"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
+                    "solvent": "null",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": null,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.56,
-                        "constant_2": 0.03
+                        "constant_1": 1.5,
+                        "constant_2": 0.22
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "ethyl acetate",
-                    "method": "bulk",
-                    "temperature": 60.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.38,
-                        "constant_2": 0.31
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Alfrey-Price"
                 }
             ]
         },
         {
             "monomers": [
-                "Methyl acrylate",
-                "Vinyl acetate"
+                "Methacrylic acid sulphonate",
+                "Methyl methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
+                    "solvent": "null",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": null,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.74,
-                        "constant_2": 0.01
+                        "constant_1": 3.34,
+                        "constant_2": 0.67
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": 0.25,
+                        "constant_conf_2": 0.02
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Alfrey-Price"
                 }
             ]
         },
         {
             "monomers": [
-                "Methyl acrylate",
-                "Vinyl acetate"
+                "Methacrylic acid sulphonate",
+                "Methacrylic acid"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
+                    "solvent": "null",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": null,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.52,
-                        "constant_2": 0.05
+                        "constant_1": 1.0,
+                        "constant_2": 0.83
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": "Alfrey-Price"
                 }
             ]
         }
     ],
-    "source": null,
-    "PDF_name": null
+    "source": "null",
+    "PDF_name": "null"
 }
