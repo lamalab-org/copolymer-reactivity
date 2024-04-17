@@ -93,7 +93,7 @@ def format_prompt(template, data):
     return template.format(**data)
 
 
-def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 1.0, **kwargs):
+def call_openai(prompt, model="gpt-4-vision-preview", temperature: float = 0.0, **kwargs):
     """Call chat openai model
 
     Args:
@@ -321,7 +321,7 @@ def update_prompt_with_text_and_images(original_prompt, data, prompt):
 
 
 def create_image_content(image, maxdim=2048, detail_threshold=1024):
-    detail = "low"
+    detail = "high"
     return {
         "type": "image_url",
         "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},

@@ -1,35 +1,19 @@
 PDF_name: null
 reactions:
 - monomers:
-  - vinyl acetate
   - ethylene
+  - acrylonitrile
   reaction_conditions:
-  - determination_method: Kelen-Tudor
-    method: bulk
+  - determination_method: null
+    method: solvent
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: null
       constant_conf_2: null
     reaction_constants:
-      constant_1: 0.01
-      constant_2: 5.0
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 7.0
+      constant_2: 0.0
+    solvent: toluene
+    temperature: 20.0
     temperature_unit: °C
-- monomers:
-  - vinyl acetate
-  - vinyl chloride
-  reaction_conditions:
-  - determination_method: Kelen-Tudor
-    method: bulk
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.005
-      constant_conf_2: 2.0
-    reaction_constants:
-      constant_1: 0.02
-      constant_2: 18.0
-    solvent: benzene
-    temperature: 60.0
-    temperature_unit: °C
-source: null
+source: 'Vysokomol. soedin. 3: No. 7, 1015–1019, 1961.'

@@ -43,8 +43,6 @@ def calculate_deviation(mae, y_true):
     return deviation
 
 
-
-
 reaction_number_error = 0
 reaction_conditions_number_error = 0
 matching_monomer_error = 0
@@ -91,13 +89,13 @@ wandb.init(
         "input": "images",
         "number of model calls max": 3,
         "number of model calls min": 1,
-        "temperature": 1.0,
+        "temperature": 0.0,
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
-        "input tokens used": 15837,
-        "output tokens used": 5497,
-        "total model calls": 11,
-        "time used": 431.7084050178528
+        "input tokens used": 130993,
+        "output tokens used": 7451,
+        "total model calls": 14,
+        "time used": 647.3029091358185
 
     }
 )

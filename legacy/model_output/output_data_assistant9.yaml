@@ -1,63 +1,83 @@
-PDF_name: Copolymerization of Ethylene
+PDF_name: COPOLYMERIZATION_OF_ETHYLENE.pdf
 reactions:
 - monomers:
   - Ethylene
-  - Methyl Methacrylate
+  - Vinyl acetate
   reaction_conditions:
   - determination_method: null
-    method: bulk
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: null
       constant_conf_2: null
     reaction_constants:
-      constant_1: null
-      constant_2: null
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 1.01
+      constant_2: 1
+    solvent: null
+    temperature: 150.0
     temperature_unit: °C
-  - determination_method: Fineman-Ross
-    method: bulk
+- monomers:
+  - Ethylene
+  - Methyl acrylate
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 2.5
+    solvent: null
+    temperature: 150.0
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Methyl methacrylate
+  reaction_conditions:
+  - determination_method: null
+    method: null
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.2
+      constant_2: 17
+    solvent: null
+    temperature: 150.0
+    temperature_unit: °C
+- monomers:
+  - Ethylene
+  - Diethyl fumarate
+  reaction_conditions:
+  - determination_method: null
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: null
       constant_conf_2: null
     reaction_constants:
       constant_1: 0.25
-      constant_2: 0.016
-    solvent: benzene
-    temperature: 0.0
+      constant_2: 10
+    solvent: null
+    temperature: 150.0
     temperature_unit: °C
 - monomers:
   - Ethylene
-  - Vinyl Acetate
-  reaction_conditions:
-  - determination_method: Fineman-Ross
-    method: bulk
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: 0.12
-      constant_conf_2: 0.002
-    reaction_constants:
-      constant_1: 1.33
-      constant_2: 0.014
-    solvent: benzene
-    temperature: 60.0
-    temperature_unit: °C
-- monomers:
-  - Ethylene
-  - Ethyl Acrylate
+  - Diethyl maleate
   reaction_conditions:
   - determination_method: null
-    method: bulk
+    method: null
     polymerization_type: free radical
     reaction_constant_conf:
       constant_conf_1: null
       constant_conf_2: null
     reaction_constants:
-      constant_1: null
-      constant_2: null
-    solvent: benzene
-    temperature: 60.0
+      constant_1: 0.25
+      constant_2: 2.5
+    solvent: null
+    temperature: 150.0
     temperature_unit: °C
-source: DOI URL or source
+source: null
