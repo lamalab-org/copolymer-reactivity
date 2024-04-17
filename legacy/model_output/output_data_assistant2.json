@@ -7,56 +7,24 @@
             ],
             "reaction_conditions": [
                 {
-                    "polymerization_type": "free radical",
+                    "polymerization_type": "bulk",
                     "solvent": "water",
                     "method": "bulk",
-                    "temperature": 50.0,
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.5,
-                        "constant_2": 0.1
+                        "constant_1": null,
+                        "constant_2": null
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": null,
                         "constant_conf_2": null
                     },
-                    "determination_method": "Kelen-Tudor"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "N,N-Dimethylformamide",
-                    "method": "bulk",
-                    "temperature": 50.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 4.3,
-                        "constant_2": 0.04
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
-                    "determination_method": "Kelen-Tudor"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "N,N-Dimethylformamide",
-                    "method": "bulk",
-                    "temperature": 23.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 4.0,
-                        "constant_2": 0.05
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
-                    },
-                    "determination_method": "Kelen-Tudor"
+                    "determination_method": null
                 }
             ]
         }
     ],
-    "source": "doi:10.1021/ba-1973-0126.ch034",
-    "PDF_name": "Amphoteric Polyelectrolytes. I"
+    "source": null,
+    "PDF_name": "Amphoteric_Polyelectrolytes_2-Vinylpyridine-Methacrylic_Acid_Copolymers"
 }

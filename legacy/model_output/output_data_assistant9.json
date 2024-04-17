@@ -3,82 +3,114 @@
         {
             "monomers": [
                 "Ethylene",
-                "Methyl Methacrylate"
+                "Vinyl acetate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
-                    "method": "bulk",
-                    "temperature": 60.0,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 150.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": null,
-                        "constant_2": null
+                        "constant_1": 1.01,
+                        "constant_2": 1
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": null,
                         "constant_conf_2": null
                     },
                     "determination_method": null
-                },
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Ethylene",
+                "Methyl acrylate"
+            ],
+            "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
-                    "method": "bulk",
-                    "temperature": 0.0,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 150.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.25,
-                        "constant_2": 0.016
+                        "constant_1": 0.2,
+                        "constant_2": 2.5
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": null,
                         "constant_conf_2": null
                     },
-                    "determination_method": "Fineman-Ross"
+                    "determination_method": null
                 }
             ]
         },
         {
             "monomers": [
                 "Ethylene",
-                "Vinyl Acetate"
+                "Methyl methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
-                    "method": "bulk",
-                    "temperature": 60.0,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 150.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 1.33,
-                        "constant_2": 0.014
+                        "constant_1": 0.2,
+                        "constant_2": 17
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.12,
-                        "constant_conf_2": 0.002
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Fineman-Ross"
+                    "determination_method": null
                 }
             ]
         },
         {
             "monomers": [
                 "Ethylene",
-                "Ethyl Acrylate"
+                "Diethyl fumarate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzene",
-                    "method": "bulk",
-                    "temperature": 60.0,
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 150.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": null,
-                        "constant_2": null
+                        "constant_1": 0.25,
+                        "constant_2": 10
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Ethylene",
+                "Diethyl maleate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 150.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.25,
+                        "constant_2": 2.5
                     },
                     "reaction_constant_conf": {
                         "constant_conf_1": null,
@@ -89,6 +121,6 @@
             ]
         }
     ],
-    "source": "DOI URL or source",
-    "PDF_name": "Copolymerization of Ethylene"
+    "source": null,
+    "PDF_name": "COPOLYMERIZATION_OF_ETHYLENE.pdf"
 }
