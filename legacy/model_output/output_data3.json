@@ -1,0 +1,79 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomethyl itaconate",
+                "2-naphthyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.44,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.19,
+                        "constant_conf_2": 0.28
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.49,
+                        "constant_2": 0.97
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.29
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.14
+                    },
+                    "determination_method": "Fineman-Ross"
+                }
+            ]
+        }
+    ],
+    "source": null,
+    "PDF_name": "Makromol. Chem. 185, 353 – 362 (1984)",
+    "source_pdf": "Die Makromolekulare Chemie, 185(2), 353–362.pdf"
+}

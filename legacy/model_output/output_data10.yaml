@@ -1,0 +1,69 @@
+PDF_name: null
+reactions:
+- monomers:
+  - Methyl methacrylate
+  - Ethyl acrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 0.49
+      constant_2: 0.46
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl methacrylate
+  - Styrene
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.03
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 0.5
+      constant_2: 0.5
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl methacrylate
+  - n-Butyl methacrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 0.46
+      constant_2: 0.46
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl methacrylate
+  - n-Butyl acrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.03
+    reaction_constants:
+      constant_1: 0.46
+      constant_2: 0.6
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+source: null
+source_pdf: The Relative Reactivities of Alkyl Methacrylates in the Radical Copolymerization.
+  The Journal of the Society of Chemical Industry, Japan, 69(5), 986–990.pdf

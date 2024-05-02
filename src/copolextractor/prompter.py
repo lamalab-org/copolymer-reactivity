@@ -22,6 +22,7 @@ Ignore these. In each paper there could be multiple different reaction with diff
 The reaction constants for the copolymerization with the monomer pair is the most important information. Be careful with numbers and do not miss the decimal points.
 If there are polymerization's without these constants, ignore these.
 From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
+Also pay attention to the caption of figures.
 Don't use any abbreviations, always use the whole word.
 Try to keep the string short. Exclude comments out of the json output. Return one json object. 
 Stick to the given output datatype (string, or float).
@@ -35,17 +36,17 @@ reactions: [
             {
                 "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
                 "solvent": used solvent for the polymerization reaction as STRING (whole name without
-                        abbreviation, just name no further details); if the solvent is water put just "water"; ,
-                "method": used polymerization method (solvent, bulk, emulsion...) as STRING,
+                        abbreviation, just name no further details like 'sulfur or water free'); if the solvent is water put just "water"; ,
+                "method": used polymerization method (solvent(polymerization takes place in a solvent), bulk (polymerization takes place without any solvent, only reactants like monomers built the recation mixture), emulsion...) as STRING,
                 "temperature": used polymerization temperature as FLOAT ,
                 "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
-                "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT,
+                "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT (be careful and just take the individual values, not the product of these two),
                 "constant_1":
                 "constant_2": },
                 "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as FLOAT
                 "constant_conf_1":
                 "constant_conf_2": },
-                "determination_method": method for determination of the r-values (Kelen-Tudor, ...) as STRING
+                "determination_method": method for determination of the r-values (Kelen-Tudor, EVM Program...) as STRING
             },
             {
                 "polymerization_type":
@@ -118,6 +119,7 @@ def call_openai(
             {"role": "user", "content": prompt},
         ],
         temperature=temperature,
+        seed=12345,
         **kwargs,
     )
     input_tokens = completion.usage.prompt_tokens
@@ -239,17 +241,17 @@ def format_output_as_json_and_yaml(
     i,
     output,
     output_folder,
+    pdf_name
 ):
     parts = output.split("```")
 
     if len(parts) >= 3:
         output_part = parts[1]
-        print(output_part)
     else:
         output_part = ""
         print("Output in json format is empty.")
-    output_name_json = os.path.join(output_folder, f"output_data_assistant{i + 1}.json")
-    output_name_yaml = os.path.join(output_folder, f"output_data_assistant{i + 1}.yaml")
+    output_name_json = os.path.join(output_folder, f"output_data{i + 1}.json")
+    output_name_yaml = os.path.join(output_folder, f"output_data{i + 1}.yaml")
 
     if output_part.startswith("json\n"):
         output_cleaned = output_part.split("json\n", 1)[1]
@@ -258,6 +260,7 @@ def format_output_as_json_and_yaml(
     print(output_cleaned)
     try:
         json_data = json.loads(output_cleaned)
+        json_data['source_pdf'] = pdf_name
 
         with open(output_name_json, "w", encoding="utf-8") as json_file:
             json.dump(json_data, json_file, ensure_ascii=False, indent=4)

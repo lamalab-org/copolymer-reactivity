@@ -1,0 +1,97 @@
+PDF_name: null
+reactions:
+- monomers:
+  - Methyl α-cyanoacrylate
+  - Methyl methacrylate
+  reaction_conditions:
+  - determination_method: null
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 0.04
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl α-cyanoacrylate
+  - Styrene
+  reaction_conditions:
+  - determination_method: null
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.03
+      constant_2: 0.01
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl α-cyanoacrylate
+  - α-Methylstyrene
+  reaction_conditions:
+  - determination_method: null
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.001
+      constant_2: 0.05
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl α-cyanoacrylate
+  - Vinyl acetate
+  reaction_conditions:
+  - determination_method: null
+    method: solution
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.5
+      constant_2: 0.05
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl α-cyanoacrylate
+  - Octene-1
+  reaction_conditions:
+  - determination_method: Fineman-Ross
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.06
+      constant_conf_2: 0.04
+    reaction_constants:
+      constant_1: 0.63
+      constant_2: -0.17
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: penultimate unit effect
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.04
+      constant_conf_2: 0.11
+    reaction_constants:
+      constant_1: 0.27
+      constant_2: 1.66
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+source: null
+source_pdf: Methyl α-cyanoacrylate. II. Copolymerization studies. Journal of Applied
+  Polymer Science, 9(2), 429–437.pdf
