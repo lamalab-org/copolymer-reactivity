@@ -1,0 +1,37 @@
+PDF_name: null
+reactions:
+- monomers:
+  - Styrene
+  - Methyl methacrylate
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.48
+      constant_2: 0.52
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Styrene
+  - Acrylonitrile
+  reaction_conditions:
+  - determination_method: Kelen-Tudor
+    method: bulk
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.01
+      constant_2: 1.08
+    solvent: dimethylformamide
+    temperature: 60.0
+    temperature_unit: °C
+source: null
+source_pdf: Polymerization and Copolymerization of p-Vinylbenzylmethylcarbinol. The
+  Journal of the Society of Chemical Industry, Japan, 70(4), 557–562.pdf
