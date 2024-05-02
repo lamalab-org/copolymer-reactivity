@@ -1,0 +1,55 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "phenylacetylene",
+                "methacrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.04,
+                        "constant_2": 0.78
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "phenylacetylene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 3.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos"
+                }
+            ]
+        }
+    ],
+    "source": null,
+    "PDF_name": null,
+    "source_pdf": "Acta Polymerica, 34(1), 62–63.pdf"
+}

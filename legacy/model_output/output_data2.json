@@ -1,0 +1,79 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "allyl acetate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 0.009
+                    },
+                    "determination_method": "Kelen-Tudor"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "allyl acetate",
+                "n-butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.66
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudor"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "allyl acetate",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.021,
+                        "constant_2": 0.66
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudor"
+                }
+            ]
+        }
+    ],
+    "source": null,
+    "PDF_name": "EP_29_255-268_(1993)",
+    "source_pdf": "NMR studies of free-radical polymerization and copolymerization of monomers and polymers containing allyl groups. European Polymer Journal, 29(2-3), 255–268.pdf"
+}

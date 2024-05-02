@@ -1,0 +1,71 @@
+PDF_name: Effect of the Substituents on Radical Copolymerization of Dialkyl Fumarates
+  with Some Vinyl Monomers
+reactions:
+- monomers:
+  - Styrene
+  - Diisopropyl fumarate
+  reaction_conditions:
+  - determination_method: nonlinear least-squares procedure
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.41
+      constant_2: 0.0
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Methyl acrylate
+  - Diisopropyl fumarate
+  reaction_conditions:
+  - determination_method: nonlinear least-squares procedure
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.42
+      constant_2: 1.9
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Vinyl acetate
+  - Diisopropyl fumarate
+  reaction_conditions:
+  - determination_method: nonlinear least-squares procedure
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.033
+      constant_2: 12.0
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+- monomers:
+  - Vinyl chloride
+  - Diisopropyl fumarate
+  reaction_conditions:
+  - determination_method: nonlinear least-squares procedure
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.026
+      constant_2: 0.22
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+source: doi:10.1002/pola.1992.080300622
+source_pdf: Effect of the substituents on radical copolymerization of dialkyl fumarates
+  with some vinyl monomers. Journal of Polymer Science Part A  Polymer Chemistry,
+  30(8), 1559–1565.pdf

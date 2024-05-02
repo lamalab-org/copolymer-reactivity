@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methyl Vinyl Ketone",
+                "Acrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.06,
+                        "constant_2": 6.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.88,
+                        "constant_2": 1.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Vinyl Ketone",
+                "Methacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.29,
+                        "constant_2": 3.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross"
+                },
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.37,
+                        "constant_2": 2.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Vinyl Ketone",
+                "N,N-dimethylacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.95,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross"
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338408065676",
+    "PDF_name": "Radical Copolymerizability of Acrylamide Derivatives with Methyl Vinyl Ketone",
+    "source_pdf": "Radical Copolymerizability of Acrylamide Derivatives with Methyl Vinyl Ketone. Journal of Macromolecular Science  Part A - Chemistry, 21(5), 615–629.pdf"
+}

@@ -1,0 +1,31 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acryl chloride",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 67.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": null
+                }
+            ]
+        }
+    ],
+    "source": null,
+    "PDF_name": "Graft Efficiency",
+    "source_pdf": "Die Makromolekulare Chemie, 91(1), 160–174.pdf"
+}

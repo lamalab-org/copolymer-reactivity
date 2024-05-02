@@ -1,19 +1,22 @@
 import os
-import copolextractor.analyzer as az
+import src.copolextractor.analyzer as az
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import wandb
-import copolextractor.prompter as prompter
+import src.copolextractor.prompter as prompter
+import src.copolextractor.utils as utils
 import traceback
+import json
+import matplotlib.pyplot as plt
 
 
 def count_reaction_conditions(file_path):
-    data = az.load_yaml(file_path)
+    data = utils.load_yaml(file_path)
     reaction_conditions_count = az.get_total_number_of_reaction_conditions(data)
     return reaction_conditions_count
 
 
 def count_reactions(file_path):
-    data = az.load_yaml(file_path)
+    data = utils.load_yaml(file_path)
     reaction_count = az.get_number_of_reactions(data)
     return reaction_count
 
@@ -41,6 +44,25 @@ def calculate_deviation(mae, y_true):
     else:
         deviation = mae
     return deviation
+
+
+def load_existing_data(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {"test_data": [], "model_data": []}
+
+
+def append_new_data(existing_data, new_test_data, new_model_data):
+    existing_data['test_data'].append(new_test_data)
+    existing_data['model_data'].append(new_model_data)
+    return existing_data
+
+
+def save_data(file_path, data):
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
 
 
 reaction_number_error = 0
@@ -73,6 +95,13 @@ mae_conf_current_rxn = 0
 deviation_conf = None
 deviation_const = None
 deviation_temp = None
+all_test_data = []
+all_model_data = []
+all_test_data_temp = []
+all_model_data_temp = []
+
+const_json_file_path = 'rxn_const.json'
+temp_json_file_path = 'temp.json'
 
 test_path = "./../test_data"
 model_path = "./model_output"
@@ -90,12 +119,13 @@ wandb.init(
         "number of model calls max": 3,
         "number of model calls min": 1,
         "temperature": 0.0,
+        "seed": 12345,
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
-        "input tokens used": 130993,
-        "output tokens used": 7451,
-        "total model calls": 14,
-        "time used": 647.3029091358185
+        "input tokens used": 123055,
+        "output tokens used": 6288,
+        "total model calls": 12,
+        "time used": 430.284206867218
 
     }
 )
@@ -129,8 +159,8 @@ for test_file, model_file in zip(test_files, model_files):
             reaction_conditions_number_error += 1
 
         # comparing reactions and reaction conditions
-        test_data = az.load_yaml(test_file_path)
-        model_data = az.load_yaml(model_file_path)
+        test_data = utils.load_yaml(test_file_path)
+        model_data = utils.load_yaml(model_file_path)
 
         # counting empty entries
         total_entries_count += az.count_total_entries(model_data)
@@ -160,7 +190,7 @@ for test_file, model_file in zip(test_files, model_files):
                     # test data: specific reaction condition for this iteration
                     temperature, temp_unit, polym_method, polym_type, solvent, reaction_constants, reaction_constant_confidence, determination_method = az.get_metadata_polymerization(
                         reaction_conditions)
-                    print(model_reaction_conditions)
+
                     # try to find matching or best matching reaction conditions of model data to specific test conditions
                     index, score = az.find_matching_reaction_conditions(model_reaction_conditions, solvent,
                                                                         temperature, temp_unit,
@@ -179,23 +209,28 @@ for test_file, model_file in zip(test_files, model_files):
                         temperature_model_list = [temperature_model]
                         temperature_list = [temperature]
 
+                        all_test_data_temp.append({
+                            "temperature": temperature
+                        })
+                        all_model_data_temp.append({
+                            "temperature": temperature_model
+                        })
+
                         mse_temp_individual = calculate_mse(temperature_model, temperature)
                         mse_temp.append(mse_temp_individual)
                         mae_temp_current_rxn = mean_absolute_error(temperature_list, temperature_model_list)
                         deviation_temp = mae_temp_current_rxn / temperature
                         print("mae temp: ", mae_temp_current_rxn, "deviation: ", deviation_temp)
-                        print(temperature_model, temperature)
 
                     # comparison of solvents
                     solvent_model, smiles_solvent_model = az.get_solvent(model_reaction_conditions, index)
                     print("solvent model: ", solvent_model, " vs. solvent test: ", solvent)
-                    smiles_solvent_test = az.name_to_smiles(solvent)
+                    smiles_solvent_test = utils.name_to_smiles(solvent)
                     solvent_missmatch = False
                     solvent_error += az.compare_smiles(smiles_solvent_test, smiles_solvent_model)
                     if az.compare_smiles(smiles_solvent_test, smiles_solvent_model) == 1:
                         solvent_error += 1
                         solvent_missmatch = True
-                    print("solvent missmatch: ", solvent_missmatch)
 
                     # comparison of reactivity constant and confidence of reactivity constant
                     test_reaction_constants, test_reaction_constant_confidence = az.get_reaction_const_list(
@@ -214,7 +249,15 @@ for test_file, model_file in zip(test_files, model_files):
                         test_reaction_constant_confidence, model_reaction_const_conf = az.change_sequence(
                             test_reaction_constant_confidence,
                             model_reaction_const_conf)
-                    print(f'model_reaction_constants: {model_reaction_constants}')
+
+                    all_test_data.append({
+                        "constants": test_reaction_constants,
+                        "confidence": test_reaction_constant_confidence
+                    })
+                    all_model_data.append({
+                        "constants": model_reaction_constants,
+                        "confidence": model_reaction_const_conf
+                    })
 
                     if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
                         if test_reaction_constants[0] is not None or test_reaction_constants[1] is not None:
@@ -250,7 +293,6 @@ for test_file, model_file in zip(test_files, model_files):
                             deviation_conf = 0
                     else:
                         for test_val, model_val in zip(test_reaction_constant_confidence, model_reaction_const_conf):
-                            print("mse const conf", model_val, test_val)
                             if (test_reaction_constant_confidence[0] is None or test_reaction_constant_confidence[1] is
                                     None):
                                 mse_const_individual = 1
@@ -292,6 +334,13 @@ for test_file, model_file in zip(test_files, model_files):
 
 correct_reaction_rate = calculate_rate(correct_reaction_count, combined_count_reaction_conditions_test) * 100
 
+existing_data_const = load_existing_data(const_json_file_path)
+existing_data_temp = load_existing_data(temp_json_file_path)
+updated_data_const = append_new_data(existing_data_const, all_test_data, all_model_data)
+updated_data_temp = append_new_data(existing_data_temp, all_test_data_temp, all_model_data_temp)
+save_data(const_json_file_path, updated_data_const)
+save_data(temp_json_file_path, updated_data_temp)
+
 print(
     f"out of {reaction_condition_count} matching reactions, {correct_reaction_count} are completely correct. ({calculate_rate(correct_reaction_count, reaction_condition_count) * 100} %)")
 print(
@@ -329,6 +378,8 @@ print(f"average mse of reaction constants is {average_mse_const}")
 print(f"average mse of reaction constants confidence is {average_mse_conf}")
 print(f"average mse of temperature is {average_mse_temp}")
 
+print('reaction cond. test count: ', combined_count_reaction_conditions_test)
+
 # metrics saved on weights and biases
 wandb.log({"prompt": prompt, "prompt_addition": prompt_addition, "parsing-error": parsing_error,
            "parsing-error-rate": parsing_error_rate,
@@ -344,3 +395,5 @@ wandb.log({"prompt": prompt, "prompt_addition": prompt_addition, "parsing-error"
            "fuzzy matching score": average_score, "mse reaction const": average_mse_const,
            "mse reaction const conf": average_mse_conf, "mse temperature": average_mse_temp,
            "solvent error": solvent_error, "solvent error rate": solvent_error_rate})
+
+
