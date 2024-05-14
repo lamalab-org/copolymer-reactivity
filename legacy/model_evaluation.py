@@ -104,7 +104,7 @@ const_json_file_path = 'rxn_const.json'
 temp_json_file_path = 'temp.json'
 
 test_path = "./../test_data"
-model_path = "./model_output"
+model_path = "./output"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -112,7 +112,7 @@ wandb.init(
     project="Copolymer_extraction",
 
     config={
-        "model": "gpt-4-vision-preview",
+        "model": "gpt-4-turbo",
         "paper number": 10,
         "token length": "",
         "input": "images",
@@ -122,10 +122,10 @@ wandb.init(
         "seed": 12345,
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
-        "input tokens used": 123055,
-        "output tokens used": 6288,
-        "total model calls": 12,
-        "time used": 430.284206867218
+        "input tokens used": 131495,
+        "output tokens used": 6768,
+        "total model calls": 14,
+        "time used": 649.6449012756348
 
     }
 )

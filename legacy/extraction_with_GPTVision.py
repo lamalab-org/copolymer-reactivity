@@ -9,7 +9,7 @@ import random
 
 start = time.time()
 
-input_folder = "./PDF_from_scidownl/paper"
+input_folder = "../pdfs"
 output_folder_images = "./images"
 output_folder = "model_output"
 number_of_model_calls = 2
@@ -19,13 +19,13 @@ total_input_tokens = 0
 total_output_token = 0
 number_of_calls = 0
 
-random_pdf_selection = random.sample(input_files, 20)
-print("random selection of PDFs: ", random_pdf_selection)
+#random_pdf_selection = random.sample(input_files, 20)
+#print("random selection of PDFs: ", random_pdf_selection)
 
 prompt_text = prompter.get_prompt_template()
 
 
-for i, filename in enumerate(random_pdf_selection):
+for i, filename in enumerate(input_files):
     file_path = os.path.join(input_folder, filename)
     print("processing ", filename)
     pdf_images = convert_from_path(file_path)

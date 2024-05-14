@@ -14,8 +14,24 @@ class RunTimeExpired(Exception):
     pass
 
 
+def get_prompt_rxn_number():
+    prompt = """The content of the pictures is a scientific paper about copolymerization of monomers. 
+We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
+Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
+Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
+Count each different reaction as one. Return one json object. 
+Stick to the given output datatype (string, or float). json:
+{
+    "number of reactions": number of the different relevant reactions in the paper (FLOAT),
+    "language": language of the main text (STRING),
+    "paper name": name of the pdf document (STRING)
+}
+"""
+    return prompt
+
+
 def get_prompt_template():
-    prompt = """The content of the Markdown is a scientific paper about copolymerization of monomers. 
+    prompt = """The content of the pictures is a scientific paper about copolymerization of monomers. 
 We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
 Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
 Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
@@ -37,7 +53,7 @@ reactions: [
                 "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
                 "solvent": used solvent for the polymerization reaction as STRING (whole name without
                         abbreviation, just name no further details like 'sulfur or water free'); if the solvent is water put just "water"; ,
-                "method": used polymerization method (solvent(polymerization takes place in a solvent), bulk (polymerization takes place without any solvent, only reactants like monomers built the recation mixture), emulsion...) as STRING,
+                "method": used polymerization method (solvent(polymerization takes place in a solvent), bulk (polymerization takes place without any solvent, only reactants like monomers built the reaction mixture), emulsion...) as STRING,
                 "temperature": used polymerization temperature as FLOAT ,
                 "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
                 "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT (be careful and just take the individual values, not the product of these two),
@@ -94,7 +110,7 @@ def format_prompt(template: str, data: dict) -> str:
 
 
 def call_openai(
-    prompt, model="gpt-4-vision-preview", temperature: float = 0.0, **kwargs
+    prompt, model="gpt-4o", temperature: float = 0.0, **kwargs
 ):
     """Call chat openai model
 
@@ -119,6 +135,7 @@ def call_openai(
             {"role": "user", "content": prompt},
         ],
         temperature=temperature,
+        response_format={"type": "json_object"},
         seed=12345,
         **kwargs,
     )
