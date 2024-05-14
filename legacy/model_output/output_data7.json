@@ -2,78 +2,102 @@
     "reactions": [
         {
             "monomers": [
-                "allyl chloroacetate",
-                "vinyl acetate"
+                "Ethylene",
+                "n-Butyl acrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzoyl peroxide",
+                    "solvent": "toluene",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": 70.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.43,
-                        "constant_2": 1.8
+                        "constant_1": 11.9,
+                        "constant_2": 0.03
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": 2.5,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": null
                 }
             ]
         },
         {
             "monomers": [
-                "allyl dichloroacetate",
-                "vinyl acetate"
+                "Ethylene",
+                "Vinyl chloride"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzoyl peroxide",
+                    "solvent": "toluene",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": 90.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.54,
-                        "constant_2": 0.57
+                        "constant_1": 3.6,
+                        "constant_2": 0.24
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.07
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": null
                 }
             ]
         },
         {
             "monomers": [
-                "allyl trichloroacetate",
-                "vinyl acetate"
+                "Ethylene",
+                "Vinyl acetate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "benzoyl peroxide",
+                    "solvent": "toluene",
                     "method": "bulk",
-                    "temperature": 60.0,
+                    "temperature": 90.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.28,
-                        "constant_2": 0.41
+                        "constant_1": 1.08,
+                        "constant_2": 1.07
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": null,
-                        "constant_conf_2": null
+                        "constant_conf_1": 0.19,
+                        "constant_conf_2": 0.06
                     },
-                    "determination_method": "Kelen-Tudos"
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Ethylene",
+                "Vinyl fluoride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 160.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.16,
+                        "constant_2": 4.39
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.77
+                    },
+                    "determination_method": null
                 }
             ]
         }
     ],
-    "source": null,
-    "PDF_name": "Polymer Journal, Vol. 24, No. 1, pp 87-98 (1992)",
-    "source_pdf": "Allylic Polymers. II. Effects of Chloro-Substituents on Copolymerization of Allyl Chloroacetates with Vinyl Acetate. Polymer Journal, 24(1), 87–98.pdf"
+    "source": "Journal of Polymer Science: Part A, Vol. 1, pp. 1137-1145 (1963)",
+    "PDF_name": "Copolymerization Studies III",
+    "source_pdf": "paper07.pdf"
 }
