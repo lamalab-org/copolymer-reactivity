@@ -2,150 +2,54 @@
     "reactions": [
         {
             "monomers": [
-                "N-Octadecylacrylamide",
-                "Acrylonitrile"
+                "Methacrylic Acid Sulpholanate",
+                "Methyl Methacrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "tert-butyl alcohol",
-                    "method": "solvent",
-                    "temperature": 60.0,
+                    "solvent": "Dimethylformamide",
+                    "method": "bulk",
+                    "temperature": 50.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 1.44,
-                        "constant_2": 1.1
+                        "constant_1": 1.0,
+                        "constant_2": 0.83
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.019,
-                        "constant_conf_2": 0.035
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
                     },
-                    "determination_method": "Fineman and Ross equation"
+                    "determination_method": null
                 }
             ]
         },
         {
             "monomers": [
-                "N-Octadecylacrylamide",
-                "Vinylidene chloride"
+                "Methacrylic Acid Sulpholanate",
+                "Styrene"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "tert-butyl alcohol",
-                    "method": "solvent",
-                    "temperature": 60.0,
+                    "solvent": "Dimethylformamide",
+                    "method": "bulk",
+                    "temperature": 50.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 1.37,
-                        "constant_2": 0.438
+                        "constant_1": 1.5,
+                        "constant_2": 0.22
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.008,
-                        "constant_conf_2": 0.008
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.01
                     },
-                    "determination_method": "Fineman and Ross equation"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "N-Octadecylacrylamide",
-                "Vinyl acetate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "tert-butyl alcohol",
-                    "method": "solvent",
-                    "temperature": 60.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 6.11,
-                        "constant_2": 0.027
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.045,
-                        "constant_conf_2": 0.009
-                    },
-                    "determination_method": "Fineman and Ross equation"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "N-Allylstearamide",
-                "Acrylonitrile"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "tert-butyl alcohol",
-                    "method": "solvent",
-                    "temperature": 80.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.118,
-                        "constant_2": 3.61
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.084,
-                        "constant_conf_2": 0.087
-                    },
-                    "determination_method": "Fineman and Ross equation"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "N-Allylstearamide",
-                "Vinylidene chloride"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "tert-butyl alcohol",
-                    "method": "solvent",
-                    "temperature": 80.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.0,
-                        "constant_2": 5.23
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.136,
-                        "constant_conf_2": 0.067
-                    },
-                    "determination_method": "Fineman and Ross equation"
-                }
-            ]
-        },
-        {
-            "monomers": [
-                "N-Allylstearamide",
-                "Vinyl acetate"
-            ],
-            "reaction_conditions": [
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "tert-butyl alcohol",
-                    "method": "solvent",
-                    "temperature": 80.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.532,
-                        "constant_2": 0.74
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.012,
-                        "constant_conf_2": 0.087
-                    },
-                    "determination_method": "Fineman and Ross equation"
+                    "determination_method": null
                 }
             ]
         }
     ],
     "source": null,
-    "PDF_name": null,
-    "source_pdf": "Monomer reactivity ratios of N-octadecylacrylamide and N-allylstearamide. Journal of Applied Polymer Science, 8(1), 527–532.pdf"
+    "PDF_name": "Kinetics_of_polymerization_and_copolymerization_of_MAS.pdf",
+    "source_pdf": "paper06.pdf"
 }

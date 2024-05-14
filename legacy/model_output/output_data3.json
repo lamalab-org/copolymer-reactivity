@@ -2,78 +2,46 @@
     "reactions": [
         {
             "monomers": [
-                "monomethyl itaconate",
-                "2-naphthyl methacrylate"
+                "Methacrylic Acid",
+                "Ethyl Acrylate"
             ],
             "reaction_conditions": [
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "chloroform",
-                    "method": "solvent",
-                    "temperature": 60.0,
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 2.44,
-                        "constant_2": 1.2
+                        "constant_1": 2.58,
+                        "constant_2": 0.157
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.19,
-                        "constant_conf_2": 0.28
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Fineman-Ross"
+                    "determination_method": "EVM Program"
                 },
                 {
                     "polymerization_type": "free radical",
-                    "solvent": "1,4-dioxane",
-                    "method": "solvent",
-                    "temperature": 60.0,
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
                     "temperature_unit": "°C",
                     "reaction_constants": {
-                        "constant_1": 0.49,
-                        "constant_2": 0.97
+                        "constant_1": 2.9,
+                        "constant_2": 0.162
                     },
                     "reaction_constant_conf": {
-                        "constant_conf_1": 0.04,
-                        "constant_conf_2": 0.29
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
                     },
-                    "determination_method": "Fineman-Ross"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "acetone",
-                    "method": "solvent",
-                    "temperature": 60.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.15,
-                        "constant_2": 0.28
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.0,
-                        "constant_conf_2": 0.03
-                    },
-                    "determination_method": "Fineman-Ross"
-                },
-                {
-                    "polymerization_type": "free radical",
-                    "solvent": "acetonitrile",
-                    "method": "solvent",
-                    "temperature": 60.0,
-                    "temperature_unit": "°C",
-                    "reaction_constants": {
-                        "constant_1": 0.1,
-                        "constant_2": 0.35
-                    },
-                    "reaction_constant_conf": {
-                        "constant_conf_1": 0.01,
-                        "constant_conf_2": 0.14
-                    },
-                    "determination_method": "Fineman-Ross"
+                    "determination_method": "Kelen-Tudos method"
                 }
             ]
         }
     ],
-    "source": null,
-    "PDF_name": "Makromol. Chem. 185, 353 – 362 (1984)",
-    "source_pdf": "Die Makromolekulare Chemie, 185(2), 353–362.pdf"
+    "source": "Journal of Applied Polymer Science, Vol. 53, 1771-1783 (1994)",
+    "PDF_name": "Synthesis and Characterization of Methacrylic Acid–Ethyl Acrylate Copolymers",
+    "source_pdf": "paper03.pdf"
 }
