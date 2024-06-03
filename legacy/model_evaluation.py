@@ -112,7 +112,7 @@ wandb.init(
     project="Copolymer_extraction",
 
     config={
-        "model": "gpt-4-turbo",
+        "model": "gpt4-o",
         "paper number": 10,
         "token length": "",
         "input": "images",
@@ -122,10 +122,10 @@ wandb.init(
         "seed": 12345,
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
-        "input tokens used": 131495,
-        "output tokens used": 6768,
-        "total model calls": 14,
-        "time used": 649.6449012756348
+        "input tokens used": 98465,
+        "output tokens used": 5575,
+        "total model calls": 10,
+        "time used": 286.4618351459503
 
     }
 )

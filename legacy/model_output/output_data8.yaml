@@ -1,20 +1,10 @@
-PDF_name: example.pdf
-reactions:
-- monomers:
-  - ethylene
-  - acrylonitrile
-  reaction_conditions:
-  - determination_method: null
-    method: solvent
-    polymerization_type: free radical
-    reaction_constant_conf:
-      constant_conf_1: null
-      constant_conf_2: null
-    reaction_constants:
-      constant_1: 7.0
-      constant_2: 0.0
-    solvent: toluene
-    temperature: 20.0
-    temperature_unit: °C
-source: 'Vysokomol. soedin. 3: No. 7, 1015–1019, 1961.'
-source_pdf: paper08.pdf
+"{\n  \"reactions\": [\n    {\n      \"monomers\": [\"Acrylonitrile\", \"Ethylene\"\
+  ],\n      \"reaction_conditions\": [\n        {\n          \"polymerization_type\"\
+  : \"free radical\",\n          \"solvent\": \"toluene\",\n          \"method\":\
+  \ \"solvent\",\n          \"temperature\": 20.0,\n          \"temperature_unit\"\
+  : \"°C\",\n          \"reaction_constants\": {\n            \"constant_1\": 7.0,\n\
+  \            \"constant_2\": 0.0\n          },\n          \"reaction_constant_conf\"\
+  : {\n            \"constant_conf_1\": null,\n            \"constant_conf_2\": null\n\
+  \          },\n          \"determination_method\": null\n        }\n      ]\n  \
+  \  }\n  ],\n  \"source\": \"Vysokomol. soedin. 3: No. 7, 1015–1019, 1961\",\n  \"\
+  PDF_name\": \"polymerization_conditions.pdf\"\n}"
