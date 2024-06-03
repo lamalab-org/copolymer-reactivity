@@ -37,16 +37,12 @@ out = "./PDF_from_scidownl/paper/"
 help(scihub_download)
 
 for index, paper_dict in enumerate(enhanced_doi_list):
-    if index < 111:
-        print(index)
-        continue
     paper_count += 1
     paper = paper_dict["paper"]
     paper_type = paper_dict["paper_type"]
     out = paper_dict["out"]
     task = ScihubTask(source_keyword=paper, out=out)
     task.run()
-    #time.sleep(2)
 
     if task.context.get('status') in ['downloading_failed', 'extracting_failed']:
         print(f"Download failed: {task.context.get('error')}")
