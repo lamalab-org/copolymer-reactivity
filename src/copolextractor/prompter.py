@@ -35,10 +35,10 @@ Stick to the given output datatype (string, or float). json:
 
 
 def get_prompt_pdf_quality():
-    prompt = """The content of the pictures is a scientific paper about copolymerization of monomers.
+    prompt = """Question: The content of the pictures is a scientific paper about copolymerization of monomers.
     The main focus here is to find the copolymerizations which have r-values for a pair of two Monomers.
     Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
-    Ignore these. Rate the quality of the provided paper form 0 (hard to extract) to 10 (easy to extract) in terms of readability and easiness of data extraction.
+    Ignore these. Rate the quality of the provided paper form 0 (hard to extract data) to 10 (easy to extract data) in terms of readability and easiness of data extraction.
     Return one json object. 
     Stick to the given output datatype (string, integer or float). json:
     {
@@ -47,6 +47,15 @@ def get_prompt_pdf_quality():
         "quality_of_numbers": the readability of the numbers in the PDF document form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
         "year": the year of the publication (INTEGER)
     }
+    Possible Answer (including comments in the brackets):
+    {
+        "pdf_quality": 4 (resolution is poor but still readable),
+        "table_quality": 5 (basic structure provided; no clear lines in between; line slip possible),
+        "quality_of_number": 7 (numbers are readable),
+        "year": 1957
+    }
+    Question: Please reason concisely about the quality of the given categorys in terms of how likely you would make mistakes in extracting data for this article.
+    Then provide your answer in the given json format. Please be really realistic about your score and try to give a calibrated estimate.
     """
     return prompt
 

@@ -6,8 +6,8 @@ from openai import OpenAI
 import copolextractor.prompter as prompter
 import copolextractor.image_processer as ip
 
-# Pfade definieren
-input_folder = "./PDF"
+
+input_folder = "./pdfs"
 output_folder_images = "./images"
 output_folder = "model_output_rxn_count"
 number_of_model_calls = 2
@@ -16,10 +16,12 @@ selected_entries_path = 'selected_entries.json'
 with open(selected_entries_path, 'r', encoding='utf-8') as file:
     selected_entries = json.load(file)
 
-selected_pdfs = [entry['out'] for entry in selected_entries if os.path.exists(os.path.join(input_folder, os.path.basename(entry['out'])))]
+#selected_pdfs = [entry['out'] for entry in selected_entries if os.path.exists(os.path.join(input_folder, os.path.basename(entry['out'])))]
 
-# Filtern der PDF-Dateien basierend auf den ausgewählten Einträgen
-input_files = sorted([os.path.basename(f) for f in selected_pdfs if f.endswith(".pdf")])
+input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
+
+#input_files = sorted([os.path.basename(f) for f in selected_pdfs if f.endswith(".pdf")])
+print(input_files)
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 total_input_tokens = 0
@@ -35,8 +37,8 @@ start = time.time()
 
 for i, filename in enumerate(input_files):
 
-    item = next((item for item in enhanced_doi_list if item['out'].endswith(filename)), None)
-
+    #item = next((item for item in enhanced_doi_list if item['out'].endswith(filename)), None)
+    item = next((item for item in enhanced_doi_list if 'pdf_name' in item and item['pdf_name'] == filename), None)
 
     file_path = os.path.join(input_folder, filename)
     print("processing ", filename)
