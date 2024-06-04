@@ -104,7 +104,7 @@ const_json_file_path = 'rxn_const.json'
 temp_json_file_path = 'temp.json'
 
 test_path = "./../test_data"
-model_path = "./output"
+model_path = "./PDF_from_scidownl/model_output_extraction"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -123,14 +123,14 @@ wandb.init(
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
         "input tokens used": 98465,
-        "output tokens used": 5575,
+        "output tokens used": 5608,
         "total model calls": 10,
-        "time used": 286.4618351459503
+        "time used": 308.93470311164856
 
     }
 )
 
-# comparison of numer of reactions and reactions with different reaction_conditions
+# comparison of number of reactions and reactions with different reaction_conditions
 for test_file, model_file in zip(test_files, model_files):
     test_file_path = get_file_path(test_path, test_file)
     model_file_path = get_file_path(model_path, model_file)
