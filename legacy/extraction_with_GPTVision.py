@@ -11,18 +11,19 @@ import yaml
 
 start = time.time()
 
-input_folder = "./PDF_from_scidownl/PDF"
+input_folder = "./PDF_from_scidownl/pdfs"
 output_folder_images = "./images"
 output_folder = "./PDF_from_scidownl/model_output_extraction"
 
-selected_entries_path = './PDF_from_scidownl/selected_entries.json'
-with open(selected_entries_path, 'r', encoding='utf-8') as file:
-    selected_entries = json.load(file)
+#selected_entries_path = './PDF_from_scidownl/selected_entries.json'
+#with open(selected_entries_path, 'r', encoding='utf-8') as file:
+    #selected_entries = json.load(file)
 
-selected_pdfs = [entry['out'] for entry in selected_entries if os.path.exists(os.path.join(input_folder, os.path.basename(entry['out'])))]
+#selected_pdfs = [entry['out'] for entry in selected_entries if os.path.exists(os.path.join(input_folder, os.path.basename(entry['out'])))]
+input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
 
 number_of_model_calls = 2
-input_files = sorted([f for f in selected_pdfs if f.endswith(".pdf")])
+input_files = sorted([f for f in input_files if f.endswith(".pdf")])
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 print(os.environ.get("OPENAI_API_KEY"))
 total_input_tokens = 0
@@ -33,7 +34,8 @@ prompt_text = prompter.get_prompt_template()
 
 for i, filename in enumerate(input_files):
 
-    file_path = os.path.join('./PDF_from_scidownl', 'PDF', os.path.basename(filename))
+    #file_path = os.path.join('./PDF_from_scidownl', 'PDF', os.path.basename(filename))
+    file_path = os.path.join('./PDF_from_scidownl/pdfs', filename)
     print("processing ", filename)
     pdf_images = convert_from_path(file_path)
 
@@ -85,11 +87,11 @@ for i, filename in enumerate(input_files):
     print("output tokens used: ", total_output_token)
     print("total number of model call: ", number_of_calls)
 
-    for item in selected_entries:
-        if item['out'].endswith(filename):
-            item['extracted'] = True
-    with open(selected_entries_path, 'w') as file:
-        json.dump(selected_entries, file, indent=4)
+    #for item in selected_entries:
+        ##if item['out'].endswith(filename):
+            #item['extracted'] = True
+    #with open(selected_entries_path, 'w') as file:
+       # json.dump(selected_entries, file, indent=4)
 
 end = time.time()
 execution_time = start-end
