@@ -3,7 +3,7 @@ import re
 from crossref.restful import Works
 
 # JSON-Dateien laden
-with open('enhanced_doi_list.json', 'r') as file:
+with open('enhanced_doi_list1.json', 'r') as file:
     data_languages = json.load(file)
 
 # JSON-Datei mit DOI-URLs laden
@@ -31,7 +31,7 @@ for doi in doi_list:
     if year:
         doi_to_year[doi] = year
 
-# Aktualisierung der enhanced_doi_list.json mit den Jahreszahlen
+# Aktualisierung der enhanced_doi_list1.json mit den Jahreszahlen
 for entry in data_languages:
     doi = entry.get('paper', '')
     year = doi_to_year.get(doi, None)

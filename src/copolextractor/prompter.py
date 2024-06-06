@@ -70,6 +70,7 @@ If there are polymerization's without these constants, ignore these.
 From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
 Also pay attention to the caption of figures.
 Don't use any abbreviations, always use the whole word.
+Be careful with the sequenz of the monomers and reaction constants. The monomer 1 should belong to r-value 1. t6zt
 Try to keep the string short. Exclude comments out of the json output. Return one json object. 
 Stick to the given output datatype (string, or float).
 
@@ -77,7 +78,10 @@ Extract the following information:
 
 reactions: [
     {
-        "monomers": ["Monomer 1", "Monomer 2"] as STRING (only the whole Monomer name without abbreviation)
+        "monomers": [
+            "monomer1": monomer assigned to reaction constant 1
+            "monomer2": monomer assigned to reaction constant 2
+            ] as STRING (only the whole Monomer name without abbreviation)
         "reaction_conditions": [
             {
                 "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
@@ -93,6 +97,13 @@ reactions: [
                 "constant_conf_1":
                 "constant_conf_2": },
                 "determination_method": method for determination of the r-values (Kelen-Tudor, EVM Program...) as STRING
+                "Q-value": {another reaction value provided in some articles as FLOAT
+                    "constant_1":
+                    "constant_2": },
+                "e-Value": {another reaction value provided in some articles as FLOAT
+                    "constant_1":
+                    "constant_2": },
+                "r_product": the product of r1 and r2 sometimes provided in articles, do not calculate this, if its provided extracted it, if not put null
             },
             {
                 "polymerization_type":

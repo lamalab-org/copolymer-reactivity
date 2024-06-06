@@ -27,7 +27,7 @@ print("doi list: ", doi_list)
 #]
 
 #print("enhanced doi list: ", enhanced_doi_list)
-output_file_path = "PDF_from_scidownl/enhanced_doi_list.json"
+output_file_path = "PDF_from_scidownl/enhanced_doi_list1.json"
 enhanced_doi_list = json.load(open(output_file_path, 'r'))
 with open(output_file_path, 'w') as file:
     json.dump(enhanced_doi_list, file, indent=4)
