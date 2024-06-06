@@ -2,7 +2,7 @@ import random
 import json
 
 
-input_file = 'enhanced_doi_list.json'
+input_file = 'enhanced_doi_list1.json'
 
 with open(input_file, 'r', encoding='utf-8') as file:
     data = json.load(file)
