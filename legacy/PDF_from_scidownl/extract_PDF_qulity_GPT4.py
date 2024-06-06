@@ -28,7 +28,7 @@ total_input_tokens = 0
 total_output_token = 0
 number_of_calls = 0
 
-output_file_path = os.path.join(os.getcwd(), "enhanced_doi_list.json")
+output_file_path = os.path.join(os.getcwd(), "enhanced_doi_list1.json")
 enhanced_doi_list = json.load(open(output_file_path))
 prompt_text = prompter.get_prompt_pdf_quality()
 

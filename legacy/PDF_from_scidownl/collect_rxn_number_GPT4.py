@@ -18,7 +18,7 @@ total_input_tokens = 1232390
 total_output_token = 6850
 number_of_calls = 120
 
-output_file_path = os.path.join(os.getcwd(), "enhanced_doi_list.json")
+output_file_path = os.path.join(os.getcwd(), "enhanced_doi_list1.json")
 enhanced_doi_list = json.load(open(output_file_path))
 prompt_text = prompter.get_prompt_rxn_number()
 
