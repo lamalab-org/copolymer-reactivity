@@ -60,3 +60,36 @@ def name_to_smiles(name: str) -> str:
             return canonicalize_smiles(compound[0].canonical_smiles)
         except Exception:
             return None
+
+
+@cache.memoize()
+def smiles_to_name(smiles: str) -> str:
+    """Convert SMILES to a chemical name using CACTUS and PubChem as fallback."""
+    canonical_smiles = canonicalize_smiles(smiles)
+    try:
+        # First try with CACTUS
+        name = cactus_request_w_backoff_name(canonical_smiles, rep="name")
+        if name is not None:
+            return name.strip()
+    except Exception:
+        pass
+
+    # If CACTUS fails, try with PubChem
+    try:
+        compound = pcp.get_compounds(canonical_smiles, 'smiles')
+        if compound:
+            return compound[0].iupac_name
+    except Exception:
+        pass
+
+    return None
+
+
+def cactus_request_w_backoff_name(smiles, rep="name"):
+    url = CACTUS.format(smiles, rep)
+    response = requests.get(url, allow_redirects=True, timeout=10)
+    response.raise_for_status()
+    resp = response.text
+    if "html" in resp:
+        return None
+    return resp
