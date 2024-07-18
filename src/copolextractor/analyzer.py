@@ -61,21 +61,18 @@ def get_solvent(data: list, index: int) -> tuple:
     return solvent, solvent_smiles
 
 
-def convert_unit(temp1: int, temp2: int, unit1: str, unit2: str):
+def convert_unit(temp1: int, unit1: str):
     try:
         temp1_unit = ureg.Quantity(temp1, ureg.parse_units(unit1))
-        temp2_unit = ureg.Quantity(temp2, ureg.parse_units(unit2))
         if ureg.parse_units(unit1) is not ureg.degC:
             temp1_unit.ito(ureg.degC)
-        if ureg.parse_units(unit2) is not ureg.degC:
-            temp2_unit.ito(ureg.degC)
-        return temp1_unit.magnitude, temp2_unit.magnitude
+        return temp1_unit.magnitude
     except (AttributeError, ValueError, TypeError, KeyError) as e:
         print(AttributeError, e)
         print(ValueError, e)
         print(TypeError, e)
         print(KeyError, e)
-        return temp1, temp2
+        return temp1
 
 
 def get_metadata_polymerization(data: dict):
@@ -272,7 +269,7 @@ def average(const):
         return average_value
 
 
-def count_na_values(data, null_value=None):
+def count_na_values(data, null_value="na"):
     null_count = 0
 
     if isinstance(data, dict):
