@@ -62,71 +62,70 @@ def get_prompt_pdf_quality():
 
 def get_prompt_template():
     prompt = """The content of the pictures is a scientific paper about copolymerization of monomers. 
-We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
-Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
-Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
-The reaction constants for the copolymerization with the monomer pair is the most important information. Be careful with numbers and do not miss the decimal points.
-If there are polymerization's without these constants, ignore these.
-From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
-Also pay attention to the caption of figures.
-Don't use any abbreviations, always use the whole word.
-Be careful with the sequenz of the monomers and reaction constants. The monomer 1 should belong to r-value 1. t6zt
-Try to keep the string short. Exclude comments out of the json output. Return one json object. 
-Stick to the given output datatype (string, or float).
+    We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
+    Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
+    Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
+    The reaction constants for the copolymerization with the monomer pair is the most important information. Be careful with numbers and do not miss the decimal points.
+    If there are polymerization's without these constants, ignore these.
+    From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
+    Also pay attention to the caption of figures.
+    Don't use any abbreviations, always use the whole word.
+    Be careful with the sequenz of the monomers and reaction constants. The monomer 1 should belong to r-value 1. t6zt
+    Try to keep the string short. Exclude comments out of the json output. Return one json object. 
+    Stick to the given output datatype (string, or float).
 
-Extract the following information:
+    Extract the following information:
 
-reactions: [
-    {
-        "monomers": [
-            "monomer1": monomer assigned to reaction constant 1
-            "monomer2": monomer assigned to reaction constant 2
-            ] as STRING (only the whole Monomer name without abbreviation)
-        "reaction_conditions": [
-            {
-                "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
-                "solvent": used solvent for the polymerization reaction as STRING (whole name without
-                        abbreviation, just name no further details like 'sulfur or water free'); if the solvent is water put just "water"; ,
-                "method": used polymerization method (solvent(polymerization takes place in a solvent), bulk (polymerization takes place without any solvent, only reactants like monomers built the reaction mixture), emulsion...) as STRING,
-                "temperature": used polymerization temperature as FLOAT ,
-                "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
-                "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT (be careful and just take the individual values, not the product of these two),
-                "constant_1":
-                "constant_2": },
-                "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as FLOAT
-                "constant_conf_1":
-                "constant_conf_2": },
-                "determination_method": method for determination of the r-values (Kelen-Tudor, EVM Program...) as STRING
-                "Q-value": {another reaction value provided in some articles as FLOAT
+    reactions: [
+        {
+            "monomers": [
+                "monomer1": monomer assigned to reaction constant 1
+                "monomer2": monomer assigned to reaction constant 2
+                ] as STRING (only the whole Monomer name without abbreviation)
+            "reaction_conditions": [
+                {
+                    "polymerization_type": polymerization reaction type (free radical, anionic, cationic, ...) as STRING,
+                    "solvent": used solvent for the polymerization reaction as STRING (whole name without
+                            abbreviation, just name no further details like 'sulfur or water free'); if the solvent is water put just "water"; ,
+                    "method": used polymerization method (solvent(polymerization takes place in a solvent), bulk (polymerization takes place without any solvent, only reactants like monomers built the reaction mixture), emulsion...) as STRING,
+                    "temperature": used polymerization temperature as FLOAT ,
+                    "temperature_unit": unit of temperature (°C, °F, ...) as STRING,
+                    "reaction_constants": { polymerization reaction constants r1 and r2 as FLOAT (be careful and just take the individual values, not the product of these two),
                     "constant_1":
                     "constant_2": },
-                "e-Value": {another reaction value provided in some articles as FLOAT
-                    "constant_1":
-                    "constant_2": },
-                "r_product": the product of r1 and r2 sometimes provided in articles, do not calculate this, if its provided extracted it, if not put null
-            },
-            {
-                "polymerization_type":
-                "solvent":
-                ...
-            }
-        ]
-    },
-    {
-        "monomers":
-            "reaction_condition": [
-                { ... }
+                    "reaction_constant_conf": { confidence interval of polymerization reaction constant r1 and r2 as FLOAT
+                    "constant_conf_1":
+                    "constant_conf_2": },
+                    "determination_method": method for determination of the r-values (Kelen-Tudor, EVM Program...) as STRING
+                    Q-value": {another reaction value provided in some articles as FLOAT
+                        "constant_1":
+                        "constant_2": },
+                    "e-Value": {another reaction value provided in some articles as FLOAT
+                        "constant_1":
+                        "constant_2": },
+                    "r_product": the product of r1 and r2 sometimes provided in articles, do not calculate this, if its provided extracted it, if not put null
+                },
+                {
+                    "polymerization_type":
+                    "solvent":
+                    ...
+                }
             ]
-    }
-    "source": doi url or source as STRING (just one source)
-    "PDF_name": name of the pdf document
-]
+        },
+        {
+            "monomers":
+                "reaction_condition": [
+                    { ... }
+                ]
+        }
+        "source": doi url or source as STRING (just one source)
+        "PDF_name": name of the pdf document
+    ]
 
 
-If the information is not provided put null.
-If there are multiple polymerization's with different parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions (for different reaction conditions of the same monomers)."""
+    If the information is not provided put 'na'.
+    If there are multiple polymerization's with different parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions (for different reaction conditions of the same monomers)."""
     return prompt
-
 
 def get_prompt_addition() -> str:
     prompt_addition = """Here is the previously collected data from the same Markdowns: {}. 
@@ -170,13 +169,12 @@ def call_openai(
             {
                 "role": "system",
                 "content": "You are a scientific assistant, extracting important information about polymerization conditions"
-                "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                "out of pdf_testset in valid json format. Extract just data which you are 100% confident about the "
                 "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
         ],
         temperature=temperature,
-        response_format={"type": "json_object"},
         seed=12345,
         **kwargs,
     )
@@ -207,7 +205,7 @@ def call_openai_chucked(
             {
                 "role": "system",
                 "content": "You are a scientific assistant, extracting important information about polymerization conditions"
-                "out of pdfs in valid json format. Extract just data which you are 100% confident about the "
+                "out of pdf_testset in valid json format. Extract just data which you are 100% confident about the "
                 "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
@@ -364,7 +362,7 @@ def call_claude3(prompt):
         model="claude-3-opus-20240229",
         max_tokens=1024,
         system="You are a scientific assistant, extracting important information about polymerization conditions "
-        "out of images in valid json format. If the info is not found put 'NA'. Always be truthful and do not "
+        "out of processed_images in valid json format. If the info is not found put 'NA'. Always be truthful and do not "
         "extract anything false or made up.",
         temperature=0.0,
         messages=prompt,
