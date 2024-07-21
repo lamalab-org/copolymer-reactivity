@@ -51,8 +51,10 @@ for filename in input_files:
 
                             result = {
                                 'file': filename,
-                                'monomer1': monomer1_smiles,
-                                'monomer2': monomer2_smiles,
+                                'monomer1_s': monomer1_smiles,
+                                'monomer2_s': monomer2_smiles,
+                                'monomer1': monomer1,
+                                'monomer2': monomer2,
                                 'r_values': r_values,
                                 'conf_intervals': conf_intervals,
                                 'temperature': temperature,
@@ -72,6 +74,6 @@ print(f"Number of reactions: {reaction_count}")
 for result in results:
     print(result)
 
-with open('collected_data/extracted_data_collected2.json', 'w') as file:
+with open('collected_data/extracted_data_collected_without_fp.json', 'w') as file:
     json.dump(results, file, indent=4)
 
