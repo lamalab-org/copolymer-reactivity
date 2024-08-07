@@ -1,8 +1,7 @@
 import os
 from morfeus.conformer import ConformerEnsemble
-#from morfeus import XTB
-#import qcengine as qcng
-#import geometric
+from morfeus import XTB
+import json
 
 # Function to optimize and calculate properties of a molecule
 def calculate_properties(smiles):
@@ -17,6 +16,11 @@ def calculate_properties(smiles):
     model_opt = {"method": "GFN-FF"}
     ce.optimize_qc_engine(program="xtb", model=model_opt, procedure="geometric")
 
+    # run optimization with GFN2-xTB
+    model_opt = {"method": "GFN2-xTB"}
+    ce.optimize_qc_engine(program="xtb", model=model_opt, procedure="geometric")
+
+    # run single-point calculations with GFN2-xTB
     model_sp = {"method": "GFN2-xTB"}
     ce.sp_qc_engine(program="xtb", model=model_sp)
 
@@ -49,8 +53,8 @@ def calculate_properties(smiles):
 # Save the properties to a file
 def save_properties(properties, filename):
     with open(filename, 'w') as f:
-        for prop, value in properties.items():
-            f.write(f"{prop}: {value}\n")
+        # save to json
+        json.dump(properties, f)
 
 # Main function
 def main(smiles_list, output_folder):
@@ -59,7 +63,7 @@ def main(smiles_list, output_folder):
 
     for smiles in smiles_list:
         properties = calculate_properties(smiles)
-        filename = os.path.join(output_folder, f"{smiles.replace('/', '_')}.txt")
+        filename = os.path.join(output_folder, f"{smiles.replace('/', '_')}.json")
         save_properties(properties, filename)
         print(f"Properties for {smiles} saved to {filename}")
 
