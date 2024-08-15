@@ -1,0 +1,54 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-Chloro-1,3-butadiene",
+                "Methyl isopropenyl ketone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 40.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.6,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-Chloro-1,3-butadiene",
+                "Methacrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free-radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 40.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.7,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": null
+                }
+            ]
+        }
+    ],
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/pol.1963.100010635",
+    "PDF_name": "paper04.pdf"
+}
