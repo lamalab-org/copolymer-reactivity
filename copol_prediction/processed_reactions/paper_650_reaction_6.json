@@ -1,0 +1,22 @@
+{
+    "file": "paper_650.json",
+    "monomer1_s": "C=C(C)C(=O)OC",
+    "monomer2_s": "C=Cc1cccc([N+](=O)[O-])c1",
+    "monomer1": "methyl methacrylate",
+    "monomer2": "m-nitrostyrene",
+    "r_values": {
+        "constant_1": 0.35,
+        "constant_2": 0.85
+    },
+    "conf_intervals": {
+        "constant_conf_1": 0.05,
+        "constant_conf_2": 0.2
+    },
+    "temperature": 75.0,
+    "temperature_unit": "\u00b0C",
+    "solvent": "c1ccccc1",
+    "method": "solvent",
+    "r-product": null,
+    "source": "https://doi.org/10.1002/pol.1949.120040408",
+    "logP": 1.6866
+}

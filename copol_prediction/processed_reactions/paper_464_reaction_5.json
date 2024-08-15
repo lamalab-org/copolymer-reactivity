@@ -1,0 +1,65 @@
+{
+    "file": "paper_464.json",
+    "monomer1_s": "C=COC(C)=O",
+    "monomer2_s": "ClC=C(Cl)Cl",
+    "monomer1": "Vinyl acetate",
+    "monomer2": "Trichloroethylene",
+    "r_values": {
+        "constant_1": 0.67,
+        "constant_2": 0.0
+    },
+    "conf_intervals": {
+        "constant_conf_1": null,
+        "constant_conf_2": null
+    },
+    "temperature": 68.0,
+    "temperature_unit": "\u00b0C",
+    "solvent": "CC(C)=CCC/C(C)=C/C(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
+    "method": "bulk",
+    "r-product": null,
+    "source": "Journal of Polymer Science, Volume 3, No. 2 (1948)",
+    "logP": 1.3574000000000008,
+    "monomer2_data": {
+        "smiles": "ClC=C(Cl)Cl",
+        "ip": 14.067258183770909,
+        "ip_corrected": 9.221258183770908,
+        "ea": 3.9063415431021005,
+        "homo": -0.4127227826022011,
+        "lumo": -0.2671673321670233,
+        "charges": {
+            "1": -0.09666017267269665,
+            "2": 0.017832186577047063,
+            "3": 0.1491156599357438,
+            "4": -0.08152899601592384,
+            "5": -0.09427872609461437,
+            "6": 0.10552004827043396
+        },
+        "dipole": [
+            0.12717211326718578,
+            -0.2183038296837247,
+            0.20401621640625694
+        ],
+        "global_electrophilicity": 0.8437340899150992,
+        "global_nucleophilicity": -9.221258183770908,
+        "fukui_electrophilicity": {
+            "1": 0.2243309073079568,
+            "2": 0.09825496856832013,
+            "3": 0.09268940126330584,
+            "4": 0.22096987147442326,
+            "5": 0.2240385634190349,
+            "6": 0.13971628796693306
+        },
+        "fukui_nucleophilicity": {
+            "1": 0.32150403546319994,
+            "2": 0.0359104366873875,
+            "3": 0.020996319609044273,
+            "4": 0.25171213081757216,
+            "5": 0.27188135250505674,
+            "6": 0.0979957255470176
+        },
+        "boltzmann_weights": [
+            0.49993342033305477,
+            0.5000665796669451
+        ]
+    }
+}
