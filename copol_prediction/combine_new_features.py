@@ -5,6 +5,7 @@ from rdkit.Chem import Descriptors
 
 failed_smiles_list = []
 
+
 # Function to calculate logP from SMILES
 def calculate_logP(smiles):
     try:
@@ -21,6 +22,7 @@ def calculate_logP(smiles):
         failed_smiles_list.append(smiles)
         return None
 
+
 # Function to load additional monomer data from the corresponding JSON files
 def load_monomer_data(smiles, monomer_data_path):
     filename = os.path.join(monomer_data_path, f"{smiles}.json")
@@ -32,6 +34,7 @@ def load_monomer_data(smiles, monomer_data_path):
         print(f"File not found for SMILES: {smiles} at {filename}")
         return None
 
+
 # Main function
 def main():
     # Path to the monomer features files
@@ -42,8 +45,11 @@ def main():
     with open(data_file, 'r') as file:
         data = json.load(file)
 
+    # Track the number of times each paper name has been used
+    paper_count = {}
+
     # Process each entry in the data
-    for entry in data:
+    for idx, entry in enumerate(data):
         # Calculate logP for the solvent
         solvent_smiles = entry.get('solvent')
         if solvent_smiles:
@@ -61,14 +67,33 @@ def main():
         if monomer2_data:
             entry['monomer2_data'] = monomer2_data
 
-    # Save the updated data back to a JSON file
-    output_file = 'extracted_data_collected_with_logP_and_features.json'
-    with open(output_file, 'w') as file:
-        json.dump(data, file, indent=4)
+        # Determine a unique filename for each reaction
+        base_filename = entry.get('file', 'unknown').replace('.json', '')
+        if base_filename in paper_count:
+            paper_count[base_filename] += 1
+        else:
+            paper_count[base_filename] = 1
+        unique_filename = f"{base_filename}_reaction_{paper_count[base_filename]}.json"
 
-    print(f"Data successfully updated and saved to {output_file}")
+        output_path = os.path.join('./processed_reactions', unique_filename)
+
+        with open(output_path, 'w') as output_file:
+            json.dump(entry, output_file, indent=4)
+
+    print(f"Processed files saved in ./processed_reactions/")
 
 
 if __name__ == "__main__":
+    # Create directory for processed files if it doesn't exist
+    if not os.path.exists('./processed_reactions'):
+        os.makedirs('./processed_reactions')
+
     main()
-    print(failed_smiles_list)
+
+    # Print the list of SMILES that failed logP calculation
+    if failed_smiles_list:
+        print("Failed SMILES for logP calculation:")
+        for smi in failed_smiles_list:
+            print(smi)
+    else:
+        print("All SMILES were successfully processed.")
