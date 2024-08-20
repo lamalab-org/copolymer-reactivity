@@ -47,6 +47,7 @@ def main():
 
     # Track the number of times each paper name has been used
     paper_count = {}
+    all_entries = []
 
     # Process each entry in the data
     for idx, entry in enumerate(data):
@@ -80,6 +81,12 @@ def main():
         with open(output_path, 'w') as output_file:
             json.dump(entry, output_file, indent=4)
 
+        all_entries.append(entry)
+
+    # Save all entries in a single file
+    all_reactions_output_path = os.path.join('./processed_reactions', 'all_reactions.json')
+    with open(all_reactions_output_path, 'w') as all_reactions_file:
+        json.dump(all_entries, all_reactions_file, indent=4)
     print(f"Processed files saved in ./processed_reactions/")
 
 
