@@ -176,6 +176,7 @@ def call_openai(
         ],
         temperature=temperature,
         seed=12345,
+        response_format={"type": "json_object"},
         **kwargs,
     )
     input_tokens = completion.usage.prompt_tokens

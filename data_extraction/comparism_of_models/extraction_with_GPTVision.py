@@ -72,7 +72,7 @@ for i, filename in enumerate(input_files):
     #with open(output_name_yaml, "w", encoding="utf-8") as yaml_file:
         #yaml.dump(output, yaml_file, allow_unicode=True, default_flow_style=False)
     #print("Output saved as YAML-file.")
-    output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder, filename)
+    #output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder, filename)
 
     for a in range(number_of_model_calls):
         na_count = az.count_na_values(output)
