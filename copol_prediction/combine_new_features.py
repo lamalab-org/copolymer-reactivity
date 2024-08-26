@@ -4,6 +4,7 @@ from rdkit import Chem
 from rdkit.Chem import Descriptors
 
 failed_smiles_list = []
+count = []
 
 
 # Function to calculate logP from SMILES
@@ -61,12 +62,16 @@ def main():
         monomer1_data = load_monomer_data(monomer1_smiles, monomer_data_path)
         if monomer1_data:
             entry['monomer1_data'] = monomer1_data
+        else:
+            count.append(monomer1_smiles)
 
         # Load and add monomer2 data
         monomer2_smiles = entry.get('monomer2_s')
         monomer2_data = load_monomer_data(monomer2_smiles, monomer_data_path)
         if monomer2_data:
             entry['monomer2_data'] = monomer2_data
+        else:
+            count.append(monomer2_smiles)
 
         # Determine a unique filename for each reaction
         base_filename = entry.get('file', 'unknown').replace('.json', '')
@@ -96,6 +101,9 @@ if __name__ == "__main__":
         os.makedirs('./processed_reactions')
 
     main()
+
+    print('failed smiles: ', len(set(count)))
+    print(set(count))
 
     # Print the list of SMILES that failed logP calculation
     if failed_smiles_list:
