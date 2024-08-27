@@ -68,9 +68,13 @@ def conformer_opt(smiles):
         print(f"GFN-FF optimization failed for {smiles}: {e}")
         # Continue with the next steps regardless of the error
 
-    # Run optimization with GFN2-xTB
-    model_opt = {"method": "GFN2-xTB"}
-    ce.optimize_qc_engine(program="xtb", model=model_opt, procedure="geometric")
+    try:
+        # Run optimization with GFN2-xTB
+        model_opt = {"method": "GFN2-xTB"}
+        ce.optimize_qc_engine(program="xtb", model=model_opt, procedure="geometric")
+    except Exception as e:
+        print(f"GFN-FF optimization failed for {smiles}: {e}")
+        # Continue with the next steps regardless of the error
 
     # Run single-point calculations with GFN2-xTB
     model_sp = {"method": "GFN2-xTB"}
@@ -152,7 +156,7 @@ def main(json_file, output_folder, smiles_error):
         os.makedirs(output_folder)
 
     # Calculate properties for each unique SMILES string with a progress bar
-    for smiles in tqdm(sorted(unique_smiles, reverse=True), desc="Processing SMILES"):
+    for smiles in tqdm(sorted(unique_smiles), desc="Processing SMILES"):
         print('SMILES: ', smiles)
         filename = os.path.join(output_folder, f"{smiles.replace('/', '_')}.json")
         if os.path.exists(filename):
