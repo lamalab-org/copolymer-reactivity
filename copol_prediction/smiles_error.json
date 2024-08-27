@@ -90,5 +90,45 @@
     {
         "smiles": "C[SH+]C=Cc1ccccc1.F[B-](F)(F)F",
         "error": "geomeTRIC run_json error:\nTraceback (most recent call last):\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/geometric/run_json.py\", line 258, in geometric_run_json\n    geometric.optimize.Optimize(coords, M, IC, engine, dirname, params)\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/geometric/optimize.py\", line 778, in Optimize\n    return optimizer.optimizeGeometry()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/geometric/optimize.py\", line 696, in optimizeGeometry\n    self.calcEnergyForce()\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/geometric/optimize.py\", line 282, in calcEnergyForce\n    spcalc = self.engine.calc(self.X, self.dirname, read_data=(self.Iteration==0))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/geometric/engine.py\", line 1473, in calc\n    return self.calc_new(coords, dirname)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/geometric/engine.py\", line 1464, in calc_new\n    raise QCEngineAPIEngineError(\"QCEngineAPI computation did not execute correctly. Message: \" + ret[\"error\"][\"error_message\"])\ngeometric.errors.QCEngineAPIEngineError: QCEngineAPI computation did not execute correctly. Message: QCEngine Execution Error:\nTraceback (most recent call last):\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/qcengine/util.py\", line 117, in compute_wrapper\n    yield metadata\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/qcengine/compute.py\", line 108, in compute\n    output_data = executor.compute(input_data, config)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/qcengine/programs/xtb.py\", line 72, in compute\n    output = run_qcschema(input_data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/xtb/qcschema/harness.py\", line 214, in run_qcschema\n    return qcel.models.AtomicResult(**ret_data, stdout=output)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/maraw/anaconda3/envs/morfeus2/lib/python3.11/site-packages/pydantic/v1/main.py\", line 341, in __init__\n    raise validation_error\npydantic.v1.error_wrappers.ValidationError: 1 validation error for AtomicResult\nreturn_result\n  cannot reshape array of size 1 into shape (3) (type=value_error)\n\n"
+    },
+    {
+        "smiles": "O=C(O)c1cccc(C(=O)O)c1.[Cl-].[Cl-]",
+        "error": "Following atoms are too close: [(12, 13, 0.0)]"
+    },
+    {
+        "smiles": "O=C(O)c1cccc(C(=O)O)c1.[Cl-].[Cl-]",
+        "error": "Following atoms are too close: [(12, 13, 0.0)]"
+    },
+    {
+        "smiles": "CCCC[Sn](C=CCOC(=O)/C=C\\C(=O)[O-])(CCCC)CCCC",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpdsr_s0st': Too many open files"
+    },
+    {
+        "smiles": "C=Cc1cc(O)ccc1O.O=C(O)c1ccccc1.O=C(O)c1ccccc1",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmppzsfsd26': Too many open files"
+    },
+    {
+        "smiles": "C=C(CC(=O)[O-])C(=O)[O-].CCCC[Sn+](CCCC)CCCC.CCCC[Sn+](CCCC)CCCC",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=CC(=O)[O-].C=CC(=O)[O-].[Zn+2]",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=CC[N+](C)(C)CC=C.[Cl-]",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=Cc1cc(O)ccc1O.O=C(O)c1ccccc1.O=C(O)c1ccccc1",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "CCCC[Sn](C=CCOC(=O)/C=C\\C(=O)[O-])(CCCC)CCCC",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmp95taispd': Too many open files"
+    },
+    {
+        "smiles": "O=C(O)c1cccc(C(=O)O)c1.[Cl-].[Cl-]",
+        "error": "Following atoms are too close: [(12, 13, 0.0)]"
     }
 ]
