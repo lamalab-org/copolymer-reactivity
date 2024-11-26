@@ -1,0 +1,31 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-Vinylpyridine",
+                "Methacrylic Acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.55,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na"
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ja01122a053",
+    "PDF_name": "Amphoteric Polyelectrolytes. I. 2-Vinylpyridine–Methacrylic Acid Copolymers",
+    "source_pdf": "paper02.pdf"
+}

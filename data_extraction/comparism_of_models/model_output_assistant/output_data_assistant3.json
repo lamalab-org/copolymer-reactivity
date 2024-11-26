@@ -1,0 +1,30 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methacrylic Acid",
+                "Ethyl Acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "emulsion",
+                    "solvent": "water",
+                    "method": null,
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 2.58,
+                        "constant_2": 0.157
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "EVM program using the Kelen-Tudos method"
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Volume 53, Pages 1771-1783 (1994)",
+    "PDF_name": "paper03.pdf"
+}
