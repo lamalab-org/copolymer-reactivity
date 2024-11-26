@@ -104,7 +104,7 @@ const_json_file_path = '../plots_and_figures/rxn_const.json'
 temp_json_file_path = '../plots_and_figures/temp.json'
 
 test_path = "test_data"
-model_path = "../comparism_of_models/model_output_GPT4-o"
+model_path = "../comparison_of_models/model_output_GPT4-o"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
