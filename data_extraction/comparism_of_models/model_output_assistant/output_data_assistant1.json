@@ -1,0 +1,94 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methacrylic Acid",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Carbon Tetrachloride",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.54,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudós"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Chloroform",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudós"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Acetone",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudós"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-Dioxane",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.41,
+                        "constant_2": 0.59
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudós"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Acetonitrile",
+                    "method": null,
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudós"
+                }
+            ]
+        }
+    ],
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/macp.1985.021860820",
+    "PDF_name": "paper01.pdf"
+}

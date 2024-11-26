@@ -1,0 +1,32 @@
+PDF_name: null
+reactions:
+- monomers:
+  - Benzyl Methacrylate
+  - Maleic Anhydride
+  reaction_conditions:
+  - determination_method: Fineman-Ross
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.035
+      constant_conf_2: 0.005
+    reaction_constants:
+      constant_1: 0.188
+      constant_2: 0.003
+    solvent: chloroform
+    temperature: 70.0
+    temperature_unit: °C
+  - determination_method: Fineman-Ross
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.093
+      constant_conf_2: 0.027
+    reaction_constants:
+      constant_1: 0.116
+      constant_2: 0.231
+    solvent: acetonitrile
+    temperature: 70.0
+    temperature_unit: °C
+source: Makromol. Chem. 182, 1119 - 1125 (1981)
+source_pdf: Die Makromolekulare Chemie, 182(4), 1119–1125.pdf
