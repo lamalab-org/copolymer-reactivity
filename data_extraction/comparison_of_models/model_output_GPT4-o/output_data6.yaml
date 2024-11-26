@@ -1,0 +1,52 @@
+PDF_name: Kinetics of polymerization and copolymerization of MAS
+reactions:
+- monomers:
+  - Methacrylic Acid Sulpholanate
+  - Styrene
+  reaction_conditions:
+  - determination_method: na
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.01
+    reaction_constants:
+      constant_1: 1.5
+      constant_2: 0.22
+    solvent: Dimethylformamide
+    temperature: 50.0
+    temperature_unit: °C
+- monomers:
+  - Methacrylic Acid Sulpholanate
+  - Methyl Methacrylate
+  reaction_conditions:
+  - determination_method: na
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.25
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 3.34
+      constant_2: 0.67
+    solvent: Dimethylformamide
+    temperature: 50.0
+    temperature_unit: °C
+- monomers:
+  - Methacrylic Acid Sulpholanate
+  - Methacrylic Acid
+  reaction_conditions:
+  - determination_method: na
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.1
+      constant_conf_2: 0.02
+    reaction_constants:
+      constant_1: 1.0
+      constant_2: 0.83
+    solvent: Dimethylformamide
+    temperature: 50.0
+    temperature_unit: °C
+source: na
+source_pdf: paper06.pdf

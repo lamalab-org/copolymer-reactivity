@@ -1,0 +1,90 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3-methylstyrene",
+                "methacrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solution",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.43
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.33,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "isopropyl alcohol",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.42
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "acetone",
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.41,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": null,
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "3-methylstyrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": null,
+                    "method": null,
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tüdös"
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1080/10601329508013679",
+    "PDF_name": "Journal of Macromolecular Science, Part A Pure and Applied Chemistry"
+}

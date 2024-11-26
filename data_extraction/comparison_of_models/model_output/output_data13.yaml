@@ -1,0 +1,45 @@
+PDF_name: null
+reactions:
+- monomers:
+  - phenyl methacrylate
+  - methacrylic acid
+  reaction_conditions:
+  - determination_method: Fineman-Ross
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: null
+      constant_conf_2: null
+    reaction_constants:
+      constant_1: 0.25
+      constant_2: 1.15
+    solvent: dimethylformamide
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Fineman-Ross
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.14
+      constant_conf_2: 0.17
+    reaction_constants:
+      constant_1: 0.4
+      constant_2: 0.59
+    solvent: benzene
+    temperature: 60.0
+    temperature_unit: °C
+  - determination_method: Fineman-Ross
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.02
+      constant_conf_2: 0.13
+    reaction_constants:
+      constant_1: 0.21
+      constant_2: 1.52
+    solvent: benzene-dimethylformamide
+    temperature: 60.0
+    temperature_unit: °C
+source: 'Vysokomol. soed. A12: No. 11, 2488-2493, 1970.'
+source_pdf: The copolymerization of phenyl methacrylate with methacrylic acid. Polymer
+  Science U.S.S.R., 12(11), 2820–2825.pdf

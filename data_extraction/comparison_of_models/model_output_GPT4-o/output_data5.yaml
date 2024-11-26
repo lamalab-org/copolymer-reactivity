@@ -1,0 +1,21 @@
+PDF_name: 'Copolymerization of Ethylene and Vinyl Acetate at Low Pressure: Determination
+  of the Kinetics by Sequential Sampling'
+reactions:
+- monomers:
+  - Ethylene
+  - Vinyl Acetate
+  reaction_conditions:
+  - determination_method: nonlinear least-squares
+    method: solvent
+    polymerization_type: free radical
+    reaction_constant_conf:
+      constant_conf_1: 0.005
+      constant_conf_2: 0.007
+    reaction_constants:
+      constant_1: 0.743
+      constant_2: 1.515
+    solvent: tert-Butyl Alcohol
+    temperature: 62.0
+    temperature_unit: °C
+source: 'Journal of Polymer Science: Part A-1 Vol. 9, 2225-2232 (1971)'
+source_pdf: paper05.pdf
