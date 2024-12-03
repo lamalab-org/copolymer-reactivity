@@ -172,9 +172,9 @@ def find_matching_reaction_conditions(
     matching_idxs = []
     for i, comb in enumerate(reaction_conditions):
         if comb["temperature"] != "NA" and comb["temperature_unit"] != "NA":
-            temperature_model, temp = convert_unit(
-                comb["temperature"], temperature, comb["temperature_unit"], temp_unit
-            )
+            temp = convert_unit(temperature, temp_unit)
+            temperature_model = convert_unit(
+                comb["temperature"], comb["temperature_unit"])
         else:
             temperature_model = comb["temperature"]
             temp = temperature
