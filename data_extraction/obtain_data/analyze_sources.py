@@ -3,7 +3,7 @@ from collections import Counter
 import re
 
 
-file_path = '../collected_data/doi_with_metadata.json'
+file_path = '../collected_data/collected_doi_metadata.json'
 with open(file_path, 'r') as file:
     data = json.load(file)
 

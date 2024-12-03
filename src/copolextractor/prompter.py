@@ -14,45 +14,31 @@ class RunTimeExpired(Exception):
     pass
 
 
-def get_prompt_rxn_number():
-    prompt = """The content of the pictures is a scientific paper about copolymerization of monomers.
-The main focus here is to find the copolymerizations which have r-values for a pair of two Monomers.
-We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
-Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
-Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
-Count each different reaction with an r-value as one. Ignore copolymerization with reference to previse work.
-If there are also reactions from previous works included set the 'additional sources' variable to true.
-Just count copolymerizations with r-values which are carried out in the article.  Return one json object. 
-Stick to the given output datatype (string, or float). json:
-{
-    "number of reactions": number of the different relevant copolymerizations with r-values in the paper (FLOAT),
-    "additional sources": if there are additional reaction from previous works included = true (BOOLEAN),
-    "language": language of the main text (STRING),
-    "paper name": name of the pdf document (STRING
-}
-"""
-    return prompt
-
-
 def get_prompt_pdf_quality():
     prompt = """Question: The content of the pictures is a scientific paper about copolymerization of monomers.
     The main focus here is to find the copolymerizations which have r-values for a pair of two Monomers.
     Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
     Ignore these. Rate the quality of the provided paper form 0 (hard to extract data) to 10 (easy to extract data) in terms of readability and easiness of data extraction.
-    Return one json object. 
+    In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
+    Count each different reaction with an r-value as one. Ignore copolymerization with reference to previse work.
+    Just count copolymerizations with r-values which are carried out in the article.  
     Stick to the given output datatype (string, integer or float). json:
     {
         "pdf_quality": the quality of the provided PDF document in terms of e.g. resolution and easiness of data extraction form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
         "table_quality": the quality and structuredness of the tables in the PDF document in terms of e.g. easiness of data extraction and clearity form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
         "quality_of_numbers": the readability of the numbers in the PDF document form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
-        "year": the year of the publication (INTEGER)
+        "year": the year of the publication (INTEGER),
+        "number_of_reactions": number of the different relevant copolymerizations with r-values in the paper (FLOAT),
+        "language": language of the main text (STRING),
     }
     Possible Answer (including comments in the brackets):
     {
         "pdf_quality": 4 (resolution is poor but still readable),
         "table_quality": 5 (basic structure provided; no clear lines in between; line slip possible),
         "quality_of_number": 7 (numbers are readable),
-        "year": 1957
+        "year": 1957,
+        "number_of_reactions": 20 (20 different copolymerization reaction with r-value in this paper),
+        "language": english,
     }
     Question: Please reason concisely about the quality of the given categorys in terms of how likely you would make mistakes in extracting data for this article.
     Then provide your answer in the given json format. Please be really realistic about your score and try to give a calibrated estimate.

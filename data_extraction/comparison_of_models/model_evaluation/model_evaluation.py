@@ -100,11 +100,8 @@ all_model_data = []
 all_test_data_temp = []
 all_model_data_temp = []
 
-const_json_file_path = '../plots_and_figures/rxn_const.json'
-temp_json_file_path = '../plots_and_figures/temp.json'
-
 test_path = "test_data"
-model_path = "../comparison_of_models/model_output_GPT4-o"
+model_path = "../model_output_GPT4-o"
 test_files = sorted([f for f in os.listdir(test_path) if f.endswith(".yaml")])
 model_files = sorted([f for f in os.listdir(model_path) if f.endswith(".yaml")])
 
@@ -122,10 +119,10 @@ wandb.init(
         "seed": 12345,
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
-        "input tokens used": 98755,
-        "output tokens used": 5402,
+        "input tokens used": 100085,
+        "output tokens used": 7813,
         "total model calls": 10,
-        "time used": 302.4681930541992
+        "time used": 383.4063169956207
 
     }
 )
@@ -333,12 +330,12 @@ for test_file, model_file in zip(test_files, model_files):
 
 correct_reaction_rate = calculate_rate(correct_reaction_count, combined_count_reaction_conditions_test) * 100
 
-existing_data_const = load_existing_data(const_json_file_path)
-existing_data_temp = load_existing_data(temp_json_file_path)
-updated_data_const = append_new_data(existing_data_const, all_test_data, all_model_data)
-updated_data_temp = append_new_data(existing_data_temp, all_test_data_temp, all_model_data_temp)
-save_data(const_json_file_path, updated_data_const)
-save_data(temp_json_file_path, updated_data_temp)
+#existing_data_const = load_existing_data(const_json_file_path)
+#existing_data_temp = load_existing_data(temp_json_file_path)
+#updated_data_const = append_new_data(existing_data_const, all_test_data, all_model_data)
+#updated_data_temp = append_new_data(existing_data_temp, all_test_data_temp, all_model_data_temp)
+#save_data(const_json_file_path, updated_data_const)
+#save_data(temp_json_file_path, updated_data_temp)
 
 print('reaction count', reaction_condition_count)
 print('correct rxn count', correct_reaction_count)
