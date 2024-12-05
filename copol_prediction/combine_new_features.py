@@ -42,7 +42,7 @@ def main():
     monomer_data_path = './molecule_properties'
 
     # Load the main data JSON
-    data_file = '../data_extraction/data_extraction_GPT-4o/collected_data/extracted_data_collected_without_fp.json'
+    data_file = '../data_extraction/data_extraction_GPT-4o/output/copol_database/copol_extracted_data_without_fp.json'
     with open(data_file, 'r') as file:
         data = json.load(file)
 

@@ -5,7 +5,7 @@ import copolextractor.analyzer as az
 import copolextractor.utils as utils
 
 
-folder_path = '../data_extraction/data_extraction_GPT-4o/model_output_extraction'
+folder_path = '../data_extraction/data_extraction_GPT-4o/output/copol_database/model_output_extraction'
 
 results = []
 
@@ -76,6 +76,6 @@ print(f"Number of reactions: {reaction_count}")
 for result in results:
     print(result)
 
-with open('../data_extraction/data_extraction_GPT-4o/collected_data/extracted_data_collected_without_fp.json', 'w') as file:
+with open('../data_extraction/data_extraction_GPT-4o/output/copol_database/copol_extracted_data_without_fp.json', 'w') as file:
     json.dump(results, file, indent=4)
 

@@ -3,25 +3,26 @@ import time
 import json
 import yaml
 from pdf2image import convert_from_path
-from openai import OpenAI
 import copolextractor.prompter as prompter
 import copolextractor.analyzer as az
 import copolextractor.image_processer as ip
 
 
-def process_pdf_files(input_folder, output_folder_images, output_folder, number_of_model_calls, api_key):
+def process_pdf_files(paper_list_path, output_folder_images, output_folder, number_of_model_calls):
     """
-    Process PDF files in the input folder, convert them to images, and analyze their content using an OpenAI model.
+    Process PDF files based on entries from paper_list.json and update the JSON file with extraction results.
     """
     start = time.time()
 
-    # Initialize OpenAI client
-    client = OpenAI(api_key=api_key)
+    # Load paper list JSON
+    with open(paper_list_path, 'r', encoding='utf-8') as file:
+        paper_list = json.load(file)
 
-    # Get list of PDF files in the input folder
-    input_files = sorted([f for f in os.listdir(input_folder) if f.endswith(".pdf")])
-    print(input_files)
-    print('Number of input files:', len(input_files))
+    # Filter for entries with "precision_score": 1
+    selected_papers = [
+        entry for entry in paper_list if entry.get("precision_score") == 1 and not entry.get("extracted")
+    ]
+    print(f"Number of PDFs to process: {len(selected_papers)}")
 
     # Token and model call counters
     total_input_tokens = 0
@@ -31,8 +32,14 @@ def process_pdf_files(input_folder, output_folder_images, output_folder, number_
     # Load prompt template
     prompt_text = prompter.get_prompt_template()
 
-    for i, filename in enumerate(input_files):
-        file_path = os.path.join(input_folder, filename)
+    for i, paper in enumerate(selected_papers):
+        filename = paper['pdf_name']
+        file_path = os.path.join("pdf_testset", filename)
+
+        if not os.path.exists(file_path):
+            print(f"Skipping {filename}: File not found.")
+            continue
+
         print(f"Processing {filename}")
 
         # Convert PDF to images
@@ -77,11 +84,16 @@ def process_pdf_files(input_folder, output_folder_images, output_folder, number_
                 print("NA-rate below 30%, no further retries needed.")
                 break
 
-        # Final output save
-        with open(output_name_json, "w", encoding="utf-8") as json_file:
-            json.dump(output, json_file, ensure_ascii=True, indent=4)
-        with open(output_name_yaml, "w", encoding="utf-8") as yaml_file:
-            yaml.dump(output, yaml_file, allow_unicode=True, default_flow_style=False)
+        # Update the JSON entry
+        paper.update({
+            "extracted": True,
+            "extracted_data": output
+        })
+
+    # Save the updated JSON file
+    extracted_json_path = "data_extracted.json"
+    with open(extracted_json_path, 'w', encoding='utf-8') as file:
+        json.dump(paper_list, file, indent=4)
 
     print("Total input tokens used:", total_input_tokens)
     print("Total output tokens used:", total_output_tokens)
@@ -91,25 +103,25 @@ def process_pdf_files(input_folder, output_folder_images, output_folder, number_
     print("Execution time:", end - start)
 
 
-def main():
-    # Input and output folders
-    input_folder = "pdf_testset"
-    output_folder_images = "./processed_images"
-    output_folder = "./model_output_GPT4-o"
-
+def main(input_folder_images, output_folder, paper_list_path):
+    """
+    Main function to process PDFs and update JSON entries.
+    """
     # Number of retries for model calls
     number_of_model_calls = 2
 
-    # OpenAI API Key
-    api_key = os.getenv("OPENAI_API_KEY")
-
     # Ensure output folders exist
-    os.makedirs(output_folder_images, exist_ok=True)
+    os.makedirs(input_folder_images, exist_ok=True)
     os.makedirs(output_folder, exist_ok=True)
 
     # Process PDF files
-    process_pdf_files(input_folder, output_folder_images, output_folder, number_of_model_calls, api_key)
+    process_pdf_files(paper_list_path, input_folder_images, output_folder, number_of_model_calls)
 
 
 if __name__ == "__main__":
-    main()
+    # Input and output folders
+    input_folder_images = "./processed_images"
+    output_folder = "./model_output_GPT4-o"
+    paper_list_path = "../data_extraction_GPT-4o/output/paper_list.json"
+
+    main(input_folder_images, output_folder, paper_list_path)
