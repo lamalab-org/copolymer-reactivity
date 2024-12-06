@@ -87,10 +87,17 @@ def download_papers_and_update_file(input_file, output_folder):
           f"{failed_download_count} downloads failed.")
 
 
-def main(input_file, output_folder):
+def main():
     """
     Main function to handle the download process and update the JSON file.
     """
+    input_file = "../../data_extraction/obtain_data/output/selected_200_papers.json"  # Path to the input JSON file
+    output_folder = "output/PDF"  # Folder to save the papers
+
+    # Check if the output folder exists, and create it if not
+    os.makedirs(output_folder, exist_ok=True)
+    print(f"Ensured folder exists: {output_folder}")
+
     print("Starting the paper download process...")
     download_papers_and_update_file(input_file, output_folder)
 
@@ -100,12 +107,4 @@ def main(input_file, output_folder):
 
 
 if __name__ == "__main__":
-    input_file = "output/selected_200_papers.json"  # Path to the input JSON file
-    output_folder = "output/PDF"  # Folder to save the papers
-
-    # Check if the output folder exists, and create it if not
-    os.makedirs(output_folder, exist_ok=True)
-    print(f"Ensured folder exists: {output_folder}")
-
-    # Call the main function
-    main(input_file, output_folder)
+    main()

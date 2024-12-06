@@ -152,6 +152,6 @@ if __name__ == "__main__":
     input_folder = "./PDF"
     output_folder_images = "./processed_images"
     output_folder = "./model_output_score"
-    selected_entries_path = "../output/copol_paper_list.json"
+    selected_entries_path = "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
 
     main(input_folder, output_folder_images, output_folder, selected_entries_path)
