@@ -85,9 +85,9 @@ def process_papers(input_file, journal_file, keywords, output_file):
 
 def main():
     # Input and output files
-    journal_file = "output/journals.json"
-    input_file = "output/collected_doi_metadata.json"
-    output_file = "output/scored_doi.json"
+    journal_file = "../../data_extraction/obtain_data/output/journals.json"
+    input_file = "../../data_extraction/obtain_data/output/collected_doi_metadata.json"
+    output_file = "../../data_extraction/obtain_data/output/scored_doi.json"
 
     # Keywords and their weights
     keywords = {

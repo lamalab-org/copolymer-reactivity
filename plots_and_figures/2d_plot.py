@@ -7,7 +7,7 @@ import seaborn as sns
 import matplotlib.patches as mpatches
 
 # Load the JSON data
-with open('../data_extraction_GPT-4o/output/copol_database/copol_extracted_data.json', 'r') as file:
+with open('../data_extraction/data_extraction_GPT-4o/output/copol_database/copol_extracted_data.json', 'r') as file:
     data = json.load(file)
 
 

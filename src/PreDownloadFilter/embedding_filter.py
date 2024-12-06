@@ -164,8 +164,8 @@ def save_json(data, path):
 
 def main():
     # Define input and output paths
-    input_file_path = "output/scored_doi.json"
-    output_dir = "output"
+    input_file_path = "../../data_extraction/obtain_data/output/scored_doi.json"
+    output_dir = "../../data_extraction/obtain_data/output"
     doi_list_path = os.path.join(output_dir, "embeddings/existing_embeddings.json")
     selected_papers_path = os.path.join(output_dir, "selected_200_papers.json")
     number_of_selected_paper = 200

@@ -138,15 +138,12 @@ def save_extracted_data(output_file_path, extracted_data):
     print(f"Extracted data saved to {output_file_path}.")
 
 
-def main():
+def main(crossref_query):
     # Define file paths
-    copol_file_path = '../data_extraction_GPT-4o/output/copol_paper_list.json'
-    output_crossref_file = 'output/crossref_search.json'
-    extracted_doi_file = 'output/collected_doi.json'
-    metadata_output_file = 'collected_doi_metadata.json'
-
-    # Define CrossRef query
-    crossref_query = "'copolymerization' AND 'reactivity ratio'"
+    copol_file_path = '../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json'
+    output_crossref_file = '../../data_extraction/obtain_data/output/crossref_search.json'
+    extracted_doi_file = '../../data_extraction/obtain_data/output/collected_doi.json'
+    metadata_output_file = '../../data_extraction/obtain_data/collected_doi_metadata.json'
 
     # Initialize extracted data list
     extracted_data = []
@@ -163,4 +160,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Define CrossRef query
+    crossref_query = "'copolymerization' AND 'reactivity ratio'"
+
+    main(crossref_query)

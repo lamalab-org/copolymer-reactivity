@@ -1,6 +1,6 @@
 import os
-from random_forest_filter.precision_prediction_randomforest import main as rf_main
-from random_forest_filter.extract_PDF_quality_GPT4 import main as pdf_main
+from PreExtractionFilter.precision_prediction_randomforest import main as rf_main
+from PreExtractionFilter.extract_PDF_quality_GPT4 import main as pdf_main
 
 
 def run_combined_pipeline(training_file, scoring_file, output_file, pdf_input_folder, output_folder_images, output_folder):
@@ -36,9 +36,9 @@ def main():
     output_folder_images = "./output/processed_images"
     output_folder = "./output/model_output_score"
 
-    training_file = "output/copol_paper_list.json"
-    scoring_file = "paper_list_3.json"
-    output_file = "./output/paper_list.json"
+    training_file = "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
+    scoring_file = "../../data_extraction/obtain_data/output/selected_200_papers.json"
+    output_file = "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
 
     # Ensure output directories exist
     os.makedirs(output_folder_images, exist_ok=True)
