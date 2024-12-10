@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: Methyl methacrylate",
+                "monomer2: 2-(Dimethylamino)ethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "Atom Transfer Radical Polymerization",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.36,
+                        "constant_2": 2.76
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.15
+                    },
+                    "determination_method": "Eq. 8",
+                    "Q-value": {
+                        "constant_1": 1.94,
+                        "constant_2": 2.83
+                    },
+                    "e-Value": {
+                        "constant_1": 1.04,
+                        "constant_2": 0.77
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "Atom Transfer Radical Polymerization",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.48,
+                        "constant_2": 1.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.26
+                    },
+                    "determination_method": "Eq. 7",
+                    "Q-value": {
+                        "constant_1": 1.04,
+                        "constant_2": 0.77
+                    },
+                    "e-Value": {
+                        "constant_1": 1.04,
+                        "constant_2": 0.77
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.29017",
+    "PDF_name": "On the Origin and Consequences of High DMAEMA Reactivity Ratio in ATRP Copolymerization with MMA: An Experimental and Theoretical Study"
+}

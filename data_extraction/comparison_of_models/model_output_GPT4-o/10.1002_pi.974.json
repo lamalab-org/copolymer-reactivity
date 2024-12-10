@@ -1,0 +1,255 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "2-F-hexylethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.72,
+                        "constant_2": 0.42
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.61,
+                        "constant_2": 0.58
+                    },
+                    "e-Value": {
+                        "constant_1": 0.29,
+                        "constant_2": 0.29
+                    },
+                    "r_product": 0.31
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross inverse",
+                    "Q-value": {
+                        "constant_1": 1.61,
+                        "constant_2": 0.58
+                    },
+                    "e-Value": {
+                        "constant_1": 0.29,
+                        "constant_2": 0.29
+                    },
+                    "r_product": 0.28
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.61,
+                        "constant_2": 0.58
+                    },
+                    "e-Value": {
+                        "constant_1": 0.29,
+                        "constant_2": 0.29
+                    },
+                    "r_product": 0.3
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "4-F-hexylbutyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.03,
+                        "constant_2": 0.68
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.07,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": -0.08,
+                        "constant_2": -0.08
+                    },
+                    "r_product": 0.7
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.96,
+                        "constant_2": 0.57
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross inverse",
+                    "Q-value": {
+                        "constant_1": 1.07,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": -0.08,
+                        "constant_2": -0.08
+                    },
+                    "r_product": 0.55
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.64
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.07,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": -0.08,
+                        "constant_2": -0.08
+                    },
+                    "r_product": 0.59
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "6-F-hexylhexyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.02,
+                        "constant_2": 0.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.54
+                    },
+                    "e-Value": {
+                        "constant_1": -0.1,
+                        "constant_2": -0.1
+                    },
+                    "r_product": 0.56
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.12,
+                        "constant_2": 0.61
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross inverse",
+                    "Q-value": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.54
+                    },
+                    "e-Value": {
+                        "constant_1": -0.1,
+                        "constant_2": -0.1
+                    },
+                    "r_product": 0.68
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.06,
+                        "constant_2": 0.58
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.54
+                    },
+                    "e-Value": {
+                        "constant_1": -0.1,
+                        "constant_2": -0.1
+                    },
+                    "r_product": 0.61
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pi.974",
+    "PDF_name": "Monomers reactivity ratios of fluorinated acrylates\u2013styrene copolymers"
+}

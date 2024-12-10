@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: Glycidyl Methacrylate",
+                "monomer2: Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-Dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.799,
+                        "constant_2": 1.301
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.74,
+                        "constant_conf_2": 1.218
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.039
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-Dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.74,
+                        "constant_2": 1.218
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.76,
+                        "constant_conf_2": 1.26
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.901
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-Dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.76,
+                        "constant_2": 1.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "RREVM",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.958
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/jemt.23384",
+    "PDF_name": "Spectroscopic characterization of glycidyl methacrylate with acrylonitrile copolymers and monomer reactivity ratios"
+}

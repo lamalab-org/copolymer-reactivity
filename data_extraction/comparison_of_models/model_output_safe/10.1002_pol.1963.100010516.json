@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: 1-Vinylnaphthalene",
+                "monomer2: Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.67,
+                        "constant_2": 1.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 3.55,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1350.0,
+                        "constant_2": 792.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1: 9-Vinylanthracene",
+                "monomer2: Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.12,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.89,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 440.0,
+                        "constant_2": 792.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1: 9-Vinylphenanthrene",
+                "monomer2: Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.58,
+                        "constant_2": 2.36
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.89,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 440.0,
+                        "constant_2": 792.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "na",
+    "PDF_name": "Polymerization and Copolymerization of 1- and 9-Vinylnaphthalenes and 9-Vinylphenanthrene"
+}

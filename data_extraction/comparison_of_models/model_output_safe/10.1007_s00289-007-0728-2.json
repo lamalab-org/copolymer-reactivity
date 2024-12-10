@@ -1,0 +1,91 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "4-biphenyl methacrylate",
+                "monomer2",
+                "glycidyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl methyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.398,
+                        "constant_2": 0.365
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.004,
+                        "constant_conf_2": 0.013
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl methyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.394,
+                        "constant_2": 0.352
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.004,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl methyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.392,
+                        "constant_2": 0.358
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.006,
+                        "constant_conf_2": 0.007
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "DOI 10.1007/s00289-007-0728-2",
+    "PDF_name": "Copolymerization of 4-biphenyl methacrylate with glycidyl methacrylate"
+}

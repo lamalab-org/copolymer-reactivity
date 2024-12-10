@@ -4,8 +4,6 @@ from copolextractor.utils import name_to_smiles, load_yaml
 from thefuzz import fuzz
 from pint import UnitRegistry
 
-ureg = UnitRegistry()
-
 
 def get_number_of_reactions(data: dict) -> int:
     return len(data["reactions"])
@@ -61,18 +59,29 @@ def get_solvent(data: list, index: int) -> tuple:
     return solvent, solvent_smiles
 
 
-def convert_unit(temp1: int, unit1: str):
+ureg = UnitRegistry()
+
+
+def convert_unit(temp1, unit1):
+    """
+    Converts a temperature to Celsius if the unit is not already Celsius.
+    Handles 'na' entries by returning None.
+    """
+    # Check for 'na' entries
+    if temp1 == 'na' or unit1 == 'na':
+        return None
+
     try:
+        # Parse and convert the temperature
         temp1_unit = ureg.Quantity(temp1, ureg.parse_units(unit1))
         if ureg.parse_units(unit1) is not ureg.degC:
             temp1_unit.ito(ureg.degC)
         return temp1_unit.magnitude
     except (AttributeError, ValueError, TypeError, KeyError) as e:
-        print(AttributeError, e)
-        print(ValueError, e)
-        print(TypeError, e)
-        print(KeyError, e)
-        return temp1
+        # Log the error details
+        print("Error converting units:", e)
+        return None
+
 
 
 def get_metadata_polymerization(data: dict):
@@ -270,35 +279,78 @@ def average(const):
 
 
 def count_na_values(data, null_value="na"):
+    """
+    Count occurrences of a specific null value (e.g., 'na') in nested dictionaries or lists.
+
+    Args:
+        data: The data structure (dict, list, or scalar) to search.
+        null_value (str): The value to count as 'null', defaults to "na".
+
+    Returns:
+        int: The count of occurrences of the null value.
+    """
     null_count = 0
 
+    # If data is a dictionary, iterate through its values
     if isinstance(data, dict):
-        for value in data.values():
+        for key, value in data.items():
             null_count += count_na_values(value, null_value)
+
+    # If data is a list, iterate through its items
     elif isinstance(data, list):
         for item in data:
             null_count += count_na_values(item, null_value)
-    elif data == null_value:
-        null_count += 1
+
+    # If data matches the null_value directly, increment the count
+    elif isinstance(data, str):
+        if data == null_value:
+            null_count += 1
+
     return null_count
 
 
 def count_total_entries(data):
+    """
+    Count the total number of scalar entries in nested dictionaries or lists.
+
+    Args:
+        data: The data structure (dict, list, or scalar) to search.
+
+    Returns:
+        int: The total number of scalar entries.
+    """
     count = 0
+
+    # If data is a dictionary, iterate through its values
     if isinstance(data, dict):
         for value in data.values():
             count += count_total_entries(value)
+
+    # If data is a list, iterate through its items
     elif isinstance(data, list):
         for item in data:
             count += count_total_entries(item)
+
+    # Count scalar entries (non-dict, non-list)
     else:
         count += 1
+
     return count
 
 
-def calculate_rate(x1, x2):
-    if x2 != 0:
-        rate = abs(x1 / x2)
-        return rate
+def calculate_rate(na_count, total_count):
+    """
+    Calculate the rate of 'na' values in the total count.
+
+    Args:
+        na_count (int): Number of 'na' occurrences.
+        total_count (int): Total number of entries.
+
+    Returns:
+        float: Rate of 'na' values.
+    """
+    if total_count != 0:
+        return na_count / total_count
     else:
-        return None
+        return 0.0  # Return 0 if total_count is zero to avoid division by zero.
+

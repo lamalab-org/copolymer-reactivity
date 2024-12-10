@@ -1,0 +1,139 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: styrene",
+                "monomer2: methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.39,
+                        "constant_2": 0.298
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01113,
+                        "constant_conf_2": 0.01113
+                    },
+                    "determination_method": "Nelder and Mead simplex method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.424,
+                        "constant_2": 0.304
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.00344,
+                        "constant_conf_2": 0.00344
+                    },
+                    "determination_method": "Nelder and Mead simplex method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.243
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.00652,
+                        "constant_conf_2": 0.00652
+                    },
+                    "determination_method": "Nelder and Mead simplex method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzyl alcohol",
+                    "method": "solvent",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.317,
+                        "constant_2": 0.256
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.00625,
+                        "constant_conf_2": 0.00625
+                    },
+                    "determination_method": "Nelder and Mead simplex method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "phenol",
+                    "method": "solvent",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.25,
+                        "constant_2": 0.232
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0047,
+                        "constant_conf_2": 0.0047
+                    },
+                    "determination_method": "Nelder and Mead simplex method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "doi:10.1016/S0032-3861(99)00117-2",
+    "PDF_name": "Solvent effects on true terminal reactivity ratios for styrene \u2013 methyl methacrylate copolymerization system"
+}

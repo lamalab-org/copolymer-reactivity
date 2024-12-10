@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "n-Butyl Acrylate",
+                "Methyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "atom transfer radical polymerization",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.39,
+                        "constant_2": 2.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Jaacks",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "conventional radical polymerization",
+                    "solvent": "butyl acetate",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 2.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.014,
+                        "constant_conf_2": 0.37
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1021/ma9819337",
+    "PDF_name": "Copolymerization of n-Butyl Acrylate with Methyl Methacrylate and PMMA Macromonomers"
+}

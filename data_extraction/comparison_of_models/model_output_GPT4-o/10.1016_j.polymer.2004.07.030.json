@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "dodecyl acrylate",
+                "hexyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "NMR",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.45
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.3
+                    },
+                    "r_product": 0.72
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "hexyl acrylate",
+                "octadecyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "NMR",
+                    "Q-value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.3
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "doi:10.1016/j.polymer.2004.07.030",
+    "PDF_name": "Copolymers of poly(n-alkyl acrylates): synthesis, characterization, and monomer reactivity ratios"
+}

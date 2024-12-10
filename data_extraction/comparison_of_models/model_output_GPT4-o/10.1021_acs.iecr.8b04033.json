@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "diallyl dimethylammonium chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 20.62,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.93,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.026,
+                        "constant_2": -0.88
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 35.87,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 3.84,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": 0.54,
+                        "constant_2": 0.23
+                    },
+                    "e-Value": {
+                        "constant_1": 0.026,
+                        "constant_2": -0.88
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 29.22,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.45,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": 0.54,
+                        "constant_2": 0.23
+                    },
+                    "e-Value": {
+                        "constant_1": 0.026,
+                        "constant_2": -0.88
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/acs.iecr.8b04033",
+    "PDF_name": "In-Situ NMR Measurement of Reactivity Ratios for Copolymerization of Methyl Methacrylate and Diallyl Dimethylammonium Chloride"
+}

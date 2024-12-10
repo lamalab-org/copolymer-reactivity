@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Acrylic Acid",
+                "N-Vinylpyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 5.39,
+                        "constant_2": 0.072
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.72,
+                        "constant_conf_2": 0.128
+                    },
+                    "determination_method": "differential method",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 3.6
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.51,
+                        "constant_2": 0.078
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.108,
+                        "constant_conf_2": 0.151
+                    },
+                    "determination_method": "integrated equation",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 3.6
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: Polymer Chemistry Edition VOL. 14, 1987\u20131992 (1976)",
+    "PDF_name": "Effect of pH on the Reactivity Ratios in Aqueous Solution Copolymerization of Acrylic Acid and N-Vinylpyrrolidone"
+}

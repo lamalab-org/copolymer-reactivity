@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: allyl methacrylate",
+                "monomer2: methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-heptane",
+                    "method": "bulk",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.55,
+                        "constant_2": 0.99
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.16,
+                        "constant_conf_2": 0.19
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1: allyl methacrylate",
+                "monomer2: N-vinyl-2-pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-heptane",
+                    "method": "bulk",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.408,
+                        "constant_2": 0.401
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.074,
+                        "constant_conf_2": 0.044
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "doi:10.1016/0032-3861(96)00000-0",
+    "PDF_name": "Reactivity ratios in copolymerizations involving allyl methacrylate"
+}

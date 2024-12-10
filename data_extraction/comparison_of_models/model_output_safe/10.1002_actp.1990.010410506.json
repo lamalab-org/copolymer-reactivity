@@ -1,0 +1,126 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Ethyl methacrylate",
+                "monomer2",
+                "N-Vinyl carbazole"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 333.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 5.926,
+                        "constant_2": 0.04
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.237,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.08,
+                        "constant_2": 0.18
+                    },
+                    "e-Value": {
+                        "constant_1": 5.671,
+                        "constant_2": 0.02
+                    },
+                    "r_product": 0.237
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 333.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 5.91,
+                        "constant_2": 0.04
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2417,
+                        "constant_conf_2": 0.023
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 2.03,
+                        "constant_2": 0.17
+                    },
+                    "e-Value": {
+                        "constant_1": 5.69,
+                        "constant_2": 0.0223
+                    },
+                    "r_product": 0.2417
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "n-Butyl methacrylate",
+                "monomer2",
+                "N-Vinyl carbazole"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 333.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 5.69,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1134,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 3.07,
+                        "constant_2": 0.45
+                    },
+                    "e-Value": {
+                        "constant_1": 5.68,
+                        "constant_2": 0.0228
+                    },
+                    "r_product": 0.1134
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 333.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 5.908,
+                        "constant_2": 0.045
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2557,
+                        "constant_conf_2": 0.023
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.95,
+                        "constant_2": 0.14
+                    },
+                    "e-Value": {
+                        "constant_1": 5.689,
+                        "constant_2": 0.023
+                    },
+                    "r_product": 0.2557
+                }
+            ]
+        }
+    ],
+    "source": "Acta Polymerica 41 (1990) Nr. 5",
+    "PDF_name": "Copolymerization of alkyl methacrylates with N-vinyl carbazole"
+}

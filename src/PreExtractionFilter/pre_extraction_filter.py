@@ -25,7 +25,7 @@ def run_combined_pipeline(training_file, scoring_file, output_file, pdf_input_fo
     print("PDF processing and scoring completed.")
 
     print("Starting Random Forest filtering...")
-    rf_main(training_file=training_file, scoring_file=scoring_file, output_file=output_file,
+    rf_main(training_file=training_file, scoring_file=output_file, output_file=output_file,
             pdf_folder=pdf_input_folder)
     print(f"RF filtering completed. Results saved to {output_file}.")
 

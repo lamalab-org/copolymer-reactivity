@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: acetylsalicylic acid",
+                "monomer2: N-vinylpyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.384
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.01,
+                        "constant_conf_2": 0.347
+                    },
+                    "determination_method": "Joshi-Kapur",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.92,
+                        "constant_2": 0.375
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.46,
+                        "constant_conf_2": 0.432
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1021/ma00130a009",
+    "PDF_name": "Determination of Reactivity Ratios in Radical Copolymerization: A Comparison of Methods for a Methacrylate/N-Vinylpyrrolidone System"
+}

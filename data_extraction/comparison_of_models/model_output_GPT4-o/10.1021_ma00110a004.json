@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methacrylate",
+                "N-Vinylpyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.384
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.01,
+                        "constant_conf_2": 0.347
+                    },
+                    "determination_method": "Joshi-Kapur",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.92,
+                        "constant_2": 0.375
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.46,
+                        "constant_conf_2": 0.432
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1021/ma00122a021",
+    "PDF_name": "macromolecules_1995_28_1750-1753.pdf"
+}

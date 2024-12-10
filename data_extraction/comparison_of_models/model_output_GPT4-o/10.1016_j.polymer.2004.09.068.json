@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1-Vinyl-2-Pyrrolidone",
+                "N-(3-(Dimethylamino)propyl)methacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 68.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 5.67,
+                        "constant_2": 0.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.34,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Rosenbrock optimization",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1-Vinyl-2-Pyrrolidone",
+                "3-(Methacrylamidopropyl)trimethylammonium methylsulfate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 68.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 4.47,
+                        "constant_2": 0.038
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.049,
+                        "constant_conf_2": 0.0056
+                    },
+                    "determination_method": "Rosenbrock optimization",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "doi:10.1016/j.polymer.2004.09.068",
+    "PDF_name": "Copolymerization of 1-vinylpyrrolidone with N-substituted methacrylamides: monomer reactivity ratios and copolymer sequence distribution"
+}

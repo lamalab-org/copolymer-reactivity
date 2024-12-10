@@ -65,8 +65,8 @@ def get_prompt_template():
     reactions: [
         {
             "monomers": [
-                "monomer1": monomer assigned to reaction constant 1
-                "monomer2": monomer assigned to reaction constant 2
+                "monomer1" (monomer assigned to reaction constant 1),
+                "monomer2" (monomer assigned to reaction constant 2)
                 ] as STRING (only the whole Monomer name without abbreviation)
             "reaction_conditions": [
                 {
@@ -112,6 +112,7 @@ def get_prompt_template():
     If the information is not provided put 'na'.
     If there are multiple polymerization's with different parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions (for different reaction conditions of the same monomers)."""
     return prompt
+
 
 def get_prompt_addition() -> str:
     prompt_addition = """Here is the previously collected data from the same Markdowns: {}. 
