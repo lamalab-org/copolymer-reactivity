@@ -3,17 +3,19 @@ from collections import Counter
 import re
 
 
-file_path = '../collected_data/collected_doi_metadata.json'
-with open(file_path, 'r') as file:
+file_path = "../collected_data/collected_doi_metadata.json"
+with open(file_path, "r") as file:
     data = json.load(file)
 
 # Filter entries with source 'copol database'
-filtered_entries = [entry for entry in data if entry.get('Source', '').lower() == 'copol database']
-print('Number of analyzed papers: ', len(filtered_entries))
+filtered_entries = [
+    entry for entry in data if entry.get("Source", "").lower() == "copol database"
+]
+print("Number of analyzed papers: ", len(filtered_entries))
 
 
 # Count how often each journal occurs
-journal_counter = Counter([entry['Journal'] for entry in filtered_entries])
+journal_counter = Counter([entry["Journal"] for entry in filtered_entries])
 
 # Analyze the words in the titles
 word_counter = Counter()
@@ -21,8 +23,10 @@ word_counter = Counter()
 # Iterate through filtered entries and count words in titles
 for entry in filtered_entries:
     # Get the title and split into words (ignoring case and special characters)
-    title = entry['Title']
-    words = re.findall(r'\b\w+\b', title.lower())  # Extract words and convert to lowercase
+    title = entry["Title"]
+    words = re.findall(
+        r"\b\w+\b", title.lower()
+    )  # Extract words and convert to lowercase
     word_counter.update(words)
 
 # Print the journal frequency

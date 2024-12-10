@@ -1,9 +1,18 @@
 import os
-from PreExtractionFilter.precision_prediction_randomforest import main as rf_main
-from PreExtractionFilter.extract_PDF_quality_GPT4 import main as pdf_main
+from copolextractor.preextractionfilter.precision_prediction_randomforest import (
+    main as rf_main,
+)
+from copolextractor.preextractionfilter.extract_PDF_quality_GPT4 import main as pdf_main
 
 
-def run_combined_pipeline(training_file, scoring_file, output_file, pdf_input_folder, output_folder_images, output_folder):
+def run_combined_pipeline(
+    training_file,
+    scoring_file,
+    output_file,
+    pdf_input_folder,
+    output_folder_images,
+    output_folder,
+):
     """
     Combined pipeline that first processes PDFs for scoring and then performs RF filtering.
 
@@ -20,13 +29,17 @@ def run_combined_pipeline(training_file, scoring_file, output_file, pdf_input_fo
         output_folder_images=output_folder_images,
         output_folder=output_folder,
         selected_entries_path=scoring_file,
-        output_file=output_file
+        output_file=output_file,
     )
     print("PDF processing and scoring completed.")
 
     print("Starting Random Forest filtering...")
-    rf_main(training_file=training_file, scoring_file=scoring_file, output_file=output_file,
-            pdf_folder=pdf_input_folder)
+    rf_main(
+        training_file=training_file,
+        scoring_file=scoring_file,
+        output_file=output_file,
+        pdf_folder=pdf_input_folder,
+    )
     print(f"RF filtering completed. Results saved to {output_file}.")
 
 
@@ -36,7 +49,9 @@ def main():
     output_folder_images = "./output/processed_images"
     output_folder = "./output/model_output_score"
 
-    training_file = "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
+    training_file = (
+        "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
+    )
     scoring_file = "../../data_extraction/obtain_data/output/selected_200_papers.json"
     output_file = "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
 
@@ -45,7 +60,14 @@ def main():
     os.makedirs(output_folder, exist_ok=True)
 
     # Run the combined pipeline
-    run_combined_pipeline(training_file, scoring_file, output_file, pdf_input_folder, output_folder_images, output_folder)
+    run_combined_pipeline(
+        training_file,
+        scoring_file,
+        output_file,
+        pdf_input_folder,
+        output_folder_images,
+        output_folder,
+    )
 
 
 if __name__ == "__main__":

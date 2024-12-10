@@ -2,6 +2,8 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import json
 from collections import Counter
+from typing import Union
+from pathlib import Path
 
 
 def fetch_journals(output_journal_file):
@@ -11,13 +13,13 @@ def fetch_journals(output_journal_file):
     driver.get(url)
 
     # Parse the HTML with BeautifulSoup
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    soup = BeautifulSoup(driver.page_source, "html.parser")
     driver.quit()
 
     # Extract journal names
     journals = []
-    for row in soup.find_all('tr'):
-        cols = row.find_all('td')
+    for row in soup.find_all("tr"):
+        cols = row.find_all("td")
         if cols:  # Check if <td> tags exist in the row
             journal_name = cols[0].get_text(strip=True)
             journals.append(journal_name)
@@ -34,7 +36,9 @@ def calculate_score(entry, journal_list, keywords):
 
     # Check if 'Journal' key exists and if journal is in the list
     if "Journal" in entry:
-        journal_in_list = any(journal.lower() in entry["Journal"].lower() for journal in journal_list)
+        journal_in_list = any(
+            journal.lower() in entry["Journal"].lower() for journal in journal_list
+        )
         if journal_in_list:
             score += 40
 
@@ -75,7 +79,7 @@ def process_papers(input_file, journal_file, keywords, output_file):
     for score, count in sorted(score_counts.items(), reverse=True):
         print(f"Score {score}: {count} papers")
 
-    print('Total number of papers:', len(scored_data))
+    print("Total number of papers:", len(scored_data))
 
     # Save the updated data to a new JSON file
     with open(output_file, "w") as f:
@@ -83,21 +87,26 @@ def process_papers(input_file, journal_file, keywords, output_file):
     print(f"Scored papers saved to {output_file}.")
 
 
-def main():
-    # Input and output files
-    journal_file = "../../data_extraction/obtain_data/output/journals.json"
-    input_file = "../../data_extraction/obtain_data/output/collected_doi_metadata.json"
-    output_file = "../../data_extraction/obtain_data/output/scored_doi.json"
-
-    # Keywords and their weights
-    keywords = {
+def main(
+    journal_file: Union[
+        str, Path
+    ] = "../../data_extraction/obtain_data/output/journals.json",
+    input_file: Union[
+        str, Path
+    ] = "../../data_extraction/obtain_data/output/collected_doi_metadata.json",
+    output_file: Union[
+        str, Path
+    ] = "../../data_extraction/obtain_data/output/scored_doi.json",
+    keywords: dict = {
         "copolymerization": 10,
         "polymerization": 5,
         "monomers": 5,
         "copolymers": 5,
         "ratios": 20,
-        "reactivity ratios": 40
-    }
+        "reactivity ratios": 40,
+    },
+):
+    # Keywords and their weights
 
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)

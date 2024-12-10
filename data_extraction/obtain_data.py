@@ -1,4 +1,3 @@
-import os
 from PreExtractionFilter.pre_extraction_filter import main as pre_extraction_filter
 from copolextractor.PDF_download import main as pdf_download
 from PreDownloadFilter.pre_download_filter import main as pre_download_filter
@@ -6,7 +5,6 @@ from copolextractor.crossref_search import main as crossref_search
 
 
 def obtain_data(crossref_keyword, keywords, score_limit, number_of_selected_papers):
-
     # crossref search for relevant paper
     crossref_search(crossref_keyword)
 
@@ -21,7 +19,6 @@ def obtain_data(crossref_keyword, keywords, score_limit, number_of_selected_pape
 
 
 def main():
-
     # Define Crossref Keywords
     crossref_keyword = "'copolymerization' AND 'reactivity ratio'"
 
@@ -32,7 +29,7 @@ def main():
         "monomers": 5,
         "copolymers": 5,
         "ratios": 20,
-        "reactivity ratios": 40
+        "reactivity ratios": 40,
     }
 
     score_limit = 65  # Minimum score for embedding generation
@@ -43,5 +40,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()

@@ -32,21 +32,29 @@ for i, filename in enumerate(input_files):
     pdf_images = convert_from_path(file_path)
 
     for idx in range(len(pdf_images)):
-        image_path = os.path.join(output_folder_images, f"{filename}_page_{idx + 1}.png")
-        pdf_images[idx].save(image_path, 'PNG')
+        image_path = os.path.join(
+            output_folder_images, f"{filename}_page_{idx + 1}.png"
+        )
+        pdf_images[idx].save(image_path, "PNG")
     print("Successfully converted PDF to processed_images")
     for j, image in enumerate(pdf_images):
         resized_image = ip.resize_image(image, 1024)
-        rotate_image = ip.correct_text_orientation(resized_image, output_folder_images, file_path, j)
+        rotate_image = ip.correct_text_orientation(
+            resized_image, output_folder_images, file_path, j
+        )
 
-    prompt = prompter.get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text)
+    prompt = prompter.get_prompt_claude_vision(
+        output_folder_images, filename, pdf_images, prompt_text
+    )
 
     print("model call starts")
     output, input_token, output_token = prompter.call_claude3(prompt)
     total_input_token += input_token
     total_output_token += output_token
     number_of_calls += 1
-    output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
+    output_model = prompter.format_output_claude_as_json_and_yaml(
+        i, output, output_folder
+    )
     print("output_model: ", output_model)
 
     for a in range(number_of_model_calls):
@@ -57,12 +65,16 @@ for i, filename in enumerate(input_files):
         if rate > 0.3 or output_model is None:
             print(f"model call number {a+2} of {filename}")
             updated_prompt_text = prompter.update_prompt(prompt_text, output_model)
-            prompt = prompter.get_prompt_claude_vision(output_folder_images, filename, pdf_images, updated_prompt_text)
+            prompt = prompter.get_prompt_claude_vision(
+                output_folder_images, filename, pdf_images, updated_prompt_text
+            )
             output, input_token, output_token = prompter.call_claude3(prompt)
             total_input_token += input_token
             total_output_token += output_token
             number_of_calls += 1
-            output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
+            output_model = prompter.format_output_claude_as_json_and_yaml(
+                i, output, output_folder
+            )
         else:
             print("NA-rate under 30%")
         print("tokens input used: ", input_token)
@@ -75,7 +87,6 @@ print(f"out of {i} papers, {parsing_error} papers are extracted in invalid json 
 
 
 end = time.time()
-execution_time = start-end
+execution_time = start - end
 
 print("execution time: ", execution_time)
-

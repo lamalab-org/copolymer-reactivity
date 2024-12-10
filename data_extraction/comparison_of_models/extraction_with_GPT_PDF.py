@@ -8,19 +8,23 @@ import copolextractor.analyzer as az
 import copolextractor.image_processer as ip
 
 
-def process_pdf_files(paper_list_path, output_folder_images, output_folder, number_of_model_calls):
+def process_pdf_files(
+    paper_list_path, output_folder_images, output_folder, number_of_model_calls
+):
     """
     Process PDF files based on entries from paper_list.json and update the JSON file with extraction results.
     """
     start = time.time()
 
     # Load paper list JSON
-    with open(paper_list_path, 'r', encoding='utf-8') as file:
+    with open(paper_list_path, "r", encoding="utf-8") as file:
         paper_list = json.load(file)
 
     # Filter for entries with "precision_score": 1
     selected_papers = [
-        entry for entry in paper_list if entry.get("precision_score") == 1 and not entry.get("extracted")
+        entry
+        for entry in paper_list
+        if entry.get("precision_score") == 1 and not entry.get("extracted")
     ]
     print(f"Number of PDFs to process: {len(selected_papers)}")
 
@@ -33,7 +37,7 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
     prompt_text = prompter.get_prompt_template()
 
     for i, paper in enumerate(selected_papers):
-        filename = paper['pdf_name']
+        filename = paper["pdf_name"]
         file_path = os.path.join("pdf_testset", filename)
 
         if not os.path.exists(file_path):
@@ -44,7 +48,10 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
 
         # Convert PDF to images
         pdf_images = convert_from_path(file_path)
-        images_base64 = [ip.process_image(image, 2048, output_folder_images, file_path, j)[0] for j, image in enumerate(pdf_images)]
+        images_base64 = [
+            ip.process_image(image, 2048, output_folder_images, file_path, j)[0]
+            for j, image in enumerate(pdf_images)
+        ]
 
         # Generate initial prompt
         content = prompter.get_prompt_vision_model(images_base64, prompt_text)
@@ -57,8 +64,12 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
         number_of_calls += 1
 
         # Save output as JSON and YAML
-        output_name_json = os.path.join(output_folder, filename.replace('.pdf', '.json'))
-        output_name_yaml = os.path.join(output_folder, filename.replace('.pdf', '.yaml'))
+        output_name_json = os.path.join(
+            output_folder, filename.replace(".pdf", ".json")
+        )
+        output_name_yaml = os.path.join(
+            output_folder, filename.replace(".pdf", ".yaml")
+        )
 
         for attempt in range(number_of_model_calls):
             na_count = az.count_na_values(output)
@@ -69,7 +80,9 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
             if na_rate > 0.3 or output is None:
                 print(f"Retrying model call {attempt + 2} for {filename}")
                 updated_prompt = prompter.update_prompt(prompt_text, output)
-                content = prompter.get_prompt_vision_model(images_base64, updated_prompt)
+                content = prompter.get_prompt_vision_model(
+                    images_base64, updated_prompt
+                )
                 output, input_token, output_token = prompter.call_openai(content)
                 total_input_tokens += input_token
                 total_output_tokens += output_token
@@ -79,20 +92,19 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
                 with open(output_name_json, "w", encoding="utf-8") as json_file:
                     json.dump(output, json_file, ensure_ascii=True, indent=4)
                 with open(output_name_yaml, "w", encoding="utf-8") as yaml_file:
-                    yaml.dump(output, yaml_file, allow_unicode=True, default_flow_style=False)
+                    yaml.dump(
+                        output, yaml_file, allow_unicode=True, default_flow_style=False
+                    )
             else:
                 print("NA-rate below 30%, no further retries needed.")
                 break
 
         # Update the JSON entry
-        paper.update({
-            "extracted": True,
-            "extracted_data": output
-        })
+        paper.update({"extracted": True, "extracted_data": output})
 
     # Save the updated JSON file
     extracted_json_path = "data_extracted.json"
-    with open(extracted_json_path, 'w', encoding='utf-8') as file:
+    with open(extracted_json_path, "w", encoding="utf-8") as file:
         json.dump(paper_list, file, indent=4)
 
     print("Total input tokens used:", total_input_tokens)
@@ -115,7 +127,9 @@ def main(input_folder_images, output_folder, paper_list_path):
     os.makedirs(output_folder, exist_ok=True)
 
     # Process PDF files
-    process_pdf_files(paper_list_path, input_folder_images, output_folder, number_of_model_calls)
+    process_pdf_files(
+        paper_list_path, input_folder_images, output_folder, number_of_model_calls
+    )
 
 
 if __name__ == "__main__":

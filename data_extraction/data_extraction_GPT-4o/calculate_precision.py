@@ -1,7 +1,7 @@
 import json
 
 
-with open('output/copol_database/RF_training_paper.json', 'r') as file:
+with open("output/copol_database/RF_training_paper.json", "r") as file:
     data = json.load(file)
 
 
@@ -17,7 +17,7 @@ for entry in data:
     entry["precision"] = precision
 
 
-with open('output/copol_database/RF_training_paper.json', 'w') as file:
+with open("output/copol_database/RF_training_paper.json", "w") as file:
     json.dump(data, file, indent=4)
 
 print(json.dumps(data, indent=4))

@@ -11,43 +11,52 @@ import numpy as np
 def calculate_missing_properties(smiles, existing_properties):
     missing_properties = {}
 
-    if 'best_conformer_elements' in existing_properties and 'best_conformer_coordinates' in existing_properties:
-        elements = existing_properties['best_conformer_elements']
-        coordinates = existing_properties['best_conformer_coordinates']
+    if (
+        "best_conformer_elements" in existing_properties
+        and "best_conformer_coordinates" in existing_properties
+    ):
+        elements = existing_properties["best_conformer_elements"]
+        coordinates = existing_properties["best_conformer_coordinates"]
     else:
-        print(f"Best conformer data is missing for {smiles}. Cannot calculate missing properties.")
+        print(
+            f"Best conformer data is missing for {smiles}. Cannot calculate missing properties."
+        )
         elements, coordinates, energy = conformer_opt(smiles)
-        missing_properties['best_conformer_elements'] = elements
-        missing_properties['best_conformer_coordinates'] = coordinates
-        missing_properties['best_conformer_energy'] = energy
+        missing_properties["best_conformer_elements"] = elements
+        missing_properties["best_conformer_coordinates"] = coordinates
+        missing_properties["best_conformer_energy"] = energy
 
     xtb = XTB(elements, coordinates)
 
     # Check for missing properties and calculate them
-    if 'ip' not in existing_properties:
-        missing_properties['ip'] = xtb.get_ip()
-    if 'ip_corrected' not in existing_properties:
-        missing_properties['ip_corrected'] = xtb.get_ip(corrected=True)
-    if 'ea' not in existing_properties:
-        missing_properties['ea'] = xtb.get_ea()
-    if 'homo' not in existing_properties:
-        missing_properties['homo'] = xtb.get_homo()
-    if 'lumo' not in existing_properties:
-        missing_properties['lumo'] = xtb.get_lumo()
-    if 'charges' not in existing_properties:
-        missing_properties['charges'] = xtb.get_charges()
-    if 'dipole' not in existing_properties:
-        missing_properties['dipole'] = xtb.get_dipole().tolist()
-    if 'global_electrophilicity' not in existing_properties:
-        missing_properties['global_electrophilicity'] = xtb.get_global_descriptor("electrophilicity", corrected=True)
-    if 'global_nucleophilicity' not in existing_properties:
-        missing_properties['global_nucleophilicity'] = xtb.get_global_descriptor("nucleophilicity", corrected=True)
-    if 'fukui_electrophilicity' not in existing_properties:
-        missing_properties['fukui_electrophilicity'] = xtb.get_fukui("electrophilicity")
-    if 'fukui_nucleophilicity' not in existing_properties:
-        missing_properties['fukui_nucleophilicity'] = xtb.get_fukui("nucleophilicity")
-    if 'fukui_radical' not in existing_properties:
-        missing_properties['fukui_radical'] = xtb.get_fukui("radical")
+    if "ip" not in existing_properties:
+        missing_properties["ip"] = xtb.get_ip()
+    if "ip_corrected" not in existing_properties:
+        missing_properties["ip_corrected"] = xtb.get_ip(corrected=True)
+    if "ea" not in existing_properties:
+        missing_properties["ea"] = xtb.get_ea()
+    if "homo" not in existing_properties:
+        missing_properties["homo"] = xtb.get_homo()
+    if "lumo" not in existing_properties:
+        missing_properties["lumo"] = xtb.get_lumo()
+    if "charges" not in existing_properties:
+        missing_properties["charges"] = xtb.get_charges()
+    if "dipole" not in existing_properties:
+        missing_properties["dipole"] = xtb.get_dipole().tolist()
+    if "global_electrophilicity" not in existing_properties:
+        missing_properties["global_electrophilicity"] = xtb.get_global_descriptor(
+            "electrophilicity", corrected=True
+        )
+    if "global_nucleophilicity" not in existing_properties:
+        missing_properties["global_nucleophilicity"] = xtb.get_global_descriptor(
+            "nucleophilicity", corrected=True
+        )
+    if "fukui_electrophilicity" not in existing_properties:
+        missing_properties["fukui_electrophilicity"] = xtb.get_fukui("electrophilicity")
+    if "fukui_nucleophilicity" not in existing_properties:
+        missing_properties["fukui_nucleophilicity"] = xtb.get_fukui("nucleophilicity")
+    if "fukui_radical" not in existing_properties:
+        missing_properties["fukui_radical"] = xtb.get_fukui("radical")
 
     return missing_properties
 
@@ -90,53 +99,59 @@ def conformer_opt(smiles):
 
     # Convert numpy arrays to lists for JSON serialization
     elements = elements.tolist() if isinstance(elements, np.ndarray) else elements
-    coordinates = coordinates.tolist() if isinstance(coordinates, np.ndarray) else coordinates
+    coordinates = (
+        coordinates.tolist() if isinstance(coordinates, np.ndarray) else coordinates
+    )
 
     return elements, coordinates, energy
 
 
 def calculate_property(smiles):
-        elements, coordinates, energy = conformer_opt(smiles)
+    elements, coordinates, energy = conformer_opt(smiles)
 
-        xtb = XTB(elements, coordinates)
+    xtb = XTB(elements, coordinates)
 
-        properties = {
-            'smiles': smiles,
-            'ip': xtb.get_ip(),
-            'ip_corrected': xtb.get_ip(corrected=True),
-            'ea': xtb.get_ea(),
-            'homo': xtb.get_homo(),
-            'lumo': xtb.get_lumo(),
-            'charges': xtb.get_charges(),
-            'dipole': xtb.get_dipole().tolist(),
-            'global_electrophilicity': xtb.get_global_descriptor("electrophilicity", corrected=True),
-            'global_nucleophilicity': xtb.get_global_descriptor("nucleophilicity", corrected=True),
-            'fukui_electrophilicity': xtb.get_fukui("electrophilicity"),
-            'fukui_nucleophilicity': xtb.get_fukui("nucleophilicity"),
-            'fukui_radical': xtb.get_fukui("radical"),
-            'best_conformer_coordinates': coordinates,
-            'best_conformer_elements': elements,
-            'best_conformer_energy': energy
-        }
+    properties = {
+        "smiles": smiles,
+        "ip": xtb.get_ip(),
+        "ip_corrected": xtb.get_ip(corrected=True),
+        "ea": xtb.get_ea(),
+        "homo": xtb.get_homo(),
+        "lumo": xtb.get_lumo(),
+        "charges": xtb.get_charges(),
+        "dipole": xtb.get_dipole().tolist(),
+        "global_electrophilicity": xtb.get_global_descriptor(
+            "electrophilicity", corrected=True
+        ),
+        "global_nucleophilicity": xtb.get_global_descriptor(
+            "nucleophilicity", corrected=True
+        ),
+        "fukui_electrophilicity": xtb.get_fukui("electrophilicity"),
+        "fukui_nucleophilicity": xtb.get_fukui("nucleophilicity"),
+        "fukui_radical": xtb.get_fukui("radical"),
+        "best_conformer_coordinates": coordinates,
+        "best_conformer_elements": elements,
+        "best_conformer_energy": energy,
+    }
 
-        return properties
+    return properties
 
 
 # Save the properties to a file
 def save_properties(properties, filename):
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         # Save to json
         json.dump(properties, f)
 
 
 # Function to extract unique SMILES strings
 def extract_unique_smiles(json_file):
-    with open(json_file, 'r') as f:
+    with open(json_file, "r") as f:
         data = json.load(f)
 
     unique_smiles = set()
     for entry in data:
-        if entry['monomer1_s'] is not None and entry['monomer2_s'] is not None:
+        if entry["monomer1_s"] is not None and entry["monomer2_s"] is not None:
             unique_smiles.add(entry["monomer1_s"])
             unique_smiles.add(entry["monomer2_s"])
 
@@ -157,22 +172,37 @@ def main(json_file, output_folder, smiles_error):
 
     # Calculate properties for each unique SMILES string with a progress bar
     for smiles in tqdm(sorted(unique_smiles), desc="Processing SMILES"):
-        print('SMILES: ', smiles)
+        print("SMILES: ", smiles)
         filename = os.path.join(output_folder, f"{smiles.replace('/', '_')}.json")
         if os.path.exists(filename):
-            with open(filename, 'r') as f:
+            with open(filename, "r") as f:
                 existing_properties = json.load(f)
             required_properties = [
-                'ip', 'ip_corrected', 'ea', 'homo', 'lumo', 'charges', 'dipole',
-                'global_electrophilicity', 'global_nucleophilicity',
-                'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical'
+                "ip",
+                "ip_corrected",
+                "ea",
+                "homo",
+                "lumo",
+                "charges",
+                "dipole",
+                "global_electrophilicity",
+                "global_nucleophilicity",
+                "fukui_electrophilicity",
+                "fukui_nucleophilicity",
+                "fukui_radical",
             ]
             if all(prop in existing_properties for prop in required_properties):
-                print(f"All properties for {smiles} already exist. Skipping calculation.")
+                print(
+                    f"All properties for {smiles} already exist. Skipping calculation."
+                )
                 continue
             else:
-                print(f"Some properties for {smiles} are missing. Calculating missing properties.")
-                missing_properties = calculate_missing_properties(smiles, existing_properties)
+                print(
+                    f"Some properties for {smiles} are missing. Calculating missing properties."
+                )
+                missing_properties = calculate_missing_properties(
+                    smiles, existing_properties
+                )
                 existing_properties.update(missing_properties)
                 save_properties(existing_properties, filename)
                 print(f"Updated properties for {smiles} saved to {filename}")
@@ -186,13 +216,10 @@ def main(json_file, output_folder, smiles_error):
             save_properties(properties, filename)
             print(f"Properties for {smiles} saved to {filename}")
         except Exception as e:
-            print(f'For {smiles} the error {e} occurred.')
-            error_entry = {
-                'smiles': smiles,
-                'error': str(e)
-            }
+            print(f"For {smiles} the error {e} occurred.")
+            error_entry = {"smiles": smiles, "error": str(e)}
             smiles_error.append(error_entry)
-            with open("smiles_error.json", 'w') as f:
+            with open("smiles_error.json", "w") as f:
                 json.dump(smiles_error, f, indent=4)
             continue
 
@@ -203,7 +230,7 @@ if __name__ == "__main__":
     smiles_error_path = "smiles_error.json"
 
     try:
-        with open(smiles_error_path, 'r') as f:
+        with open(smiles_error_path, "r") as f:
             smiles_error = json.load(f)
     except FileNotFoundError:
         smiles_error = []

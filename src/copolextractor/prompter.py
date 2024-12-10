@@ -113,6 +113,7 @@ def get_prompt_template():
     If there are multiple polymerization's with different parameters report as a separate reaction (for different pairs of monomers) and reaction_conditions (for different reaction conditions of the same monomers)."""
     return prompt
 
+
 def get_prompt_addition() -> str:
     prompt_addition = """Here is the previously collected data from the same Markdowns: {}. 
 Try to fill up the entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. 
@@ -135,9 +136,7 @@ def format_prompt(template: str, data: dict) -> str:
     return template.format(**data)
 
 
-def call_openai(
-    prompt, model="gpt-4o", temperature: float = 0.0, **kwargs
-):
+def call_openai(prompt, model="gpt-4o", temperature: float = 0.0, **kwargs):
     """Call chat openai model
 
     Args:
@@ -280,12 +279,7 @@ def repeated_call_model(
     return output, input_token, output_token, number_of_model_calls
 
 
-def format_output_as_json_and_yaml(
-    i,
-    output,
-    output_folder,
-    pdf_name
-):
+def format_output_as_json_and_yaml(i, output, output_folder, pdf_name):
     parts = output.split("```")
 
     if len(parts) >= 3:
@@ -303,7 +297,7 @@ def format_output_as_json_and_yaml(
     print(output_cleaned)
     try:
         json_data = json.loads(output_cleaned)
-        json_data['source_pdf'] = pdf_name
+        json_data["source_pdf"] = pdf_name
 
         with open(output_name_json, "w", encoding="utf-8") as json_file:
             json.dump(json_data, json_file, ensure_ascii=False, indent=4)

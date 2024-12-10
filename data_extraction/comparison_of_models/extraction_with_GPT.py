@@ -81,11 +81,18 @@ for i, filename in enumerate(input_files):
         file_path = os.path.join(input_folder, filename)
         with open(file_path, "r", encoding="utf-8") as file:
             file_content = file.read()
-        output, input_token, output_token, number_of_call = prompter.repeated_call_model(file_content, prompt_template, max_section_length, prompter.call_openai_chucked)
+        output, input_token, output_token, number_of_call = (
+            prompter.repeated_call_model(
+                file_content,
+                prompt_template,
+                max_section_length,
+                prompter.call_openai_chucked,
+            )
+        )
         total_input_tokens += input_token
         total_output_tokens += output_token
         number_of_calls += number_of_call
-        print('Output: ', output)
+        print("Output: ", output)
         output_name = os.path.join(output_folder, f"output_data{i + 1}.yaml")
         with open(output_name, "w") as yaml_file:
             yaml.dump(output, yaml_file, allow_unicode=True)
@@ -98,9 +105,15 @@ for i, filename in enumerate(input_files):
             if rate > 0.3 or output is None:
                 print(f"model call number {a + 2} of {filename}")
                 updated_prompt = prompter.update_prompt_chucked(prompt_template, output)
-                output, input_token, output_token, number_of_call = prompter.repeated_call_model(file_content, prompt_template, max_section_length,
-                                                      prompter.call_openai_chucked)
-                print('Output: ', output)
+                output, input_token, output_token, number_of_call = (
+                    prompter.repeated_call_model(
+                        file_content,
+                        prompt_template,
+                        max_section_length,
+                        prompter.call_openai_chucked,
+                    )
+                )
+                print("Output: ", output)
                 output_name = os.path.join(output_folder, f"output_data{i + 1}.yaml")
                 with open(output_name, "w") as yaml_file:
                     yaml.dump(output, yaml_file, allow_unicode=True)
@@ -114,6 +127,6 @@ for i, filename in enumerate(input_files):
             print("total number of model call: ", number_of_calls)
 
 end = time.time()
-execution_time = start-end
+execution_time = start - end
 
 print("execution time: ", execution_time)

@@ -1,19 +1,18 @@
-import os
 import json
 import pandas as pd
-from sklearn.model_selection import train_test_split, StratifiedKFold, GridSearchCV
+from sklearn.model_selection import StratifiedKFold, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import make_scorer, accuracy_score, confusion_matrix
+from sklearn.metrics import make_scorer, accuracy_score
 
 
 def load_data(file_path):
     """
     Load JSON data from a file.
     """
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         data = json.load(file)
     return data
 
@@ -22,7 +21,7 @@ def save_data(data, file_path):
     """
     Save JSON data to a file.
     """
-    with open(file_path, 'w') as file:
+    with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
 
@@ -30,9 +29,11 @@ def preprocess_data(data, features, target):
     """
     Prepare data for training by converting it into a DataFrame.
     """
-    filtered_data = [entry for entry in data if target in entry and entry[target] is not None]
+    filtered_data = [
+        entry for entry in data if target in entry and entry[target] is not None
+    ]
     df = pd.DataFrame(filtered_data)
-    df['precision_class'] = (df[target] > 0.7).astype(int)
+    df["precision_class"] = (df[target] > 0.7).astype(int)
     return df
 
 
@@ -40,16 +41,17 @@ def build_pipeline(numeric_features, categorical_features):
     """
     Build a preprocessing and modeling pipeline.
     """
-    numeric_transformer = 'passthrough'
-    categorical_transformer = OneHotEncoder(handle_unknown='ignore')
+    numeric_transformer = "passthrough"
+    categorical_transformer = OneHotEncoder(handle_unknown="ignore")
     preprocessor = ColumnTransformer(
         transformers=[
-            ('num', numeric_transformer, numeric_features),
-            ('cat', categorical_transformer, categorical_features)
-        ])
+            ("num", numeric_transformer, numeric_features),
+            ("cat", categorical_transformer, categorical_features),
+        ]
+    )
 
     model = RandomForestClassifier(random_state=22)
-    pipeline = Pipeline(steps=[('preprocessor', preprocessor), ('model', model)])
+    pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
     return pipeline
 
 
@@ -57,15 +59,21 @@ def train_model(training_data, features, target):
     """
     Train the Random Forest model.
     """
-    numeric_features = ['table_quality', 'quality_of_number', 'year', 'pdf_quality', 'rxn_number']
-    categorical_features = ['language']
+    numeric_features = [
+        "table_quality",
+        "quality_of_number",
+        "year",
+        "pdf_quality",
+        "rxn_number",
+    ]
+    categorical_features = ["language"]
 
     pipeline = build_pipeline(numeric_features, categorical_features)
 
     param_grid = {
-        'model__n_estimators': [50, 100],
-        'model__max_depth': [None, 10],
-        'model__min_samples_leaf': [1, 2]
+        "model__n_estimators": [50, 100],
+        "model__max_depth": [None, 10],
+        "model__min_samples_leaf": [1, 2],
     }
 
     X = training_data[features]
@@ -89,7 +97,7 @@ def update_scores(data, model, features, pdf_folder):
     Update entries with predictions and check if corresponding PDFs exist.
     """
     # Map feature names in the test data to match the training data
-    feature_mapping = {'rxn_count': 'rxn_number'}
+    feature_mapping = {"rxn_count": "rxn_number"}
 
     for entry in data:
         # Rename feature keys in the entry to match training data
@@ -98,28 +106,38 @@ def update_scores(data, model, features, pdf_folder):
                 entry[new_name] = entry.pop(old_name)
 
         # Check if all required features are present and valid
-        missing_features = [feature for feature in features if feature not in entry or pd.isna(entry[feature])]
+        missing_features = [
+            feature
+            for feature in features
+            if feature not in entry or pd.isna(entry[feature])
+        ]
         if missing_features:
             print(f"Skipping entry due to missing features: {missing_features}")
-            entry['precision_score'] = None
+            entry["precision_score"] = None
             continue
 
         # Create a DataFrame for prediction
-        feature_values = pd.DataFrame([{
-            feature: entry.get(feature, 0)  # Use 0 as the default value for missing features
-            for feature in features
-        }])
+        feature_values = pd.DataFrame(
+            [
+                {
+                    feature: entry.get(
+                        feature, 0
+                    )  # Use 0 as the default value for missing features
+                    for feature in features
+                }
+            ]
+        )
 
         print(f"Features for prediction: {feature_values}")  # Debug: Show feature data
         try:
             # Perform prediction
             prediction = model.predict(feature_values)[0]
             print(f"Prediction result: {prediction}")  # Debug: Show prediction result
-            entry['precision_score'] = int(prediction)
+            entry["precision_score"] = int(prediction)
         except Exception as e:
             # Handle any errors during prediction
             print(f"Error during prediction: {e}")
-            entry['precision_score'] = None
+            entry["precision_score"] = None
 
     return data
 
@@ -132,15 +150,22 @@ def main(training_file, scoring_file, output_file, pdf_folder):
     training_data = load_data(training_file)
     scoring_data = load_data(scoring_file)
 
-    features = ['language', 'table_quality', 'quality_of_number', 'year', 'pdf_quality', 'rxn_number']
-    target = 'precision'
+    features = [
+        "language",
+        "table_quality",
+        "quality_of_number",
+        "year",
+        "pdf_quality",
+        "rxn_number",
+    ]
+    target = "precision"
 
     # Prepare training data
     training_df = preprocess_data(training_data, features, target)
 
     # Train the model
     print("Training the model...")
-    model = train_model(training_df, features, 'precision_class')
+    model = train_model(training_df, features, "precision_class")
 
     # Update scoring data
     print("Updating scores for scoring data...")

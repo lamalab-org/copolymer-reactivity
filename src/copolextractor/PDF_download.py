@@ -8,7 +8,7 @@ def load_json(input_file):
     """
     Load JSON data from the given file.
     """
-    with open(input_file, 'r') as file:
+    with open(input_file, "r") as file:
         data = json.load(file)
     return data
 
@@ -17,7 +17,7 @@ def sanitize_filename(name):
     """
     Sanitize a filename by replacing invalid characters with underscores.
     """
-    return re.sub(r'[^\w\-_\. ]', '_', name)
+    return re.sub(r"[^\w\-_\. ]", "_", name)
 
 
 def generate_filename(base_name, output_folder, extension=".pdf"):
@@ -49,7 +49,9 @@ def download_papers_and_update_file(input_file, output_folder):
             print(f"Skipping entry {index + 1}: No DOI found.")
             continue
 
-        doi_url = f"https://doi.org/{doi}" if not doi.startswith("https://doi.org/") else doi
+        doi_url = (
+            f"https://doi.org/{doi}" if not doi.startswith("https://doi.org/") else doi
+        )
         paper_count += 1
 
         # Generate a sanitized filename for the PDF
@@ -80,11 +82,13 @@ def download_papers_and_update_file(input_file, output_folder):
             failed_download_count += 1
 
         # Update the JSON file
-        with open(input_file, 'w') as file:
+        with open(input_file, "w") as file:
             json.dump(data, file, indent=4)
 
-    print(f"Out of {paper_count} papers, {downloaded_paper_count} were successfully downloaded, "
-          f"{failed_download_count} downloads failed.")
+    print(
+        f"Out of {paper_count} papers, {downloaded_paper_count} were successfully downloaded, "
+        f"{failed_download_count} downloads failed."
+    )
 
 
 def main():
@@ -101,7 +105,7 @@ def main():
     print("Starting the paper download process...")
     download_papers_and_update_file(input_file, output_folder)
 
-    pdf_files = [f for f in os.listdir(output_folder) if f.endswith('.pdf')]
+    pdf_files = [f for f in os.listdir(output_folder) if f.endswith(".pdf")]
     pdf_count = len(pdf_files)
     print(f"There are {pdf_count} PDFs in the folder.")
 
