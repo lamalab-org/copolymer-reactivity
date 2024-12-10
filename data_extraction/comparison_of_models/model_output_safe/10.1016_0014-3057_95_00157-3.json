@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: Glycidyl Methacrylate",
+                "monomer2: N-Vinyl Pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 3.41,
+                        "constant_2": 0.006
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.87,
+                        "constant_conf_2": 4.05
+                    },
+                    "determination_method": "least-squares method",
+                    "Q-value": {
+                        "constant_1": 0.088,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.62,
+                        "constant_2": 0.2
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1016/0014-3057(95)00157-3",
+    "PDF_name": "copolymerization_of_glycidyl_methacrylate_and_n-vinyl_pyrrolidone.pdf"
+}

@@ -1,0 +1,91 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Acrylonitrile",
+                "monomer2",
+                "Methyl Acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.78,
+                        "constant_2": 1.04
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "na",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.02,
+                        "constant_2": 0.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.29
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.62
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "na",
+                    "solvent": "water",
+                    "method": "suspension",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.75,
+                        "constant_2": 1.54
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "na",
+    "PDF_name": "Effect of Reaction Medium on Copolymerization of Acrylonitrile and Methyl Acrylate"
+}

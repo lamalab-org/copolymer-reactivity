@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methyl 2-acetoxyacrylate",
+                "Vinylidene cyanide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.65,
+                        "constant_2": 1.65
+                    },
+                    "e-Value": {
+                        "constant_1": 0.54,
+                        "constant_2": 0.517
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl 2-acetoxyacrylate",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.19,
+                        "constant_2": 0.78
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.65,
+                        "constant_2": 1.65
+                    },
+                    "e-Value": {
+                        "constant_1": 0.54,
+                        "constant_2": 0.517
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/S0032-3861(01)00697-8",
+    "PDF_name": "Radical copolymerization of 2-acetoxyacrylates with nitrile monomers and properties of the copolymers"
+}

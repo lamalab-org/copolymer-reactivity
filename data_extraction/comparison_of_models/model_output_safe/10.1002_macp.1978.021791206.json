@@ -1,0 +1,101 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Diallyl Ether",
+                "monomer2",
+                "Maleic Anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.35,
+                        "constant_2": "na"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 2.25,
+                        "constant_2": 0.23
+                    },
+                    "e-Value": {
+                        "constant_1": 2.25,
+                        "constant_2": 1.96
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.35,
+                        "constant_2": "na"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 2.25,
+                        "constant_2": 0.23
+                    },
+                    "e-Value": {
+                        "constant_1": 2.25,
+                        "constant_2": 1.96
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Diallyl Ether",
+                "monomer2",
+                "Fumaronitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": "na"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": 1.2
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 179, 2867-2875 (1978)",
+    "PDF_name": "Cyclo-copolymerization of 1,6-Diene with Monoolefin"
+}

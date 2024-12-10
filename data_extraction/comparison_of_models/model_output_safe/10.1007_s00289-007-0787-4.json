@@ -1,0 +1,91 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "4-cyanophenyl methacrylate",
+                "monomer2",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.524,
+                        "constant_2": 0.502
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.038,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.288
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.562,
+                        "constant_2": 0.487
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.173,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.288
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.735,
+                        "constant_2": 0.492
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.128,
+                        "constant_conf_2": 0.002
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.288
+                }
+            ]
+        }
+    ],
+    "source": "DOI 10.1007/s00289-007-0787-4",
+    "PDF_name": "Copolymerization of 4-cyanophenyl methacrylate with methyl methacrylate: Synthesis, characterization and determination of monomer reactivity ratios"
+}

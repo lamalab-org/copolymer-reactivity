@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1: 2-Hydroxyethyl acrylate",
+                "monomer2: Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.34
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "elemental analysis",
+                    "Q-value": {
+                        "constant_1": 0.85,
+                        "constant_2": 0.64
+                    },
+                    "e-Value": {
+                        "constant_1": 0.64,
+                        "constant_2": 0.64
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1: Hydroxypropyl acrylate",
+                "monomer2: Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.45,
+                        "constant_2": 0.36
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "elemental analysis",
+                    "Q-value": {
+                        "constant_1": 0.75,
+                        "constant_2": 0.56
+                    },
+                    "e-Value": {
+                        "constant_1": 0.56,
+                        "constant_2": 0.56
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1: 2-(1-Aziridinyl)ethyl methacrylate",
+                "monomer2: Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.53,
+                        "constant_2": 0.63
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "elemental analysis",
+                    "Q-value": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.25
+                    },
+                    "e-Value": {
+                        "constant_1": 0.25,
+                        "constant_2": 0.25
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "na",
+    "PDF_name": "Monomer Reactivity Ratio and Q-e Values for Copolymerization of Hydroxyalkyl Acrylates and 2-(1-Aziridinyl)ethyl Methacrylate with Styrene"
+}
