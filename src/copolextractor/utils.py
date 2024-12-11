@@ -76,7 +76,7 @@ def smiles_to_name(smiles: str) -> str:
 
     # If CACTUS fails, try with PubChem
     try:
-        compound = pcp.get_compounds(canonical_smiles, 'smiles')
+        compound = pcp.get_compounds(canonical_smiles, "smiles")
         if compound:
             return compound[0].iupac_name
     except Exception:

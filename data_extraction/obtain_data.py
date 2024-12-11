@@ -6,8 +6,17 @@ from copolextractor.crossref_search import main as crossref_search
 from copolextractor.extraction_with_GPT_PDF import main as extractor
 
 
-def obtain_data(crossref_keyword, keywords, score_limit, number_of_selected_papers, input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file):
-
+def obtain_data(
+    crossref_keyword,
+    keywords,
+    score_limit,
+    number_of_selected_papers,
+    input_folder_images,
+    output_folder,
+    paper_list_path,
+    pdf_folder,
+    extracted_data_file,
+):
     # crossref search for relevant paper
     crossref_search(crossref_keyword)
 
@@ -21,11 +30,16 @@ def obtain_data(crossref_keyword, keywords, score_limit, number_of_selected_pape
     pre_extraction_filter()
 
     # Extraction
-    extractor(input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file)
+    extractor(
+        input_folder_images,
+        output_folder,
+        paper_list_path,
+        pdf_folder,
+        extracted_data_file,
+    )
 
 
 def main():
-
     # Define Crossref Keywords
     crossref_keyword = "'copolymerization' AND 'reactivity ratio'"
 
@@ -36,7 +50,7 @@ def main():
         "monomers": 5,
         "copolymers": 5,
         "ratios": 20,
-        "reactivity ratios": 40
+        "reactivity ratios": 40,
     }
 
     score_limit = 65  # Minimum score for embedding generation
@@ -45,12 +59,26 @@ def main():
     # Input and output folders for data extraction
     input_folder_images = "./processed_images"
     output_folder = "./model_output_GPT4-o"
-    paper_list_path = "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+    paper_list_path = (
+        "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+    )
     pdf_folder = "../obtain_data/output/PDF"
-    extracted_data_file = "../../data_extraction/comparison_of_models/extracted_data.json"
+    extracted_data_file = (
+        "../../data_extraction/comparison_of_models/extracted_data.json"
+    )
 
     # run obtain data pipline
-    obtain_data(crossref_keyword, keywords, score_limit, number_of_selected_papers, input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file)
+    obtain_data(
+        crossref_keyword,
+        keywords,
+        score_limit,
+        number_of_selected_papers,
+        input_folder_images,
+        output_folder,
+        paper_list_path,
+        pdf_folder,
+        extracted_data_file,
+    )
 
 
 if __name__ == "__main__":

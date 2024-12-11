@@ -3,7 +3,15 @@ from keyword_filter import main as keyword_filter
 from embedding_filter import main as embedding_main
 
 
-def run_combined_pipeline(input_file, journal_file, keywords, score_limit, output_dir, selected_papers_path, number_of_selected_papers):
+def run_combined_pipeline(
+    input_file,
+    journal_file,
+    keywords,
+    score_limit,
+    output_dir,
+    selected_papers_path,
+    number_of_selected_papers,
+):
     """
     Combined pipeline that first scores the papers and then processes embeddings.
 
@@ -18,26 +26,32 @@ def run_combined_pipeline(input_file, journal_file, keywords, score_limit, outpu
     """
     print("Step 1: Scoring papers...")
     scoring_output_path = os.path.join(output_dir, "scored_doi.json")
-    keyword_filter(input_file=input_file,
-                   journal_file=journal_file,
-                   keywords=keywords,
-                   output_file=scoring_output_path)
+    keyword_filter(
+        input_file=input_file,
+        journal_file=journal_file,
+        keywords=keywords,
+        output_file=scoring_output_path,
+    )
 
     print("Scoring completed.")
 
     print("Step 2: Generating embeddings...")
-    embedding_main(file_path=scoring_output_path,
-                   output_dir=output_dir,
-                   doi_list_path=os.path.join(output_dir, "embeddings/existing_embeddings.json"),
-                   selected_papers_path=selected_papers_path,
-                   score=score_limit)
+    embedding_main(
+        file_path=scoring_output_path,
+        output_dir=output_dir,
+        doi_list_path=os.path.join(output_dir, "embeddings/existing_embeddings.json"),
+        selected_papers_path=selected_papers_path,
+        score=score_limit,
+    )
 
     print("Embedding generation completed.")
 
 
 def main(keywords, score_limit, number_of_selected_papers):
     # Define paths and parameters
-    input_file = "output/collected_doi_metadata.json"  # Input file containing DOI metadata
+    input_file = (
+        "output/collected_doi_metadata.json"  # Input file containing DOI metadata
+    )
     journal_file = "output/journals.json"  # JSON file with supported journal names
     output_dir = "output"  # Directory to store results
     selected_papers_path = os.path.join(output_dir, "selected_200_papers.json")
@@ -46,11 +60,18 @@ def main(keywords, score_limit, number_of_selected_papers):
     os.makedirs(output_dir, exist_ok=True)
 
     # Run the combined pipeline
-    run_combined_pipeline(input_file, journal_file, keywords, score_limit, output_dir, selected_papers_path, number_of_selected_papers)
+    run_combined_pipeline(
+        input_file,
+        journal_file,
+        keywords,
+        score_limit,
+        output_dir,
+        selected_papers_path,
+        number_of_selected_papers,
+    )
 
 
 if __name__ == "__main__":
-
     # Keywords and weights for scoring
     keywords = {
         "copolymerization": 10,
@@ -58,10 +79,10 @@ if __name__ == "__main__":
         "monomers": 5,
         "copolymers": 5,
         "ratios": 20,
-        "reactivity ratios": 40
+        "reactivity ratios": 40,
     }
 
     score_limit = 65  # Minimum score for embedding generation
     number_of_selected_papers = 200  # Number of nearest papers to select
 
-    main(keywords,score_limit, number_of_selected_papers)
+    main(keywords, score_limit, number_of_selected_papers)

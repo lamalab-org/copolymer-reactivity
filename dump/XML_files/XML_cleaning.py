@@ -4,7 +4,11 @@ import time
 import logging
 
 # Set up logging
-logging.basicConfig(filename='../files_pygetpaper/XML_cleaning/processing_errors.log', level=logging.ERROR)
+logging.basicConfig(
+    filename="../files_pygetpaper/XML_cleaning/processing_errors.log",
+    level=logging.ERROR,
+)
+
 
 # Function to process a single XML file
 def process_xml_file(xml_file, output_file, timeout=60):
@@ -25,7 +29,9 @@ def process_xml_file(xml_file, output_file, timeout=60):
                 print(f"Processed {xml_file} successfully.")
                 return output_file
             else:
-                print(f"Failed to process {xml_file}. Status code: {response.status_code}")
+                print(
+                    f"Failed to process {xml_file}. Status code: {response.status_code}"
+                )
             break
         except requests.exceptions.Timeout:
             print(f"Timeout error for {xml_file}. Moving to the next file.")
@@ -54,9 +60,11 @@ def process_all_xml_files(input_dir, output_dir):
             # Iterate over all files in the subdirectory
             for filename in os.listdir(subdir_path):
                 if filename.endswith(".xml"):
-                    print(f'processing {filename} in {subdir_path}.')
+                    print(f"processing {filename} in {subdir_path}.")
                     input_file = os.path.join(subdir_path, filename)
-                    output_file = os.path.join(output_dir, subdir, filename.replace(".xml", ".tei.xml"))
+                    output_file = os.path.join(
+                        output_dir, subdir, filename.replace(".xml", ".tei.xml")
+                    )
 
                     # Ensure the output directory for this subfolder exists
                     os.makedirs(os.path.join(output_dir, subdir), exist_ok=True)
@@ -68,6 +76,7 @@ def process_all_xml_files(input_dir, output_dir):
 
                     # Process the XML file with a timeout and error handling
                     process_xml_file(input_file, output_file)
+
 
 if __name__ == "__main__":
     input_dir = "../files_pygetpaper/"  # Path to your input directory

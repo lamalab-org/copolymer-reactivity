@@ -8,7 +8,7 @@ import re
 
 def sanitize_filename(filename):
     """Replace invalid characters in filename with underscores."""
-    return re.sub(r'[<>:"/\\|?*]', '_', filename)
+    return re.sub(r'[<>:"/\\|?*]', "_", filename)
 
 
 def save_embedding_file(output_dir, paper, doi_list_path):
@@ -22,7 +22,7 @@ def save_embedding_file(output_dir, paper, doi_list_path):
         "DOI": paper["DOI"],
         "Title": paper["Title"],
         "Abstract": paper["Abstract"],
-        "Embedding": paper["Embedding"]
+        "Embedding": paper["Embedding"],
     }
     with open(filename, "w") as f:
         json.dump(data, f, indent=2)
@@ -97,8 +97,12 @@ def find_nearest_papers(output_dir, selected_papers_path, number_of_selected_pap
     sources = [entry.get("Source", "") for entry in processed_data]
 
     # Identify indices for "copol database" papers and other papers
-    copol_indices = [i for i, source in enumerate(sources) if source == 'copol database']
-    other_indices = [i for i, source in enumerate(sources) if source != 'copol database']
+    copol_indices = [
+        i for i, source in enumerate(sources) if source == "copol database"
+    ]
+    other_indices = [
+        i for i, source in enumerate(sources) if source != "copol database"
+    ]
 
     if not copol_indices or not other_indices:
         print("Error: Either 'copol database' or other sources are empty.")
@@ -109,7 +113,7 @@ def find_nearest_papers(output_dir, selected_papers_path, number_of_selected_pap
     other_embeddings = embeddings[other_indices]
 
     # Compute distances between "copol database" papers and other papers
-    distances = cdist(other_embeddings, copol_embeddings, metric='euclidean')
+    distances = cdist(other_embeddings, copol_embeddings, metric="euclidean")
 
     if distances.size == 0:
         print("Error: Distance matrix is empty.")
@@ -128,23 +132,24 @@ def find_nearest_papers(output_dir, selected_papers_path, number_of_selected_pap
             "Abstract": processed_data[other_indices[i]]["Abstract"],
             "Score": processed_data[other_indices[i]]["Score"],
             "DOI": processed_data[other_indices[i]].get("DOI"),
-            "Source": processed_data[other_indices[i]].get("Source", "Unknown")
+            "Source": processed_data[other_indices[i]].get("Source", "Unknown"),
         }
         for i in nearest_indices
     ]
 
     # Save the results to the specified JSON file
-    with open(selected_papers_path, 'w') as outfile:
+    with open(selected_papers_path, "w") as outfile:
         json.dump(nearest_papers, outfile, indent=2)
 
-    print(f"The {number_of_selected_paper} nearest papers have been saved to {selected_papers_path}.")
+    print(
+        f"The {number_of_selected_paper} nearest papers have been saved to {selected_papers_path}."
+    )
 
 
 def save_json(data, path):
     """Save JSON data to a file."""
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
-
 
 
 def get_embedding(client, text, model="text-embedding-3-small"):
