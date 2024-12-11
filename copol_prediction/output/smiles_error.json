@@ -130,5 +130,13 @@
     {
         "smiles": "O=C(O)c1cccc(C(=O)O)c1.[Cl-].[Cl-]",
         "error": "Following atoms are too close: [(12, 13, 0.0)]"
+    },
+    {
+        "smiles": "C=C(C)C(=O)OCC[N+](C)(C)C.[Cl-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpw9c5kt_6': Too many open files"
+    },
+    {
+        "smiles": "CCCC[Sn+2]CCCC.O=C([O-])/C=C\\C(=O)[O-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmp48vz7ixk': Too many open files"
     }
 ]
