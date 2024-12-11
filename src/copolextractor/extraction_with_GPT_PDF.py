@@ -13,19 +13,27 @@ from rdkit.Chem import Descriptors
 failed_smiles_list = []
 
 
-def process_pdf_files(paper_list_path, output_folder_images, output_folder, number_of_model_calls, pdf_folder):
+def process_pdf_files(
+    paper_list_path,
+    output_folder_images,
+    output_folder,
+    number_of_model_calls,
+    pdf_folder,
+):
     """
     Process PDF files based on entries from paper_list.json and update the JSON file with extraction results.
     """
     start = time.time()
 
     # Load paper list JSON
-    with open(paper_list_path, 'r', encoding='utf-8') as file:
+    with open(paper_list_path, "r", encoding="utf-8") as file:
         paper_list = json.load(file)
 
     # Filter for entries with "precision_score": 1
     selected_papers = [
-        entry for entry in paper_list if entry.get("precision_score") == 1 and not entry.get("extracted")
+        entry
+        for entry in paper_list
+        if entry.get("precision_score") == 1 and not entry.get("extracted")
     ]
     print(f"Number of PDFs to process: {len(selected_papers)}")
 
@@ -38,10 +46,10 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
     prompt_text = prompter.get_prompt_template()
 
     for i, paper in enumerate(selected_papers):
-        filename = paper['pdf_name']
+        filename = paper["pdf_name"]
         file_path = os.path.join(pdf_folder, filename)
 
-        json_file_path = os.path.join(output_folder, filename.replace('.pdf', '.json'))
+        json_file_path = os.path.join(output_folder, filename.replace(".pdf", ".json"))
         if os.path.exists(json_file_path):
             print(f"Skipping {filename}: JSON file already exists.")
             continue
@@ -54,7 +62,10 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
 
         # Convert PDF to images
         pdf_images = convert_from_path(file_path)
-        images_base64 = [ip.process_image(image, 2048, output_folder_images, file_path, j)[0] for j, image in enumerate(pdf_images)]
+        images_base64 = [
+            ip.process_image(image, 2048, output_folder_images, file_path, j)[0]
+            for j, image in enumerate(pdf_images)
+        ]
 
         # Generate initial prompt
         content = prompter.get_prompt_vision_model(images_base64, prompt_text)
@@ -67,7 +78,9 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
         number_of_calls += 1
 
         # Save output as JSON and YAML
-        output_name_json = os.path.join(output_folder, filename.replace('.pdf', '.json'))
+        output_name_json = os.path.join(
+            output_folder, filename.replace(".pdf", ".json")
+        )
 
         for attempt in range(number_of_model_calls):
             if isinstance(output, str):
@@ -79,10 +92,11 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
             print(f"NA-rate: {na_rate}")
 
             if na_rate > 0.4 or output is None:
-
                 print(f"Retrying model call {attempt + 2} for {filename}")
                 updated_prompt = prompter.update_prompt(prompt_text, output)
-                content = prompter.get_prompt_vision_model(images_base64, updated_prompt)
+                content = prompter.get_prompt_vision_model(
+                    images_base64, updated_prompt
+                )
                 output, input_token, output_token = prompter.call_openai(content)
                 total_input_tokens += input_token
                 total_output_tokens += output_token
@@ -118,14 +132,13 @@ def process_pdf_files(paper_list_path, output_folder_images, output_folder, numb
                 break
 
         # Update the JSON entry
-        paper.update({
-            "extracted": True,
-            "extracted_data": output
-        })
+        paper.update({"extracted": True, "extracted_data": output})
 
     # Save the updated JSON file
-    extracted_json_path = "../../data_extraction/comparison_of_models/data_extracted.json"
-    with open(extracted_json_path, 'w', encoding='utf-8') as file:
+    extracted_json_path = (
+        "../../data_extraction/comparison_of_models/data_extracted.json"
+    )
+    with open(extracted_json_path, "w", encoding="utf-8") as file:
         json.dump(paper_list, file, indent=4)
 
     print("Total input tokens used:", total_input_tokens)
@@ -146,7 +159,9 @@ def decode_nested_json(data):
     """
     if isinstance(data, str):
         try:
-            return decode_nested_json(json.loads(data))  # Parse the string and decode further
+            return decode_nested_json(
+                json.loads(data)
+            )  # Parse the string and decode further
         except (json.JSONDecodeError, TypeError):
             return data  # Return as-is if not JSON
     elif isinstance(data, dict):
@@ -190,7 +205,7 @@ def process_files(input_folder, output_file):
         file_path = os.path.join(input_folder, filename)
         print(f"Processing: {file_path}")
         try:
-            with open(file_path, 'r') as file:
+            with open(file_path, "r") as file:
                 data = json.load(file)
                 if isinstance(data, str):
                     print("Detected double-encoded JSON. Attempting to parse again...")
@@ -200,7 +215,7 @@ def process_files(input_folder, output_file):
             continue
 
         try:
-            reactions = data.get('reactions', [])
+            reactions = data.get("reactions", [])
             if not isinstance(reactions, list):
                 print(f"'reactions' in {filename} is not a list. Skipping file.")
                 continue
@@ -210,46 +225,46 @@ def process_files(input_folder, output_file):
                     print(f"Skipping non-dict reaction in {filename}: {reaction}")
                     continue
 
-                monomers = reaction.get('monomers', [])
+                monomers = reaction.get("monomers", [])
                 if len(monomers) != 2:
                     print(f"Unexpected number of monomers in {filename}: {monomers}")
                     continue
 
                 monomer1, monomer2 = monomers
 
-                reaction_conditions = reaction.get('reaction_conditions', [])
+                reaction_conditions = reaction.get("reaction_conditions", [])
                 for condition in reaction_conditions:
-                    temp = condition.get('temperature')
-                    unit = condition.get('temperature_unit')
+                    temp = condition.get("temperature")
+                    unit = condition.get("temperature_unit")
                     temperature = az.convert_unit(temp, unit)
-                    solvent = condition.get('solvent')
+                    solvent = condition.get("solvent")
                     solvent_smiles = utils.name_to_smiles(solvent)
                     logP = calculate_logP(solvent_smiles) if solvent_smiles else None
-                    r_values = condition.get('reaction_constants', {})
-                    conf_intervals = condition.get('reaction_constant_conf', {})
-                    method = condition.get('method')
-                    product = condition.get('r_product')
-                    polymerization_type = condition.get('polymerization_type')
-                    determination_method = condition.get('determination_method')
+                    r_values = condition.get("reaction_constants", {})
+                    conf_intervals = condition.get("reaction_constant_conf", {})
+                    method = condition.get("method")
+                    product = condition.get("r_product")
+                    polymerization_type = condition.get("polymerization_type")
+                    determination_method = condition.get("determination_method")
 
                     result = {
-                        'file': filename,
-                        'monomer1_s': utils.name_to_smiles(monomer1),
-                        'monomer2_s': utils.name_to_smiles(monomer2),
-                        'monomer1': monomer1,
-                        'monomer2': monomer2,
-                        'r_values': r_values,
-                        'conf_intervals': conf_intervals,
-                        'temperature': temperature,
-                        'temperature_unit': '°C',
-                        'solvent': solvent,
-                        'solvent_smiles': solvent_smiles,
-                        'logP': logP,
-                        'method': method,
-                        'r-product': product,
-                        'source': data.get('source'),
-                        'polymerization_type': polymerization_type,
-                        'determination_method': determination_method
+                        "file": filename,
+                        "monomer1_s": utils.name_to_smiles(monomer1),
+                        "monomer2_s": utils.name_to_smiles(monomer2),
+                        "monomer1": monomer1,
+                        "monomer2": monomer2,
+                        "r_values": r_values,
+                        "conf_intervals": conf_intervals,
+                        "temperature": temperature,
+                        "temperature_unit": "°C",
+                        "solvent": solvent,
+                        "solvent_smiles": solvent_smiles,
+                        "logP": logP,
+                        "method": method,
+                        "r-product": product,
+                        "source": data.get("source"),
+                        "polymerization_type": polymerization_type,
+                        "determination_method": determination_method,
                     }
                     results.append(result)
                     reaction_count += 1
@@ -260,7 +275,7 @@ def process_files(input_folder, output_file):
     print(f"Total files processed: {file_count}")
     print(f"Total reactions extracted: {reaction_count}")
 
-    with open(output_file, 'w') as file:
+    with open(output_file, "w") as file:
         json.dump(results, file, indent=4)
     print(f"Results saved to {output_file}")
 
@@ -273,7 +288,9 @@ def process_files(input_folder, output_file):
         print("All SMILES were successfully processed.")
 
 
-def main(input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file):
+def main(
+    input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file
+):
     """
     Main function to process PDFs and extracted JSON files.
     """
@@ -283,7 +300,9 @@ def main(input_folder_images, output_folder, paper_list_path, pdf_folder, extrac
     os.makedirs(output_folder, exist_ok=True)
 
     # Process PDF files
-    process_pdf_files(paper_list_path, input_folder_images, output_folder, 2, pdf_folder)
+    process_pdf_files(
+        paper_list_path, input_folder_images, output_folder, 2, pdf_folder
+    )
 
     # Process extracted JSON files
     process_files(output_folder, extracted_data_file)
@@ -293,8 +312,18 @@ if __name__ == "__main__":
     # Input and output folders
     input_folder_images = "./processed_images"
     output_folder = "./model_output_GPT4-o"
-    paper_list_path = "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+    paper_list_path = (
+        "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+    )
     pdf_folder = "../obtain_data/output/PDF"
-    extracted_data_file = "../../data_extraction/comparison_of_models/extracted_data.json"
+    extracted_data_file = (
+        "../../data_extraction/comparison_of_models/extracted_data.json"
+    )
 
-    main(input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file)
+    main(
+        input_folder_images,
+        output_folder,
+        paper_list_path,
+        pdf_folder,
+        extracted_data_file,
+    )

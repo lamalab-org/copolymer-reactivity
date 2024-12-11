@@ -68,7 +68,7 @@ def convert_unit(temp1, unit1):
     Handles 'na' entries by returning None.
     """
     # Check for 'na' entries
-    if temp1 == 'na' or unit1 == 'na':
+    if temp1 == "na" or unit1 == "na":
         return None
 
     try:
@@ -81,7 +81,6 @@ def convert_unit(temp1, unit1):
         # Log the error details
         print("Error converting units:", e)
         return None
-
 
 
 def get_metadata_polymerization(data: dict):
@@ -183,7 +182,8 @@ def find_matching_reaction_conditions(
         if comb["temperature"] != "NA" and comb["temperature_unit"] != "NA":
             temp = convert_unit(temperature, temp_unit)
             temperature_model = convert_unit(
-                comb["temperature"], comb["temperature_unit"])
+                comb["temperature"], comb["temperature_unit"]
+            )
         else:
             temperature_model = comb["temperature"]
             temp = temperature
@@ -353,4 +353,3 @@ def calculate_rate(na_count, total_count):
         return na_count / total_count
     else:
         return 0.0  # Return 0 if total_count is zero to avoid division by zero.
-
