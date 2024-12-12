@@ -7,6 +7,7 @@ from sklearn.model_selection import KFold, RandomizedSearchCV
 from sklearn.metrics import mean_squared_error, r2_score
 from xgboost import XGBRegressor
 from sklearn.pipeline import Pipeline
+import os
 
 # Function to map categorical features to numerical values
 def map_categorical_features(X, column, mapping):
@@ -191,19 +192,12 @@ def preprocess_and_combine(df_filtered, df_filtered_flipped):
     return combined_df
 
 
-# Main execution
-if __name__ == "__main__":
-    import os
-
+def main(data, data_flipped):
     # Print the current working directory
     print("Current Working Directory:", os.getcwd())
 
-    # Load datasets
-    df_filtered = pd.read_csv("../../copol_prediction/output/processed_data_copol.csv")
-    df_filtered_flipped = pd.read_csv("../../copol_prediction/output/processed_data_copol_flipped.csv")
-
     # Combine and deduplicate datasets
-    combined_df = preprocess_and_combine(df_filtered, df_filtered_flipped)
+    combined_df = preprocess_and_combine(data, data_flipped)
 
     # Ensure no missing values in numerical features
     combined_df.dropna(subset=numerical_features, inplace=True)
@@ -227,3 +221,14 @@ if __name__ == "__main__":
     )
 
     plot_predictions(all_y_train_true, all_y_train_pred, all_y_true, all_y_pred)
+
+# Main execution
+if __name__ == "__main__":
+
+    # Load datasets
+    df_filtered = pd.read_csv("../../copol_prediction/output/processed_data_copol.csv")
+    df_filtered_flipped = pd.read_csv("../../copol_prediction/output/processed_data_copol_flipped.csv")
+
+    main(df_filtered, df_filtered_flipped)
+
+

@@ -1,9 +1,9 @@
 from copolextractor.pre_model_filter import main as pre_model_filter
 from copolextractor.preprocess_data import main as pre_process
-#from copolextractor.model import main as model
+from copolextractor.model import main as model
 
 
-def preprocess_data(input_file_filter, output_file_filter, output_file_processing):
+def preprocess_data(input_file_filter, output_file_filter, output_file_processing, data, data_flipped):
     # Pre modeling filter
     pre_model_filter(input_file_filter, output_file_filter)
 
@@ -11,7 +11,7 @@ def preprocess_data(input_file_filter, output_file_filter, output_file_processin
     pre_process(output_file_filter, output_file_processing)
 
     # model
-    # model()
+    model(data, data_flipped)
 
 
 def main():
@@ -28,6 +28,10 @@ def main():
 
     # Pre-processing
     output_file_processing = "./output/processed_data_copol.csv"
+
+    # Model
+    data = "./output/processed_data_copol.csv"
+    data_flipped = "./output/processed_data_copol_flipped.csv"
 
     preprocess_data(input_file_filter, output_file_filter, output_file_processing)
 
