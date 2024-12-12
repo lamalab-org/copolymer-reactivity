@@ -136,7 +136,7 @@ def format_prompt(template: str, data: dict) -> str:
     return template.format(**data)
 
 
-def call_openai(prompt, model="gpt-4o", temperature: float = 0.0, **kwargs):
+def call_openai(prompt, model="chatgpt-4o-latest", temperature: float = 0.0, **kwargs):
     """Call chat openai model
 
     Args:
@@ -154,7 +154,7 @@ def call_openai(prompt, model="gpt-4o", temperature: float = 0.0, **kwargs):
             {
                 "role": "system",
                 "content": "You are a scientific assistant, extracting important information about polymerization conditions"
-                "out of pdf_testset in valid json format. Extract just data which you are 100% confident about the "
+                "out of PDFs in valid json format. Extract just data which you are 100% confident about the "
                 "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
@@ -191,7 +191,7 @@ def call_openai_chucked(
             {
                 "role": "system",
                 "content": "You are a scientific assistant, extracting important information about polymerization conditions"
-                "out of pdf_testset in valid json format. Extract just data which you are 100% confident about the "
+                "out of PDFs in valid json format. Extract just data which you are 100% confident about the "
                 "accuracy. Keep the entries short without details. Be careful with numbers.",
             },
             {"role": "user", "content": prompt},
@@ -342,9 +342,9 @@ def call_claude3(prompt):
     message = client.messages.create(
         model="claude-3-opus-20240229",
         max_tokens=1024,
-        system="You are a scientific assistant, extracting important information about polymerization conditions "
-        "out of processed_images in valid json format. If the info is not found put 'NA'. Always be truthful and do not "
-        "extract anything false or made up.",
+        system="You are a scientific assistant, extracting important information about polymerization conditions"
+                "out of PDFs in valid json format. Extract just data which you are 100% confident about the "
+                "accuracy. Keep the entries short without details. Be careful with numbers.",
         temperature=0.0,
         messages=prompt,
     )

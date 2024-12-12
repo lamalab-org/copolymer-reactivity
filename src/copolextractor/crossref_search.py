@@ -46,10 +46,7 @@ def process_crossref(query, output_crossref_file, extracted_data):
 
     for entry in results:
         if "DOI" in entry:
-            doi = entry["DOI"]
-            source = "crossref"
-            format_type = None
-            add_to_database(doi, source, format_type, extracted_data)
+            add_to_database(entry["DOI"], "crossref", None, extracted_data)
 
 
 def get_crossref_data(doi, source, format_type):

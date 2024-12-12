@@ -67,16 +67,17 @@ def apply_r_conf_filter(data):
         conf_1 = entry.get("conf_intervals", {}).get("constant_conf_1")
         conf_2 = entry.get("conf_intervals", {}).get("constant_conf_2")
 
-        if (
-            r1 is not None
-            and r2 is not None
-            and conf_1 is not None
-            and conf_2 is not None
-        ):
-            # Confidence intervals should not exceed the corresponding r-values
-            entry["r_conf_filter"] = (conf_1 <= r1) and (conf_2 <= r2)
+        if r1 is not None and r2 is not None:
+            # Check confidence intervals if they exist
+            if conf_1 is not None and conf_2 is not None:
+                # Confidence intervals should not exceed the corresponding r-values
+                entry["r_conf_filter"] = (conf_1 <= r1) and (conf_2 <= r2)
+            else:
+                # If one or both confidence intervals are missing, still pass the filter
+                entry["r_conf_filter"] = True
         else:
-            entry["r_conf_filter"] = False  # Filter out due to missing/conflicting data
+            # Filter out due to missing r-values
+            entry["r_conf_filter"] = True
 
 
 # Main function

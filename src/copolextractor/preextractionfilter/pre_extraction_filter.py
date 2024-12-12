@@ -10,6 +10,8 @@ def run_combined_pipeline(
     pdf_input_folder,
     output_folder_images,
     output_folder,
+    seed,
+    threshold,
 ):
     """
     Combined pipeline that first processes PDFs for scoring and then performs RF filtering.
@@ -36,26 +38,17 @@ def run_combined_pipeline(
         training_file=training_file,
         scoring_file=output_file,
         output_file=output_file,
-        pdf_folder=pdf_input_folder,
+        seed_rf=seed,
+        threshold=threshold,
     )
     print(f"RF filtering completed. Results saved to {output_file}.")
 
 
-def main():
-    # Paths for the PDF processing module
-    pdf_input_folder = "../obtain_data/output/PDF"
-    output_folder_images = "./output/processed_images"
-    output_folder = "./output/model_output_score"
-
-    training_file = (
-        "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
-    )
-    scoring_file = "../../../data_extraction/obtain_data/output/selected_200_papers.json"
-    output_file = "../../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+def main(seed_rf, threshold, pdf_input_folder, output_folder_images, output_folder_score, training_file, scoring_file, output_file):
 
     # Ensure output directories exist
     os.makedirs(output_folder_images, exist_ok=True)
-    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(output_folder_score, exist_ok=True)
 
     # Run the combined pipeline
     run_combined_pipeline(
@@ -64,9 +57,8 @@ def main():
         output_file,
         pdf_input_folder,
         output_folder_images,
-        output_folder,
+        output_folder_score,
+        seed_rf,
+        threshold
     )
 
-
-if __name__ == "__main__":
-    main()

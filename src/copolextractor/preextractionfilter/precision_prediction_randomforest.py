@@ -2,31 +2,15 @@ import os
 import json
 import pandas as pd
 from sklearn.model_selection import train_test_split, StratifiedKFold, GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import make_scorer, accuracy_score, confusion_matrix
+from sklearn.metrics import make_scorer, accuracy_score
+from xgboost import XGBClassifier
+import copolextractor.utils as utils
 
 
-def load_data(file_path):
-    """
-    Load JSON data from a file.
-    """
-    with open(file_path, "r") as file:
-        data = json.load(file)
-    return data
-
-
-def save_data(data, file_path):
-    """
-    Save JSON data to a file.
-    """
-    with open(file_path, "w") as file:
-        json.dump(data, file, indent=4)
-
-
-def preprocess_data(data, features, target):
+def preprocess_data(data, features, target, threshold):
     """
     Prepare data for training by converting it into a DataFrame.
     """
@@ -34,15 +18,15 @@ def preprocess_data(data, features, target):
         entry for entry in data if target in entry and entry[target] is not None
     ]
     df = pd.DataFrame(filtered_data)
-    df["precision_class"] = (df[target] > 0.7).astype(int)
+    df["precision_class"] = (df[target] > threshold).astype(int)
     return df
 
 
-def build_pipeline(numeric_features, categorical_features):
+def build_pipeline(numeric_features, categorical_features, seed_rf):
     """
-    Build a preprocessing and modeling pipeline.
+    Build a preprocessing and modeling pipeline with XGBoost.
     """
-    numeric_transformer = "passthrough"
+    numeric_transformer = "passthrough"  # No transformation needed for numerical features
     categorical_transformer = OneHotEncoder(handle_unknown="ignore")
     preprocessor = ColumnTransformer(
         transformers=[
@@ -51,14 +35,16 @@ def build_pipeline(numeric_features, categorical_features):
         ]
     )
 
-    model = RandomForestClassifier(random_state=22)
+    model = XGBClassifier(
+        random_state=seed_rf, use_label_encoder=False, eval_metric="logloss", missing=pd.NA
+    )
     pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
     return pipeline
 
 
-def train_model(training_data, features, target):
+def train_model(training_data, features, target, seed_rf):
     """
-    Train the Random Forest model.
+    Train the XGBoost model.
     """
     numeric_features = [
         "table_quality",
@@ -69,12 +55,14 @@ def train_model(training_data, features, target):
     ]
     categorical_features = ["language"]
 
-    pipeline = build_pipeline(numeric_features, categorical_features)
+    pipeline = build_pipeline(numeric_features, categorical_features, seed_rf)
 
     param_grid = {
-        "model__n_estimators": [50, 100],
-        "model__max_depth": [None, 10],
-        "model__min_samples_leaf": [1, 2],
+        "model__n_estimators": [100, 500, 1000],
+        "model__max_depth": [3, 5, 7],
+        "model__learning_rate": [0.01, 0.1, 0.2],
+        "model__colsample_bytree": [0.6, 0.8, 1.0],
+        "model__subsample": [0.6, 0.8, 1.0],
     }
 
     X = training_data[features]
@@ -93,19 +81,11 @@ def train_model(training_data, features, target):
     return grid_search.best_estimator_
 
 
-def update_scores(data, model, features, pdf_folder):
+def update_scores(data, model, features):
     """
-    Update entries with predictions and check if corresponding PDFs exist.
+    Update entries with predictions.
     """
-    # Map feature names in the test data to match the training data
-    feature_mapping = {"rxn_count": "rxn_number"}
-
     for entry in data:
-        # Rename feature keys in the entry to match training data
-        for old_name, new_name in feature_mapping.items():
-            if old_name in entry:
-                entry[new_name] = entry.pop(old_name)
-
         # Check if all required features are present and valid
         missing_features = [
             feature
@@ -119,14 +99,7 @@ def update_scores(data, model, features, pdf_folder):
 
         # Create a DataFrame for prediction
         feature_values = pd.DataFrame(
-            [
-                {
-                    feature: entry.get(
-                        feature, 0
-                    )  # Use 0 as the default value for missing features
-                    for feature in features
-                }
-            ]
+            [{feature: entry.get(feature, pd.NA) for feature in features}]
         )
 
         print(f"Features for prediction: {feature_values}")  # Debug: Show feature data
@@ -143,13 +116,13 @@ def update_scores(data, model, features, pdf_folder):
     return data
 
 
-def main(training_file, scoring_file, output_file, pdf_folder):
+def main(training_file, scoring_file, output_file, seed_rf, threshold):
     """
     Main function to run the filtering pipeline.
     """
     # Load training and scoring data
-    training_data = load_data(training_file)
-    scoring_data = load_data(scoring_file)
+    training_data = utils.load_json(training_file)
+    scoring_data = utils.load_json(scoring_file)
 
     features = [
         "language",
@@ -162,25 +135,17 @@ def main(training_file, scoring_file, output_file, pdf_folder):
     target = "precision"
 
     # Prepare training data
-    training_df = preprocess_data(training_data, features, target)
+    training_df = preprocess_data(training_data, features, target, threshold)
 
     # Train the model
     print("Training the model...")
-    model = train_model(training_df, features, "precision_class")
+    model = train_model(training_df, features, "precision_class", seed_rf)
 
     # Update scoring data
     print("Updating scores for scoring data...")
-    updated_data = update_scores(scoring_data, model, features, pdf_folder)
+    updated_data = update_scores(scoring_data, model, features)
 
     # Save updated scoring data
-    save_data(updated_data, output_file)
+    utils.save_json(updated_data, output_file)
     print(f"Updated scoring data saved to {output_file}")
 
-
-if __name__ == "__main__":
-    training_file = "../obtain_data/output/training_data.json"
-    scoring_file = "../obtain_data/output/selected_200_papers.json"
-    output_file = "./output/paper_list.json"
-    pdf_folder = "../obtain_data/output/PDF"
-
-    main(training_file, scoring_file, output_file, pdf_folder)

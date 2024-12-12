@@ -173,22 +173,3 @@ def main(
         log_file_path,
         output_file,
     )
-
-
-if __name__ == "__main__":
-    # Define input and output folders
-    input_folder = "./PDF"
-    output_folder_images = "./processed_images"
-    output_folder = "./model_output_score"
-    selected_entries_path = (
-        "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
-    )
-    output_file = "../../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
-
-    main(
-        input_folder,
-        output_folder_images,
-        output_folder,
-        selected_entries_path,
-        output_file,
-    )

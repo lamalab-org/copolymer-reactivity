@@ -85,28 +85,10 @@ def process_papers(input_file, journal_file, keywords, output_file):
     print(f"Scored papers saved to {output_file}.")
 
 
-def main():
-    # Input and output files
-    journal_file = "../../../data_extraction/obtain_data/output/journals.json"
-    input_file = "../../../data_extraction/obtain_data/output/collected_doi_metadata.json"
-    output_file = "../../../data_extraction/obtain_data/output/scored_doi.json"
-
-    # Keywords and their weights
-    keywords = {
-        "copolymerization": 10,
-        "polymerization": 5,
-        "monomers": 5,
-        "copolymers": 5,
-        "ratios": 20,
-        "reactivity ratios": 40,
-    }
+def main(input_file, journal_file, keywords, output_file):
 
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)
 
     # Step 2: Process papers and calculate scores
     process_papers(input_file, journal_file, keywords, output_file)
-
-
-if __name__ == "__main__":
-    main()

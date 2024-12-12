@@ -1,6 +1,6 @@
 import os
 from keyword_filter import main as keyword_filter
-from embedding_filter import main as embedding_main
+from embedding_filter import main as embedding_filter
 
 
 def run_combined_pipeline(
@@ -36,12 +36,13 @@ def run_combined_pipeline(
     print("Scoring completed.")
 
     print("Step 2: Generating embeddings...")
-    embedding_main(
+    embedding_filter(
         file_path=scoring_output_path,
         output_dir=output_dir,
         doi_list_path=os.path.join(output_dir, "embeddings/existing_embeddings.json"),
         selected_papers_path=selected_papers_path,
-        score=score_limit,
+        score_limit=score_limit,
+        number_of_selected_paper=number_of_selected_papers,
     )
 
     print("Embedding generation completed.")
@@ -69,20 +70,3 @@ def main(keywords, score_limit, number_of_selected_papers):
         selected_papers_path,
         number_of_selected_papers,
     )
-
-
-if __name__ == "__main__":
-    # Keywords and weights for scoring
-    keywords = {
-        "copolymerization": 10,
-        "polymerization": 5,
-        "monomers": 5,
-        "copolymers": 5,
-        "ratios": 20,
-        "reactivity ratios": 40,
-    }
-
-    score_limit = 65  # Minimum score for embedding generation
-    number_of_selected_papers = 200  # Number of nearest papers to select
-
-    main(keywords, score_limit, number_of_selected_papers)

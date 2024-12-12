@@ -2,11 +2,13 @@ import backoff
 import requests
 import pubchempy as pcp
 import diskcache as dc
-from rdkit import Chem
 from pathlib import Path
 from typing import Union
 import yaml
 import json
+from rdkit import Chem
+from rdkit.Chem import Descriptors
+import re
 
 
 def load_yaml(file_path: Union[str, Path]) -> dict:
@@ -19,6 +21,36 @@ def load_json(file_path: Union[str, Path]) -> dict:
     with open(file_path, "r") as file:
         data = json.load(file)
     return data
+
+
+def save_json(data, file_path):
+    """
+    Save JSON data to a file.
+    """
+    with open(file_path, "w") as file:
+        json.dump(data, file, indent=4)
+
+
+def sanitize_filename(filename):
+    """Replace invalid characters in filename with underscores."""
+    return re.sub(r'[<>:"/\\|?*]', "_", filename)
+
+
+def calculate_logP(smiles):
+    """
+    Calculate the logP value for a given SMILES string.
+    """
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is not None:
+            logP = Descriptors.MolLogP(mol)
+            return logP
+        else:
+            print(f"Conversion failed for SMILES: {smiles}")
+            return None
+    except Exception as e:
+        print(f"Error processing SMILES: {smiles} with error {e}")
+        return None
 
 
 CACTUS = "https://cactus.nci.nih.gov/chemical/structure/{0}/{1}"

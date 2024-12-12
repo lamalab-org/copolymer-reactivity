@@ -6,8 +6,6 @@ import copolextractor.image_processer as ip
 import copolextractor.utils as utils
 import os
 import json
-from rdkit import Chem
-from rdkit.Chem import Descriptors
 
 
 failed_smiles_list = []
@@ -171,25 +169,6 @@ def decode_nested_json(data):
     return data
 
 
-def calculate_logP(smiles):
-    """
-    Calculate the logP value for a given SMILES string.
-    """
-    try:
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is not None:
-            logP = Descriptors.MolLogP(mol)
-            return logP
-        else:
-            print(f"Conversion failed for SMILES: {smiles}")
-            failed_smiles_list.append(smiles)
-            return None
-    except Exception as e:
-        print(f"Error processing SMILES: {smiles} with error {e}")
-        failed_smiles_list.append(smiles)
-        return None
-
-
 def process_files(input_folder, output_file):
     """
     Process JSON files in the input folder and generate extracted results.
@@ -239,7 +218,7 @@ def process_files(input_folder, output_file):
                     temperature = az.convert_unit(temp, unit)
                     solvent = condition.get("solvent")
                     solvent_smiles = utils.name_to_smiles(solvent)
-                    logP = calculate_logP(solvent_smiles) if solvent_smiles else None
+                    logP = utils.calculate_logP(solvent_smiles) if solvent_smiles else None
                     r_values = condition.get("reaction_constants", {})
                     conf_intervals = condition.get("reaction_constant_conf", {})
                     method = condition.get("method")

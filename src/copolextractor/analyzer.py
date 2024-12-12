@@ -3,6 +3,7 @@ from typing import Union, List, Tuple
 from copolextractor.utils import name_to_smiles, load_yaml
 from thefuzz import fuzz
 from pint import UnitRegistry
+from typing import Tuple, List, Optional, Dict, Any
 
 
 def get_number_of_reactions(data: dict) -> int:
@@ -247,13 +248,29 @@ def get_reaction_constant(data: list, index: int) -> tuple:
     return reaction_const, reaction_const_conf
 
 
-def get_reaction_const_list(reaction_const: list, reaction_const_conf: list):
-    reaction_constants = []
-    reaction_constants_conf = []
+def get_reaction_const_list(
+    reaction_const: Optional[Dict[str, Any]],
+    reaction_const_conf: Optional[Dict[str, Any]]
+) -> Tuple[List[Optional[float]], List[Optional[float]]]:
+    """
+    Extract reaction constants and their confidence intervals.
+
+    Parameters:
+        reaction_const: A dictionary containing reaction constants or None.
+        reaction_const_conf: A dictionary containing reaction confidence intervals or None.
+
+    Returns:
+        A tuple containing two lists:
+        - reaction_constants: A list of reaction constants, or [None, None] if input is None.
+        - reaction_constants_conf: A list of confidence intervals, or [None, None] if input is None.
+    """
+    # Extract reaction constants
     if reaction_const is None:
         reaction_constants = [None, None]
     else:
         reaction_constants = list(reaction_const.values())
+
+    # Extract reaction confidence intervals
     if reaction_const_conf is None:
         reaction_constants_conf = [None, None]
     else:

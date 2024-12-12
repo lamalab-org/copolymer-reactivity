@@ -1,30 +1,14 @@
 import json
 from scidownl.core.task import ScihubTask
 import os
-import re
-
-
-def load_json(input_file):
-    """
-    Load JSON data from the given file.
-    """
-    with open(input_file, "r") as file:
-        data = json.load(file)
-    return data
-
-
-def sanitize_filename(name):
-    """
-    Sanitize a filename by replacing invalid characters with underscores.
-    """
-    return re.sub(r"[^\w\-_\. ]", "_", name)
+import copolextractor.utils as utils
 
 
 def generate_filename(base_name, output_folder, extension=".pdf"):
     """
     Generate a sanitized filename and check if it exists in the output folder.
     """
-    sanitized_name = sanitize_filename(base_name)
+    sanitized_name = utils.sanitize_filename(base_name)
     unique_name = sanitized_name + extension
 
     # If the file exists, return None to indicate skipping
@@ -38,7 +22,7 @@ def download_papers_and_update_file(input_file, output_folder):
     """
     Download papers based on the DOIs in the input JSON file and update the file with download status.
     """
-    data = load_json(input_file)
+    data = utils.load_json(input_file)
     paper_count = 0
     failed_download_count = 0
     downloaded_paper_count = 0
