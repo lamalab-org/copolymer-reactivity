@@ -1,6 +1,6 @@
 from copolextractor.pre_model_filter import main as pre_model_filter
 from copolextractor.preprocess_data import main as pre_process
-from copolextractor.model import main as model
+#from copolextractor.model import main as model
 
 
 def preprocess_data(input_file_filter, output_file_filter, output_file_processing):
@@ -15,13 +15,23 @@ def preprocess_data(input_file_filter, output_file_filter, output_file_processin
 
 
 def main():
+    import os
+
+    # Print the current working directory
+    print("Current Working Directory:", os.getcwd())
+
     # Pre modeling filter
-    input_file_filter = "../../copol_prediction/output/extracted_data_w_features.json"
+    input_file_filter = "./output/extracted_data_w_features_copol.json"
     output_file_filter = (
-        "../../copol_prediction/output/extracted_data_w_features_filtered.json"
+        "./output/extracted_data_w_features_filtered_copol.json"
     )
 
     # Pre-processing
-    output_file_processing = "../../copol_prediction/output/processed_data.csv"
+    output_file_processing = "./output/processed_data_copol.csv"
 
     preprocess_data(input_file_filter, output_file_filter, output_file_processing)
+
+
+if __name__ == "__main__":
+
+    main()

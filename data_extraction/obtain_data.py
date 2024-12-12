@@ -1,7 +1,6 @@
-import os
-from PreExtractionFilter.pre_extraction_filter import main as pre_extraction_filter
+from PreExtractionFilter import main as pre_extraction_filter
 from copolextractor.PDF_download import main as pdf_download
-from PreDownloadFilter.pre_download_filter import main as pre_download_filter
+from PreDownloadFilter import main as pre_download_filter
 from copolextractor.crossref_search import main as crossref_search
 from copolextractor.extraction_with_GPT_PDF import main as extractor
 

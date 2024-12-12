@@ -110,6 +110,11 @@ def main(input_file, output_file):
     # Convert to DataFrame
     df = pd.DataFrame(filtered_data)
 
+    # Rename 'calculation_method' to 'determination_method' if it exists
+    if "calculation_method" in df.columns:
+        df.rename(columns={"calculation_method": "determination_method"}, inplace=True)
+        print("Renamed 'calculation_method' to 'determination_method'.")
+
     # Extract relevant features and molecular properties
     df = extract_features(df)
 

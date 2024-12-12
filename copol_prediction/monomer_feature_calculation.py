@@ -215,8 +215,8 @@ def save_properties(properties, filename):
 
 
 if __name__ == "__main__":
-    json_file = "../data_extraction/comparison_of_models/extracted_data.json"
+    json_file = "output/extracted_data_with_fp.json"
     output_folder = "output/molecule_properties"
     smiles_error_path = "output/smiles_error.json"
-    output_file = "output/extracted_data_w_features.json"
+    output_file = "output/extracted_data_w_features_copol.json"
     main(json_file, output_folder, smiles_error_path, output_file)
