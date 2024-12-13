@@ -21,7 +21,16 @@ def combine_csv_files(csv_files, output_file_combined):
     print(f"Combined {len(csv_files)} files into {output_file_combined} with {len(combined_df)} rows.")
 
 
-def preprocess_data(input_file_filter, output_file_filter, output_file_processing, data, data_flipped, combined, combine_csv_files_flag, csv_files_to_combine):
+def preprocess_data(
+        input_file_filter,
+        output_file_filter,
+        output_file_processing,
+        training_data,
+        training_data_flipped,
+        add_flipped_data,
+        combine_data_files_flag,
+        data_files_to_combine):
+
     # Pre modeling filter
     pre_model_filter(input_file_filter, output_file_filter)
 
@@ -29,14 +38,14 @@ def preprocess_data(input_file_filter, output_file_filter, output_file_processin
     pre_process(output_file_filter, output_file_processing)
 
     # If combining CSV files is enabled
-    if combine_csv_files_flag:
+    if combine_data_files_flag:
         # Combine the specified CSV files
         combined_csv_file = "./output/combined_data.csv"
-        combine_csv_files(csv_files_to_combine, combined_csv_file)
-        data = combined_csv_file  # Use the combined CSV file as the input data
+        combine_csv_files(data_files_to_combine, combined_csv_file)
+        training_data = combined_csv_file  # Use the combined CSV file as the input data
 
     # model
-    model(data, data_flipped, combined)
+    model(training_data, training_data_flipped, add_flipped_data)
 
 
 def main():
@@ -53,18 +62,26 @@ def main():
     output_file_processing = "./output/processed_data_copol.csv"
 
     # Model
-    data = "./output/processed_data_copol.csv"
-    data_flipped = "./output/processed_data_copol_flipped.csv"
-    combined = True
-
+    training_data = "./output/processed_data_copol.csv"
+    training_data_flipped = "./output/processed_data_copol_flipped.csv"
+    add_flipped_data = True  # Set True to incorporate flipped data to training and test dataset
     # Combine CSV files
-    combine_csv_files_flag = True  # Set to True to enable CSV file combination
-    csv_files_to_combine = [
+    combine_data_files_flag = True  # Set to True to enable CSV file combination
+    data_files_to_combine = [
         "./output/processed_data_copol.csv",
         "./output/processed_data.csv",
     ]
 
-    preprocess_data(input_file_filter, output_file_filter, output_file_processing, data, data_flipped, combined, combine_csv_files_flag, csv_files_to_combine)
+    preprocess_data(
+        input_file_filter,
+        output_file_filter,
+        output_file_processing,
+        training_data,
+        training_data_flipped,
+        add_flipped_data,
+        combine_data_files_flag,
+        data_files_to_combine
+    )
 
 
 if __name__ == "__main__":

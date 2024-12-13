@@ -48,25 +48,22 @@ def run_combined_pipeline(
     print("Embedding generation completed.")
 
 
-def main(keywords, score_limit, number_of_selected_papers):
+def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_input_file, output_file_pre_download_filter):
+
     # Define paths and parameters
-    input_file = (
-        "output/collected_doi_metadata.json"  # Input file containing DOI metadata
-    )
     journal_file = "output/journals.json"  # JSON file with supported journal names
     output_dir = "output"  # Directory to store results
-    selected_papers_path = os.path.join(output_dir, "selected_200_papers.json")
 
     # Ensure output directories exist
     os.makedirs(output_dir, exist_ok=True)
 
     # Run the combined pipeline
     run_combined_pipeline(
-        input_file,
+        crossref_metadata_input_file,
         journal_file,
         keywords,
         score_limit,
         output_dir,
-        selected_papers_path,
+        output_file_pre_download_filter,
         number_of_selected_papers,
     )

@@ -75,24 +75,18 @@ def download_papers_and_update_file(input_file, output_folder):
     )
 
 
-def main():
+def main(input_file_paper, output_folder):
     """
     Main function to handle the download process and update the JSON file.
     """
-    input_file = "../../data_extraction/obtain_data/output/selected_200_papers.json"  # Path to the input JSON file
-    output_folder = "output/PDF"  # Folder to save the papers
 
     # Check if the output folder exists, and create it if not
     os.makedirs(output_folder, exist_ok=True)
     print(f"Ensured folder exists: {output_folder}")
 
     print("Starting the paper download process...")
-    download_papers_and_update_file(input_file, output_folder)
+    download_papers_and_update_file(input_file_paper, output_folder)
 
     pdf_files = [f for f in os.listdir(output_folder) if f.endswith(".pdf")]
     pdf_count = len(pdf_files)
     print(f"There are {pdf_count} PDFs in the folder.")
-
-
-if __name__ == "__main__":
-    main()

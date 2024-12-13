@@ -141,7 +141,6 @@ def find_nearest_papers(output_dir, selected_papers_path, number_of_selected_pap
             copol_indices.append(i)
         else:
             other_indices.append(i)
-
     if not copol_indices or not other_indices:
         print("Error: Either 'copol database' or other sources are empty.")
         return

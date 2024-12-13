@@ -130,35 +130,22 @@ def save_extracted_data(output_file_path, extracted_data):
     print(f"Extracted data saved to {output_file_path}.")
 
 
-def main(crossref_query):
+def main(crossref_query, output_file_crossref_search, crossref_metadata_output_file):
     # Define file paths
     copol_file_path = (
         "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
     )
-    output_crossref_file = (
-        "../../data_extraction/obtain_data/output/crossref_search.json"
-    )
-    extracted_doi_file = "../../data_extraction/obtain_data/output/collected_doi.json"
-    metadata_output_file = (
-        "../../data_extraction/obtain_data/collected_doi_metadata.json"
-    )
+    all_doi_output_file = "../../data_extraction/obtain_data/output/collected_doi.json"
 
     # Initialize extracted data list
     extracted_data = []
 
     # Process data sources
     process_copol_database(copol_file_path, extracted_data)
-    process_crossref(crossref_query, output_crossref_file, extracted_data)
+    process_crossref(crossref_query, output_file_crossref_search, extracted_data)
 
     # Save combined DOIs
-    save_extracted_data(extracted_doi_file, extracted_data)
+    save_extracted_data(all_doi_output_file, extracted_data)
 
     # Fetch and save metadata
-    fetch_and_save_metadata(extracted_doi_file, metadata_output_file, extracted_data)
-
-
-if __name__ == "__main__":
-    # Define CrossRef query
-    crossref_query = "'copolymerization' AND 'reactivity ratio'"
-
-    main(crossref_query)
+    fetch_and_save_metadata(all_doi_output_file, crossref_metadata_output_file, extracted_data)
