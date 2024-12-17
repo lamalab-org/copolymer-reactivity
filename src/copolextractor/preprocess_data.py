@@ -1,5 +1,7 @@
 import json
 import pandas as pd
+from sklearn.decomposition import PCA
+from openai import OpenAI
 
 
 # Function: Filter data based on the filters
@@ -97,7 +99,114 @@ def create_flipped_dataset(df_features):
     return pd.DataFrame(flipped_rows)
 
 
-# Main function
+import os
+import json
+from sklearn.decomposition import PCA
+import openai
+
+# Global cache for embeddings
+embedding_cache = {}
+
+
+# Load existing embeddings from file if available
+def load_embeddings(file_path="embeddings.json"):
+    """Load embeddings from a JSON file if it exists."""
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
+            embeddings = json.load(file)
+            print(f"Loaded {len(embeddings)} embeddings from {file_path}.")
+            return {item["name"]: item["embedding"] for item in embeddings}
+    return {}
+
+
+# Save embeddings to a file
+def save_embeddings(embeddings_dict, file_path="output/method_embeddings.json"):
+    """Save embeddings to a JSON file."""
+    embeddings_list = [{"name": name, "embedding": embedding} for name, embedding in embeddings_dict.items()]
+    with open(file_path, "w") as file:
+        json.dump(embeddings_list, file, indent=4)
+    print(f"Saved {len(embeddings_list)} embeddings to {file_path}.")
+
+
+# Function: Check cache and get embedding
+def get_or_create_embedding(client, text, model="text-embedding-3-small"):
+    """
+    Retrieve embeddings for a given text.
+    The function checks the global cache first and only queries the API if the embedding is not already cached.
+
+    Args:
+        client: The OpenAI client instance for API requests.
+        text (str): The input text to generate an embedding for.
+        model (str): The OpenAI model to use for embedding generation (default: "text-embedding-3-small").
+
+    Returns:
+        list: The embedding vector as a list of floats.
+    """
+    global embedding_cache  # Ensure global access to the embedding cache
+
+    # Handle None or NaN text inputs safely
+    if text is None or pd.isna(text):
+        print("Warning: Found None or NaN in determination_method, returning a zero vector.")
+        return [0] * 1536  # Return a zero vector of the expected embedding dimension (e.g., 1536 for this model)
+
+    # Clean the text by removing newlines for consistency
+    text_cleaned = text.replace("\n", " ")
+
+    # Check if the embedding already exists in the cache
+    if text_cleaned in embedding_cache:
+        return embedding_cache[text_cleaned]  # Return the cached embedding
+
+    # If not in the cache, generate the embedding using the OpenAI API
+    response = client.embeddings.create(input=[text_cleaned], model=model)
+    embedding = response.data[0].embedding  # Extract the embedding from the response
+
+    # Store the new embedding in the cache for future use
+    embedding_cache[text_cleaned] = embedding
+    return embedding
+
+
+# Function: Convert str to embeddings and apply PCA
+def process_embeddings(df, client, column_name, prefix):
+    """
+    Processes a specified column into embeddings, applies PCA for dimensionality reduction,
+    and adds the reduced components as new features.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame containing the column to process.
+        client: OpenAI API client for generating embeddings.
+        column_name (str): Name of the column to process.
+        prefix (str): Prefix for the resulting PCA component columns.
+
+    Returns:
+        pd.DataFrame: Updated DataFrame with new PCA-reduced embedding features.
+    """
+    embeddings = []
+
+    # Generate embeddings or fetch from cache
+    for value in df[column_name].unique():
+        embedding = get_or_create_embedding(client, value)  # Fetch embedding
+        embeddings.append({"name": value, "embedding": embedding})
+
+    # Convert embeddings into DataFrame for PCA
+    embedding_matrix = [item["embedding"] for item in embeddings]
+    pca = PCA(n_components=2)  # Reduce to 2 components
+    reduced_embeddings = pca.fit_transform(embedding_matrix)
+
+    # Map reduced embeddings back to the column values
+    embedding_map = {item["name"]: reduced for item, reduced in zip(embeddings, reduced_embeddings)}
+
+    # Add PCA components to the DataFrame
+    df[f"{prefix}_1"] = df[column_name].apply(
+        lambda x: embedding_map.get(x, [None, None])[0]
+    )
+    df[f"{prefix}_2"] = df[column_name].apply(
+        lambda x: embedding_map.get(x, [None, None])[1]
+    )
+
+    print(f"PCA reduced embeddings for {column_name} added as {prefix}_1 and {prefix}_2.")
+    return df
+
+
 def main(input_file, output_file):
     # Load JSON data
     with open(input_file, "r") as file:
@@ -110,25 +219,30 @@ def main(input_file, output_file):
     # Convert to DataFrame
     df = pd.DataFrame(filtered_data)
 
-    # Rename 'calculation_method' to 'determination_method' if it exists
-    if "calculation_method" in df.columns:
-        df.rename(columns={"calculation_method": "determination_method"}, inplace=True)
-        print("Renamed 'calculation_method' to 'determination_method'.")
-
     # Extract relevant features and molecular properties
     df = extract_features(df)
 
-    # Add extracted columns directly into the DataFrame
+    # Load existing embeddings and initialize client
+    global embedding_cache
+    embedding_cache = load_embeddings()
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    # Process embeddings for determination_method
+    df = process_embeddings(df, client, column_name="method", prefix="method")
+
+    # Process embeddings for polymerization_type
+    df = process_embeddings(df, client, column_name="polymerization_type", prefix="polymerization_type")
+
+    # Save updated embeddings to file
+    save_embeddings(embedding_cache)
+
+    # Add other extracted columns
     df["r1"] = df["r_values"].apply(
         lambda x: x["constant_1"] if isinstance(x, dict) and "constant_1" in x else None
     )
     df["r2"] = df["r_values"].apply(
         lambda x: x["constant_2"] if isinstance(x, dict) and "constant_2" in x else None
     )
-
-    # Replace missing values with defaults
-    df["determination_method"] = df["determination_method"].fillna("None")
-    df["polymerization_type"] = df["polymerization_type"].fillna("None")
 
     # Drop rows with missing required values
     df = df.dropna(
@@ -138,8 +252,6 @@ def main(input_file, output_file):
             "monomer1_s",
             "monomer2_s",
             "temperature",
-            "determination_method",
-            "polymerization_type",
         ]
     )
 
@@ -156,16 +268,13 @@ def main(input_file, output_file):
 
     # Save the results
     df.to_csv(output_file, index=False)
-    print(df.columns)
     df_flipped.to_csv(output_file.replace(".csv", "_flipped.csv"), index=False)
 
     print(
         f"Processed data saved to {output_file} and flipped data to {output_file.replace('.csv', '_flipped.csv')}."
     )
     print(f"Number of datapoints in {output_file}: {len(df)}")
-    print(
-        f"Number of datapoints in {output_file.replace('.csv', '_flipped.csv')}: {len(df_flipped)}"
-    )
+    print(f"Number of datapoints in flipped data: {len(df_flipped)}")
 
 
 if __name__ == "__main__":
