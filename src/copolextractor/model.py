@@ -1,14 +1,13 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, FunctionTransformer, PowerTransformer
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+import copolextractor.utils as utils
 from sklearn.model_selection import KFold, RandomizedSearchCV
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.preprocessing import PowerTransformer
 from xgboost import XGBRegressor
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import StratifiedGroupKFold
-import copolextractor.utils as utils
+import numpy as np
+import pandas as pd
 import plotly.express as px
 
 
@@ -45,14 +44,6 @@ transformer = ColumnTransformer(
         ("numerical", Pipeline([("scaler", StandardScaler())]), numerical_features),
     ]
 )
-
-from sklearn.model_selection import KFold, RandomizedSearchCV
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.preprocessing import PowerTransformer
-from xgboost import XGBRegressor
-import numpy as np
-import pandas as pd
-import plotly.express as px
 
 
 def train_and_evaluate(df_filtered, transformer, param_grid):
@@ -190,6 +181,8 @@ def main(data, data_flipped, combined):
         combined_df = preprocess_and_combine(data, data_flipped)
     else:
         combined_df = pd.read_csv(data)
+
+    print(combined_df["polymerization_type"].unique())
 
     # Ensure group_id column exists
     if "group_id" not in combined_df.columns:

@@ -1,6 +1,6 @@
 import os
-from keyword_filter import main as keyword_filter
-from embedding_filter import main as embedding_filter
+from src.copolextractor.predownloadfilter.keyword_filter import main as keyword_filter
+from src.copolextractor.predownloadfilter.embedding_filter import main as embedding_filter
 
 
 def run_combined_pipeline(
@@ -11,6 +11,9 @@ def run_combined_pipeline(
     output_dir,
     selected_papers_path,
     number_of_selected_papers,
+    key_embedding_filter,
+    values_embedding_filter,
+    scoring_file_embedding_filter,
 ):
     """
     Combined pipeline that first scores the papers and then processes embeddings.
@@ -43,12 +46,15 @@ def run_combined_pipeline(
         selected_papers_path=selected_papers_path,
         score_limit=score_limit,
         number_of_selected_paper=number_of_selected_papers,
+        key=key_embedding_filter,
+        values=values_embedding_filter,
+        new_papers_path=scoring_file_embedding_filter
     )
 
     print("Embedding generation completed.")
 
 
-def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_input_file, output_file_pre_download_filter):
+def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_input_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter):
 
     # Define paths and parameters
     journal_file = "output/journals.json"  # JSON file with supported journal names
@@ -66,4 +72,7 @@ def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_inp
         output_dir,
         output_file_pre_download_filter,
         number_of_selected_papers,
+        key_embedding_filter,
+        values_embedding_filter,
+        scoring_file_embedding_filter,
     )
