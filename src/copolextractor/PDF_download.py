@@ -39,7 +39,7 @@ def download_papers_and_update_file(input_file, output_folder):
         paper_count += 1
 
         # Generate a sanitized filename for the PDF
-        base_name = f"paper_{index + 1}" if not doi else sanitize_filename(doi)
+        base_name = f"paper_{index + 1}" if not doi else utils.sanitize_filename(doi)
         pdf_name = generate_filename(base_name, output_folder)
 
         # Check if the file already exists

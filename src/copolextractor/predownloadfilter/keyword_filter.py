@@ -2,9 +2,15 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import json
 from collections import Counter
+import os
 
 
 def fetch_journals(output_journal_file):
+    if output_journal_file:
+        with open(output_journal_file, "r") as f:
+            journal_list = json.load(f)
+            return journal_list
+
     """Fetch journal names from the website and save to a JSON file."""
     driver = webdriver.Chrome()
     url = "https://chemsearch.kovsky.net/supported_journals.php"
@@ -86,6 +92,7 @@ def process_papers(input_file, journal_file, keywords, output_file):
 
 
 def main(input_file, journal_file, keywords, output_file):
+    print("Current directory:", os.getcwd())
 
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)
