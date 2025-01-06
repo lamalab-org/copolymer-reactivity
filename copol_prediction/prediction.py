@@ -66,7 +66,7 @@ def main():
     training_data_flipped = "./output/processed_data_copol_flipped.csv"
     add_flipped_data = False  # Set True to incorporate flipped data to training and test dataset
     # Combine CSV files
-    combine_data_files_flag = False  # Set to True to enable CSV file combination
+    combine_data_files_flag = True  # Set to True to enable CSV file combination
     data_files_to_combine = [
         "./output/processed_data_copol.csv",
         "./output/processed_data.csv",

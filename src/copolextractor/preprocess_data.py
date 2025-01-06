@@ -2,6 +2,7 @@ import json
 import pandas as pd
 from sklearn.decomposition import PCA
 from openai import OpenAI
+import copolextractor.utils as utils
 
 
 # Function: Filter data based on the filters
@@ -219,6 +220,8 @@ def main(input_file, output_file):
     # Convert to DataFrame
     df = pd.DataFrame(filtered_data)
 
+    print(df["polymerization_type"].unique())
+
     # Extract relevant features and molecular properties
     df = extract_features(df)
 
@@ -243,6 +246,12 @@ def main(input_file, output_file):
     df["r2"] = df["r_values"].apply(
         lambda x: x["constant_2"] if isinstance(x, dict) and "constant_2" in x else None
     )
+
+    if "LogP" not in df.columns:
+        print("LogP column not found. Calculating LogP values...")
+        df["LogP"] = df["solvent"].apply(
+            lambda solvent: utils.calculate_logP(utils.name_to_smiles(solvent)) if utils.name_to_smiles(solvent) else None
+        )
 
     # Drop rows with missing required values
     df = df.dropna(

@@ -1,6 +1,6 @@
-from copolextractor.preextractionfilter import main as pre_extraction_filter
+from copolextractor.preextractionfilter.pre_extraction_filter import main as pre_extraction_filter
 from copolextractor.PDF_download import main as pdf_download
-from copolextractor.predownloadfilter import main as pre_download_filter
+from copolextractor.predownloadfilter.pre_download_filter import main as pre_download_filter
 from copolextractor.crossref_search import main as crossref_search
 from copolextractor.extraction_with_GPT_PDF import main as extractor
 
@@ -23,12 +23,15 @@ def obtain_data(
     output_folder_LLM_score,
     training_file_xgboost_model,
     output_file_xgboost_filter,
+    key_embedding_filter,
+    values_embedding_filter,
+    scoring_file_embedding_filter,
 ):
     # crossref search for relevant paper
-    crossref_search(crossref_keyword, output_file_crossref_search, crossref_metadata_output_file)
+    #crossref_search(crossref_keyword, output_file_crossref_search, crossref_metadata_output_file)
 
     # metadata filter with keywords and embeddings
-    pre_download_filter(keywords_filter, score_limit, number_of_selected_papers, crossref_metadata_output_file, output_file_pre_download_filter)
+    pre_download_filter(keywords_filter, score_limit, number_of_selected_papers, crossref_metadata_output_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter)
 
     # PDF download with Scidownl
     pdf_download(output_file_pre_download_filter, pdf_folder)
@@ -54,7 +57,7 @@ def main():
         "../../data_extraction/obtain_data/output/crossref_search.json"
     )
     crossref_metadata_output_file = (
-        "../../data_extraction/obtain_data/collected_doi_metadata.json"
+        "./obtain_data/output/collected_doi_metadata.json"
     )
 
     # Keywords and weights for pre download scoring
@@ -69,11 +72,22 @@ def main():
 
     # Embedding filter
     score_limit = 65  # Minimum score for embedding generation
-    number_of_selected_papers = 200  # Number of nearest papers to select
-    output_file_pre_download_filter = "./output/selected_200_papers.json"
+    number_of_selected_papers = 500  # Number of nearest papers to select
+    output_file_pre_download_filter = "./output/selected_papers.json"
+    key_embedding_filter = "polymerization_type"
+    values_embedding_filter = [
+        "Anionic",
+        "cationic",
+        "atom transfer radical",
+        "atom transfer radical polymerization",
+        "nickel-mediated radical",
+        "Polycondensation"
+    ]
+    scoring_file_embedding_filter = "../copol_prediction/output/extracted_data_w_features.json"
 
     # PDF download
-    pdf_folder = "../obtain_data/output/PDF"
+    pdf_folder = "./output/PDF"  # the PDFs get downloaded form the SciHub corpus.
+    # People should be aware of copyright law before using this
 
     # XGBoost filter
     seed_xgboost_model = 22
@@ -113,6 +127,9 @@ def main():
         output_folder_LLM_score,
         training_file_xgboost_model,
         output_file_xgboost_filter,
+        key_embedding_filter,
+        values_embedding_filter,
+        scoring_file_embedding_filter,
     )
 
 
