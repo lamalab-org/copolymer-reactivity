@@ -45,7 +45,7 @@ def preprocess_data(
         training_data = combined_csv_file  # Use the combined CSV file as the input data
 
     # model
-    model(training_data, training_data_flipped, add_flipped_data)
+    model(training_data)
 
 
 def main():
