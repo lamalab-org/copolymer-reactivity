@@ -5,6 +5,18 @@ import numpy as np
 import torch.nn as nn
 from sklearn.preprocessing import StandardScaler
 import math
+import wandb
+from sklearn.preprocessing import PowerTransformer
+from torchmetrics import R2Score
+
+
+wandb.init(
+    project="Copol_prediction",
+    config={
+    "architecture": "graph-like",
+    "dataset": "copol dataset"
+    }
+)
 
 
 class MoleculeEncoder(nn.Module):
@@ -97,7 +109,9 @@ class ProductPredictor(nn.Module):
         self.output_network = nn.Sequential(
             nn.Linear(hidden_dim * 2, hidden_dim),
             nn.ReLU(),
-            nn.Linear(hidden_dim, 1)
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, 1),
         )
 
     def forward(self, mol_i, mol_j, conditions):
@@ -120,7 +134,6 @@ class EdgePredictor(nn.Module):
         )
 
     def forward(self, mol_i, mol_j, conditions):
-        # Bilinear naturally provides asymmetry
         interaction = self.bilinear(mol_i, mol_j)
         cond_effect = self.condition_proj(conditions)
         combined = torch.cat([interaction, cond_effect], dim=1)
@@ -160,12 +173,14 @@ class MolecularReactivityPredictor(nn.Module):
         )
 
     def forward(self, molecules, conditions):
-        batch_size = molecules[0].size(0)
         mol_embeddings = [self.mol_encoder(mol) for mol in molecules]
+
         condition_embedding = self.condition_encoder(conditions)
 
         r_ij = self.edge_predictor(mol_embeddings[0], mol_embeddings[1], condition_embedding)
+
         r_ji = self.edge_predictor(mol_embeddings[1], mol_embeddings[0], condition_embedding)
+
         r_product = self.product_predictor(mol_embeddings[0], mol_embeddings[1], condition_embedding)
 
         return r_ij, r_ji, r_product
@@ -242,25 +257,318 @@ def create_dataloaders(mol_features_df, condition_features_df, reactivity_df,
     return train_loader, test_loader
 
 
-def train_step(model, batch, optimizer, criterion, grad_clip=0.1):
+class R2Loss(nn.Module):
+    def __init__(self, reduction='mean'):
+        super(R2Loss, self).__init__()
+        self.r2_metric = R2Score()
+        self.reduction = reduction
+
+    def forward(self, y_pred, y_true):
+        """
+        Calculate R² loss using torchmetrics implementation
+        """
+        r2 = self.r2_metric(y_pred, y_true)
+        loss = 1 - r2
+
+        if self.reduction == 'mean':
+            return loss
+        elif self.reduction == 'sum':
+            return loss * len(y_true)
+        else:
+            return loss
+
+
+def train_model(model, train_loader, test_loader, num_epochs=100, overfit_mode=True):
+
+    criterion = R2Loss(reduction='mean')
+    transformers = None
+    scheduler = None
+
+    if overfit_mode:
+        optimizer = torch.optim.Adam(
+            model.parameters(),
+            lr=5e-4,
+            weight_decay=0.0
+        )
+        train_loader = create_overfit_loader(train_loader, num_samples=16)
+        test_loader = train_loader
+
+        print(f"Overfitting on {len(train_loader.dataset)} samples")
+
+        for epoch in range(num_epochs):
+            model.train()
+            train_loss = 0
+            valid_batches = 0
+
+            for batch in train_loader:
+                loss = train_step(model, batch, optimizer, criterion, transformers)
+                if not math.isnan(loss):
+                    train_loss += loss
+                    valid_batches += 1
+
+            avg_train_loss = train_loss / max(1, valid_batches)
+
+            if epoch % 10 == 0:
+                print(f"Epoch {epoch}, Loss (1 - R²): {avg_train_loss:.8f}")
+
+            if avg_train_loss < 0.01:
+                print(f"Successfully overfit at epoch {epoch} with R² > {1 - avg_train_loss:.8f}")
+                break
+    else:
+        optimizer = torch.optim.AdamW(
+            model.parameters(),
+            lr=1e-4,
+            weight_decay=1e-6,
+            betas=(0.9, 0.999),
+            eps=1e-8
+        )
+
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode='min',
+            factor=0.5,
+            patience=20,
+            verbose=True,
+            min_lr=1e-7
+        )
+
+        # Initialize and fit PowerTransformer on training data
+        pt_r12 = PowerTransformer(method="yeo-johnson")
+        pt_r21 = PowerTransformer(method="yeo-johnson")
+        pt_product = PowerTransformer(method="yeo-johnson")
+
+        all_r12 = []
+        all_r21 = []
+        all_products = []
+
+        for batch in train_loader:
+            r_12 = batch['r_12'].numpy().reshape(-1, 1)
+            r_21 = batch['r_21'].numpy().reshape(-1, 1)
+            product = (r_12.ravel() * r_21.ravel()).reshape(-1, 1)
+
+            all_r12.append(r_12)
+            all_r21.append(r_21)
+            all_products.append(product)
+
+        # Fit separate transformers
+        all_r12 = np.concatenate(all_r12, axis=0)
+        all_r21 = np.concatenate(all_r21, axis=0)
+        all_products = np.concatenate(all_products, axis=0)
+
+        pt_r12.fit(all_r12)
+        pt_r21.fit(all_r21)
+        pt_product.fit(all_products)
+
+        transformers = {
+            'r12': pt_r12,
+            'r21': pt_r21,
+            'product': pt_product
+        }
+
+        config = {
+            "learning_rate": optimizer.param_groups[0]['lr'],
+            "architecture": type(model).__name__,
+            "epochs": num_epochs,
+            "optimizer": type(optimizer).__name__,
+            "weight_decay": optimizer.param_groups[0]['weight_decay'],
+            "scheduler": type(scheduler).__name__,
+            "scheduler_patience": scheduler.patience,
+            "scheduler_factor": scheduler.factor,
+            "min_lr": scheduler.min_lrs[0],
+            "loss_weights": {
+                "r12": 0.4,
+                "r21": 0.4,
+                "product": 0.2
+            },
+            "batch_size": train_loader.batch_size if hasattr(train_loader,
+                                                             'batch_size') else train_loader.dataset.batch_size,
+            # "power_transformer": transformers.method
+        }
+
+        # Initialize wandb with dynamic config
+        wandb.init(
+            project="Copol_prediction",
+            config={
+                "learning_rate": optimizer.param_groups[0]['lr'],
+                "architecture": type(model).__name__,
+                "epochs": num_epochs,
+                "optimizer": type(optimizer).__name__,
+                "loss_metric": "R²",  # Updated to show we're using R²
+                # ... rest of your config ...
+            }
+        )
+
+        wandb.define_metric("train/r12_r2", summary="max")  # Now we want to maximize R²
+        wandb.define_metric("val/r12_r2", summary="max")
+
+    for epoch in range(num_epochs):
+        model.train()
+        train_loss = 0
+        valid_batches = 0
+
+        for batch in train_loader:
+            loss = train_step(model, batch, optimizer, criterion, transformers)
+            if not math.isnan(loss):
+                train_loss += loss
+                valid_batches += 1
+
+        avg_train_loss = train_loss / max(1, valid_batches)
+
+        # Calculate metrics
+        train_metrics = evaluate_model(model, train_loader)
+        val_metrics = evaluate_model(model, test_loader)
+
+        wandb.log({
+            "epoch": epoch,
+            "avg_train_loss": avg_train_loss,
+
+            "train/r12_r2": train_metrics['r12_r2'],
+            "train/r21_r2": train_metrics['r21_r2'],
+            "train/product_r2": train_metrics['product_r2'],
+
+            # Validation metrics
+            "val/r12_r2": val_metrics['r12_r2'],
+            "val/r21_r2": val_metrics['r21_r2'],
+            "val/product_r2": val_metrics['product_r2'],
+
+            "r2_comparison": wandb.plot.line_series(
+                xs=[epoch, epoch],
+                ys=[[train_metrics['r12_r2']], [val_metrics['r12_r2']]],
+                keys=["Train R²", "Val R²"],
+                title="R² Comparison",
+                xname="epoch"
+            )
+        })
+
+        metrics_table = wandb.Table(columns=["Metric", "Train", "Validation"])
+        metrics_table.add_data("R12 R²", train_metrics['r12_r2'], val_metrics['r12_r2'])
+        metrics_table.add_data("R21 R²", train_metrics['r21_r2'], val_metrics['r21_r2'])
+        metrics_table.add_data("Product R²", train_metrics['product_r2'], val_metrics['product_r2'])
+        wandb.log({"metrics_summary": metrics_table})
+
+        print(f"\nEpoch {epoch}:")
+        print(f"Training Metrics:")
+        print(f"  R12    - R²: {train_metrics['r12_r2']:.6f}")
+        print(f"  R21    - R²: {train_metrics['r21_r2']:.6f}")
+        print(f"  Product- R²: {train_metrics['product_r2']:.6f}")
+        print(f"Validation Metrics:")
+        print(f"  R12    - R²: {val_metrics['r12_r2']:.6f}")
+        print(f"  R21    - R²: {val_metrics['r21_r2']:.6f}")
+        print(f"  Product- R²: {val_metrics['product_r2']:.6f}")
+
+        total_val_r2 = (val_metrics['r12_r2'] + val_metrics['r21_r2'] + val_metrics['product_r2']) / 3
+        scheduler.step(1 - total_val_r2)
+
+        if math.isnan(avg_train_loss):
+            print("Training diverged. Stopping...")
+            break
+
+
+def visualize_predictions(model, dataloader, num_samples=200):
+    model.eval()
+    r12_true, r12_pred = [], []
+    r21_true, r21_pred = [], []
+    product_true, product_pred = [], []
+
+    with torch.no_grad():
+        for batch in dataloader:
+            # Get predictions
+            r_12_p, r_21_p, product_p = model([batch['mol_1'], batch['mol_2']], batch['conditions'])
+
+            # Store true and predicted values
+            r12_true.extend(batch['r_12'].numpy().flatten())
+            r12_pred.extend(r_12_p.numpy().flatten())
+            r21_true.extend(batch['r_21'].numpy().flatten())
+            r21_pred.extend(r_21_p.numpy().flatten())
+            true_product = (batch['r_12'] * batch['r_21']).numpy().flatten()
+            product_true.extend(true_product)
+            product_pred.extend(product_p.numpy().flatten())
+
+            if len(r12_true) >= num_samples:
+                break
+
+    # Truncate to desired number of samples
+    r12_true = r12_true[:num_samples]
+    r12_pred = r12_pred[:num_samples]
+    r21_true = r21_true[:num_samples]
+    r21_pred = r21_pred[:num_samples]
+    product_true = product_true[:num_samples]
+    product_pred = product_pred[:num_samples]
+
+    # Create artifact for visualization
+    wandb.init(project="Copol_prediction", name="prediction_analysis")
+
+    # Log scatter plots to wandb
+    wandb.log({
+        "r12_scatter": wandb.plot.scatter(
+            wandb.Table(data=[[x, y] for x, y in zip(r12_true, r12_pred)],
+                        columns=["True r12", "Predicted r12"]),
+            "True r12",
+            "Predicted r12",
+            title="r12: True vs Predicted"
+        ),
+        "r21_scatter": wandb.plot.scatter(
+            wandb.Table(data=[[x, y] for x, y in zip(r21_true, r21_pred)],
+                        columns=["True r21", "Predicted r21"]),
+            "True r21",
+            "Predicted r21",
+            title="r21: True vs Predicted"
+        ),
+        "product_scatter": wandb.plot.scatter(
+            wandb.Table(data=[[x, y] for x, y in zip(product_true, product_pred)],
+                        columns=["True product", "Predicted product"]),
+            "True product",
+            "Predicted product",
+            title="Product: True vs Predicted"
+        )
+    })
+
+    # Calculate and log error metrics
+    r12_rmse = np.sqrt(np.mean((np.array(r12_true) - np.array(r12_pred)) ** 2))
+    r21_rmse = np.sqrt(np.mean((np.array(r21_true) - np.array(r21_pred)) ** 2))
+    product_rmse = np.sqrt(np.mean((np.array(product_true) - np.array(product_pred)) ** 2))
+
+    wandb.log({
+        "r12_rmse": r12_rmse,
+        "r21_rmse": r21_rmse,
+        "product_rmse": product_rmse
+    })
+
+    # Print summary statistics
+    print("\nPrediction Summary:")
+    print(f"R12 RMSE: {r12_rmse:.4f}")
+    print(f"R21 RMSE: {r21_rmse:.4f}")
+    print(f"Product RMSE: {product_rmse:.4f}")
+
+    wandb.finish()
+
+
+def train_step(model, batch, optimizer, criterion, transformers=None, grad_clip=0.1):
     optimizer.zero_grad()
 
-    # Get data
-    mol_1 = torch.clamp(batch['mol_1'], -10, 10)
-    mol_2 = torch.clamp(batch['mol_2'], -10, 10)
-    conditions = torch.clamp(batch['conditions'], -10, 10)
-    r_12 = batch['r_12']
-    r_21 = batch['r_21']
-    true_product = r_12 * r_21
+    mol_1 = batch['mol_1']
+    mol_2 = batch['mol_2']
+    conditions = batch['conditions']
+
+    # Ensure targets have shape [batch_size, 1]
+    r_12 = batch['r_12'].reshape(-1, 1)
+    r_21 = batch['r_21'].reshape(-1, 1)
+    true_product = (r_12 * r_21).reshape(-1, 1)
+
+    if transformers is not None:
+        # Transform if transformer is available
+        r_12 = torch.tensor(transformers['r12'].transform(r_12), dtype=torch.float32)
+        r_21 = torch.tensor(transformers['r21'].transform(r_21), dtype=torch.float32)
+        true_product = torch.tensor(transformers['product'].transform(true_product), dtype=torch.float32)
 
     try:
         # Forward pass
         r_12_pred, r_21_pred, product_pred = model([mol_1, mol_2], conditions)
 
-        # Clip predictions
-        r_12_pred = torch.clamp(r_12_pred, -10, 10)
-        r_21_pred = torch.clamp(r_21_pred, -10, 10)
-        product_pred = torch.clamp(product_pred, -10, 10)
+        # Ensure predictions have shape [batch_size, 1]
+        r_12_pred = r_12_pred.reshape(-1, 1)
+        r_21_pred = r_21_pred.reshape(-1, 1)
+        product_pred = product_pred.reshape(-1, 1)
 
         # Calculate losses
         loss_12 = criterion(r_12_pred, r_12)
@@ -269,6 +577,8 @@ def train_step(model, batch, optimizer, criterion, grad_clip=0.1):
 
         # Combine losses with weights
         loss = 0.4 * loss_12 + 0.4 * loss_21 + 0.2 * loss_product
+        print(f"Loss r1: {loss_12}, loss r2: {loss_21}, loss product: {loss_product}")
+        print(f"Overall loss: {loss}")
 
         # Check for invalid loss and backward pass
         if torch.isfinite(loss):
@@ -283,68 +593,8 @@ def train_step(model, batch, optimizer, criterion, grad_clip=0.1):
         return float('nan')
 
 
-def train_model(model, train_loader, test_loader, num_epochs=100):
-    optimizer = torch.optim.AdamW(
-        model.parameters(),
-        lr=1e-5,
-        weight_decay=1e-6,
-        betas=(0.9, 0.999),
-        eps=1e-8
-    )
-
-    criterion = nn.MSELoss(reduction='mean')
-
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer,
-        mode='min',
-        factor=0.5,
-        patience=10,
-        verbose=True,
-        min_lr=1e-7
-    )
-
-    for epoch in range(num_epochs):
-        model.train()
-        train_loss = 0
-        valid_batches = 0
-
-        for batch in train_loader:
-            loss = train_step(model, batch, optimizer, criterion)
-            if not math.isnan(loss):
-                train_loss += loss
-                valid_batches += 1
-
-        avg_train_loss = train_loss / max(1, valid_batches)
-
-        # Calculate metrics on training data
-        train_metrics = evaluate_model(model, train_loader)
-
-        # Calculate metrics on validation data
-        val_metrics = evaluate_model(model, test_loader)
-
-        # Print metrics
-        print(f"\nEpoch {epoch}:")
-        print(f"Training Metrics:")
-        print(f"  R12    - MSE: {train_metrics['r12_mse']:.6f}, R²: {train_metrics['r12_r2']:.6f}")
-        print(f"  R21    - MSE: {train_metrics['r21_mse']:.6f}, R²: {train_metrics['r21_r2']:.6f}")
-        print(f"  Product- MSE: {train_metrics['product_mse']:.6f}, R²: {train_metrics['product_r2']:.6f}")
-        print(f"Validation Metrics:")
-        print(f"  R12    - MSE: {val_metrics['r12_mse']:.6f}, R²: {val_metrics['r12_r2']:.6f}")
-        print(f"  R21    - MSE: {val_metrics['r21_mse']:.6f}, R²: {val_metrics['r21_r2']:.6f}")
-        print(f"  Product- MSE: {val_metrics['product_mse']:.6f}, R²: {val_metrics['product_r2']:.6f}")
-
-        # Use total validation MSE for scheduler
-        total_val_mse = (val_metrics['r12_mse'] + val_metrics['r21_mse'] + val_metrics['product_mse']) / 3
-        scheduler.step(total_val_mse)
-
-        if math.isnan(avg_train_loss):
-            print("Training diverged. Stopping...")
-            break
-
-
 def calculate_metrics(y_true, y_pred):
     """Calculate MSE and R² for given true and predicted values."""
-    # Input is already numpy array, no need for detach().numpy()
 
     # Calculate MSE
     mse = np.mean((y_true - y_pred) ** 2)
@@ -352,7 +602,7 @@ def calculate_metrics(y_true, y_pred):
     # Calculate R²
     ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
     ss_res = np.sum((y_true - y_pred) ** 2)
-    r2 = 1 - (ss_res / (ss_tot + 1e-10))  # Add small epsilon to prevent division by zero
+    r2 = 1 - (ss_res / (ss_tot + 1e-10))
 
     return mse, r2
 
@@ -492,7 +742,7 @@ def prepare_data_from_csv(csv_path):
             'condition_id': condition_mapping[cond_key],
             'r_12': float(row['r1']),
             'r_21': float(row['r2']),
-            'product': float(row['r-product'])
+            'product': float(row['r1']) * float(row['r2'])
         }
         reactions.append(reaction)
 
@@ -511,20 +761,18 @@ def init_model(mol_input_dim, condition_input_dim):
     model = MolecularReactivityPredictor(
         mol_input_dim=mol_input_dim,
         condition_input_dim=condition_input_dim,
-        embedding_dim=64,  # Reduced from original
-        hidden_dim=128  # Kept the same
+        embedding_dim=64,
+        hidden_dim=128
     )
 
-    # Initialize weights with smaller values
     def init_weights(m):
         if isinstance(m, nn.Linear):
-            nn.init.xavier_normal_(m.weight, gain=0.1)
+            nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
             if m.bias is not None:
                 nn.init.zeros_(m.bias)
 
     model.apply(init_weights)
 
-    # Print model parameter statistics
     total_params = 0
     for name, param in model.named_parameters():
         if param.requires_grad:
@@ -533,6 +781,80 @@ def init_model(mol_input_dim, condition_input_dim):
 
     print(f"\nTotal trainable parameters: {total_params:,}")
     return model
+
+
+def create_overfit_loader(train_loader, num_samples=16):
+    # Get one batch of data
+    for batch in train_loader:
+        overfit_data = {
+            'mol_1': batch['mol_1'],
+            'mol_2': batch['mol_2'],
+            'conditions': batch['conditions'],
+            'r_12': batch['r_12'],
+            'r_21': batch['r_21'],
+            'product': batch['r_12'] * batch['r_21']
+        }
+        break
+
+    class OverfitDataset(Dataset):
+        def __init__(self, data):
+            self.data = data
+
+        def __len__(self):
+            return num_samples
+
+        def __getitem__(self, idx):
+            return {k: v[idx % len(v)] if isinstance(v, torch.Tensor) else v
+                    for k, v in self.data.items()}
+
+    # Create dataset and loader
+    dataset = OverfitDataset(overfit_data)
+    overfit_loader = DataLoader(
+        dataset,
+        batch_size=min(32, num_samples),
+        shuffle=True
+    )
+
+    return overfit_loader
+
+
+def train_overfit(model, train_loader, num_epochs=100):
+    # Get small dataset
+    overfit_loader = create_overfit_loader(train_loader)
+
+    # Configure for overfitting
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    criterion = nn.MSELoss()
+
+    # Remove regularization
+    for param in model.parameters():
+        if hasattr(param, 'requires_grad'):
+            param.requires_grad = True
+
+    # Train with very small dataset
+    for epoch in range(num_epochs):
+        model.train()
+        train_loss = 0
+
+        for batch in overfit_loader:
+            optimizer.zero_grad()
+
+            r_12_pred, r_21_pred, product_pred = model([batch['mol_1'], batch['mol_2']], batch['conditions'])
+
+            loss_12 = criterion(r_12_pred, batch['r_12'])
+            loss_21 = criterion(r_21_pred, batch['r_21'])
+            loss_product = criterion(product_pred, batch['r_12'] * batch['r_21'])
+
+            loss = loss_12 + loss_21 + loss_product
+            loss.backward()
+            optimizer.step()
+
+            train_loss += loss.item()
+
+        if epoch % 10 == 0:
+            print(f"Epoch {epoch}, Loss: {train_loss:.6f}")
+            # Visualize predictions on overfit data
+            visualize_predictions(model, overfit_loader, num_samples=32)
 
 
 def main(training_data):
@@ -573,4 +895,7 @@ def main(training_data):
     )
 
     # Train model
-    train_model(model, train_loader, test_loader, num_epochs=100)
+    train_model(model, train_loader, test_loader, num_epochs=500, overfit_mode=True)
+
+    # Visualize predictions
+    visualize_predictions(model, test_loader, num_samples=1000)
