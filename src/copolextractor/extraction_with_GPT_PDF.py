@@ -6,9 +6,11 @@ import copolextractor.image_processer as ip
 import copolextractor.utils as utils
 import os
 import json
+from copolextractor.mongodb_storage import CoPolymerDB
 
 
 failed_smiles_list = []
+db = CoPolymerDB()
 
 
 def process_pdf_files(
@@ -245,6 +247,10 @@ def process_files(input_folder, output_file):
                         "polymerization_type": polymerization_type,
                         "determination_method": determination_method,
                     }
+
+                    database = db.save_data(data)
+                    print(database)
+
                     results.append(result)
                     reaction_count += 1
         except (AttributeError, json.JSONDecodeError, TypeError) as e:
