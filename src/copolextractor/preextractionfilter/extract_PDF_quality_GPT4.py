@@ -46,6 +46,7 @@ def process_pdfs(
     for entry in selected_entries:
         filename = entry.get("pdf_name")
         if not filename:
+            print(f"Skipping entry {entry} because filename {filename} was not found.")
             continue
 
         file_path = os.path.join(input_folder, filename)
@@ -71,6 +72,7 @@ def process_pdfs(
                     "rxn_count": api_response.get("number_of_reactions"),
                 }
             )
+            print(entry)
             continue  # Skip further processing since the result already exists
 
         # Skip if the PDF file doesn't exist
@@ -136,6 +138,7 @@ def process_pdfs(
                 "rxn_count": api_response.get("number_of_reactions"),
             }
         )
+        print(entry)
 
     with open(output_file, "w", encoding="utf-8") as file:
         json.dump(selected_entries, file, indent=4)
@@ -159,6 +162,9 @@ def main(
     """
     # Define log file path
     log_file_path = "./error_log.txt"
+
+    import os
+    print("Working directory: ", os.getcwd())
 
     # Ensure output directories exist
     os.makedirs(output_folder_images, exist_ok=True)
