@@ -97,9 +97,9 @@ def main():
     output_folder_LLM_score = "./output/model_output_score"
 
     training_file_xgboost_model = (
-        "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
+        "./data_extraction_GPT-4o/output/copol_paper_list.json"
     )
-    output_file_xgboost_filter = "../../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+    output_file_xgboost_filter = "./data_extraction_GPT-4o/output/paper_list.json"
 
     # Data extraction of filtered paper
     input_folder_images = "./processed_images"

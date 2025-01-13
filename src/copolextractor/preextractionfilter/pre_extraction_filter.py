@@ -31,7 +31,7 @@ def run_combined_pipeline(
         selected_entries_path=input_file_xgboost_filter,
         output_file=output_file,
     )
-    print("PDF processing and scoring completed.")
+    print(f"PDF processing and scoring completed. Results saved to {output_file}")
 
     print("Starting Random Forest filtering...")
     rf_main(

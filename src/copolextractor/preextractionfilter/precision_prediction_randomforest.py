@@ -8,6 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import make_scorer, accuracy_score
 from xgboost import XGBClassifier
 import copolextractor.utils as utils
+import numpy as np
 
 
 def preprocess_data(data, features, target, threshold):
@@ -36,7 +37,7 @@ def build_pipeline(numeric_features, categorical_features, seed_rf):
     )
 
     model = XGBClassifier(
-        random_state=seed_rf, use_label_encoder=False, eval_metric="logloss", missing=pd.NA
+        random_state=seed_rf, use_label_encoder=False, eval_metric="logloss", missing=np.nan
     )
     pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
     return pipeline
@@ -46,6 +47,10 @@ def train_model(training_data, features, target, seed_rf):
     """
     Train the XGBoost model.
     """
+
+    print("Datentypes:", training_data[features].dtypes)
+    print("Fehlende Werte:", training_data[features].isnull().sum())
+
     numeric_features = [
         "table_quality",
         "quality_of_number",
@@ -67,6 +72,10 @@ def train_model(training_data, features, target, seed_rf):
 
     X = training_data[features]
     y = training_data[target]
+
+    X['language'] = X['language'].astype(str)
+
+    print(training_data[features].head())
 
     cv = StratifiedKFold(n_splits=5)
     scorer = make_scorer(accuracy_score)
