@@ -92,7 +92,6 @@ def process_papers(input_file, journal_file, keywords, output_file):
 
 
 def main(input_file, journal_file, keywords, output_file):
-    print("Current directory:", os.getcwd())
 
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)

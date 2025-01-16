@@ -136,7 +136,7 @@ def process_pdf_files(
 
     # Save the updated JSON file
     extracted_json_path = (
-        "../../data_extraction/comparison_of_models/data_extracted.json"
+        "./comparison_of_models/data_extracted.json"
     )
     with open(extracted_json_path, "w", encoding="utf-8") as file:
         json.dump(paper_list, file, indent=4)

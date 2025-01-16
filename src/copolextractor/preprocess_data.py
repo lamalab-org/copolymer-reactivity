@@ -1,8 +1,9 @@
-import json
 import pandas as pd
 from sklearn.decomposition import PCA
 from openai import OpenAI
 import copolextractor.utils as utils
+import os
+import json
 
 
 # Function: Filter data based on the filters
@@ -98,12 +99,6 @@ def create_flipped_dataset(df_features):
         )
         flipped_rows.append(flipped_row)
     return pd.DataFrame(flipped_rows)
-
-
-import os
-import json
-from sklearn.decomposition import PCA
-import openai
 
 # Global cache for embeddings
 embedding_cache = {}
@@ -220,8 +215,6 @@ def main(input_file, output_file):
     # Convert to DataFrame
     df = pd.DataFrame(filtered_data)
 
-    print(df["polymerization_type"].unique())
-
     # Extract relevant features and molecular properties
     df = extract_features(df)
 
@@ -247,6 +240,8 @@ def main(input_file, output_file):
         lambda x: x["constant_2"] if isinstance(x, dict) and "constant_2" in x else None
     )
 
+    df = df[(df["r1"] >= 0) & (df["r2"] >= 0)]
+
     if "LogP" not in df.columns:
         print("LogP column not found. Calculating LogP values...")
         df["LogP"] = df["solvent"].apply(
@@ -263,6 +258,8 @@ def main(input_file, output_file):
             "temperature",
         ]
     )
+
+    df['r_product']= df['r1'] * df ['r2']
 
     # Set solvent to "bulk" if polymerization type is "bulk"
     df.loc[df["polymerization_type"] == "bulk", "solvent"] = "bulk"
@@ -284,9 +281,3 @@ def main(input_file, output_file):
     )
     print(f"Number of datapoints in {output_file}: {len(df)}")
     print(f"Number of datapoints in flipped data: {len(df_flipped)}")
-
-
-if __name__ == "__main__":
-    input_file = "../../copol_prediction/output/extracted_data_w_features_filtered.json"  # Input file
-    output_file = "../../copol_prediction/output/processed_data.csv"  # Output CSV file
-    main(input_file, output_file)

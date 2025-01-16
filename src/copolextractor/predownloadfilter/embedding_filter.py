@@ -1,9 +1,11 @@
+import numpy as np
 import os
 import json
-import numpy as np
+import requests
 from scipy.spatial.distance import cdist
 from openai import OpenAI
 import copolextractor.utils as utils
+
 
 def save_embedding_file(output_dir, paper, doi_list_path):
     """Save individual embedding JSON files and update DOI list."""
@@ -34,12 +36,14 @@ def save_embedding_file(output_dir, paper, doi_list_path):
     with open(doi_list_path, "w") as f:
         json.dump(doi_list, f, indent=2)
 
+
 def load_existing_doi_list(doi_list_path):
     """Load the existing DOI list from file."""
     if os.path.exists(doi_list_path):
         with open(doi_list_path, "r") as f:
             return json.load(f)
     return []
+
 
 def load_existing_embedding(output_dir, doi):
     """Check if an embedding already exists for a given DOI and load it."""
@@ -50,8 +54,9 @@ def load_existing_embedding(output_dir, doi):
     if os.path.exists(filename):
         with open(filename, "r") as f:
             data = json.load(f)
-            return data.get("Embedding")
-    return None
+            return data.get("Embedding"), filename
+    return None, filename
+
 
 def process_embeddings(file_path, output_dir, client, score, doi_list_path):
     """Process and save embeddings for each paper."""
@@ -80,9 +85,6 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
         doi = paper.get("DOI", "Unknown")
 
         if score_value < score:
-            print(
-                f"Warning: Skipped paper with DOI {doi} because its score ({score_value}) is below the threshold ({score})."
-            )
             continue
 
         if not title and not abstract:
@@ -109,12 +111,6 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
 
     print(f"Total tokens used: {total_tokens}")
 
-import os
-import json
-import requests
-from scipy.spatial.distance import cdist
-from openai import OpenAI
-import copolextractor.utils as utils
 
 def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
     """Embed only filtered new papers from a given JSON file."""
@@ -156,15 +152,17 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
         text = f"{title if title else ''}. {abstract if abstract else ''}".strip()
 
         # Check if embedding already exists
-        existing_embedding = load_existing_embedding(output_dir, paper.get("source"))
+        existing_embedding, current_filename = load_existing_embedding(output_dir, paper.get("source"))
         if existing_embedding is not None:
             paper["Embedding"] = existing_embedding
+            paper["filename"] = current_filename
             embedded_papers.append(paper)
             continue
 
         try:
             embedding, _ = get_embedding(client, text)
             paper["Embedding"] = embedding
+            paper["filename"] = current_filename
             embedded_papers.append(paper)
         except Exception as e:
             print(f"Error embedding paper {paper.get('source', 'Unknown')}: {e}")
@@ -172,12 +170,12 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
 
     return embedded_papers
 
+
 def get_crossref_data(doi, source, format_type):
     """
     Fetch metadata from CrossRef API for a given DOI.
     """
     url = f"https://api.crossref.org/works/{doi}"
-    print(type(url))
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -205,9 +203,6 @@ def get_crossref_data(doi, source, format_type):
 
 
 def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper, new_papers_path, client):
-    """
-    Find and save the nearest papers based on embeddings, where new papers are compared to processed papers.
-    """
     embeddings_path = os.path.join(output_dir, "embeddings/embedded_papers.json")
 
     # Load processed data
@@ -242,6 +237,11 @@ def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, n
     # Get indices of the `number_of_selected_paper` processed papers with the smallest distances
     nearest_indices = np.argsort(min_distances)[:number_of_selected_paper]
 
+    # Generate filename for each processed paper
+    def get_filename_for_paper(doi):
+        sanitized_doi = utils.sanitize_filename(doi)
+        return f"{sanitized_doi}.json"
+
     # Select the nearest papers, including the similarity scores
     nearest_papers = [
         {
@@ -251,7 +251,8 @@ def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, n
             "DOI": processed_data[i].get("DOI"),
             "Source": processed_data[i].get("Source", "Unknown"),
             key: processed_data[i].get(key, "Unknown"),
-            "Similarity": 1 - min_distances[i],  # Cosine similarity (1 - cosine distance)
+            "Similarity": 1 - min_distances[i],
+            "filename": get_filename_for_paper(processed_data[i].get("DOI", "Unknown")),
         }
         for i in nearest_indices
     ]

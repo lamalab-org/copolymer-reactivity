@@ -44,12 +44,12 @@ def process_pdfs(
     start_time = time.time()
 
     for entry in selected_entries:
-        filename = entry.get("pdf_name")
+        filename = entry.get("filename")
         if not filename:
             print(f"Skipping entry {entry} because filename {filename} was not found.")
             continue
 
-        file_path = os.path.join(input_folder, filename)
+        file_path = os.path.join(input_folder, filename.replace(".json", ".pdf"))
         output_json_path = os.path.join(
             output_folder, filename.replace(".pdf", ".json")
         )
@@ -72,12 +72,11 @@ def process_pdfs(
                     "rxn_count": api_response.get("number_of_reactions"),
                 }
             )
-            print(entry)
             continue  # Skip further processing since the result already exists
 
         # Skip if the PDF file doesn't exist
         if not os.path.exists(file_path):
-            print(f"Skipping {filename}: File not found.")
+            print(f"Skipping {filename}: File not found in {file_path}.")
             entry["pdf_exists"] = False
             continue
         else:
@@ -112,11 +111,13 @@ def process_pdfs(
         # Prepare and send the prompt to the model
         content = prompter.get_prompt_vision_model(images_base64, prompt_text)
 
-        print("Model call starts")
+        print("LLM call starts")
         output, input_token, output_token = prompter.call_openai(prompt=content)
         total_input_tokens += input_token
         total_output_tokens += output_token
         number_of_calls += 1
+
+        print("API response:", output)
 
         api_response = json.loads(output)
         print("API Response Parsed:", api_response)
@@ -143,6 +144,8 @@ def process_pdfs(
     with open(output_file, "w", encoding="utf-8") as file:
         json.dump(selected_entries, file, indent=4)
 
+    print(f"LLM scores saved to {output_file}")
+
     end_time = time.time()
     print("Execution time:", end_time - start_time)
     print("Total input tokens:", total_input_tokens)
@@ -162,9 +165,6 @@ def main(
     """
     # Define log file path
     log_file_path = "./error_log.txt"
-
-    import os
-    print("Working directory: ", os.getcwd())
 
     # Ensure output directories exist
     os.makedirs(output_folder_images, exist_ok=True)

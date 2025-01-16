@@ -48,9 +48,6 @@ def train_model(training_data, features, target, seed_rf):
     Train the XGBoost model.
     """
 
-    print("Datentypes:", training_data[features].dtypes)
-    print("Fehlende Werte:", training_data[features].isnull().sum())
-
     numeric_features = [
         "table_quality",
         "quality_of_number",
@@ -74,8 +71,6 @@ def train_model(training_data, features, target, seed_rf):
     y = training_data[target]
 
     X['language'] = X['language'].astype(str)
-
-    print(training_data[features].head())
 
     cv = StratifiedKFold(n_splits=5)
     scorer = make_scorer(accuracy_score)
@@ -102,7 +97,7 @@ def update_scores(data, model, features):
             if feature not in entry or pd.isna(entry[feature])
         ]
         if missing_features:
-            print(f"Skipping entry due to missing features: {missing_features}")
+            print(f"Skipping {entry['filename']} due to missing features: {missing_features}")
             entry["precision_score"] = None
             continue
 
@@ -111,11 +106,9 @@ def update_scores(data, model, features):
             [{feature: entry.get(feature, pd.NA) for feature in features}]
         )
 
-        print(f"Features for prediction: {feature_values}")  # Debug: Show feature data
         try:
             # Perform prediction
             prediction = model.predict(feature_values)[0]
-            print(f"Prediction result: {prediction}")  # Debug: Show prediction result
             entry["precision_score"] = int(prediction)
         except Exception as e:
             # Handle any errors during prediction
