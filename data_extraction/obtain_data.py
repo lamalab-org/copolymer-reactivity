@@ -34,7 +34,7 @@ def obtain_data(
     pre_download_filter(keywords_filter, score_limit, number_of_selected_papers, crossref_metadata_output_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter)
 
     # PDF download with Scidownl
-    pdf_download(output_file_pre_download_filter, pdf_folder)
+    #pdf_download(output_file_pre_download_filter, pdf_folder)
 
     # PDF quality XGBoost-filter
     pre_extraction_filter(seed_xgboost_model, threshold_xgboost_model, pdf_folder, output_folder_images, output_folder_LLM_score, training_file_xgboost_model, output_file_pre_download_filter, output_file_xgboost_filter)
@@ -54,7 +54,7 @@ def main():
     crossref_keyword = "'copolymerization' AND 'reactivity ratio'"  # Note that this prompt was created in the
     # wrong way and collect all paper with reactivity and/or copolymerization in title and abstract
     output_file_crossref_search = (
-        "../../data_extraction/obtain_data/output/crossref_search.json"
+        "./obtain_data/output/crossref_search.json"
     )
     crossref_metadata_output_file = (
         "./obtain_data/output/collected_doi_metadata.json"
@@ -105,7 +105,7 @@ def main():
     input_folder_images = "./processed_images"
     output_folder_data_extraction = "./model_output_GPT4-o"
     output_file_data_extraction = (
-        "../../data_extraction/comparison_of_models/extracted_data.json"
+        "./comparison_of_models/extracted_data.json"
     )
 
     # run obtain data pipline

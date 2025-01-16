@@ -1,13 +1,71 @@
 from torch.utils.data import Dataset, DataLoader
 import torch
-import pandas as pd
-import numpy as np
 import torch.nn as nn
 from sklearn.preprocessing import StandardScaler
 import math
 import wandb
 from sklearn.preprocessing import PowerTransformer
 from torchmetrics import R2Score
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+
+def plot_r_distributions(df):
+    """
+    Plot distributions of r_12 and r_21 values in stacked subplots.
+
+    Parameters:
+    df (pandas.DataFrame): DataFrame containing 'r_12' and 'r_21' columns
+    """
+    # Create figure with two subplots stacked vertically
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), height_ratios=[1, 1])
+    fig.tight_layout(pad=3.0)
+
+    # Plot R12 distribution
+    ax1.hist(df['r_12'], bins=30, color='blue', alpha=0.6, edgecolor='black')
+    ax1.set_title('Distribution of r12 Values', pad=10)
+    ax1.set_xlabel('r12')
+    ax1.set_ylabel('Frequency')
+    ax1.grid(True, alpha=0.3)
+
+    # Add R12 statistics textbox
+    r12_stats = (f'Mean: {df.r_12.mean():.2f}\n'
+                 f'Median: {df.r_12.median():.2f}\n'
+                 f'Std: {df.r_12.std():.2f}\n'
+                 f'Min: {df.r_12.min():.2f}\n'
+                 f'Max: {df.r_12.max():.2f}')
+    ax1.text(0.95, 0.95, r12_stats,
+             transform=ax1.transAxes,
+             verticalalignment='top',
+             horizontalalignment='right',
+             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+
+    # Plot R21 distribution
+    ax2.hist(df['r_21'], bins=30, color='green', alpha=0.6, edgecolor='black')
+    ax2.set_title('Distribution of r21 Values', pad=10)
+    ax2.set_xlabel('r21')
+    ax2.set_ylabel('Frequency')
+    ax2.grid(True, alpha=0.3)
+
+    # Add R21 statistics textbox
+    r21_stats = (f'Mean: {df.r_21.mean():.2f}\n'
+                 f'Median: {df.r_21.median():.2f}\n'
+                 f'Std: {df.r_21.std():.2f}\n'
+                 f'Min: {df.r_21.min():.2f}\n'
+                 f'Max: {df.r_21.max():.2f}')
+    ax2.text(0.95, 0.95, r21_stats,
+             transform=ax2.transAxes,
+             verticalalignment='top',
+             horizontalalignment='right',
+             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+
+    # Add main title
+    fig.suptitle('Distribution of r12 and r21 Values', y=1.02, fontsize=14)
+
+    # Save plot
+    plt.savefig('r_value_distributions.png', dpi=300, bbox_inches='tight')
+    plt.close()
 
 
 wandb.init(
@@ -207,12 +265,10 @@ class MolecularReactivityDataset(Dataset):
             self.condition_features.loc[reaction['condition_id']].values
         )
 
-        # Get r_12 and r_21 values
+        # Get r_12 and r_21 values and r-product
         r_12 = torch.FloatTensor([reaction['r_12']])
         r_21 = torch.FloatTensor([reaction['r_21']])
-
-        # Calculate product as r_12 * r_21
-        product = r_12 * r_21
+        product = torch.FloatTensor([reaction['product']])
 
         return {
             'mol_1': mol_1_features,
@@ -317,7 +373,7 @@ def train_model(model, train_loader, test_loader, num_epochs=100, overfit_mode=T
     else:
         optimizer = torch.optim.AdamW(
             model.parameters(),
-            lr=1e-4,
+            lr=1e-5,
             weight_decay=1e-6,
             betas=(0.9, 0.999),
             eps=1e-8
@@ -480,7 +536,7 @@ def visualize_predictions(model, dataloader, num_samples=200):
             r12_pred.extend(r_12_p.numpy().flatten())
             r21_true.extend(batch['r_21'].numpy().flatten())
             r21_pred.extend(r_21_p.numpy().flatten())
-            true_product = (batch['r_12'] * batch['r_21']).numpy().flatten()
+            true_product = batch['product'].numpy().flatten()
             product_true.extend(true_product)
             product_pred.extend(product_p.numpy().flatten())
 
@@ -553,13 +609,13 @@ def train_step(model, batch, optimizer, criterion, transformers=None, grad_clip=
     # Ensure targets have shape [batch_size, 1]
     r_12 = batch['r_12'].reshape(-1, 1)
     r_21 = batch['r_21'].reshape(-1, 1)
-    true_product = (r_12 * r_21).reshape(-1, 1)
+    true_product = batch['product'].reshape(-1, 1)
 
-    if transformers is not None:
+    #if transformers is not None:
         # Transform if transformer is available
-        r_12 = torch.tensor(transformers['r12'].transform(r_12), dtype=torch.float32)
-        r_21 = torch.tensor(transformers['r21'].transform(r_21), dtype=torch.float32)
-        true_product = torch.tensor(transformers['product'].transform(true_product), dtype=torch.float32)
+        #r_12 = torch.tensor(transformers['r12'].transform(r_12), dtype=torch.float32)
+        #r_21 = torch.tensor(transformers['r21'].transform(r_21), dtype=torch.float32)
+        #true_product = torch.tensor(transformers['product'].transform(true_product), dtype=torch.float32)
 
     try:
         # Forward pass
@@ -577,16 +633,20 @@ def train_step(model, batch, optimizer, criterion, transformers=None, grad_clip=
 
         # Combine losses with weights
         loss = 0.4 * loss_12 + 0.4 * loss_21 + 0.2 * loss_product
+
+        # Backpropagate and optimize
+        loss.backward()
+        if grad_clip is not None:
+            torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+        optimizer.step()
+
+        # Print loss components for debugging
         print(f"Loss r1: {loss_12}, loss r2: {loss_21}, loss product: {loss_product}")
         print(f"Overall loss: {loss}")
+        print(f"Loss type: {type(loss)}")  # Print loss type for debugging
 
-        # Check for invalid loss and backward pass
-        if torch.isfinite(loss):
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
-            optimizer.step()
-            return loss.item()
-        return float('nan')
+        # Return the loss value as a float
+        return loss.item()
 
     except Exception as e:
         print(f"Error in train step: {str(e)}")
@@ -632,7 +692,7 @@ def evaluate_model(model, dataloader):
                 all_r12_pred.extend(r_12_pred.numpy().flatten())
                 all_r21_true.extend(batch['r_21'].numpy().flatten())
                 all_r21_pred.extend(r_21_pred.numpy().flatten())
-                all_product_true.extend((batch['r_12'] * batch['r_21']).numpy().flatten())
+                all_product_true.extend(batch['product'].numpy().flatten())
                 all_product_pred.extend(product_pred.numpy().flatten())
 
             except Exception as e:
@@ -665,43 +725,48 @@ def evaluate_model(model, dataloader):
 def prepare_data_from_csv(csv_path):
     print("Loading data from CSV...")
     df = pd.read_csv(csv_path)
-    print(f"Loaded data shape: {df.shape}")
+    print(f"Initial data shape: {df.shape}")
 
     # Define column groups
     mol1_cols = [col for col in df.columns if col.startswith('monomer1_data_')]
     mol2_cols = [col for col in df.columns if col.startswith('monomer2_data_')]
     condition_cols = ['LogP', 'temperature', 'method_1', 'method_2',
                       'polymerization_type_1', 'polymerization_type_2']
-    target_cols = ['r1', 'r2', 'r-product']
+    target_cols = ['r1', 'r2', 'r_product']
 
-    print("\nFound column groups:")
-    print(f"Molecule 1 features: {mol1_cols}")
-    print(f"Molecule 2 features: {mol2_cols}")
-    print(f"Condition features: {condition_cols}")
-    print(f"Target variables: {target_cols}")
+    # Check for complete duplicates before any processing
+    all_relevant_cols = mol1_cols + mol2_cols + condition_cols + target_cols
+    duplicates_mask = df.duplicated(subset=all_relevant_cols, keep='first')
+    n_duplicates = duplicates_mask.sum()
+
+    print("\n=== Duplicate Analysis ===")
+    print(f"Total rows before duplicate removal: {len(df)}")
+    print(f"Number of complete duplicates found: {n_duplicates}")
+
+    if n_duplicates > 0:
+        print("\nExample of duplicate rows:")
+        duplicate_examples = df[df.duplicated(subset=all_relevant_cols, keep=False)].head()
+        print(duplicate_examples[all_relevant_cols])
+
+        # Remove complete duplicates
+        df = df.drop_duplicates(subset=all_relevant_cols, keep='first')
+        print(f"\nRows after duplicate removal: {len(df)}")
 
     # Fill NaN values
     df[mol1_cols] = df[mol1_cols].fillna(0)
     df[mol2_cols] = df[mol2_cols].fillna(0)
-    df[['LogP', 'temperature', 'method_1', 'method_2', 'polymerization_type_1', 'polymerization_type_2']] = df[['LogP', 'temperature', 'method_1', 'method_2', 'polymerization_type_1', 'polymerization_type_2']].fillna(0)
+    df[condition_cols] = df[condition_cols].fillna(0)
 
-    # Create molecule features dataframe
-    mol1_features = df[mol1_cols].drop_duplicates()
-    mol2_features = df[mol2_cols].drop_duplicates()
+    # Create unique molecular feature sets
+    mol1_features = df[mol1_cols]
+    mol2_features = df[mol2_cols]
 
-    # Create mappings with index as the key
+    # Create mappings with index as the key (without dropping duplicates)
     mol1_features.index = [f'mol1_{i}' for i in range(len(mol1_features))]
     mol2_features.index = [f'mol2_{i}' for i in range(len(mol2_features))]
 
-    # Create molecule mappings using the index
-    mol1_mapping = {
-        tuple(row.values): idx
-        for idx, row in mol1_features.iterrows()
-    }
-    mol2_mapping = {
-        tuple(row.values): idx
-        for idx, row in mol2_features.iterrows()
-    }
+    mol1_mapping = {tuple(row.values): idx for idx, row in mol1_features.iterrows()}
+    mol2_mapping = {tuple(row.values): idx for idx, row in mol2_features.iterrows()}
 
     # Combine molecule features
     mol1_features_renamed = mol1_features.rename(
@@ -742,13 +807,15 @@ def prepare_data_from_csv(csv_path):
             'condition_id': condition_mapping[cond_key],
             'r_12': float(row['r1']),
             'r_21': float(row['r2']),
-            'product': float(row['r1']) * float(row['r2'])
+            'product': float(row['r_product'])
         }
         reactions.append(reaction)
 
     reactivity_df = pd.DataFrame(reactions)
+    print(reactivity_df["product"])
 
-    print(f"\nCreated DataFrames:")
+    # Print final statistics
+    print("\n=== Final Dataset Statistics ===")
     print(f"Molecule features shape: {mol_features.shape}")
     print(f"Condition features shape: {condition_features.shape}")
     print(f"Reactivity data shape: {reactivity_df.shape}")
@@ -792,7 +859,7 @@ def create_overfit_loader(train_loader, num_samples=16):
             'conditions': batch['conditions'],
             'r_12': batch['r_12'],
             'r_21': batch['r_21'],
-            'product': batch['r_12'] * batch['r_21']
+            'product': batch['r_product']
         }
         break
 
@@ -843,7 +910,7 @@ def train_overfit(model, train_loader, num_epochs=100):
 
             loss_12 = criterion(r_12_pred, batch['r_12'])
             loss_21 = criterion(r_21_pred, batch['r_21'])
-            loss_product = criterion(product_pred, batch['r_12'] * batch['r_21'])
+            loss_product = criterion(product_pred, batch['r_product'])
 
             loss = loss_12 + loss_21 + loss_product
             loss.backward()
@@ -857,12 +924,125 @@ def train_overfit(model, train_loader, num_epochs=100):
             visualize_predictions(model, overfit_loader, num_samples=32)
 
 
+from xgboost import XGBRegressor
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.multioutput import MultiOutputRegressor
+import numpy as np
+
+
+def train_xgboost_models(train_loader, test_loader):
+    print("\n=== Preparing Data for XGBoost ===")
+
+    # Extract features and targets from DataLoader
+    X_train, y_train_r1, y_train_r2, y_train_product = [], [], [], []
+    X_test, y_test_r1, y_test_r2, y_test_product = [], [], [], []
+
+    # Process training data
+    for batch in train_loader:
+        # Concatenate all features
+        mol_1 = batch['mol_1'].numpy()
+        mol_2 = batch['mol_2'].numpy()
+        conditions = batch['conditions'].numpy()
+
+        # Combine features
+        features = np.concatenate([mol_1, mol_2, conditions], axis=1)
+        X_train.extend(features)
+
+        # Get all targets
+        y_train_r1.extend(batch['r_12'].numpy())
+        y_train_r2.extend(batch['r_21'].numpy())
+        y_train_product.extend(batch['product'].numpy())
+
+    # Process test data
+    for batch in test_loader:
+        features = np.concatenate([
+            batch['mol_1'].numpy(),
+            batch['mol_2'].numpy(),
+            batch['conditions'].numpy()
+        ], axis=1)
+        X_test.extend(features)
+        y_test_r1.extend(batch['r_12'].numpy())
+        y_test_r2.extend(batch['r_21'].numpy())
+        y_test_product.extend(batch['product'].numpy())
+
+    # Convert to numpy arrays
+    X_train = np.array(X_train)
+    y_train = np.column_stack([y_train_r1, y_train_r2, y_train_product])
+    X_test = np.array(X_test)
+    y_test = np.column_stack([y_test_r1, y_test_r2, y_test_product])
+
+    print("\nData shapes:")
+    print(f"X_train shape: {X_train.shape}")
+    print(f"y_train shape: {y_train.shape}")
+    print(f"X_test shape: {X_test.shape}")
+    print(f"y_test shape: {y_test.shape}")
+
+    # Define parameter grid for RandomizedSearchCV
+    param_grid = {
+        'estimator__max_depth': [3, 5, 7, 9],
+        'estimator__learning_rate': [0.01, 0.05, 0.1],
+        'estimator__n_estimators': [100, 200, 300],
+        'estimator__min_child_weight': [1, 3, 5],
+        'estimator__gamma': [0, 0.1, 0.2],
+        'estimator__subsample': [0.6, 0.8, 1.0],
+        'estimator__colsample_bytree': [0.6, 0.8, 1.0],
+        'estimator__reg_alpha': [0, 0.1, 0.5],
+        'estimator__reg_lambda': [0.1, 0.5, 1.0]
+    }
+
+    # Initialize base model with MultiOutputRegressor
+    base_model = XGBRegressor(random_state=42)
+    model = MultiOutputRegressor(base_model)
+
+    # Initialize RandomizedSearchCV
+    print("\nStarting RandomizedSearchCV...")
+    random_search = RandomizedSearchCV(
+        estimator=model,
+        param_distributions=param_grid,
+        n_iter=100,
+        cv=3,
+        verbose=1,
+        random_state=42,
+        n_jobs=-1,
+        scoring='r2'
+    )
+
+    # Fit the model
+    random_search.fit(X_train, y_train)
+
+    # Print results
+    print("\n=== XGBoost Results ===")
+    print(f"Best R² score (average across outputs): {random_search.best_score_:.4f}")
+    print("\nBest parameters:")
+    for param, value in random_search.best_params_.items():
+        print(f"{param}: {value}")
+
+    # Evaluate on test set
+    y_pred = random_search.predict(X_test)
+
+    # Calculate R² scores for each output
+    from sklearn.metrics import r2_score
+    r2_r1 = r2_score(y_test[:, 0], y_pred[:, 0])
+    r2_r2 = r2_score(y_test[:, 1], y_pred[:, 1])
+    r2_product = r2_score(y_test[:, 2], y_pred[:, 2])
+
+    print("\nTest set R² scores:")
+    print(f"R1: {r2_r1:.4f}")
+    print(f"R2: {r2_r2:.4f}")
+    print(f"Product: {r2_product:.4f}")
+
+    return random_search.best_estimator_, (r2_r1, r2_r2, r2_product)
+
+
 def main(training_data):
     print("\n=== Starting Molecular Reactivity Prediction ===\n")
 
     # Load and prepare data
     mol_features, condition_features, reactivity_df = prepare_data_from_csv(
         training_data)
+
+    # Plot distributions before any scaling
+    plot_r_distributions(reactivity_df)
 
     # Normalize the features
     mol_scaler = StandardScaler()
@@ -894,8 +1074,10 @@ def main(training_data):
         condition_input_dim=len(condition_features.columns)
     )
 
+    #best_model, (r2_r1, r2_r2, r2_product) = train_xgboost_models(train_loader, test_loader)
+
     # Train model
-    train_model(model, train_loader, test_loader, num_epochs=500, overfit_mode=True)
+    train_model(model, train_loader, test_loader, num_epochs=500, overfit_mode=False)
 
     # Visualize predictions
     visualize_predictions(model, test_loader, num_samples=1000)

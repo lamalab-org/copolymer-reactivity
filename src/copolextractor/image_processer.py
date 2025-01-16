@@ -32,7 +32,6 @@ def correct_text_orientation(image, save_directory, file_path, i):
     )
 
     cv2.imwrite(new_filename, rotated)
-    print(f"[INFO] {file_path} - corrected image saved as {new_filename}")
     return rotated
 
 
