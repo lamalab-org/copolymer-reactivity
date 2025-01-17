@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-acryloyl thioxanthone",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl formamide",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.36,
+                        "constant_2": 0.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Jaacks integral method",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 1.02,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.1990.080280331",
+    "PDF_name": "Radical Copolymerization of 2-Acryloyl Thioxanthone with Methyl Methacrylate"
+}

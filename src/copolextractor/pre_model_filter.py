@@ -1,10 +1,11 @@
 import json
-import os
+from copolextractor.mongodb_storage import CoPolymerDB
+from typing import List, Dict, Optional
 
 
-# Function to convert string values to float
 def convert_to_float(value):
-    if value == "na" or value is None:  # Handle "na" or None values
+    """Convert string values to float."""
+    if value == "na" or value is None:
         return None
     try:
         return float(value)
@@ -13,40 +14,43 @@ def convert_to_float(value):
         return None
 
 
-# Function to preprocess data and convert relevant values to float
-def preprocess_data(data):
+def preprocess_data(data: List[Dict]):
+    """Preprocess data and convert relevant values to float."""
     for entry in data:
-        if "r_values" in entry:
-            entry["r_values"]["constant_1"] = convert_to_float(
-                entry["r_values"].get("constant_1")
-            )
-            entry["r_values"]["constant_2"] = convert_to_float(
-                entry["r_values"].get("constant_2")
-            )
-        if "conf_intervals" in entry:
-            entry["conf_intervals"]["constant_conf_1"] = convert_to_float(
-                entry["conf_intervals"].get("constant_conf_1")
-            )
-            entry["conf_intervals"]["constant_conf_2"] = convert_to_float(
-                entry["conf_intervals"].get("constant_conf_2")
-            )
-        if "r-product" in entry:
-            entry["r-product"] = convert_to_float(entry.get("r-product"))
+        reaction_conditions = entry.get("reaction_conditions", {})
+
+        # Extract reaction constants
+        reaction_constants = reaction_conditions.get("reaction_constants", {})
+        if reaction_constants:
+            reaction_constants["constant_1"] = convert_to_float(reaction_constants.get("constant_1"))
+            reaction_constants["constant_2"] = convert_to_float(reaction_constants.get("constant_2"))
+
+        # Extract confidence intervals
+        reaction_constant_conf = reaction_conditions.get("reaction_constant_conf", {})
+        if reaction_constant_conf:
+            reaction_constant_conf["constant_conf_1"] = convert_to_float(reaction_constant_conf.get("constant_conf_1"))
+            reaction_constant_conf["constant_conf_2"] = convert_to_float(reaction_constant_conf.get("constant_conf_2"))
+
+        # Extract r_product
+        reaction_conditions["r_product"] = convert_to_float(reaction_conditions.get("r_product"))
 
 
-# Function to check if the actual product is within the allowed deviation
 def is_within_deviation(actual_product, expected_product, deviation=0.10):
+    """Check if actual product is within allowed deviation."""
     if expected_product == 0:
         return actual_product == 0
     return abs(actual_product - expected_product) / abs(expected_product) <= deviation
 
 
-# Function to apply the r-product filter
-def apply_r_product_filter(data):
+def apply_r_product_filter(data: List[Dict]):
+    """Apply the r-product filter to the data."""
     for entry in data:
-        r1 = entry["r_values"].get("constant_1")
-        r2 = entry["r_values"].get("constant_2")
-        r_product = entry.get("r-product")
+        reaction_conditions = entry.get("reaction_conditions", {})
+        reaction_constants = reaction_conditions.get("reaction_constants", {})
+
+        r1 = reaction_constants.get("constant_1")
+        r2 = reaction_constants.get("constant_2")
+        r_product = reaction_conditions.get("r_product")
 
         if r_product is None or r1 is None or r2 is None:
             entry["r-product_filter"] = True
@@ -54,60 +58,100 @@ def apply_r_product_filter(data):
 
         actual_product = r1 * r2
         if is_within_deviation(actual_product, r_product):
-            entry["r-product_filter"] = True  # Keep reaction
+            entry["r-product_filter"] = True
         else:
-            entry["r-product_filter"] = False  # Filter out reaction
+            entry["r-product_filter"] = False
 
 
-# Function to apply the confidence interval filter
-def apply_r_conf_filter(data):
+def apply_r_conf_filter(data: List[Dict]):
+    """Apply the confidence interval filter to the data."""
     for entry in data:
-        r1 = entry.get("r_values", {}).get("constant_1")
-        r2 = entry.get("r_values", {}).get("constant_2")
-        conf_1 = entry.get("conf_intervals", {}).get("constant_conf_1")
-        conf_2 = entry.get("conf_intervals", {}).get("constant_conf_2")
+        reaction_conditions = entry.get("reaction_conditions", {})
+        reaction_constants = reaction_conditions.get("reaction_constants", {})
+        reaction_constant_conf = reaction_conditions.get("reaction_constant_conf", {})
+
+        r1 = reaction_constants.get("constant_1")
+        r2 = reaction_constants.get("constant_2")
+        conf_1 = reaction_constant_conf.get("constant_conf_1")
+        conf_2 = reaction_constant_conf.get("constant_conf_2")
 
         if r1 is not None and r2 is not None:
-            # Check confidence intervals if they exist
             if conf_1 is not None and conf_2 is not None:
-                # Confidence intervals should not exceed the corresponding r-values
                 entry["r_conf_filter"] = (conf_1 <= r1) and (conf_2 <= r2)
             else:
-                # If one or both confidence intervals are missing, still pass the filter
                 entry["r_conf_filter"] = True
         else:
-            # Filter out due to missing r-values
             entry["r_conf_filter"] = True
 
 
-# Main function
-def main(input_file, output_file):
-    # Load data from JSON file
-    if not os.path.exists(input_file):
-        print(f"Error: Input file {input_file} does not exist.")
-        return
+from datetime import datetime
 
-    with open(input_file, "r") as file:
-        data = json.load(file)
 
-    # Preprocess data to convert values to float
+def convert_mongo_document(doc):
+    """Convert MongoDB document to JSON serializable format."""
+    if isinstance(doc, dict):
+        return {key: convert_mongo_document(value) for key, value in doc.items()}
+    elif isinstance(doc, list):
+        return [convert_mongo_document(item) for item in doc]
+    elif str(type(doc)) == "<class 'bson.objectid.ObjectId'>":
+        return str(doc)
+    elif isinstance(doc, datetime):
+        return doc.isoformat()  # Konvertiert datetime zu ISO-Format String
+    else:
+        return doc
+
+
+def load_and_filter_data(source: Optional[str] = None, output_file: Optional[str] = None):
+    """
+    Load data from MongoDB, optionally filter by source, apply filters and save results.
+
+    Args:
+        source: Optional filter for original_source ('crossref' or 'copol database')
+        output_file: Optional file path to save the filtered results
+    """
+    # Initialize database connection
+    db = CoPolymerDB()
+
+    # Prepare query
+    query = {}
+    if source:
+        query["original_source"] = source
+
+    # Load data from MongoDB
+    data = db.query_data(query)
+    print(f"Loaded {len(data)} entries from database")
+
+    # Convert MongoDB documents to JSON serializable format
+    data = convert_mongo_document(data)
+
+    # Preprocess and apply filters
     preprocess_data(data)
-
-    # Apply filters
     apply_r_product_filter(data)
     apply_r_conf_filter(data)
 
-    # Save updated data to output file
-    with open(output_file, "w") as file:
-        json.dump(data, file, indent=4)
+    # Save results if output file is specified
+    if output_file:
+        with open(output_file, "w") as file:
+            json.dump(data, file, indent=4)
+        print(f"Results saved to {output_file}")
 
-    print(f"Filters applied and results saved to {output_file}")
+    return data
+
+
+def main():
+    # Example usage
+    # Load all data
+    all_data = load_and_filter_data(output_file="all_data_filtered.json")
+    print(f"Total entries processed: {len(all_data)}")
+
+    # Load only crossref data
+    crossref_data = load_and_filter_data(source="crossref", output_file="crossref_data_filtered.json")
+    print(f"Crossref entries processed: {len(crossref_data)}")
+
+    # Load only copol database data
+    copol_data = load_and_filter_data(source="copol database", output_file="copol_data_filtered.json")
+    print(f"Copol database entries processed: {len(copol_data)}")
 
 
 if __name__ == "__main__":
-    input_file = "../../copol_prediction/output/extracted_data_w_features.json"
-    output_file = (
-        "../../copol_prediction/output/extracted_data_w_features_filtered.json"
-    )
-
-    main(input_file, output_file)
+    main()

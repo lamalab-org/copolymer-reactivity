@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Dimethallylidene pentaerythritol",
+                "Maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 0.025
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.05,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": -0.48,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.00125
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Dicrotylidene pentaerythritol",
+                "Maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": -0.32,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.0004
+                }
+            ]
+        }
+    ],
+    "source": "na",
+    "PDF_name": "The Copolymerization of Dimethallylidene pentaerythritol and Dicrotylidene pentaerythritol with Maleic Anhydride"
+}

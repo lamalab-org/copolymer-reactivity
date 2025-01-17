@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methylmethacrylate",
+                    "monomer2": "Maleic Anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solution",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.63,
+                        "constant_2": -0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.14,
+                        "constant_conf_2": 0.28
+                    },
+                    "determination_method": "graphical extrapolation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0014-3057(63)90001-2",
+    "PDF_name": "The Copolymerization of Methylmethacrylate and Maleic Anhydride"
+}

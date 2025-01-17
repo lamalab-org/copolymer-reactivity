@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "n-Butyl acrylate",
+                    "monomer2": "Ethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 11.9,
+                        "constant_2": 0.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.5,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 33.3,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": 1.02,
+                        "constant_2": -0.41
+                    },
+                    "r_product": 0.36
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl chloride",
+                    "monomer2": "Ethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 90.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.6,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 4.2,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.37,
+                        "constant_2": -0.57
+                    },
+                    "r_product": 0.85
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl acetate",
+                    "monomer2": "Ethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 90.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.08,
+                        "constant_2": 1.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.19,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.03
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": -0.3
+                    },
+                    "r_product": 1.16
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl fluoride",
+                    "monomer2": "Ethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 160.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.16,
+                        "constant_2": 4.39
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.77
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 0.25,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": null
+                    },
+                    "r_product": 0.7
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1963.100010327",
+    "PDF_name": "Copolymerization Studies. III. Reactivity Ratios of Model Ethylene Copolymerizations and Their Use in Q-e Calculations"
+}

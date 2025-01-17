@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Styrene",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.54,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.34
+                    },
+                    "e-Value": {
+                        "constant_1": -1,
+                        "constant_2": 1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Acrylonitrile",
+                "Chloroprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 0.009,
+                        "constant_2": 2.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.34,
+                        "constant_2": 2.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1,
+                        "constant_2": 0.9
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Chloroprene",
+                "Isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 5.5,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.53,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 3.5
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": -1.4
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science",
+    "PDF_name": "Reactivity Ratios in Diene and Diene-Vinyl Copolymerization"
+}

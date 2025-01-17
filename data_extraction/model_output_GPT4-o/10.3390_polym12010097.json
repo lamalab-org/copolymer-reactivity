@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "pentadecylphenyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "atom transfer radical polymerization",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 95.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.0465
+                },
+                {
+                    "polymerization_type": "atom transfer radical polymerization",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 95.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.8965,
+                        "constant_2": 0.0182
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Finemann-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.016
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym12010097",
+    "PDF_name": "Copolymerization_of_Styrene_and_Pentadecylphenylmethacrylate_PDMPA.pdf"
+}

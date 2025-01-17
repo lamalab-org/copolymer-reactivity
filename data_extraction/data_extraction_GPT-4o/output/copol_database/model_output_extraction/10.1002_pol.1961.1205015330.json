@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N,N-Dimethylacrylamide",
+                    "monomer2": "Acrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.09,
+                        "constant_2": 1.12
+                    },
+                    "e-Value": {
+                        "constant_1": -0.26,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science. Vol. L, Issue 153 (1961)",
+    "PDF_name": "Journal_of_Polymer_Science_1961.pdf"
+}

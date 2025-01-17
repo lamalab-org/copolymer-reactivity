@@ -1,0 +1,54 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Isobutyl Vinyl Ether"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 0.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 9.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 1.0
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 40.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 11.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 3.0
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1295/polymj.4.495",
+    "PDF_name": "Copolymerization of Styrene with Isobutyl Vinyl Ether by Radiation"
+}

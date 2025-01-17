@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "cyclohexyl acrylate",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.272,
+                        "constant_2": 0.913
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.048,
+                        "constant_conf_2": 0.107
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.43
+                    },
+                    "r_product": 0.248
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "cyclohexyl acrylate",
+                "N-vinyl-2-pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.297,
+                        "constant_2": 0.122
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.088,
+                        "constant_conf_2": 0.014
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.28,
+                        "constant_2": 0.19
+                    },
+                    "e-Value": {
+                        "constant_1": 0.28,
+                        "constant_2": 0.19
+                    },
+                    "r_product": "na"
+                }
+            ]
+        }
+    ],
+    "source": "10.1016/0032-3861(93)90224-03",
+    "PDF_name": "Synthesis, characterization and the reactivity ratios of copolymers of cyclohexyl acrylate with styrene and N-vinyl-2-pyrrolidone"
+}

@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "2-Methyl-N-vinyl imidazole"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 8.97,
+                        "constant_2": 0.069
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.025
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.19,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.49,
+                        "constant_2": null
+                    },
+                    "r_product": 0.619
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl methacrylate",
+                    "monomer2": "2-Methyl-N-vinyl imidazole"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.48,
+                        "constant_2": 0.003
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.019
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.1,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.73,
+                        "constant_2": null
+                    },
+                    "r_product": 0.01
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl methacrylate",
+                    "monomer2": "2-Phenyl-N-vinyl imidazole"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.5,
+                        "constant_2": 0.006
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.001
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.34,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.58,
+                        "constant_2": null
+                    },
+                    "r_product": 0.02
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1964.100020",
+    "PDF_name": "Polymerization and Copolymerization of 2-Methyl- and 2-Phenyl-N-Vinyl Imidazole"
+}

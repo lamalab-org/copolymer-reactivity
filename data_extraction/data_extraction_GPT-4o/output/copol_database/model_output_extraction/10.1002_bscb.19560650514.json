@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl acrylate",
+                    "monomer2": "isopropenyl isocyanate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "approximations successives",
+                    "Q-value": {
+                        "constant_1": 0.19,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.06,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "isopropenyl isocyanate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 7.0,
+                        "constant_2": 0.14
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "approximations successives",
+                    "Q-value": {
+                        "constant_1": 0.16,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.95,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Bull. Soc. Chim. Belg., 65, pp. 571-579, 1956",
+    "PDF_name": "Bull. Soc. Chim. Belg., 65, pp. 571-579, 1956"
+}

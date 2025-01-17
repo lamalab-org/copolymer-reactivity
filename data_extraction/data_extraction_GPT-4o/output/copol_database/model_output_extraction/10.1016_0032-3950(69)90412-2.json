@@ -1,0 +1,196 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl acetate",
+                    "monomer2": "Butyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 3.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.33,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.08,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 3.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.33,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.08,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl alcohol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 3.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.33,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.08,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl acetate",
+                    "monomer2": "Acrylic acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 10.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 1.0
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 1.15,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.77,
+                        "constant_2": null
+                    },
+                    "r_product": 100.0
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl acetate",
+                    "monomer2": "Methyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 9.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 2.5
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.42,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": null
+                    },
+                    "r_product": 10.0
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl acetate",
+                    "monomer2": "2-Ethylhexyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 0.14,
+                        "constant_2": 6.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.18,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.46,
+                        "constant_2": null
+                    },
+                    "r_product": 7.1
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00552334",
+    "PDF_name": "SOME ASPECTS OF THE COPOLYMERIZATION OF VINYLACETATE AND BUTYLACRYLATE"
+}

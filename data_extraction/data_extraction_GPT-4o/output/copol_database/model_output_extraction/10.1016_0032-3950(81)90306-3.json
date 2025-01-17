@@ -1,0 +1,102 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Stilbene",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 110.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.033,
+                        "constant_2": 5.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.004,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Shtraikhman approach",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 140.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.022,
+                        "constant_2": 7.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.055,
+                        "constant_conf_2": 0.45
+                    },
+                    "determination_method": "Shtraikhman approach",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Stilbene",
+                    "monomer2": "Acenaphthylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 110.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.027,
+                        "constant_2": 5.38
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.034,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": "Shtraikhman approach",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 140.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.007,
+                        "constant_2": 11.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.064,
+                        "constant_conf_2": 0.66
+                    },
+                    "determination_method": "Shtraikhman approach",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0032-3950(81)90136-0",
+    "PDF_name": "STUDY OF THE TEMPERATURE DEPENDENCE OF THE COPOLYMERIZATION CONSTANTS FOR STILBENE WITH STYRENE AND ACENAPHTHYLENE"
+}

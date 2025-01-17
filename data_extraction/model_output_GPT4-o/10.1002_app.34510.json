@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "n-butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene-d6",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.03,
+                        "constant_2": 7.43
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 2.17
+                    },
+                    "determination_method": "TUM",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene-d6",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0277,
+                        "constant_2": 7.402
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0122,
+                        "constant_conf_2": 1.401
+                    },
+                    "determination_method": "simplified PUM",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/app.34510",
+    "PDF_name": "Free-Radical Homo- and Copolymerization of Vinyl Acetate and n-Butyl Acrylate: Kinetic Studies by Online 1H NMR Kinetic Experiments"
+}

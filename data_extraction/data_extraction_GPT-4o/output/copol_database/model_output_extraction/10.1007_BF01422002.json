@@ -1,0 +1,54 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "p-Chlorostyrene",
+                    "monomer2": "n-Butylmethacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.036,
+                        "constant_2": 0.517
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.084,
+                        "constant_conf_2": 0.083
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.02,
+                        "constant_2": 0.43
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.192,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF01410695",
+    "PDF_name": "Radikalische Copolymerisation von p-Chlorstyrol und n-Butylmethacrylat"
+}

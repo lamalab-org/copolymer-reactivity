@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.55,
+                        "constant_2": 0.482
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01113,
+                        "constant_conf_2": 0.01089
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 313.15,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.496,
+                        "constant_2": 0.444
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/mats.199800007",
+    "PDF_name": "True reactivity ratios for styrene-methyl methacrylate copolymerization in bulk"
+}

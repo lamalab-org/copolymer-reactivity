@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "cinnamyl methacrylate",
+                "ethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.135,
+                        "constant_2": 0.868
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.56,
+                        "constant_2": 0.826
+                    },
+                    "e-Value": {
+                        "constant_1": 1.603,
+                        "constant_2": 0.17
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.149,
+                        "constant_2": 0.938
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.56,
+                        "constant_2": 0.826
+                    },
+                    "e-Value": {
+                        "constant_1": 1.603,
+                        "constant_2": 0.17
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1590/1516-1439.012015",
+    "PDF_name": "Synthesis and Characterization of New Copolymer Based Cinnamyl Methacrylate Monomer: Determination of Monomer Reactivity Ratio and Statistical Sequence"
+}

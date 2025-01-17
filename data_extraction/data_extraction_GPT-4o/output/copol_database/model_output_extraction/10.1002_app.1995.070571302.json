@@ -1,0 +1,60 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "tetrafluoroethylene",
+                    "monomer2": "ethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "suspension",
+                    "temperature": 338.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.0646,
+                        "constant_2": 0.575
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.027,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "nonlinear least-squares method",
+                    "Q-value": {
+                        "constant_1": 0.018,
+                        "constant_2": 1.66
+                    },
+                    "e-Value": {
+                        "constant_1": 0.015,
+                        "constant_2": -0.2
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "suspension",
+                    "temperature": 338.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.045,
+                        "constant_2": 0.14
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.008,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "nonlinear least-squares method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.1995.070571113",
+    "PDF_name": "Study of Radical Copolymerization of Tetrafluoroethylene with Ethylene in Suspension"
+}

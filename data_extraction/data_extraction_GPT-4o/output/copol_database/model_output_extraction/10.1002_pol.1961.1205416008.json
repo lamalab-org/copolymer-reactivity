@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl Acetate",
+                    "monomer2": "N-Vinyl Pyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.237,
+                        "constant_2": 2.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.037,
+                        "constant_conf_2": 0.19
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Dioctyl Fumarate",
+                    "monomer2": "N-Vinyl Pyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-heptane",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.041
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.033,
+                        "constant_conf_2": 0.007
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1961.1205412310",
+    "PDF_name": "Evaluation of the Terpolymer Composition Equation"
+}

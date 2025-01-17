@@ -90,6 +90,10 @@ def update_scores(data, model, features):
     Update entries with predictions.
     """
     for entry in data:
+
+        if 'rxn_count' in entry and entry['rxn_count']:
+            entry['rxn_number'] = entry['rxn_count']
+
         # Check if all required features are present and valid
         missing_features = [
             feature

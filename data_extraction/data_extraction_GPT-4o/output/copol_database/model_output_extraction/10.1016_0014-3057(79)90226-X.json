@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-Naphthyl Methacrylate",
+                    "monomer2": "Methyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "carbon tetrachloride",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.46,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.25,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.61
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.62,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.35,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 1.15
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.62,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.35,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 1.15
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 55.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.13,
+                        "constant_2": 0.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.35,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 1.86
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 55.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.7,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 1.11
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0014-3057(79)90102-0",
+    "PDF_name": "The Influence of Molecular Interactions on Polymerization—IV"
+}

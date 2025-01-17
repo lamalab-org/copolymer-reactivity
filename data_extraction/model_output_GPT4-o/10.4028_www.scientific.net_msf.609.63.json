@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "cyclohexyl methacrylate",
+                "tetra ethylene glycol dimethacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.77,
+                        "constant_2": 0.48
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.1,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": -0.64,
+                        "constant_2": "na"
+                    },
+                    "r_product": "na"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.81,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.1,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": -0.64,
+                        "constant_2": "na"
+                    },
+                    "r_product": "na"
+                }
+            ]
+        }
+    ],
+    "source": "10.4028/www.scientific.net/MSF.609.63",
+    "PDF_name": "Cyclohexyl Methacrylate with Tetra (Ethylene Glycol) Dimethacrylate in Tetrahydrofuran Radical Copolymerization"
+}

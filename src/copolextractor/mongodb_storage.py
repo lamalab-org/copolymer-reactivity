@@ -7,33 +7,39 @@ class CoPolymerDB:
     def __init__(self, connection_string: str = "mongodb://localhost:27017/"):
         """Initialize connection to MongoDB"""
         self.client = MongoClient(connection_string)
-        self.db = self.client.co_polymer_database  # database name
+        self.db = self.client.co_polymer_database
         self.collection = self.db.co_polymerization_data
 
-        # Create indexes for faster queries
-        self.collection.create_index("file", unique=True)
+        # Drop old indexes to avoid conflicts
+        self.collection.drop_indexes()
+
+        # Create new indexes for faster queries
+        self.collection.create_index("filename", unique=True)
         self.collection.create_index([
-            ("monomer1", 1),
-            ("monomer2", 1),
-            ("temperature", 1),
-            ("solvent", 1)
+            ("monomers", 1),
+            ("reaction_conditions.temperature", 1),
+            ("reaction_conditions.solvent", 1)
         ])
 
     def check_duplicate(self, data: Dict) -> Optional[Dict]:
         """
-        Check if a similar entry already exists
+        Check if a similar entry already exists by comparing all relevant fields
         """
         query = {
-            "$or": [
-                {"file": data["file"]},  # Check by filename
-                {  # Check by key parameters
-                    "monomer1": data["monomer1"],
-                    "monomer2": data["monomer2"],
-                    "temperature": data["temperature"],
-                    "solvent": data["solvent"],
-                    "source": data["source"]
-                }
-            ]
+            # All fields must match to be considered a duplicate
+            "filename": data["filename"],
+            "monomers": data["monomers"],
+            "reaction_conditions.temperature": data["reaction_conditions"]["temperature"],
+            "reaction_conditions.temperature_unit": data["reaction_conditions"]["temperature_unit"],
+            "reaction_conditions.solvent": data["reaction_conditions"]["solvent"],
+            "reaction_conditions.method": data["reaction_conditions"]["method"],
+            "reaction_conditions.polymerization_type": data["reaction_conditions"]["polymerization_type"],
+            "reaction_conditions.reaction_constants.constant_1": data["reaction_conditions"]["reaction_constants"][
+                "constant_1"],
+            "reaction_conditions.reaction_constants.constant_2": data["reaction_conditions"]["reaction_constants"][
+                "constant_2"],
+            "reaction_conditions.determination_method": data["reaction_conditions"]["determination_method"],
+            "source": data["source"]
         }
 
         return self.collection.find_one(query)
@@ -51,6 +57,13 @@ class CoPolymerDB:
                         "message": "Duplicate entry found",
                         "existing_data": existing
                     }
+
+            # Ensure filename is present
+            if "filename" not in data:
+                return {
+                    "success": False,
+                    "message": "Missing required field: filename"
+                }
 
             # Add timestamp
             data["created_at"] = datetime.datetime.utcnow()

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "glycidyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.015,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.68,
+                        "constant_2": -0.36
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "na",
+    "PDF_name": "Studies of Methyl Methacrylate\u2013Glycidyl Methacrylate Copolymers.pdf"
+}

@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "6,8-Dimethyl-4-oxo-5-chromanlymethyl acrylate",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.54,
+                        "constant_2": 0.42
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 1.0
+                    },
+                    "r_product": 0.22
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "6,8-Dimethyl-4-oxo-5-chromanlymethyl acrylate",
+                "Methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 2.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.58,
+                        "constant_2": 0.79
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.74
+                    },
+                    "r_product": 0.86
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "6,8-Dimethyl-4-oxo-5-chromanlymethyl acrylate",
+                "Vinyl chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 4.0,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.68,
+                        "constant_2": 1.27
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.044
+                    },
+                    "r_product": 0.32
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 180, 625-631 (1979)",
+    "PDF_name": "Formaldehyde Polymers, 25"
+}

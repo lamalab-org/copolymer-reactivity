@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-Hydroxypropyl methacrylate",
+                    "monomer2": "Ethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.807,
+                        "constant_2": 0.245
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.032,
+                        "constant_conf_2": 0.021
+                    },
+                    "determination_method": "Yezrielev, Brokhina, and Raskin method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-Hydroxypropyl methacrylate",
+                    "monomer2": "n-Butyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.378,
+                        "constant_2": 0.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Yezrielev, Brokhina, and Raskin method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-Hydroxypropyl methacrylate",
+                    "monomer2": "2-Ethylhexyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.37,
+                        "constant_2": 0.103
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.048,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "Yezrielev, Brokhina, and Raskin method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338208063268",
+    "PDF_name": "Copolymerization of 2-Hydroxypropyl Methacrylate with Alkyl Methacrylates"
+}

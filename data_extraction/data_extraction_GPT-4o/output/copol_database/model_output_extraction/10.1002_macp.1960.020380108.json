@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "2-Methyl-5-vinylpyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "bulk",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.812,
+                        "constant_2": 0.91
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.76,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl methacrylate",
+                    "monomer2": "2-Methyl-5-vinylpyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "bulk",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.61
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.04,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.7,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl acrylate",
+                    "monomer2": "2-Methyl-5-vinylpyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "bulk",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.172,
+                        "constant_2": 0.88
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.05,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "2-Methyl-5-vinylpyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "bulk",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.116,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.38,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.7,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1959.120391203",
+    "PDF_name": "The Copolymerization of 2-Methyl-5-Vinylpyridine"
+}

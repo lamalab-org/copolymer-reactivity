@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Styrene",
+                "Cyanomethyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.29
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": 1.64,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 0.98,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.044
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Methacrylate",
+                "Cyanomethyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.75
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": 0.32,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 2.65,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.32
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 21, 2997\u20133008 (1983)",
+    "PDF_name": "Radical-Initiated Homo- and Copolymerization of Cyanomethyl Methacrylate"
+}

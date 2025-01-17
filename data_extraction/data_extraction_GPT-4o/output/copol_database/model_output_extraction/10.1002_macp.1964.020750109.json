@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Diethylcarbamidsäurevinylester",
+                    "monomer2": "Acrylsäuremethylester"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Benzol",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 4.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 9.0
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Diethylcarbamidsäurevinylester",
+                    "monomer2": "Acrylsäure"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Benzol",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.09,
+                        "constant_2": 5.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 2.0
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Diethylcarbamidsäurevinylester",
+                    "monomer2": "Maleinsäureanhydrid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Benzol",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.035,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.055,
+                        "constant_conf_2": 0.003
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1964.110020108",
+    "PDF_name": "Herstellung und Polymerisation von Carbamidsäurevinylestern"
+}

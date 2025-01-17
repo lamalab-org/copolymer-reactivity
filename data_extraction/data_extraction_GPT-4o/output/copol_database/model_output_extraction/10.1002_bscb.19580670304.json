@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinyl acetate",
+                    "monomer2": "N-vinyl-N'-ethylurea"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.45,
+                        "constant_2": 0.63
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price",
+                    "Q-value": {
+                        "constant_1": 0.15,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.4,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl methacrylate",
+                    "monomer2": "N-vinyl-N'-ethylurea"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone-methanol",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.8,
+                        "constant_2": 0.015
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price",
+                    "Q-value": {
+                        "constant_1": 0.17,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.5,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "N-vinyl-N'-ethylurea"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "butanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 20.0,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price",
+                    "Q-value": {
+                        "constant_1": 0.11,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.8,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Bull. Soc. Chim. Belg., 67, pp. 123-130, 1958",
+    "PDF_name": "DERIVES N-VINYLIQUES IV. - COPOLYMERISATION DE LA N-VINYL N'-ETHYLUREE"
+}

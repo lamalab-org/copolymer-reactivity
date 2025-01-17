@@ -1,0 +1,83 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "N-Vinylcarbazole",
+                "monomer2",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "photopolymerization",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.09,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "infrared spectrum",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "thermal polymerization",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.09,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "infrared spectrum",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Acrylonitrile",
+                "monomer2",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "photopolymerization",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "infrared spectrum",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1968.150060622",
+    "PDF_name": "Photo and Thermal Polymerization Sensitized by Donor-Acceptor Interaction. I. N-Vinylcarbazole-Acrylonitrile and Related Systems"
+}

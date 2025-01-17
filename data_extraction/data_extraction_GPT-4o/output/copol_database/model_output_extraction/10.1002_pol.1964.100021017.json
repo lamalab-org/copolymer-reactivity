@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Acrylonitrile",
+                "monomer2",
+                "4-Cyclopentene-1,3-dione"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.67,
+                        "constant_2": 0.21
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.6,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.26,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.74,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Methyl methacrylate",
+                "monomer2",
+                "4-Cyclopentene-1,3-dione"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 7.4,
+                        "constant_2": 0.083
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.13,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.1,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1964.100020821",
+    "PDF_name": "Copolymerization of 4-Cyclopentene-1,3-dione with Acrylonitrile and Methyl Methacrylate"
+}

@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-Hydroxyethyl methacrylate",
+                "2-[(2-(Ethoxycarbonyl)prop-2-en-1-yloxy)ethyl] phosphonic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.83,
+                        "constant_2": 0.42
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.17,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "nonlinear least square method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": "na"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-Hydroxyethyl methacrylate",
+                "Ethyl-2-[(2-(Dimethoxyphosphoryl)ethoxy) methyl]prop-2-en-ethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.28,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.18,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "nonlinear least square method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": "na"
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/app.48256",
+    "PDF_name": "Combination of nuclear magnetic resonance spectroscopy and nonlinear methods to analyze the copolymerization of phosphonic acid derivatives"
+}

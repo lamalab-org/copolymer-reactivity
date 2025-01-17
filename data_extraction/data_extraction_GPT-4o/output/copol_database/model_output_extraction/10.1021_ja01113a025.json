@@ -1,0 +1,101 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Methacrylic Acid",
+                "monomer2",
+                "Diethylaminoethyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.98
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.16,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "graphical method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.7,
+                        "constant_2": -1.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 0.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.015,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "graphical method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.7,
+                        "constant_2": -1.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Methacrylic Acid",
+                "monomer2",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.23,
+                        "constant_conf_2": 0.88
+                    },
+                    "determination_method": "graphical method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.7,
+                        "constant_2": -1.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ja01113a001",
+    "PDF_name": "Copolymerization_Behavior_of_Ionizable_Monomers.pdf"
+}

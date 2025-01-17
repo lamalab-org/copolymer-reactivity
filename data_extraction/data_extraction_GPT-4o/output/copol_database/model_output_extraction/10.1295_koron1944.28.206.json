@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Tetrafluoroethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "Radiation-induced",
+                    "solvent": "R-113",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.2,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "not provided",
+                    "Q-value": {
+                        "constant_1": 0.049,
+                        "constant_2": 0.92
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1246/nikkashi1948.28.206",
+    "PDF_name": "Radiation-Induced Copolymerization of Tetrafluoroethylene with Styrene"
+}
