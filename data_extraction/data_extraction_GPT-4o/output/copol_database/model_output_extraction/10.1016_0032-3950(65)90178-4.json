@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Phenylvinylphosphinic acid",
+                    "monomer2": "Acrylic acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.98
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Mayo and Lewis integrations",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 1.45
+                    },
+                    "e-Value": {
+                        "constant_1": 0.72,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 0.43
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Phenylvinylphosphinic acid",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.69
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": "Mayo and Lewis integrations",
+                    "Q-value": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.44
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": 1.2
+                    },
+                    "r_product": 0.22
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00552050",
+    "PDF_name": "alpha-PVP copolymerization with AA and AN"
+}

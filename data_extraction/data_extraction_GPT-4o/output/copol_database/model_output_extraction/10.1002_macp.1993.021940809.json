@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-cyclohexylmaleimide",
+                    "monomer2": "bis(2-ethylhexyl) itaconate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.34,
+                        "constant_2": 0.38
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1993.021940802",
+    "PDF_name": "Kinetic and ESR studies on radical polymerization. ESR and kinetic evidences for the penultimate effect in the radical-initiated copolymerization of N-cyclohexylmaleimide and bis(2-ethylhexyl) itaconate in benzene"
+}

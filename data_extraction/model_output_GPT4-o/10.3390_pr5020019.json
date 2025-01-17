@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methacrylic acid",
+                "polyethylene glycol methyl ether methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.07,
+                        "constant_2": 9.89
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.89,
+                        "constant_conf_2": 117.21
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.14,
+                        "constant_2": 26.56
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": -0.14,
+                        "constant_conf_2": -153.12
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/pr5020019",
+    "PDF_name": "Kinetics of the Aqueous-Phase Copolymerization of MAA and PEGMA Macromonomer.pdf"
+}

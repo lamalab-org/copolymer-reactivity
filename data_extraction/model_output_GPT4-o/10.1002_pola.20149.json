@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "methyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.29,
+                        "constant_2": 0.96
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.20149",
+    "PDF_name": "Monomer Reactivity Ratios for Acrylonitrile\u2013Methyl Acrylate Free-Radical Copolymerization"
+}

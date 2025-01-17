@@ -6,11 +6,9 @@ import copolextractor.image_processer as ip
 import copolextractor.utils as utils
 import os
 import json
-from copolextractor.mongodb_storage import CoPolymerDB
 
 
 failed_smiles_list = []
-db = CoPolymerDB()
 
 
 def process_pdf_files(
@@ -46,8 +44,8 @@ def process_pdf_files(
     prompt_text = prompter.get_prompt_template()
 
     for i, paper in enumerate(selected_papers):
-        filename = paper["pdf_name"]
-        file_path = os.path.join(pdf_folder, filename)
+        filename = paper["filename"]
+        file_path = os.path.join(pdf_folder, filename.replace('.json', '.pdf'))
 
         json_file_path = os.path.join(output_folder, filename.replace(".pdf", ".json"))
         if os.path.exists(json_file_path):
@@ -247,9 +245,6 @@ def process_files(input_folder, output_file):
                         "polymerization_type": polymerization_type,
                         "determination_method": determination_method,
                     }
-
-                    database = db.save_data(data)
-                    print(database)
 
                     results.append(result)
                     reaction_count += 1

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Phenylvinylphosphinic acid",
+                    "monomer2": "Methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 3.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo and Lewis intersection method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Phenylvinylphosphinic acid",
+                    "monomer2": "Methacrylic acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.36,
+                        "constant_2": 3.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.12,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo and Lewis intersection method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00550710",
+    "PDF_name": "COPOLYMERIZATION OF alpha-PHENYLVINYLPHOSPHINIC ACID WITH METHYL METHACRYLATE AND METHACRYLIC ACID"
+}

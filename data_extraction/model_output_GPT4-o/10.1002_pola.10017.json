@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-Isopropylacrylamide",
+                "Glycidyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "deuterated dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.39,
+                        "constant_2": 2.69
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "deuterated dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 2.66
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.2001",
+    "PDF_name": "Studies on Copolymerization of N-Isopropylacrylamide and Glycidyl Methacrylate"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "allyl methacrylate",
+                "butyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.35,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.37,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1016/0032-3861(92)90655-Q",
+    "PDF_name": "Statistical group transfer copolymerization. Monomer reactivity ratios for allyl methacrylate and n-butyl methacrylate"
+}

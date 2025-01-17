@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "9-(4-vinylbenzyl)-9H-carbazole"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "controlled radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.7,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.5,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "nonlinear least-squares fitting of the Mayo-Lewis equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.24522",
+    "PDF_name": "Nitroxide-Mediated Radical Copolymerization of Methyl Methacrylate Controlled with a Minimal Amount of 9-(4-Vinylbenzyl)-9H-Carbazole"
+}

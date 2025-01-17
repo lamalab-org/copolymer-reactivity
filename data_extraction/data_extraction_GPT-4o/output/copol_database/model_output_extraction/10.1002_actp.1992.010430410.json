@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Dimethyl diallyl ammonium chloride",
+                    "monomer2": "Vinyl acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.95,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.21,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/actp.1992.010430402",
+    "PDF_name": "Untersuchungen zur radikalischen Copolymerisation von Dimethyl-diallyl-ammoniumchlorid mit Vinylacetat und Funktionalisierungsreaktionen der Copolymere"
+}

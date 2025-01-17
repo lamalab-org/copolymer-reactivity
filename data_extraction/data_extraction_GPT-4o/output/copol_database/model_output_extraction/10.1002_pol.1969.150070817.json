@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Acrylonitrile",
+                "monomer2",
+                "Cinnamonnitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 6.4,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.0,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "graphical method",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.11
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 1.21
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Acrylonitrile",
+                "monomer2",
+                "Ethyl benzylidenecyanoacetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 18.0,
+                        "constant_2": -0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.0,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "graphical method",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.13
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 2.7
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Acrylonitrile",
+                "monomer2",
+                "Benzylidenemalononitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 6.2,
+                        "constant_2": -0.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.8,
+                        "constant_conf_2": 0.4
+                    },
+                    "determination_method": "graphical method",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.52
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 2.6
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1969.160070901",
+    "PDF_name": "Copolymerization of Acrylonitrile. I. Copolymerization with Styrene Derivatives Containing Nitrile Groups in the Side Chain"
+}

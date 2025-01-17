@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "isopropyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.47,
+                        "constant_2": 0.74
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "beta-methoxyethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.58
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl methacrylate",
+                    "monomer2": "isopropyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.89,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.21,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl methacrylate",
+                    "monomer2": "beta-methoxyethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.86,
+                        "constant_2": 1.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.11,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1968.160060607",
+    "PDF_name": "Determination of Propagation and Termination Rate Constants for Some Methacrylates in Their Radical Polymerizations"
+}

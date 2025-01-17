@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-Hydroxyethyl methacrylate",
+                "t-Butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-Dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.792,
+                        "constant_2": 0.51
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Mayo\u2013Lewis terminal model",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1016/S0032-3861(00)00109-7",
+    "PDF_name": "Monomer reactivity ratios and microstructural analysis of 2-hydroxyethyl methacrylate\u2013t-butyl acrylate copolymers"
+}

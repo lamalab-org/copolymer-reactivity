@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylamide",
+                "acrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.33,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "DNI procedure",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.26906",
+    "PDF_name": "Optimal Estimation of Reactivity Ratios for Acrylamide/Acrylic Acid Copolymerization"
+}

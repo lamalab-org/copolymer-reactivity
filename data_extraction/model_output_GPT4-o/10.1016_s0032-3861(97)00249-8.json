@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.887,
+                        "constant_2": 0.216
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mao-Huglin",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.006,
+                        "constant_2": 0.232
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mao-Huglin",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/S0032-3861(97)00249-8",
+    "PDF_name": "Monomer reactivity ratios of styrene\u2013butyl acrylate copolymers at low and high conversions"
+}

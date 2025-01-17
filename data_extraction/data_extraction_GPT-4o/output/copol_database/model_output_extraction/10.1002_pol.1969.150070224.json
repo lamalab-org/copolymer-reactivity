@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "Isobutyl Vinyl Ether"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-hexane",
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 1.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1969.160070312",
+    "PDF_name": "Photo and Thermal Polymerizations Sensitized by Donor-Acceptor Interaction. II. Photopolymerization and Electronic Spectroscopy of the Isobutyl Vinyl Ether-Acrylonitrile System"
+}

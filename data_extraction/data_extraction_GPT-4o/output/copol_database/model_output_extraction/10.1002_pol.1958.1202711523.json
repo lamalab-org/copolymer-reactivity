@@ -1,0 +1,181 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Vinyl Acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.0,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "integrated equation",
+                    "Q-value": {
+                        "constant_1": 0.008,
+                        "constant_2": 0.028
+                    },
+                    "e-Value": {
+                        "constant_1": -0.76,
+                        "constant_2": -0.3
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Vinyl Chloride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.2,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "integrated equation",
+                    "Q-value": {
+                        "constant_1": 0.004,
+                        "constant_2": 0.024
+                    },
+                    "e-Value": {
+                        "constant_1": -0.66,
+                        "constant_2": 0.2
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Methyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 70.0,
+                        "constant_2": 0.005
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "integrated equation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Vinylpyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "differential equation",
+                    "Q-value": {
+                        "constant_1": 0.025,
+                        "constant_2": 0.11
+                    },
+                    "e-Value": {
+                        "constant_1": -0.51,
+                        "constant_2": -1.64
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 85.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. XXVII, Pages 275-283 (1958)",
+    "PDF_name": "Copolymerization of Vinylene Carbonate"
+}

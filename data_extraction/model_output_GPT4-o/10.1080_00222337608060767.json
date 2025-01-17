@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "alpha-methacrylophenone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethylbenzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.77,
+                        "constant_2": 0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.25
+                    },
+                    "e-Value": {
+                        "constant_1": 1.68,
+                        "constant_2": -0.88
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethylbenzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.81,
+                        "constant_2": 0.174
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "Yezrielev-Brokhina-Roskin",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.25
+                    },
+                    "e-Value": {
+                        "constant_1": 1.68,
+                        "constant_2": -0.88
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222337608060767",
+    "PDF_name": "Free-Radical Copolymerization of Methyl Methacrylate and alpha-Methacrylophenone. I. Reactivity Ratios"
+}

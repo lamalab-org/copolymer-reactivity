@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "acroleindiethylacetal",
+                    "monomer2": "acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 11.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "acroleindiethylacetal",
+                    "monomer2": "maleic anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1978.0217901092",
+    "PDF_name": "Acroleindiethylacetal: Reaction with Free Radicals and Copolymerization"
+}

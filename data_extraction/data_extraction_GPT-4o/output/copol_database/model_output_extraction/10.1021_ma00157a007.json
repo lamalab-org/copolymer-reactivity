@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N,N-Dimethylacrylamide",
+                    "monomer2": "Sodium 2-acrylamido-2-methylpropanesulfonate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.26,
+                        "constant_2": 0.68
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N,N-Dimethylacrylamide",
+                    "monomer2": "Sodium 3-acrylamido-3-methylbutanoate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.99
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00156a021",
+    "PDF_name": "Water-Soluble Copolymers. 14. Potentiometric and Turbidimetric Studies of Water-Soluble Copolymers of Acrylamide: Comparison of Carboxylated and Sulfonated Copolymers"
+}

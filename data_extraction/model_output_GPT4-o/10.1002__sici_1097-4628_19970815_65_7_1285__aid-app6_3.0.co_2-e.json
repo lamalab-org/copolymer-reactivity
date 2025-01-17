@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4-Nitrophenyl Acrylate",
+                "Glycidyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "2-butanone",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.44,
+                        "constant_2": 1.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "F-R",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.699
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "2-butanone",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.37,
+                        "constant_2": 1.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "K-T",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.576
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "2-butanone",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.38,
+                        "constant_2": 1.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Extended K-T",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.532
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/(SICI)1097-4628(19970314)65:11<1285::AID-APP3>3.0.CO;2-3",
+    "PDF_name": "Copolymerization of 4-Nitrophenyl Acrylate with Glycidyl Methacrylate: Synthesis, Characterization, and Reactivity Ratios"
+}

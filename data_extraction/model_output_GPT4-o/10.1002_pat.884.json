@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,3,5,6-tetrafluorophenyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.47,
+                        "constant_2": 0.77
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.13
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "pentafluorophenyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.51
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.61
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "4-trifluoromethyl-2,3,5,6-tetrafluorophenyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.15,
+                        "constant_2": 0.86
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.29
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pat.884",
+    "PDF_name": "Property modification of poly(methyl methacrylate) through copolymerization with fluorinated aryl methacrylate monomers"
+}

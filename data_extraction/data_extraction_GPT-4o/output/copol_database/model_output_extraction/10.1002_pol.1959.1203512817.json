@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-Vinylethylurethane",
+                    "monomer2": "Vinyl acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.33,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price",
+                    "Q-value": {
+                        "constant_1": 0.132,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.79,
+                        "constant_2": null
+                    },
+                    "r_product": 0.109
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-Vinylethylurethane",
+                    "monomer2": "N-Vinylpyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.42,
+                        "constant_2": 2.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price",
+                    "Q-value": {
+                        "constant_1": 0.105,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -2.03,
+                        "constant_2": null
+                    },
+                    "r_product": 0.84
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1959.120351215",
+    "PDF_name": "Copolymerization of N-Vinylurethane"
+}

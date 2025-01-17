@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,2,2-Trifluoroethyl methacrylate",
+                "tert-Butyl \u03b1-trifluoromethacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 74.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 4.87,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.5,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "average of Fineman-Ross, Kelen-Tudos, and Extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.13,
+                        "constant_2": 0.53
+                    },
+                    "e-Value": {
+                        "constant_1": 0.98,
+                        "constant_2": 1.81
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.23857",
+    "PDF_name": "Kinetics of the Radical Copolymerization of 2,2,2-Trifluoroethyl methacrylate with tert-Butyl \u03b1-trifluoromethacrylate"
+}

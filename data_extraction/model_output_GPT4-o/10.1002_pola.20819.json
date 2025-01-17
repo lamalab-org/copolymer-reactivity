@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Ethyl alpha-hydroxymethylacrylate",
+                "Methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.06,
+                        "constant_2": 1.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.02,
+                        "constant_2": 1.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.20819",
+    "PDF_name": "Influence of Aggregate Formation in the Copolymerization of Ethyl alpha-Hydroxymethylacrylate with Methyl Methacrylate"
+}

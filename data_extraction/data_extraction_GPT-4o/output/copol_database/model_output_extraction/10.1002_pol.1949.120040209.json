@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Vinyl Carbazole"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.5,
+                        "constant_2": 0.012
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.825,
+                        "constant_conf_2": 0.0018
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Methacrylate",
+                    "monomer2": "Vinyl Carbazole"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "1,2-Dichloro-2-propene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.0,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.75,
+                        "constant_conf_2": 0.009
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Methacrylate",
+                    "monomer2": "1,2-Dichloro-2-propene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.5,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.825,
+                        "constant_conf_2": 0.0255
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science Vol. IV, pp. 215-218, 1949",
+    "PDF_name": "copolymerization_of_some_further_monomer_pairs.pdf"
+}

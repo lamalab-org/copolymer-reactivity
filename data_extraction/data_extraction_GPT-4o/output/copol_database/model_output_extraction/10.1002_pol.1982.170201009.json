@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Methacryloyl Fluoride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.083,
+                        "constant_2": 0.138
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": 2.22,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.31,
+                        "constant_2": null
+                    },
+                    "r_product": 0.012
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Methacrylate",
+                    "monomer2": "Methacryloyl Fluoride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.48,
+                        "constant_2": 0.81
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": 2.25,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.37,
+                        "constant_2": null
+                    },
+                    "r_product": 0.39
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1982.170200828",
+    "PDF_name": "Radical-Initiated Homo- and Copolymerizations of Methacryloyl Fluoride"
+}

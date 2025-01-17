@@ -1,0 +1,54 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "crotonic acid",
+                    "monomer2": "vinylpyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "bulk",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.85
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Finemann and Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.017
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "bulk",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.85
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Finemann and Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.017
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1967.110050819",
+    "PDF_name": "Copolymerization of Crotonic Acid with Vinylpyrrolidone"
+}

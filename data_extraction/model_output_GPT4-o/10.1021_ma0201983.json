@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "butyl acetate",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.621,
+                        "constant_2": 0.225
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1021/ma0201983",
+    "PDF_name": "Online Monitoring of Composition, Sequence Length, and Molecular Weight Distributions during Free Radical Copolymerization, and Subsequent Determination of Reactivity Ratios"
+}

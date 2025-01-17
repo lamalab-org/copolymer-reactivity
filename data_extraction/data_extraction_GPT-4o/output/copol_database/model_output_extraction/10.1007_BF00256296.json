@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "N-(2-hydroxyethyl)carbazolyl methacrylate",
+                "monomer2",
+                "methacryloyl β-hydroxyethyl-3,5-dinitrobenzoate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.35,
+                        "constant_2": 1.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "N-(2-hydroxyethyl)carbazolyl acrylate",
+                "monomer2",
+                "methacryloyl β-hydroxyethyl-3,5-dinitrobenzoate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00254460",
+    "PDF_name": "Intramolecular Charge Transfer Complexes 10. Radical Copolymers of Methacryloyl β-Hydroxyethyl-3,5-Dinitrobenzoate with N-(2-Hydroxyethyl)Carbazolyl Acrylate and Methacrylate"
+}

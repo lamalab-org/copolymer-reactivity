@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methacrylic macromonomer derived from Triton X-100",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.97,
+                        "constant_2": 0.95
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.92
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.99,
+                        "constant_2": 0.96
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.95
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.97,
+                        "constant_2": 0.95
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.92
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.10778",
+    "PDF_name": "Novel_Acrylic_Macromonomer_with_Amphiphilic_Character.pdf"
+}

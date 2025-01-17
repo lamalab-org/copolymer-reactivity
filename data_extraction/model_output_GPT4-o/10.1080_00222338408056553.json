@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylamide",
+                "n-butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "redox",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 34.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.29,
+                        "constant_2": 1.75
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.25
+                    },
+                    "determination_method": "least squares",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "redox",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.24,
+                        "constant_2": 1.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.27
+                    },
+                    "determination_method": "least squares",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.32,
+                        "constant_2": 1.357
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "least squares",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338408056553",
+    "PDF_name": "Reactivity_Ratios_in_the_Redox_Copolymerization_of_Acrylamide_and_n-Butyl_Acrylate_in_Dimethylformamide.pdf"
+}

@@ -1,0 +1,196 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylferrocene",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "differential form of the copolymer equation",
+                    "Q-value": {
+                        "constant_1": 0.145,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.47,
+                        "constant_2": null
+                    },
+                    "r_product": 0.2
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "curve-fitting technique",
+                    "Q-value": {
+                        "constant_1": 0.145,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.47,
+                        "constant_2": null
+                    },
+                    "r_product": 0.2
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.097,
+                        "constant_2": 2.91
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.043,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "integration method",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.28
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylferrocene",
+                    "monomer2": "methyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.63
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "integration method",
+                    "Q-value": {
+                        "constant_1": 1.16,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.39,
+                        "constant_2": null
+                    },
+                    "r_product": 0.52
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylferrocene",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 1.22
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.27,
+                        "constant_conf_2": 0.37
+                    },
+                    "determination_method": "integration method",
+                    "Q-value": {
+                        "constant_1": 0.79,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.07,
+                        "constant_2": null
+                    },
+                    "r_product": 0.64
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylferrocene",
+                    "monomer2": "acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.16
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "curve-fitting technique",
+                    "Q-value": {
+                        "constant_1": 0.05,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.73,
+                        "constant_2": null
+                    },
+                    "r_product": 0.024
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1971.150090405",
+    "PDF_name": "Free-Radical Homopolymerization and Copolymerization of Vinylferrocene"
+}

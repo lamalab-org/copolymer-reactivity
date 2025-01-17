@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl-4-styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 1.27,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": -0.98,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl-4-styrene",
+                "acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.27,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1987.021880413",
+    "PDF_name": "Copolymerisation_radicalaire_du_methyl-4_styrene_avec_le_methacrylate_de_methyle_ou_l_acrylonitrile.pdf"
+}

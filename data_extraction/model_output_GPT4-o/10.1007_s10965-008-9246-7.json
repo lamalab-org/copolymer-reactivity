@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "itaconic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.505,
+                        "constant_2": 1.928
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Q-e schemes",
+                    "Q-value": {
+                        "constant_1": 0.48,
+                        "constant_2": 0.75
+                    },
+                    "e-Value": {
+                        "constant_1": 1.23,
+                        "constant_2": 0.107
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.64,
+                        "constant_2": 1.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.61,
+                        "constant_2": 1.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/s10965-008-9246-7",
+    "PDF_name": "Study on monomer reactivity ratios of acrylonitrile/itaconic acid in aqueous deposited copolymerization system initiated by ammonium persulfate"
+}

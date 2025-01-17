@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methacrylamide",
+                    "monomer2": "Methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl alcohol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.47,
+                        "constant_2": 1.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 1.42
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methacrylic acid",
+                    "monomer2": "Methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 2.22
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methacrylic acid",
+                    "monomer2": "Methacrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.22
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 2.28
+                }
+            ]
+        }
+    ],
+    "source": "Bull. Soc. Chim. Belg., 59, pp. 443-448, 2 fig., 1950",
+    "PDF_name": "Copolymerisation de derives methacryliques"
+}

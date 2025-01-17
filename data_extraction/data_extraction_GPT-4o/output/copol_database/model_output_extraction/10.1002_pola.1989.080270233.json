@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Hydroxymethylacrylonitrile",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N-Methyl-2-pyrrolidone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.24,
+                        "constant_2": 0.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "curve fitting method",
+                    "Q-value": {
+                        "constant_1": 1.35,
+                        "constant_2": 0.49
+                    },
+                    "e-Value": {
+                        "constant_1": 0.63,
+                        "constant_2": 1.23
+                    },
+                    "r_product": 0.13
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Hydroxymethylacrylonitrile",
+                    "monomer2": "Methacrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N-Methyl-2-pyrrolidone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.29,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "curve fitting method",
+                    "Q-value": {
+                        "constant_1": 1.12,
+                        "constant_2": 0.49
+                    },
+                    "e-Value": {
+                        "constant_1": 0.81,
+                        "constant_2": 1.23
+                    },
+                    "r_product": 0.067
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Hydroxymethylacrylonitrile",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N-Methyl-2-pyrrolidone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.04
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "curve fitting method",
+                    "Q-value": {
+                        "constant_1": 0.49,
+                        "constant_2": 0.49
+                    },
+                    "e-Value": {
+                        "constant_1": 1.23,
+                        "constant_2": 1.23
+                    },
+                    "r_product": 0.016
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1989.080270405",
+    "PDF_name": "Radical-Initiated Homopolymerization and Copolymerization of alpha-Hydroxymethylacrylonitrile"
+}

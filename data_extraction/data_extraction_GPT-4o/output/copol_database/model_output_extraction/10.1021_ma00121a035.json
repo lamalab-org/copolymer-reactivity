@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Methylenebenzocyclobutene",
+                    "monomer2": "Methyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.025,
+                        "constant_conf_2": 0.025
+                    },
+                    "determination_method": "nonlinear least-squares analysis",
+                    "Q-value": {
+                        "constant_1": 1.35,
+                        "constant_2": -1.0
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.147
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "alpha-Methylenebenzocyclobutene",
+                    "monomer2": "Maleic Anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.025,
+                        "constant_2": 0.025
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 6.25e-05,
+                        "constant_conf_2": 6.25e-05
+                    },
+                    "determination_method": "nonlinear least-squares analysis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00125a053",
+    "PDF_name": "Radical Polymerization of alpha-Methylenebenzocyclobutene, a Cyclic Analog of alpha-Methylstyrene"
+}

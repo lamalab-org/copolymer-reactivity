@@ -1,0 +1,30 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Ethylene",
+                "Vinyl Acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-Butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.743,
+                        "constant_2": 1.515
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 0.007
+                    },
+                    "determination_method": "least-squares"
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1971.160090823",
+    "PDF_name": "Copolymerization of Ethylene and Vinyl Acetate at Low Pressure: Determination of the Kinetics by Sequential Sampling"
+}

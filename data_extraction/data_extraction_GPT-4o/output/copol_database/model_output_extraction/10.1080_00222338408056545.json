@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ic",
+                    "monomer2": "chlorostyrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.27,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 4.16,
+                        "constant_2": 1.18
+                    },
+                    "e-Value": {
+                        "constant_1": -0.35,
+                        "constant_2": 0.24
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ic",
+                    "monomer2": "chloroprene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 40.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": -0.02,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 7.26,
+                        "constant_2": 1.18
+                    },
+                    "e-Value": {
+                        "constant_1": -1.29,
+                        "constant_2": 0.24
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338408056545",
+    "PDF_name": "1-Butadienyl Sulfide Polymerization"
+}

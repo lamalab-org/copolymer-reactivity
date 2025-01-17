@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methacrylonitrile",
+                "p-methylstyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.205,
+                        "constant_2": 0.377
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.031,
+                        "constant_conf_2": 0.085
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.56
+                    },
+                    "e-Value": {
+                        "constant_1": -0.63,
+                        "constant_2": 1.1
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.227,
+                        "constant_2": 0.408
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.56
+                    },
+                    "e-Value": {
+                        "constant_1": -0.63,
+                        "constant_2": 1.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.1994.080321208",
+    "PDF_name": "Copolymerization of Methacrylonitrile with p-Methylstyrene"
+}

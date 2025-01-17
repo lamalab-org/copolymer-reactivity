@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylhydroquinone dibenzoate",
+                    "monomer2": "acrylic acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.95
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.002
+                    },
+                    "determination_method": "Mayo and Lewis method",
+                    "Q-value": {
+                        "constant_1": 1.43,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.06,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylhydroquinone dibenzoate",
+                    "monomer2": "methacrylic acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.91,
+                        "constant_2": 0.91
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.23,
+                        "constant_conf_2": 0.25
+                    },
+                    "determination_method": "Mayo and Lewis method",
+                    "Q-value": {
+                        "constant_1": 1.8,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.04,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00549755",
+    "PDF_name": "Copolymerization of vinylhydroquinone dibenzoate with acrylic and methacrylic acids"
+}

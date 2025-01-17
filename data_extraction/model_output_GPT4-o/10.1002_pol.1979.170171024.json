@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl acrylate",
+                "butadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.093,
+                        "constant_2": 0.72
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "curve-fitting I-intersection procedure",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": "na"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.088,
+                        "constant_2": 0.84
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "penultimate unit scheme",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": "na"
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pol.1979.170171201",
+    "PDF_name": "Evaluation of Monomer Reactivity Ratios of More Complex Copolymerization Schemes"
+}

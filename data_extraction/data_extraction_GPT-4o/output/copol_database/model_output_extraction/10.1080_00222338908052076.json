@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "di-L-menthyl itaconate",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.56,
+                        "constant_2": 0.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.76,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.29,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "di-L-menthyl itaconate",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 5.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "di-L-menthyl itaconate",
+                    "monomer2": "vinyl acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "di-L-menthyl itaconate",
+                    "monomer2": "N-cyclohexylmaleimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.31,
+                        "constant_2": 0.56
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338908052076",
+    "PDF_name": "Synthesis and Polymerization of Optically Active Di-L-Menthyl Itaconate"
+}

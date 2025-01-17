@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Butadiene-1-carboxylic acid",
+                "monomer2",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.55,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 6.0,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.11,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Butadiene-1-carboxylic acid",
+                "monomer2",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 11.0,
+                        "constant_2": 0.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 5.9,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1976.170140314",
+    "PDF_name": "Radical Polymerization of Butadiene-1-Carboxylic Acid"
+}

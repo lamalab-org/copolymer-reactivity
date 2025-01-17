@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.577,
+                        "constant_2": 0.783
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.186,
+                        "constant_conf_2": 0.129
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.235
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.528,
+                        "constant_2": 0.789
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.168,
+                        "constant_conf_2": 0.121
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.206
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/s00289-020-03123-5",
+    "PDF_name": "Determination of monomer reactivity ratios and thermal properties of poly(GMA-co-MMA) copolymers"
+}

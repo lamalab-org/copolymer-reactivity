@@ -1,0 +1,97 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl acrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 130.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.47,
+                        "constant_2": 2.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "Price-Alfrey Q-e scheme",
+                    "Q-value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 130.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 2.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "intersection method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl acrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "ammonia",
+                    "method": "bulk",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 4.5,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "carbon-hydrogen combustion analysis",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "na",
+    "PDF_name": "Copolymerization Characteristics of Methyl Acrylate and Methyl Methacrylate.pdf"
+}

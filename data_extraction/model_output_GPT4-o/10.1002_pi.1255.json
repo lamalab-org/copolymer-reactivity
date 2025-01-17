@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-bromophenylmaleimide",
+                "ethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.496,
+                        "constant_2": 0.716
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.177,
+                        "constant_conf_2": 0.166
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.716,
+                        "constant_2": 0.998
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.166,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-bromophenylmaleimide",
+                "butyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.197,
+                        "constant_2": 0.582
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.057,
+                        "constant_conf_2": 0.17
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.582,
+                        "constant_2": 1.635
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.17,
+                        "constant_conf_2": 0.418
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pi.1255",
+    "PDF_name": "Copolymerization of bromophenylmaleimide with ethyl or butyl methacrylate"
+}

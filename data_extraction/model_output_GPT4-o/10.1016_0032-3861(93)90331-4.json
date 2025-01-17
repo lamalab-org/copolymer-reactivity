@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 95.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.5344,
+                        "constant_2": 0.5922
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0312,
+                        "constant_conf_2": 0.0361
+                    },
+                    "determination_method": "new method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 95.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.53,
+                        "constant_2": 0.56
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "graphical intersection",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1016/0032-3861(93)90109-7",
+    "PDF_name": "A new linear method to calculate monomer reactivity ratios by using high conversion copolymerization data: terminal model"
+}

@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "gamma-methyl-alpha-methylene-gamma-butyrolactone",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.34
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "gamma-methyl-alpha-methylene-gamma-butyrolactone",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 3.0,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/macp.200900553",
+    "PDF_name": "An Investigation of Free Radical Copolymerization Kinetics of the Bio-renewable Monomer gamma-Methyl-alpha-methylene-gamma-butyrolactone with Methyl methacrylate and Styrene"
+}

@@ -32,7 +32,7 @@ def preprocess_data(
         data_files_to_combine):
 
     # Pre modeling filter
-    pre_model_filter(input_file_filter, output_file_filter)
+    pre_model_filter()
 
     # Pre process data
     pre_process(output_file_filter, output_file_processing)
@@ -52,7 +52,7 @@ def main():
 
     # Pre modeling filter
     input_file_filter = "./output/extracted_data_w_features_copol.json"
-    output_file_filter = "./output/extracted_data_w_features_filtered_copol.json"
+    output_file_filter = "all_data_filtered.json"
 
     # Pre-processing
     output_file_processing = "./output/processed_data_copol.csv"

@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "epsilon-Caprolactone",
+                "delta-Valerolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "enzyme-catalyzed",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.27,
+                        "constant_2": 0.39
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "enzyme-catalyzed",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.64
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.29
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "epsilon-Caprolactone",
+                "delta-Valerolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "metal-catalyzed",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "metal-catalyzed",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma302015e",
+    "PDF_name": "Nonlinear Method for Determining Reactivity Ratios of Ring-Opening Copolymerizations"
+}

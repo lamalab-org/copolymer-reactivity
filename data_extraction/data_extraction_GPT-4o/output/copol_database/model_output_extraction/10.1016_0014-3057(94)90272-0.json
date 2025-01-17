@@ -1,0 +1,66 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Methacrylate",
+                    "monomer2": "Methacrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "isopropyl alcohol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.63,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "isopropyl alcohol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.58,
+                        "constant_2": 0.29
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Yserielve-Brokhina-Roskin",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0014-3057(94)00111-1",
+    "PDF_name": "STUDY OF RADICAL METHYL METHACRYLATE-METHACRYLIC ACID COPOLYMERIZATION IN ISOPROPYL ALCOHOL BY DYNAMIC LASER SCATTERING AND 13C-NMR SPECTROSCOPY"
+}

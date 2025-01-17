@@ -1,0 +1,35 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "acrylic acid",
+                "monomer2",
+                "2-vinylpyridine"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.19,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Mayo-Walling",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Bull. Soc. Chim. Belg., 64, pp. 173-188, 8 fig., 1955",
+    "PDF_name": "Copolymeres ordinaires et Copolymeres greffes"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "controlled/living radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.018,
+                        "constant_2": 0.177
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.025
+                    },
+                    "determination_method": "extended Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "controlled/living radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.016,
+                        "constant_2": 0.179
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.053,
+                        "constant_conf_2": 0.023
+                    },
+                    "determination_method": "MH",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/app.34102",
+    "PDF_name": "A_New_General_Approach_to_Determine_More_Accurate_Comonomer_Reactivity_Ratios_in_Controlled_Living_Radical_Copolymerization_Systems.pdf"
+}

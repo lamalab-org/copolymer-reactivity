@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-methacryloxy tropone",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.17,
+                        "constant_2": 0.68
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.35,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-methacryloxy tropone",
+                    "monomer2": "ethyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.1,
+                        "constant_2": 0.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.7,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00254898",
+    "PDF_name": "Polymer Bulletin 34, 27-30 (1995)"
+}

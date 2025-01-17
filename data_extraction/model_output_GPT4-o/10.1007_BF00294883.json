@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-methacryloxy tropone",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.17,
+                        "constant_2": 0.68
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.35,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo-Lewis equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-methacryloxy tropone",
+                "ethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 3.1,
+                        "constant_2": 0.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.7,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Mayo-Lewis equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00330892",
+    "PDF_name": "Copolymerization of 2-methacryloxy tropone with methyl methacrylate and ethyl acrylate"
+}

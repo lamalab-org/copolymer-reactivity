@@ -1,0 +1,181 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Muconic acid",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "curve-fitting and Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.8,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Muconic acid",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.0,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "curve-fitting and Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.7,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.73,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl muconate",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.56,
+                        "constant_2": 0.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl muconate",
+                    "monomer2": "2-vinylpyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl muconate",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.2,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.6,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1977.170150915",
+    "PDF_name": "Radical Polymerization of Muconic Acid and Ethyl Muconate"
+}

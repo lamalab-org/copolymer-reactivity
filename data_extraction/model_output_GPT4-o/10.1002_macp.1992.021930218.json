@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl alpha-cyanocinnamate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.397,
+                        "constant_2": -0.052
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.082,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "terminal",
+                    "Q-value": {
+                        "constant_1": -0.2,
+                        "constant_2": 0.024
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.239,
+                        "constant_2": 1.388
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.056,
+                        "constant_conf_2": 0.291
+                    },
+                    "determination_method": "penultimate",
+                    "Q-value": {
+                        "constant_1": 0.049,
+                        "constant_2": 0.912
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "fumaroyldipyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.167,
+                        "constant_2": -0.028
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.016,
+                        "constant_conf_2": 0.081
+                    },
+                    "determination_method": "terminal",
+                    "Q-value": {
+                        "constant_1": -0.269,
+                        "constant_2": 0.032
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.118,
+                        "constant_2": 0.271
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.065,
+                        "constant_conf_2": 0.074
+                    },
+                    "determination_method": "penultimate",
+                    "Q-value": {
+                        "constant_1": 0.152,
+                        "constant_2": 0.522
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1992.021930301",
+    "PDF_name": "Analysis of the linear methods of determining copolymerization reactivity ratios"
+}

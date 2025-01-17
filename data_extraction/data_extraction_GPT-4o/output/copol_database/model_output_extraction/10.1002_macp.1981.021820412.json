@@ -1,0 +1,54 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Benzyl Methacrylate",
+                    "monomer2": "Maleic Anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.188,
+                        "constant_2": 0.003
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.035,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.0006
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.116,
+                        "constant_2": 0.231
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.093,
+                        "constant_conf_2": 0.027
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.027
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1981.021820512",
+    "PDF_name": "The Influence of Molecular Interaction on Polymerization, 5"
+}

@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "meta-divinylbenzene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.41,
+                        "constant_2": 0.61
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "least-squares regression analysis",
+                    "Q-value": {
+                        "constant_1": 1.1,
+                        "constant_2": -0.8
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "para-divinylbenzene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 1.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "least-squares regression analysis",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/10601326808051881",
+    "PDF_name": "Monomer Reactivity Ratios for the Copolymerization of Methyl Methacrylate with Pure Meta- and Pure Para-Divinylbenzene"
+}

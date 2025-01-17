@@ -1,0 +1,161 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Glycidyl Methacrylate",
+                    "monomer2": "Butyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.79
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.74
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.75,
+                        "constant_2": 0.69
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.87,
+                        "constant_2": 0.38
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.57
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Butyl Methacrylate",
+                    "monomer2": "Methacrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.11,
+                        "constant_2": 0.53
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": -0.02
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.59
+                },
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.75
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.72,
+                        "constant_2": -0.23
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.9
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Glycidyl Methacrylate",
+                    "monomer2": "Methacrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.85
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.55,
+                        "constant_2": 0.65
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00549755",
+    "PDF_name": "COMPOSITION OF TERNARY COPOLYMERS AND COPOLYMERIZATION CONSTANTS OF BUTYL METHACRYLATE, GLYCIDYL METHACRYLATE AND METHACRYLIC ACID"
+}

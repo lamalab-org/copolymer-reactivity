@@ -1,0 +1,116 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Maleic Anhydride",
+                    "monomer2": "N-Phenylmaleimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.6657,
+                        "constant_2": -0.0009
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.029,
+                        "constant_conf_2": 0.0381
+                    },
+                    "determination_method": "nonlinear least squares",
+                    "Q-value": {
+                        "constant_1": 14.0414,
+                        "constant_2": 0.058
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.6721,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.029,
+                        "constant_conf_2": 0.0372
+                    },
+                    "determination_method": "nonlinear least squares",
+                    "Q-value": {
+                        "constant_1": 14.0414,
+                        "constant_2": 0.058
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0091,
+                        "constant_2": 10.0179
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0176,
+                        "constant_conf_2": 0.0313
+                    },
+                    "determination_method": "penultimate mu model",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0017,
+                        "constant_2": 11.0025
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0176,
+                        "constant_conf_2": 0.0305
+                    },
+                    "determination_method": "penultimate mu model",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 28, 795-801 (1990)",
+    "PDF_name": "A Study of the Relative Reactivity of Maleic Anhydride and Some Maleimides in Free Radical Copolymerization and Terpolymerization"
+}

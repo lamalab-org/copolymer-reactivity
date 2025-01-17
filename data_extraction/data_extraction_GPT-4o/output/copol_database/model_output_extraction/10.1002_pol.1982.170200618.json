@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Glycidyl methacrylate",
+                    "monomer2": "n-Butyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.15,
+                        "constant_2": 0.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.14,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Yezrielev method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Glycidyl methacrylate",
+                    "monomer2": "Isobutyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.27,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Yezrielev method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Glycidyl methacrylate",
+                    "monomer2": "2-Ethylhexyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.32,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.14,
+                        "constant_conf_2": 0.009
+                    },
+                    "determination_method": "Yezrielev method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1982.170200619",
+    "PDF_name": "Copolymerization of Glycidyl Methacrylate with Alkyl Acrylate Monomers"
+}

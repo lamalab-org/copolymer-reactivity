@@ -1,0 +1,54 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-vinyl-tert-butylcarbamate",
+                    "monomer2": "vinylacetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.14,
+                        "constant_2": 0.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.12,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1984.170220622",
+    "PDF_name": "Copolymers of Vinylamine and Vinylalcohol by Acid Hydrolysis of Poly(N-Vinyl-tert-Butylcarbamate-co-Vinylacetate): Evaluation of Reactivity Ratios"
+}

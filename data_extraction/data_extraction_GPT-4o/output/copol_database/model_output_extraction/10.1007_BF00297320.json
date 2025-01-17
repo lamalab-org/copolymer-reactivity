@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "3-vinyl thiophene",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.25,
+                        "constant_2": 0.563
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "nonlinear least squares error-in-variables",
+                    "Q-value": {
+                        "constant_1": 1.8,
+                        "constant_2": 2.3
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.141
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "3-vinyl thiophene",
+                    "monomer2": "butyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.499,
+                        "constant_2": 0.386
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.14
+                    },
+                    "determination_method": "nonlinear least squares error-in-variables",
+                    "Q-value": {
+                        "constant_1": 2.34,
+                        "constant_2": 5.04
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.193
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00295721",
+    "PDF_name": "A re-evaluation of the reactivity ratios of 3-vinyl thiophene in copolymerization with butyl acrylate and methyl methacrylate"
+}

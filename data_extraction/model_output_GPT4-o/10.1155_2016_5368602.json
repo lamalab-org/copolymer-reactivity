@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4-Acryloyl-1,2,2,6,6-pentamethyl-piperidinol",
+                "Methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "photoinduced",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.353,
+                        "constant_2": 0.168
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1155/2016/5386602",
+    "PDF_name": "Photoinduced Copolymerization of APMP-MMA: The Role of Reactive Hindered Amine APMP"
+}

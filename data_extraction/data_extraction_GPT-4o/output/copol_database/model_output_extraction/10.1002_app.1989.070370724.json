@@ -1,0 +1,186 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-methacryloyloxyphthalimide",
+                    "monomer2": "methyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.223,
+                        "constant_2": 0.208
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.097,
+                        "constant_conf_2": 0.029
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 0.254
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.147,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.049,
+                        "constant_conf_2": 0.039
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 0.254
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-methacryloyloxyphthalimide",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.441,
+                        "constant_2": 0.704
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.179,
+                        "constant_conf_2": 0.11
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 1.014
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.37,
+                        "constant_2": 0.641
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.254,
+                        "constant_conf_2": 0.239
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 1.014
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-methacryloyloxyphthalimide",
+                    "monomer2": "acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.496,
+                        "constant_2": 0.228
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.162,
+                        "constant_conf_2": 0.019
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 0.341
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.4,
+                        "constant_2": 0.223
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.211,
+                        "constant_conf_2": 0.021
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 0.341
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 37, 2051-2058 (1989)",
+    "PDF_name": "Estimation of Reactivity Ratios of N-Methacryloyloxyphthalimide Copolymers by 1H NMR"
+}

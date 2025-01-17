@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Acetate of isopropenyl",
+                "monomer2",
+                "Acetate of vinyl"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.018,
+                        "constant_2": 0.018
+                    },
+                    "e-Value": {
+                        "constant_1": -0.61,
+                        "constant_2": -0.61
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Acetate of isopropenyl",
+                "monomer2",
+                "Chloride of vinyl"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.2,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.028,
+                        "constant_2": 0.015
+                    },
+                    "e-Value": {
+                        "constant_1": -0.19,
+                        "constant_2": -0.97
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Acetate of isopropenyl",
+                "monomer2",
+                "Methacrylate of methyl"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 30.0,
+                        "constant_2": 0.017
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.64,
+                        "constant_2": 0.021
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": -0.82
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. V, No. 1, Pages 55-67",
+    "PDF_name": "Vitesse de Polymérisation et de Copolymérisation de l'Acétate d'Isopropényle"
+}

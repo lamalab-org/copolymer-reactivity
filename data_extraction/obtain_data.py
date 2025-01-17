@@ -3,6 +3,7 @@ from copolextractor.PDF_download import main as pdf_download
 from copolextractor.predownloadfilter.pre_download_filter import main as pre_download_filter
 from copolextractor.crossref_search import main as crossref_search
 from copolextractor.extraction_with_GPT_PDF import main as extractor
+from copolextractor.save_data_in_database import main as save_data
 
 
 def obtain_data(
@@ -47,6 +48,9 @@ def obtain_data(
         pdf_folder,
         output_file_data_extraction,
     )
+
+    # Save data in database
+    save_data(output_folder_data_extraction)
 
 
 def main():

@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-(2,4,6-tribromophenyl)maleimide",
+                "methyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.095,
+                        "constant_2": 2.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.045,
+                        "constant_conf_2": 0.142
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.42,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-(2,4,6-tribromophenyl)maleimide",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.037,
+                        "constant_2": 4.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.042,
+                        "constant_conf_2": 0.23
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/macp.1993.021940711",
+    "PDF_name": "Copolymerization_and_copolymers_of_N-(2,4,6-tribromophenyl)maleimide_with_methyl_acrylate_and_methyl_methacrylate.pdf"
+}
