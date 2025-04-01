@@ -58,6 +58,8 @@ def train_and_evaluate(df_filtered, transformer, param_grid):
     - r2_test_list: List of R2 scores for each fold.
     """
 
+    df_filtered.dropna(subset=['r1', 'r2'], inplace=True)
+
     kf = KFold(n_splits=10, shuffle=True, random_state=42)
     pt = PowerTransformer(method="yeo-johnson")
     all_y_true, all_y_pred = [], []
@@ -75,6 +77,8 @@ def train_and_evaluate(df_filtered, transformer, param_grid):
 
         y_train = pt.fit_transform(train["r1r2"].values.reshape(-1, 1)).ravel()
         y_test = pt.transform(test["r1r2"].values.reshape(-1, 1)).ravel()
+
+
 
         X_train = transformer.fit_transform(train)
         X_test = transformer.transform(test)
@@ -107,7 +111,8 @@ def train_and_evaluate(df_filtered, transformer, param_grid):
         all_y_pred.extend(y_pred_test_inv)
 
         # Randomly select a subset for plotting
-        test_indices = np.random.choice(len(y_test_true_inv), 50, replace=False)
+        n_samples = min(50, len(y_test_true_inv))
+        test_indices = np.random.choice(len(y_test_true_inv), n_samples, replace=False)
         y_test_true_selected = y_test_true_inv[test_indices]
         y_pred_test_selected = y_pred_test_inv[test_indices]
 
@@ -176,28 +181,29 @@ def preprocess_and_combine(df_filtered, df_filtered_flipped):
     return combined_df
 
 
-def main(data, data_flipped, combined):
-    if combined:
-        combined_df = preprocess_and_combine(data, data_flipped)
-    else:
-        combined_df = pd.read_csv(data)
+def main(data):
+    print("staring training of xgboost model")
 
-    print(combined_df["polymerization_type"].unique())
+    df = pd.read_csv(data)
+
+    df = df.replace(['na', 'NA', 'null', 'NULL', '', 'None', 'none', 'nan'], np.nan)
+
+    print(df["polymerization_type"].unique())
 
     # Ensure group_id column exists
-    if "group_id" not in combined_df.columns:
+    if "group_id" not in df.columns:
         print("Creating group_id column...")
-        combined_df["group_id"] = combined_df.apply(
+        df["group_id"] = df.apply(
             lambda row: tuple(sorted([row["monomer1_s"], row["monomer2_s"]])), axis=1
         )
 
-    if "LogP" not in combined_df.columns:
-        print("LogP column not found. Calculating LogP values...")
-        combined_df["LogP"] = combined_df["solvent"].apply(
-            lambda solvent: utils.calculate_logP(utils.name_to_smiles(solvent)) if utils.name_to_smiles(solvent) else None
-        )
+    mol1_cols = [col for col in df.columns if col.startswith('monomer1_data_')]
+    mol2_cols = [col for col in df.columns if col.startswith('monomer2_data_')]
+    condition_cols = ['LogP', 'temperature', 'method_1', 'method_2',
+                      'polymerization_type_1', 'polymerization_type_2']
+    numerical_features = mol1_cols + mol2_cols + condition_cols
 
-    combined_df.dropna(subset=numerical_features, inplace=True)
+    df.dropna(subset=numerical_features, inplace=True)
 
     param_grid = {
         'n_estimators': [100, 500, 1000, 5000],
@@ -211,7 +217,7 @@ def main(data, data_flipped, combined):
         'reg_lambda': np.linspace(0, 1, 10)
     }
 
-    all_y_true, all_y_pred, mse_list, r2_list = train_and_evaluate(combined_df, transformer, param_grid)
+    all_y_true, all_y_pred, mse_list, r2_list = train_and_evaluate(df, transformer, param_grid)
 
     mse_avg = np.mean(mse_list)
     r2_avg = np.mean(r2_list)
@@ -219,6 +225,10 @@ def main(data, data_flipped, combined):
     print(f"Average Test MSE: {mse_avg:.4f}")
     print(f"Average Test R2: {r2_avg:.4f}")
 
+
+if __name__ == "__main__":
+    data = "../../copol_prediction/output/processed_data.csv"
+    main(data)
 
 
 

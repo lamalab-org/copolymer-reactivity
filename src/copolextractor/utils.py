@@ -65,7 +65,7 @@ def canonicalize_smiles(smiles: str) -> str:
 @backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_time=10)
 def cactus_request_w_backoff(inp, rep="SMILES"):
     url = CACTUS.format(inp, rep)
-    response = requests.get(url, allow_redirects=True, timeout=10)
+    response = requests.get(url, allow_redirects=True, timeout=5)
     response.raise_for_status()
     resp = response.text
     if "html" in resp:
@@ -76,22 +76,44 @@ def cactus_request_w_backoff(inp, rep="SMILES"):
 cache = dc.Cache("cache")
 
 
-@cache.memoize()
-def name_to_smiles(name: str) -> str:
+def name_to_smiles(name: str, force_retry: bool = True) -> str:
     """Use the chemical name resolver https://cactus.nci.nih.gov/chemical/structure.
     If this does not work, use pubchem.
+
+    Args:
+        name: Chemical name to convert
+        force_retry: If True, attempts online lookup for None values.
+                    If False, uses only cached values.
     """
-    try:
-        smiles = cactus_request_w_backoff(name, rep="SMILES")
-        if smiles is None:
-            raise Exception
-        return canonicalize_smiles(smiles)
-    except Exception:
+    cache_key = f"name_to_smiles_{name}"
+
+    # Get from cache
+    cached_value = cache.get(cache_key)
+
+    # If we have a cached value and we're not force retrying, return it
+    # (even if it's None)
+    if not force_retry:
+        return cached_value
+
+    # Only proceed with conversion if we're force retrying and the cached value is None
+    if cached_value is None:
         try:
-            compound = pcp.get_compounds(name, "name")
-            return canonicalize_smiles(compound[0].canonical_smiles)
+            smiles = cactus_request_w_backoff(name, rep="SMILES")
+            if smiles is None:
+                raise Exception
+            result = canonicalize_smiles(smiles)
         except Exception:
-            return None
+            try:
+                compound = pcp.get_compounds(name, "name")
+                result = canonicalize_smiles(compound[0].canonical_smiles)
+            except Exception:
+                result = None
+
+        # Cache the result
+        cache.set(cache_key, result)
+        return result
+
+    return cached_value
 
 
 @cache.memoize()
@@ -125,3 +147,4 @@ def cactus_request_w_backoff_name(smiles, rep="name"):
     if "html" in resp:
         return None
     return resp
+

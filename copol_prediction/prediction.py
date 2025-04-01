@@ -1,6 +1,6 @@
 from copolextractor.pre_model_filter import main as pre_model_filter
 from copolextractor.preprocess_data import main as pre_process
-from copolextractor.model import main as model
+from copolextractor.model_XGBoost import main as model
 
 
 def combine_csv_files(csv_files, output_file_combined):
@@ -43,7 +43,8 @@ def preprocess_data(
         combined_csv_file = "./output/combined_data.csv"
         combine_csv_files(data_files_to_combine, combined_csv_file)
         training_data = combined_csv_file  # Use the combined CSV file as the input data
-
+    else:
+        training_data = output_file_processing
     # model
     model(training_data)
 

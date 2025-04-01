@@ -4,6 +4,51 @@ from openai import OpenAI
 import copolextractor.utils as utils
 import os
 import json
+import numpy as np
+
+
+# Global cache for embeddings
+embedding_cache = {}
+
+
+def extract_nested_fields(df):
+    """
+    Extracts nested fields from the reaction_conditions column
+
+    Args:
+        df (pd.DataFrame): Input DataFrame containing reaction_conditions column
+
+    Returns:
+        pd.DataFrame: DataFrame with extracted fields as separate columns
+    """
+    # Extract fields from reaction_conditions
+    if 'reaction_conditions' in df.columns:
+        # Method
+        df['method'] = df['reaction_conditions'].apply(
+            lambda x: x.get('method') if isinstance(x, dict) else None
+        )
+
+        # Polymerization type
+        df['polymerization_type'] = df['reaction_conditions'].apply(
+            lambda x: x.get('polymerization_type') if isinstance(x, dict) else None
+        )
+
+        # Temperature
+        df['temperature'] = df['reaction_conditions'].apply(
+            lambda x: x.get('temperature') if isinstance(x, dict) else None
+        )
+
+        # Solvent
+        df['solvent'] = df['reaction_conditions'].apply(
+            lambda x: x.get('solvent') if isinstance(x, dict) else None
+        )
+
+        # Reaction constants
+        df['r_values'] = df['reaction_conditions'].apply(
+            lambda x: x.get('reaction_constants') if isinstance(x, dict) else None
+        )
+
+    return df
 
 
 # Function: Filter data based on the filters
@@ -99,9 +144,6 @@ def create_flipped_dataset(df_features):
         )
         flipped_rows.append(flipped_row)
     return pd.DataFrame(flipped_rows)
-
-# Global cache for embeddings
-embedding_cache = {}
 
 
 # Load existing embeddings from file if available
@@ -203,6 +245,74 @@ def process_embeddings(df, client, column_name, prefix):
     return df
 
 
+def process_logp(df):
+    """
+    Process LogP values for solvents in the dataframe.
+    Returns the dataframe with added LogP column.
+    """
+    # File to store the cache
+    CACHE_FILE = "./output/logp_cache.json"
+
+    if "LogP" not in df.columns:
+        print("LogP column not found. Calculating LogP values...")
+
+        # Load existing cache if available
+        smiles_cache = {}
+        if os.path.exists(CACHE_FILE):
+            try:
+                with open(CACHE_FILE, 'r') as f:
+                    smiles_cache = json.load(f)
+                print(f"Loaded {len(smiles_cache)} cached values")
+            except json.JSONDecodeError:
+                print("Cache file corrupted, starting with empty cache")
+
+        def get_cached_logp(solvent):
+            # Get SMILES for the solvent
+            smiles = utils.name_to_smiles(solvent)
+            if not smiles:
+                return None
+
+            # If SMILES is already in cache, return cached value
+            if smiles in smiles_cache:
+                return smiles_cache[smiles]
+
+            # Otherwise calculate LogP and store in cache using SMILES as key
+            print(f"Calculating LogP for SMILES: {smiles} (solvent: {solvent})")
+            logp = utils.calculate_logP(smiles)
+            smiles_cache[smiles] = logp
+
+            # Save updated cache to file
+            with open(CACHE_FILE, 'w') as f:
+                json.dump(smiles_cache, f, indent=2)
+
+            return logp
+
+        # Process LogP values with progress tracking
+        total_solvents = len(df["solvent"].unique())
+        print(f"\nProcessing LogP values for {total_solvents} unique solvents...")
+
+        # First create a mapping of all unique solvents to their LogP values
+        unique_solvents = df["solvent"].unique()
+        solvent_to_logp = {}
+
+        for i, solvent in enumerate(unique_solvents, 1):
+            if pd.isna(solvent):
+                solvent_to_logp[solvent] = np.nan
+                continue
+
+            logp = get_cached_logp(solvent)
+            solvent_to_logp[solvent] = logp
+
+            if i % 10 == 0 or i == total_solvents:
+                print(f"Processed {i}/{total_solvents} solvents ({(i / total_solvents * 100):.1f}%)")
+
+        # Then map these values to the dataframe
+        df["LogP"] = df["solvent"].map(solvent_to_logp)
+        print("LogP calculation completed!")
+
+    return df
+
+
 def main(input_file, output_file):
     # Load JSON data
     with open(input_file, "r") as file:
@@ -214,6 +324,9 @@ def main(input_file, output_file):
 
     # Convert to DataFrame
     df = pd.DataFrame(filtered_data)
+
+    # Extract nested fields
+    df = extract_nested_fields(df)
 
     # Extract relevant features and molecular properties
     df = extract_features(df)
@@ -232,7 +345,7 @@ def main(input_file, output_file):
     # Save updated embeddings to file
     save_embeddings(embedding_cache)
 
-    # Add other extracted columns
+    # Extract r-values
     df["r1"] = df["r_values"].apply(
         lambda x: x["constant_1"] if isinstance(x, dict) and "constant_1" in x else None
     )
@@ -240,44 +353,45 @@ def main(input_file, output_file):
         lambda x: x["constant_2"] if isinstance(x, dict) and "constant_2" in x else None
     )
 
+    # Remove r-values < 0
     df = df[(df["r1"] >= 0) & (df["r2"] >= 0)]
 
-    if "LogP" not in df.columns:
-        print("LogP column not found. Calculating LogP values...")
-        df["LogP"] = df["solvent"].apply(
-            lambda solvent: utils.calculate_logP(utils.name_to_smiles(solvent)) if utils.name_to_smiles(solvent) else None
-        )
-
-    # Drop rows with missing required values
-    df = df.dropna(
-        subset=[
-            "r1",
-            "r2",
-            "monomer1_s",
-            "monomer2_s",
-            "temperature",
-        ]
-    )
-
-    df['r_product']= df['r1'] * df ['r2']
+    # Calculate r-product
+    df['r_product'] = df['r1'] * df['r2']
 
     # Set solvent to "bulk" if polymerization type is "bulk"
     df.loc[df["polymerization_type"] == "bulk", "solvent"] = "bulk"
+    df["solvent"].replace(['na', 'NA', 'null', 'NULL', None, '', 'nan'], np.nan, inplace=True)
 
-    # Drop rows with missing solvent
-    df = df.dropna(subset=["solvent"])
+    # Process LogP values
+    df = process_logp(df)
 
-    print(f"Filtered and processed datapoints: {len(df)}")
+    # Define column groups that should not contain NaN values
+    mol1_cols = [col for col in df.columns if col.startswith('monomer1_data_')]
+    mol2_cols = [col for col in df.columns if col.startswith('monomer2_data_')]
+    condition_cols = ['LogP', 'temperature', 'method_1', 'method_2',
+                      'polymerization_type_1', 'polymerization_type_2']
+    target_cols = ['r1', 'r2', 'r_product']
+    names = ['monomer1_s', 'monomer2_s']
 
-    # Create flipped dataset
-    df_flipped = create_flipped_dataset(df)
+    # Combine all columns that should not contain NaN
+    columns_to_check = mol1_cols + mol2_cols + condition_cols + target_cols + names
+
+    # Count NaN values before dropping
+    nan_counts = df[columns_to_check].isna().sum()
+    print("\nNaN counts before filtering:")
+    print(nan_counts[nan_counts > 0])  # Only show columns with NaN values
+
+    # Drop rows with NaN in any of the specified columns
+    df_cleaned = df.dropna(subset=columns_to_check)
+
+    # Print information about dropped rows
+    rows_dropped = len(df) - len(df_cleaned)
+    print(f"\nRows dropped due to NaN values: {rows_dropped}")
+    print(f"Remaining rows: {len(df_cleaned)}")
 
     # Save the results
-    df.to_csv(output_file, index=False)
-    df_flipped.to_csv(output_file.replace(".csv", "_flipped.csv"), index=False)
+    df_cleaned.to_csv(output_file, index=False)
 
-    print(
-        f"Processed data saved to {output_file} and flipped data to {output_file.replace('.csv', '_flipped.csv')}."
-    )
-    print(f"Number of datapoints in {output_file}: {len(df)}")
-    print(f"Number of datapoints in flipped data: {len(df_flipped)}")
+    print(f"Processed data saved to {output_file}")
+    print(f"Final number of datapoints: {len(df_cleaned)}")
