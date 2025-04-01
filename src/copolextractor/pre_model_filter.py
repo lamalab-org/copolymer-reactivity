@@ -96,7 +96,7 @@ def convert_mongo_document(doc):
     elif str(type(doc)) == "<class 'bson.objectid.ObjectId'>":
         return str(doc)
     elif isinstance(doc, datetime):
-        return doc.isoformat()  # Konvertiert datetime zu ISO-Format String
+        return doc.isoformat()
     else:
         return doc
 
@@ -139,7 +139,6 @@ def load_and_filter_data(source: Optional[str] = None, output_file: Optional[str
 
 
 def main():
-    # Example usage
     # Load all data
     all_data = load_and_filter_data(output_file="all_data_filtered.json")
     print(f"Total entries processed: {len(all_data)}")

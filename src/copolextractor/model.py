@@ -449,8 +449,7 @@ def train_model(model, train_loader, test_loader, num_epochs=100, overfit_mode=T
                 "architecture": type(model).__name__,
                 "epochs": num_epochs,
                 "optimizer": type(optimizer).__name__,
-                "loss_metric": "R²",  # Updated to show we're using R²
-                # ... rest of your config ...
+                "loss_metric": "R²",
             }
         )
 
@@ -724,7 +723,9 @@ def evaluate_model(model, dataloader):
 
 def prepare_data_from_csv(csv_path):
     print("Loading data from CSV...")
-    df = pd.read_csv(csv_path)
+    # Define NA values to be recognized
+    na_values = ['', 'NA', 'na', 'N/A', 'n/a', 'NaN', 'nan', 'NULL', 'null', '#N/A']
+    df = pd.read_csv(csv_path, na_values=na_values)
     print(f"Initial data shape: {df.shape}")
 
     # Define column groups
@@ -734,7 +735,13 @@ def prepare_data_from_csv(csv_path):
                       'polymerization_type_1', 'polymerization_type_2']
     target_cols = ['r1', 'r2', 'r_product']
 
-    # Check for complete duplicates before any processing
+    # Drop rows with any NaN values in important columns
+    all_important_cols = mol1_cols + mol2_cols + condition_cols + target_cols
+    print(f"\nRows with NaN values: {df[all_important_cols].isna().any(axis=1).sum()}")
+    df = df.dropna(subset=all_important_cols)
+    print(f"Shape after NaN removal: {df.shape}")
+
+    # Check for complete duplicates
     all_relevant_cols = mol1_cols + mol2_cols + condition_cols + target_cols
     duplicates_mask = df.duplicated(subset=all_relevant_cols, keep='first')
     n_duplicates = duplicates_mask.sum()
@@ -752,23 +759,16 @@ def prepare_data_from_csv(csv_path):
         df = df.drop_duplicates(subset=all_relevant_cols, keep='first')
         print(f"\nRows after duplicate removal: {len(df)}")
 
-    # Fill NaN values
-    df[mol1_cols] = df[mol1_cols].fillna(0)
-    df[mol2_cols] = df[mol2_cols].fillna(0)
-    df[condition_cols] = df[condition_cols].fillna(0)
-
-    # Create unique molecular feature sets
+    # Rest of the function remains the same
     mol1_features = df[mol1_cols]
     mol2_features = df[mol2_cols]
 
-    # Create mappings with index as the key (without dropping duplicates)
     mol1_features.index = [f'mol1_{i}' for i in range(len(mol1_features))]
     mol2_features.index = [f'mol2_{i}' for i in range(len(mol2_features))]
 
     mol1_mapping = {tuple(row.values): idx for idx, row in mol1_features.iterrows()}
     mol2_mapping = {tuple(row.values): idx for idx, row in mol2_features.iterrows()}
 
-    # Combine molecule features
     mol1_features_renamed = mol1_features.rename(
         columns={col: col.replace('monomer1_data_', '') for col in mol1_cols}
     )
@@ -777,12 +777,10 @@ def prepare_data_from_csv(csv_path):
     )
     mol_features = pd.concat([mol1_features_renamed, mol2_features_renamed])
 
-    # Create condition features
     unique_conditions = df[condition_cols].drop_duplicates()
     unique_conditions.index = [f'cond_{i}' for i in range(len(unique_conditions))]
     condition_features = unique_conditions
 
-    # Create condition mapping
     condition_mapping = {}
     for idx, row in unique_conditions.iterrows():
         key = tuple(
@@ -791,7 +789,6 @@ def prepare_data_from_csv(csv_path):
         )
         condition_mapping[key] = idx
 
-    # Create reactions dataframe
     reactions = []
     for _, row in df.iterrows():
         mol1_key = tuple(row[mol1_cols].values)
@@ -812,9 +809,7 @@ def prepare_data_from_csv(csv_path):
         reactions.append(reaction)
 
     reactivity_df = pd.DataFrame(reactions)
-    print(reactivity_df["product"])
 
-    # Print final statistics
     print("\n=== Final Dataset Statistics ===")
     print(f"Molecule features shape: {mol_features.shape}")
     print(f"Condition features shape: {condition_features.shape}")

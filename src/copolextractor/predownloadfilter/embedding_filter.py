@@ -71,10 +71,13 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
         print("Error: Expected a list of papers in the JSON file. Exiting.")
         return
 
+    # Filter out papers that have already been extracted
+    filtered_data = [paper for paper in data if not paper.get('already_extracted', False)]
+
     existing_dois = load_existing_doi_list(doi_list_path)
     total_tokens = 0
 
-    for paper in data:
+    for paper in filtered_data:  # Iteriere nur über die gefilterten Papers
         print(f"Processing embedding of {paper}.")
         if paper.get("DOI") in existing_dois:
             continue

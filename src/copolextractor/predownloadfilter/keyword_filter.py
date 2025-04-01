@@ -66,8 +66,25 @@ def process_papers(input_file, journal_file, keywords, output_file):
     with open(input_file, "r") as f:
         data = json.load(f)
 
-    # Process entries and calculate scores
-    scored_data = [calculate_score(entry, journal_list, keywords) for entry in data]
+    # Initialize MongoDB connection using CoPolymerDB
+    db = CoPolymerDB()
+
+    # Process DOIs and mark existing entries
+    for entry in data:
+        if 'DOI' in entry:
+            processed_doi = sanitize(entry['DOI']).rstrip('.json')
+            # Check if DOI exists in MongoDB
+            if db.exists(processed_doi):
+                entry['already_extracted'] = True
+            else:
+                entry['already_extracted'] = False
+
+    # Process only entries that haven't been extracted yet
+    scored_data = [
+        calculate_score(entry, journal_list, keywords)
+        for entry in data
+        if not entry.get('already_extracted', False)
+    ]
 
     # Sort by score and get top 50
     top_50_papers = sorted(scored_data, key=lambda x: x["Score"], reverse=True)[:50]
@@ -83,7 +100,9 @@ def process_papers(input_file, journal_file, keywords, output_file):
     for score, count in sorted(score_counts.items(), reverse=True):
         print(f"Score {score}: {count} papers")
 
-    print("Total number of papers:", len(scored_data))
+    print("Total number of papers processed:", len(scored_data))
+    print("Total number of papers skipped (already extracted):",
+          len([e for e in data if e.get('already_extracted', False)]))
 
     # Save the updated data to a new JSON file
     with open(output_file, "w") as f:
@@ -92,7 +111,6 @@ def process_papers(input_file, journal_file, keywords, output_file):
 
 
 def main(input_file, journal_file, keywords, output_file):
-
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)
 
