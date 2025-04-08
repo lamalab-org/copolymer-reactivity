@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "Allyl Alcohol"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "zinc chloride aqueous solution",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.6,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 9.35,
+                        "constant_2": 2.34
+                    },
+                    "e-Value": {
+                        "constant_1": 2.34,
+                        "constant_2": 1.2
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222337008069375",
+    "PDF_name": "The Kinetic Study of Copolymerization of Acrylonitrile with Allyl Alcohol in Concentrated Zinc Chloride Aqueous Solution with the Aid of a Computer"
+}

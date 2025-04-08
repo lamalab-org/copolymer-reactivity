@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "tetrafluoroethylene",
+                    "monomer2": "ethylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 343.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.067,
+                        "constant_2": 0.52
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.12,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": "nonlinear least-square method of Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": 0.047,
+                        "constant_2": 1.95
+                    },
+                    "e-Value": {
+                        "constant_1": 0.015,
+                        "constant_2": -0.2
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.1995.070581208",
+    "PDF_name": "Study of Radical Copolymerization of Tetrafluoroethylene with Ethylene in Bulk"
+}

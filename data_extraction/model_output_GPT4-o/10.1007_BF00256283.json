@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methacrylonitrile",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 22.5,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.21,
+                        "constant_2": 0.34
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00255250",
+    "PDF_name": "Plasma-induced Polymerization 5. Bulk Copolymerization of Methacrylonitrile with Styrene"
+}

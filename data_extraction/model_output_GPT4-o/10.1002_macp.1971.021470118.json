@@ -1,0 +1,102 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Methacrylamide",
+                "monomer2",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.29,
+                        "constant_2": 1.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.54,
+                        "constant_2": 1.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.15
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Methacrylamide",
+                "monomer2",
+                "Methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.27,
+                        "constant_2": 1.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.19,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.43,
+                        "constant_2": 1.68
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1971.021470113",
+    "PDF_name": "Solvent Effects in Radical Copolymerization III. Methacrylamide"
+}

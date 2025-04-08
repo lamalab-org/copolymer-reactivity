@@ -1,0 +1,35 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl acrylate",
+                    "monomer2": "vinyl acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 6.3,
+                        "constant_2": 0.031
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.4,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "intersection line method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 139 (1970) 165-170",
+    "PDF_name": "Determination of Reactivity Ratios for the Copolymerisation of Vinyl Acetate with Methyl Acrylate by Proton Magnetic Resonance Spectroscopy"
+}

@@ -1,0 +1,196 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Itaconic Anhydride",
+                    "monomer2": "Vinyl Acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.08,
+                        "constant_2": 0.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.283,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.017,
+                        "constant_2": null
+                    },
+                    "r_product": 0.2156
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 64.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.2,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.992,
+                        "constant_2": null
+                    },
+                    "r_product": 0.23
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Itaconic Anhydride",
+                    "monomer2": "2-Chloroethyl Acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.42,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 10.159,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.824,
+                        "constant_2": null
+                    },
+                    "r_product": 0.1936
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 64.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.1,
+                        "constant_2": 0.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 1.344,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.629,
+                        "constant_2": null
+                    },
+                    "r_product": 0.992
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Itaconic Anhydride",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.8,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 10.46,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.88,
+                        "constant_2": null
+                    },
+                    "r_product": 0.624
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Itaconic Anhydride",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.53,
+                        "constant_2": 0.018
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.003
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 9.68,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.37,
+                        "constant_2": null
+                    },
+                    "r_product": 0.0095
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222337608061235",
+    "PDF_name": "Copolymerization Parameters of Itaconic Anhydride in Free-Radical Polymerization"
+}

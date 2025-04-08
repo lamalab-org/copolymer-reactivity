@@ -1,0 +1,35 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-Cyclohexylmaleimide",
+                    "monomer2": "Di-n-butyl itaconate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.21,
+                        "constant_2": 0.34
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00010a019",
+    "PDF_name": "An ESR Study on the Radical Copolymerization of N-Cyclohexylmaleimide and Di-n-butyl Itaconate in Benzene"
+}

@@ -1,0 +1,126 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinyltrimethylsilane",
+                    "monomer2": "acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.85,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Finemann-Ross",
+                    "Q-value": {
+                        "constant_1": 0.035,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.1,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.85,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Finemann-Ross",
+                    "Q-value": {
+                        "constant_1": 0.035,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.1,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylphenyldimethylsilane",
+                    "monomer2": "acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.84,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Finemann-Ross",
+                    "Q-value": {
+                        "constant_1": 0.055,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.84,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Finemann-Ross",
+                    "Q-value": {
+                        "constant_1": 0.055,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00552360",
+    "PDF_name": "Radical Copolymerization of Vinyltrimethyl(phenyl)silanes with Acrylonitrile"
+}

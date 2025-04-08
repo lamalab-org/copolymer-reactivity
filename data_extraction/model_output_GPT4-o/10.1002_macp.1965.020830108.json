@@ -1,0 +1,101 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "p-Vinylbenzoic acid",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.8,
+                        "constant_2": 0.076
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.001
+                    },
+                    "determination_method": "intersection method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": null
+                    },
+                    "r_product": 0.14
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "intersection method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.3,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.7,
+                        "constant_2": null
+                    },
+                    "r_product": 0.023
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.37,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "intersection method of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": null
+                    },
+                    "r_product": 0.02
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1964.110020601",
+    "PDF_name": "p-Vinylbenzoic Acid: A Convenient Preparation, Copolymerization, and Examination as Dye Receptive Modifier for Acrylic Fibers and as Ion Exchange Resin Component"
+}

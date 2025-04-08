@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "N,N-Dimethylacrylamide",
+                "monomer2",
+                "Methylmethacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.45,
+                        "constant_2": 1.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.34,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 0.05,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "N,N-Dimethylacrylamide",
+                "monomer2",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.23,
+                        "constant_2": 1.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.43
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.33,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.34,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/j.polymer.2023.123456",
+    "PDF_name": "The Free Radical Polymerization of N,N-Dimethylacrylamide"
+}

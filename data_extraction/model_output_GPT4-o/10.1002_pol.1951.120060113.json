@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-Vinylpyridine",
+                    "monomer2": "Phenylacetylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.0,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.7,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "graphic solution",
+                    "Q-value": {
+                        "constant_1": 0.3,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.5,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl acrylate",
+                    "monomer2": "Phenylacetylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "graphic solution",
+                    "Q-value": {
+                        "constant_1": 0.25,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.7,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "Phenylacetylene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "graphic solution",
+                    "Q-value": {
+                        "constant_1": 0.34,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.6,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. VI, No. 1, Pages 111-115",
+    "PDF_name": "Copolymerization of Phenylacetylene with Vinylpyridine"
+}

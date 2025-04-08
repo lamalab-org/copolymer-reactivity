@@ -1,0 +1,151 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-Substituted Phenyl Methacrylamide",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-Dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.6,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "assumed",
+                    "Q-value": {
+                        "constant_1": 2.5,
+                        "constant_2": 0.36
+                    },
+                    "e-Value": {
+                        "constant_1": -0.05,
+                        "constant_2": -0.02
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-Substituted Phenyl Methacrylamide",
+                    "monomer2": "Methyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Acetonitrile",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.63,
+                        "constant_2": 1.51
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "assumed",
+                    "Q-value": {
+                        "constant_1": 2.94,
+                        "constant_2": 0.38
+                    },
+                    "e-Value": {
+                        "constant_1": -0.08,
+                        "constant_2": -0.06
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Acetonitrile/Ethanol (2:1)",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 1.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "assumed",
+                    "Q-value": {
+                        "constant_1": 1.92,
+                        "constant_2": 0.63
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Ethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.48,
+                        "constant_2": 1.67
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "assumed",
+                    "Q-value": {
+                        "constant_1": 2.08,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.63,
+                        "constant_2": 1.51
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "assumed",
+                    "Q-value": {
+                        "constant_1": 1.59,
+                        "constant_2": 0.66
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "高分子論文集, Vol. 31, No. 4 (1974)",
+    "PDF_name": "N-Substituted Phenyl Methacrylamide Radical Polymerization and Copolymerization"
+}

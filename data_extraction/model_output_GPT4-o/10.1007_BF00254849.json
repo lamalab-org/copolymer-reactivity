@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "2-Hydroxyethylacrylate",
+                "monomer2",
+                "Methylacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "2-ethoxyethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "2-Hydroxyethylacrylate",
+                "monomer2",
+                "Ethylacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "2-methoxyethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.88,
+                        "constant_2": 0.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "2-Hydroxyethylacrylate",
+                "monomer2",
+                "Butylacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "2-methoxyethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.94,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00258491",
+    "PDF_name": "Radical Copolymerization of 2-Hydroxyethylacrylate with Alkylacrylate Determination of the Reactivity Ratios"
+}

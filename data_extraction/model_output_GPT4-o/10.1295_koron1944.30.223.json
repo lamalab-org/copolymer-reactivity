@@ -1,0 +1,78 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Methyl Acrylate",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 12.9,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.0,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Acrylate",
+                "Maleic Anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 18.2,
+                        "constant_2": 5.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.5,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl Acrylate",
+                "Acrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.1,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1246/nikkashi.1973.223",
+    "PDF_name": "高分子化学 (Kobunshi Kagaku), Vol. 30, No. 336, pp. 223-227 (Apr., 1973)"
+}

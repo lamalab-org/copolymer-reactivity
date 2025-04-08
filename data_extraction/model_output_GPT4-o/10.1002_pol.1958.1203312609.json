@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Ethyl alpha-Acetoxyacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-hexane",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.57,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "graphical method of intersections",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.54
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 0.67
+                    },
+                    "r_product": 0.114
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl methacrylate",
+                    "monomer2": "Ethyl alpha-Acetoxyacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-hexane",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.65,
+                        "constant_2": 0.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "graphical method of intersections",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 0.53
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.66
+                    },
+                    "r_product": 1.07
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl acetate",
+                    "monomer2": "Ethyl alpha-Acetoxyacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-hexane",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 5.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "graphical method of intersections",
+                    "Q-value": {
+                        "constant_1": 0.028,
+                        "constant_2": 0.27
+                    },
+                    "e-Value": {
+                        "constant_1": -0.3,
+                        "constant_2": 0.62
+                    },
+                    "r_product": 0.432
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl acrylate",
+                    "monomer2": "Ethyl alpha-Acetoxyacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "n-hexane",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "graphical method of intersections",
+                    "Q-value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.42
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.6
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1958.1203312707",
+    "PDF_name": "The Copolymerization Characteristics of Ethyl alpha-Acetoxyacrylate"
+}

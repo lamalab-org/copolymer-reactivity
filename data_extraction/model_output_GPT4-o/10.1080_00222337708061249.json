@@ -1,0 +1,201 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 2.13,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.11,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "thermal",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 110.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "Methyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.05,
+                        "constant_2": 0.38
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 2.87,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.361,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "thermal",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 110.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.7,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "Maleic Anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "Diethyl Maleate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.7,
+                        "constant_2": null
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "N-Vinylpyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "toluene-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222337708061249",
+    "PDF_name": "Acenaphthylene Copolymers. I. Copolymerization Behavior"
+}

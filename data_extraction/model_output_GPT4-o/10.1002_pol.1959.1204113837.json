@@ -1,0 +1,175 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Vinyl Acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 7.3,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.7,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.002,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.7,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylene Carbonate",
+                    "monomer2": "Methyl Vinyl Sulfide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 10.6,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.2,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.7,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Bicyclo(2,2,1)-2-heptene-5-carboxylate",
+                    "monomer2": "Vinyl Acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.24,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Bicyclo(2,2,1)-2-heptene-5-carboxylate",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.05,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.1,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Crotonolactone",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 8.5,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 5.0,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1959.1204113410",
+    "PDF_name": "The Copolymerization Characteristics of Vinylene Carbonate, γ-Crotonolactone and Methyl Bicyclo(2,2,1)-2-heptene-5-carboxylate"
+}

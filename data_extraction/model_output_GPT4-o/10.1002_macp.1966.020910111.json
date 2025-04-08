@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylyl chloride",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 67.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "not specified",
+                    "Q-value": {
+                        "constant_1": 0.8,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": -1.6,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1966.020910113",
+    "PDF_name": "Die Makromolekulare Chemie 91 (1966) 160-174"
+}

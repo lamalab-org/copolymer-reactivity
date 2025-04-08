@@ -6,46 +6,34 @@ import os
 import json
 import numpy as np
 
-
 # Global cache for embeddings
 embedding_cache = {}
 
 
 def extract_nested_fields(df):
     """
-    Extracts nested fields from the reaction_conditions column
-
-    Args:
-        df (pd.DataFrame): Input DataFrame containing reaction_conditions column
-
-    Returns:
-        pd.DataFrame: DataFrame with extracted fields as separate columns
+    Extracts fields from the unnested database structure
     """
-    # Extract fields from reaction_conditions
-    if 'reaction_conditions' in df.columns:
-        # Method
-        df['method'] = df['reaction_conditions'].apply(
-            lambda x: x.get('method') if isinstance(x, dict) else None
-        )
+    # For unnested structure
+    if 'reaction_method' in df.columns:
+        df['method'] = df['reaction_method']
+    if 'reaction_polymerization_type' in df.columns:
+        df['polymerization_type'] = df['reaction_polymerization_type']
+    if 'reaction_temperature' in df.columns:
+        df['temperature'] = df['reaction_temperature']
+    if 'reaction_solvent' in df.columns:
+        df['solvent'] = df['reaction_solvent']
 
-        # Polymerization type
-        df['polymerization_type'] = df['reaction_conditions'].apply(
-            lambda x: x.get('polymerization_type') if isinstance(x, dict) else None
-        )
-
-        # Temperature
-        df['temperature'] = df['reaction_conditions'].apply(
-            lambda x: x.get('temperature') if isinstance(x, dict) else None
-        )
-
-        # Solvent
-        df['solvent'] = df['reaction_conditions'].apply(
-            lambda x: x.get('solvent') if isinstance(x, dict) else None
-        )
-
-        # Reaction constants
-        df['r_values'] = df['reaction_conditions'].apply(
-            lambda x: x.get('reaction_constants') if isinstance(x, dict) else None
+    # Reaction constants - now with reaction_constant_ prefix
+    constant_cols = [col for col in df.columns if col.startswith('reaction_constant_')]
+    if constant_cols:
+        df['r_values'] = df.apply(
+            lambda row: {
+                col.replace('reaction_constant_', ''): row[col]
+                for col in constant_cols
+                if pd.notna(row[col])
+            },
+            axis=1
         )
 
     return df
@@ -57,9 +45,13 @@ def filter_data(data):
     Filters the input data to include only valid entries where both
     'r-product_filter' and 'r_conf_filter' are True.
     """
-    filtered_data = [
-        entry for entry in data if entry["r-product_filter"] and entry["r_conf_filter"]
-    ]
+    if data and all(key in data[0] for key in ["r-product_filter", "r_conf_filter"]):
+        filtered_data = [
+            entry for entry in data if entry["r-product_filter"] and entry["r_conf_filter"]
+        ]
+    else:
+        filtered_data = data
+
     print(f"Filtered datapoints: {len(filtered_data)}")
     return filtered_data
 
@@ -68,13 +60,6 @@ def filter_data(data):
 def extract_features(df):
     """
     Extracts features from 'monomer1_data' and 'monomer2_data' JSON fields
-    and adds them as new columns to the input DataFrame.
-
-    Args:
-        df (pd.DataFrame): Input DataFrame with 'monomer1_data' and 'monomer2_data' JSON fields.
-
-    Returns:
-        pd.DataFrame: DataFrame with additional columns for extracted features.
     """
     # Keys to process with min, max, mean statistics
     keys_to_process = [
@@ -86,6 +71,9 @@ def extract_features(df):
 
     # Loop through each monomer and process its features
     for monomer_key in ["monomer1_data", "monomer2_data"]:
+        if monomer_key not in df.columns:
+            continue
+
         # Process specific keys for min, max, mean statistics
         for key in keys_to_process:
             df[f"{monomer_key}_{key}_min"] = df[monomer_key].apply(
@@ -128,12 +116,6 @@ def extract_features(df):
 def create_flipped_dataset(df_features):
     """
     Creates a flipped dataset where the order of monomer1 and monomer2 is swapped.
-
-    Args:
-        df_features (pd.DataFrame): The input DataFrame with extracted features.
-
-    Returns:
-        pd.DataFrame: A new DataFrame with flipped monomer order.
     """
     flipped_rows = []
     for _, row in df_features.iterrows():
@@ -170,22 +152,13 @@ def save_embeddings(embeddings_dict, file_path="output/method_embeddings.json"):
 def get_or_create_embedding(client, text, model="text-embedding-3-small"):
     """
     Retrieve embeddings for a given text.
-    The function checks the global cache first and only queries the API if the embedding is not already cached.
-
-    Args:
-        client: The OpenAI client instance for API requests.
-        text (str): The input text to generate an embedding for.
-        model (str): The OpenAI model to use for embedding generation (default: "text-embedding-3-small").
-
-    Returns:
-        list: The embedding vector as a list of floats.
     """
     global embedding_cache  # Ensure global access to the embedding cache
 
     # Handle None or NaN text inputs safely
     if text is None or pd.isna(text):
-        print("Warning: Found None or NaN in determination_method, returning a zero vector.")
-        return [0] * 1536  # Return a zero vector of the expected embedding dimension (e.g., 1536 for this model)
+        print("Warning: Found None or NaN in text, returning a zero vector.")
+        return [0] * 1536  # Return a zero vector of the expected embedding dimension
 
     # Clean the text by removing newlines for consistency
     text_cleaned = text.replace("\n", " ")
@@ -206,27 +179,26 @@ def get_or_create_embedding(client, text, model="text-embedding-3-small"):
 # Function: Convert str to embeddings and apply PCA
 def process_embeddings(df, client, column_name, prefix):
     """
-    Processes a specified column into embeddings, applies PCA for dimensionality reduction,
-    and adds the reduced components as new features.
-
-    Args:
-        df (pd.DataFrame): Input DataFrame containing the column to process.
-        client: OpenAI API client for generating embeddings.
-        column_name (str): Name of the column to process.
-        prefix (str): Prefix for the resulting PCA component columns.
-
-    Returns:
-        pd.DataFrame: Updated DataFrame with new PCA-reduced embedding features.
+    Processes a specified column into embeddings and applies PCA
     """
+    if column_name not in df.columns:
+        return df
+
     embeddings = []
 
     # Generate embeddings or fetch from cache
     for value in df[column_name].unique():
+        if pd.isna(value):
+            continue
         embedding = get_or_create_embedding(client, value)  # Fetch embedding
         embeddings.append({"name": value, "embedding": embedding})
 
     # Convert embeddings into DataFrame for PCA
     embedding_matrix = [item["embedding"] for item in embeddings]
+
+    if len(embedding_matrix) < 3:
+        return df
+
     pca = PCA(n_components=2)  # Reduce to 2 components
     reduced_embeddings = pca.fit_transform(embedding_matrix)
 
@@ -235,10 +207,10 @@ def process_embeddings(df, client, column_name, prefix):
 
     # Add PCA components to the DataFrame
     df[f"{prefix}_1"] = df[column_name].apply(
-        lambda x: embedding_map.get(x, [None, None])[0]
+        lambda x: embedding_map.get(x, [None, None])[0] if not pd.isna(x) else None
     )
     df[f"{prefix}_2"] = df[column_name].apply(
-        lambda x: embedding_map.get(x, [None, None])[1]
+        lambda x: embedding_map.get(x, [None, None])[1] if not pd.isna(x) else None
     )
 
     print(f"PCA reduced embeddings for {column_name} added as {prefix}_1 and {prefix}_2.")
@@ -248,8 +220,10 @@ def process_embeddings(df, client, column_name, prefix):
 def process_logp(df):
     """
     Process LogP values for solvents in the dataframe.
-    Returns the dataframe with added LogP column.
     """
+    if "solvent" not in df.columns:
+        return df
+
     # File to store the cache
     CACHE_FILE = "./output/logp_cache.json"
 
@@ -267,6 +241,9 @@ def process_logp(df):
                 print("Cache file corrupted, starting with empty cache")
 
         def get_cached_logp(solvent):
+            if pd.isna(solvent):
+                return None
+
             # Get SMILES for the solvent
             smiles = utils.name_to_smiles(solvent)
             if not smiles:
@@ -315,9 +292,20 @@ def process_logp(df):
 
 def main(input_file, output_file):
     # Load JSON data
-    with open(input_file, "r") as file:
-        data = json.load(file)
-    print(f"Initial datapoints: {len(data)}")
+    print(f"Loading data from {input_file}...")
+    try:
+        with open(input_file, "r") as file:
+            data = json.load(file)
+        print(f"Initial datapoints: {len(data)}")
+    except Exception as e:
+        print(f"Error loading JSON data: {e}")
+        try:
+            df = pd.read_json(input_file, orient='records')
+            print(f"Data loaded with pandas: {len(df)} rows")
+            data = df.to_dict(orient='records')
+        except Exception as e2:
+            print(f"Failed to load data: {e2}")
+            return
 
     # Filter data
     filtered_data = filter_data(data)
@@ -325,43 +313,79 @@ def main(input_file, output_file):
     # Convert to DataFrame
     df = pd.DataFrame(filtered_data)
 
-    # Extract nested fields
+    # Extract fields from unnested structure
     df = extract_nested_fields(df)
 
-    # Extract relevant features and molecular properties
+    # Extract features from monomer data
     df = extract_features(df)
+
+    # Convert all monomer data numerical fields to float
+    numeric_columns = [col for col in df.columns if any(
+        col.startswith(prefix) for prefix in [
+            'monomer1_data_charges_',
+            'monomer1_data_fukui_',
+            'monomer1_data_dipole_',
+            'monomer2_data_charges_',
+            'monomer2_data_fukui_',
+            'monomer2_data_dipole_'
+        ]
+    )]
+
+    for col in numeric_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
 
     # Load existing embeddings and initialize client
     global embedding_cache
     embedding_cache = load_embeddings()
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    # Process embeddings for determination_method
+    # Process embeddings
     df = process_embeddings(df, client, column_name="method", prefix="method")
-
-    # Process embeddings for polymerization_type
     df = process_embeddings(df, client, column_name="polymerization_type", prefix="polymerization_type")
-
-    # Save updated embeddings to file
     save_embeddings(embedding_cache)
 
     # Extract r-values
-    df["r1"] = df["r_values"].apply(
-        lambda x: x["constant_1"] if isinstance(x, dict) and "constant_1" in x else None
-    )
-    df["r2"] = df["r_values"].apply(
-        lambda x: x["constant_2"] if isinstance(x, dict) and "constant_2" in x else None
-    )
+    if 'r_values' in df.columns:
+        df["r1"] = df["r_values"].apply(
+            lambda x: x["constant_1"] if isinstance(x, dict) and "constant_1" in x else None
+        )
+        df["r2"] = df["r_values"].apply(
+            lambda x: x["constant_2"] if isinstance(x, dict) and "constant_2" in x else None
+        )
+    else:
+        # For unnested structure
+        if 'reaction_constant_constant_1' in df.columns:
+            df["r1"] = df["reaction_constant_constant_1"]
+        if 'reaction_constant_constant_2' in df.columns:
+            df["r2"] = df["reaction_constant_constant_2"]
+
+    # Convert r-values to float
+    if 'r1' in df.columns:
+        df["r1"] = pd.to_numeric(df["r1"], errors='coerce')
+    if 'r2' in df.columns:
+        df["r2"] = pd.to_numeric(df["r2"], errors='coerce')
 
     # Remove r-values < 0
-    df = df[(df["r1"] >= 0) & (df["r2"] >= 0)]
-
-    # Calculate r-product
-    df['r_product'] = df['r1'] * df['r2']
+    if 'r1' in df.columns and 'r2' in df.columns:
+        df = df[(df["r1"] >= 0) & (df["r2"] >= 0)]
+        # Calculate r-product
+        df['r_product'] = df['r1'] * df['r2']
 
     # Set solvent to "bulk" if polymerization type is "bulk"
-    df.loc[df["polymerization_type"] == "bulk", "solvent"] = "bulk"
-    df["solvent"].replace(['na', 'NA', 'null', 'NULL', None, '', 'nan'], np.nan, inplace=True)
+    if 'polymerization_type' in df.columns and 'solvent' in df.columns:
+        df.loc[df["polymerization_type"] == "bulk", "solvent"] = "bulk"
+        df["solvent"].replace(['na', 'NA', 'null', 'NULL', None, '', 'nan'], np.nan, inplace=True)
+
+    # Convert numerical fields to float
+    numerical_fields = [
+        'temperature',
+        'method_1', 'method_2',
+        'polymerization_type_1', 'polymerization_type_2'
+    ]
+    for field in numerical_fields:
+        if field in df.columns:
+            df[field] = pd.to_numeric(df[field], errors='coerce')
 
     # Process LogP values
     df = process_logp(df)
@@ -375,7 +399,9 @@ def main(input_file, output_file):
     names = ['monomer1_s', 'monomer2_s']
 
     # Combine all columns that should not contain NaN
-    columns_to_check = mol1_cols + mol2_cols + condition_cols + target_cols + names
+    columns_to_check = []
+    for col_list in [mol1_cols, mol2_cols, condition_cols, target_cols, names]:
+        columns_to_check.extend([col for col in col_list if col in df.columns])
 
     # Count NaN values before dropping
     nan_counts = df[columns_to_check].isna().sum()
@@ -395,3 +421,10 @@ def main(input_file, output_file):
 
     print(f"Processed data saved to {output_file}")
     print(f"Final number of datapoints: {len(df_cleaned)}")
+
+
+if __name__ == "__main__":
+    input_path_new_data = "../../data_extraction/model_output_GPT4-o"
+    input_file = f"{input_path_new_data}/export.json"
+    output_file = f"{input_path_new_data}/processed_data.csv"
+    main(input_file, output_file)

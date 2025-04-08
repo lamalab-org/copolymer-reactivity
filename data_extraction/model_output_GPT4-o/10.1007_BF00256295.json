@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "2,4-Dinitrophenyl Acrylate",
+                "monomer2",
+                "N-(2-Hydroxyethyl)Carbazolyl Acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "2,4-Dinitrophenyl Acrylate",
+                "monomer2",
+                "N-(2-Hydroxyethyl)Carbazolyl Methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.24,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1007/BF00255250",
+    "PDF_name": "Intramolecular Charge Transfer Complexes 9. Radical Copolymers of 2,4-Dinitrophenyl Acrylate with N-(2-Hydroxyethyl)Carbazolyl Acrylate and Methacrylate"
+}

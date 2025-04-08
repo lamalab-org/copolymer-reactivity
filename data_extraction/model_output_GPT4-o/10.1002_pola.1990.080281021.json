@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "2-trimethylsilyloxy-1,3-butadiene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.64,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 2.34,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.31,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylonitrile",
+                    "monomer2": "2-trimethylsilyloxy-1,3-butadiene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.036,
+                        "constant_2": 0.065
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.86,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.27,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1990.080281122",
+    "PDF_name": "Silyl Enol Ethers as Monomer. III. Radical Polymerization and Copolymerizations of 2-Trimethylsilyloxy-1,3-Butadiene and Desilylation of the Resulting Polymers"
+}

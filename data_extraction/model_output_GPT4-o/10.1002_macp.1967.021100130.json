@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "methyl alpha-cyanoacrylate",
+                "monomer2",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 17.0,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 2.48,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "methyl alpha-chloroacrylate",
+                "monomer2",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 7.7,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.5,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "methyl alpha-bromoacrylate",
+                "monomer2",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.08,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 4.5,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.25,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "methyl alpha-phenylacrylate",
+                "monomer2",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 6.1,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": 1.3,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 110 (1967) 297-299",
+    "PDF_name": "Determination of Q, e Parameters for Methyl alpha-Cyanoacrylate"
+}

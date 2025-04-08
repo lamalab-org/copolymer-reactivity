@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "2-Vinyl pyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "glacial acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.113,
+                        "constant_2": 0.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.5,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "4-Vinyl pyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "glacial acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.113,
+                        "constant_2": 0.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.49,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.6,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "5-Ethyl-2-vinyl pyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "glacial acetic acid",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.43
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.6,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -1.0,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science Vol. XXXIX, Pages 203-209 (1959)",
+    "PDF_name": "Copolymerization of Acrylonitrile and Vinyl Pyridine"
+}

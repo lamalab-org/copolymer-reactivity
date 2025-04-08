@@ -1,0 +1,94 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Vinylmesitylene",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 138.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.16,
+                        "constant_2": 0.98
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Alfrey-Price"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Vinylmesitylene",
+                "Methacrylate of Methyl"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 130.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 1.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Alfrey-Price"
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 85.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 1.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price"
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Vinylmesitylene",
+                "p-Chlorostyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 130.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 10.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Alfrey-Price"
+                }
+            ]
+        }
+    ],
+    "source": "Bull. Soc. Chim. Belg., 59, pp. 629-648, 1950",
+    "PDF_name": "La polymérisation et la copolymérisation du vinylmésitylène"
+}

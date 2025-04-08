@@ -218,5 +218,9 @@
     {
         "smiles": "[Cl-].C[N+](CC=C)(CC=C)C",
         "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpz3te0i57': Too many open files"
+    },
+    {
+        "smiles": "C=C(C)C(=O)[O-].CCCC[Sn+](CCCC)CCCC",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
     }
 ]

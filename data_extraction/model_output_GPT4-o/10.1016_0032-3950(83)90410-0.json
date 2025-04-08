@@ -1,0 +1,66 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "ethylene",
+                    "monomer2": "maleic anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.045,
+                        "constant_2": 0.019
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.019,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "not provided",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 130.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.045,
+                        "constant_2": 0.019
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.019,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "not provided",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "not provided",
+    "PDF_name": "Synthesis of alternating and random copolymers of ethylene with maleic anhydride"
+}

@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Styrene",
+                "monomer2",
+                "Fumaronitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.23,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 1.6,
+                        "constant_2": 2.1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "monomer1",
+                "Methyl methacrylate",
+                "monomer2",
+                "Fumaronitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.5,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 2.0,
+                        "constant_2": 2.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1951.120080606",
+    "PDF_name": "Copolymerization Characteristics of Fumaronitrile"
+}

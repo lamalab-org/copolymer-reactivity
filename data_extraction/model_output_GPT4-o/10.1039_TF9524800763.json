@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl methacrylate",
+                    "monomer2": "p-methoxystyrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.29,
+                        "constant_2": 0.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "m-vinyl phenol"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.91,
+                        "constant_2": 1.21
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.1
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1039/TF9524800763",
+    "PDF_name": "STUDIES IN COPOLYMERIZATION"
+}

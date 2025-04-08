@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Maleic Anhydride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": null,
+                    "temperature_unit": null,
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 24.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": null,
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of the American Chemical Society, Vol. 67, 1945",
+    "PDF_name": "The Copolymerization of Styrene and Maleic Anhydride"
+}

@@ -1,0 +1,111 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinylidene chloride",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.1,
+                        "constant_2": 0.145
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.009
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.2,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.29,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acrylonitrile",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.07,
+                        "constant_2": 0.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.006,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.58,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.11,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Vinyl chloride",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.052,
+                        "constant_2": 3.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.009,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.039,
+                        "constant_2": 0.58
+                    },
+                    "e-Value": {
+                        "constant_1": -0.17,
+                        "constant_2": 1.11
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1959.120411411",
+    "PDF_name": "A Revised Q-e Diagram"
+}

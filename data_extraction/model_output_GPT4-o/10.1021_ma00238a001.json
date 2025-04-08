@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "(-)-Menthyl Acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.12,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Acenaphthylene",
+                    "monomer2": "(-)-Menthyl Methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.12,
+                        "constant_2": 0.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00242a013",
+    "PDF_name": "Synthesis and Characterization of Optically Active Copolymers of Acenaphthylene. 1. Preparation and Characterization"
+}

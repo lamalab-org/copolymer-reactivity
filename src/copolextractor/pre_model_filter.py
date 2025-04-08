@@ -1,6 +1,7 @@
 import json
 from copolextractor.mongodb_storage import CoPolymerDB
 from typing import List, Dict, Optional
+from datetime import datetime
 
 
 def convert_to_float(value):
@@ -17,22 +18,46 @@ def convert_to_float(value):
 def preprocess_data(data: List[Dict]):
     """Preprocess data and convert relevant values to float."""
     for entry in data:
-        reaction_conditions = entry.get("reaction_conditions", {})
+        # Handle both nested and unnested structures
+        if "reaction_conditions" in entry and isinstance(entry["reaction_conditions"], dict):
+            # Original nested structure
+            reaction_conditions = entry.get("reaction_conditions", {})
 
-        # Extract reaction constants
-        reaction_constants = reaction_conditions.get("reaction_constants", {})
-        if reaction_constants:
-            reaction_constants["constant_1"] = convert_to_float(reaction_constants.get("constant_1"))
-            reaction_constants["constant_2"] = convert_to_float(reaction_constants.get("constant_2"))
+            # Extract reaction constants
+            reaction_constants = reaction_conditions.get("reaction_constants", {})
+            if reaction_constants:
+                reaction_constants["constant_1"] = convert_to_float(reaction_constants.get("constant_1"))
+                reaction_constants["constant_2"] = convert_to_float(reaction_constants.get("constant_2"))
 
-        # Extract confidence intervals
-        reaction_constant_conf = reaction_conditions.get("reaction_constant_conf", {})
-        if reaction_constant_conf:
-            reaction_constant_conf["constant_conf_1"] = convert_to_float(reaction_constant_conf.get("constant_conf_1"))
-            reaction_constant_conf["constant_conf_2"] = convert_to_float(reaction_constant_conf.get("constant_conf_2"))
+            # Extract confidence intervals
+            reaction_constant_conf = reaction_conditions.get("reaction_constant_conf", {})
+            if reaction_constant_conf:
+                reaction_constant_conf["constant_conf_1"] = convert_to_float(
+                    reaction_constant_conf.get("constant_conf_1"))
+                reaction_constant_conf["constant_conf_2"] = convert_to_float(
+                    reaction_constant_conf.get("constant_conf_2"))
 
-        # Extract r_product
-        reaction_conditions["r_product"] = convert_to_float(reaction_conditions.get("r_product"))
+            # Extract r_product
+            reaction_conditions["r_product"] = convert_to_float(reaction_conditions.get("r_product"))
+        else:
+            # Unnested structure - look for fields directly
+            # Convert reaction constants
+            if "reaction_constant_constant_1" in entry:
+                entry["reaction_constant_constant_1"] = convert_to_float(entry.get("reaction_constant_constant_1"))
+            if "reaction_constant_constant_2" in entry:
+                entry["reaction_constant_constant_2"] = convert_to_float(entry.get("reaction_constant_constant_2"))
+
+            # Convert confidence intervals
+            if "reaction_constant_conf_constant_conf_1" in entry:
+                entry["reaction_constant_conf_constant_conf_1"] = convert_to_float(
+                    entry.get("reaction_constant_conf_constant_conf_1"))
+            if "reaction_constant_conf_constant_conf_2" in entry:
+                entry["reaction_constant_conf_constant_conf_2"] = convert_to_float(
+                    entry.get("reaction_constant_conf_constant_conf_2"))
+
+            # Convert r_product
+            if "reaction_r_product" in entry:
+                entry["reaction_r_product"] = convert_to_float(entry.get("reaction_r_product"))
 
 
 def is_within_deviation(actual_product, expected_product, deviation=0.10):
@@ -45,19 +70,27 @@ def is_within_deviation(actual_product, expected_product, deviation=0.10):
 def apply_r_product_filter(data: List[Dict]):
     """Apply the r-product filter to the data."""
     for entry in data:
-        reaction_conditions = entry.get("reaction_conditions", {})
-        reaction_constants = reaction_conditions.get("reaction_constants", {})
+        # Check if we're dealing with unnested or nested structure
+        if "reaction_conditions" in entry and isinstance(entry["reaction_conditions"], dict):
+            # Original nested structure
+            reaction_conditions = entry.get("reaction_conditions", {})
+            reaction_constants = reaction_conditions.get("reaction_constants", {})
 
-        r1 = reaction_constants.get("constant_1")
-        r2 = reaction_constants.get("constant_2")
-        r_product = reaction_conditions.get("r_product")
+            r1 = reaction_constants.get("constant_1")
+            r2 = reaction_constants.get("constant_2")
+            r_product = reaction_conditions.get("r_product")
+        else:
+            # Unnested structure
+            r1 = entry.get("reaction_constant_constant_1")
+            r2 = entry.get("reaction_constant_constant_2")
+            r_product = entry.get("reaction_r_product")
 
         if r_product is None or r1 is None or r2 is None:
             entry["r-product_filter"] = True
             continue
 
         actual_product = r1 * r2
-        if is_within_deviation(actual_product, r_product):
+        if not is_within_deviation(actual_product, r_product):
             entry["r-product_filter"] = True
         else:
             entry["r-product_filter"] = False
@@ -66,14 +99,22 @@ def apply_r_product_filter(data: List[Dict]):
 def apply_r_conf_filter(data: List[Dict]):
     """Apply the confidence interval filter to the data."""
     for entry in data:
-        reaction_conditions = entry.get("reaction_conditions", {})
-        reaction_constants = reaction_conditions.get("reaction_constants", {})
-        reaction_constant_conf = reaction_conditions.get("reaction_constant_conf", {})
+        if "reaction_conditions" in entry and isinstance(entry["reaction_conditions"], dict):
+            # Original nested structure
+            reaction_conditions = entry.get("reaction_conditions", {})
+            reaction_constants = reaction_conditions.get("reaction_constants", {})
+            reaction_constant_conf = reaction_conditions.get("reaction_constant_conf", {})
 
-        r1 = reaction_constants.get("constant_1")
-        r2 = reaction_constants.get("constant_2")
-        conf_1 = reaction_constant_conf.get("constant_conf_1")
-        conf_2 = reaction_constant_conf.get("constant_conf_2")
+            r1 = reaction_constants.get("constant_1")
+            r2 = reaction_constants.get("constant_2")
+            conf_1 = reaction_constant_conf.get("constant_conf_1")
+            conf_2 = reaction_constant_conf.get("constant_conf_2")
+        else:
+            # Unnested structure
+            r1 = entry.get("reaction_constant_constant_1")
+            r2 = entry.get("reaction_constant_constant_2")
+            conf_1 = entry.get("reaction_constant_conf_constant_conf_1")
+            conf_2 = entry.get("reaction_constant_conf_constant_conf_2")
 
         if r1 is not None and r2 is not None:
             if conf_1 is not None and conf_2 is not None:
@@ -82,9 +123,6 @@ def apply_r_conf_filter(data: List[Dict]):
                 entry["r_conf_filter"] = True
         else:
             entry["r_conf_filter"] = True
-
-
-from datetime import datetime
 
 
 def convert_mongo_document(doc):
