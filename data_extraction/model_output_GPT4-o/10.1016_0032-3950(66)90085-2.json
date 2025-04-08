@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylonitrile",
+                    "monomer2": "benzyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.294,
+                        "constant_2": 0.636
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Mayo and Lewis differential composition equation",
+                    "Q-value": {
+                        "constant_1": 3.5,
+                        "constant_2": 0.433
+                    },
+                    "e-Value": {
+                        "constant_1": -0.09,
+                        "constant_2": null
+                    },
+                    "r_product": 0.187
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylonitrile",
+                    "monomer2": "benzyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.206,
+                        "constant_2": 0.81
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Mayo and Lewis differential composition equation",
+                    "Q-value": {
+                        "constant_1": 4.85,
+                        "constant_2": 0.59
+                    },
+                    "e-Value": {
+                        "constant_1": -0.13,
+                        "constant_2": null
+                    },
+                    "r_product": 0.167
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylonitrile",
+                    "monomer2": "tetrahydrofurfuryl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.602,
+                        "constant_2": 0.773
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Mayo and Lewis differential composition equation",
+                    "Q-value": {
+                        "constant_1": 1.66,
+                        "constant_2": 0.16
+                    },
+                    "e-Value": {
+                        "constant_1": 0.32,
+                        "constant_2": null
+                    },
+                    "r_product": 0.465
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylonitrile",
+                    "monomer2": "tetrahydrofurfuryl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.154,
+                        "constant_2": 0.71
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Mayo and Lewis differential composition equation",
+                    "Q-value": {
+                        "constant_1": 6.5,
+                        "constant_2": 0.664
+                    },
+                    "e-Value": {
+                        "constant_1": -0.28,
+                        "constant_2": null
+                    },
+                    "r_product": 0.11
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1007/BF00552360",
+    "PDF_name": "Copolymerization of Acrylonitrile with Benzyl- and Tetrahydrofurfuryl Acrylates"
+}

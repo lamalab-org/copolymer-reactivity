@@ -1,0 +1,181 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "maleimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "fundamental equation of copolymerisation",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.8
+                    },
+                    "e-Value": {
+                        "constant_1": -0.81,
+                        "constant_2": 1.34
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "vinylidene chloride",
+                    "monomer2": "maleimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.71,
+                        "constant_2": 0.48
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "fundamental equation of copolymerisation",
+                    "Q-value": {
+                        "constant_1": 0.39,
+                        "constant_2": 1.33
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 1.33
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl methacrylate",
+                    "monomer2": "maleimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.5,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "fundamental equation of copolymerisation",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 0.43
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 1.32
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "styrene",
+                    "monomer2": "N-methyl citraconimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.135,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "fundamental equation of copolymerisation",
+                    "Q-value": {
+                        "constant_1": 0.95,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": 1.05,
+                        "constant_2": 1.25
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl methacrylate",
+                    "monomer2": "N-methyl citraconimide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "cyclohexanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 3.24,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "fundamental equation of copolymerisation",
+                    "Q-value": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": 1.25,
+                        "constant_2": 1.25
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1964.120020112",
+    "PDF_name": "The Copolymerisation of Maleimide"
+}

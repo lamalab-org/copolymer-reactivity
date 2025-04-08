@@ -1,0 +1,76 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "methylphenylvinylsulfonium tetrafluoroborate",
+                    "monomer2": "acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 2.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Finemann and Ross",
+                    "Q-value": {
+                        "constant_1": 3.4,
+                        "constant_2": 1.13
+                    },
+                    "e-Value": {
+                        "constant_1": 2.23,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methylphenylvinylsulfonium tetrafluoroborate",
+                    "monomer2": "acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 2.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Finemann and Ross",
+                    "Q-value": {
+                        "constant_1": 3.4,
+                        "constant_2": 1.13
+                    },
+                    "e-Value": {
+                        "constant_1": 2.23,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1977.130150315",
+    "PDF_name": "Synthesis and Copolymerization of Methylphenylvinylsulfonium Tetrafluoroborate"
+}

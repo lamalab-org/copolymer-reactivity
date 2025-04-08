@@ -1,0 +1,186 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Methacrylate",
+                    "monomer2": "Methacrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 45.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.98,
+                        "constant_2": 0.68
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Mayo-Lewis differential method",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 45.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.55,
+                        "constant_2": 1.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Mayo-Lewis differential method",
+                    "Q-value": {
+                        "constant_1": 1.51,
+                        "constant_2": 0.68
+                    },
+                    "e-Value": {
+                        "constant_1": 0.68,
+                        "constant_2": 0.68
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Styrene",
+                    "monomer2": "Methacrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 45.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Mayo-Lewis differential method",
+                    "Q-value": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.45
+                    },
+                    "e-Value": {
+                        "constant_1": 0.45,
+                        "constant_2": 0.45
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 45.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.66
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Mayo-Lewis differential method",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Acrylate",
+                    "monomer2": "Acrylic Acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 45.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.98,
+                        "constant_2": 0.42
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Mayo-Lewis differential method",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 1.1
+                    },
+                    "e-Value": {
+                        "constant_1": 1.1,
+                        "constant_2": 1.1
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 45.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.95,
+                        "constant_2": 1.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Mayo-Lewis differential method",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 1.1
+                    },
+                    "e-Value": {
+                        "constant_1": 1.1,
+                        "constant_2": 1.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Vysokomol. soyed. A12: No. 3, 553-559, 1970",
+    "PDF_name": "EFFECT OF THE MEDIUM ON THE HOMOGENEOUS RADICAL COPOLYMERIZATION OF UNSATURATED CARBOXYLIC ACIDS WITH VINYL MONOMERS"
+}

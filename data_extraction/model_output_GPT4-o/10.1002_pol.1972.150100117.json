@@ -1,0 +1,180 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "cis-Crotonic acid",
+                    "monomer2": "Acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": -0.21,
+                        "constant_2": 4.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Mayo-Lewis method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.25
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "trans-Crotonic acid",
+                    "monomer2": "Acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": -0.09,
+                        "constant_2": 6.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.4
+                    },
+                    "determination_method": "Mayo-Lewis method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.15
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "cis-3-Bromoacrylic acid",
+                    "monomer2": "Acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": -0.14,
+                        "constant_2": 12.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "Mayo-Lewis method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.08
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "trans-3-Bromoacrylic acid",
+                    "monomer2": "Acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": -0.21,
+                        "constant_2": 6.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.6
+                    },
+                    "determination_method": "Mayo-Lewis method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.15
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "cis-Cinnamic acid",
+                    "monomer2": "Acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": -0.22,
+                        "constant_2": 6.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.6
+                    },
+                    "determination_method": "Mayo-Lewis method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.15
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "trans-Cinnamic acid",
+                    "monomer2": "Acrylamide"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": -0.26,
+                        "constant_2": 3.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Mayo-Lewis method",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.33
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1972.160100114",
+    "PDF_name": "Reactivities of cis- and trans-3-Substituted Acrylic Acids on Copolymerization with Acrylamide"
+}

@@ -1,0 +1,146 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl Vinyl Ether",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.25
+                    },
+                    "determination_method": "intersection method",
+                    "Q-value": {
+                        "constant_1": 0.06,
+                        "constant_2": 0.44
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 1.2
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl Vinyl Ether",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 37.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 2.0
+                    },
+                    "determination_method": "intersection method",
+                    "Q-value": {
+                        "constant_1": 0.017,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.28,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl Vinyl Ether",
+                    "monomer2": "Vinyl Acetate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 3.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "intersection method",
+                    "Q-value": {
+                        "constant_1": 0.03,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": -0.3,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "Ethyl Vinyl Ether",
+                    "monomer2": "Vinyl Chloride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 2.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "intersection method",
+                    "Q-value": {
+                        "constant_1": 0.05,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1955.120168201",
+    "PDF_name": "Copolymerization Characteristics of Ethyl Vinyl Ether and Its Beta-Bromo and Beta-Carbethoxy Derivatives"
+}

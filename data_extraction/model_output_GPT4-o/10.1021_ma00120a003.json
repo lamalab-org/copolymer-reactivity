@@ -1,0 +1,116 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Methyl Methacrylate",
+                    "monomer2": "N-Vinylpyrrolidone"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Methyl Isobutyrate",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.781,
+                        "constant_2": 0.006
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.236,
+                        "constant_conf_2": 2.286
+                    },
+                    "determination_method": "least-square curve-fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N-Methylpyrrolidone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 5.932,
+                        "constant_2": 0.014
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.198,
+                        "constant_conf_2": 0.899
+                    },
+                    "determination_method": "least-square curve-fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Cyclohexane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.073,
+                        "constant_2": 0.027
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.247,
+                        "constant_conf_2": 0.0624
+                    },
+                    "determination_method": "least-square curve-fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.041,
+                        "constant_2": 0.066
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.956,
+                        "constant_conf_2": 0.965
+                    },
+                    "determination_method": "least-square curve-fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00125a053",
+    "PDF_name": "Solvent Effect on Free-Radical Chain Polymerization"
+}

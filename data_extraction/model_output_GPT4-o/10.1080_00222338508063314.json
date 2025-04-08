@@ -1,0 +1,181 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "3,3-Dimethoxycyclopropene",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.241,
+                        "constant_2": 1.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.053,
+                        "constant_conf_2": 0.045
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.31,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.24,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "4,8-Dioxaspiro(2,5)oct-1-ene",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.248,
+                        "constant_2": 1.78
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.038,
+                        "constant_conf_2": 0.038
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.27,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "6,6-Dimethyl-4,8-dioxaspiro(2,5)oct-1-ene",
+                    "monomer2": "Styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.254,
+                        "constant_2": 1.84
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.061,
+                        "constant_conf_2": 0.053
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.27,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.071,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "6,6-Dimethyl-4,8-dioxaspiro(2,5)oct-1-ene",
+                    "monomer2": "2-Vinylpyridine"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.071,
+                        "constant_2": 2.08
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.011,
+                        "constant_conf_2": 0.014
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.38,
+                        "constant_2": 1.41
+                    },
+                    "e-Value": {
+                        "constant_1": 0.96,
+                        "constant_2": -0.42
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "6,6-Dimethyl-4,8-dioxaspiro(2,5)oct-1-ene",
+                    "monomer2": "Acrylonitrile"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": null,
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.4,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.48
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": 1.23
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338508063314",
+    "PDF_name": "Copolymerization Studies of Cyclopropenone Ketals"
+}

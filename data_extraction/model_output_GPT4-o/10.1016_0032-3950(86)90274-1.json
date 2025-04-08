@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomer1",
+                "Dicyclopentadiene",
+                "monomer2",
+                "Maleic Anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.096,
+                        "constant_2": 0.061
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Jaacks equation",
+                    "Q-value": {
+                        "constant_1": 0.023,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": -0.017,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0032-3950(86)90001-2",
+    "PDF_name": "Complex-radical copolymerization of Dicyclopentadiene with Maleic Anhydride"
+}

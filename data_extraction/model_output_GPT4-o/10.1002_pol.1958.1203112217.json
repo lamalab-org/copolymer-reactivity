@@ -1,0 +1,35 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "Trimethyl aconitate",
+                    "monomer2": "Vinylidene chloride"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 54.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 5.0
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. XXXI, Pages 165-171 (1958)",
+    "PDF_name": "Copolymerization of Trialkyl Aconitates with Vinylidene Chloride"
+}

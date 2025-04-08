@@ -1,0 +1,486 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-acryloyloxybenzoic acid",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.068,
+                        "constant_2": 0.661
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.055,
+                        "constant_conf_2": 0.643
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 3.9,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": 1.02,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.053,
+                        "constant_2": 0.639
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.017,
+                        "constant_conf_2": 0.014
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 3.9,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": 1.02,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-methacryloyloxybenzoic acid",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.155,
+                        "constant_2": 1.175
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.172,
+                        "constant_conf_2": 1.204
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.22,
+                        "constant_2": 0.15
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.158,
+                        "constant_2": 1.178
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.027,
+                        "constant_conf_2": 0.023
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 2.22,
+                        "constant_2": 0.15
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-methyl-N-phenyl-2-aminoethyl methacrylate",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.445,
+                        "constant_2": 0.592
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.412,
+                        "constant_conf_2": 0.557
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": 0.37,
+                        "constant_2": 0.04
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.438,
+                        "constant_2": 0.584
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.017,
+                        "constant_conf_2": 0.021
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": 0.37,
+                        "constant_2": 0.04
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl 2-methacryloyloxybenzoate",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.245,
+                        "constant_2": 0.433
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.248,
+                        "constant_conf_2": 0.48
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.05
+                    },
+                    "e-Value": {
+                        "constant_1": 0.63,
+                        "constant_2": 0.04
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.282,
+                        "constant_2": 0.479
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.028,
+                        "constant_conf_2": 0.026
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.05
+                    },
+                    "e-Value": {
+                        "constant_1": 0.63,
+                        "constant_2": 0.04
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-acryloyloxybenzoic acid",
+                    "monomer2": "N-methyl-N-phenyl-2-aminoethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.67,
+                        "constant_2": 0.152
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.86,
+                        "constant_conf_2": 0.23
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.25,
+                        "constant_2": 0.37
+                    },
+                    "e-Value": {
+                        "constant_1": 0.65,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.559,
+                        "constant_2": 0.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.008,
+                        "constant_conf_2": 0.026
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 2.25,
+                        "constant_2": 0.37
+                    },
+                    "e-Value": {
+                        "constant_1": 0.65,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-methacryloyloxybenzoic acid",
+                    "monomer2": "N-methyl-N-phenyl-2-aminoethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.544,
+                        "constant_2": 0.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.607,
+                        "constant_conf_2": 0.206
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.31,
+                        "constant_2": 0.12
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.08,
+                        "constant_2": 0.194
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.013,
+                        "constant_conf_2": 0.026
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 2.31,
+                        "constant_2": 0.12
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "acrylic acid",
+                    "monomer2": "N-methyl-N-phenyl-2-aminoethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.051,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.205,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 2.17,
+                        "constant_2": 0.17
+                    },
+                    "e-Value": {
+                        "constant_1": 0.65,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 2.08,
+                        "constant_2": 0.177
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.013,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 2.17,
+                        "constant_2": 0.17
+                    },
+                    "e-Value": {
+                        "constant_1": 0.65,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methyl 2-methacryloyloxybenzoate",
+                    "monomer2": "N-methyl-N-phenyl-2-aminoethyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.183,
+                        "constant_2": 0.611
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.075,
+                        "constant_conf_2": 0.528
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.11,
+                        "constant_2": 0.02
+                    },
+                    "e-Value": {
+                        "constant_1": 0.63,
+                        "constant_2": 0.04
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.156,
+                        "constant_2": 0.599
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 1.11,
+                        "constant_2": 0.02
+                    },
+                    "e-Value": {
+                        "constant_1": 0.63,
+                        "constant_2": 0.04
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/macp.1982.021830111",
+    "PDF_name": "The Copolymerization of Unsaturated Carboxylic Acids with Styrene and an Unsaturated Tertiary Amine in Benzene"
+}

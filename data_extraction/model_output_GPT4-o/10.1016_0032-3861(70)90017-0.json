@@ -1,0 +1,102 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "methacrylic anhydride",
+                    "monomer2": "styrene"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.33,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methacrylic anhydride",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.7,
+                        "constant_2": 0.22
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "methacrylic anhydride",
+                    "monomer2": "methyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 4.75,
+                        "constant_2": 0.16
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": null,
+                    "Q-value": null,
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0014-3057(70)90012-3",
+    "PDF_name": "Studies of the polymerization and copolymerization of methacrylic anhydride"
+}

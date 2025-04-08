@@ -1,0 +1,41 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "ethylacrylate",
+                    "monomer2": "3-[diethyl-2-(2-methacryloyloxyethoxy)ethylammonio]propanesulphonate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.242,
+                        "constant_2": 3.93
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": null,
+                        "constant_conf_2": null
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.49,
+                        "constant_2": 0.31
+                    },
+                    "e-Value": {
+                        "constant_1": 0.49,
+                        "constant_2": 0.31
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0032-3861(88)90070-3",
+    "PDF_name": "Random ethylacrylate-sulphonatopropylbetaine copolymers. 1. Synthesis and characterization"
+}

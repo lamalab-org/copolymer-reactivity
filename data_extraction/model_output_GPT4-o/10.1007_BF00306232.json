@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-vinyl-5-methyl furan",
+                    "monomer2": "methyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.89,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0748,
+                        "constant_conf_2": 0.635
+                    },
+                    "determination_method": "nonlinear least squares error-in-variables",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.2
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-vinyl-5-methyl furan",
+                    "monomer2": "isobutyl methacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.72,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.063,
+                        "constant_conf_2": 0.238
+                    },
+                    "determination_method": "nonlinear least squares error-in-variables",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.094
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "2-vinyl-5-methyl furan",
+                    "monomer2": "n-butyl acrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 0.39,
+                        "constant_2": 0.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.25,
+                        "constant_conf_2": 0.502
+                    },
+                    "determination_method": "nonlinear least squares error-in-variables",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": 0.047
+                }
+            ]
+        }
+    ],
+    "source": "Polymer Bulletin 34, 399-404 (1995)",
+    "PDF_name": "Copolymerization behavior of 2-vinyl-5-methyl furan"
+}

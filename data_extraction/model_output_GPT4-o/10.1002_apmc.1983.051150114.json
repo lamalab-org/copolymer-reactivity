@@ -1,0 +1,93 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-(5-Methyl-3-oxa-4-oxo-hexen-5-yl)-dimethylmaleinimid",
+                    "monomer2": "Methacrylic acid"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "Methylethylketon/Methylcellosolve",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.36,
+                        "constant_2": 0.77
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-(5-Methyl-3-oxa-4-oxo-hexen-5-yl)-dimethylmaleinimid",
+                    "monomer2": "Methylmethacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1-Acetoxy-2-ethoxy-ethan",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.16,
+                        "constant_2": 0.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.17,
+                        "constant_conf_2": 0.17
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                {
+                    "monomer1": "N-(5-Methyl-3-oxa-4-oxo-hexen-5-yl)-dimethylmaleinimid",
+                    "monomer2": "Ethylacrylate"
+                }
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1-Acetoxy-2-ethoxy-ethan",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "°C",
+                    "reaction_constants": {
+                        "constant_1": 1.6,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.15
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": null,
+                    "e-Value": null,
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/apmc.1983.051181410",
+    "PDF_name": "Neue photoreaktive Polymere mit seitenständigen Dimethylmaleinimid-Gruppen"
+}
