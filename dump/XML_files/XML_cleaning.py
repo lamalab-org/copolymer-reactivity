@@ -66,10 +66,10 @@ def process_all_xml_files(input_dir, output_dir):
                         output_dir, subdir, filename.replace(".xml", ".tei.xml")
                     )
 
-                    # Ensure the output directory for this subfolder exists
+                    # Ensure the output_2 directory for this subfolder exists
                     os.makedirs(os.path.join(output_dir, subdir), exist_ok=True)
 
-                    # Check if the output file already exists
+                    # Check if the output_2 file already exists
                     if os.path.exists(output_file):
                         print(f"Output file {output_file} already exists. Skipping.")
                         continue
@@ -81,7 +81,7 @@ def process_all_xml_files(input_dir, output_dir):
 if __name__ == "__main__":
     input_dir = "../files_pygetpaper/"  # Path to your input directory
     print(input_dir)
-    output_dir = "../files_pygetpaper/XML_cleaning/clean_XML_files"  # Path to your output directory
+    output_dir = "../files_pygetpaper/XML_cleaning/clean_XML_files"  # Path to your output_2 directory
 
     # Define the Pub2TEI server URL
     server_url = "http://localhost:8060/service/processXML"  # Use port 8080

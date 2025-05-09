@@ -14,6 +14,7 @@ def run_combined_pipeline(
     key_embedding_filter,
     values_embedding_filter,
     scoring_file_embedding_filter,
+    existing_doi_csv
 ):
     """
     Combined pipeline that first scores the papers and then processes embeddings.
@@ -34,6 +35,7 @@ def run_combined_pipeline(
         journal_file=journal_file,
         keywords=keywords,
         output_file=scoring_output_path,
+        existing_doi_csv=existing_doi_csv
     )
 
     print("Scoring completed.")
@@ -54,13 +56,13 @@ def run_combined_pipeline(
     print("Embedding generation completed.")
 
 
-def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_input_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter):
+def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_input_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter, existing_doi_csv):
 
     # Define paths and parameters
-    journal_file = "output/journals.json"  # JSON file with supported journal names
-    output_dir = "output"  # Directory to store results
+    journal_file = "output_2/journals.json"  # JSON file with supported journal names
+    output_dir = "output_2"  # Directory to store results
 
-    # Ensure output directories exist
+    # Ensure output_2 directories exist
     os.makedirs(output_dir, exist_ok=True)
 
     # Run the combined pipeline
@@ -75,4 +77,5 @@ def main(keywords, score_limit, number_of_selected_papers, crossref_metadata_inp
         key_embedding_filter,
         values_embedding_filter,
         scoring_file_embedding_filter,
+        existing_doi_csv
     )

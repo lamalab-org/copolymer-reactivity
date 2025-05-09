@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "vinyl propionate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 1.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "curve-fitting I procedure",
+                    "Q-value": {
+                        "constant_1": 0.027,
+                        "constant_2": 0.022
+                    },
+                    "e-Value": {
+                        "constant_1": -0.49,
+                        "constant_2": -0.2
+                    },
+                    "r_product": 0.93
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "vinyl butyrate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 1.035
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "curve-fitting I procedure",
+                    "Q-value": {
+                        "constant_1": 0.027,
+                        "constant_2": 0.022
+                    },
+                    "e-Value": {
+                        "constant_1": -0.49,
+                        "constant_2": -0.2
+                    },
+                    "r_product": 0.93
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "vinyl isobutyrate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.81,
+                        "constant_2": 1.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "curve-fitting I procedure",
+                    "Q-value": {
+                        "constant_1": 0.029,
+                        "constant_2": 0.026
+                    },
+                    "e-Value": {
+                        "constant_1": -0.62,
+                        "constant_2": -0.51
+                    },
+                    "r_product": 0.85
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "vinyl pivalate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.88,
+                        "constant_2": 1.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "curve-fitting I procedure",
+                    "Q-value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.024
+                    },
+                    "e-Value": {
+                        "constant_1": -0.22,
+                        "constant_2": -0.4
+                    },
+                    "r_product": 1.03
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1979.170171025",
+    "PDF_name": "Copolymerization of vinyl acetate with a homologous series of vinyl esters: a comparative study of vinyl acetate-vinyl ester and ethylene-vinyl ester copolymerization"
+}

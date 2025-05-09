@@ -140,9 +140,9 @@ def process_all_xml_files(input_dir, output_dir):
 
 if __name__ == "__main__":
     input_dir = "../files_pygetpaper/XML_cleaning/clean_XML_files"  # Path to your input directory
-    output_dir = "../files_pygetpaper/XML_cleaning/clean_JSON_files"  # Path to your collected output directory
+    output_dir = "../files_pygetpaper/XML_cleaning/clean_JSON_files"  # Path to your collected output_2 directory
 
-    # Create the output directory if it doesn't exist
+    # Create the output_2 directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
 
     # Process all XML files

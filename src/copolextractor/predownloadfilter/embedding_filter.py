@@ -2,6 +2,7 @@ import numpy as np
 import os
 import json
 import requests
+import pandas as pd
 from scipy.spatial.distance import cdist
 from openai import OpenAI
 import copolextractor.utils as utils
@@ -96,7 +97,7 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
         text = f"{title if title else ''}. {abstract if abstract else ''}".strip()
 
         # Check if embedding already exists
-        existing_embedding = load_existing_embedding(output_dir, paper.get("DOI"))
+        existing_embedding, filename = load_existing_embedding(output_dir, paper.get("DOI"))
         if existing_embedding is not None:
             paper["Embedding"] = existing_embedding
             save_embedding_file(output_dir, paper, doi_list_path)
@@ -116,59 +117,88 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
 
 
 def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
-    """Embed only filtered new papers from a given JSON file."""
-    print(new_papers_path)
+    """Embed only filtered new papers from a given CSV file."""
+    print(f"Loading new papers from CSV: {new_papers_path}")
 
     try:
-        with open(new_papers_path, "r") as f:
-            new_papers = json.load(f)
+        # Load the CSV file
+        df = pd.read_csv(new_papers_path)
+
+        # Check if required columns exist
+        required_cols = ['original_source']
+        missing_cols = [col for col in required_cols if col not in df.columns]
+
+        if missing_cols:
+            print(f"Error: Missing required columns in CSV: {missing_cols}")
+            return []
+
+        # Filter papers based on the key and values
+        if key in df.columns:
+            filtered_df = df[df[key].isin(values)]
+        else:
+            print(f"Warning: Key '{key}' not found in CSV. Processing all papers.")
+            filtered_df = df
+
+        # Convert DataFrame to list of dictionaries
+        new_papers = filtered_df.to_dict('records')
+
     except Exception as e:
-        print(f"Error loading JSON file: {new_papers_path}. Details: {e}")
+        print(f"Error loading CSV file: {new_papers_path}. Details: {e}")
         return []
 
-    print(new_papers_path)
-
-    filtered_papers = [
-        paper for paper in new_papers if paper.get(key) in values
-    ]
+    print(f"Found {len(new_papers)} papers after filtering")
 
     embedded_papers = []
-    for paper in filtered_papers:
-        print(f"Processing embedding of {paper}.")
+    for paper in new_papers:
+        # Use 'original_source' as DOI
+        doi = paper.get("original_source")
+        if not doi:
+            print(f"Skipping paper without DOI (original_source)")
+            continue
+
+        print(f"Processing embedding for paper with DOI: {doi}")
+
         title = paper.get("Title")
         abstract = paper.get("Abstract")
 
         # Check for missing Title and Abstract and use CrossRef if needed
-        if not title and not abstract:
-            print(f"Missing Title and Abstract for paper with DOI: {paper.get('source')}. Fetching from CrossRef...")
-            crossref_data = get_crossref_data(paper.get("source"), paper.get("Source", "Unknown"), paper.get("Format", "Unknown"))
-            title = crossref_data.get("Title")
-            abstract = crossref_data.get("Abstract")
+        if not title or not abstract:
+            print(f"Missing Title or Abstract for paper with DOI: {doi}. Fetching from CrossRef...")
+            crossref_data = get_crossref_data(doi, paper.get("Source", "Unknown"), paper.get("Format", "Unknown"))
+
+            if not title:
+                title = crossref_data.get("Title")
+                paper["Title"] = title
+
+            if not abstract:
+                abstract = crossref_data.get("Abstract")
+                paper["Abstract"] = abstract
 
             if title == "No title" and abstract == "No abstract available":
-                print(f"CrossRef could not provide Title and Abstract for DOI: {paper.get('source')}.")
+                print(f"CrossRef could not provide Title and Abstract for DOI: {doi}.")
                 continue
-            else:
-                paper["Title"] = title
-                paper["Abstract"] = abstract
 
         text = f"{title if title else ''}. {abstract if abstract else ''}".strip()
 
         # Check if embedding already exists
-        existing_embedding, current_filename = load_existing_embedding(output_dir, paper.get("source"))
+        existing_embedding, current_filename = load_existing_embedding(output_dir, doi)
         if existing_embedding is not None:
             paper["Embedding"] = existing_embedding
             paper["filename"] = current_filename
+            paper["DOI"] = doi  # Ensure DOI is in the standard key
             embedded_papers.append(paper)
+            print(f"Using existing embedding for {doi}")
             continue
 
         try:
             embedding, _ = get_embedding(client, text)
             paper["Embedding"] = embedding
             paper["filename"] = current_filename
+            paper["DOI"] = doi  # Ensure DOI is in the standard key
             embedded_papers.append(paper)
+            print(f"Created new embedding for {doi}")
         except Exception as e:
-            print(f"Error embedding paper {paper.get('source', 'Unknown')}: {e}")
+            print(f"Error embedding paper {doi}: {e}")
             continue
 
     return embedded_papers
@@ -201,11 +231,14 @@ def get_crossref_data(doi, source, format_type):
     else:
         return {
             "DOI": doi,
+            "Title": "No title",
+            "Abstract": "No abstract available",
             "Error": f"Unable to fetch data (Status Code: {response.status_code})",
         }
 
 
-def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper, new_papers_path, client):
+def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper,
+                                new_papers_path, client):
     embeddings_path = os.path.join(output_dir, "embeddings/embedded_papers.json")
 
     # Load processed data
@@ -278,9 +311,9 @@ def get_embedding(client, text, model="text-embedding-3-small"):
     return embedding, token_usage
 
 
-def main(file_path, output_dir, doi_list_path, selected_papers_path, score_limit, number_of_selected_paper, key, values, new_papers_path):
-
-    # Ensure output directory exists
+def main(file_path, output_dir, doi_list_path, selected_papers_path, score_limit, number_of_selected_paper, key, values,
+         new_papers_path):
+    # Ensure output_2 directory exists
     os.makedirs(output_dir, exist_ok=True)
 
     # Initialize OpenAI client
@@ -290,4 +323,5 @@ def main(file_path, output_dir, doi_list_path, selected_papers_path, score_limit
     process_embeddings(file_path, output_dir, client, score_limit, doi_list_path)
 
     # Step 2: Find and save the x nearest papers including new papers
-    find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper, new_papers_path, client)
+    find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper,
+                                new_papers_path, client)

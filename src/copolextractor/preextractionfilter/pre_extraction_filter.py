@@ -46,7 +46,7 @@ def run_combined_pipeline(
 
 def main(seed_xgboost_model, threshold_xgboost_model, pdf_input_folder, output_folder_images, output_folder_LLM_score, training_file_xgboost_model, input_file_xgboost_filter, output_file_xgboost_filter):
 
-    # Ensure output directories exist
+    # Ensure output_2 directories exist
     os.makedirs(output_folder_images, exist_ok=True)
     os.makedirs(output_folder_LLM_score, exist_ok=True)
 

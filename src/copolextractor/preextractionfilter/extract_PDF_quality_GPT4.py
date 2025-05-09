@@ -54,7 +54,7 @@ def process_pdfs(
             output_folder, filename.replace(".pdf", ".json")
         )
 
-        # Check if the result already exists in the output folder
+        # Check if the result already exists in the output_2 folder
         if os.path.exists(output_json_path):
             print(f"Loading existing result for {filename} from {output_json_path}.")
             with open(output_json_path, "r", encoding="utf-8") as json_file:
@@ -149,7 +149,7 @@ def process_pdfs(
     end_time = time.time()
     print("Execution time:", end_time - start_time)
     print("Total input tokens:", total_input_tokens)
-    print("Total output tokens:", total_output_tokens)
+    print("Total output_2 tokens:", total_output_tokens)
     print("Total number of model calls:", number_of_calls)
 
 
@@ -166,7 +166,7 @@ def main(
     # Define log file path
     log_file_path = "./error_log.txt"
 
-    # Ensure output directories exist
+    # Ensure output_2 directories exist
     os.makedirs(output_folder_images, exist_ok=True)
     os.makedirs(output_folder, exist_ok=True)
 

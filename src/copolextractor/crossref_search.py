@@ -133,7 +133,7 @@ def save_extracted_data(output_file_path, extracted_data):
 def main(crossref_query, output_file_crossref_search, crossref_metadata_output_file):
     # Define file paths
     copol_file_path = (
-        "../../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"
+        "../../data_extraction/data_extraction_GPT-4o/output_2/copol_paper_list.json"
     )
     all_doi_output_file = "../../data_extraction/obtain_data/output/collected_doi.json"
 

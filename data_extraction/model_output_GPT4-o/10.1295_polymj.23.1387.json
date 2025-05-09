@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-dodecylacrylamide",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.73,
+                        "constant_2": 0.52
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": 0.73,
+                        "constant_2": 0.4
+                    },
+                    "r_product": 0.9
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.67,
+                        "constant_2": 0.58
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": 0.73,
+                        "constant_2": 0.4
+                    },
+                    "r_product": 0.9
+                }
+            ]
+        }
+    ],
+    "source": "Polymer Journal, Vol. 23, No. 11, pp 1387\u20131391 (1991)",
+    "PDF_name": "Reactivity Ratios of N-dodecylacrylamide in Copolymerization with Methyl Methacrylate and Langmuir\u2013Blodgett Multilayer Formation of the Copolymers"
+}

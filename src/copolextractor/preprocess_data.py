@@ -140,7 +140,7 @@ def load_embeddings(file_path="embeddings.json"):
 
 
 # Save embeddings to a file
-def save_embeddings(embeddings_dict, file_path="output/method_embeddings.json"):
+def save_embeddings(embeddings_dict, file_path="output_2/method_embeddings.json"):
     """Save embeddings to a JSON file."""
     embeddings_list = [{"name": name, "embedding": embedding} for name, embedding in embeddings_dict.items()]
     with open(file_path, "w") as file:
@@ -225,7 +225,7 @@ def process_logp(df):
         return df
 
     # File to store the cache
-    CACHE_FILE = "./output/logp_cache.json"
+    CACHE_FILE = "./output_2/logp_cache.json"
 
     if "LogP" not in df.columns:
         print("LogP column not found. Calculating LogP values...")

@@ -29,8 +29,8 @@ important information. Be careful with numbers and do not miss the decimal point
 If there are polymerizations without these constants, ignore these.
 From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
 Don't use any abbreviations, always use the whole word.
-Try to keep the string short. Exclude comments out of the json output. Return one json object. Stick to the
-given output datatype (string, or float).
+Try to keep the string short. Exclude comments out of the json output_2. Return one json object. Stick to the
+given output_2 datatype (string, or float).
 
 Extract the following information:
 
@@ -123,7 +123,7 @@ for i, filename in enumerate(input_files):
             else:
                 print("NA-rate under 30%")
             print("input tokens used: ", total_input_tokens)
-            print("output tokens used: ", total_output_tokens)
+            print("output_2 tokens used: ", total_output_tokens)
             print("total number of model call: ", number_of_calls)
 
 end = time.time()

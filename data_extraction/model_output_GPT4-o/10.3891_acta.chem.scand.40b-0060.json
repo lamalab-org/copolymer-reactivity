@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-decene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "Ziegler-Natta",
+                    "solvent": "n-heptane",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 240.0,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 95.0,
+                        "constant_conf_2": 95.0
+                    },
+                    "determination_method": "nonlinear optimization algorithm",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "1-dodecene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "Ziegler-Natta",
+                    "solvent": "n-heptane",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 350.0,
+                        "constant_2": 0.018
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 95.0,
+                        "constant_conf_2": 95.0
+                    },
+                    "determination_method": "nonlinear optimization algorithm",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "1-hexadecene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "Ziegler-Natta",
+                    "solvent": "n-heptane",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 490.0,
+                        "constant_2": 0.019
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 95.0,
+                        "constant_conf_2": 95.0
+                    },
+                    "determination_method": "nonlinear optimization algorithm",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Acta Chemica Scandinavica B40 (1986) 60\u201363",
+    "PDF_name": "Ethylene Copolymerization with Long Chain \u03b1-Olefins; Binary Reactivity Ratios"
+}

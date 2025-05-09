@@ -172,10 +172,10 @@ def clean_json_file(input_dir: str, output_dir: str, mapping_file: str, manual_m
 
 
 def main():
-    input_dir = "../data_extraction/data_extraction_GPT-4o/output/copol_database/model_output_extraction"  # Directory with original files
-    output_dir = "../data_extraction/data_extraction_GPT-4o/output/copol_database/model_output_extraction"  # Directory for cleaned files
+    input_dir = "../data_extraction/output/copol_database/model_output_extraction"  # Directory with original files
+    output_dir = "../data_extraction/output/copol_database/model_output_extraction"  # Directory for cleaned files
 
-    mapping_file = "../data_extraction/data_extraction_GPT-4o/output/copol_paper_list.json"  # File with DOI mappings
+    mapping_file = "../data_extraction/output/copol_database/copol_paper_list.json"  # File with DOI mappings
     manual_mapping_file = "papers_without_mapping.json"
 
     print(f"\nProcessing files from {input_dir} to {output_dir}")
