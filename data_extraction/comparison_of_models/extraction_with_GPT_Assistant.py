@@ -60,12 +60,12 @@ for i, filename in enumerate(input_files):
         run_time_expired_error += 1
         continue
 
-    # format output and convert into json and yaml file
+    # format output_2 and convert into json and yaml file
     try:
         output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
     except json.JSONDecodeError as e:
         parsing_error += 1
-        print(f"json format of output of {filename} is not valid")
+        print(f"json format of output_2 of {filename} is not valid")
         continue
 
     # if there are more than 30 % "NA" entries it calls again the model (max 2 times)
@@ -91,7 +91,7 @@ for i, filename in enumerate(input_files):
                 i, output, output_folder
             )
     print("input tokens used: ", total_input_tokens)
-    print("output tokens used: ", total_output_token)
+    print("output_2 tokens used: ", total_output_token)
     print("total number of model call: ", number_of_calls)
 print("parsing error:", parsing_error)
 

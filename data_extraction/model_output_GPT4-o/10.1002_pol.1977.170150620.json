@@ -1,0 +1,204 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl formate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.586,
+                        "constant_2": 1.29
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.009,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "nonlinear least-squares estimation method",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.028
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": -0.73
+                    },
+                    "r_product": 0.76
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.74,
+                        "constant_2": 1.504
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.008
+                    },
+                    "determination_method": "nonlinear least-squares estimation method",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.026
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": -0.22
+                    },
+                    "r_product": 1.11
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl propionate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.674,
+                        "constant_2": 1.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "nonlinear least-squares estimation method",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.022
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": -0.2
+                    },
+                    "r_product": 1.01
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl butyrate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.696,
+                        "constant_2": 1.505
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "nonlinear least-squares estimation method",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.022
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": -0.2
+                    },
+                    "r_product": 1.05
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl isobutyrate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.609,
+                        "constant_2": 1.49
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.008,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "nonlinear least-squares estimation method",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.026
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": -0.51
+                    },
+                    "r_product": 0.91
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl pivalate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tert-butyl alcohol",
+                    "method": "solvent",
+                    "temperature": 62.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.645,
+                        "constant_2": 1.49
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.006,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "nonlinear least-squares estimation method",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.024
+                    },
+                    "e-Value": {
+                        "constant_1": -0.2,
+                        "constant_2": -0.4
+                    },
+                    "r_product": 0.96
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1977.170150620",
+    "PDF_name": "Copolymerization of ethylene with a homologous series of vinyl esters"
+}

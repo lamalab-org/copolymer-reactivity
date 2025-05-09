@@ -78,7 +78,7 @@ for i, filename in enumerate(input_files):
         else:
             print("NA-rate under 30%")
         print("tokens input used: ", input_token)
-        print("tokens output used: ", output_token)
+        print("tokens output_2 used: ", output_token)
         print("total number of model call: ", number_of_calls)
     if output_model is None:
         parsing_error += 1

@@ -68,14 +68,14 @@ def process_pdf_files(
         # Generate initial prompt
         content = prompter.get_prompt_vision_model(images_base64, prompt_text)
 
-        # Call the model and process output
+        # Call the model and process output_2
         print("Model call starts")
         output, input_token, output_token = prompter.call_openai(prompt=content)
         total_input_tokens += input_token
         total_output_tokens += output_token
         number_of_calls += 1
 
-        # Save output as JSON and YAML
+        # Save output_2 as JSON and YAML
         output_name_json = os.path.join(
             output_folder, filename.replace(".pdf", ".json")
         )
@@ -101,31 +101,31 @@ def process_pdf_files(
                 number_of_calls += 1
 
                 if output is not None:
-                    # Save updated output
+                    # Save updated output_2
                     try:
-                        # Parse the output string into a Python dictionary
+                        # Parse the output_2 string into a Python dictionary
                         parsed_output = json.loads(output)
                     except json.JSONDecodeError as e:
                         print(f"Error decoding JSON: {e}")
                         parsed_output = None
 
                     if parsed_output is not None:
-                        # Save updated output
+                        # Save updated output_2
                         with open(output_name_json, "w", encoding="utf-8") as json_file:
                             json.dump(parsed_output, json_file, indent=4)
                         print(f"Output successfully saved to {output_name_json}")
                     else:
-                        print("Failed to save output due to JSON parsing error.")
+                        print("Failed to save output_2 due to JSON parsing error.")
             else:
                 print("NA-rate below 30%, no further retries needed.")
 
                 if output is not None:
-                    # Save updated output
+                    # Save updated output_2
                     with open(output_name_json, "w", encoding="utf-8") as json_file:
                         json.dump(output, json_file, indent=4)
                     print(f"Output successfully saved to {output_name_json}")
                 else:
-                    print("Failed to save output due to JSON parsing error.")
+                    print("Failed to save output_2 due to JSON parsing error.")
 
                 break
 
@@ -140,7 +140,7 @@ def process_pdf_files(
         json.dump(paper_list, file, indent=4)
 
     print("Total input tokens used:", total_input_tokens)
-    print("Total output tokens used:", total_output_tokens)
+    print("Total output_2 tokens used:", total_output_tokens)
     print("Total number of model calls:", number_of_calls)
 
     end = time.time()
@@ -289,13 +289,13 @@ def main(
 
 
 if __name__ == "__main__":
-    # Input and output folders
+    # Input and output_2 folders
     input_folder_images = "./processed_images"
     output_folder = "./model_output_GPT4-o"
     paper_list_path = (
-        "../../data_extraction/data_extraction_GPT-4o/output/paper_list.json"
+        "../../data_extraction/data_extraction_GPT-4o/output_2/paper_list.json"
     )
-    pdf_folder = "../obtain_data/output/PDF"
+    pdf_folder = "../obtain_data/output_2/PDF"
     extracted_data_file = (
         "../../data_extraction/comparison_of_models/extracted_data.json"
     )

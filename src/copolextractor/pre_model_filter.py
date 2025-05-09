@@ -167,7 +167,7 @@ def load_and_filter_data(source: Optional[str] = None, output_file: Optional[str
     apply_r_product_filter(data)
     apply_r_conf_filter(data)
 
-    # Save results if output file is specified
+    # Save results if output_2 file is specified
     if output_file:
         with open(output_file, "w") as file:
             json.dump(data, file, indent=4)

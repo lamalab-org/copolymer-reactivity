@@ -119,7 +119,7 @@ wandb.init(
         "max resolution": "high",
         "deviation of correct rxn": 0.01,
         "input tokens used": 100085,
-        "output tokens used": 7813,
+        "output_2 tokens used": 7813,
         "total model calls": 10,
         "time used": 383.4063169956207,
     },

@@ -180,7 +180,7 @@ def load_embeddings(file_path="embeddings.json"):
     return {}
 
 
-def save_embeddings(embeddings_dict, file_path="output/embeddings.json"):
+def save_embeddings(embeddings_dict, file_path="output_2/embeddings.json"):
     """Save embeddings to a JSON file."""
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     embeddings_list = [{"name": name, "embedding": embedding} for name, embedding in embeddings_dict.items()]

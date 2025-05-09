@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinylidene fluoride",
+                "4-bromo-1,1,2-trifluorobut-1-ene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.96,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.67,
+                        "constant_conf_2": 0.63
+                    },
+                    "determination_method": "Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "r_product": 0.09
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.20555",
+    "PDF_name": "Synthesis and Copolymerization of Fluorinated Monomers Bearing a Reactive Lateral Group. XX. Copolymerization of Vinylidene Fluoride with 4-Bromo-1,1,2-trifluorobut-1-ene"
+}

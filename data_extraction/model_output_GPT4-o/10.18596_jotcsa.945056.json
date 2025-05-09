@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "2-perfluorooctyl ethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 350.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.79,
+                        "constant_2": 1.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "quantum computational approach",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.18596/jotcsa.945056",
+    "PDF_name": "Kinetic Study of the Free Radical Copolymerization of Methyl Methacrylate with 2-Perfluorooctyl Ethyl Methacrylate by Quantum Computational Approach"
+}

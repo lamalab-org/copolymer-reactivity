@@ -2,7 +2,7 @@ import json
 
 
 with open(
-    "../data_extraction/data_extraction_GPT-4o/output/copol_database/RF_training_paper.json",
+        "../data_extraction/output/copol_database/RF_training_paper.json",
     "r",
 ) as file:
     data = json.load(file)
@@ -21,7 +21,7 @@ for entry in data:
 
 
 with open(
-    "../data_extraction/data_extraction_GPT-4o/output/copol_database/RF_training_paper.json",
+        "../data_extraction/output/copol_database/RF_training_paper.json",
     "w",
 ) as file:
     json.dump(data, file, indent=4)

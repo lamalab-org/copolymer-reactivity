@@ -1015,7 +1015,7 @@ def train_xgboost_models(train_loader, test_loader):
     # Evaluate on test set
     y_pred = random_search.predict(X_test)
 
-    # Calculate R² scores for each output
+    # Calculate R² scores for each output_2
     from sklearn.metrics import r2_score
     r2_r1 = r2_score(y_test[:, 0], y_pred[:, 0])
     r2_r2 = r2_score(y_test[:, 1], y_pred[:, 1])

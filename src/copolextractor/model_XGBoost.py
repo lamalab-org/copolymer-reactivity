@@ -15,7 +15,7 @@ import plotly.express as px
 def map_categorical_features(X, column, mapping):
     """
     Map categorical values to numeric values using a predefined mapping.
-    Unknown values are mapped to -1. Ensures the output is 2D.
+    Unknown values are mapped to -1. Ensures the output_2 is 2D.
     """
     return X[column].map(mapping).values.reshape(-1, 1)
 
@@ -227,7 +227,7 @@ def main(data):
 
 
 if __name__ == "__main__":
-    data = "../../copol_prediction/output/processed_data.csv"
+    data = "../../copol_prediction/output_2/processed_data.csv"
     main(data)
 
 

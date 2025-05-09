@@ -349,7 +349,7 @@ def update_mongodb_entries_safe(db: CoPolymerDB, updated_data: dict):
     print(f"Failed updates: {error_count}")
 
 
-def main(output_folder="output/molecule_properties", smiles_error_path="output/smiles_error.json"):
+def main(output_folder="output_2/molecule_properties", smiles_error_path="output_2/smiles_error.json"):
     # Initialize MongoDB connection
     db = CoPolymerDB()
 
@@ -370,7 +370,7 @@ def main(output_folder="output/molecule_properties", smiles_error_path="output/s
 
     print(f"Found {len(unique_smiles)} unique SMILES strings")
 
-    # Ensure output folder exists
+    # Ensure output_2 folder exists
     os.makedirs(output_folder, exist_ok=True)
 
     updated_data = {}

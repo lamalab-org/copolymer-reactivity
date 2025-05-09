@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import json
 from collections import Counter
 import os
+import copolextractor.utils as utils
+import pandas as pd
 
 
 def fetch_journals(output_journal_file):
@@ -56,7 +58,7 @@ def calculate_score(entry, journal_list, keywords):
     return entry
 
 
-def process_papers(input_file, journal_file, keywords, output_file):
+def process_papers(input_file, journal_file, keywords, output_file, existing_doi_csv):
     """Process papers, calculate scores, and save results to a JSON file."""
     # Load journals
     with open(journal_file, "r") as f:
@@ -66,15 +68,22 @@ def process_papers(input_file, journal_file, keywords, output_file):
     with open(input_file, "r") as f:
         data = json.load(f)
 
-    # Initialize MongoDB connection using CoPolymerDB
-    db = CoPolymerDB()
+    # Load existing DOIs from CSV file
+    existing_dois = set()
+    if existing_doi_csv:
+        try:
+            df = pd.read_csv(existing_doi_csv)
+            if 'original_source' in df.columns:
+                existing_dois = set(df['original_source'].dropna().tolist())
+        except Exception as e:
+            print(f"Warning: Could not load existing DOIs from CSV: {e}")
 
     # Process DOIs and mark existing entries
     for entry in data:
         if 'DOI' in entry:
-            processed_doi = sanitize(entry['DOI']).rstrip('.json')
-            # Check if DOI exists in MongoDB
-            if db.exists(processed_doi):
+            processed_doi = utils.sanitize_filename(entry['DOI']).rstrip('.json')
+            # Check if DOI exists in the list from CSV
+            if processed_doi in existing_dois:
                 entry['already_extracted'] = True
             else:
                 entry['already_extracted'] = False
@@ -110,9 +119,9 @@ def process_papers(input_file, journal_file, keywords, output_file):
     print(f"Scored papers saved to {output_file}.")
 
 
-def main(input_file, journal_file, keywords, output_file):
+def main(input_file, journal_file, keywords, output_file, existing_doi_csv):
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)
 
     # Step 2: Process papers and calculate scores
-    process_papers(input_file, journal_file, keywords, output_file)
+    process_papers(input_file, journal_file, keywords, output_file, existing_doi_csv)

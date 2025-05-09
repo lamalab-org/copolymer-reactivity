@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4-vinylpyridine",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "carbon tetrachloride",
+                    "method": "precipitation",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.97,
+                        "constant_2": 0.93
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Alfrey-Price",
+                    "Q-value": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.17721/1728-2209.2019.1(56).11",
+    "PDF_name": "Kinetics_Investigation_of_Methacrylic_Monomers_Based_on_2-Styrylquinoline.pdf"
+}

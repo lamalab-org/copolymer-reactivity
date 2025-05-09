@@ -3,7 +3,7 @@ from copolextractor.PDF_download import main as pdf_download
 from copolextractor.predownloadfilter.pre_download_filter import main as pre_download_filter
 from copolextractor.crossref_search import main as crossref_search
 from copolextractor.extraction_with_GPT_PDF import main as extractor
-from copolextractor.save_data_in_database import main as save_data
+from copolextractor.data_into_csv import main as save_data
 
 
 def obtain_data(
@@ -27,15 +27,16 @@ def obtain_data(
     key_embedding_filter,
     values_embedding_filter,
     scoring_file_embedding_filter,
+existing_doi_csv
 ):
     # crossref search for relevant paper
     #crossref_search(crossref_keyword, output_file_crossref_search, crossref_metadata_output_file)
 
     # metadata filter with keywords and embeddings
-    pre_download_filter(keywords_filter, score_limit, number_of_selected_papers, crossref_metadata_output_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter)
+    pre_download_filter(keywords_filter, score_limit, number_of_selected_papers, crossref_metadata_output_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter, existing_doi_csv)
 
     # PDF download with Scidownl
-    #pdf_download(output_file_pre_download_filter, pdf_folder)
+    pdf_download(output_file_pre_download_filter, pdf_folder)
 
     # PDF quality XGBoost-filter
     pre_extraction_filter(seed_xgboost_model, threshold_xgboost_model, pdf_folder, output_folder_images, output_folder_LLM_score, training_file_xgboost_model, output_file_pre_download_filter, output_file_xgboost_filter)
@@ -58,12 +59,13 @@ def main():
     crossref_keyword = "'copolymerization' AND 'reactivity ratio'"  # Note that this prompt was created in the
     # wrong way and collect all paper with reactivity and/or copolymerization in title and abstract
     output_file_crossref_search = (
-        "./obtain_data/output/crossref_search.json"
+        "./obtain_data/output_2/crossref_search.json"
     )
     crossref_metadata_output_file = (
-        "./obtain_data/output/collected_doi_metadata.json"
+        "./obtain_data/output_2/collected_doi_metadata.json"
     )
 
+    existing_doi_csv = 'extracted_reactions.csv'
     # Keywords and weights for pre download scoring
     keywords_filter = {
         "copolymerization": 10,
@@ -76,34 +78,51 @@ def main():
 
     # Embedding filter
     score_limit = 65  # Minimum score for embedding generation
-    number_of_selected_papers = 500  # Number of nearest papers to select
+    number_of_selected_papers = 2000  # Number of nearest papers to select
     output_file_pre_download_filter = "./output/selected_papers.json"
     key_embedding_filter = "polymerization_type"
     values_embedding_filter = [
-        "Anionic",
-        "cationic",
-        "atom transfer radical",
-        "atom transfer radical polymerization",
-        "nickel-mediated radical",
-        "Polycondensation"
+        'free radical', 'Free radical', 'Free Radical',
+        'atom transfer radical polymerization',
+        'atom-transfer radical polymerization',
+        'nickel-mediated radical', 'bulk',
+        'Radical', 'radical',
+        'controlled radical',
+        'controlled/living radical',
+        'conventional radical polymerization',
+        'reversible deactivation radical polymerization',
+        'reversible addition-fragmentation chain transfer polymerization',
+        'reversible addition-fragmentation chain transfer',
+        'Homogeneous Radical',
+        'Radiation-induced', 'radiation-induced',
+        'Radiation-Initiated',
+        'photo-induced polymerization',
+        'photopolymerization',
+        'thermal polymerization',
+        'thermal',
+        'group transfer polymerization',
+        'Emulsion',
+        'Homogeneous Radical',
+        'semicontinuous emulsion',
+        'emulsion'
     ]
-    scoring_file_embedding_filter = "../copol_prediction/output/extracted_data_w_features.json"
+    scoring_file_embedding_filter = "extracted_reactions.csv"
 
     # PDF download
-    pdf_folder = "./output/PDF"  # the PDFs get downloaded form the SciHub corpus.
+    pdf_folder = "./output_2/PDF"  # the PDFs get downloaded form the SciHub corpus.
     # People should be aware of copyright law before using this
 
     # XGBoost filter
     seed_xgboost_model = 22
     threshold_xgboost_model = 0.7  # threshold to define precision limit for the filter
     # LLM scoring PDF as parameters for XGBoost model
-    output_folder_images = "./output/processed_images"
-    output_folder_LLM_score = "./output/model_output_score"
+    output_folder_images = "./output_2/processed_images"
+    output_folder_LLM_score = "./output_2/model_output_score"
 
     training_file_xgboost_model = (
-        "./data_extraction_GPT-4o/output/copol_paper_list.json"
+        "./data_extraction_GPT-4o/output_2/copol_paper_list.json"
     )
-    output_file_xgboost_filter = "./data_extraction_GPT-4o/output/paper_list.json"
+    output_file_xgboost_filter = "output/paper_list.json"
 
     # Data extraction of filtered paper
     input_folder_images = "./processed_images"
@@ -134,6 +153,7 @@ def main():
         key_embedding_filter,
         values_embedding_filter,
         scoring_file_embedding_filter,
+        existing_doi_csv
     )
 
 

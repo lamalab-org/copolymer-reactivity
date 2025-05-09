@@ -22,7 +22,7 @@ def get_prompt_pdf_quality():
     In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
     Count each different reaction with an r-value as one. Ignore copolymerization with reference to previse work.
     Just count copolymerizations with r-values which are carried out in the article.  
-    Stick to the given output datatype (string, integer or float). json:
+    Stick to the given output_2 datatype (string, integer or float). json:
     {
         "pdf_quality": the quality of the provided PDF document in terms of e.g. resolution and easiness of data extraction form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
         "table_quality": the quality and structuredness of the tables in the PDF document in terms of e.g. easiness of data extraction and clearity form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
@@ -57,8 +57,8 @@ def get_prompt_template():
     Also pay attention to the caption of figures.
     Don't use any abbreviations, always use the whole word.
     Be careful with the sequenz of the monomers and reaction constants. The monomer 1 should belong to r-value 1. t6zt
-    Try to keep the string short. Exclude comments out of the json output. Return one json object. 
-    Stick to the given output datatype (string, or float).
+    Try to keep the string short. Exclude comments out of the json output_2. Return one json object. 
+    Stick to the given output_2 datatype (string, or float).
 
     Extract the following information:
 
@@ -301,12 +301,12 @@ def format_output_as_json_and_yaml(i, output, output_folder, pdf_name):
 
         with open(output_name_json, "w", encoding="utf-8") as json_file:
             json.dump(json_data, json_file, ensure_ascii=False, indent=4)
-        print("output saved as JSON-file.")
+        print("output_2 saved as JSON-file.")
         with open(output_name_yaml, "w") as yaml_file:
             yaml.dump(json_data, yaml_file, allow_unicode=True)
         return json_data
     except json.JSONDecodeError as e:
-        print("error at parsing the output to JSON-file:", e)
+        print("error at parsing the output_2 to JSON-file:", e)
 
 
 def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
@@ -332,7 +332,7 @@ def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
             print(f"Output saved as YAML-file at {output_name_yaml}.")
             return json_data
         except Exception as e:
-            print(f"Error parsing the output: {e}")
+            print(f"Error parsing the output_2: {e}")
 
 
 def call_claude3(prompt):
