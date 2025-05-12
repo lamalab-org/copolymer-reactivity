@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 9.0,
+    "(The PDF is high-resolution, text is selectable and well-aligned, making it easy to extract data with minimal OCR errors.)": "FLOAT",
+    "table_quality": 8.5,
+    "(Table I is clearly structured with column headers and units, though it lacks grid lines, which could cause minor alignment issues during automated extraction.)": "FLOAT",
+    "quality_of_numbers": 9.0,
+    "(All numerical values, including r-values, concentrations, and time data, are clearly printed and easy to read. Figures and equations are also legible.)": "FLOAT",
+    "year": 2010,
+    "(Clearly stated in the publication info section.)": "INTEGER",
+    "number_of_reactions": 1,
+    "(Only one copolymerization system is studied in detail: 4-vinylbenzenesulfonic acid sodium salt (VB) with acrylamide (Aam), with r-values provided for this pair under various conditions.)": "FLOAT",
+    "language": "english",
+    "(The entire article is written in English, including figures, tables, and references.)": "STRING"
+}

@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 9.0,
+    "(The PDF is high-resolution, text is selectable and well-aligned, making it easy to extract data with minimal OCR errors.)": "FLOAT",
+    "table_quality": 8.0,
+    "(Tables are well-structured with clear headers and consistent formatting, though some footnotes and superscripts may require careful parsing.)": "FLOAT",
+    "quality_of_numbers": 9.0,
+    "(Numerical data is clearly printed and well-aligned in tables and text, with minimal risk of misreading or misalignment.)": "FLOAT",
+    "year": 2012,
+    "(Clearly stated in the abstract and footer of the first page.)": "INTEGER",
+    "number_of_reactions": 0.0,
+    "(The paper discusses chain transfer constants and polymerization kinetics, but does not report any r-values for copolymerization reactions. No reactivity ratios are provided.)": "FLOAT",
+    "language": "english",
+    "(The entire document is written in English, including figures, tables, and references.)": "STRING"
+}

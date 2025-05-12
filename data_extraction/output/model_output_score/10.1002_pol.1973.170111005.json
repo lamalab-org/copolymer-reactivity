@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 7.0,
+    "(The scan quality is decent, text is mostly clear, but some figures and symbols are slightly blurry. OCR errors are possible in complex formulas or small text.)": "FLOAT",
+    "table_quality": 6.5,
+    "(Tables are present and mostly structured, but some are embedded in text or have minimal borders, increasing the chance of line misalignment or misreading column headers.)": "FLOAT",
+    "quality_of_numbers": 8.0,
+    "(Most numerical data, including r-values and molecular weights, are clearly printed and distinguishable. However, some small font sizes and figure labels may introduce minor errors.)": "FLOAT",
+    "year": 1973,
+    "(Clearly stated at the bottom of the first page and in the references section.)": "INTEGER",
+    "number_of_reactions": 2,
+    "(Two distinct copolymerization systems with r-values are reported: BMA\u2013DMBD with and without Al(C2H5)2Cl (Table II), and MAn\u2013DMBD (Figure 15). Other systems are discussed but without r-values.)": "FLOAT",
+    "language": "english",
+    "(All text, figures, and tables are in English.)": "STRING"
+}

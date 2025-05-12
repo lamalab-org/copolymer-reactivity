@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 9.0,
+    "(The PDF is high-resolution, text is clear, and layout is well-structured. Minimal risk of OCR or parsing errors.)": "FLOAT",
+    "table_quality": 8.0,
+    "(Table I is clearly labeled and structured, but lacks grid lines which could lead to minor parsing issues.)": "FLOAT",
+    "quality_of_numbers": 9.0,
+    "(All numerical values, including r-values, temperatures, and dose rates, are clearly printed and easy to extract.)": "FLOAT",
+    "year": 1964,
+    "(Clearly stated at the top of the first page.)": "INTEGER",
+    "number_of_reactions": 4.0,
+    "(Four distinct copolymerization conditions with r-values are reported: 15\u00b0C, 0\u00b0C, -20\u00b0C, and -78\u00b0C.)": "FLOAT",
+    "language": "english",
+    "(Main text is in English; French and German summaries are present but not the main content.)": "STRING"
+}

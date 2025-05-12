@@ -9,10 +9,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
 # Import the BucketClassifier
-from bucket_model import BucketClassifier
-import data_processing
-import result_visualization as visualization
-import models
+from copolpredictor.bucket_model import BucketClassifier
+from copolpredictor import models, data_processing, result_visualization as visualization
 
 
 def run_bucket_classifier(df, random_state):
@@ -25,7 +23,7 @@ def run_bucket_classifier(df, random_state):
     """
     print("\n=== Running Bucket Classification Model ===")
 
-    # Create output_2 directory for classification results
+    # Create output directory for classification results
     os.makedirs("output/classification", exist_ok=True)
 
     # Initialize classifier with predefined category boundaries
@@ -54,7 +52,7 @@ def run_bucket_classifier(df, random_state):
         df_prepared,
         save_path="output/classification/bucket_distribution.png"
     )
-    print("Saved bucket distribution plot to output_2/classification/bucket_distribution.png")
+    print("Saved bucket distribution plot to output/classification/bucket_distribution.png")
 
     # Train and evaluate model
     fold_scores, predictions = classifier.train_and_evaluate(X, y, df_prepared)
@@ -66,7 +64,7 @@ def run_bucket_classifier(df, random_state):
     importance_df = classifier.get_feature_importances(final_model)
 
     if importance_df is not None:
-        importance_df.to_csv("output_2/classification/feature_importances.csv", index=False)
+        importance_df.to_csv("output/classification/feature_importances.csv", index=False)
 
         # Plot feature importances
         visualization.plot_feature_importances(
@@ -133,7 +131,7 @@ def run_bucket_classifier(df, random_state):
             predictions['r1r2_rmse']
         ]
     })
-    metrics_df.to_csv("output_2/classification/metrics.csv", index=False)
+    metrics_df.to_csv("output/classification/metrics.csv", index=False)
 
     # Save detailed predictions for error analysis
     save_detailed_predictions(predictions, df_prepared, original_df)
@@ -142,13 +140,13 @@ def run_bucket_classifier(df, random_state):
     print(f"Average Accuracy: {predictions['avg_test_accuracy']:.4f}")
     print(f"Average F1 Score: {predictions['avg_test_f1']:.4f}")
     print(f"RMSE on r1r2 values: {predictions['r1r2_rmse']:.4f}")
-    print("Results saved to output_2/classification/")
+    print("Results saved to output/classification/")
 
 
 def save_detailed_predictions(predictions, df_prepared, original_df):
     """
     Save detailed prediction results for error analysis
-    Ensures method and polymerization_type are included in the output_2
+    Ensures method and polymerization_type are included in the output
 
     Args:
         predictions: Dictionary with prediction results
@@ -224,8 +222,8 @@ def save_detailed_predictions(predictions, df_prepared, original_df):
         results_df['rel_error_dist'] = results_df['abs_error_dist'] / np.maximum(results_df['true_r1r2'], 0.0001) * 100
 
     # Save the results
-    results_df.to_csv("output_2/classification/detailed_predictions.csv", index=False)
-    print("Saved detailed predictions to output_2/classification/detailed_predictions.csv")
+    results_df.to_csv("output/classification/detailed_predictions.csv", index=False)
+    print("Saved detailed predictions to output/classification/detailed_predictions.csv")
     print(f"Columns included in detailed predictions: {results_df.columns.tolist()}")
 
 
@@ -237,7 +235,7 @@ def main(process_data = True):
     # Set random seed for reproducibility
     random_state = 42
 
-    # Create output_2 directory
+    # Create output directory
     os.makedirs("output", exist_ok=True)
 
     print("=== Copolymerization Prediction Model ===")
@@ -252,7 +250,7 @@ def main(process_data = True):
             return
 
         # Save processed data
-        df.to_csv("output_2/processed_data.csv", index=False)
+        df.to_csv("output/processed_data.csv", index=False)
     else:
         df = pd.read_csv("output/processed_data.csv")
 
@@ -269,7 +267,7 @@ def main(process_data = True):
     # run_neural_network(df, random_state)
 
     print("\n=== Modeling Complete ===")
-    print("Results saved to output_2/")
+    print("Results saved to output/")
 
 
 def run_xgboost(df, random_state):
@@ -297,7 +295,7 @@ def run_xgboost(df, random_state):
     importance_df = trainer.get_feature_importances(final_model)
 
     if importance_df is not None:
-        importance_df.to_csv("output_2/xgboost_feature_importances.csv", index=False)
+        importance_df.to_csv("output/xgboost_feature_importances.csv", index=False)
 
     # Create visualizations
     visualization.plot_model_performance(
@@ -434,9 +432,9 @@ def run_xgboost(df, random_state):
     results_df = pd.concat([test_df, train_df], ignore_index=True)
 
     # Save the results
-    results_df.to_csv("output_2/xgboost_predictions_for_error_analysis.csv", index=False)
+    results_df.to_csv("output/xgboost_predictions_for_error_analysis.csv", index=False)
     print(
-        f"Saved {len(results_df)} samples ({len(test_df)} test, {len(train_df)} train) to output_2/xgboost_predictions_for_error_analysis.csv")
+        f"Saved {len(results_df)} samples ({len(test_df)} test, {len(train_df)} train) to output/xgboost_predictions_for_error_analysis.csv")
 
     # Calculate R² separately for train and test
     # Check for NaN values before calculating metrics
@@ -486,9 +484,9 @@ def run_xgboost(df, random_state):
         'Test': [test_r2, test_rmse],
         'CV_Average': [predictions['avg_test_r2'], None]
     })
-    metrics_summary.to_csv("output_2/xgboost_metrics_summary.csv", index=False)
+    metrics_summary.to_csv("output/xgboost_metrics_summary.csv", index=False)
 
-    # Print the columns included in the output_2
+    # Print the columns included in the output
     print(f"Columns included in the analysis: {results_df.columns.tolist()}")
 
 
@@ -576,7 +574,7 @@ def run_neural_network(df, random_state):
             'MSE_Product': metrics['product_mse']
         }])
 
-        metrics_df.to_csv("output_2/nn_metrics.csv", index=False)
+        metrics_df.to_csv("output/nn_metrics.csv", index=False)
 
         # Prepare a fresh test loader for plotting
         train_loader, test_loader, input_size, new_feature_scaler, new_target_transformer = prepare_data(
@@ -634,7 +632,7 @@ def run_neural_network(df, random_state):
         plt.title('Distribution of True vs Predicted R1 Values')
         plt.legend()
         plt.tight_layout()
-        plt.savefig("output_2/nn_r1_distribution.png")
+        plt.savefig("output/nn_r1_distribution.png")
         plt.close()
 
         plt.figure(figsize=(10, 6))
@@ -645,7 +643,7 @@ def run_neural_network(df, random_state):
         plt.title('Distribution of True vs Predicted R2 Values')
         plt.legend()
         plt.tight_layout()
-        plt.savefig("output_2/nn_r2_distribution.png")
+        plt.savefig("output/nn_r2_distribution.png")
         plt.close()
 
         plt.figure(figsize=(10, 6))
@@ -656,7 +654,7 @@ def run_neural_network(df, random_state):
         plt.title('Distribution of True vs Predicted Product Values')
         plt.legend()
         plt.tight_layout()
-        plt.savefig("output_2/nn_product_distribution.png")
+        plt.savefig("output/nn_product_distribution.png")
         plt.close()
 
         # Save model
@@ -667,14 +665,14 @@ def run_neural_network(df, random_state):
                 'target_transformer': target_transformer,
                 'input_size': model.shared_layers[0].in_features
             }
-            torch.save(model_info, "output_2/nn_model.pt")
-            print("Model saved successfully to output_2/nn_model.pt")
+            torch.save(model_info, "output/nn_model.pt")
+            print("Model saved successfully to output/nn_model.pt")
         except Exception as e:
             print(f"Error saving model: {e}")
 
         avg_r2 = (metrics['r12_r2'] + metrics['r21_r2'] + metrics['product_r2']) / 3
         print(f"Neural Network average R² score: {avg_r2:.4f}")
-        print("Prediction plots saved to output_2/ directory")
+        print("Prediction plots saved to output/ directory")
 
     except Exception as e:
         print(f"Error running neural network model: {e}")
