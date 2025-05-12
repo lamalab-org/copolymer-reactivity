@@ -1,6 +1,6 @@
 import json
 import os
-from doi2pdf import doi2pdf
+from copolextractor.doi2pdf import doi2pdf
 import copolextractor.utils as utils
 
 
@@ -54,8 +54,7 @@ def download_papers(input_file, output_folder):
             doi = doi.replace('https://doi.org/', '')
 
         try:
-            # Download using doi2pdf - we don't pass specific sci_hub_url
-            # to let it try all mirrors automatically
+            # Download using doi2pdf
             doi2pdf(doi, output=output_path)
 
             # Check if file was created

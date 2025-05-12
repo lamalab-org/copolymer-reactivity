@@ -4,6 +4,24 @@ import csv
 from copolextractor import utils
 
 
+def load_existing_csv(output_file):
+    """Load existing CSV and return data and set of already processed sources."""
+    if not os.path.exists(output_file):
+        return [], set()
+
+    existing_data = []
+    processed_sources = set()
+    with open(output_file, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            existing_data.append(row)
+            if 'PDF_name' in row and row['PDF_name']:
+                processed_sources.add(row['PDF_name'])
+            elif 'source_filename' in row:
+                processed_sources.add(row['source_filename'])
+    return existing_data, processed_sources
+
+
 
 def load_data(data_path):
     combined_data = []
@@ -283,22 +301,46 @@ def write_to_csv(data, output_file="output_2.csv"):
 
 
 def main(data_path):
-    # Load data
+    output_file = "../../data_extraction/extracted_reactions.csv"
+    backup_file = output_file.replace(".csv", "_old.csv")
+
+    # Load existing CSV if it exists
+    existing_data, processed_sources = load_existing_csv(output_file)
+
+    # Back up the old CSV
+    if os.path.exists(output_file):
+        os.rename(output_file, backup_file)
+        print(f"Backup saved to {backup_file}")
+
+    # Load raw JSON data
     combined_data = load_data(data_path)
 
-    # Process data
-    unnested_data = unnest_data(combined_data)
+    # Filter: skip already processed entries
+    new_data = [
+        reaction for reaction in combined_data
+        if reaction.get("PDF_name") not in processed_sources
+        and reaction.get("source_filename") not in processed_sources
+    ]
 
-    print("Processing the data...")
-    # add smiles and logp
+    if not new_data:
+        print("No new papers to process. Rewriting existing data.")
+        write_to_csv(existing_data, output_file)
+        return
+
+    print(f"Processing {len(new_data)} new papers...")
+
+    # Process new entries
+    unnested_data = unnest_data(new_data)
     processed_data = process_chemicals(unnested_data)
-
-    print("Filtering the data...")
-    # filter data
     filtered_data = filter_data(processed_data)
 
-    # Write to CSV
-    write_to_csv(filtered_data, "../../data_extraction/extracted_reactions.csv")
+    # Merge new and old data
+    final_data = existing_data + filtered_data
+
+    # Write updated CSV
+    write_to_csv(final_data, output_file)
+    print(f"Updated data written to {output_file}")
+
 
 
 if __name__ == "__main__":

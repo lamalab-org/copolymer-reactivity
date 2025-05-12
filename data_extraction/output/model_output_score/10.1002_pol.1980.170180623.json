@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 9.0,
+    "(The PDF is high-resolution, text is clear, and all figures and tables are legible. OCR is not needed, and the layout is clean.)": "FLOAT",
+    "table_quality": 8.5,
+    "(Tables are well-structured with clear headers and consistent formatting. Minor issues like footnotes and superscripts could slightly complicate parsing.)": "FLOAT",
+    "quality_of_numbers": 9.0,
+    "(All numerical values, including r-values, temperatures, and times, are clearly printed and easy to extract. Very low chance of misreading.)": "FLOAT",
+    "year": 1980,
+    "(Clearly stated at the bottom of the first page and in the references section.)": "INTEGER",
+    "number_of_reactions": 1.0,
+    "(Only one copolymerization reaction with r-values is explicitly reported: styrene and p-vinyltrifluoroacetophenone (VTFA), with r1 = 0.30 \u00b1 0.09 and r2 = 1.3 \u00b1 0.3.)": "FLOAT",
+    "language": "english",
+    "(The entire document is written in English, including all figures and tables.)": "STRING"
+}

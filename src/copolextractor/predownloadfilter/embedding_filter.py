@@ -38,6 +38,19 @@ def save_embedding_file(output_dir, paper, doi_list_path):
         json.dump(doi_list, f, indent=2)
 
 
+def load_failed_crossref(failed_path="output/failed_crossref.json"):
+    if os.path.exists(failed_path):
+        with open(failed_path, "r") as f:
+            return set(json.load(f))
+    return set()
+
+
+def save_failed_crossref(failed_dois, failed_path="output/failed_crossref.json"):
+    with open(failed_path, "w") as f:
+        json.dump(list(failed_dois), f, indent=2)
+
+
+
 def load_existing_doi_list(doi_list_path):
     """Load the existing DOI list from file."""
     if os.path.exists(doi_list_path):
@@ -116,10 +129,9 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
     print(f"Total tokens used: {total_tokens}")
 
 
-def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
-    """Embed only filtered new papers from a given CSV file."""
+def embed_filtered_papers(new_papers_path, output_dir, client, key, values, failed_path="failed_crossref.json"):
     print(f"Loading new papers from CSV: {new_papers_path}")
-
+    failed_dois = load_failed_crossref(failed_path)
     try:
         # Load the CSV file
         df = pd.read_csv(new_papers_path)
@@ -150,32 +162,31 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
 
     embedded_papers = []
     for paper in new_papers:
-        # Use 'original_source' as DOI
         doi = paper.get("original_source")
         if not doi:
             print(f"Skipping paper without DOI (original_source)")
             continue
 
-        print(f"Processing embedding for paper with DOI: {doi}")
+        if doi in failed_dois:
+            print(f"Skipping previously failed DOI: {doi}")
+            continue
 
+        print(f"Processing embedding for paper with DOI: {doi}")
         title = paper.get("Title")
         abstract = paper.get("Abstract")
 
-        # Check for missing Title and Abstract and use CrossRef if needed
         if not title or not abstract:
             print(f"Missing Title or Abstract for paper with DOI: {doi}. Fetching from CrossRef...")
             crossref_data = get_crossref_data(doi, paper.get("Source", "Unknown"), paper.get("Format", "Unknown"))
 
-            if not title:
-                title = crossref_data.get("Title")
-                paper["Title"] = title
-
-            if not abstract:
-                abstract = crossref_data.get("Abstract")
-                paper["Abstract"] = abstract
+            title = crossref_data.get("Title")
+            abstract = crossref_data.get("Abstract")
+            paper["Title"] = title
+            paper["Abstract"] = abstract
 
             if title == "No title" and abstract == "No abstract available":
                 print(f"CrossRef could not provide Title and Abstract for DOI: {doi}.")
+                failed_dois.add(doi)
                 continue
 
         text = f"{title if title else ''}. {abstract if abstract else ''}".strip()
@@ -201,6 +212,7 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values):
             print(f"Error embedding paper {doi}: {e}")
             continue
 
+    save_failed_crossref(failed_dois, failed_path)
     return embedded_papers
 
 
@@ -238,7 +250,7 @@ def get_crossref_data(doi, source, format_type):
 
 
 def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper,
-                                new_papers_path, client):
+                                new_papers_path, client, output_folder=None):
     embeddings_path = os.path.join(output_dir, "embeddings/embedded_papers.json")
 
     # Load processed data
@@ -270,35 +282,56 @@ def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, n
     # Find the minimum distance for each processed paper
     min_distances = distances.min(axis=1)
 
-    # Get indices of the `number_of_selected_paper` processed papers with the smallest distances
-    nearest_indices = np.argsort(min_distances)[:number_of_selected_paper]
+    # Get indices of the processed papers sorted by distance
+    sorted_indices = np.argsort(min_distances)
+
+    output_folder = "./model_output_GPT4-o"
 
     # Generate filename for each processed paper
     def get_filename_for_paper(doi):
         sanitized_doi = utils.sanitize_filename(doi)
         return f"{sanitized_doi}.json"
 
-    # Select the nearest papers, including the similarity scores
-    nearest_papers = [
-        {
+    # Select papers, checking if they already exist in the database
+    nearest_papers = []
+    papers_checked = 0
+
+    for i in sorted_indices:
+        if len(nearest_papers) >= number_of_selected_paper:
+            break
+
+        paper_doi = processed_data[i].get("DOI", "Unknown")
+        filename = get_filename_for_paper(paper_doi)
+        json_file_path = os.path.join(output_folder, filename)
+
+        # Check if this paper already exists in the database
+        if os.path.exists(json_file_path):
+            print(f"Skipping {filename}: JSON file already exists in the database.")
+            continue
+
+        # Add paper to the selection
+        nearest_papers.append({
             "Title": processed_data[i]['Title'],
             "Abstract": processed_data[i]['Abstract'],
             "Score": processed_data[i].get("Score", 0),
-            "DOI": processed_data[i].get("DOI"),
+            "DOI": paper_doi,
             "Source": processed_data[i].get("Source", "Unknown"),
             key: processed_data[i].get(key, "Unknown"),
             "Similarity": 1 - min_distances[i],
-            "filename": get_filename_for_paper(processed_data[i].get("DOI", "Unknown")),
-        }
-        for i in nearest_indices
-    ]
+            "filename": filename,
+        })
+        papers_checked += 1
+
+        if papers_checked >= len(sorted_indices):
+            print(f"Warning: Checked all {papers_checked} papers but only found {len(nearest_papers)} new papers.")
+            break
 
     # Save the results to the specified JSON file
     with open(selected_papers_path, "w") as outfile:
         json.dump(nearest_papers, outfile, indent=2)
 
     print(
-        f"The {number_of_selected_paper} nearest papers have been saved to {selected_papers_path}."
+        f"Found {len(nearest_papers)} new papers out of {number_of_selected_paper} requested. Results saved to {selected_papers_path}."
     )
 
 
