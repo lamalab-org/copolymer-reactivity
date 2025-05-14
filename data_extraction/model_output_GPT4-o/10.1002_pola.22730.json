@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-ethylhexyl methacrylate",
+                "1H,1H,5H-octafluoropentyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform-d",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.61,
+                        "constant_2": 0.39
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.14,
+                        "constant_conf_2": 0.14
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.22730",
+    "PDF_name": "Dispersion Copolymerization of 2-Ethylhexyl Methacrylate and Vinylbenzyl Chloride and Functional Group Conversions in a Fluorinated Solvent Using Microwave Heating"
+}

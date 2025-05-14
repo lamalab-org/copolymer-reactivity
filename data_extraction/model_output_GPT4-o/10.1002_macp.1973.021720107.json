@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "furfural",
+                "p-tolyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "furfural",
+                "2,3-dihydropyran"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 172, 85\u201396 (1973)",
+    "PDF_name": "Polymerization of Aromatic Aldehydes, 9"
+}

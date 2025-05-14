@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "trioxane",
+                "dioxolane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "cyclohexane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.5,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 116 (1968) 203\u2013218",
+    "PDF_name": "Segmental Exchange Polyacetal-Polyether in the Cationic Copolymerization of Trioxane with Dioxolane Catalyzed by BF3 in the Presence of Polyethers"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,2,2-trifluoroethyl alpha-fluoroacrylate",
+                "2,2,2-trichloroethyl alpha-fluoroacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 74.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.56,
+                        "constant_2": 0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.23249",
+    "PDF_name": "Free Radical Copolymerization of \u03b1-Fluoroacrylates for Optical Materials: Synthesis and Characterization"
+}

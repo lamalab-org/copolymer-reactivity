@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Chloral",
+                "Dichloroacetaldehyde"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.975
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: PART A-1 VOL. 5, 975\u2013986 (1967)",
+    "PDF_name": "Poly(chloroaldehydes)_IV_Copolymerization_of_Chloral_and_Dichloroacetaldehyde_Catalyzed_by_Organometallic_Compounds.pdf"
+}

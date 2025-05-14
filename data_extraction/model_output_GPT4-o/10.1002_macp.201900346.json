@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1-(N-Boc-2-aminoethyl)-4-propyl diitaconate",
+                "N,N-dimethylacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "reversible addition-fragmentation chain transfer",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.49,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.12,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.54
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.12,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.201900346",
+    "PDF_name": "Asymmetrically Substituted Poly(diitaconates) Obtained by Reversible Addition-Fragmentation Chain Transfer (RAFT) Polymerization"
+}

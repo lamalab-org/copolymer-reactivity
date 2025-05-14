@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "dimethyl sulfoxide",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.003,
+                        "constant_2": 1.605
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.0048
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.26334",
+    "PDF_name": "Copper(0)-Mediated Radical Copolymerization of Vinyl Acetate and Acrylonitrile in DMSO at Ambient Temperature"
+}

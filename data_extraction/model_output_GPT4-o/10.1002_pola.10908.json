@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinylidene fluoride",
+                "methyl 1,1-dihydro-4,7-dioxaperfluoro-5,8-dimethyl non-1-enoate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 2.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.21,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": 0.008,
+                        "constant_2": 0.024
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.7
+                    },
+                    "r_product": 0.92
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 2.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.21,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.046
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.8
+                    },
+                    "r_product": 0.92
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 41, 3109\u20133121 (2003)",
+    "PDF_name": "Synthesis and Polymerization of Fluorinated Monomers Bearing a Reactive Lateral Group XIV"
+}

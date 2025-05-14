@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethene",
+                "propene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 13.48,
+                        "constant_2": 0.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.91,
+                        "constant_conf_2": 0.26
+                    },
+                    "determination_method": "diad distribution fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 7.4
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethene",
+                "propene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Finemann Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.26
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma9717247",
+    "PDF_name": "Ethene/Propene Copolymerization with High Product of Reactivity Ratios from a Single Center, Metallocene-Based Catalytic System"
+}

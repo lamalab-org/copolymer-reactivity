@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.88
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "nonlinear least-squares method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.04
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.92,
+                        "constant_2": 0.54
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 27.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 7.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Macromol. Rapid Commun. 16, 779\u2013784 (1995)",
+    "PDF_name": "Copolymerization of styrene and isoprene with Ni(acac)2-methylalumoxane catalyst"
+}

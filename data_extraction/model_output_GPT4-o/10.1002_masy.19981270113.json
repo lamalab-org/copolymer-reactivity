@@ -1,0 +1,114 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "phenylacetylene",
+                "1-hexyne"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "cyclohexane",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 4.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.033,
+                        "constant_conf_2": 0.16
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.32
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "cyclohexane",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.09,
+                        "constant_2": 4.16
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0064,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": "Curve-fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.068,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.1
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.79,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "Curve-fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Macromol. Symp. 127, 77\u201387 (1998)",
+    "PDF_name": "INVESTIGATIONS ON HOMOPOLYMERIZATION AND COPOLYMERIZATION OF PHENYLACETYLENE AND 1-HEXYNE BY IRON-BASED ZIEGLER-NATTA CATALYST SYSTEMS"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3,4-ethylenedioxythiophene",
+                "5-methylindole"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electrochemical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.35,
+                        "constant_2": 2.58
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.54
+                    },
+                    "e-Value": {
+                        "constant_1": 0.124,
+                        "constant_2": 0.058
+                    },
+                    "r_product": 0.903
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.28112",
+    "PDF_name": "Electrochemical Copolymerization of 3,4-Ethylenedioxythiophene and 5-Methylindole and Characterizations of the Copolymers"
+}

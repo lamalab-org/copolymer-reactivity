@@ -1,0 +1,205 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "butyl acrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.433,
+                        "constant_2": 1.147
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.187,
+                        "constant_conf_2": 2.299
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": 3.708,
+                        "constant_2": 0.00628
+                    },
+                    "e-Value": {
+                        "constant_1": -3.585,
+                        "constant_2": 5.547
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.551,
+                        "constant_2": 1.57
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.285,
+                        "constant_conf_2": 2.492
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": 0.673,
+                        "constant_2": 0.4013
+                    },
+                    "e-Value": {
+                        "constant_1": -0.583,
+                        "constant_2": 4.609
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.453,
+                        "constant_2": 1.564
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.332,
+                        "constant_conf_2": 2.915
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": 0.973,
+                        "constant_2": 0.0182
+                    },
+                    "e-Value": {
+                        "constant_1": -0.858,
+                        "constant_2": 4.504
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.242,
+                        "constant_2": 2.652
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.545,
+                        "constant_conf_2": 2.992
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": -0.6714,
+                        "constant_2": 1.082
+                    },
+                    "e-Value": {
+                        "constant_1": -0.858,
+                        "constant_2": 3.905
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 140.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.24,
+                        "constant_2": 2.77
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.64,
+                        "constant_conf_2": 2.127
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": -0.6068,
+                        "constant_2": 0.0182
+                    },
+                    "e-Value": {
+                        "constant_1": -0.858,
+                        "constant_2": 3.905
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "p-chlorostyrene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.356,
+                        "constant_2": 0.665
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.9964,
+                        "constant_conf_2": 0.501
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": 0.545,
+                        "constant_2": 160.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.412,
+                        "constant_2": 175.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "p-chlorostyrene",
+                "p-methoxystyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.941,
+                        "constant_2": 0.474
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.9964,
+                        "constant_conf_2": 0.408
+                    },
+                    "determination_method": "nonlinear regression",
+                    "Q-value": {
+                        "constant_1": 0.545,
+                        "constant_2": 197.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.412,
+                        "constant_2": 175.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ie034337w",
+    "PDF_name": "Integro-differential Approach to the Estimation of Copolymerization Reactivity Ratios"
+}

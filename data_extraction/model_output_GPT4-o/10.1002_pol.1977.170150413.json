@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,6-anhydro-2,3,4-tri-O-(p-methylbenzyl)-\u03b2-D-glucopyranose",
+                "1,6-anhydro-2,3,4-tri-O-benzyl-\u03b2-D-mannopyranose"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 11.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.8
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 10.4
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,6-anhydro-2,3,4-tri-O-(p-methylbenzyl)-\u03b2-D-glucopyranose",
+                "1,6-anhydro-2,3,4-tri-O-benzyl-\u03b2-D-galactopyranose"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 1.36,
+                        "constant_2": 0.14
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.19
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,6-anhydro-2,3,4-tri-O-(p-methylbenzyl)-\u03b2-D-glucopyranose",
+                "1,6-anhydro-2,3-di-O-benzyl-4-O-(2,3,4,6-tetra-O-benzyl-\u03b1-D-glucopyranosyl)-\u03b2-D-glucopyranose"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 1.91,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.35,
+                        "constant_conf_2": 0.25
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.53
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: Polymer Chemistry Edition, VOL. 15, 913\u2013926 (1977)",
+    "PDF_name": "Copolymerization of Anhydroglucose and Anhydromannose Derivatives"
+}

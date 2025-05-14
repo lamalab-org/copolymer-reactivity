@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl acrylate",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "reversible addition fragmentation chain transfer",
+                    "solvent": "2-methyl-2-butanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 8.2,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.0,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "sum of residual space method",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/masy.201200038",
+    "PDF_name": "High-Throughput Method for RAFT Kinetic Investigations and Estimation of Reactivity Ratios in Copolymerization Systems"
+}

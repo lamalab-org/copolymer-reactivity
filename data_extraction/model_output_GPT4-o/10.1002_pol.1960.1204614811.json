@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "p-methylstyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 63.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.99,
+                        "constant_2": 0.94
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "direct counting",
+                    "Q-value": {
+                        "constant_1": 1.76,
+                        "constant_2": -1.276
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -1.276
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 63.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.83,
+                        "constant_2": 0.96
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "ionization chamber",
+                    "Q-value": {
+                        "constant_1": 1.76,
+                        "constant_2": -1.276
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -1.276
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. XLVI, Pages 423\u2013429 (1960)",
+    "PDF_name": "Tracer Techniques for the Determination of Monomer Reactivity Ratios III"
+}

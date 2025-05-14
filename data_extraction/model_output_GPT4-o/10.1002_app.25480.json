@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "methacrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "carbon dioxide",
+                    "method": "precipitation",
+                    "temperature": 338.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.56
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.94
+                    },
+                    "e-Value": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.26
+                    },
+                    "r_product": 0.1
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "2-hydroxyethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "carbon dioxide",
+                    "method": "precipitation",
+                    "temperature": 338.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.21,
+                        "constant_2": 0.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.85,
+                        "constant_2": 0.91
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.28
+                    },
+                    "r_product": 0.1
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.25480",
+    "PDF_name": "Environmentally Benign Precipitation Copolymerization of Methacrylate Ester and Styrene to Make Polymeric Microspheres in Supercritical Carbon Dioxide"
+}

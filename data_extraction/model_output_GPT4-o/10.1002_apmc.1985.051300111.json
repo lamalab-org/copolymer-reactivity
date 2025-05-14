@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "perfluoroheptyl methacrylate",
+                "glycidyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 1.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.34
+                    },
+                    "e-Value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.15
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 1.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.34
+                    },
+                    "e-Value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.15
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Angewandte Makromolekulare Chemie 130 (1985) 137\u2013146",
+    "PDF_name": "Graft Copolymerization of Perfluoroheptyl Methacrylate/Glycidyl Methacrylate Mixtures with Cotton Fabric Using Fe2+-thioureadioxide-H2O2 Redox System"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,2-bis[2-(4-fluorophenyl)benzoxazol-6-yl]hexafluoropropane",
+                "sodium 5,5\u2032-carbonylbis-2-fluorobenzenesulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "step-growth",
+                    "solvent": "N,N-dimethylacetamide",
+                    "method": "solvent",
+                    "temperature": 160.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.93,
+                        "constant_2": 1.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "proton nuclear magnetic resonance",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.21994",
+    "PDF_name": "Synthesis and Characterization of Sulfonated Poly(benzoxazole ether ketone)s by Direct Copolymerization as Novel Polymers for Proton-Exchange Membranes"
+}

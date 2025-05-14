@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl 3-phenyl-2-cyanopropenoate",
+                "ethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 1.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.6
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-phenyl-1,1-dicyanoethene",
+                "ethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.7
+                    },
+                    "e-Value": {
+                        "constant_1": 1.3,
+                        "constant_2": 0.5
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl 3-phenyl-2-cyanopropenoate",
+                "chloroethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.7
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-phenyl-1,1-dicyanoethene",
+                "chloroethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 2.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.3,
+                        "constant_2": 0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 31, 2295\u20132303 (1993)",
+    "PDF_name": "Radical Alternating Copolymerization of Vinyl Ethers"
+}

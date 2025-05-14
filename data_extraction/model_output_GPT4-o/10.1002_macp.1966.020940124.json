@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "para-Methoxystyrene",
+                "para-Chlorostyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylacetamide",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.48
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.36,
+                        "constant_2": 1.03
+                    },
+                    "e-Value": {
+                        "constant_1": 0.11,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "para-Methoxystyrene",
+                "para-Bromostyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylacetamide",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.43
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.36,
+                        "constant_2": 1.04
+                    },
+                    "e-Value": {
+                        "constant_1": 0.11,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "para-Methoxystyrene",
+                "para-Cyanostyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylacetamide",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.093,
+                        "constant_2": 0.85
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.36,
+                        "constant_2": 1.86
+                    },
+                    "e-Value": {
+                        "constant_1": 0.11,
+                        "constant_2": 0.21
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "para-Chlorostyrene",
+                "para-Cyanostyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylacetamide",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.4,
+                        "constant_2": 0.34
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.03,
+                        "constant_2": 1.86
+                    },
+                    "e-Value": {
+                        "constant_1": 0.08,
+                        "constant_2": 0.21
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 94 (1966) 238\u2013247",
+    "PDF_name": "120. Mutual Copolymerization of p-Substituted Styrenes through Radical Mechanism"
+}

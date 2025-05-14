@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 9.0,
+    "(The PDF is high-resolution, text is selectable and clearly structured. Figures and captions are legible. Minimal risk of OCR or parsing errors.)": "FLOAT",
+    "table_quality": 6.5,
+    "(Tables are present but embedded in the text or figures, not clearly separated or labeled as formal tables. Data is extractable but requires effort.)": "FLOAT",
+    "quality_of_numbers": 9.0,
+    "(Numerical data such as molar ratios, temperatures, and r-values are clearly printed and easy to read. Low chance of misreading.)": "FLOAT",
+    "year": 2020,
+    "(Clearly stated in the DOI and citation format.)": "INTEGER",
+    "number_of_reactions": 1.0,
+    "(Only one copolymerization reaction with r-values is described in detail: pyrrole and tellurophene with varying feed ratios. No other r-value-based copolymerizations are reported.)": "FLOAT",
+    "language": "english",
+    "(The entire article is written in English, including figures and captions.)": "STRING"
+}

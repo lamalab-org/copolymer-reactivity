@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4-methoxystyrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.32,
+                        "constant_2": 0.29
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.36,
+                        "constant_conf_2": 0.6
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 20.0,
+                        "constant_2": 20.0
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.092
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "4-methoxystyrene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.82,
+                        "constant_2": 1.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.95
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.472,
+                        "constant_2": 0.454
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.425,
+                        "constant_conf_2": 0.159
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 14.0,
+                        "constant_2": 14.0
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.214
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 28, 2097\u20132106 (1990)",
+    "PDF_name": "Copolymerization Kinetics of 4-Methoxystyrene with Methyl Methacrylate and 4-Methoxystyrene with Styrene"
+}

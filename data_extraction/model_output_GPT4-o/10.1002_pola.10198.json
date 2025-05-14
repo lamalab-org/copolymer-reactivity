@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "octafluorocyclopentene",
+                "ethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": -0.008,
+                        "constant_2": 0.192
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.015
+                    },
+                    "determination_method": "Yamada\u2013Itahashi\u2013Otsu nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.018
+                    },
+                    "e-Value": {
+                        "constant_1": 2.0,
+                        "constant_2": -1.8
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Lewis\u2013Mayo integrated equation",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.018
+                    },
+                    "e-Value": {
+                        "constant_1": 2.0,
+                        "constant_2": -1.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science Part A: Polymer Chemistry, Vol. 40, 1151\u20131156 (2002)",
+    "PDF_name": "Radical Copolymerization Behavior of a Highly Fluorinated Cyclic Olefin with Vinyl Ether"
+}

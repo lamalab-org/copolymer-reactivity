@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "propylene oxide",
+                "allyl glycidyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 21.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.25,
+                        "constant_2": 0.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1038/s42004-023-01031-z",
+    "PDF_name": "Quasi-alternating copolymerization of oxiranes driven by a benign acetate-based catalyst"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "N-vinyl-2-pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radiation-induced",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 5.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.348,
+                        "constant_2": 3.108
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.18,
+                        "constant_conf_2": 4.16
+                    },
+                    "determination_method": "Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "radiation-induced",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 5.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.348,
+                        "constant_2": 3.108
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.18,
+                        "constant_conf_2": 4.16
+                    },
+                    "determination_method": "Marquardt",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 24, 2159\u20132167 (1979)",
+    "PDF_name": "Statistical Analysis of Nitrogen-Containing Vinyl Copolymers"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "beta-propiolactone",
+                "3,3-chloromethyl-oxetane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": -50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.00166,
+                        "constant_2": 1.002
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.00107,
+                        "constant_conf_2": 0.00072
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.107,
+                        "constant_2": 0.107
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.1
+                    },
+                    "r_product": 0.00166
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338108063235",
+    "PDF_name": "Analysis of the Linear Methods for Determining Copolymerization Reactivity Ratios. V. Planning of Experiments"
+}

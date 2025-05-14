@@ -1,0 +1,114 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0234,
+                        "constant_2": 0.0442
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0177,
+                        "constant_conf_2": 0.0288
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "butanone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0242,
+                        "constant_2": 0.0628
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0177,
+                        "constant_conf_2": 0.0288
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0176,
+                        "constant_2": 0.0455
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0177,
+                        "constant_conf_2": 0.0288
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0189,
+                        "constant_2": 0.0446
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0177,
+                        "constant_conf_2": 0.0288
+                    },
+                    "determination_method": "non-linear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1016/0014-3057(94)E0060-H",
+    "PDF_name": "Solvent Effects on the Copolymerization of Styrene with Maleic Anhydride"
+}

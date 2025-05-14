@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "maleic anhydride",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 25.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 5.0
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 20.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.005,
+                        "constant_conf_2": 4.0
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1080/00222338108066433",
+    "PDF_name": "Studies of Radical Alternating Copolymerization. II. Influence of Charge Transfer Complex between Comonomers on the Microstructure of the Copolymers. Case of Maleic Anhydride and Vinyl Acetate"
+}

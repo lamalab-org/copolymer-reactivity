@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4-vinylphenyloxirane",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.06,
+                        "constant_2": 0.78
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": -0.36,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 191, 1941\u20131947 (1990)",
+    "PDF_name": "Kinetics of radical polymerization of oxirane- and oxetane-derivatives of styrene and copolymerization of 4-vinylphenyloxirane with styrene"
+}

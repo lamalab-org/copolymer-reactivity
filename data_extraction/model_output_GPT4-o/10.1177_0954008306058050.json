@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-(4-carboxyphenyl)maleimide",
+                "N-vinyl-2-pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.028,
+                        "constant_2": 0.347
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.021
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.035,
+                        "constant_2": 0.14
+                    },
+                    "e-Value": {
+                        "constant_1": 1.013,
+                        "constant_2": -1.14
+                    },
+                    "r_product": 0.0097
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.029,
+                        "constant_2": 0.347
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.006,
+                        "constant_conf_2": 0.013
+                    },
+                    "determination_method": "Mao-Huglin",
+                    "Q-value": {
+                        "constant_1": 0.035,
+                        "constant_2": 0.14
+                    },
+                    "e-Value": {
+                        "constant_1": 1.013,
+                        "constant_2": -1.14
+                    },
+                    "r_product": 0.0097
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-(4-formylphenoxy-4'-carbonylphenyl)maleimide",
+                "N-vinyl-2-pyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.044,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.025,
+                        "constant_conf_2": 0.024
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.145,
+                        "constant_2": 0.14
+                    },
+                    "e-Value": {
+                        "constant_1": 1.297,
+                        "constant_2": -1.14
+                    },
+                    "r_product": 0.0026
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.044,
+                        "constant_2": 0.061
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.024,
+                        "constant_conf_2": 0.023
+                    },
+                    "determination_method": "Mao-Huglin",
+                    "Q-value": {
+                        "constant_1": 0.145,
+                        "constant_2": 0.14
+                    },
+                    "e-Value": {
+                        "constant_1": 1.297,
+                        "constant_2": -1.14
+                    },
+                    "r_product": 0.0026
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1177/0954008306058050",
+    "PDF_name": "Radical Copolymerization of Functional N-Substituted Maleimides with N-Vinyl-2-Pyrrolidone"
+}

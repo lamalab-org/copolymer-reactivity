@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "butadiene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "heptane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 4.3,
+                        "constant_2": 0.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 2.15
+                }
+            ]
+        }
+    ],
+    "source": "Macromol. Rapid Commun. 16, 563\u2013569 (1995)",
+    "PDF_name": "Copolymerization of 1,3-butadiene and styrene with a neodymium catalyst"
+}

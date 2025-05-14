@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "chlorotrifluoroethylene",
+                "4-bromo-3,3,4,4-tetrafluorobut-1-ene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 74.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.84,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.07
+                    },
+                    "e-Value": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.18
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.27172",
+    "PDF_name": "Radical Copolymerization of Chlorotrifluoroethylene with 4-Bromo-3,3,4,4-tetrafluorobut-1-ene"
+}

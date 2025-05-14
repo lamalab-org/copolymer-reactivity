@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3,4-Dimethyltetrahydrofuran",
+                "Epichlorohydrin"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": -20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 20, 2033\u20132041 (1982)",
+    "PDF_name": "Copolymerization of 3,4-Dimethyltetrahydrofuran with Cyclic Ethers"
+}

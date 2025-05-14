@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "epsilon-Caprolactone",
+                "Lactide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination-insertion",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 36.51,
+                        "constant_2": 24.17
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.02,
+                        "constant_conf_2": 0.72
+                    },
+                    "determination_method": "least-squares fit",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/zaac.202100183",
+    "PDF_name": "Synthesis and Catalytic Activity of Gallium Schiff-base Complexes in the Ring-Opening Homo- and Copolymerization of Cyclic Esters"
+}

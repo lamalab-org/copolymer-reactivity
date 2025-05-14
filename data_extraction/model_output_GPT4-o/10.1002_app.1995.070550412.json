@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.4
+                    },
+                    "r_product": 0.239
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "vinyl chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.14
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.1
+                    },
+                    "e-Value": {
+                        "constant_1": -0.4,
+                        "constant_2": -0.2
+                    },
+                    "r_product": 0.036
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "na",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": "na",
+                    "temperature_unit": "na",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.44
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -1.2
+                    },
+                    "r_product": 0.046
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.1995.070561106",
+    "PDF_name": "A New Copolymerization Equation"
+}

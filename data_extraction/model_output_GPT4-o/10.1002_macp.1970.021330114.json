@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-isopropylidene-3a.4.7.7a-tetrahydroindene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "n-heptane",
+                    "method": "solvent",
+                    "temperature": -20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.08,
+                        "constant_2": 0.9
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.08,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.12
+                    },
+                    "r_product": 0.072
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 133 (1970) 161\u2013179",
+    "PDF_name": "The Polymerization, Copolymerization and Terpolymerization of 1-Isopropylidene-3a.4.7.7a-Tetrahydroindene"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-phenyl-5,5-bis(hydroxymethyl) trimethylene carbonate",
+                "5,5-dimethyl trimethylene carbonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 180.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.08,
+                        "constant_2": 0.565
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.27562",
+    "PDF_name": "Ring-Opening Copolymerization and Properties of Polycarbonate Copolymers"
+}

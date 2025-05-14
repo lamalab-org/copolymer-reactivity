@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,5,7,11-tetraoxaspiro[5.5]undecane",
+                "epsilon-caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.57,
+                        "constant_2": 0.64
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.18
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.21379",
+    "PDF_name": "Synthesis and Properties of Poly(carbonate-co-ester)s Obtained by Cationic Ring-Opening Copolymerization of Spiroorthocarbonate and epsilon-Caprolactone"
+}

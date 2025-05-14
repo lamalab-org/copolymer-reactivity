@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Styrene",
+                "Trimethylvinylgermane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 24.4,
+                        "constant_2": 0.009
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.0,
+                        "constant_conf_2": 0.8
+                    },
+                    "determination_method": "Fineman-Ross and curve-fitting",
+                    "Q-value": {
+                        "constant_1": 0.0049,
+                        "constant_2": 0.037
+                    },
+                    "e-Value": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.43
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl methacrylate",
+                "Trimethylvinylgermane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 19.98,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.74,
+                        "constant_conf_2": 0.4
+                    },
+                    "determination_method": "Fineman-Ross and curve-fitting",
+                    "Q-value": {
+                        "constant_1": 0.037,
+                        "constant_2": 0.037
+                    },
+                    "e-Value": {
+                        "constant_1": 0.43,
+                        "constant_2": 0.43
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: PART A-1 VOL. 7, 3287\u20133295 (1969)",
+    "PDF_name": "Copolymerization of Trialkylvinylgermane"
+}

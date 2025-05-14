@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "diethyl 7-oxabicyclo[2.2.1]hepta-2,5-diene-2,3-dicarboxylate",
+                "phenylacetylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.45,
+                        "constant_2": 0.059
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.026
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "diethyl 7-oxabicyclo[2.2.1]hepta-2,5-diene-2,3-dicarboxylate",
+                "p-methoxyphenylacetylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.062,
+                        "constant_2": 0.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.0077
+                }
+            ]
+        }
+    ],
+    "source": "Macromol. Rapid Commun. 18, 651\u2013657 (1997)",
+    "PDF_name": "Pd(II)-catalyzed copolymerization of a norbornadiene derivative with substituted phenylacetylenes"
+}

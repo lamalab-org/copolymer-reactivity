@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "7-octenyl-terminated poly(methyl(trifluoropropyl)siloxane)"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.72,
+                        "constant_2": 29.9
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.055,
+                        "constant_conf_2": 0.037
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/acs.iecr.0c00029",
+    "PDF_name": "Design of Well-Defined Polyethylene-g-poly-methyltrifluorosiloxane Graft Copolymers via Direct Copolymerization of Ethylene with Polyfluorosiloxane Macromonomers"
+}

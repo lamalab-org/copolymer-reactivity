@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,6-Anhydro-2,3,4-tri-O-benzyl-\u03b2-D-glucopyranose",
+                "Epichlorohydrin"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.9
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,6-Anhydro-2,3,4-tri-O-benzyl-\u03b2-D-glucopyranose",
+                "1,3-Dioxolane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.9,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.6
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,6-Anhydro-2,3,4-tri-O-methyl-\u03b2-D-glucopyranose",
+                "Epichlorohydrin"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 181, 2137\u20132149 (1980)",
+    "PDF_name": "Copolymerization of 1,6-Anhydro-sugar Derivatives with Cyclic Monomers, 1"
+}

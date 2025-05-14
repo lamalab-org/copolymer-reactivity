@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "epsilon-Caprolactone",
+                "L-Lactide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 5.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.86
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.0
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "epsilon-Caprolactone",
+                "Methyl ethylene phosphate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 5.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.0
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "L-Lactide",
+                "Methyl ethylene phosphate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 5.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.65,
+                        "constant_2": 0.77
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.5
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym11101641",
+    "PDF_name": "DFT Visualization and Experimental Evidence of BHT-Mg-Catalyzed Copolymerization of Lactides, Lactones and Ethylene Phosphates"
+}

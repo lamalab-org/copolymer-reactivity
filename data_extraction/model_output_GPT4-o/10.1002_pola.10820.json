@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4,4'-difluorobenzophenone",
+                "4-(4-hydroxyphenyl)-1(2H)-phthalazinone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "nucleophilic polycondensation",
+                    "solvent": "N-methyl-2-pyrrolidone",
+                    "method": "solvent",
+                    "temperature": 170.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.23,
+                        "constant_2": 2.56
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.12
+                    },
+                    "r_product": 0.59
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "4,4'-difluorodiphenyl sulfone",
+                "4-(4-hydroxyphenyl)-1(2H)-phthalazinone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "nucleophilic polycondensation",
+                    "solvent": "N-methyl-2-pyrrolidone",
+                    "method": "solvent",
+                    "temperature": 170.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 2.89
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 0.14,
+                        "constant_2": 0.11
+                    },
+                    "r_product": 0.52
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.10820",
+    "PDF_name": "Direct copolymerization of sulfonated poly(phthalazinone arylene ether)s for proton-exchange-membrane materials"
+}

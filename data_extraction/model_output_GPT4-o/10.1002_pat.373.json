@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "linalool",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "xylene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.016,
+                        "constant_2": 0.057
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.54,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 1.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "xylene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.017,
+                        "constant_2": 0.052
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.54,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 1.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "xylene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0165,
+                        "constant_2": 0.0545
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0005,
+                        "constant_conf_2": 0.0025
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.25,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 1.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pat.373",
+    "PDF_name": "Determination of reactivity ratios and kinetics of free radical copolymerization of linalool with styrene"
+}

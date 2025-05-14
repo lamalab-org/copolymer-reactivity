@@ -81,7 +81,7 @@ class BucketClassifier:
 
         # Use predefined bucket edges
         # These are the predefined category boundaries
-        predefined_edges = [0.01, 0.1, 0.25, 0.5, 0.75, 0.95, 0.99, 1.00, 1.05, 1.5, 2.00]
+        predefined_edges = [0.01, 0.1, 0.25, 0.5, 0.75, 0.95, 0.99, 1.05, 1.5, 2.00]
 
         # Add 0 as the first edge and ensure the last edge covers all data
         self.bucket_edges = np.array([0.0] + predefined_edges)
@@ -357,6 +357,10 @@ class BucketClassifier:
         all_train_indices = []
         all_models = []
 
+        # For storing distribution-based predictions and uncertainties
+        all_r1r2_pred_dist = []
+        all_r1r2_uncertainties = []
+
         # Cross-validation loop
         for fold, (train_idx, test_idx) in enumerate(kf_splits, 1):
             print(f"Fold {fold}")
@@ -414,6 +418,18 @@ class BucketClassifier:
             print(f"Test F1 Score (weighted): {f1_test:.4f}")
             fold_scores.append((accuracy_train, accuracy_test, f1_test))
 
+            # Calculate distribution-based predictions and uncertainties
+            proba_dist = best_model.predict_proba(X_test)
+            expected_values = np.sum(proba_dist * self.bucket_centers, axis=1)
+
+            # Calculate standard deviation as uncertainty measure
+            variance = np.sum(proba_dist * (self.bucket_centers - expected_values[:, np.newaxis]) ** 2, axis=1)
+            uncertainties = np.sqrt(variance)
+
+            # Store distribution-based predictions and uncertainties
+            all_r1r2_pred_dist.extend(expected_values)
+            all_r1r2_uncertainties.extend(uncertainties)
+
         # Calculate average scores
         avg_train_accuracy = np.mean([score[0] for score in fold_scores])
         avg_test_accuracy = np.mean([score[1] for score in fold_scores])
@@ -421,8 +437,6 @@ class BucketClassifier:
         print(f"\nAverage Train Accuracy: {avg_train_accuracy:.4f}")
         print(f"\nAverage Test Accuracy: {avg_test_accuracy:.4f}")
         print(f"\nAverage Test F1 Score: {avg_test_f1:.4f}")
-
-
 
         # Convert bucket indices back to r1r2 values for evaluation
         def bucket_to_r1r2(bucket_indices):
@@ -435,25 +449,15 @@ class BucketClassifier:
 
         # Calculate RMSE between predicted and true r1r2 values
         rmse = np.sqrt(np.mean((r1r2_pred - r1r2_true) ** 2))
-        print(f"\nRMSE on r1r2 values: {rmse:.4f}")
-
-        # Additionally: Evaluate predictions using probability distribution
-        r1r2_pred_dist = []
-        for fold, model in enumerate(all_models):
-            # Get test data for this fold
-            fold_test_idx = kf_splits[fold][1]
-            X_fold_test = X[fold_test_idx]
-
-            # Calculate probability distribution
-            proba_dist = model.predict_proba(X_fold_test)
-
-            # Calculate expected values (weighted average)
-            expected_values = np.sum(proba_dist * self.bucket_centers, axis=1)
-            r1r2_pred_dist.extend(expected_values)
+        print(f"\nRMSE on r1r2 values (hard bucket prediction): {rmse:.4f}")
 
         # Calculate RMSE for distribution-based predictions
-        rmse_dist = np.sqrt(np.mean((np.array(r1r2_pred_dist) - r1r2_true) ** 2))
+        rmse_dist = np.sqrt(np.mean((np.array(all_r1r2_pred_dist) - r1r2_true) ** 2))
         print(f"\nRMSE with distribution-based prediction: {rmse_dist:.4f}")
+
+        # Calculate average uncertainty
+        avg_uncertainty = np.mean(all_r1r2_uncertainties)
+        print(f"\nAverage prediction uncertainty (std dev): {avg_uncertainty:.4f}")
 
         # Package all predictions and indices for later analysis and visualization
         all_predictions = {
@@ -470,8 +474,10 @@ class BucketClassifier:
             'r1r2_rmse': rmse,
             'bucket_edges': self.bucket_edges,
             'bucket_centers': self.bucket_centers,
-            'r1r2_pred_dist': r1r2_pred_dist,
-            'r1r2_rmse_dist': rmse_dist
+            'r1r2_pred_dist': all_r1r2_pred_dist,
+            'r1r2_rmse_dist': rmse_dist,
+            'r1r2_uncertainties': all_r1r2_uncertainties,
+            'avg_uncertainty': avg_uncertainty
         }
 
         return fold_scores, all_predictions
@@ -688,35 +694,49 @@ class BucketClassifier:
             print(f"Model type {self.model_type} does not support feature importances.")
             return None
 
-    def predict(self, X_new, use_distribution=False):
+    def predict(self, X_new):
         """
-        Make predictions on new data
+        Make predictions on new data, always using probability distribution
+
         Args:
             X_new: New feature data to predict on
-            use_distribution: Whether to use probability distribution for prediction
         Returns:
-            array: Predicted r1r2 values
+            tuple: (predicted_values, uncertainties) - Predicted r1r2 values and their uncertainties
+        """
+        # Always use probability distribution for prediction with uncertainty
+        return self.predict_with_uncertainty(X_new)
+
+    def predict_with_uncertainty(self, X_new):
+        """
+        Make predictions using probability distribution across all buckets and calculate uncertainty
+
+        Args:
+            X_new: New feature data to predict on
+        Returns:
+            tuple: (predicted_values, uncertainties) - Predicted r1r2 values and their uncertainties
         """
         if self.transformer is None or self.final_model is None or self.bucket_centers is None:
             print(
                 "Error: Model not properly initialized. Run prepare_data, train_and_evaluate, and train_final_model first.")
-            return None
+            return None, None
 
-        if use_distribution:
-            # Use probability distribution for prediction
-            return self.predict_with_distribution(X_new)
-        else:
-            # Traditional single-class prediction
-            # Transform the input features
-            X_new_transformed = self.transformer.transform(X_new)
+        # Transform the input features
+        X_new_transformed = self.transformer.transform(X_new)
 
-            # Predict bucket indices
-            bucket_indices = self.final_model.predict(X_new_transformed)
+        # Get probability distribution over all buckets
+        proba_distribution = self.final_model.predict_proba(X_new_transformed)
 
-            # Convert bucket indices to r1r2 values using bucket centers
-            r1r2_pred = np.array([self.bucket_centers[idx] for idx in bucket_indices])
+        # Calculate expected value (weighted average)
+        expected_values = np.sum(proba_distribution * self.bucket_centers, axis=1)
 
-            return r1r2_pred
+        # Calculate standard deviation as a measure of uncertainty
+        # First calculate variance: sum of squared differences weighted by probabilities
+        variance = np.sum(proba_distribution * (self.bucket_centers - expected_values[:, np.newaxis]) ** 2, axis=1)
+
+        # Then take square root to get standard deviation
+        uncertainties = np.sqrt(variance)
+
+        return expected_values, uncertainties
 
     def plot_confusion_matrix(self, predictions, title="Confusion Matrix", save_path=None, max_buckets_to_show=20):
         """
@@ -943,3 +963,178 @@ class BucketClassifier:
         else:
             plt.tight_layout(rect=[0, 0, 1, 0.95])
             plt.show()
+
+    def plot_predictions_with_uncertainty(self, predictions, df, title="r1r2 Predictions with Uncertainty",
+                                          save_path=None):
+        """
+        Plot predicted vs true r1r2 values with uncertainty
+
+        Args:
+            predictions: Dictionary with prediction results
+            df: DataFrame with original r1r2 values
+            title: Plot title
+            save_path: Where to save the plot
+        """
+        # Get test indices
+        test_indices = predictions['test_indices']
+
+        # Get true r1r2 values
+        true_r1r2 = df.iloc[test_indices]['r1r2'].values
+
+        # Get distribution-based predictions and uncertainties
+        if 'r1r2_pred_dist' not in predictions or 'r1r2_uncertainties' not in predictions:
+            print("Error: No distribution-based predictions or uncertainties available.")
+            return
+
+        pred_r1r2 = predictions['r1r2_pred_dist']
+        uncertainties = predictions['r1r2_uncertainties']
+
+        # Calculate R²
+        from sklearn.metrics import r2_score
+        r2 = r2_score(true_r1r2, pred_r1r2)
+
+        # Create figure
+        plt.figure(figsize=(10, 8))
+
+        # Define plot limits
+        max_val = max(max(true_r1r2), max(pred_r1r2)) * 1.1
+        min_val = 0
+
+        # Plot with error bars
+        plt.errorbar(true_r1r2, pred_r1r2, yerr=uncertainties, fmt='o', alpha=0.6,
+                     ecolor='lightgray', elinewidth=1, capsize=3)
+        plt.plot([min_val, max_val], [min_val, max_val], 'r--')
+
+        # Add labels, title, and R² text
+        plt.xlabel('True r1r2')
+        plt.ylabel('Predicted r1r2 with Uncertainty')
+        plt.title(f"{title} (R² = {r2:.4f})")
+
+        # Set limits
+        plt.xlim(min_val, min(10, max_val))
+        plt.ylim(min_val, min(10, max_val))
+
+        # Add grid
+        plt.grid(True, linestyle='--', alpha=0.7)
+
+        # Save if path is provided
+        if save_path:
+            plt.tight_layout()
+            plt.savefig(save_path)
+            plt.close()
+        else:
+            plt.tight_layout()
+            plt.show()
+
+    def analyze_uncertainty(self, predictions, df, save_path=None):
+        """
+        Analyze prediction uncertainties
+
+        Args:
+            predictions: Dictionary with prediction results
+            df: DataFrame with original r1r2 values
+            save_path: Where to save the plot
+        """
+        if 'r1r2_uncertainties' not in predictions:
+            print("Error: No uncertainties available in predictions.")
+            return
+
+        # Get test indices and true r1r2 values
+        test_indices = predictions['test_indices']
+        true_r1r2 = df.iloc[test_indices]['r1r2'].values
+
+        # Get predictions and uncertainties
+        pred_r1r2 = predictions['r1r2_pred_dist']
+        uncertainties = predictions['r1r2_uncertainties']
+
+        # Calculate absolute errors
+        abs_errors = np.abs(true_r1r2 - pred_r1r2)
+
+        # Create figure with 2x2 subplots
+        fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+
+        # 1. Histogram of uncertainties
+        ax = axes[0, 0]
+        ax.hist(uncertainties, bins=30, alpha=0.7)
+        ax.axvline(np.mean(uncertainties), color='r', linestyle='--',
+                   label=f'Mean: {np.mean(uncertainties):.4f}')
+        ax.set_xlabel('Uncertainty (Std Dev)')
+        ax.set_ylabel('Frequency')
+        ax.set_title('Distribution of Prediction Uncertainties')
+        ax.legend()
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # 2. Uncertainty vs true r1r2 value
+        ax = axes[0, 1]
+        ax.scatter(true_r1r2, uncertainties, alpha=0.6)
+        ax.set_xlabel('True r1r2')
+        ax.set_ylabel('Uncertainty (Std Dev)')
+        ax.set_title('Uncertainty vs True r1r2 Value')
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # 3. Uncertainty vs absolute error
+        ax = axes[1, 0]
+        ax.scatter(uncertainties, abs_errors, alpha=0.6)
+
+        # Calculate correlation and add trendline
+        from scipy.stats import pearsonr
+        corr, _ = pearsonr(uncertainties, abs_errors)
+
+        # Add trendline
+        z = np.polyfit(uncertainties, abs_errors, 1)
+        p = np.poly1d(z)
+        ax.plot(np.sort(uncertainties), p(np.sort(uncertainties)),
+                'r--', label=f'Correlation: {corr:.4f}')
+
+        ax.set_xlabel('Uncertainty (Std Dev)')
+        ax.set_ylabel('Absolute Error')
+        ax.set_title('Uncertainty vs Absolute Prediction Error')
+        ax.legend()
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # 4. Prediction Intervals Coverage Analysis
+        ax = axes[1, 1]
+
+        # Calculate 95% confidence intervals
+        lower_bounds = pred_r1r2 - 1.96 * uncertainties
+        upper_bounds = pred_r1r2 + 1.96 * uncertainties
+
+        # Check if true values fall within intervals
+        within_interval = (true_r1r2 >= lower_bounds) & (true_r1r2 <= upper_bounds)
+        coverage = np.mean(within_interval) * 100
+
+        # Plot interval widths and coverage
+        interval_widths = upper_bounds - lower_bounds
+
+        ax.hist(interval_widths, bins=30, alpha=0.7)
+        ax.set_xlabel('95% Confidence Interval Width')
+        ax.set_ylabel('Frequency')
+        ax.set_title(f'Prediction Interval Widths\nCoverage: {coverage:.1f}% (Expected: 95%)')
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # Add overall title
+        plt.suptitle('Prediction Uncertainty Analysis', fontsize=16)
+        plt.tight_layout(rect=[0, 0, 1, 0.97])
+
+        # Save if path is provided
+        if save_path:
+            plt.savefig(save_path)
+            plt.close()
+        else:
+            plt.show()
+
+        # Print summary
+        print("\n=== Uncertainty Analysis ===")
+        print(f"Average uncertainty (std dev): {np.mean(uncertainties):.4f}")
+        print(f"Min uncertainty: {np.min(uncertainties):.4f}")
+        print(f"Max uncertainty: {np.max(uncertainties):.4f}")
+        print(f"Correlation between uncertainty and absolute error: {corr:.4f}")
+        print(f"95% Prediction interval coverage: {coverage:.1f}% (Expected: 95%)")
+
+        return {
+            'mean_uncertainty': np.mean(uncertainties),
+            'min_uncertainty': np.min(uncertainties),
+            'max_uncertainty': np.max(uncertainties),
+            'uncertainty_error_correlation': corr,
+            'interval_coverage': coverage
+        }

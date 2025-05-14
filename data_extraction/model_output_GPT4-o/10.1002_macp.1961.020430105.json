@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 1.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "J. C. Bevington and N. A. Ghanem, J. Chem. Soc. [London] 1959, 2071",
+    "PDF_name": "The Mechanisms of Retardation and Inhibition in Radical Polymerization Part VI"
+}

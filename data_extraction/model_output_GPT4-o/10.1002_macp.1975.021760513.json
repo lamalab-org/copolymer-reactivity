@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.582,
+                        "constant_2": 0.53
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.044,
+                        "constant_conf_2": 0.004
+                    },
+                    "determination_method": "least squares",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 176, 1383\u20131391 (1975)",
+    "PDF_name": "Determination of Copolymerization Parameters in Steady State"
+}

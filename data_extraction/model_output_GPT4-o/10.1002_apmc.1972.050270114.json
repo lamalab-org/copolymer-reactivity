@@ -1,0 +1,164 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Cyclopentadiene",
+                "2-Chloroethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.55,
+                        "constant_2": 2.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.4
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.15
+                },
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.6,
+                        "constant_2": 2.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Intersection",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.68
+                },
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.73,
+                        "constant_2": 3.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.6
+                    },
+                    "determination_method": "Modified Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 2.6
+                },
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.8,
+                        "constant_2": 1.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.4,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.98
+                },
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.2,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.6,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "Intersection",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 2.2
+                },
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "nitroethane",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 3.0,
+                        "constant_2": 1.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.6,
+                        "constant_conf_2": 0.6
+                    },
+                    "determination_method": "Integrated Lewis-Mayo",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 4.8
+                }
+            ]
+        }
+    ],
+    "source": "Die Angewandte Makromolekulare Chemie 27 (1972) 189\u2013200",
+    "PDF_name": "Cationic Copolymerization of Cyclopentadiene with 2-Chloroethyl Vinyl Ether and Some Properties of the Copolymer"
+}

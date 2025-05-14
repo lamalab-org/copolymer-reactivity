@@ -1,0 +1,310 @@
+{
+    "runs": [
+        {
+            "timestamp": "2025-05-13 11:18:28",
+            "model_type": "XGBoost",
+            "features": [
+                "language",
+                "table_quality",
+                "quality_of_number",
+                "year",
+                "pdf_quality",
+                "rxn_number"
+            ],
+            "hyperparameters": {
+                "model__colsample_bytree": 0.6,
+                "model__learning_rate": 0.01,
+                "model__max_depth": 3,
+                "model__n_estimators": 500,
+                "model__subsample": 1.0
+            },
+            "grid_search_params": {
+                "model__n_estimators": [
+                    100,
+                    500,
+                    1000
+                ],
+                "model__max_depth": [
+                    3,
+                    5,
+                    7
+                ],
+                "model__learning_rate": [
+                    0.01,
+                    0.1,
+                    0.2
+                ],
+                "model__colsample_bytree": [
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+                "model__subsample": [
+                    0.6,
+                    0.8,
+                    1.0
+                ]
+            },
+            "cv_folds": 5,
+            "metrics": {
+                "best_cv_score": 0.8300000000000001,
+                "training_time": 5.31525993347168
+            }
+        },
+        {
+            "timestamp": "2025-05-13 11:24:33",
+            "model_type": "XGBoost",
+            "features": [
+                "language",
+                "table_quality",
+                "quality_of_number",
+                "year",
+                "pdf_quality",
+                "rxn_number"
+            ],
+            "hyperparameters": {
+                "model__colsample_bytree": 0.6,
+                "model__learning_rate": 0.01,
+                "model__max_depth": 3,
+                "model__n_estimators": 500,
+                "model__subsample": 1.0
+            },
+            "grid_search_params": {
+                "model__n_estimators": [
+                    100,
+                    500,
+                    1000
+                ],
+                "model__max_depth": [
+                    3,
+                    5,
+                    7
+                ],
+                "model__learning_rate": [
+                    0.01,
+                    0.1,
+                    0.2
+                ],
+                "model__colsample_bytree": [
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+                "model__subsample": [
+                    0.6,
+                    0.8,
+                    1.0
+                ]
+            },
+            "cv_folds": 5,
+            "metrics": {
+                "best_cv_score": 0.8300000000000001,
+                "training_time": 5.736304044723511
+            }
+        },
+        {
+            "timestamp": "2025-05-13 11:34:20",
+            "model_type": "XGBoost",
+            "features": [
+                "language",
+                "table_quality",
+                "quality_of_number",
+                "year",
+                "pdf_quality",
+                "rxn_number"
+            ],
+            "hyperparameters": {
+                "model__colsample_bytree": 0.6,
+                "model__learning_rate": 0.01,
+                "model__max_depth": 3,
+                "model__n_estimators": 500,
+                "model__subsample": 1.0
+            },
+            "grid_search_params": {
+                "model__n_estimators": [
+                    100,
+                    500,
+                    1000
+                ],
+                "model__max_depth": [
+                    3,
+                    5,
+                    7
+                ],
+                "model__learning_rate": [
+                    0.01,
+                    0.1,
+                    0.2
+                ],
+                "model__colsample_bytree": [
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+                "model__subsample": [
+                    0.6,
+                    0.8,
+                    1.0
+                ]
+            },
+            "cv_folds": 5,
+            "metrics": {
+                "best_cv_score": 0.8300000000000001,
+                "training_time": 4.876780986785889
+            }
+        },
+        {
+            "timestamp": "2025-05-13 12:45:40",
+            "model_type": "XGBoost",
+            "features": [
+                "language",
+                "table_quality",
+                "quality_of_number",
+                "year",
+                "pdf_quality",
+                "rxn_number"
+            ],
+            "hyperparameters": {
+                "model__colsample_bytree": 0.6,
+                "model__learning_rate": 0.01,
+                "model__max_depth": 3,
+                "model__n_estimators": 500,
+                "model__subsample": 1.0
+            },
+            "grid_search_params": {
+                "model__n_estimators": [
+                    100,
+                    500,
+                    1000
+                ],
+                "model__max_depth": [
+                    3,
+                    5,
+                    7
+                ],
+                "model__learning_rate": [
+                    0.01,
+                    0.1,
+                    0.2
+                ],
+                "model__colsample_bytree": [
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+                "model__subsample": [
+                    0.6,
+                    0.8,
+                    1.0
+                ]
+            },
+            "cv_folds": 5,
+            "metrics": {
+                "best_cv_score": 0.8300000000000001,
+                "training_time": 5.44286322593689
+            }
+        },
+        {
+            "timestamp": "2025-05-14 08:48:54",
+            "model_type": "XGBoost",
+            "features": [
+                "language",
+                "table_quality",
+                "quality_of_number",
+                "year",
+                "pdf_quality",
+                "rxn_number"
+            ],
+            "hyperparameters": {
+                "model__colsample_bytree": 0.6,
+                "model__learning_rate": 0.01,
+                "model__max_depth": 3,
+                "model__n_estimators": 500,
+                "model__subsample": 1.0
+            },
+            "grid_search_params": {
+                "model__n_estimators": [
+                    100,
+                    500,
+                    1000
+                ],
+                "model__max_depth": [
+                    3,
+                    5,
+                    7
+                ],
+                "model__learning_rate": [
+                    0.01,
+                    0.1,
+                    0.2
+                ],
+                "model__colsample_bytree": [
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+                "model__subsample": [
+                    0.6,
+                    0.8,
+                    1.0
+                ]
+            },
+            "cv_folds": 5,
+            "metrics": {
+                "best_cv_score": 0.8300000000000001,
+                "training_time": 7.031606912612915
+            }
+        },
+        {
+            "timestamp": "2025-05-14 13:19:57",
+            "model_type": "XGBoost",
+            "features": [
+                "language",
+                "table_quality",
+                "quality_of_number",
+                "year",
+                "pdf_quality",
+                "rxn_number"
+            ],
+            "hyperparameters": {
+                "model__colsample_bytree": 0.6,
+                "model__learning_rate": 0.01,
+                "model__max_depth": 3,
+                "model__n_estimators": 500,
+                "model__subsample": 1.0
+            },
+            "grid_search_params": {
+                "model__n_estimators": [
+                    100,
+                    500,
+                    1000
+                ],
+                "model__max_depth": [
+                    3,
+                    5,
+                    7
+                ],
+                "model__learning_rate": [
+                    0.01,
+                    0.1,
+                    0.2
+                ],
+                "model__colsample_bytree": [
+                    0.6,
+                    0.8,
+                    1.0
+                ],
+                "model__subsample": [
+                    0.6,
+                    0.8,
+                    1.0
+                ]
+            },
+            "cv_folds": 5,
+            "metrics": {
+                "best_cv_score": 0.8300000000000001,
+                "training_time": 13.825175046920776
+            }
+        }
+    ]
+}

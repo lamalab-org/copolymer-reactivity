@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methacrylic acid",
+                "acrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 273.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 694.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "acryloyloxyethyltrimethylammonium chloride",
+                "acrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solution",
+                    "temperature": 303.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.68,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 250.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "acrylic acid",
+                "acrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solution",
+                    "temperature": 303.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 1.7,
+                        "constant_2": 0.48
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 250.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/mats.200350010",
+    "PDF_name": "Free-Radical Frontal Copolymerization: The Dependence of the Front Velocity on the Monomer Feed Composition and Reactivity Ratios"
+}

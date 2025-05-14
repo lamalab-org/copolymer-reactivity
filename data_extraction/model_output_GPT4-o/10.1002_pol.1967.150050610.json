@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,4,5,6,7,7-Hexachlorobicyclo-[2,2,1]-5-heptene-2-carboxylic Acid Vinyl Ester",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.11,
+                        "constant_2": 0.94
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.017,
+                        "constant_2": 2.25
+                    },
+                    "e-Value": {
+                        "constant_1": 1.36,
+                        "constant_2": 0.23
+                    },
+                    "r_product": 0.1
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,4,5,6,7,7-Hexabromobicyclo-[2,2,1]-5-heptene-2-carboxylic Acid Vinyl Ester",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.007,
+                        "constant_2": 2.25
+                    },
+                    "e-Value": {
+                        "constant_1": 1.36,
+                        "constant_2": 0.23
+                    },
+                    "r_product": 0.06
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A-1, Vol. 5, 1279\u20131287 (1967)",
+    "PDF_name": "Synthesis of 1,4,5,6,7,7-Hexachloro- and Hexabromo-bicyclo-[2,2,1]-5-heptene-2-carboxylic Acid Vinyl Esters and Copolymerization with Acrylonitrile"
+}

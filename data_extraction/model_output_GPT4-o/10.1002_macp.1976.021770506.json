@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "butadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 2.5,
+                        "constant_2": 0.5
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methacrylonitrile",
+                "butadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl acrylate",
+                "butadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.05
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "butadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 177, 1293\u20131299 (1976)",
+    "PDF_name": "Copolymerization of Polar Vinyl Monomers with Butadiene in the Presence of Lewis Acids"
+}

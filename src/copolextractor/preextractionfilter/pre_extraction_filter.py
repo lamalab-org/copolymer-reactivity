@@ -24,13 +24,13 @@ def run_combined_pipeline(
         rf_output_path (str): Output path for the RF filtering module results.
     """
     print("Starting PDF processing and quality scoring...")
-    pdf_main(
-        input_folder=pdf_input_folder,
-        output_folder_images=output_folder_images,
-        output_folder=output_folder_LLM_score,
-        selected_entries_path=input_file_xgboost_filter,
-        output_file=output_file,
-    )
+    #pdf_main(
+        #input_folder=pdf_input_folder,
+        #output_folder_images=output_folder_images,
+        #output_folder=output_folder_LLM_score,
+        #selected_entries_path=input_file_xgboost_filter,
+        #output_file=output_file,
+    #)
     print(f"PDF processing and scoring completed. Results saved to {output_file}")
 
     print("Starting Random Forest filtering...")

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-Butyl maleimide",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.025,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.025,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.044,
+                        "constant_2": 0.0349
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo\u2013Lewis",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.00154
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.2330",
+    "PDF_name": "Reactivity Ratios of Free Monomers and Their Charge-Transfer Complex in the Copolymerization of N-Butyl Maleimide and Styrene"
+}

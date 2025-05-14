@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl thiolacetate",
+                "vinylene carbonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 12.9,
+                        "constant_2": 0.04
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.1,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "4-vinylpyridine",
+                "N,N,N-triethyl-N-[2-(methacryloxy)ethyl]ammonium iodide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.61
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "integrated equation of Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. XXVII, Pages 381\u2013390 (1958)",
+    "PDF_name": "Copolymerization of Vinylene Carbonate with Vinyl Thiolacetate and N,N,N-Triethyl-N-[2-(Methacryloxy)ethyl]ammonium Iodide with 4-Vinylpyridine"
+}

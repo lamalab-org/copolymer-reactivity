@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl bromide",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 0.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 25.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 2.0
+                    },
+                    "determination_method": "intersections and curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 28.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 20.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.015,
+                        "constant_conf_2": 2.0
+                    },
+                    "determination_method": "intersections and curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl bromide",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 0.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 20.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": 5.0
+                    },
+                    "determination_method": "intersections and curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 28.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 18.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.015,
+                        "constant_conf_2": 2.0
+                    },
+                    "determination_method": "intersections and curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.04
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. XXV, Pages 19\u201326 (1957)",
+    "PDF_name": "Copolymerization of Vinyl Bromide"
+}

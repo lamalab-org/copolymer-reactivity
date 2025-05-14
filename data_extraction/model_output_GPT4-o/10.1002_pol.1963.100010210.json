@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "sodium p-styrenesulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 45.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 1.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.76
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": -0.26
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 45.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 1.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 0.44,
+                        "constant_2": 1.24
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": -0.43
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A, Vol. 1, pp. 705\u2013714 (1963)",
+    "PDF_name": "Copolymerization of Acrylonitrile and p-Sodium Styrene Sulfanate"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "norbornene",
+                "cyclopentene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring opening metathesis polymerization",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 0.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "ring opening metathesis polymerization",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.87,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.07,
+                        "constant_conf_2": 0.004
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/molecules200915597",
+    "PDF_name": "Statistical Ring Opening Metathesis Copolymerization of Norbornene and Cyclopentene by Grubbs\u2019 1st-Generation Catalyst"
+}

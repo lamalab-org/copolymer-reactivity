@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1-ethoxyethyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": -40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.06,
+                        "constant_2": 1.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": 0.55,
+                        "constant_2": 0.55
+                    },
+                    "r_product": 1.16
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1-butoxyethyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": -40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.12,
+                        "constant_2": 1.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": 0.55,
+                        "constant_2": 0.55
+                    },
+                    "r_product": 1.22
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1-tert-butoxyethyl methacrylate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": -40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.27,
+                        "constant_2": 1.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": 0.55,
+                        "constant_2": 0.55
+                    },
+                    "r_product": 1.71
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma9812534",
+    "PDF_name": "Living Anionic Copolymerization of 1-(Alkoxy)ethyl Methacrylates with Polar and/or Nonpolar Monomers"
+}

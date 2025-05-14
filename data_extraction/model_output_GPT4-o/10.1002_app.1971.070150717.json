@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.026,
+                        "constant_2": 0.026
+                    },
+                    "e-Value": {
+                        "constant_1": 0.003,
+                        "constant_2": 0.003
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chlorinated hydrocarbons",
+                    "method": "solvent",
+                    "temperature": 125.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.026,
+                        "constant_2": 0.026
+                    },
+                    "e-Value": {
+                        "constant_1": 0.003,
+                        "constant_2": 0.003
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF APPLIED POLYMER SCIENCE VOL. 15, PP. 1737\u20131742 (1971)",
+    "PDF_name": "Copolymerization of Ethylene with Vinyl Acetate"
+}

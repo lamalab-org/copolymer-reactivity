@@ -1,0 +1,204 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "2-methylene-1,3-dioxepane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.014,
+                        "constant_2": 3.551
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0073,
+                        "constant_conf_2": 0.401
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-ethyl methacrylate",
+                "2-methylene-1,3-dioxepane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.021,
+                        "constant_2": 0.157
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0069,
+                        "constant_conf_2": 0.0211
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "2-methylene-1,3-dioxepane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.155,
+                        "constant_2": 4.2351
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.132,
+                        "constant_conf_2": 1.94
+                    },
+                    "determination_method": "free radical",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "2-methylene-1,3-dioxepane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.948,
+                        "constant_2": 1.707
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.359,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "free radical",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-hydroxyethyl methacrylate protected with trimethylsilyl",
+                "5,6-benzo-2-methylene-1,3-dioxepane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.019,
+                        "constant_2": 4.692
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.014,
+                        "constant_conf_2": 0.305
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "5,6-benzo-2-methylene-1,3-dioxepane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "bulk",
+                    "method": "bulk",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.503,
+                        "constant_2": 1.95
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.191,
+                        "constant_conf_2": 1.409
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/acs.iecr.9b02375",
+    "PDF_name": "Toward Biodegradable Chain-Growth Polymers and Polymer Particles"
+}

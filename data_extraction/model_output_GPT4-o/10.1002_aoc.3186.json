@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "norbornene",
+                "5-norbornene-2-carboxylic acid methyl ester"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "vinyl-addition",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 1.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.23,
+                        "constant_conf_2": "<1"
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "vinyl-addition",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.19,
+                        "constant_2": 3.57
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.68,
+                        "constant_conf_2": "<1"
+                    },
+                    "determination_method": "Kelen-Tudor",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/aoc.3186",
+    "PDF_name": "Pd(II) complexes bearing di- and monochelae fluorinated \u03b2-ketonaphthyliminato ligand and their catalytic properties towards vinyl-addition polymerization and copolymerization of norbornene and ester-functionalized norbornene derivative"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "trimethylene carbonate",
+                "epsilon caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination insertion",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 21.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.22,
+                        "constant_2": 2.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.29
+                    },
+                    "determination_method": "Fineman Ross",
+                    "Q-value": {
+                        "constant_1": 0.88,
+                        "constant_2": 1.14
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/chem.200600843",
+    "PDF_name": "Unprecedented Polymerization of Trimethylene Carbonate Initiated by a Samarium Borohydride Complex"
+}

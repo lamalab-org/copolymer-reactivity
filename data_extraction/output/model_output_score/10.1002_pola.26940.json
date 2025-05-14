@@ -1,0 +1,14 @@
+{
+    "pdf_quality": 9.0,
+    "(The PDF is high-resolution, text is selectable and clearly structured. Figures and schemes are well-labeled. No scanning artifacts or distortions.)": "FLOAT",
+    "table_quality": 8.0,
+    "(Table 1 is well-structured with clear column headers and footnotes. However, some superscripts and footnotes could lead to minor confusion during automated extraction.)": "FLOAT",
+    "quality_of_numbers": 9.0,
+    "(Numerical data such as molecular weights, yields, and feed ratios are clearly presented and easy to extract. Minor risk of misreading superscripts or footnotes.)": "FLOAT",
+    "year": 2013,
+    "(Clearly stated in the header and footer of each page.)": "INTEGER",
+    "number_of_reactions": 0.0,
+    "(No r-values for copolymerization reactions are reported in this article. The focus is on functionalization and characterization, not reactivity ratios.)": "FLOAT",
+    "language": "english",
+    "(All text, figures, and tables are in English.)": "STRING"
+}

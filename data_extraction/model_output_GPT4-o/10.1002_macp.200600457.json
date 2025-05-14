@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "\u03b5-caprolactone",
+                "cis/trans-3-oxa-4-oxo- and cis/trans-4-oxa-3-oxobicyclo[5.4.0]undecane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 130.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.7,
+                        "constant_2": 0.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.6
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.200600457",
+    "PDF_name": "Ring-Opening Homo- and Copolymerization of Cis/Trans-3-oxa-4-oxobicyclo- and Cis/Trans-4-oxa-3-oxobicyclo[5.4.0]undecane"
+}

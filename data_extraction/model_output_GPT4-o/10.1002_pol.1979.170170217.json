@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "l-Menthyl vinyl ether",
+                "Maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 2.89
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": 0.94
+                    },
+                    "r_product": 0.018
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "l-Menthyl vinyl ether",
+                "Dimethyl maleate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 1.3
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": 0.6
+                    },
+                    "r_product": 0.018
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "l-Menthyl vinyl ether",
+                "Dimethyl fumarate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 1.5
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": 0.7
+                    },
+                    "r_product": 0.02
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 17, 473\u2013484 (1979)",
+    "PDF_name": "Radical Copolymerization of Optically Active l-Menthyl Vinyl Ether with Maleic Anhydride, Dimethyl Maleate, and Dimethyl Fumarate"
+}

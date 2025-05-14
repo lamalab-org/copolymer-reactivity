@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "p-chloromethylstyrene",
+                "isobutylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "n-hexane/dichloromethane",
+                    "method": "solvent",
+                    "temperature": -80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 4.7,
+                        "constant_2": 0.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.648,
+                        "constant_2": 0.612
+                    },
+                    "e-Value": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.56
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.20210098",
+    "PDF_name": "Synthesis of branched polyisobutylenes via cationic copolymerization of p-chloromethylstyrene and isobutylene"
+}

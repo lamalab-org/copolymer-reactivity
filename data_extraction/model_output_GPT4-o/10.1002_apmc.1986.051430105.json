@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "6-Caprolactam",
+                "12-Dodecanolactam"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "m-cresol",
+                    "method": "bulk",
+                    "temperature": 260.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.29,
+                        "constant_2": 2.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.12
+                    },
+                    "r_product": 0.78
+                }
+            ]
+        }
+    ],
+    "source": "Die Angewandte Makromolekulare Chemie 143 (1986) 49 \u2013 57",
+    "PDF_name": "Polymerization of Lactams, 82"
+}

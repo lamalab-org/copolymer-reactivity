@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "\u03b1-double bond\u2013containing polyurethane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.20641",
+    "PDF_name": "Concentrated Emulsion Copolymerization of \u03b1-Double Bond\u2013Containing Polyurethane/Styrene Initiated by Redox System"
+}

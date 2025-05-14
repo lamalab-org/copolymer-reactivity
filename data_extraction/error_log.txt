@@ -1,0 +1,1150 @@
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 98, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 139, in process_pdfs
+    base64_image, _ = ip.process_image(
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24226.json:
+(1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 675 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_ange.202113302.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.26434_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.33774_chemrxiv-2021-gh6gf.json:
+(1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Too few characters. Skipping this page Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1039_d4qo01065e.json:
+(1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 288 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Error processing 10.1002_cjce.24137.json:
+(1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')
+Traceback (most recent call last):
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/preextractionfilter/extract_PDF_quality_GPT4.py", line 144, in process_pdfs
+    base64_image, img_size = ip.process_image(
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 79, in process_image
+    rotate_image = correct_text_orientation(resized_image, output_folder, file_path, i)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/PycharmProjects/test/src/copolextractor/image_processer.py", line 24, in correct_text_orientation
+    results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 621, in image_to_osd
+    return {
+           ^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 623, in <lambda>
+    Output.DICT: lambda: osd_to_dict(run_and_get_output(*args)),
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "/Users/maraw/anaconda3/envs/prediction/lib/python3.11/site-packages/pytesseract/pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (1, 'Estimating resolution as 371 Warning. Invalid resolution 0 dpi. Using 70 instead. Too few characters. Skipping this page Error during processing.')

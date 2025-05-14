@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl 10,11-epoxyundecanoate",
+                "1-dodecene oxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 23.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.11,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "least-squares fit",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.2
+                    },
+                    "r_product": 0.28
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 23, 673\u2013701 (1985)",
+    "PDF_name": "Poly(alkylene Oxide) Ionomers. XI. Polymerization and Copolymerization of Methyl \u03c9-Epoxyundecanoate and Characterization of the Polymers"
+}

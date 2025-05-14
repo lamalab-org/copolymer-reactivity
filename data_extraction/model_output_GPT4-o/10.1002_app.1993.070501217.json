@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylic acid",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.088,
+                        "constant_2": 0.52
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.012,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.1,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.86,
+                        "constant_2": -0.8
+                    },
+                    "r_product": 0.046
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 50, 2173\u20132183 (1993)",
+    "PDF_name": "Characterization of Water-Soluble Oligomer in Acrylic Acid-Styrene Emulsion Copolymerization"
+}

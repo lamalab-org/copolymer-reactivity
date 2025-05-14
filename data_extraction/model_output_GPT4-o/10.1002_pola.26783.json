@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "2,2,2-trifluoroethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.25,
+                        "constant_2": 0.93
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Fineman-Ross and Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.93
+                    },
+                    "e-Value": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.93
+                    },
+                    "r_product": 1.16
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.22,
+                        "constant_2": 0.78
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.93
+                    },
+                    "e-Value": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.93
+                    },
+                    "r_product": 0.95
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.03,
+                        "constant_2": 0.87
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "revised pattern scheme",
+                    "Q-value": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.93
+                    },
+                    "e-Value": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.93
+                    },
+                    "r_product": 0.9
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.26783",
+    "PDF_name": "Radical Copolymerization of Acrylonitrile with 2,2,2-Trifluoroethyl Acrylate for Dielectric Materials"
+}

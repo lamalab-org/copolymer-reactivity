@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "furan",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.11,
+                        "constant_2": 9.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": -1.2
+                    },
+                    "r_product": 1.0
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.11,
+                        "constant_2": 9.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": -1.2
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 16, 1527\u20131537 (1978)",
+    "PDF_name": "Structure of Furan\u2013Maleic Anhydride Copolymers Prepared from the Monomers and the Diels-Alder Adduct"
+}

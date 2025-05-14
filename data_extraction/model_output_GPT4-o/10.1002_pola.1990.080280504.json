@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.7,
+                        "constant_2": 8.22
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "simulation model",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.46
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 28, 987\u20131009 (1990)",
+    "PDF_name": "Modeling of Unseeded Emulsion Copolymerization of Styrene and Methyl Methacrylate"
+}

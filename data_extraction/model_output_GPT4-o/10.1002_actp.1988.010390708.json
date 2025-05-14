@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "maleic anhydride",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0362,
+                        "constant_2": 0.0119
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.000443,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-2-chlorophenyl maleimide",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1026,
+                        "constant_2": 0.0304
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.000311,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-alpha-naphthyl maleimide",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1522,
+                        "constant_2": 0.1157
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.00175,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Acta Polymerica 39 (1988) Nr. 7",
+    "PDF_name": "Copolymerization of maleic anhydride, N-2-chlorophenyl maleimide and N-alpha-naphthyl maleimide with styrene"
+}

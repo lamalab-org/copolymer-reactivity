@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "pyrrole",
+                "N-methylpyrrole"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "oxidative",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.13,
+                        "constant_2": 0.35
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "least squares linear fit",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 38, 2009\u20132017 (1989)",
+    "PDF_name": "Halogen-Induced Chemical Copolymerization of Pyrrole with N-Methylpyrrole"
+}

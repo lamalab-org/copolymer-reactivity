@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "p-oxathiene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 42.0,
+                        "constant_2": 0.005
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 3.0,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": 0.011,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": -0.85,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "p-oxathiene",
+                "acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 55.8,
+                        "constant_2": 0.0176
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 1.07,
+                        "constant_2": 29.1
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": 0.6
+                    },
+                    "r_product": 0.98
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "p-dioxene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 15.3,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.6,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": 0.031,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "butyl vinyl ether",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.6,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo-Lewis",
+                    "Q-value": {
+                        "constant_1": 0.082,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": 0.4
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 180, 663\u2013678 (1979)",
+    "PDF_name": "Charge-Transfer Complex between p-Oxathiene and Maleic Anhydride and its Relative Reactivity in Alternating Copolymerization"
+}

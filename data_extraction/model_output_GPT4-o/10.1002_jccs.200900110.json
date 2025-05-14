@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1-Naphthylamine",
+                "Aniline"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electrochemical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of the Chinese Chemical Society, 2009, 56, 741-747",
+    "PDF_name": "Investigation of Electrochemical Copolymerization of 1-Naphthylamineaniline in the Presence of Various Organic Sulfonic Acids"
+}

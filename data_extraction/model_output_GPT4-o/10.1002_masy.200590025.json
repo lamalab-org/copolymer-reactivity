@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "epsilon-caprolactone",
+                "gamma-butyrolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination-insertion",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 19.4,
+                        "constant_2": 0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Finemann-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/masy.200551306",
+    "PDF_name": "Polymerization of epsilon-Caprolactone and its Copolymerization with gamma-Butyrolactone using Metal Complexes"
+}

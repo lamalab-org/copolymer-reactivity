@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinylidene cyanide",
+                "2,2,2-trifluoroethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Jenkins",
+                    "Q-value": {
+                        "constant_1": 8.3,
+                        "constant_2": 1.13
+                    },
+                    "e-Value": {
+                        "constant_1": 2.58,
+                        "constant_2": 0.98
+                    },
+                    "r_product": 0.03
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.24825",
+    "PDF_name": "Radical Copolymerization of Vinylidene Cyanide with 2,2,2-Trifluoroethyl Methacrylate"
+}

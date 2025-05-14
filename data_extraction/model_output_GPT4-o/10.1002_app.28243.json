@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "isobutyl methacrylate",
+                "lauryl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.109,
+                        "constant_2": 1.85829
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 1e-05
+                    },
+                    "determination_method": "robust M-estimation",
+                    "Q-value": {
+                        "constant_1": 61.02,
+                        "constant_2": 61.02
+                    },
+                    "e-Value": {
+                        "constant_1": 140.1,
+                        "constant_2": 140.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.28243",
+    "PDF_name": "Kinetic Study of Methacrylate Copolymerization Systems by Thermoanalysis Methods"
+}

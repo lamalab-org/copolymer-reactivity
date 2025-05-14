@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3,4-ethylenedioxythiophene",
+                "3,2-b:2\u2032,3\u2032-dithiophene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electrochemical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.11,
+                        "constant_2": 1.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1039/d3ra08729h",
+    "PDF_name": "Electrochemical copolymerization of 3,4-ethylenedioxythiophene and dithienothiophene"
+}

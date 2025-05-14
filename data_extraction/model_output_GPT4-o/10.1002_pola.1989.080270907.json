@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,4-dicyanobut-1-ene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.016,
+                        "constant_2": 0.109
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.008,
+                        "constant_conf_2": 0.009
+                    },
+                    "determination_method": "nonlinear least squares curve fitting",
+                    "Q-value": {
+                        "constant_1": 0.055,
+                        "constant_2": 333.0
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.00174
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 27, 2907\u20132924 (1989)",
+    "PDF_name": "Alternating Copolymerization of 2,4-Dicyanobut-1-ene and Isoprene"
+}

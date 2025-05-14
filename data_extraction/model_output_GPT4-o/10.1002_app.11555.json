@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "N,N-dimethylacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 313.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.55,
+                        "constant_2": 1.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.12
+                    },
+                    "r_product": 0.99
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 87, 1646\u20131653 (2003)",
+    "PDF_name": "Radiation-Induced GMA/DMAA Graft Copolymerization onto Porous PE Hollow-Fiber Membrane"
+}

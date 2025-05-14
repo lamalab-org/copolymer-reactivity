@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-vinylcarbazole",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.938,
+                        "constant_2": 0.116
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.191,
+                        "constant_conf_2": 0.106
+                    },
+                    "determination_method": "Kelen-Tudos and EVM",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/masy.200850107",
+    "PDF_name": "Copolymerization of N-Vinylcarbazole and Vinyl Acetate via Reversible Addition-Fragmentation Chain Transfer (RAFT) Polymerization"
+}

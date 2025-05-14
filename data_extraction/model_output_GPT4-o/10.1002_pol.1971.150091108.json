@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-vinyl-2-pyrrolidone",
+                "vinylferrocene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.66,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.72,
+                        "constant_conf_2": 0.29
+                    },
+                    "determination_method": "Montgomery and Fry",
+                    "Q-value": {
+                        "constant_1": 88.0,
+                        "constant_2": 45.0
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.67,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.72,
+                        "constant_conf_2": 0.29
+                    },
+                    "determination_method": "Mortimer and Tidwell",
+                    "Q-value": {
+                        "constant_1": 88.0,
+                        "constant_2": 45.0
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-vinyl-2-pyrrolidone",
+                "vinylcyclopentadienyl manganese tricarbonyl"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.14,
+                        "constant_2": 0.094
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Montgomery and Fry",
+                    "Q-value": {
+                        "constant_1": 85.0,
+                        "constant_2": 45.0
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.053,
+                        "constant_2": 0.085
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "Mortimer and Tidwell",
+                    "Q-value": {
+                        "constant_1": 85.0,
+                        "constant_2": 45.0
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A-1, Vol. 9, 3175\u20133186 (1971)",
+    "PDF_name": "Organometallic Polymers. XIV. Copolymerization of Vinylcyclopentadienyl Manganese Tricarbonyl and Vinylferrocene with N-Vinyl-2-Pyrrolidone"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3,4-dihydro-2H-pyran-2-carboxyaldehyde",
+                "phenyl isocyanate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 15.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 0.13
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 1.1
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.5
+                    },
+                    "r_product": 0.02
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A-1, Vol. 7, 935\u2013944 (1969)",
+    "PDF_name": "Polymerization of 3,4-Dihydro-2H-Carboxyaldehyde (Acrolein Dimer). Part II. Copolymerization with Isocyanates"
+}

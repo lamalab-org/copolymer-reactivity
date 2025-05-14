@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Styrene",
+                "N-Bornylmaleimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.13,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross and curve-fitting method",
+                    "Q-value": {
+                        "constant_1": 1.09,
+                        "constant_2": 0.48
+                    },
+                    "e-Value": {
+                        "constant_1": 1.44,
+                        "constant_2": 1.47
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Methyl methacrylate",
+                "N-Bornylmaleimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.02,
+                        "constant_2": 0.16
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross and curve-fitting method",
+                    "Q-value": {
+                        "constant_1": 0.58,
+                        "constant_2": 0.48
+                    },
+                    "e-Value": {
+                        "constant_1": 1.46,
+                        "constant_2": 1.47
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Vinylidene chloride",
+                "N-Bornylmaleimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.15,
+                        "constant_2": 0.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross and curve-fitting method",
+                    "Q-value": {
+                        "constant_1": 0.48,
+                        "constant_2": 0.48
+                    },
+                    "e-Value": {
+                        "constant_1": 1.33,
+                        "constant_2": 1.47
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: PART A-1 VOL. 8, 1467\u20131479 (1970)",
+    "PDF_name": "Copolymerization of Optically Active N-Bornylmaleimide with Vinyl Monomers"
+}

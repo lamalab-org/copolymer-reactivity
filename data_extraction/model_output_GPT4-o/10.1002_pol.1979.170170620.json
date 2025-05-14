@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl trifluoroacrylate",
+                "ethylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.034,
+                        "constant_2": 0.14
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Lewis\u2013Mayo method",
+                    "Q-value": {
+                        "constant_1": 0.067,
+                        "constant_2": 0.015
+                    },
+                    "e-Value": {
+                        "constant_1": 2.11,
+                        "constant_2": -0.2
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 17, 1789\u20131793 (1979)",
+    "PDF_name": "Radiation-Induced Copolymerization of Methyl Trifluoroacrylate with Ethylene"
+}

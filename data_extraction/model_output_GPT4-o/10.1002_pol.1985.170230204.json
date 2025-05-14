@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "beta-bromostyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electroinitiated",
+                    "solvent": "1,2-dichloroethane",
+                    "method": "solvent",
+                    "temperature": 0.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.79,
+                        "constant_2": 0.047
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Lewis\u2013Mayo equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 23, 303\u2013306 (1985)",
+    "PDF_name": "Effects of Potential on Electroinitiated Copolymerization of Styrene and beta-Bromostyrene"
+}

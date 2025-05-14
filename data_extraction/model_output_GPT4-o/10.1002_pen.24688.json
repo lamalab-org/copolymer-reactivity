@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "ethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.26
+                    },
+                    "e-Value": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.38
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pen.24688",
+    "PDF_name": "One-Pot Approach Synthesizing and Characterization of Random Copolymerization of Ethyl Acrylate-co-Methyl Methacrylate With Broad Range of Glass Transition Temperature Onto Collagen"
+}

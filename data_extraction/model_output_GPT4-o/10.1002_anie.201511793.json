@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "lactide",
+                "cyclohexene oxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination-insertion",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 24.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.23,
+                        "constant_2": 2.54
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.18
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.6,
+                        "constant_2": 1.3e-10
+                    },
+                    "e-Value": {
+                        "constant_1": 9.5e-11,
+                        "constant_2": 1.1e-10
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/anie.201511793",
+    "PDF_name": "Block Copolymerization of Lactide and an Epoxide Facilitated by a Redox Switchable Iron-Based Catalyst"
+}

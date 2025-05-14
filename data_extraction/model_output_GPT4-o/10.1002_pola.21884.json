@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-Phenoxymethyl-1,4,6-trioxa-spiro[4.6]undecane",
+                "3-Ethyl-3-phenoxymethyl oxetane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "dichloromethane",
+                    "method": "bulk",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.017,
+                        "constant_2": 0.025
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "gas chromatography",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.21884",
+    "PDF_name": "Infrared Thermographic Analysis on Copolymerization of Spiroorthoester with Oxetane"
+}

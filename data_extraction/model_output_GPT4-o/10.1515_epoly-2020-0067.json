@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "epsilon-caprolactone",
+                "omega-pentadecanolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "enzymatic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 85.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.742,
+                        "constant_2": 0.135
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1515/epoly-2020-0067",
+    "PDF_name": "Microwave-assisted synthesis of the lipase-catalyzed ring-opening copolymerization of epsilon-caprolactone and omega-pentadecanolactone"
+}

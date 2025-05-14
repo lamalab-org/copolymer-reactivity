@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "p-decyl styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetralin",
+                    "method": "solvent",
+                    "temperature": 200.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.05,
+                        "constant_2": 1.07
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.17,
+                        "constant_conf_2": 0.15
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "THE BRITISH POLYMER JOURNAL, MARCH 1981",
+    "PDF_name": "Gas Chromatographic Determination of Reactivity Ratios"
+}

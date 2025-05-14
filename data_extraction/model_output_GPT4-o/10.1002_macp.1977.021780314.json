@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "dimethyl 2,6-dimethyleneheptanedioate",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.554,
+                        "constant_2": 2.326
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.095,
+                        "constant_conf_2": 0.396
+                    },
+                    "determination_method": "non linear least square method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 178, 765\u2013771 (1977)",
+    "PDF_name": "Free Radical Polymerization of Unconjugated Dienes_17"
+}

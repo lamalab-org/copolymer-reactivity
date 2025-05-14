@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene oxide",
+                "propylene oxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 6.5,
+                        "constant_2": 0.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 3.25
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 14, pp. 1179\u20131182 (1970)",
+    "PDF_name": "Copolymerization of Ethylene Oxide and Propylene Oxide by Anhydrous Potassium Hydroxide"
+}

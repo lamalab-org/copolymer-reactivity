@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "butadiene",
+                "sodium styrene sulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.19,
+                        "constant_2": 0.55
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.72
+                    },
+                    "e-Value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.8
+                    },
+                    "r_product": 0.1
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 18, 3427\u20133439 (1980)",
+    "PDF_name": "The Synthesis of Sulfonated Polymers by Free Radical Copolymerization. Poly(butadiene-co-Sodium Styrene Sulfonate)"
+}

@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "beta butyrolactone",
+                "epsilon caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring opening",
+                    "solvent": "hexane",
+                    "method": "bulk",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.34,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "beta butyrolactone",
+                "delta valerolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring opening",
+                    "solvent": "hexane",
+                    "method": "bulk",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.34,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pi.1036",
+    "PDF_name": "Ring-opening copolymerization of racemic beta-butyrolactone with epsilon-caprolactone and delta-valerolactone by distannoxane derivative catalysts"
+}

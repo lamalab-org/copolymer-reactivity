@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "carbon monoxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "2,2,2-trifluoroethanol",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 25.4,
+                        "constant_2": 2.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.25,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "carbon monoxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "2,2,2-trifluoroethanol",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 29.7,
+                        "constant_2": 1.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 4.3,
+                        "constant_conf_2": 1.7
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/aoc.6337",
+    "PDF_name": "IminopyridinePd(II) complexes as versatile catalysts for copolymerization and terpolymerization of vinyl arene, ethylene, and carbon monoxide"
+}

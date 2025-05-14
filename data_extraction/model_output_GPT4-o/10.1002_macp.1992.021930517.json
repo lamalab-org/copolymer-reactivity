@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,2-dimethyltrimethylene carbonate",
+                "2-allyloxymethyl-2-ethyltrimethylene carbonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.26,
+                        "constant_2": 0.79
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.95,
+                        "constant_2": 0.95
+                    },
+                    "e-Value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.03
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2,2-dimethyltrimethylene carbonate",
+                "\u03b5-caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.89,
+                        "constant_2": 1.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.95,
+                        "constant_2": 0.95
+                    },
+                    "e-Value": {
+                        "constant_1": 0.03,
+                        "constant_2": 0.03
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 193, 1207\u20131217 (1992)",
+    "PDF_name": "Copolymerization of 2,2-dimethyltrimethylene carbonate with 2-allyloxymethyl-2-ethyltrimethylene carbonate and with \u03b5-caprolactone using initiators on the basis of Li, Al, Zn and Sn"
+}

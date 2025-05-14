@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "maleic acid",
+                "allylamine"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.051,
+                        "constant_2": 0.033
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 0.007
+                    },
+                    "determination_method": "Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Acta Polymerica 41 (1990) Nr. 2",
+    "PDF_name": "Synthesis of regular polyampholytes by copolymerization of maleic acid with allyl and diallyl amine derivatives"
+}

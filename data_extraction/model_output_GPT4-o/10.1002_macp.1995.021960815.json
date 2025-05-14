@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "5-(N,N-diisopropylamino)isoprene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 10.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.9,
+                        "constant_2": 0.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.29,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1995.021961120",
+    "PDF_name": "The anionic copolymerization of 5-(N,N-diisopropylamino)isoprene with styrene"
+}

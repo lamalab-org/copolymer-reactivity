@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methacrylic acid",
+                "acrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.42
+                    },
+                    "e-Value": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.38
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Polym. Adv. Technol. 9, 290\u2013296 (1998)",
+    "PDF_name": "Surface Modification of Polyamide-6 Graft Copolymerization of Vinyl Monomers onto Polyamide-6 and Thermal Analysis of the Graft Copolymers"
+}

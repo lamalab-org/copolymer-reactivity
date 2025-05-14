@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-(4-acetyl phenyl)maleimide",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.051,
+                        "constant_2": 0.015
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.004,
+                        "constant_conf_2": 0.003
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.000765
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.07,
+                        "constant_2": 0.018
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.007,
+                        "constant_conf_2": 0.008
+                    },
+                    "determination_method": "Inverted Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.00126
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 0.016
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.002
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.00096
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 91, 964\u2013970 (2004)",
+    "PDF_name": "Radical Copolymerization of N-(4-Acetyl phenyl)maleimide and Styrene"
+}

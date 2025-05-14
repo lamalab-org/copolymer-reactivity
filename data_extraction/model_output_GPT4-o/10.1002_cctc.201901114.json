@@ -1,0 +1,122 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "methyl 10-undecenoate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.35,
+                        "constant_2": 1.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 21.9,
+                        "constant_2": 2.7
+                    },
+                    "e-Value": {
+                        "constant_1": 1.52,
+                        "constant_2": 1.7
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.84,
+                        "constant_2": 1.76
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 5.5,
+                        "constant_2": 2.3
+                    },
+                    "e-Value": {
+                        "constant_1": 2.9,
+                        "constant_2": 2.9
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "vinyltrimethoxysilane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.96,
+                        "constant_2": 0.83
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 13.6,
+                        "constant_2": 1.6
+                    },
+                    "e-Value": {
+                        "constant_1": 0.97,
+                        "constant_2": 0.9
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 10.3,
+                        "constant_2": 2.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.67,
+                        "constant_2": 0.6
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "http://dx.doi.org/10.1002/cctc.201901114",
+    "PDF_name": "Amidine/phosphine-oxide-based nickel catalysts for ethylene polymerization and copolymerization"
+}

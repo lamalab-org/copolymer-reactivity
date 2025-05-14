@@ -222,5 +222,9 @@
     {
         "smiles": "C=C(C)C(=O)[O-].CCCC[Sn+](CCCC)CCCC",
         "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=C(CC(=O)O[Sn](CCCC)(CCCC)CCCC)C(=O)O[Sn](CCCC)(CCCC)CCCC",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
     }
 ]

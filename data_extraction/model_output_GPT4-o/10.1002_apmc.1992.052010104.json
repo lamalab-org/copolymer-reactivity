@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-(2-carboxybenzoyloxy)ethyl methacrylate",
+                "butyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "diglyme",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.85,
+                        "constant_2": 0.75
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.82,
+                        "constant_2": 0.72
+                    },
+                    "e-Value": {
+                        "constant_1": 0.44,
+                        "constant_2": -0.23
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Angewandte Makromolekulare Chemie 201 (1992) 33\u201348",
+    "PDF_name": "Synthesis of 2-(2-carboxybenzoyloxy)ethyl methacrylate and its radical polymerization and copolymerization with butyl methacrylate"
+}

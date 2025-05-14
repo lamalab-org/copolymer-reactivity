@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "5-norbornene-2,3-dicarboxylic acid",
+                "5-norbornene-exo-exo-dicarboxylic anhydride with 1-leucine methyl ester"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring opening metathesis polymerization",
+                    "solvent": "chloroform",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.27,
+                        "constant_2": 1.54
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.13,
+                        "constant_conf_2": 0.12
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma7022233",
+    "PDF_name": "Copolymerization of Amino Acid Functionalized Norbornene Monomers"
+}

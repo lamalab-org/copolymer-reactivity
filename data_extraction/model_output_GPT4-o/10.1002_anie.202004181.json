@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "pyrrole",
+                "tellurophene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "oxidative",
+                    "solvent": "water",
+                    "method": "microemulsion",
+                    "temperature": 4.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.742,
+                        "constant_2": 0.786
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.176,
+                        "constant_conf_2": 0.347
+                    },
+                    "determination_method": "nonlinear least-squares fitting",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/anie.202004181",
+    "PDF_name": "Precisely Tuning Photothermal and Photodynamic Effects of Polymeric Nanoparticles by Controlled Copolymerization"
+}

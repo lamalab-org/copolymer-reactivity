@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl trifluoroacrylate",
+                "propylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.005
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "Lewis-Mayo",
+                    "Q-value": {
+                        "constant_1": 0.035,
+                        "constant_2": 0.002
+                    },
+                    "e-Value": {
+                        "constant_1": 2.37,
+                        "constant_2": -0.78
+                    },
+                    "r_product": 5e-05
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 17, 1795\u20131800 (1979)",
+    "PDF_name": "Radiation-Induced Copolymerization of Methyl Trifluoroacrylate with Propylene"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-hexene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 140.0,
+                        "constant_2": 0.024
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 30.0,
+                        "constant_conf_2": 0.004
+                    },
+                    "determination_method": "13C NMR",
+                    "Q-value": {
+                        "constant_1": 3.3,
+                        "constant_2": 0.5
+                    },
+                    "e-Value": {
+                        "constant_1": 15.0,
+                        "constant_2": 8.0
+                    },
+                    "r_product": 3.5
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 240.0,
+                        "constant_2": 0.005
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 20.0,
+                        "constant_conf_2": 0.001
+                    },
+                    "determination_method": "13C NMR",
+                    "Q-value": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.6
+                    },
+                    "r_product": 1.2
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.20170",
+    "PDF_name": "Ethylene/1-Hexene Copolymerization with Tetramethyldisiloxane-Bridged Bis(indenyl) Metallocenes"
+}

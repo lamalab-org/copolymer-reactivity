@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "L,L-lactide",
+                "trimethylene carbonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 21.5,
+                        "constant_2": 250.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "kinetic simulation fitting",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.11,
+                        "constant_2": 0.097
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "kinetic simulation fitting",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym10010070",
+    "PDF_name": "Effect of the Configuration of a Bulky Aluminum Initiator on the Structure of Copolymers of L,L-Lactide with Symmetric Comonomer Trimethylene Carbonate"
+}

@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Sodium styrenesulfonate",
+                "Acrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "intersection and curve fitting",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": -0.4,
+                        "constant_2": 1.2
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Sodium styrenesulfonate",
+                "Acrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "intersection and curve fitting",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 1.32
+                    },
+                    "e-Value": {
+                        "constant_1": -0.4,
+                        "constant_2": 0.99
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "Sodium styrenesulfonate",
+                "Sodium acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 0.34
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.2,
+                        "constant_conf_2": 0.23
+                    },
+                    "determination_method": "intersection and curve fitting",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.44
+                    },
+                    "e-Value": {
+                        "constant_1": -0.4,
+                        "constant_2": 0.05
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. 59, Pages 425\u2013431 (1962)",
+    "PDF_name": "Copolymerization Characteristics of Sodium Styrenesulfonate"
+}

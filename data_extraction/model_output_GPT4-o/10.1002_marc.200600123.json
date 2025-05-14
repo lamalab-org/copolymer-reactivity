@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3-Ethyl-3-phenoxymethyloxetane",
+                "1,4-Bis[(3-ethyloxetan-3-yl)methoxymethyl]benzene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 150.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.96
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.48
+                    },
+                    "e-Value": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.08
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/marc.200600123",
+    "PDF_name": "Non-Shrinking Networked Materials from the Cross-Linking Copolymerization of Spiroorthocarbonate with Bifunctional Oxetane"
+}

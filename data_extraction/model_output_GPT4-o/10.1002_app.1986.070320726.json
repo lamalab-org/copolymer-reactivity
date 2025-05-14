@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl chloroacetate",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl isobutyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "nonlinear least-squares",
+                    "Q-value": {
+                        "constant_1": 3.1,
+                        "constant_2": 2.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.3
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl isobutyl ketone",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.21,
+                        "constant_2": 0.83
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "linear least-squares",
+                    "Q-value": {
+                        "constant_1": 3.1,
+                        "constant_2": 2.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.3
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 32, 5981\u20135999 (1986)",
+    "PDF_name": "The Kinetics of Solution Copolymerization of Vinyl Chloroacetate with Vinyl Acetate in a CSTR"
+}
