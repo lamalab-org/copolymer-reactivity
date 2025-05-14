@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-vinyl-3-ethylimidazolium bis(trifluoromethylsulfonyl)imide",
+                "N-vinyl-3-butylimidazolium bromide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.86,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "non-linear least-squares fit",
+                    "Q-value": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.52
+                    },
+                    "e-Value": {
+                        "constant_1": 0.24,
+                        "constant_2": 0.24
+                    },
+                    "r_product": 0.5
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/acs.macromol.5b01013",
+    "PDF_name": "All Poly(ionic liquid)-Based Block Copolymers by Sequential Controlled Radical Copolymerization of Vinylimidazolium Monomers"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2,4,5-Trichlorophenyl acrylate",
+                "Styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.29,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.09,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.82,
+                        "constant_2": -0.8
+                    },
+                    "r_product": 0.073
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00243a028",
+    "PDF_name": "Copolymerization of 2,4,5-Trichlorophenyl Acrylate with Styrene"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-ethylhexyl acrylate",
+                "vinyl chloroacetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 10.0,
+                        "constant_2": 0.033
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "Balaraman equation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 39, 1309\u20131323 (1990)",
+    "PDF_name": "Diffusion-Controlled Kinetics for the Solution Copolymerization of 2-Ethylhexyl Acrylate with Vinyl Chloroacetate in a CSTR"
+}

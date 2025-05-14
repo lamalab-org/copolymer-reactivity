@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,6-Anhydro-2,3,4-tri-O-(p-methylbenzyl)-\u03b2-D-galactopyranose",
+                "1,6-Anhydro-2,3,4-tri-O-benzyl-\u03b2-D-mannopyranose"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.37,
+                        "constant_2": 38.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 4.0
+                    },
+                    "determination_method": "Mayo\u2013Lewis",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 17, 1299\u20131307 (1979)",
+    "PDF_name": "Copolymerization of 1,6-Anhydro-\u03b2-D-Galactopyranose and 1,6-Anhydro-\u03b2-D-Mannopyranose Derivatives"
+}

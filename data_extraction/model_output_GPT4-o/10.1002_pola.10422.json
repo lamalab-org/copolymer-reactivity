@@ -1,0 +1,114 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethene",
+                "propene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.4,
+                        "constant_2": 0.19
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.22,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "first-order Markov model",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.59
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 7.5,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.34,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "first-order Markov model",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 1.29
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 12.3,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.9,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "first-order Markov model",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 4.2
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 14.0,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.0,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "first-order Markov model",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 2.66
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science Part A: Polymer Chemistry, Vol. 40, 3249\u20133255 (2002)",
+    "PDF_name": "Copolymerization of Ethene and Propene in the Presence of C_s Symmetric Group 4 Metallocenes and Methylaluminoxane"
+}

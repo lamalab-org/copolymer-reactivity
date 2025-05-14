@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "ethylene glycol dimethacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.01
+                    },
+                    "e-Value": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.01
+                    },
+                    "r_product": 0.08
+                }
+            ]
+        }
+    ],
+    "source": "10.1002/pola.22001",
+    "PDF_name": "Synthesis of Densely Branched Poly(methyl methacrylate)s via ATR Copolymerization of Methyl Methacrylate and Ethylene Glycol Dimethacrylate"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-(4-methylphenyl)maleimide",
+                "N-vinylpyrrolidone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solution",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-T\u00fcdos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide/water",
+                    "method": "solution",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.34,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-T\u00fcdos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.201300394",
+    "PDF_name": "Influence of \u03b2-Cyclodextrin on the Free-Radical Copolymerization of N-(4-Methylphenyl)maleimide with N-Vinylpyrrolidone in Water"
+}

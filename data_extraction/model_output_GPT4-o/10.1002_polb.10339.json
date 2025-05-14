@@ -1,0 +1,114 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-hexene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 32.0,
+                        "constant_2": 0.012
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 10.0,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "13C nuclear magnetic resonance",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.38
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 32.0,
+                        "constant_2": 0.015
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 10.0,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "13C nuclear magnetic resonance",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.48
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 34.872,
+                        "constant_2": 0.012
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo\u2013Lewis equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.42
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 34.47,
+                        "constant_2": 0.0001
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo\u2013Lewis equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.000345
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/polb.10300",
+    "PDF_name": "Ethylene-1-Hexene Copolymers Synthesized with a Single-Site Catalyst"
+}

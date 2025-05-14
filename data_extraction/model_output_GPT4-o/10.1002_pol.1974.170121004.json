@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-Vinylindole",
+                "Fumaronitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.014,
+                        "constant_2": 15.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 1.2
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.47
+                    },
+                    "e-Value": {
+                        "constant_1": -1.38,
+                        "constant_2": 1.36
+                    },
+                    "r_product": 0.22
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N-Vinylindole",
+                "Diethyl fumarate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.026,
+                        "constant_2": 9.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.8
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.36
+                    },
+                    "e-Value": {
+                        "constant_1": -1.38,
+                        "constant_2": 0.94
+                    },
+                    "r_product": 0.24
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 12, 2199\u20132206 (1974)",
+    "PDF_name": "Mechanism of Charge-Transfer Polymerization XI Radical Copolymerization of N-Vinylindole with Electron-Accepting Monomers"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "norbornene",
+                "norbornadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring opening metathesis polymerization",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.32,
+                        "constant_2": 0.44
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.5
+                    },
+                    "e-Value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.18
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym9040141",
+    "PDF_name": "Copolymerization of Norbornene and Norbornadiene Using a cis-Selective Bimetallic W-Based Catalytic System"
+}

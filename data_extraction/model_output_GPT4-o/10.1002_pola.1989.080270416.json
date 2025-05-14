@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "itaconic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.053,
+                        "constant_2": 31.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.028,
+                        "constant_conf_2": 16.86
+                    },
+                    "determination_method": "Mayo\u2013Lewis",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "diethyl itaconate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.125,
+                        "constant_2": 18.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.021,
+                        "constant_conf_2": 11.15
+                    },
+                    "determination_method": "Mayo\u2013Lewis",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1989.170270507",
+    "PDF_name": "On the Kinetics and Mechanism of Copolymerization of Vinyl Acetate and Itaconic Monomers"
+}

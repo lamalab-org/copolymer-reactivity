@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "N-vinylpyrrolidone",
+                "N-vinylcaprolactam"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.58,
+                        "constant_2": 0.26
+                    },
+                    "e-Value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.12
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/adom.201901277",
+    "PDF_name": "Employing Lactam Copolymerization Strategy to Effectively Achieve Pure Organic Room-Temperature Phosphorescence in Amorphous State"
+}

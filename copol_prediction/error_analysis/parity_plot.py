@@ -8,8 +8,7 @@ df = pd.read_csv("../output/xgboost_predictions_for_error_analysis.csv")  # Repl
 features = [
     'temperature',
     'solvent_logp', 'delta_HOMO_LUMO_AA', 'delta_HOMO_LUMO_AB',
-    'delta_HOMO_LUMO_BB', 'delta_HOMO_LUMO_BA', 'polytype_emb_1',
-    'polytype_emb_2', 'method_emb_1', 'method_emb_2'
+    'delta_HOMO_LUMO_BB', 'delta_HOMO_LUMO_BA'
 ]
 
 # Define axes
@@ -39,8 +38,8 @@ fig = go.Figure(
     data=[frames[0].data[0]],
     layout=go.Layout(
         title="Parity Plot: true_r1r2 vs. pred_r1r2 (colored by feature)",
-        xaxis=dict(title="true_r1r2", range=[0, 10]),
-        yaxis=dict(title="pred_r1r2", range=[0, 10]),
+        xaxis=dict(title="true_r1r2", range=[0, 2]),
+        yaxis=dict(title="pred_r1r2", range=[0, 2]),
         sliders=[{
             "active": 0,
             "pad": {"t": 50},

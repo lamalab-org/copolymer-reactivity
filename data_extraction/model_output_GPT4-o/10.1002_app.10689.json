@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "aniline",
+                "2-aminobenzenesulfonic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electrochemical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 67.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.28,
+                        "constant_2": 0.36
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.1
+                    },
+                    "r_product": 0.1
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "aniline",
+                "3-aminobenzenesulfonic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electrochemical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 67.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.35,
+                        "constant_2": 0.29
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.5
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.1
+                    },
+                    "r_product": 0.1
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "aniline",
+                "4-aminobenzenesulfonic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "electrochemical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 67.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.31,
+                        "constant_2": 0.27
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.1
+                    },
+                    "r_product": 0.08
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 85, 1227\u20131235 (2002)",
+    "PDF_name": "Electrochemical Copolymerization of Aniline and Anilinesulfonic Acids in FSO3H_Acetonitrile Solution"
+}

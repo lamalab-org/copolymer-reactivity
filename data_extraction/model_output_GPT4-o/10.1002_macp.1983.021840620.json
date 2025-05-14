@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.39,
+                        "constant_2": 8.92
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.583,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Arrhenius relation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.803,
+                        "constant_2": 36.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.592,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Arrhenius relation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.69,
+                        "constant_2": 140.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.639,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Arrhenius relation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 184, 1295\u20131302 (1983)",
+    "PDF_name": "High Conversion Copolymerization, 1 - Kinetics of the Copolymerization of Styrene and Maleic Anhydride"
+}

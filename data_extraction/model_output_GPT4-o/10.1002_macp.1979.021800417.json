@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetone",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.06
+                    },
+                    "e-Value": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.06
+                    },
+                    "r_product": 0.026
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 180, 1007-1011 (1979)",
+    "PDF_name": "On the Copolymerization of Acrylonitrile with Styrene in the Presence of Lewis Acid, 3"
+}

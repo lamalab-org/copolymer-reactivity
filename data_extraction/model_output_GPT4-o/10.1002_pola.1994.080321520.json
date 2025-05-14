@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.077,
+                        "constant_2": 0.036
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0722,
+                        "constant_conf_2": 0.0369
+                    },
+                    "determination_method": "nonlinear least squares",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 32, 2971\u20132978 (1994)",
+    "PDF_name": "The Comppen Model A Combined Complex-Participation Penultimate Effect Model for Free-Radical Copolymerization"
+}

@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "trimethylene carbonate",
+                "ethyl 5-methyl-2-oxo-1,3-dioxane-5-carboxylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.13,
+                        "constant_2": 1.92
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.29,
+                        "constant_conf_2": 0.31
+                    },
+                    "determination_method": "1H nuclear magnetic resonance spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 7.53,
+                        "constant_2": 0.96
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.12,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "1H nuclear magnetic resonance spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.28431",
+    "PDF_name": "Obtaining Aliphatic Branched Polycarbonates via Simple Copolymerization of Trimethylene Carbonate with Cyclic Carbonate Containing Pendant Ester Groups"
+}

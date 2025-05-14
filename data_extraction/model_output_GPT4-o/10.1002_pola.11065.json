@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Divinylbenzene",
+                "N-Isopropylacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "N,N-dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.33
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.57,
+                        "constant_2": 0.74
+                    },
+                    "e-Value": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.22
+                    },
+                    "r_product": 0.066
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 42, 1609\u20131617 (2004)",
+    "PDF_name": "Initiator-Fragment Incorporation Radical Copolymerization of Divinylbenzene and N-Isopropylacrylamide"
+}

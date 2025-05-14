@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl vinyl ketone",
+                "propylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.23,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.7
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.3
+                    },
+                    "r_product": 0.0598
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl vinyl ketone",
+                "vinyl chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.31
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.4
+                    },
+                    "r_product": 0.0558
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl vinyl ketone",
+                "butadiene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.4,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.05,
+                        "constant_2": 0.5
+                    },
+                    "r_product": 0.054
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl vinyl ketone",
+                "isobutylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.3
+                    },
+                    "r_product": 0.042
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 137 (1970) 61\u201366",
+    "PDF_name": "Copolymerization of Methyl Vinyl Ketone with Vinyl Compounds or Dienes in the Presence of Alkyl-Aluminium Chloride or Aluminium Bromide"
+}

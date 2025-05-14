@@ -1,0 +1,163 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "zinc acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.9
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.07
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.84
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.7
+                    },
+                    "r_product": 0.99
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "cobalt acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.74,
+                        "constant_2": 0.56
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.09
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.51
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.64
+                    },
+                    "r_product": 0.97
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "nickel acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.83,
+                        "constant_2": 0.53
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.48
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.63
+                    },
+                    "r_product": 0.97
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "copper acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 5.94,
+                        "constant_2": 0.12
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.11
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.22
+                    },
+                    "r_product": 0.71
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 6.34,
+                        "constant_2": 0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "copolymer composition equation",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 186, 139\u2013144 (1985)",
+    "PDF_name": "Copolymerization of styrene with Zn(II), Co(II), Ni(II) and Cu(II) acrylates"
+}

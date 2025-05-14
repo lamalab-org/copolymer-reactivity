@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "2,3-epoxypropyl ethyl maleate/fumarate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 0.05
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "\u00b1 0.02",
+                        "constant_conf_2": "\u00b1 0.007"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.55,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 1.28,
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 172, 97\u2013106 (1973)",
+    "PDF_name": "Reactive Polymers, 5 - Synthesis of a 2,3-Epoxypropyl Ethyl Maleate/Fumarate Mixture and Its Copolymerization with Styrene and Ethylene"
+}

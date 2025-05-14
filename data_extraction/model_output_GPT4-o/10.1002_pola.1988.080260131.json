@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "phenyl-4'-vinylphenylbutadiyne",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 3.08,
+                        "constant_2": 0.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "NMR",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 0.26
+                    },
+                    "e-Value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.18
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "phenyl-4'-vinylphenylbutadiyne",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.32,
+                        "constant_2": 0.43
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.08,
+                        "constant_conf_2": 0.06
+                    },
+                    "determination_method": "NMR",
+                    "Q-value": {
+                        "constant_1": 0.68,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": 0.19,
+                        "constant_2": 0.21
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 26, 321\u2013327 (1988)",
+    "PDF_name": "Studies on Diacetylenic Vinyl Compounds. II. Copolymerization of Phenyl-4'-Vinylphenylbutadiyne with Styrene and Methyl Methacrylate"
+}

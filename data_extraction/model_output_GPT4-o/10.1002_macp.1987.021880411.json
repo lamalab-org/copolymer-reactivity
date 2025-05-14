@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "benzyl methacrylate",
+                "N-methylmethacrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.6
+                    },
+                    "e-Value": {
+                        "constant_1": 0.55,
+                        "constant_2": 0.2
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 188, 769\u2013781 (1987)",
+    "PDF_name": "Preparation of poly(N-methylmethacrylamide) microspheres containing peroxy ester groups and their use in graft copolymerization"
+}

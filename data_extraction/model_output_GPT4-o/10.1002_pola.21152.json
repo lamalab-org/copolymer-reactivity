@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "poly(ethylene glycol) monomethacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "diethylene glycol dimethacrylate",
+                    "method": "suspension",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.44,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.32
+                    },
+                    "e-Value": {
+                        "constant_1": 0.45,
+                        "constant_2": 0.12
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.21152",
+    "PDF_name": "Interfacial Living Radical Copolymerization of Oil- and Water-Soluble Comonomers To Form Composite Polymer Capsules"
+}

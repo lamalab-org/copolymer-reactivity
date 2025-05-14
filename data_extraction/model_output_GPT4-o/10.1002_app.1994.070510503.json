@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "2-hydroxyethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.7,
+                        "constant_2": 2.74
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.15,
+                        "constant_conf_2": 0.14
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.85,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.34
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methyl ethyl ketone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.69,
+                        "constant_2": 2.72
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.16,
+                        "constant_conf_2": 0.15
+                    },
+                    "determination_method": "Joshi-Joshi",
+                    "Q-value": {
+                        "constant_1": 0.96,
+                        "constant_2": 1.03
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.39
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 51, 807\u2013813 (1994)",
+    "PDF_name": "Photoinitiated Graft Copolymerization of Glycidyl Methacrylate and 2-Hydroxyethyl Methacrylate onto Polyacrylonitrile"
+}

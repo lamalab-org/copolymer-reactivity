@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "myrcene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 3.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.65
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.38
+                },
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 3.32
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.004,
+                        "constant_conf_2": 0.68
+                    },
+                    "determination_method": "extended Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.33
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym13050838",
+    "PDF_name": "Sustainable Myrcene-Based Elastomers via a Convenient Anionic Polymerization"
+}

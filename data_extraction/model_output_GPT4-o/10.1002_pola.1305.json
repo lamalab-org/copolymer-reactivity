@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-[(N-benzyl-N-methylamino)methyl]-1,3-butadiene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "cyclohexane",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.6,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Mayo\u2013Lewis equation",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 39, 3227\u20133238 (2001)",
+    "PDF_name": "Free-Radical Polymerization of 2-[(N-Benzyl-N-methylamino)methyl]-1,3-butadiene and Copolymerization with Styrene"
+}

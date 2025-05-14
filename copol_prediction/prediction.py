@@ -6,7 +6,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_squared_error
 
 # Import the BucketClassifier
 from copolpredictor.bucket_model import BucketClassifier
@@ -227,49 +227,6 @@ def save_detailed_predictions(predictions, df_prepared, original_df):
     print(f"Columns included in detailed predictions: {results_df.columns.tolist()}")
 
 
-def main(process_data = True):
-    """Main function to run both XGBoost regression and bucket classification models"""
-    # Input data path
-    data_path = "../data_extraction/extracted_reactions.csv"
-
-    # Set random seed for reproducibility
-    random_state = 42
-
-    # Create output directory
-    os.makedirs("output", exist_ok=True)
-
-    print("=== Copolymerization Prediction Model ===")
-
-    if process_data:
-        # Step 1: Load and preprocess data
-        print("\nStep 1: Loading and preprocessing data...")
-        df = data_processing.load_and_preprocess_data(data_path)
-
-        if df is None or len(df) == 0:
-            print("Error: No data available for modeling.")
-            return
-
-        # Save processed data
-        df.to_csv("output/processed_data.csv", index=False)
-    else:
-        df = pd.read_csv("output/processed_data.csv")
-
-    # Step 2: Run XGBoost regression model (as before)
-    print("\nStep 2: Running XGBoost regression model...")
-    run_xgboost(df, random_state)
-
-    # Step 3: Run Bucket Classification model
-    print("\nStep 3: Running Bucket Classification model...")
-    run_bucket_classifier(df, random_state)
-
-    # Step 4: Run Neural Network model (optional)
-    # print("\nStep 4: Running improved Neural Network model...")
-    # run_neural_network(df, random_state)
-
-    print("\n=== Modeling Complete ===")
-    print("Results saved to output/")
-
-
 def run_xgboost(df, random_state):
     """Run XGBoost model and save both train and test predictions for error analysis"""
     # Initialize model trainer
@@ -453,8 +410,6 @@ def run_xgboost(df, random_state):
     print(f"Removed {len(train_true_values) - len(train_true_filtered)} NaN values from train data")
 
     # Calculate metrics on filtered data
-    from sklearn.metrics import r2_score, mean_squared_error
-
     if len(test_true_filtered) > 0:
         test_r2 = r2_score(test_true_filtered, test_pred_filtered)
         test_rmse = np.sqrt(mean_squared_error(test_true_filtered, test_pred_filtered))
@@ -678,6 +633,49 @@ def run_neural_network(df, random_state):
         print(f"Error running neural network model: {e}")
         import traceback
         traceback.print_exc()
+
+
+def main(process_data = True):
+    """Main function to run both XGBoost regression and bucket classification models"""
+    # Input data path
+    data_path = "../data_extraction/extracted_reactions.csv"
+
+    # Set random seed for reproducibility
+    random_state = 42
+
+    # Create output directory
+    os.makedirs("output", exist_ok=True)
+
+    print("=== Copolymerization Prediction Model ===")
+
+    if process_data:
+        # Step 1: Load and preprocess data
+        print("\nStep 1: Loading and preprocessing data...")
+        df = data_processing.load_and_preprocess_data(data_path)
+
+        if df is None or len(df) == 0:
+            print("Error: No data available for modeling.")
+            return
+
+        # Save processed data
+        df.to_csv("output/processed_data.csv", index=False)
+    else:
+        df = pd.read_csv("output/processed_data.csv")
+
+    # Step 2: Run XGBoost regression model (as before)
+    print("\nStep 2: Running XGBoost regression model...")
+    run_xgboost(df, random_state)
+
+    # Step 3: Run Bucket Classification model
+    print("\nStep 3: Running Bucket Classification model...")
+    run_bucket_classifier(df, random_state)
+
+    # Step 4: Run Neural Network model (optional)
+    # print("\nStep 4: Running improved Neural Network model...")
+    # run_neural_network(df, random_state)
+
+    print("\n=== Modeling Complete ===")
+    print("Results saved to output/")
 
 
 if __name__ == "__main__":

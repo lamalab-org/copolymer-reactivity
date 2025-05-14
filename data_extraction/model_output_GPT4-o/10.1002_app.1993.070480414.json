@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-hexene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "tetrahydrofuran",
+                    "method": "slurry",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 120.0,
+                        "constant_2": 10.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 10.0,
+                        "constant_conf_2": 1.0
+                    },
+                    "determination_method": "infrared spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 48, 721\u2013730 (1993)",
+    "PDF_name": "Comonomer Enhancement Effect of 1-Hexene in Ethylene Copolymerization Catalyzed over MgCl2/THF/TiCl4 Catalysts"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "beta-butyrolactone",
+                "benzyl beta-malolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.27,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.7
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.2
+                    },
+                    "r_product": 0.11
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem., Macromol. Symp. 60, 187-195 (1992)",
+    "PDF_name": "copolymerization_of_butyrolactone_and_benzyl_malolactone.pdf"
+}

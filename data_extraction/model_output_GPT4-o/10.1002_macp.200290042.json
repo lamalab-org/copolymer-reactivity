@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "omega-allyl polystyrene macromonomer"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.5,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 2.0,
+                        "constant_2": 2.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.6
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethylene",
+                "omega-undecenyl polystyrene macromonomer"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.6,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 2.3,
+                        "constant_2": 2.3
+                    },
+                    "e-Value": {
+                        "constant_1": 1.8,
+                        "constant_2": 1.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/1521-3935(20021001)203:18<2583::AID-MACP2583>3.0.CO;2-0",
+    "PDF_name": "Homo- and Copolymerization of \u03c9-Functional Polystyrene Macromonomers via Coordination Polymerization"
+}

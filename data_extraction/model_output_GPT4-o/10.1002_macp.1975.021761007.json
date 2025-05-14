@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "(-)-Menthyl acrylate",
+                "(\u00b1)-Menthyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.38,
+                        "constant_2": 0.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.95,
+                        "constant_2": 0.85
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.1
+                    },
+                    "r_product": 1.07
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 176, 2853\u20132860 (1975)",
+    "PDF_name": "Copolymerization of (-)- and (\u00b1)-Menthyl Acrylates"
+}

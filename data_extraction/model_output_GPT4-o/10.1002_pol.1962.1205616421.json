@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl chloride",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": -40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.5,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": -1.1,
+                        "constant_2": -0.72
+                    },
+                    "e-Value": {
+                        "constant_1": -0.039,
+                        "constant_2": -0.334
+                    },
+                    "r_product": 0.26
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. 56, Pages 501\u2013506 (1962)",
+    "PDF_name": "The Effect of Copolymerization on Stereoregular Polyvinyl Chloride"
+}

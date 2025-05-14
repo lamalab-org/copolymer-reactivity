@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.4,
+                        "constant_2": 7.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.5
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.7,
+                        "constant_2": 4.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.4
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.22765",
+    "PDF_name": "Factors Affecting Product Distributions in Ethylene/Styrene Copolymerization by (Aryloxo)(cyclopentadienyl)titanium Complexes-MAO Catalyst Systems"
+}

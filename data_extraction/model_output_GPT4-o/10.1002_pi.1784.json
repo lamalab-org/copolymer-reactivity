@@ -1,0 +1,97 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methylcobaltcarbonylsilane",
+                "dimethyldichlorosilane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "reductive coupling",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.093,
+                        "constant_2": 0.134
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.146,
+                        "constant_conf_2": 0.173
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.9825,
+                        "constant_2": 0.0771
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0771,
+                        "constant_2": 0.947
+                    },
+                    "r_product": 0.013
+                },
+                {
+                    "polymerization_type": "reductive coupling",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.036,
+                        "constant_2": 1.173
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.232,
+                        "constant_conf_2": 0.889
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": -0.3059,
+                        "constant_2": 0.103
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0378,
+                        "constant_2": 0.3902
+                    },
+                    "r_product": 0.043
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methylcobaltcarbonylsilane",
+                "diethylchlorosilane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "reductive coupling",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.506,
+                        "constant_2": 10.545
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.368,
+                        "constant_conf_2": 10.038
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": -0.8888,
+                        "constant_2": 0.8061
+                    },
+                    "e-Value": {
+                        "constant_1": -0.3366,
+                        "constant_2": 0.8041
+                    },
+                    "r_product": 5.331
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pi.1784",
+    "PDF_name": "Synthesis and monomer reactivity ratio of cobalt-containing hybrid polysilanes"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "propylene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "heptane",
+                    "method": "slurry",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.49,
+                        "constant_2": 1.37
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.1
+                    },
+                    "e-Value": {
+                        "constant_1": 0.86,
+                        "constant_2": 0.07
+                    },
+                    "r_product": 0.67
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.20827",
+    "PDF_name": "Copolymerization of Ethylene\u2013Propylene Using High-Activity Bi-supported Ziegler\u2013Natta TiCl4 Catalyst"
+}

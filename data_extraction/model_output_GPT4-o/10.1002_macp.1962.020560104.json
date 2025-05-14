@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3,3-Bis(chloromethyl)oxacyclobutane",
+                "Tetrahydrofuran"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 0.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.82,
+                        "constant_2": 1.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "intersection method",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "T. Saegusa, H. Imai, and J. Furukawa, Copolymerization of 3,3-Bis(chloromethyl)oxacyclobutane and Tetrahydrofuran, 1962",
+    "PDF_name": "Copolymerization_of_3,3-Bis(chloromethyl)oxacyclobutane_and_Tetrahydrofuran.pdf"
+}

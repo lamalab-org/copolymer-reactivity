@@ -39,7 +39,7 @@ existing_doi_csv
     #pdf_download(output_file_pre_download_filter, pdf_folder)
 
     # PDF quality XGBoost-filter
-    pre_extraction_filter(seed_xgboost_model, threshold_xgboost_model, pdf_folder, output_folder_images, output_folder_LLM_score, training_file_xgboost_model, output_file_pre_download_filter, output_file_xgboost_filter)
+    #pre_extraction_filter(seed_xgboost_model, threshold_xgboost_model, pdf_folder, output_folder_images, output_folder_LLM_score, training_file_xgboost_model, output_file_pre_download_filter, output_file_xgboost_filter)
 
     # Extraction
     extractor(
@@ -120,7 +120,7 @@ def main():
     output_folder_LLM_score = "./output/model_output_score"
 
     training_file_xgboost_model = (
-        "./data_extraction_GPT-4o/output/copol_paper_list.json"
+        "output/copol_database/copol_paper_list.json"
     )
     output_file_xgboost_filter = "output/paper_list.json"
 

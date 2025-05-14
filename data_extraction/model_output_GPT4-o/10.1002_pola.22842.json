@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Ethyl-2-cyanoacrylate",
+                "Butyl-2-cyanoacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 3.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 8.74
+                },
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 3.8
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 8.74
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.22842",
+    "PDF_name": "On the Anionic Homo- and Copolymerization of Ethyl- and Butyl-2-Cyanoacrylates"
+}

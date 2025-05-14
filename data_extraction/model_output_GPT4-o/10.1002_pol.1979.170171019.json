@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "l-Menthyl vinyl ether",
+                "Vinylene carbonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.4,
+                        "constant_2": 9.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.09,
+                        "constant_2": 0.007
+                    },
+                    "e-Value": {
+                        "constant_1": -1.93,
+                        "constant_2": -0.65
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "l-Menthyl vinyl ether",
+                "Indene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.4,
+                        "constant_2": 9.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 0.09,
+                        "constant_2": 0.36
+                    },
+                    "e-Value": {
+                        "constant_1": -1.93,
+                        "constant_2": -1.03
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 17, 3297\u20133305 (1979)",
+    "PDF_name": "Asymmetric Induction Radical Copolymerization of Optically Active l-Menthyl Vinyl Ether with Vinylene Carbonate and Indene"
+}

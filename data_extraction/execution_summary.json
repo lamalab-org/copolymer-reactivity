@@ -1,0 +1,169 @@
+{
+    "runs": [
+        {
+            "timestamp": "2025-05-13 11:18:34",
+            "training_file": "output/copol_database/copol_paper_list.json",
+            "scoring_file": "output/paper_list.json",
+            "output_file": "output/paper_list.json",
+            "threshold": 0.7,
+            "seed": 22,
+            "total_execution_time": 6.148396968841553,
+            "processed_papers": 1626,
+            "papers_with_predictions": 826
+        },
+        {
+            "timestamp": "2025-05-13 11:24:40",
+            "training_file": "output/copol_database/copol_paper_list.json",
+            "scoring_file": "output/paper_list.json",
+            "output_file": "output/paper_list.json",
+            "threshold": 0.7,
+            "seed": 22,
+            "total_execution_time": 6.866925954818726,
+            "file_stats": {
+                "scoring_file_exists": true,
+                "output_file_exists": true,
+                "scoring_file_valid": true,
+                "output_file_valid": true
+            },
+            "data_preparation": {
+                "total_entries": 1626,
+                "complete_entries": 1176,
+                "entries_with_missing_features": 450,
+                "converted_rxn_count": 1211,
+                "missing_feature_counts": {
+                    "language": 450,
+                    "table_quality": 448,
+                    "quality_of_number": 416,
+                    "year": 448,
+                    "pdf_quality": 412,
+                    "rxn_number": 415
+                }
+            },
+            "prediction_results": {
+                "total_processed": 1626,
+                "successful_predictions": 1176,
+                "failed_predictions": 450,
+                "prediction_errors": {
+                    "missing_features": 450
+                }
+            }
+        },
+        {
+            "timestamp": "2025-05-13 11:34:25",
+            "training_file": "output/copol_database/copol_paper_list.json",
+            "scoring_file": "output/paper_list.json",
+            "output_file": "output/paper_list.json",
+            "threshold": 0.7,
+            "seed": 22,
+            "total_execution_time": 5.95144510269165,
+            "file_stats": {
+                "scoring_file_exists": true,
+                "output_file_exists": true,
+                "scoring_file_valid": true,
+                "output_file_valid": true,
+                "missing_jsons": 0,
+                "missing_json_filenames": []
+            },
+            "data_preparation": {
+                "total_entries": 1626,
+                "complete_entries": 1176,
+                "entries_with_missing_features": 450,
+                "converted_rxn_count": 1211,
+                "missing_feature_counts": {
+                    "language": 450,
+                    "table_quality": 448,
+                    "quality_of_number": 416,
+                    "year": 448,
+                    "pdf_quality": 412,
+                    "rxn_number": 415
+                }
+            },
+            "prediction_results": {
+                "total_processed": 1626,
+                "successful_predictions": 1176,
+                "failed_predictions": 450,
+                "prediction_errors": {
+                    "missing_features": 450
+                }
+            }
+        },
+        {
+            "timestamp": "2025-05-13 12:45:46",
+            "training_file": "output/copol_database/copol_paper_list.json",
+            "scoring_file": "output/paper_list.json",
+            "output_file": "output/paper_list.json",
+            "threshold": 0.7,
+            "seed": 22,
+            "total_execution_time": 6.561287879943848,
+            "file_stats": {
+                "scoring_file_exists": true,
+                "output_file_exists": true,
+                "scoring_file_valid": true,
+                "output_file_valid": true,
+                "missing_jsons": 0,
+                "missing_json_filenames": []
+            },
+            "data_preparation": {
+                "total_entries": 1626,
+                "complete_entries": 1176,
+                "entries_with_missing_features": 450,
+                "converted_rxn_count": 1211,
+                "missing_feature_counts": {
+                    "language": 450,
+                    "table_quality": 448,
+                    "quality_of_number": 416,
+                    "year": 448,
+                    "pdf_quality": 412,
+                    "rxn_number": 415
+                }
+            },
+            "prediction_results": {
+                "total_processed": 1626,
+                "successful_predictions": 1176,
+                "failed_predictions": 450,
+                "prediction_errors": {
+                    "missing_features": 450
+                }
+            }
+        },
+        {
+            "timestamp": "2025-05-14 08:49:02",
+            "training_file": "output/copol_database/copol_paper_list.json",
+            "scoring_file": "output/paper_list.json",
+            "output_file": "output/paper_list.json",
+            "threshold": 0.7,
+            "seed": 22,
+            "total_execution_time": 8.371273040771484,
+            "file_stats": {
+                "scoring_file_exists": true,
+                "output_file_exists": true,
+                "scoring_file_valid": true,
+                "output_file_valid": true,
+                "missing_jsons": 0,
+                "missing_json_filenames": []
+            },
+            "data_preparation": {
+                "total_entries": 1626,
+                "complete_entries": 1176,
+                "entries_with_missing_features": 450,
+                "converted_rxn_count": 1211,
+                "missing_feature_counts": {
+                    "language": 450,
+                    "table_quality": 448,
+                    "quality_of_number": 416,
+                    "year": 448,
+                    "pdf_quality": 412,
+                    "rxn_number": 415
+                }
+            },
+            "prediction_results": {
+                "total_processed": 1626,
+                "successful_predictions": 1176,
+                "failed_predictions": 450,
+                "prediction_errors": {
+                    "missing_features": 450
+                }
+            }
+        }
+    ]
+}

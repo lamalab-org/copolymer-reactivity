@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinylidene fluoride",
+                "2,3,3-trifluoroprop-2-en-1-ol"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solution",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.83,
+                        "constant_2": 0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.77,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": 0.275,
+                        "constant_2": 0.0178
+                    },
+                    "e-Value": {
+                        "constant_1": 2.74,
+                        "constant_2": 2.04
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "tetrafluoroethylene",
+                "2,3,3-trifluoroprop-2-en-1-ol"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "na",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.47,
+                        "constant_2": 0.41
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.55,
+                        "constant_conf_2": 0.21
+                    },
+                    "determination_method": "Tidwell-Mortimer",
+                    "Q-value": {
+                        "constant_1": 0.036,
+                        "constant_2": 0.0178
+                    },
+                    "e-Value": {
+                        "constant_1": 1.2,
+                        "constant_2": 2.04
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 40, 3634\u20133643 (2002)",
+    "PDF_name": "Copolymerization of Vinylidene Fluoride with 2,3,3-Trifluoroprop-2-enol"
+}

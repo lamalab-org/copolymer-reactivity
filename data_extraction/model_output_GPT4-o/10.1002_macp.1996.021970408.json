@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "gamma-butyrolactone",
+                "epsilon-caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.05,
+                        "constant_2": 1.22
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.7
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.3
+                    },
+                    "r_product": 0.061
+                }
+            ]
+        }
+    ],
+    "source": "Macromol. Chem. Phys. 197, 1273\u20131283 (1996)",
+    "PDF_name": "Oligomerization and copolymerization of gamma-butyrolactone \u2014 a monomer known as unable to homopolymerize"
+}

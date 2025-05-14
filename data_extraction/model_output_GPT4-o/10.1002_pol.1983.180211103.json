@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 35.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.24,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Mayo\u2013Lewis equation",
+                    "Q-value": {
+                        "constant_1": 2.5,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.46
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "acrylonitrile",
+                "methacrylonitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 35.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.12,
+                        "constant_2": 0.52
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "Mayo\u2013Lewis equation",
+                    "Q-value": {
+                        "constant_1": 2.5,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.35
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Physics Edition, Vol. 21, 2243\u20132262 (1983)",
+    "PDF_name": "Effect of Copolymerization and Heat Treatment on the Structure and X-Ray Diffraction of Polyacrylonitrile"
+}

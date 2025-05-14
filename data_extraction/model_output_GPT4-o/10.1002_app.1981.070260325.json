@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "isoprene",
+                "sodium styrene sulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.48,
+                        "constant_2": 0.31
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.92,
+                        "constant_2": 0.64
+                    },
+                    "e-Value": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.18
+                    },
+                    "r_product": 0.15
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "butadiene",
+                "sodium styrene sulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 0.28
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.05,
+                        "constant_2": 0.58
+                    },
+                    "e-Value": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.22
+                    },
+                    "r_product": 0.17
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 26, 1027\u20131037 (1981)",
+    "PDF_name": "Preparation of Ion-Containing Elastomers by Emulsion Copolymerization of Dienes with Olefinic Sulfonic Acid Salts"
+}

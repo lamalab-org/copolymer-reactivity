@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Vinyl chloride",
+                "2-Methylpentyl vinyl brassylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.06,
+                        "constant_2": 0.234
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "linear least-squares",
+                    "Q-value": {
+                        "constant_1": 0.044,
+                        "constant_2": 0.033
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": -0.98
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.1,
+                        "constant_2": 0.239
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.005
+                    },
+                    "determination_method": "linear least-squares",
+                    "Q-value": {
+                        "constant_1": 0.044,
+                        "constant_2": 0.032
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": -0.95
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A-1, Vol. 7, 471\u2013477 (1969)",
+    "PDF_name": "Reactivity Ratios for Copolymerization of Vinyl Chloride with 2-Methylpentyl Vinyl Brassylate by Computerized Linearization"
+}

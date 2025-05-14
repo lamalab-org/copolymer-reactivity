@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 4.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.026,
+                        "constant_2": 0.018
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": 1.4
+                    },
+                    "r_product": 0.082
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 21, 2363\u20132382 (1983)",
+    "PDF_name": "Batch and Semicontinuous Emulsion Copolymerization of Vinyl Acetate\u2013Butyl Acrylate"
+}

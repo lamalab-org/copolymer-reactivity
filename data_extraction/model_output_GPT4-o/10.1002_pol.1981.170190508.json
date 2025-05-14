@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "iron(III) proto-porphyrin IX dimethyl ester"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.81,
+                        "constant_2": 2.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "chain transfer coefficient",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 70.4
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.61
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "iron(III) proto-porphyrin IX dimethyl ester"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.74,
+                        "constant_2": 70.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "chain transfer coefficient",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 70.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.4,
+                        "constant_2": -0.61
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 19, 1109\u20131117 (1981)",
+    "PDF_name": "Radical Copolymerization of Proto-Hemin Dimethyl Ester"
+}

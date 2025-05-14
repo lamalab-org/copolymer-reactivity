@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "maleic anhydride",
+                "5-methylenenonadecane"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": -1.2
+                    },
+                    "r_product": 0.0036
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym12040744",
+    "PDF_name": "DFT_Modeling_of_the_Alternating_Radical_Copolymerization_and_Alder-Ene_Reaction_between_Maleic_Anhydride_and_Olefins.pdf"
+}

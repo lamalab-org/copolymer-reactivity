@@ -1,0 +1,130 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylonitrile",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.04,
+                        "constant_2": 0.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "line intersection method",
+                    "Q-value": {
+                        "constant_1": 5.39,
+                        "constant_2": 24.0
+                    },
+                    "e-Value": {
+                        "constant_1": 2.53,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "acrylonitrile",
+                "vinylidene chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.91,
+                        "constant_2": 0.22
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.056
+                    },
+                    "e-Value": {
+                        "constant_1": 0.36,
+                        "constant_2": 0.11
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.18,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "calculated by equations (15) and (16)",
+                    "Q-value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.056
+                    },
+                    "e-Value": {
+                        "constant_1": 0.36,
+                        "constant_2": 0.11
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "acrylonitrile",
+                "alpha-methylstyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.98
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 5.39,
+                        "constant_2": 0.98
+                    },
+                    "e-Value": {
+                        "constant_1": 2.53,
+                        "constant_2": -1.27
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: PART A-1 VOL. 7, 1577\u20131588 (1969)",
+    "PDF_name": "Alternating Copolymerization of Polar Vinyl Monomers in the Presence of Zinc Chloride"
+}

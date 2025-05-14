@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "propylene",
+                "allyl-terminated polystyrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 7.2,
+                        "constant_2": 0.14
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.3,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "nonlinear least-squares fitting",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.1
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma062511x",
+    "PDF_name": "Poly(propylene-g-styrene) Graft Copolymers with Well-Defined Microstructure by Metallocene Catalyzed Copolymerization of Propylene with Allyl-Terminated Polystyrene Macromonomers"
+}

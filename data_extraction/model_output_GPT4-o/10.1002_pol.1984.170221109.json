@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "monomethoxy polyethylene glycol vinyl ether",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 0.036
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "carbon tetrachloride",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": -1.2,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 0.036
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 22, 2829\u20132839 (1984)",
+    "PDF_name": "Syntheses of Monomethoxy Polyethyleneglycol Vinyl Ether Macromonomers and Their Radical Copolymerization with Maleic Anhydride"
+}

@@ -1,0 +1,114 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-octene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 44.56,
+                        "constant_2": 0.022
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 4.45,
+                        "constant_conf_2": 0.0023
+                    },
+                    "determination_method": "13C NMR",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 54.95,
+                        "constant_2": 0.034
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 5.33,
+                        "constant_conf_2": 0.016
+                    },
+                    "determination_method": "Fineman\u2013Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "slurry",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 42.84,
+                        "constant_2": 0.039
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 4.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "13C NMR",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "slurry",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 65.9,
+                        "constant_2": 0.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 3.14,
+                        "constant_conf_2": 0.13
+                    },
+                    "determination_method": "Fineman\u2013Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 16.48
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.26398",
+    "PDF_name": "Living Copolymerization of Ethylene/1-Octene with Fluorinated FI-Ti Catalyst"
+}

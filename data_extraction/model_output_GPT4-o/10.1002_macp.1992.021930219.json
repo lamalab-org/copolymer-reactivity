@@ -1,0 +1,180 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "N-p-tolylcitraconimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.085,
+                        "constant_2": 0.006
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.034
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.017,
+                        "constant_2": 0.017
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 2.8
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.067,
+                        "constant_2": 0.104
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.032,
+                        "constant_conf_2": 0.019
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.086,
+                        "constant_2": 0.435
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 2.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "fumarodinitrile"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.123,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.021,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.065,
+                        "constant_2": 0.374
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 2.8
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.054,
+                        "constant_2": 0.524
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.021,
+                        "constant_conf_2": 0.088
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.065,
+                        "constant_2": 0.374
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 2.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "N-p-tolylcitraconimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.973,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.214,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 2.8
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 3.05,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 2.8
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 193, 477\u2013486 (1992)",
+    "PDF_name": "Copolymerization of styrene or methyl methacrylate with N-p-tolylcitraconimide or fumarodinitrile"
+}

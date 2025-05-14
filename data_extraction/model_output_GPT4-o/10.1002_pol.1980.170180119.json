@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.46,
+                        "constant_2": 0.52
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.74,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 0.8,
+                        "constant_2": 0.86
+                    },
+                    "r_product": 0.24
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pol.1980.170180122",
+    "PDF_name": "Polymerization of Coordinated Monomers XVI - Stereoregulation in the Alternating Copolymerization of Methyl Methacrylate with Styrene in the Presence of Metal Halides"
+}

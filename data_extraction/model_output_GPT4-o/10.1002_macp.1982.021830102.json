@@ -1,0 +1,130 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "cyclopentene",
+                "norbornene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening metathesis",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 2.6
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "13C NMR spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "ring-opening metathesis",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.62,
+                        "constant_2": 2.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.4
+                    },
+                    "determination_method": "13C NMR spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "cyclooctene",
+                "norbornene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening metathesis",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 8.9
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.11,
+                        "constant_conf_2": 1.1
+                    },
+                    "determination_method": "13C NMR spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,5-cyclooctadiene",
+                "norbornene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening metathesis",
+                    "solvent": "chlorobenzene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.48,
+                        "constant_2": 12.4
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.18,
+                        "constant_conf_2": 1.9
+                    },
+                    "determination_method": "13C NMR spectroscopy",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 183, 9\u201328 (1982)",
+    "PDF_name": "Ring-opening Copolymerization of Cycloalkenes Investigated by 13C NMR Spectroscopy"
+}

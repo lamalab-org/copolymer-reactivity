@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl chloride",
+                "methyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.116,
+                        "constant_2": 0.526
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.358,
+                        "constant_conf_2": 0.144
+                    },
+                    "determination_method": "Bernoullian statistics",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 184, 913\u2013924 (1983)",
+    "PDF_name": "Copolymerization of Vinyl Chloride and Methyl Acrylate Catalyzed by Ethylaluminium Compounds"
+}

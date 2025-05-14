@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylamide",
+                "N-(1,1-dimethyl-3-oxybutyl)acrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.41,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.95
+                    },
+                    "e-Value": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.12
+                    },
+                    "r_product": 0.19
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 30, 45\u201359 (1985)",
+    "PDF_name": "Water-Soluble Copolymers. XI. Selectivity in the Graft Copolymerization of Acrylamide/N-(1,1-Dimethyl-3-Oxybutyl)acrylamide Comonomers onto Dextran by Ce(IV)-Induced Initiation"
+}

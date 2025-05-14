@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "2-Hydroxypropyl-\u03b2-cyclodextrin methacrylate",
+                "1-Vinyl-2-pyrrolidinone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.93,
+                        "constant_2": 0.06
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.04,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Fineman Ross method",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/mabi.200390040",
+    "PDF_name": "Mass Spectrometric Characterization of a New 2-Hydroxypropyl-\u03b2-cyclodextrin Derivative Bearing Methacrylic Moieties and Its Copolymerization with 1-Vinyl-2-pyrrolidinone"
+}

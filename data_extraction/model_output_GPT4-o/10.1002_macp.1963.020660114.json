@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "glycidyl vinyl sulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.19,
+                        "constant_2": 0.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.11,
+                        "constant_conf_2": 0.08
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 0.21,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.21,
+                        "constant_2": 1.0
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "glycidyl vinyl sulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 14.4,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 2.4,
+                        "constant_conf_2": 0.13
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 0.21,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.21,
+                        "constant_2": 1.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 44/46 (1960) 570",
+    "PDF_name": "Preparation and Copolymerization of Glycidyl Vinyl Sulfonate"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "butyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 190.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.38,
+                        "constant_2": 0.24
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.4
+                    },
+                    "e-Value": {
+                        "constant_1": 0.86,
+                        "constant_2": 0.15
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "POLYMER ENGINEERING AND SCIENCE, MARCH, 1987, Vol. 27, No. 6",
+    "PDF_name": "Styrene-Butyl_Acrylate_Copolymerization_Kinetics_Viscoelastic_Properties.pdf"
+}

@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "methyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.52,
+                        "constant_2": 0.46
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "in-situ proton nuclear magnetic resonance",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.78
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.4
+                    },
+                    "r_product": 0.239
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N,N-dimethylacrylamide",
+                "2-(N-ethylperfluorooctanesulfon-amido)ethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.049,
+                        "constant_2": 0.951
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.002
+                    },
+                    "determination_method": "in-situ proton nuclear magnetic resonance",
+                    "Q-value": {
+                        "constant_1": 0.8,
+                        "constant_2": 1.2
+                    },
+                    "e-Value": {
+                        "constant_1": -0.6,
+                        "constant_2": -0.2
+                    },
+                    "r_product": 0.047
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "N,N-dimethylacrylamide",
+                "2-(N-ethylperfluorooctanesulfonamido)ethyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dioxane",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.163,
+                        "constant_2": 0.837
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.003,
+                        "constant_conf_2": 0.003
+                    },
+                    "determination_method": "in-situ proton nuclear magnetic resonance",
+                    "Q-value": {
+                        "constant_1": 0.85,
+                        "constant_2": 1.1
+                    },
+                    "e-Value": {
+                        "constant_1": -0.55,
+                        "constant_2": -0.25
+                    },
+                    "r_product": 0.137
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/acs.macromol.3c01234",
+    "PDF_name": "Supporting_Information_Radical_Reactivity_Ratios_Styrene_MMA.pdf"
+}

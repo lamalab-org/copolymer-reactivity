@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl acrylate",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.04
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.026
+                    },
+                    "e-Value": {
+                        "constant_1": 0.001,
+                        "constant_2": 0.002
+                    },
+                    "r_product": 0.0104
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 57, 245\u2013254 (1995)",
+    "PDF_name": "On-Line Gas Chromatography and Densimetry to Obtain Partial Conversions of Both Monomers in Emulsion Copolymerization"
+}

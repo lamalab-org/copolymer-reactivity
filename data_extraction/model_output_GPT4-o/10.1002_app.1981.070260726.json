@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "pentachlorophenyl acrylate",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.44,
+                        "constant_2": 0.039
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.17,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "nonlinear least-squares method of Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "pentachlorophenyl acrylate",
+                "ethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.21,
+                        "constant_2": 0.88
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.06,
+                        "constant_conf_2": 0.19
+                    },
+                    "determination_method": "nonlinear least-squares method of Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 26, 2403\u20132413 (1981)",
+    "PDF_name": "Copolymerization of Pentachlorophenyl Acrylate with Vinyl Acetate and Ethyl Acrylate. Polymer-Bound Fungicides"
+}

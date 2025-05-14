@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinyl acetate",
+                "N-(2-chlorophenyl)maleimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.049,
+                        "constant_2": 0.148
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.026,
+                        "constant_conf_2": -0.22
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.87,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 2.0,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.0072
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "N-(3-chlorophenyl)maleimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.032,
+                        "constant_2": 0.221
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.026,
+                        "constant_conf_2": -0.22
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.32,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 2.0,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.007
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "vinyl acetate",
+                "N-(4-chlorophenyl)maleimide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.655
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.026,
+                        "constant_conf_2": -0.22
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 1.527,
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": "na"
+                    },
+                    "r_product": 0.0
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 193, 847\u2013852 (1992)",
+    "PDF_name": "Copolymerization of N-chlorophenylmaleimides with vinyl acetate"
+}

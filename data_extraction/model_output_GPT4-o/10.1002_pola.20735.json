@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "L,L-lactide",
+                "epsilon-caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "carbon dioxide",
+                    "method": "emulsion",
+                    "temperature": 343.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 5.8,
+                        "constant_2": 0.7
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": 0.25
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 343.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 7.0,
+                        "constant_2": 0.15
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.20735",
+    "PDF_name": "Polymerization of (L,L)-Lactide and Copolymerization with \u03b5-Caprolactone Initiated by Dibutyltin Dimethoxide in Supercritical Carbon Dioxide"
+}

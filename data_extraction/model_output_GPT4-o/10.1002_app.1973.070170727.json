@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl methacrylate",
+                "chromium ethyleneglycol methacrylate phthalate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.23,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.46
+                    },
+                    "e-Value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.18
+                    },
+                    "r_product": 0.575
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "chromium ethyleneglycol methacrylate phthalate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 3.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.15
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.34
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.12
+                    },
+                    "r_product": 0.372
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF APPLIED POLYMER SCIENCE VOL. 17, PP. 2289\u20132299 (1973)",
+    "PDF_name": "Preparation and Copolymerization of Polyvalent Metal Salts of Ethyleneglycol\u2013Methacrylate\u2013Phthalate"
+}

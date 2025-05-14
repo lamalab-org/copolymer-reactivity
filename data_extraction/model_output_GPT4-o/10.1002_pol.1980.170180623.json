@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "p-vinyltrifluoroacetophenone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.3,
+                        "constant_2": 1.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.3
+                    },
+                    "determination_method": "intersection method",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.44
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 1.93
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 18, 1883\u20131888 (1980)",
+    "PDF_name": "Polymers Containing Fluorinated Ketone Groups. III. Synthesis of Styrene/p-Vinyltrifluoroacetophenone Copolymers by Modification of Polystyrene and the Copolymerization of Monomers"
+}

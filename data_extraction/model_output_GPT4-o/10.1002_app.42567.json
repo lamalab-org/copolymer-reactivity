@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "glycolide",
+                "epsilon-caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 140.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.31,
+                        "constant_2": 0.36
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "1H NMR",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.11
+                },
+                {
+                    "polymerization_type": "ring-opening polymerization",
+                    "solvent": "toluene",
+                    "method": "bulk",
+                    "temperature": 140.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.62
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.04
+                    },
+                    "determination_method": "1H NMR",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": 0.31
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.42567",
+    "PDF_name": "Copolymerization and terpolymerization of glycolide with lactones by dimethyl(salicylaldiminato)aluminum compounds"
+}

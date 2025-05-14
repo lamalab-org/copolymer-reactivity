@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl acrylate",
+                "vinyl acetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 6.3,
+                        "constant_2": 0.031
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.4,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "bulk polymerization",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl acrylate",
+                "indene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 70.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.92,
+                        "constant_2": 0.086
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.16,
+                        "constant_conf_2": 0.025
+                    },
+                    "determination_method": "bulk polymerization",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 32, 1009\u20131026 (1994)",
+    "PDF_name": "Prediction of Polymer Composition in Batch Emulsion Copolymerization"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "4-vinylbenzenesulfonic acid sodium salt",
+                "acrylamide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "sodium chloride solution",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.26,
+                        "constant_2": 0.027
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.006
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.33144",
+    "PDF_name": "Monomer and Radical Reactivity Ratios in 4-Vinylbenzenesulfonic Acid Sodium Salt\u2013Acrylamide Copolymerization in 0.1M NaCl Solution"
+}

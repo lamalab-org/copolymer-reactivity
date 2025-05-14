@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "anti-7-methylnorbornene",
+                "syn-7-methylnorbornene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "metathesis",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 225.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 0.00062
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.4,
+                        "constant_conf_2": 1e-05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "metathesis",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 235.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.0017,
+                        "constant_2": 0.0008
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0001,
+                        "constant_conf_2": 1e-05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "metathesis",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 250.0,
+                    "temperature_unit": "K",
+                    "reaction_constants": {
+                        "constant_1": 0.019,
+                        "constant_2": 0.0009
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.001,
+                        "constant_conf_2": 1e-05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromol. Chem. 191, 2237\u20132251 (1990)",
+    "PDF_name": "Studies of the metathesis polymerization and copolymerization of syn- and anti-7-methylnorbornene initiated by the tungsten-carbene complex"
+}

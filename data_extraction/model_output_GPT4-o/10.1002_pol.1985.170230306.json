@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "methyl 3,4-epoxybutanoate",
+                "propylene oxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.06,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "e-Value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "r_product": 0.15
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl 3,4-epoxybutanoate",
+                "1-butene oxide"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 3.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "e-Value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "r_product": 0.06
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl 3,4-epoxybutanoate",
+                "phenyl glycidyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.2
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "e-Value": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.07
+                    },
+                    "r_product": 0.02
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 23, 649\u2013671 (1985)",
+    "PDF_name": "Poly(alkylene Oxide) Ionomers. X. Copolymerization of Methyl \u03c9-Epoxyalkanoates and Characterization of the Polymers"
+}

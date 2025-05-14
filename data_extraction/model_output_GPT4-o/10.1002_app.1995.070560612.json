@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylic acid",
+                "4-vinylpyridine"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "methanol",
+                    "method": "solvent",
+                    "temperature": 25.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 4.75,
+                        "constant_2": 2.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Stern-Volmer",
+                    "Q-value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "e-Value": {
+                        "constant_1": null,
+                        "constant_2": null
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Applied Polymer Science, Vol. 56, 747\u2013756 (1995)",
+    "PDF_name": "Grafting Reactions onto Poly(organophosphazenes)_ IV. Light-Induced Graft Copolymerization of Organic Polymers Containing Free Acid or Basic Functionalities onto Poly[bis(4-benzyIphenoxy)phosphazene].pdf"
+}

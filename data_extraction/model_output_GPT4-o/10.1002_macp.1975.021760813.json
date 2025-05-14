@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "isobutene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methyl chloride",
+                    "method": "solvent",
+                    "temperature": -35.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.5,
+                        "constant_2": "na"
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.5,
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Jaacks",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 176, 2339\u20132358 (1975)",
+    "PDF_name": "Studies on Polymerizations Initiated by Syncatalytic Systems Based on Aluminium Organic Compounds"
+}

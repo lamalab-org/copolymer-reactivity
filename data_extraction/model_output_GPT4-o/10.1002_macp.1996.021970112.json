@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "1-butene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "octane",
+                    "method": "solvent",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 22.9,
+                        "constant_2": 0.091
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "13C nuclear magnetic resonance spectroscopy",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 2.08
+                },
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 18.2,
+                        "constant_2": 0.104
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "13C nuclear magnetic resonance spectroscopy",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": 1.9
+                }
+            ]
+        }
+    ],
+    "source": "Macromol. Chem. Phys. 197, 155\u2013163 (1996)",
+    "PDF_name": "Gas-phase versus slurry copolymerization of ethylene with 1-butene over MgCl2-supported titanium catalysts after prepolymerization"
+}

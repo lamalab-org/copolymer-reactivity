@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "Bis(beta-chloroethyl) vinylphosphonate",
+                "Vinyl chloride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "suspension",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.37,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 0.23,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 1.73,
+                        "constant_2": 0.044
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.37,
+                        "constant_2": 0.26
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Fineman and Ross",
+                    "Q-value": {
+                        "constant_1": 0.23,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 1.73,
+                        "constant_2": 0.044
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Symposium 64, 329\u2013337 (1978)",
+    "PDF_name": "COPOLYMERIZATION OF VINYL CHLORIDE WITH BIS(BETA-CHLOROETHYL) VINYLPHOSPHONATE"
+}

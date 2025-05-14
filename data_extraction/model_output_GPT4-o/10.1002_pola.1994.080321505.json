@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "phenylglycidylether",
+                "4,4'-dihydroxybenzophenone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic coordinative",
+                    "solvent": "1,1,2,2-tetrachloroethane",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.2,
+                        "constant_2": 0.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 1.2,
+                        "constant_2": 0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 0.25,
+                        "constant_2": 0.15
+                    },
+                    "r_product": 0.99
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A: Polymer Chemistry, Vol. 32, 2841\u20132848 (1994)",
+    "PDF_name": "Synthesis of Tridimensional Polymers by the Copolymerization of Phenylglycidylether with Aromatic Diglycidylethers"
+}

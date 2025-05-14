@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "butadiene",
+                "styrene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "heptane",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 7.0,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 20.0,
+                        "constant_2": 0.05
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.01
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "heptane",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 5.3,
+                        "constant_2": -0.09
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 20.0,
+                        "constant_2": 0.05
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.01
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "heptane",
+                    "method": "solvent",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 6.0,
+                        "constant_2": -0.11
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.0,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 20.0,
+                        "constant_2": 0.05
+                    },
+                    "e-Value": {
+                        "constant_1": 1.0,
+                        "constant_2": 0.01
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. 54, Pages 569\u2013586 (1961)",
+    "PDF_name": "The Copolymerization of 1,3-Butadiene with Styrene by Butyllithium Initiation"
+}

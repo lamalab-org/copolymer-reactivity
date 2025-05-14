@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "4-methylpent-1-ene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "with complex-type catalysts",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 45.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.89,
+                        "constant_2": 3.67
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.22
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "5-methylhex-1-ene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "with complex-type catalysts",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 35.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.591,
+                        "constant_2": 4.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.057,
+                        "constant_conf_2": 0.28
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science, Vol. 56, Pages 391\u2013402 (1962)",
+    "PDF_name": "Copolymerization with Ziegler-Natta Catalysts Part I Monomer Reactivity Ratios for Two \u03b1-Olefin Pairs"
+}

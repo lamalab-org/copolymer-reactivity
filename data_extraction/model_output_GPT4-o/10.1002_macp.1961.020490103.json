@@ -1,0 +1,138 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "m-styrenesulfonyl fluoride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.8,
+                        "constant_2": 1.25
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.25
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": -0.8
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl acrylate",
+                "m-styrenesulfonyl fluoride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "butanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.14,
+                        "constant_2": 1.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.41
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": -0.65
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "styrene",
+                "p-styrenesulfonyl fluoride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "butanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.25,
+                        "constant_2": 1.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.71
+                    },
+                    "e-Value": {
+                        "constant_1": -0.8,
+                        "constant_2": 0.26
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "methyl acrylate",
+                "p-styrenesulfonyl fluoride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "butanone",
+                    "method": "solvent",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 4.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Mayo and Lewis",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.58
+                    },
+                    "e-Value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.13
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Makromolekulare Chemie, 1961",
+    "PDF_name": "Copolymerization Behavior of m- and p-Styrenesulfonyl Fluorides"
+}

@@ -1,0 +1,114 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "styrene",
+                "isoprene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.54,
+                        "constant_2": 1.92
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": -0.8
+                    },
+                    "e-Value": {
+                        "constant_1": 2.16,
+                        "constant_2": 0.92
+                    },
+                    "r_product": 1.04
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.5,
+                        "constant_2": 1.92
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": -1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 2.16,
+                        "constant_2": 0.92
+                    },
+                    "r_product": 0.999
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 22.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.66,
+                        "constant_2": 1.18
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 1.97,
+                        "constant_2": 2.34
+                    },
+                    "e-Value": {
+                        "constant_1": -0.83,
+                        "constant_2": -1.0
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "benzene",
+                    "method": "bulk",
+                    "temperature": 30.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.03,
+                        "constant_2": 5.89
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Fineman-Ross",
+                    "Q-value": {
+                        "constant_1": 3.33,
+                        "constant_2": 2.34
+                    },
+                    "e-Value": {
+                        "constant_1": -1.22,
+                        "constant_2": -1.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Part A Vol. 1, pp. 2819\u20132830 (1963)",
+    "PDF_name": "Tracer Techniques for the Determination of Monomer Reactivity Ratios IV Monomer Reactivity Ratios for Styrene\u2013Isoprene Copolymerization"
+}

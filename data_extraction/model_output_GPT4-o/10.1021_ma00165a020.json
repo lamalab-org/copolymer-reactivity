@@ -1,0 +1,89 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "na",
+                "na"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 10.0,
+                        "constant_2": 0.3
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 1.127,
+                        "constant_conf_2": 0.026
+                    },
+                    "determination_method": "Error-in-Variable Method",
+                    "Q-value": {
+                        "constant_1": 0.586,
+                        "constant_2": 0.51
+                    },
+                    "e-Value": {
+                        "constant_1": 0.464,
+                        "constant_2": 0.333
+                    },
+                    "r_product": 3.0
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.0,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.057,
+                        "constant_conf_2": 0.086
+                    },
+                    "determination_method": "Error-in-Variable Method",
+                    "Q-value": {
+                        "constant_1": 0.586,
+                        "constant_2": 0.51
+                    },
+                    "e-Value": {
+                        "constant_1": 0.464,
+                        "constant_2": 0.333
+                    },
+                    "r_product": 0.2
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.1
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.021,
+                        "constant_conf_2": 0.008
+                    },
+                    "determination_method": "Error-in-Variable Method",
+                    "Q-value": {
+                        "constant_1": 0.586,
+                        "constant_2": 0.51
+                    },
+                    "e-Value": {
+                        "constant_1": 0.464,
+                        "constant_2": 0.333
+                    },
+                    "r_product": 0.09
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1021/ma00160a030",
+    "PDF_name": "Estimation of Monomer Reactivity Ratios by the Error-in-Variable Method"
+}

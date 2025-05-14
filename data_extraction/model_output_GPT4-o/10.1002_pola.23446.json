@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "10-methyl-2H,8H-benzo[1,2-b:5,4-b']dipyran-2,8-dione",
+                "glycidyl phenyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "anionic",
+                    "solvent": "tetrahydrofuran",
+                    "method": "bulk",
+                    "temperature": 120.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.01
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.002,
+                        "constant_conf_2": 0.002
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.37,
+                        "constant_2": 0.37
+                    },
+                    "e-Value": {
+                        "constant_1": 0.22,
+                        "constant_2": 0.22
+                    },
+                    "r_product": 0.0001
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.23446",
+    "PDF_name": "Anionic Alternating Copolymerization Behavior of Bifunctional Six-Membered Lactone and Glycidyl Phenyl Ether"
+}

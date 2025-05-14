@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "butyl acrylate",
+                "glycidyl methacrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "emulsion",
+                    "temperature": 75.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.88,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.05,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 0.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.003,
+                        "constant_2": 0.15
+                    },
+                    "r_product": 2.2
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.31817",
+    "PDF_name": "Semibatch Emulsion Copolymerization of Butyl Acrylate and Glycidyl Methacrylate: Effect of Operating Variables"
+}

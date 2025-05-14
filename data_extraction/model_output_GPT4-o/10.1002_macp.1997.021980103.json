@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,6-anhydro-3-azido-2,4-di-O-benzyl-3-deoxy-beta-D-allopyranose",
+                "1,6-anhydro-2,3,4-tri-O-benzyl-beta-D-glucopyranose"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene dichloride",
+                    "method": "solvent",
+                    "temperature": -60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.66,
+                        "constant_2": 1.67
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.1997.021980103",
+    "PDF_name": "Ring-opening polymerization and copolymerization of a new benzylated 1,6-anhydro-3-azido-3-deoxy-beta-D-allopyranose and synthesis of amino-polysaccharides with 1,6-alpha-allopyranosidic structure"
+}

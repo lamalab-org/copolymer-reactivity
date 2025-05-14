@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "chlorotrifluoroethylene",
+                "ethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0076,
+                        "constant_2": 0.0016
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Alfrey and Price equations",
+                    "Q-value": {
+                        "constant_1": 0.026,
+                        "constant_2": 0.017
+                    },
+                    "e-Value": {
+                        "constant_1": 1.56,
+                        "constant_2": -1.58
+                    },
+                    "r_product": 1.2e-05
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "chlorotrifluoroethylene",
+                "2-chloroethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0114,
+                        "constant_2": 0.0046
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Alfrey and Price equations",
+                    "Q-value": {
+                        "constant_1": 0.026,
+                        "constant_2": 0.018
+                    },
+                    "e-Value": {
+                        "constant_1": 1.56,
+                        "constant_2": -1.8
+                    },
+                    "r_product": 5.2e-05
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "chlorotrifluoroethylene",
+                "cyclohexyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "ethyl acetate",
+                    "method": "solvent",
+                    "temperature": 20.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.0025,
+                        "constant_2": 0.0025
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": "na",
+                        "constant_conf_2": "na"
+                    },
+                    "determination_method": "Alfrey and Price equations",
+                    "Q-value": {
+                        "constant_1": 0.026,
+                        "constant_2": 0.081
+                    },
+                    "e-Value": {
+                        "constant_1": 1.56,
+                        "constant_2": -1.55
+                    },
+                    "r_product": 6e-05
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pi.902",
+    "PDF_name": "Photoinitiated alternating copolymerization of vinyl ethers with chlorotrifluoroethylene"
+}

@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "2-vinylpyridine"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.51,
+                        "constant_2": 0.62
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Mayo-Lewis technique",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 1.15
+                    },
+                    "e-Value": {
+                        "constant_1": -0.02,
+                        "constant_2": -0.85
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "glycidyl methacrylate",
+                "2-vinyl-5-ethylpyridine"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "tetrahydrofuran",
+                    "method": "solvent",
+                    "temperature": 60.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.57,
+                        "constant_2": 0.62
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Mayo-Lewis technique",
+                    "Q-value": {
+                        "constant_1": 0.78,
+                        "constant_2": 1.4
+                    },
+                    "e-Value": {
+                        "constant_1": -0.02,
+                        "constant_2": -1.04
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: Polymer Chemistry Edition VOL. 13, 1017\u20131028 (1975)",
+    "PDF_name": "Self-Crosslinkable Polymers. I. Copolymerization of Glycidyl Methacrylate with 2-Vinylpyridine and 2-Vinyl-5-ethylpyridine"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "n-butyl methacrylate",
+                "D-limonene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 80.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 6.0957,
+                        "constant_2": 0.0459
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 6.4336,
+                        "constant_conf_2": 0.0463
+                    },
+                    "determination_method": "RREVM computer program",
+                    "Q-value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "e-Value": {
+                        "constant_1": "na",
+                        "constant_2": "na"
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/mren.201400023",
+    "PDF_name": "Copolymerization of n-Butyl Methacrylate and D-Limonene"
+}

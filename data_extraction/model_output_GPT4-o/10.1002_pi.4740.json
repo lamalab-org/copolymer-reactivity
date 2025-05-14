@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "epsilon caprolactone",
+                "ethyl diazoacetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "carbene polymerization",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 200.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.12,
+                        "constant_2": 0.65
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 1.38
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2,2-dimethyltrimethylene carbonate",
+                "ethyl diazoacetate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "carbene polymerization",
+                    "solvent": "chloroform",
+                    "method": "bulk",
+                    "temperature": 200.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.47,
+                        "constant_2": 0.91
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.0,
+                        "constant_2": 0.0
+                    },
+                    "r_product": 1.34
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pi.4740",
+    "PDF_name": "Microwave-assisted one-pot copolymerization of cyclic monomers and ethyl diazoacetate"
+}

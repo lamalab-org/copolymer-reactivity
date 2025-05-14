@@ -70,9 +70,9 @@ class ModelTrainer:
         print(f"Dropped {original_count - len(df)} rows where r1r2 < 0")
 
         # Filter r1r2 > 100
-        #r1r2_high_count = len(df[df['r1r2'] > 5])
-        ##df = df[df['r1r2'] <= 5]
-        #print(f"Dropped {r1r2_high_count} rows where r1r2 > 100")
+        r1r2_high_count = len(df[df['r1r2'] > 10])
+        df = df[df['r1r2'] <= 5]
+        print(f"Dropped {r1r2_high_count} rows where r1r2 > 10")
 
         # Filter temperature > 150
         #temp_out_of_range_count = len(df[(df['temperature'] < 0) | (df['temperature'] > 150)])
@@ -94,23 +94,8 @@ class ModelTrainer:
         if 'method_emb_1' in df.columns:
             embedding_features.extend(['method_emb_1', 'method_emb_2'])
 
-        numerical_features = ['temperature', 'ip_corrected_1', 'ea_1', 'homo_1', 'lumo_1',
-                              'global_electrophilicity_1', 'global_nucleophilicity_1',
-                              'best_conformer_energy_1', 'charges_min_1', 'charges_max_1',
-                              'charges_mean_1', 'fukui_electrophilicity_min_1',
-                              'fukui_electrophilicity_max_1', 'fukui_electrophilicity_mean_1',
-                              'fukui_nucleophilicity_min_1', 'fukui_nucleophilicity_max_1',
-                              'fukui_nucleophilicity_mean_1', 'fukui_radical_min_1',
-                              'fukui_radical_max_1', 'fukui_radical_mean_1', 'dipole_x_1',
-                              'dipole_y_1', 'dipole_z_1', 'ip_corrected_2', 'ea_2', 'homo_2',
-                              'lumo_2', 'global_electrophilicity_2', 'global_nucleophilicity_2',
-                              'charges_min_2', 'charges_max_2', 'charges_mean_2',
-                              'fukui_electrophilicity_min_2', 'fukui_electrophilicity_max_2',
-                              'fukui_electrophilicity_mean_2', 'fukui_nucleophilicity_min_2',
-                              'fukui_nucleophilicity_max_2', 'fukui_nucleophilicity_mean_2',
-                              'fukui_radical_min_2', 'fukui_radical_max_2', 'fukui_radical_mean_2',
-                              'dipole_x_2', 'dipole_y_2', 'dipole_z_2', 'solvent_logp', "delta_HOMO_LUMO_AA",
-                              "delta_HOMO_LUMO_AB", "delta_HOMO_LUMO_BB", "delta_HOMO_LUMO_BA"] + embedding_features
+        numerical_features = ['temperature', 'solvent_logp',"delta_HOMO_LUMO_AA",
+                              "delta_HOMO_LUMO_AB", "delta_HOMO_LUMO_BB", "delta_HOMO_LUMO_BA"]
 
         # Only use categorical features if no embeddings are available
         categorical_features = []
@@ -176,7 +161,7 @@ class ModelTrainer:
         if self.model_type == "xgboost":
             model = XGBRegressor(random_state=self.random_state)
             param_grid = {
-                'n_estimators': [100, 500, 1000, 5000],
+                'n_estimators': [100, 500,],
                 'max_depth': [3, 5, 7, 9],
                 'learning_rate': np.logspace(-3, 0, 10),
                 'subsample': [0.6, 0.8, 1.0],

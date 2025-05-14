@@ -342,7 +342,6 @@ def main(data_path):
     print(f"Updated data written to {output_file}")
 
 
-
 if __name__ == "__main__":
     data_path = "../../data_extraction/model_output_GPT4-o"
 

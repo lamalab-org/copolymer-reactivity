@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "ethylene",
+                "2-(2-bromoisobutyryloxy) ethyl acrylate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "dichloromethane",
+                    "method": "solvent",
+                    "temperature": 35.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.3,
+                        "constant_2": 0.43
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "na",
+                    "Q-value": {
+                        "constant_1": 0.9,
+                        "constant_2": 0.5
+                    },
+                    "e-Value": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.1
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/marc.200700443",
+    "PDF_name": "Chain Walking Ethylene Copolymerization with an ATRP Inimer for One-Pot Synthesis of Hyperbranched Polyethylenes Tethered with ATRP Initiating Sites"
+}

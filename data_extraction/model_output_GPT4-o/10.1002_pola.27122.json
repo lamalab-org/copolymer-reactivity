@@ -1,0 +1,105 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "isobutyl vinyl ether",
+                "benzaldehyde"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.41,
+                        "constant_2": 2.47
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.52,
+                        "constant_2": 1.92
+                    },
+                    "e-Value": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.52
+                    },
+                    "r_product": 1.01
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "ethyl 1-propenyl ether",
+                "benzaldehyde"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.1
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.4,
+                        "constant_2": 1.9
+                    },
+                    "e-Value": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.5
+                    },
+                    "r_product": 0.5
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "2-methyl-1-propenyl ether",
+                "benzaldehyde"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "1,4-dioxane",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 3.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.2
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.3,
+                        "constant_2": 2.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.6
+                    },
+                    "r_product": 0.03
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/pola.27122",
+    "PDF_name": "Controlled Cationic Alternating Copolymerization of Various Enol Ethers and Benzaldehyde Derivatives"
+}

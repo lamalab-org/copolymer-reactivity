@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "vinylidene fluoride",
+                "alpha-trifluoromethacrylic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "acetonitrile",
+                    "method": "solvent",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.33,
+                        "constant_2": 0.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.09,
+                        "constant_conf_2": 0.0
+                    },
+                    "determination_method": "Tidwell and Mortimer",
+                    "Q-value": {
+                        "constant_1": 3.03,
+                        "constant_2": 0.0
+                    },
+                    "e-Value": {
+                        "constant_1": 1.84,
+                        "constant_2": 0.0
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/macp.200300091",
+    "PDF_name": "Radical Copolymerization of \u03b1-Trifluoromethylacrylic Acid with Vinylidene Fluoride and Vinylidene Fluoride/Hexafluoropropene"
+}

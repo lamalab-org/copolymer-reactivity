@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "L-lactide",
+                "epsilon-caprolactone"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "coordination",
+                    "solvent": "toluene",
+                    "method": "solvent",
+                    "temperature": 100.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.2,
+                        "constant_2": 0.57
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "nonlinear least-squares fitting",
+                    "Q-value": {
+                        "constant_1": 1.0,
+                        "constant_2": 1.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.5,
+                        "constant_2": 0.3
+                    },
+                    "r_product": 0.114
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.3390/polym12102273",
+    "PDF_name": "Comparative Experimental and Theoretical Study of Mg, Al and Zn Aryloxy Complexes in Copolymerization of Cyclic Esters"
+}

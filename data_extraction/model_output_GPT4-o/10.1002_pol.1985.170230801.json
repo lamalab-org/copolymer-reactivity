@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "3-buten-2-one",
+                "allylbenzene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 11.77,
+                        "constant_2": 0.0038
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 3065.0,
+                        "constant_conf_2": 1.37
+                    },
+                    "determination_method": "least squares method",
+                    "Q-value": {
+                        "constant_1": 0.69,
+                        "constant_2": 850.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.68,
+                        "constant_2": 2.97
+                    },
+                    "r_product": null
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "3-methyl-3-buten-2-one",
+                "allylbenzene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "na",
+                    "method": "bulk",
+                    "temperature": 50.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 55.47,
+                        "constant_2": 0.007
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 7971.0,
+                        "constant_conf_2": 1.84
+                    },
+                    "determination_method": "least squares method",
+                    "Q-value": {
+                        "constant_1": 1.49,
+                        "constant_2": 644.0
+                    },
+                    "e-Value": {
+                        "constant_1": 0.53,
+                        "constant_2": 2.62
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 23, 2081\u20132087 (1985)",
+    "PDF_name": "Copolymerization of Vinyl Ketones with Allylbenzene in the Presence of Zinc Chloride"
+}

@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "acrylamide",
+                "sodium-2-acrylamido-2-methylpropane sulfonate"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "water",
+                    "method": "solvent",
+                    "temperature": 40.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.19,
+                        "constant_2": 0.45
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.02,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 0.77,
+                        "constant_2": 0.96
+                    },
+                    "e-Value": {
+                        "constant_1": 0.18,
+                        "constant_2": 0.21
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 22, 49\u201360 (1984)",
+    "PDF_name": "Water-Soluble Copolymers. VII. Cerium (IV) Induced Graft Copolymerization of Acrylamide and Sodium-2-Acrylamido-2-Methylpropane Sulfonate onto Dextran"
+}

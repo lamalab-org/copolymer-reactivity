@@ -1,0 +1,97 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "phenylvinyl ethyl ether",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.018,
+                        "constant_2": 0.034
+                    },
+                    "e-Value": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.18
+                    },
+                    "r_product": 0.0006
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 55.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.02,
+                        "constant_2": 0.03
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.018,
+                        "constant_2": 0.034
+                    },
+                    "e-Value": {
+                        "constant_1": 0.12,
+                        "constant_2": 0.18
+                    },
+                    "r_product": 0.0006
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "phenylvinyl sec-butyl ether",
+                "maleic anhydride"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "benzene",
+                    "method": "solvent",
+                    "temperature": 65.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.01,
+                        "constant_2": 0.02
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.01,
+                        "constant_conf_2": 0.01
+                    },
+                    "determination_method": "Kelen-T\u00fcd\u00f6s",
+                    "Q-value": {
+                        "constant_1": 0.015,
+                        "constant_2": 0.028
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.15
+                    },
+                    "r_product": 0.0002
+                }
+            ]
+        }
+    ],
+    "source": "Journal of Polymer Science: Polymer Chemistry Edition, Vol. 22, 41-47 (1984)",
+    "PDF_name": "Radiation-Induced Copolymerization of Phenylvinyl Alkyl Ethers and Maleic Anhydride"
+}

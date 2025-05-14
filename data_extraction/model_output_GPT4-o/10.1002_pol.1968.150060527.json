@@ -1,0 +1,64 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "tetrafluoroethylene",
+                "3,3,3-trifluoropropene"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "hexafluorobenzene",
+                    "method": "bulk",
+                    "temperature": 21.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.15,
+                        "constant_2": 2.5
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "copolymer composition analysis",
+                    "Q-value": {
+                        "constant_1": 0.13,
+                        "constant_2": 0.13
+                    },
+                    "e-Value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.42
+                    },
+                    "r_product": null
+                },
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "hexafluorobenzene",
+                    "method": "bulk",
+                    "temperature": 21.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 0.12,
+                        "constant_2": 5.0
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.03
+                    },
+                    "determination_method": "copolymer composition analysis",
+                    "Q-value": {
+                        "constant_1": 0.13,
+                        "constant_2": 0.13
+                    },
+                    "e-Value": {
+                        "constant_1": 0.42,
+                        "constant_2": 0.42
+                    },
+                    "r_product": null
+                }
+            ]
+        }
+    ],
+    "source": "JOURNAL OF POLYMER SCIENCE: PART A-1 VOL. 6, 1367\u20131379 (1968)",
+    "PDF_name": "The Radiation-Induced Copolymerization of Tetrafluoroethylene and 3,3,3-Trifluoropropene under Pressure"
+}

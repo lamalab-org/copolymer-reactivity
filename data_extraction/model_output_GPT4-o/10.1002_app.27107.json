@@ -1,0 +1,39 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "p-acryloyloxybenzoic acid",
+                "p-methacryloyloxybenzoic acid"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "free radical",
+                    "solvent": "dimethylformamide",
+                    "method": "solvent",
+                    "temperature": 90.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.63,
+                        "constant_2": 0.38
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.03,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "Kelen-Tudos",
+                    "Q-value": {
+                        "constant_1": 1.74,
+                        "constant_2": 0.92
+                    },
+                    "e-Value": {
+                        "constant_1": 0.97,
+                        "constant_2": 0.44
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "https://doi.org/10.1002/app.27107",
+    "PDF_name": "Graft Copolymerization of p-Acryloyloxybenzoic Acid and p-Methacryloyloxybenzoic Acid onto Isotactic Polypropylene and Their Thermal Properties: Part I"
+}

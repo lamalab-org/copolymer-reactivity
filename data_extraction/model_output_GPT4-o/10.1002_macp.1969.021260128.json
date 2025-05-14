@@ -1,0 +1,72 @@
+{
+    "reactions": [
+        {
+            "monomers": [
+                "1,3-dioxepane",
+                "isobutyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 2.78,
+                        "constant_2": 0.23
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.2,
+                        "constant_conf_2": 0.02
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.7,
+                        "constant_2": 0.2
+                    },
+                    "e-Value": {
+                        "constant_1": 0.1,
+                        "constant_2": 0.2
+                    },
+                    "r_product": 0.64
+                }
+            ]
+        },
+        {
+            "monomers": [
+                "1,3,6-trioxocane",
+                "2-chloroethyl vinyl ether"
+            ],
+            "reaction_conditions": [
+                {
+                    "polymerization_type": "cationic",
+                    "solvent": "methylene chloride",
+                    "method": "solvent",
+                    "temperature": -78.0,
+                    "temperature_unit": "\u00b0C",
+                    "reaction_constants": {
+                        "constant_1": 1.45,
+                        "constant_2": 0.69
+                    },
+                    "reaction_constant_conf": {
+                        "constant_conf_1": 0.1,
+                        "constant_conf_2": 0.05
+                    },
+                    "determination_method": "EVM Program",
+                    "Q-value": {
+                        "constant_1": 0.6,
+                        "constant_2": 0.3
+                    },
+                    "e-Value": {
+                        "constant_1": 0.15,
+                        "constant_2": 0.25
+                    },
+                    "r_product": 1.0
+                }
+            ]
+        }
+    ],
+    "source": "Die Makromolekulare Chemie 126 (1969) 266\u2013275",
+    "PDF_name": "Cationic Copolymerization of Cyclic Formals and Vinyl Ethers"
+}
