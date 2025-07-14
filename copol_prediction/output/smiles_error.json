@@ -226,5 +226,61 @@
     {
         "smiles": "C=C(CC(=O)O[Sn](CCCC)(CCCC)CCCC)C(=O)O[Sn](CCCC)(CCCC)CCCC",
         "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=C(C)C(=O)O.C=C(C)C(=O)O.OCCSCCO",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=C(C)C(=O)O.CC(O)CO.O=[N+]([O-])O",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=C(C)C(=O)O.O=[N+]([O-])O.OCCCCO",
+        "error": "Single point calculation failed:\n-2- xtb_calculator_singlepoint: Electronic structure method terminated\n-1- scf: Self consistent charge iterator did not converge"
+    },
+    {
+        "smiles": "C=C(C)C(=O)OCC[N+](CC)(CC)CC.[I-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmps6fzrdv3': Too many open files"
+    },
+    {
+        "smiles": "C=C(C)C(=O)[O-].C=C(C)C(=O)[O-].[Zn+2]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpqbz42av9': Too many open files"
+    },
+    {
+        "smiles": "C=C(C)[c-]1cccc1.[Fe+2].c1cc[cH-]c1",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpia14vxhg': Too many open files"
+    },
+    {
+        "smiles": "C=C(CC(=O)[O-])C(=O)[O-].[NH4+].[NH4+]",
+        "error": "Following atoms are too close: [(9, 10, 1.5105912429391878e-06)]"
+    },
+    {
+        "smiles": "C=C(Cl)C(=O)[O-].CCCC[Sn+](CCCC)CCCC",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmp1pfg41xb': Too many open files"
+    },
+    {
+        "smiles": "C=CC(=O)OCC[N+](C)(C)C.[Cl-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpo78srajr': Too many open files"
+    },
+    {
+        "smiles": "C=C[n+]1ccn(C)c1.[I-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpcvmksq7z': Too many open files"
+    },
+    {
+        "smiles": "C=C[n+]1ccn(C)c1C.[I-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpgft0cah1': Too many open files"
+    },
+    {
+        "smiles": "C=C[n+]1ccn(CC)c1.[Br-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpnrfpz9bv': Too many open files"
+    },
+    {
+        "smiles": "C=C[n+]1ccn(CCCC)c1.[Br-]",
+        "error": "Single point calculation failed:\n-4- xtb_calculator_singlepoint: Electronic structure method terminated\n-3- scf: Self consistent charge iterator did not converge\n-2- xtb_calculator_newWavefunction: EEQ guess failed, falling back to SAD guess\n-1- xtb_api_setOutput: Cannot open file '/var/folders/tv/b0y73fwd4zn44s4jmxl5169w0000gn/T/tmpommkktt7': Too many open files"
+    },
+    {
+        "smiles": "[Na+]",
+        "error": "1 validation error for Molecule\nconnectivity\n  ensure this value has at least 1 items (type=value_error.list.min_items; limit_value=1)"
     }
 ]
