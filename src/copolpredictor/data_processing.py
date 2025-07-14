@@ -292,7 +292,7 @@ def load_and_preprocess_data(input_path="../data_extraction/new/extracted_reacti
 
     try:
         # Load data as CSV
-        df = pd.read_csv(input_path)
+        df = pd.read_csv(input_path, decimal='.')
         print(f"Initial datapoints: {len(df)}")
     except Exception as e:
         print(f"Error loading data: {e}")
@@ -306,6 +306,13 @@ def load_and_preprocess_data(input_path="../data_extraction/new/extracted_reacti
     # Remove rows with missing values
     df.dropna(subset=['constant_1', 'constant_2', 'monomer1_smiles', 'monomer2_smiles'], inplace=True)
     print(f"DataFrame shape after dropping rows with missing values: {df.shape}")
+
+    # convert all numerical values
+    df = convert_numeric_columns(df, ['constant_1', 'constant_2', 'temperature'])
+
+    print(df[['constant_1', 'constant_2']].dtypes)
+
+    df['r1r2'] = df['constant_1'] * df['constant_2']
 
     # Add molecular features
     print("Adding molecular features...")
@@ -344,7 +351,33 @@ def load_and_preprocess_data(input_path="../data_extraction/new/extracted_reacti
             print(f"JSON filename column found: {col} with {combined_df[col].nunique()} unique values")
 
     # Save processed data
-    combined_df.to_csv("processed_data.csv", index=False)
+    combined_df.to_csv("processed_data_new.csv", index=False)
     print("Data saved to processed_data.csv")
 
     return combined_df
+
+
+def convert_numeric_columns(df, columns):
+    """
+    Ensure specified columns contain valid numeric values.
+    Tries to convert to float and sets invalid entries to NaN.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame
+        columns (list of str): List of column names to convert
+
+    Returns:
+        pd.DataFrame: DataFrame with cleaned numeric columns
+    """
+    for col in columns:
+        if col in df.columns:
+            original_non_numeric = df[col][~df[col].apply(
+                lambda x: isinstance(x, (int, float, np.number)) or pd.to_numeric(x,
+                                                                                  errors='coerce') is not pd.NA)].count()
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+            converted_non_numeric = df[col].isna().sum()
+            print(
+                f"Column '{col}': {original_non_numeric} non-numeric entries, {converted_non_numeric} converted to NaN")
+        else:
+            print(f"Column '{col}' not found in DataFrame.")
+    return df

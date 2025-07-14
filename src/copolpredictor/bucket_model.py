@@ -1,156 +1,39 @@
-"""
-Bucket-based classification model for the copolymerization prediction
-"""
-
+from xgboost import XGBClassifier
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import RandomizedSearchCV
-from sklearn.preprocessing import StandardScaler, PowerTransformer
-from sklearn.compose import ColumnTransformer
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, classification_report
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
+from copolextractor import utils
 import matplotlib.pyplot as plt
-import seaborn as sns
-from copolextractor import utils as utils
+from scipy.stats import pearsonr
+from sklearn.linear_model import LinearRegression
 
 
-class BucketClassifier:
-    """Class for training and evaluating bucket classification models"""
-
-    def __init__(self, n_buckets=100, model_type="xgboost", random_state=42,
-                 bucket_transform='log', quantile_based=False):
-        """
-        Initialize the BucketClassifier
-        Args:
-            n_buckets: Number of buckets to divide the range of r1r2 values
-            model_type: Type of model to train ('xgboost', 'random_forest')
-            random_state: Seed for reproducibility
-            bucket_transform: Type of transform for buckets ('log', 'sqrt', 'linear')
-            quantile_based: Whether to use quantile-based bucketing instead of range-based
-        """
-        self.n_buckets = n_buckets
-        self.model_type = model_type
+class DistributionBucketRegressor:
+    def __init__(self, random_state=42):
         self.random_state = random_state
-        self.bucket_transform = bucket_transform
-        self.quantile_based = quantile_based
-        self.best_params = None
-        self.feature_names = None
-        self.transformer = None
-        self.final_model = None
         self.bucket_edges = None
         self.bucket_centers = None
-        self.bucket_transform_func = None
-        self.bucket_inverse_func = None
+        self.transformer = None
+        self.model = None
+        self.feature_names = None
 
-    def _create_bucket_transform_funcs(self, max_value):
-        """Create transform and inverse transform functions for the buckets"""
-        if self.bucket_transform == 'log':
-            # Log transform: more granularity for smaller values
-            self.bucket_transform_func = lambda x: np.log1p(x)
-            self.bucket_inverse_func = lambda x: np.expm1(x)
-        elif self.bucket_transform == 'sqrt':
-            # Square root transform: moderate increase in granularity for smaller values
-            self.bucket_transform_func = lambda x: np.sqrt(x)
-            self.bucket_inverse_func = lambda x: np.square(x)
-        else:
-            # Linear transform: uniform buckets
-            self.bucket_transform_func = lambda x: x
-            self.bucket_inverse_func = lambda x: x
+    def _create_predefined_buckets(self, r1r2_values):
+        predefined_edges = [0.01, 0.1, 0.25, 0.5, 0.75, 0.95, 0.99, 1.05, 1.5, 5.00]
+        edges = np.array([0.0] + predefined_edges)
+        max_val = r1r2_values.max()
+        if max_val > edges[-1]:
+            print(f"WARNING: Found values above 2.0 ({max_val:.2f}). Capping them to 2.0.")
+            r1r2_values = np.clip(r1r2_values, None, 2.0)
 
-    def _create_bucket_edges(self, df):
-        """
-        Create bucket edges based on predefined values or the range of r1r2 values
-
-        Args:
-            df: DataFrame with 'r1r2' column
-
-        Returns:
-            array: The bucket edges
-        """
-        # Ensure r1r2 exists in the DataFrame
-        if 'r1r2' not in df.columns:
-            print("Error: 'r1r2' column not found in DataFrame")
-            return None
-
-        # Get the range of r1r2 values in the data
-        min_value = df['r1r2'].min()
-        max_value = df['r1r2'].max()
-
-        print(f"Range of r1r2 values in data: {min_value} to {max_value}")
-
-        # Use predefined bucket edges
-        # These are the predefined category boundaries
-        predefined_edges = [0.01, 0.1, 0.25, 0.5, 0.75, 0.95, 0.99, 1.05, 1.5, 2.00]
-
-        # Add 0 as the first edge and ensure the last edge covers all data
-        self.bucket_edges = np.array([0.0] + predefined_edges)
-        if max_value > self.bucket_edges[-1]:
-            print(f"Data maximum ({max_value}) exceeds the highest predefined bucket edge ({self.bucket_edges[-1]})")
-            print(f"Adding an additional bucket edge at {max_value * 1.1} to cover all data")
-            self.bucket_edges = np.append(self.bucket_edges, max_value * 1.1)
-
-        # Create bucket centers for visualization
-        self.bucket_centers = (self.bucket_edges[:-1] + self.bucket_edges[1:]) / 2
-
-        # Adjust number of buckets to match the predefined edges
-        self.n_buckets = len(self.bucket_edges) - 1
-        print(f"Using {self.n_buckets} predefined buckets instead of dynamically created ones")
-
-        # Print bucket distribution
-        print(f"First few bucket edges: {self.bucket_edges[:5]}")
-        print(f"Last few bucket edges: {self.bucket_edges[-5:]}")
-
-        return self.bucket_edges
-
-    def predict_with_distribution(self, X_new):
-        """
-        Make predictions using probability distribution across all buckets
-
-        Args:
-            X_new: New feature data to predict on
-        Returns:
-            array: Predicted r1r2 values using probability distribution
-        """
-        if self.transformer is None or self.final_model is None or self.bucket_centers is None:
-            print(
-                "Error: Model not properly initialized. Run prepare_data, train_and_evaluate, and train_final_model first.")
-            return None
-
-        # Transform the input features
-        X_new_transformed = self.transformer.transform(X_new)
-
-        # Get probability distribution over all buckets
-        proba_distribution = self.final_model.predict_proba(X_new_transformed)
-
-        # Calculate expected value (weighted average)
-        # For each sample, multiply each bucket center with its probability and sum
-        expected_values = np.sum(proba_distribution * self.bucket_centers, axis=1)
-
-        return expected_values
-
+        self.bucket_edges = edges
+        self.bucket_centers = (edges[:-1] + edges[1:]) / 2
 
     def _assign_buckets(self, r1r2_values):
-        """
-        Assign each r1r2 value to a bucket
-
-        Args:
-            r1r2_values: Array of r1r2 values
-
-        Returns:
-            array: The bucket indices
-        """
-        if self.bucket_edges is None:
-            print("Error: Bucket edges not created yet")
-            return None
-
-        # Use numpy's digitize to assign each value to a bucket
-        bucket_indices = np.digitize(r1r2_values, self.bucket_edges) - 1
-
-        # Ensure all values are within valid range
-        bucket_indices = np.clip(bucket_indices, 0, self.n_buckets - 1)
-
-        return bucket_indices
+        indices = np.digitize(r1r2_values, self.bucket_edges) - 1
+        indices = np.clip(indices, 0, len(self.bucket_centers) - 1)
+        return indices
 
     def prepare_data(self, df):
         """
@@ -188,9 +71,9 @@ class BucketClassifier:
         print(f"Dropped {original_count - len(df)} rows where r1r2 < 0")
 
         # Filter r1r2 > 100
-        #r1r2_high_count = len(df[df['r1r2'] > 100])
-        #df = df[df['r1r2'] <= 100]
-        #print(f"Dropped {r1r2_high_count} rows where r1r2 > 100")
+        # r1r2_high_count = len(df[df['r1r2'] > 100])
+        # df = df[df['r1r2'] <= 100]
+        # print(f"Dropped {r1r2_high_count} rows where r1r2 > 100")
 
         # Filter temperature > 150
         # temp_out_of_range_count = len(df[(df['temperature'] < 0) | (df['temperature'] > 150)])
@@ -198,11 +81,15 @@ class BucketClassifier:
         # print(f"Dropped {temp_out_of_range_count} rows where temperature > 150")
 
         # Create bucket edges based on the range of r1r2 values
-        self._create_bucket_edges(df)
+        self._create_predefined_buckets(df['r1r2'].values)
 
         # Assign each r1r2 value to a bucket to create the target variable
         y_buckets = self._assign_buckets(df['r1r2'].values)
         df['bucket'] = y_buckets
+
+        print("Bucket edges:", self.bucket_edges)
+        print("Bucket centers:", self.bucket_centers)
+        print("Shape of centers:", self.bucket_centers.shape)
 
         # Print bucket distribution
         bucket_counts = df['bucket'].value_counts().sort_index()
@@ -293,848 +180,290 @@ class BucketClassifier:
         # Store feature names for later use
         self.feature_names = actual_features
 
-        return X, y, actual_features, df
+        return X, y, df
 
-    def get_model_and_param_grid(self):
-        """
-        Get the model instance and parameter grid based on model_type
-        Returns:
-            tuple: (model, param_grid) - The model instance and parameter grid for hyperparameter tuning
-        """
-        if self.model_type == "xgboost":
-            model = XGBClassifier(random_state=self.random_state)
-            param_grid = {
-                'n_estimators': [100, 300, 500],
-                'max_depth': [3, 5, 7],
-                'learning_rate': [0.01, 0.05, 0.1, 0.2],
-                'subsample': [0.7, 0.8, 0.9],
-                'colsample_bytree': [0.7, 0.8, 0.9],
-                'min_child_weight': [1, 3, 5],
-                'gamma': [0, 0.1, 0.2],
-                'objective': ['multi:softmax', 'multi:softprob'],
-                'eval_metric': ['mlogloss', 'merror', 'accuracy']
-            }
-        elif self.model_type == "random_forest":
-            model = RandomForestClassifier(random_state=self.random_state)
-            param_grid = {
-                'n_estimators': [100, 200, 300],
-                'max_depth': [10, 20, 30, None],
-                'min_samples_split': [2, 5, 10],
-                'min_samples_leaf': [1, 2, 4],
-                'max_features': ['auto', 'sqrt', 'log2']
-            }
-        else:
-            raise ValueError(f"Unsupported model type: {self.model_type}")
-        return model, param_grid
+    def fit(self, df, best_params=None):
+        X, y, df_prepared = self.prepare_data(df)
+        kf_splits = utils.create_grouped_kfold_splits(df_prepared, n_splits=5, random_state=self.random_state)
 
-    def train_and_evaluate(self, X, y, df):
-        """
-        Train and evaluate the model using cross-validation
-        Args:
-            X: Feature matrix
-            y: Target variable
-            df: DataFrame with reaction IDs for proper train/test splitting
-        Returns:
-            tuple: (fold_scores, all_predictions) - Cross-validation scores and predictions
-        """
-        print(f"\nTraining {self.model_type} classification model with {self.n_buckets} buckets...")
+        # Arrays for test results
+        test_preds = []
+        test_truths = []
+        test_uncerts = []
 
-        # Create grouped K-Fold splits
-        n_splits = 5
-        kf_splits = utils.create_grouped_kfold_splits(df, n_splits=n_splits, random_state=self.random_state)
-        print(f"\nUsing {n_splits}-fold cross-validation with grouped splits (keeps flipped monomer pairs together)")
+        # Arrays for training results
+        train_preds = []
+        train_truths = []
+        train_uncerts = []
 
-        # Get model and parameter grid
-        model, param_grid = self.get_model_and_param_grid()
-
-        # Storage for scores and predictions
-        fold_scores = []
-        all_y_true = []
-        all_y_pred = []
-        all_y_train_true = []
-        all_y_train_pred = []
-        all_test_indices = []
-        all_train_indices = []
-        all_models = []
-
-        # For storing distribution-based predictions and uncertainties
-        all_r1r2_pred_dist = []
-        all_r1r2_uncertainties = []
-
-        # Cross-validation loop
-        for fold, (train_idx, test_idx) in enumerate(kf_splits, 1):
-            print(f"Fold {fold}")
-
-            # Store indices for later visualization
-            all_train_indices.extend(train_idx)
-            all_test_indices.extend(test_idx)
-
-            # Split data
+        for train_idx, test_idx in kf_splits:
             X_train, X_test = X[train_idx], X[test_idx]
-            y_train, y_test = y[train_idx], y[test_idx]
-            print(f"Training set size: {len(X_train)}, Test set size: {len(X_test)}")
+            y_train = y[train_idx]
 
-            # Hyperparameter optimization
-            random_search = RandomizedSearchCV(
-                model, param_distributions=param_grid,
-                n_iter=20, cv=3, verbose=0, random_state=self.random_state, n_jobs=-1
-            )
+            # True values for test and training
+            test_true_r1r2 = df_prepared.iloc[test_idx]['r1r2'].values
+            train_true_r1r2 = df_prepared.iloc[train_idx]['r1r2'].values
 
-            # For XGBoost, configure it to not print validation messages
-            if self.model_type == "xgboost":
-                random_search.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+            # Use default or optimized hyperparameters
+            if best_params:
+                model = XGBClassifier(
+                    objective='multi:softprob',
+                    eval_metric='mae',
+                    random_state=self.random_state,
+                    **best_params
+                )
             else:
-                random_search.fit(X_train, y_train)
-
-            # Get best model
-            best_model = random_search.best_estimator_
-            all_models.append(best_model)
-
-            # Store best parameters from the last fold
-            self.best_params = random_search.best_params_
-
-            # Print the best hyperparameters
-            print("\nBest Hyperparameters:")
-            for param, value in random_search.best_params_.items():
-                print(f"  {param}: {value}")
-            print(f"Best CV score: {random_search.best_score_:.4f}")
-
-            # Make predictions
-            y_pred_train = best_model.predict(X_train)
-            y_pred_test = best_model.predict(X_test)
-
-            # Store values for later analysis
-            all_y_train_true.extend(y_train)
-            all_y_train_pred.extend(y_pred_train)
-            all_y_true.extend(y_test)
-            all_y_pred.extend(y_pred_test)
-
-            # Calculate metrics
-            accuracy_train = accuracy_score(y_train, y_pred_train)
-            accuracy_test = accuracy_score(y_test, y_pred_test)
-            f1_test = f1_score(y_test, y_pred_test, average='weighted')
-            print(f"Train Accuracy: {accuracy_train:.4f}")
-            print(f"Test Accuracy: {accuracy_test:.4f}")
-            print(f"Test F1 Score (weighted): {f1_test:.4f}")
-            fold_scores.append((accuracy_train, accuracy_test, f1_test))
-
-            # Calculate distribution-based predictions and uncertainties
-            proba_dist = best_model.predict_proba(X_test)
-            expected_values = np.sum(proba_dist * self.bucket_centers, axis=1)
-
-            # Calculate standard deviation as uncertainty measure
-            variance = np.sum(proba_dist * (self.bucket_centers - expected_values[:, np.newaxis]) ** 2, axis=1)
-            uncertainties = np.sqrt(variance)
-
-            # Store distribution-based predictions and uncertainties
-            all_r1r2_pred_dist.extend(expected_values)
-            all_r1r2_uncertainties.extend(uncertainties)
-
-        # Calculate average scores
-        avg_train_accuracy = np.mean([score[0] for score in fold_scores])
-        avg_test_accuracy = np.mean([score[1] for score in fold_scores])
-        avg_test_f1 = np.mean([score[2] for score in fold_scores])
-        print(f"\nAverage Train Accuracy: {avg_train_accuracy:.4f}")
-        print(f"\nAverage Test Accuracy: {avg_test_accuracy:.4f}")
-        print(f"\nAverage Test F1 Score: {avg_test_f1:.4f}")
-
-        # Convert bucket indices back to r1r2 values for evaluation
-        def bucket_to_r1r2(bucket_indices):
-            """Convert bucket indices to r1r2 values using bucket centers"""
-            return np.array([self.bucket_centers[idx] for idx in bucket_indices])
-
-        # Convert predicted and true bucket indices to r1r2 values
-        r1r2_pred = bucket_to_r1r2(all_y_pred)
-        r1r2_true = df.iloc[all_test_indices]['r1r2'].values
-
-        # Calculate RMSE between predicted and true r1r2 values
-        rmse = np.sqrt(np.mean((r1r2_pred - r1r2_true) ** 2))
-        print(f"\nRMSE on r1r2 values (hard bucket prediction): {rmse:.4f}")
-
-        # Calculate RMSE for distribution-based predictions
-        rmse_dist = np.sqrt(np.mean((np.array(all_r1r2_pred_dist) - r1r2_true) ** 2))
-        print(f"\nRMSE with distribution-based prediction: {rmse_dist:.4f}")
-
-        # Calculate average uncertainty
-        avg_uncertainty = np.mean(all_r1r2_uncertainties)
-        print(f"\nAverage prediction uncertainty (std dev): {avg_uncertainty:.4f}")
-
-        # Package all predictions and indices for later analysis and visualization
-        all_predictions = {
-            'test_true_buckets': all_y_true,
-            'test_pred_buckets': all_y_pred,
-            'train_true_buckets': all_y_train_true,
-            'train_pred_buckets': all_y_train_pred,
-            'test_indices': all_test_indices,
-            'train_indices': all_train_indices,
-            'avg_test_accuracy': avg_test_accuracy,
-            'avg_train_accuracy': avg_train_accuracy,
-            'avg_test_f1': avg_test_f1,
-            'fold_scores': fold_scores,
-            'r1r2_rmse': rmse,
-            'bucket_edges': self.bucket_edges,
-            'bucket_centers': self.bucket_centers,
-            'r1r2_pred_dist': all_r1r2_pred_dist,
-            'r1r2_rmse_dist': rmse_dist,
-            'r1r2_uncertainties': all_r1r2_uncertainties,
-            'avg_uncertainty': avg_uncertainty
-        }
-
-        return fold_scores, all_predictions
-
-    # 2. Create a new method for plotting distribution-based predictions
-    def plot_distribution_predictions(self, predictions, df, title="Distribution-based r1r2 Predictions",
-                                      save_path=None):
-        """
-        Plot distribution-based predicted vs true r1r2 values
-        Args:
-            predictions: Dictionary with prediction results
-            df: DataFrame with original r1r2 values
-            title: Plot title
-            save_path: Where to save the plot
-        """
-        # Check if distribution-based predictions are available
-        if 'r1r2_pred_dist' not in predictions:
-            print("No distribution-based predictions available.")
-            return
-
-        # Get test indices
-        test_indices = predictions['test_indices']
-
-        # Get true r1r2 values
-        true_r1r2 = df.iloc[test_indices]['r1r2'].values
-
-        # Get distribution-based predictions
-        pred_r1r2 = predictions['r1r2_pred_dist']
-
-        # Calculate R²
-        from sklearn.metrics import r2_score
-        r2 = r2_score(true_r1r2, pred_r1r2)
-
-        # Create figure
-        plt.figure(figsize=(10, 8))
-
-        # Define plot limits
-        max_val = max(max(true_r1r2), max(pred_r1r2)) * 1.1
-        min_val = 0
-
-        # Plot
-        plt.scatter(true_r1r2, pred_r1r2, alpha=0.6)
-        plt.plot([min_val, max_val], [min_val, max_val], 'r--')
-
-        # Add labels, title, and R² text
-        plt.xlabel('True r1r2')
-        plt.ylabel('Predicted r1r2 (Probability Distribution)')
-        plt.title(f"{title} (R² = {r2:.4f})")
-
-        # Set limits
-        plt.xlim(min_val, 10)
-        plt.ylim(min_val, 10)
-
-        # Add grid
-        plt.grid(True, linestyle='--', alpha=0.7)
-
-        # Save if path is provided
-        if save_path:
-            plt.tight_layout()
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.tight_layout()
-            plt.show()
-
-    def compare_prediction_methods(self, predictions, df, save_path=None):
-        """
-        Compare hard classification vs distribution-based prediction
-        Args:
-            predictions: Dictionary with prediction results
-            df: DataFrame with original r1r2 values
-            save_path: Where to save the plot
-        """
-        # Check if both predictions are available
-        if 'r1r2_pred_dist' not in predictions:
-            print("Distribution-based predictions not available.")
-            return
-
-        # Get test indices and true values
-        test_indices = predictions['test_indices']
-        true_r1r2 = df.iloc[test_indices]['r1r2'].values
-
-        # Get predictions
-        pred_buckets = predictions['test_pred_buckets']
-        pred_r1r2_hard = np.array([self.bucket_centers[idx] for idx in pred_buckets])
-        pred_r1r2_dist = predictions['r1r2_pred_dist']
-
-        # Calculate metrics
-        from sklearn.metrics import r2_score, mean_squared_error
-
-        r2_hard = r2_score(true_r1r2, pred_r1r2_hard)
-        rmse_hard = np.sqrt(mean_squared_error(true_r1r2, pred_r1r2_hard))
-
-        r2_dist = r2_score(true_r1r2, np.array(pred_r1r2_dist))
-        rmse_dist = np.sqrt(mean_squared_error(true_r1r2, np.array(pred_r1r2_dist)))
-
-        # Create figure with 2x2 subplots
-        fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-
-        # 1. Scatter plot for hard prediction
-        ax = axes[0, 0]
-        ax.scatter(true_r1r2, pred_r1r2_hard, alpha=0.6)
-        max_val = max(true_r1r2.max(), pred_r1r2_hard.max()) * 1.1
-        ax.plot([0, max_val], [0, max_val], 'r--')
-        ax.set_xlabel('True r1r2')
-        ax.set_ylabel('Predicted r1r2')
-        ax.set_title(f"Hard Prediction\nR² = {r2_hard:.4f}, RMSE = {rmse_hard:.4f}")
-        ax.grid(True, linestyle='--', alpha=0.7)
-
-        # 2. Scatter plot for distribution prediction
-        ax = axes[0, 1]
-        ax.scatter(true_r1r2, pred_r1r2_dist, alpha=0.6)
-        max_val = max(true_r1r2.max(), np.array(pred_r1r2_dist).max()) * 1.1
-        ax.plot([0, max_val], [0, max_val], 'r--')
-        ax.set_xlabel('True r1r2')
-        ax.set_ylabel('Predicted r1r2 (Distribution)')
-        ax.set_title(f"Distribution Prediction\nR² = {r2_dist:.4f}, RMSE = {rmse_dist:.4f}")
-        ax.grid(True, linestyle='--', alpha=0.7)
-
-        # 3. Error distribution for hard prediction
-        ax = axes[1, 0]
-        abs_errors_hard = np.abs(true_r1r2 - pred_r1r2_hard)
-        ax.hist(abs_errors_hard, bins=30, alpha=0.7)
-        ax.set_xlabel('Absolute Error')
-        ax.set_ylabel('Frequency')
-        ax.set_title(f"Hard Prediction Error Distribution\nMean Error = {abs_errors_hard.mean():.4f}")
-        ax.grid(True, linestyle='--', alpha=0.7)
-
-        # 4. Error distribution for distribution prediction
-        ax = axes[1, 1]
-        abs_errors_dist = np.abs(true_r1r2 - np.array(pred_r1r2_dist))
-        ax.hist(abs_errors_dist, bins=30, alpha=0.7)
-        ax.set_xlabel('Absolute Error')
-        ax.set_ylabel('Frequency')
-        ax.set_title(f"Distribution Prediction Error Distribution\nMean Error = {abs_errors_dist.mean():.4f}")
-        ax.grid(True, linestyle='--', alpha=0.7)
-
-        # Add overall title
-        plt.suptitle('Comparison of Prediction Methods', fontsize=16)
-        plt.tight_layout(rect=[0, 0, 1, 0.97])
-
-        # Save and close
-        if save_path:
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.show()
-
-        # Print comparison summary
-        print("\n=== Prediction Methods Comparison ===")
-        print(f"Hard Prediction RMSE: {rmse_hard:.4f}, R²: {r2_hard:.4f}")
-        print(f"Distribution Prediction RMSE: {rmse_dist:.4f}, R²: {r2_dist:.4f}")
-
-        improvement = (rmse_hard - rmse_dist) / rmse_hard * 100
-        print(f"RMSE Improvement: {improvement:.2f}%")
-
-    def train_final_model(self, X, y):
-        """
-        Train a final model on all data using the best parameters found during cross-validation
-        Args:
-            X: Feature matrix
-            y: Target variable
-        Returns:
-            model: The trained model
-        """
-        if self.best_params is None:
-            print("Error: No best parameters found. Run train_and_evaluate first.")
-            return None
-
-        print("\nTraining final classification model on all data...")
-
-        # Create and train the final model with the best parameters
-        if self.model_type == "xgboost":
-            final_model = XGBClassifier(**self.best_params, random_state=self.random_state)
-        elif self.model_type == "random_forest":
-            final_model = RandomForestClassifier(**self.best_params, random_state=self.random_state)
-        else:
-            raise ValueError(f"Unsupported model type: {self.model_type}")
-
-        final_model.fit(X, y)
-        print("Final model training completed.")
-
-        # Store the final model
-        self.final_model = final_model
-
-        return final_model
-
-    def get_feature_importances(self, model):
-        """
-        Get feature importances from the model
-        Args:
-            model: The trained model
-        Returns:
-            DataFrame: Feature importances sorted in descending order
-        """
-        if self.feature_names is None:
-            print("Error: No feature names found. Run prepare_data first.")
-            return None
-
-        # Get feature importances if the model supports it
-        if hasattr(model, 'feature_importances_'):
-            importances = model.feature_importances_
-
-            # Create DataFrame for feature importances
-            importance_df = pd.DataFrame({
-                'Feature': self.feature_names,
-                'Importance': importances
-            })
-
-            # Sort by importance
-            importance_df = importance_df.sort_values('Importance', ascending=False)
-            return importance_df
-        else:
-            print(f"Model type {self.model_type} does not support feature importances.")
-            return None
-
-    def predict(self, X_new):
-        """
-        Make predictions on new data, always using probability distribution
-
-        Args:
-            X_new: New feature data to predict on
-        Returns:
-            tuple: (predicted_values, uncertainties) - Predicted r1r2 values and their uncertainties
-        """
-        # Always use probability distribution for prediction with uncertainty
-        return self.predict_with_uncertainty(X_new)
-
-    def predict_with_uncertainty(self, X_new):
-        """
-        Make predictions using probability distribution across all buckets and calculate uncertainty
-
-        Args:
-            X_new: New feature data to predict on
-        Returns:
-            tuple: (predicted_values, uncertainties) - Predicted r1r2 values and their uncertainties
-        """
-        if self.transformer is None or self.final_model is None or self.bucket_centers is None:
-            print(
-                "Error: Model not properly initialized. Run prepare_data, train_and_evaluate, and train_final_model first.")
-            return None, None
-
-        # Transform the input features
-        X_new_transformed = self.transformer.transform(X_new)
-
-        # Get probability distribution over all buckets
-        proba_distribution = self.final_model.predict_proba(X_new_transformed)
-
-        # Calculate expected value (weighted average)
-        expected_values = np.sum(proba_distribution * self.bucket_centers, axis=1)
-
-        # Calculate standard deviation as a measure of uncertainty
-        # First calculate variance: sum of squared differences weighted by probabilities
-        variance = np.sum(proba_distribution * (self.bucket_centers - expected_values[:, np.newaxis]) ** 2, axis=1)
-
-        # Then take square root to get standard deviation
-        uncertainties = np.sqrt(variance)
-
-        return expected_values, uncertainties
-
-    def plot_confusion_matrix(self, predictions, title="Confusion Matrix", save_path=None, max_buckets_to_show=20):
-        """
-        Plot confusion matrix for classification results
-        Args:
-            predictions: Dictionary with prediction results
-            title: Plot title
-            save_path: Where to save the plot
-            max_buckets_to_show: Maximum number of buckets to include in the plot
-        """
-        y_true = predictions['test_true_buckets']
-        y_pred = predictions['test_pred_buckets']
-
-        # Find the range of buckets actually used
-        min_bucket = min(min(y_true), min(y_pred))
-        max_bucket = max(max(y_true), max(y_pred))
-
-        # Limit the number of buckets to show
-        if max_bucket - min_bucket >= max_buckets_to_show:
-            # Split into evenly spaced buckets across the range
-            bucket_step = max(1, (max_bucket - min_bucket) // max_buckets_to_show)
-            selected_buckets = list(range(min_bucket, max_bucket + 1, bucket_step))
-
-            # Filter data to only include these buckets
-            mask_true = np.isin(y_true, selected_buckets)
-            mask_pred = np.isin(y_pred, selected_buckets)
-            mask = mask_true & mask_pred
-
-            y_true_filtered = np.array(y_true)[mask]
-            y_pred_filtered = np.array(y_pred)[mask]
-
-            # Create labels for the confusion matrix
-            bucket_labels = [f"{i}\n({self.bucket_centers[i]:.2f})" for i in selected_buckets]
-        else:
-            # Use all buckets if there are few enough
-            y_true_filtered = y_true
-            y_pred_filtered = y_pred
-            bucket_labels = [f"{i}\n({self.bucket_centers[i]:.2f})" for i in range(min_bucket, max_bucket + 1)]
-
-        # Compute confusion matrix
-        cm = confusion_matrix(y_true_filtered, y_pred_filtered,
-                              labels=range(min_bucket, max_bucket + 1,
-                                           bucket_step if max_bucket - min_bucket >= max_buckets_to_show else 1))
-
-        # Create figure
-        plt.figure(figsize=(12, 10))
-        ax = plt.subplot()
-
-        # Plot confusion matrix
-        sns.heatmap(cm, annot=True, fmt='d', ax=ax, cmap='Blues', cbar=True, square=True)
-
-        # Set labels
-        ax.set_xlabel('Predicted Bucket')
-        ax.set_ylabel('True Bucket')
-        ax.set_title(title)
-
-        # Set x and y tick labels
-        ax.set_xticks(np.arange(len(bucket_labels)) + 0.5)
-        ax.set_yticks(np.arange(len(bucket_labels)) + 0.5)
-        ax.set_xticklabels(bucket_labels, rotation=90)
-        ax.set_yticklabels(bucket_labels, rotation=0)
-
-        # Save if path is provided
-        if save_path:
-            plt.tight_layout()
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.tight_layout()
-            plt.show()
-
-    def plot_bucket_distribution(self, df, save_path=None):
-        """
-        Plot the distribution of samples across buckets
-        Args:
-            df: DataFrame with 'bucket' column
-            save_path: Where to save the plot
-        """
-        plt.figure(figsize=(15, 6))
-
-        # Count samples in each bucket
-        bucket_counts = df['bucket'].value_counts().sort_index()
-
-        # Create bucket labels with r1r2 ranges
-        bucket_labels = [f"{i}\n({self.bucket_edges[i]:.2f}-{self.bucket_edges[i + 1]:.2f})"
-                         for i in bucket_counts.index]
-
-        # Plot
-        ax = sns.barplot(x=bucket_counts.index, y=bucket_counts.values, palette='viridis')
-
-        # Add labels and title
-        plt.xlabel('Bucket Index (r1r2 range)')
-        plt.ylabel('Number of Samples')
-        plt.title('Distribution of Samples Across r1r2 Buckets')
-
-        # Rotate x-axis labels for better readability
-        if len(bucket_counts) > 20:
-            # If too many buckets, only show a subset of labels
-            n_ticks = 20
-            step = max(1, len(bucket_counts) // n_ticks)
-            plt.xticks(np.arange(0, len(bucket_counts), step),
-                       [bucket_labels[i] for i in range(0, len(bucket_counts), step)],
-                       rotation=90)
-        else:
-            plt.xticks(range(len(bucket_counts)), bucket_labels, rotation=90)
-
-        # Add grid for better readability
-        plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-        # Save if path is provided
-        if save_path:
-            plt.tight_layout()
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.tight_layout()
-            plt.show()
-
-    def plot_r1r2_predictions(self, predictions, df, title="r1r2 Predictions", save_path=None):
-        """
-        Plot predicted vs true r1r2 values
-        Args:
-            predictions: Dictionary with prediction results
-            df: DataFrame with original r1r2 values
-            title: Plot title
-            save_path: Where to save the plot
-        """
-        # Get test indices and predicted bucket indices
-        test_indices = predictions['test_indices']
-        pred_buckets = predictions['test_pred_buckets']
-
-        # Get true r1r2 values
-        true_r1r2 = df.iloc[test_indices]['r1r2'].values
-
-        # Convert predicted bucket indices to r1r2 values
-        pred_r1r2 = np.array([self.bucket_centers[idx] for idx in pred_buckets])
-
-        # Calculate R²
-        from sklearn.metrics import r2_score
-        r2 = r2_score(true_r1r2, pred_r1r2)
-
-        # Create figure
-        plt.figure(figsize=(10, 8))
-
-        # Define plot limits
-        max_val = max(max(true_r1r2), max(pred_r1r2)) * 1.1
-        min_val = 0
-
-        # Plot
-        plt.scatter(true_r1r2, pred_r1r2, alpha=0.6)
-        plt.plot([min_val, max_val], [min_val, max_val], 'r--')
-
-        # Add labels, title, and R² text
-        plt.xlabel('True r1r2')
-        plt.ylabel('Predicted r1r2')
-        plt.title(f"{title} (R² = {r2:.4f})")
-
-        # Set limits
-        plt.xlim(min_val, 10)
-        plt.ylim(min_val, 10)
-
-        # Add grid
-        plt.grid(True, linestyle='--', alpha=0.7)
-
-        # Save if path is provided
-        if save_path:
-            plt.tight_layout()
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.tight_layout()
-            plt.show()
-
-    def plot_error_analysis(self, predictions, df, save_path=None):
-        """
-        Plot error analysis of r1r2 predictions
-        Args:
-            predictions: Dictionary with prediction results
-            df: DataFrame with original r1r2 values
-            save_path: Where to save the plot
-        """
-        # Get test indices and predicted bucket indices
-        test_indices = predictions['test_indices']
-        pred_buckets = predictions['test_pred_buckets']
-
-        # Get true r1r2 values
-        true_r1r2 = df.iloc[test_indices]['r1r2'].values
-
-        # Convert predicted bucket indices to r1r2 values
-        pred_r1r2 = np.array([self.bucket_centers[idx] for idx in pred_buckets])
-
-        # Calculate errors
-        abs_errors = np.abs(true_r1r2 - pred_r1r2)
-        rel_errors = abs_errors / np.maximum(true_r1r2, 0.0001) * 100
-
-        # Create figure with 2 subplots
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-
-        # Plot 1: Absolute errors vs true r1r2
-        ax1.scatter(true_r1r2, abs_errors, alpha=0.6)
-        ax1.set_xlabel('True r1r2')
-        ax1.set_ylabel('Absolute Error')
-        ax1.set_title('Absolute Error vs True r1r2')
-        ax1.grid(True, linestyle='--', alpha=0.7)
-
-        # Plot 2: Relative errors vs true r1r2
-        ax2.scatter(true_r1r2, rel_errors, alpha=0.6)
-        ax2.set_xlabel('True r1r2')
-        ax2.set_ylabel('Relative Error (%)')
-        ax2.set_title('Relative Error vs True r1r2')
-        ax2.grid(True, linestyle='--', alpha=0.7)
-
-        # Limit y-axis for relative errors to avoid extreme values
-        ax2.set_ylim(0, min(500, np.percentile(rel_errors, 99)))
-
-        # Add overall title
-        plt.suptitle('Error Analysis of Bucket Classification Predictions', fontsize=16)
-
-        # Save if path is provided
-        if save_path:
-            plt.tight_layout(rect=[0, 0, 1, 0.95])
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.tight_layout(rect=[0, 0, 1, 0.95])
-            plt.show()
-
-    def plot_predictions_with_uncertainty(self, predictions, df, title="r1r2 Predictions with Uncertainty",
-                                          save_path=None):
-        """
-        Plot predicted vs true r1r2 values with uncertainty
-
-        Args:
-            predictions: Dictionary with prediction results
-            df: DataFrame with original r1r2 values
-            title: Plot title
-            save_path: Where to save the plot
-        """
-        # Get test indices
-        test_indices = predictions['test_indices']
-
-        # Get true r1r2 values
-        true_r1r2 = df.iloc[test_indices]['r1r2'].values
-
-        # Get distribution-based predictions and uncertainties
-        if 'r1r2_pred_dist' not in predictions or 'r1r2_uncertainties' not in predictions:
-            print("Error: No distribution-based predictions or uncertainties available.")
-            return
-
-        pred_r1r2 = predictions['r1r2_pred_dist']
-        uncertainties = predictions['r1r2_uncertainties']
-
-        # Calculate R²
-        from sklearn.metrics import r2_score
-        r2 = r2_score(true_r1r2, pred_r1r2)
-
-        # Create figure
-        plt.figure(figsize=(10, 8))
-
-        # Define plot limits
-        max_val = max(max(true_r1r2), max(pred_r1r2)) * 1.1
-        min_val = 0
-
-        # Plot with error bars
-        plt.errorbar(true_r1r2, pred_r1r2, yerr=uncertainties, fmt='o', alpha=0.6,
-                     ecolor='lightgray', elinewidth=1, capsize=3)
-        plt.plot([min_val, max_val], [min_val, max_val], 'r--')
-
-        # Add labels, title, and R² text
-        plt.xlabel('True r1r2')
-        plt.ylabel('Predicted r1r2 with Uncertainty')
-        plt.title(f"{title} (R² = {r2:.4f})")
-
-        # Set limits
-        plt.xlim(min_val, min(10, max_val))
-        plt.ylim(min_val, min(10, max_val))
-
-        # Add grid
-        plt.grid(True, linestyle='--', alpha=0.7)
-
-        # Save if path is provided
-        if save_path:
-            plt.tight_layout()
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.tight_layout()
-            plt.show()
-
-    def analyze_uncertainty(self, predictions, df, save_path=None):
-        """
-        Analyze prediction uncertainties
-
-        Args:
-            predictions: Dictionary with prediction results
-            df: DataFrame with original r1r2 values
-            save_path: Where to save the plot
-        """
-        if 'r1r2_uncertainties' not in predictions:
-            print("Error: No uncertainties available in predictions.")
-            return
-
-        # Get test indices and true r1r2 values
-        test_indices = predictions['test_indices']
-        true_r1r2 = df.iloc[test_indices]['r1r2'].values
-
-        # Get predictions and uncertainties
-        pred_r1r2 = predictions['r1r2_pred_dist']
-        uncertainties = predictions['r1r2_uncertainties']
+                model = XGBClassifier(
+                    objective='multi:softprob',
+                    eval_metric='mae',
+                    random_state=self.random_state,
+                    n_estimators=500,
+                    max_depth=6,
+                    learning_rate=0.01,
+                    subsample=0.8,
+                    colsample_bytree=0.8
+                )
+
+            model.fit(X_train, y_train)
+
+            # Predictions for test data
+            test_proba = model.predict_proba(X_test)
+
+            # Predictions for training data
+            train_proba = model.predict_proba(X_train)
+
+            k = 4  # Top-k buckets
+
+            # Calculate test predictions
+            test_expected_r1r2 = []
+            for i in range(test_proba.shape[0]):
+                top_k = np.argsort(test_proba[i])[-k:]
+                weights = test_proba[i][top_k]
+                centers = self.bucket_centers[top_k]
+                test_expected_r1r2.append(np.sum(weights * centers) / np.sum(weights))
+            test_expected_r1r2 = np.array(test_expected_r1r2)
+
+            # Calculate training predictions
+            train_expected_r1r2 = []
+            for i in range(train_proba.shape[0]):
+                top_k = np.argsort(train_proba[i])[-k:]
+                weights = train_proba[i][top_k]
+                centers = self.bucket_centers[top_k]
+                train_expected_r1r2.append(np.sum(weights * centers) / np.sum(weights))
+            train_expected_r1r2 = np.array(train_expected_r1r2)
+
+            # Uncertainties for test data
+            test_uncertainties = np.array([
+                np.sum(p * (self.bucket_centers - np.sum(p * self.bucket_centers)) ** 2)
+                for p in test_proba
+            ])
+
+            # Uncertainties for training data
+            train_uncertainties = np.array([
+                np.sum(p * (self.bucket_centers - np.sum(p * self.bucket_centers)) ** 2)
+                for p in train_proba
+            ])
+
+            # Collect results
+            test_preds.extend(test_expected_r1r2)
+            test_truths.extend(test_true_r1r2)
+            test_uncerts.extend(np.sqrt(test_uncertainties))
+
+            train_preds.extend(train_expected_r1r2)
+            train_truths.extend(train_true_r1r2)
+            train_uncerts.extend(np.sqrt(train_uncertainties))
+
+        self.model = model  # last fold model for future use
+
+        # Return test and training data
+        return (
+            np.array(test_truths), np.array(test_preds), np.array(test_uncerts),
+            np.array(train_truths), np.array(train_preds), np.array(train_uncerts)
+        )
+
+    def evaluate(self, test_truths, test_preds, test_uncerts, train_truths, train_preds, train_uncerts):
+        # Calculate metrics for test data
+        test_rmse = np.sqrt(mean_squared_error(test_truths, test_preds))
+        test_r2 = r2_score(test_truths, test_preds)
+        test_avg_uncertainty = np.mean(test_uncerts)
+
+        # Calculate metrics for training data
+        train_rmse = np.sqrt(mean_squared_error(train_truths, train_preds))
+        train_r2 = r2_score(train_truths, train_preds)
+        train_avg_uncertainty = np.mean(train_uncerts)
 
         # Calculate absolute errors
-        abs_errors = np.abs(true_r1r2 - pred_r1r2)
+        test_abs_errors = np.abs(test_truths - test_preds)
 
-        # Create figure with 2x2 subplots
-        fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+        # Calculate Pearson correlation for test data
+        test_corr, _ = pearsonr(test_uncerts, test_abs_errors)
 
-        # 1. Histogram of uncertainties
-        ax = axes[0, 0]
-        ax.hist(uncertainties, bins=30, alpha=0.7)
-        ax.axvline(np.mean(uncertainties), color='r', linestyle='--',
-                   label=f'Mean: {np.mean(uncertainties):.4f}')
-        ax.set_xlabel('Uncertainty (Std Dev)')
-        ax.set_ylabel('Frequency')
-        ax.set_title('Distribution of Prediction Uncertainties')
-        ax.legend()
-        ax.grid(True, linestyle='--', alpha=0.7)
+        # Fit linear regression for comparison (model calibration line)
+        test_uncerts_reshaped = np.array(test_uncerts).reshape(-1, 1)
+        test_abs_errors_array = np.array(test_abs_errors)
+        reg = LinearRegression().fit(test_uncerts_reshaped, test_abs_errors_array)
+        slope = reg.coef_[0]
+        intercept = reg.intercept_
 
-        # 2. Uncertainty vs true r1r2 value
-        ax = axes[0, 1]
-        ax.scatter(true_r1r2, uncertainties, alpha=0.6)
-        ax.set_xlabel('True r1r2')
-        ax.set_ylabel('Uncertainty (Std Dev)')
-        ax.set_title('Uncertainty vs True r1r2 Value')
-        ax.grid(True, linestyle='--', alpha=0.7)
+        # Prepare x values for reference line
+        x_vals = np.linspace(0, 2, 100)
+        y_ideal = x_vals  # Perfect calibration: y = x
+        y_model = slope * x_vals + intercept  # Model linear calibration
 
-        # 3. Uncertainty vs absolute error
-        ax = axes[1, 0]
-        ax.scatter(uncertainties, abs_errors, alpha=0.6)
+        # Plot uncertainty vs. absolute error with quantile bands
+        df_test = pd.DataFrame({"uncert": test_uncerts, "abs_err": test_abs_errors})
+        df_test["bin"] = pd.qcut(df_test["uncert"], q=5, duplicates='drop')
 
-        # Calculate correlation and add trendline
-        from scipy.stats import pearsonr
-        corr, _ = pearsonr(uncertainties, abs_errors)
+        bin_means = df_test.groupby("bin", observed=True).mean()
+        bin_q10 = df_test.groupby("bin", observed=True).quantile(0.1)
+        bin_q90 = df_test.groupby("bin", observed=True).quantile(0.9)
 
-        # Add trendline
-        z = np.polyfit(uncertainties, abs_errors, 1)
-        p = np.poly1d(z)
-        ax.plot(np.sort(uncertainties), p(np.sort(uncertainties)),
-                'r--', label=f'Correlation: {corr:.4f}')
+        x_bin_means = bin_means["uncert"]
+        y_bin_means = bin_means["abs_err"]
+        y_q10 = bin_q10["abs_err"]
+        y_q90 = bin_q90["abs_err"]
 
-        ax.set_xlabel('Uncertainty (Std Dev)')
-        ax.set_ylabel('Absolute Error')
-        ax.set_title('Uncertainty vs Absolute Prediction Error')
-        ax.legend()
-        ax.grid(True, linestyle='--', alpha=0.7)
+        plt.figure(figsize=(8, 6))
+        plt.scatter(test_uncerts, test_abs_errors, alpha=0.5, label="Samples")
+        plt.plot(x_vals, y_ideal, 'r--', label="Ideal Calibration (y = x)")
+        plt.plot(x_vals, y_model, 'b-', label=f"Linear Fit (y = {slope:.2f}x + {intercept:.2f})")
+        plt.plot(x_bin_means, y_bin_means, 'k-', label="Mean Abs Error (per bin)")
+        plt.fill_between(x_bin_means, y_q10, y_q90, color='gray', alpha=0.3, label="10–90% Error Range")
 
-        # 4. Prediction Intervals Coverage Analysis
-        ax = axes[1, 1]
+        plt.xlabel("Uncertainty (Std Dev or Variance)")
+        plt.ylabel("Absolute Error |True - Predicted|")
+        plt.title(f"Uncertainty vs Absolute Error\nPearson r = {test_corr:.2f}")
+        plt.grid(True)
+        plt.xlim(0, 2)
+        plt.ylim(0, 2)
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig("output/classification/uncertainty_vs_error.png")
+        plt.close()
 
-        # Calculate 95% confidence intervals
-        lower_bounds = pred_r1r2 - 1.96 * uncertainties
-        upper_bounds = pred_r1r2 + 1.96 * uncertainties
+        # Parity plot: predicted vs. true r1r2 with distinction between test and train
+        plt.figure(figsize=(8, 6))
 
-        # Check if true values fall within intervals
-        within_interval = (true_r1r2 >= lower_bounds) & (true_r1r2 <= upper_bounds)
-        coverage = np.mean(within_interval) * 100
+        # Plot training data in blue with lower alpha for clarity
+        plt.scatter(train_truths, train_preds, alpha=0.3, color='blue', label='Training data')
 
-        # Plot interval widths and coverage
-        interval_widths = upper_bounds - lower_bounds
+        # Plot test data in red
+        plt.scatter(test_truths, test_preds, alpha=0.5, color='red', label='Test data')
 
-        ax.hist(interval_widths, bins=30, alpha=0.7)
-        ax.set_xlabel('95% Confidence Interval Width')
-        ax.set_ylabel('Frequency')
-        ax.set_title(f'Prediction Interval Widths\nCoverage: {coverage:.1f}% (Expected: 95%)')
-        ax.grid(True, linestyle='--', alpha=0.7)
+        # Add perfect prediction line
+        plt.plot([0, 2], [0, 2], 'k--', alpha=0.7, label='Perfect prediction')
 
-        # Add overall title
-        plt.suptitle('Prediction Uncertainty Analysis', fontsize=16)
-        plt.tight_layout(rect=[0, 0, 1, 0.97])
+        plt.xlabel("True r1r2")
+        plt.ylabel("Predicted r1r2 (Expected from Distribution)")
+        plt.title("Expected Value from Distribution vs Ground Truth")
+        plt.grid(True)
+        plt.xlim(0, 2)
+        plt.ylim(0, 2)
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig("output/classification/distribution_vs_truth_train_test.png")
+        plt.close()
 
-        # Save if path is provided
-        if save_path:
-            plt.savefig(save_path)
-            plt.close()
-        else:
-            plt.show()
+        # Create a second parity plot showing only test data (for clarity)
+        plt.figure(figsize=(8, 6))
+        plt.scatter(test_truths, test_preds, alpha=0.5, color='red')
+        plt.plot([0, 2], [0, 2], 'k--', alpha=0.7, label='Perfect prediction')
+        plt.xlabel("True r1r2")
+        plt.ylabel("Predicted r1r2 (Expected from Distribution)")
+        plt.title("Expected Value from Distribution vs Ground Truth (Test Data Only)")
+        plt.grid(True)
+        plt.xlim(0, 2)
+        plt.ylim(0, 2)
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig("output/classification/distribution_vs_truth_test_only.png")
+        plt.close()
 
-        # Print summary
-        print("\n=== Uncertainty Analysis ===")
-        print(f"Average uncertainty (std dev): {np.mean(uncertainties):.4f}")
-        print(f"Min uncertainty: {np.min(uncertainties):.4f}")
-        print(f"Max uncertainty: {np.max(uncertainties):.4f}")
-        print(f"Correlation between uncertainty and absolute error: {corr:.4f}")
-        print(f"95% Prediction interval coverage: {coverage:.1f}% (Expected: 95%)")
+        # Add confusion matrix for bucket classification - simplified approach
+        from sklearn.metrics import confusion_matrix
+        import seaborn as sns
+
+        # Convert continuous r1r2 values to bucket indices
+        true_buckets = self._assign_buckets(test_truths)
+        pred_buckets = self._assign_buckets(test_preds)
+
+        # Get unique bucket values that are actually used
+        unique_buckets = np.unique(np.concatenate([true_buckets, pred_buckets]))
+        n_buckets = len(unique_buckets)
+
+        # Create confusion matrix
+        cm = confusion_matrix(true_buckets, pred_buckets, labels=np.sort(unique_buckets))
+
+        # Normalize confusion matrix by row (true labels)
+        with np.errstate(divide='ignore', invalid='ignore'):
+            cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+            cm_normalized[np.isnan(cm_normalized)] = 0  # Replace NaN with 0
+
+        # Create labels for the confusion matrix
+        bucket_labels = [f"{self.bucket_edges[i]:.2f}-{self.bucket_edges[i + 1]:.2f}" for i in np.sort(unique_buckets)]
+
+        # Plot confusion matrix (normalized)
+        plt.figure(figsize=(12, 10))
+        sns.heatmap(cm_normalized, annot=True, fmt='.2f', cmap='Blues',
+                    xticklabels=bucket_labels, yticklabels=bucket_labels)
+        plt.xlabel('Predicted Bucket')
+        plt.ylabel('True Bucket')
+        plt.title('Confusion Matrix (Normalized)')
+        plt.xticks(rotation=45, ha='right')
+        plt.yticks(rotation=0)
+        plt.tight_layout()
+        plt.savefig("output/classification/confusion_matrix.png")
+        plt.close()
+
+        # Plot raw counts as well
+        plt.figure(figsize=(12, 10))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=bucket_labels, yticklabels=bucket_labels)
+        plt.xlabel('Predicted Bucket')
+        plt.ylabel('True Bucket')
+        plt.title('Confusion Matrix (Counts)')
+        plt.xticks(rotation=45, ha='right')
+        plt.yticks(rotation=0)
+        plt.tight_layout()
+        plt.savefig("output/classification/confusion_matrix_counts.png")
+        plt.close()
+
+        # Baseline RMSE using mean bucket center as constant prediction
+        baseline_rmse = np.sqrt(np.mean((test_truths - np.mean(self.bucket_centers)) ** 2))
+        print("Baseline RMSE (mean bucket center):", baseline_rmse)
+
+        print(f"Test RMSE: {test_rmse:.4f}, Test R²: {test_r2:.4f}, Test Mean Uncertainty: {test_avg_uncertainty:.4f}")
+        print(
+            f"Train RMSE: {train_rmse:.4f}, Train R²: {train_r2:.4f}, Train Mean Uncertainty: {train_avg_uncertainty:.4f}")
 
         return {
-            'mean_uncertainty': np.mean(uncertainties),
-            'min_uncertainty': np.min(uncertainties),
-            'max_uncertainty': np.max(uncertainties),
-            'uncertainty_error_correlation': corr,
-            'interval_coverage': coverage
+            "test": {"rmse": test_rmse, "r2": test_r2, "uncertainty": test_avg_uncertainty},
+            "train": {"rmse": train_rmse, "r2": train_r2, "uncertainty": train_avg_uncertainty}
         }
+
+    def predict(self, df_new):
+        X_new = self.transformer.transform(df_new[self.feature_names])
+        proba = self.model.predict_proba(X_new)
+        expected_r1r2 = np.sum(proba * self.bucket_centers, axis=1)
+
+        print("proba shape:", proba.shape)
+        print("bucket_centers shape:", self.bucket_centers.shape)
+
+        import matplotlib.pyplot as plt
+
+        for i in range(5):
+            print(proba[i])
+            plt.figure()
+
+            plt.bar(range(len(self.bucket_centers)), proba[i])
+            plt.title(f"Sample {i} - Bucket Probabilities")
+            plt.xlabel("Bucket Index")
+            plt.ylabel("Probability")
+            plt.bar(range(len(self.bucket_centers)), proba[i])
+            plt.title(f"Sample {i} - Bucket Probabilities")
+            plt.xlabel("Bucket Index")
+            plt.ylabel("Probability")
+            plt.savefig(f"output/classification/prob/prob_dist_{i}.png")
+            plt.savefig("output/classification/prob_dist.png")
+
+        return expected_r1r2

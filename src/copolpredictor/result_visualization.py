@@ -9,6 +9,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+
+plt.style.use('lamalab.mplstyle')
+
 # Check if plotly is available for interactive plots
 try:
     import plotly.graph_objects as go
@@ -43,50 +46,43 @@ def plot_model_performance(predictions, title=None, save_path="model_performance
     train_data = np.column_stack((y_train_true_inv, y_train_pred_inv))
 
     # Randomly select points if there are more than requested
-    if len(test_data) > 100:
+    if len(test_data) > 200:
         np.random.seed(42)
-        test_indices = np.random.choice(len(test_data), size=100, replace=False)
+        test_indices = np.random.choice(len(test_data), size=200, replace=False)
         test_data = test_data[test_indices]
 
-    if len(train_data) > 200:
+    if len(train_data) > 500:
         np.random.seed(43)  # Use different seed than test set
-        train_indices = np.random.choice(len(train_data), size=200, replace=False)
+        train_indices = np.random.choice(len(train_data), size=500, replace=False)
         train_data = train_data[train_indices]
 
     # Create static matplotlib plot
     plt.figure(figsize=(10, 8))
 
     # Plot the training and test points
-    plt.scatter(train_data[:, 0], train_data[:, 1], alpha=0.5, color='blue',
-                label='Training points (200 samples)', marker='o')
-    plt.scatter(test_data[:, 0], test_data[:, 1], alpha=0.8, color='red',
-                label='Test points (100 samples)', marker='x')
+    plt.scatter(train_data[:, 0], train_data[:, 1], alpha=0.5, color='#661124',
+                label='Trainingset prediction ', s=50)
+    plt.scatter(test_data[:, 0], test_data[:, 1], alpha=0.8, color='#194A81',
+                label='Testset prediction ',s=50)
 
     # Add the diagonal line (perfect prediction)
-    plt.plot([0, 5], [0, 5], color='green', linestyle='--', label='Perfect prediction')
+    plt.plot([0, 5], [0, 5], color='gray', linestyle='--')
 
     # Set axis limits from 0 to 5
     plt.xlim(0, 5)
     plt.ylim(0, 5)
 
-    # Add gridlines for better readability
-    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+
+    plt.margins(x=0.1, y=0.1)
 
     # Add labels and title
-    plt.xlabel('True r_product', fontsize=12)
-    plt.ylabel('Predicted r_product', fontsize=12)
-
-    if title:
-        plt.title(title, fontsize=14)
-    else:
-        plt.title(f'Model Performance (Test R² = {avg_test_r2:.4f})', fontsize=14)
+    plt.xlabel('True r-product', fontsize=24)
+    plt.ylabel('Predicted r-product', fontsize=24)
 
     # Add legend
-    plt.legend(loc='upper left')
-
-    # Add annotation with R² value
-    plt.annotate(f'R² = {avg_test_r2:.4f}', xy=(0.05, 0.92), xycoords='axes fraction',
-                 fontsize=12, bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="gray", alpha=0.8))
+    plt.legend(loc='upper left', fontsize=24)
 
     # Save figure with higher resolution and tighter layout
     plt.tight_layout()

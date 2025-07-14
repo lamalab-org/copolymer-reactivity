@@ -1,0 +1,38 @@
+Comprehensive Error Analysis Report
+==================================================
+
+Overall Statistics:
+Total predictions: 5206
+Correct: 4698 (90.2%)
+Incorrect: 508 (9.8%)
+
+Error Breakdown:
+False Positives: 441 (8.5%)
+False Negatives: 67 (1.3%)
+
+Confidence Analysis:
+Correct predictions - Mean: 0.6333, Std: 0.2128
+Incorrect predictions - Mean: 0.3268, Std: 0.2508
+
+High Confidence Errors (>0.7): 38
+These are the most concerning errors where the model was very confident but wrong:
+  R-product: 0.000000, Confidence: 0.7171, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.8925, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.7865, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.8723, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.7750, Predicted: 1, True: 0
+  R-product: 0.008240, Confidence: 0.9099, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.7840, Predicted: 1, True: 0
+  R-product: 0.001300, Confidence: 0.8115, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.7575, Predicted: 1, True: 0
+  R-product: 0.000000, Confidence: 0.9016, Predicted: 1, True: 0
+
+Boundary Region Errors:
+Near lower boundary (0.008-0.012): 37
+Near upper boundary (80-120): 0
+
+Recommendations:
+1. Focus on high-confidence errors for model improvement
+2. Consider boundary region refinement
+3. Investigate problematic monomer/solvent combinations
+4. Consider ensemble methods or uncertainty quantification

@@ -168,9 +168,18 @@ def unnest_data(combined_data):
                 # Calculate conf_filter
                 data_point['conf_filter'] = conf_filter(data_point)
 
-                # Calculate actual r-product
+                # Calculate actual r-product with proper type conversion
                 if data_point['constant_1'] is not None and data_point['constant_2'] is not None:
-                    data_point['actual_r_product'] = data_point['constant_1'] * data_point['constant_2']
+                    try:
+                        # Convert to float to ensure proper numeric multiplication
+                        const1 = float(data_point['constant_1'])
+                        const2 = float(data_point['constant_2'])
+                        data_point['actual_r_product'] = const1 * const2
+                    except (ValueError, TypeError):
+                        # If conversion fails, set to None
+                        data_point['actual_r_product'] = None
+                        print(
+                            f"Warning: Could not convert constants to float: {data_point['constant_1']}, {data_point['constant_2']}")
                 else:
                     data_point['actual_r_product'] = None
 
@@ -301,7 +310,7 @@ def write_to_csv(data, output_file="output_2.csv"):
 
 
 def main(data_path):
-    output_file = "../../data_extraction/extracted_reactions.csv"
+    output_file = "extracted_reactions.csv"
     backup_file = output_file.replace(".csv", "_old.csv")
 
     # Load existing CSV if it exists
