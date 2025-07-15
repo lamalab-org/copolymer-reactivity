@@ -274,7 +274,7 @@ def analyze_threshold_03_detailed(df):
     print(f"=" * 60)
 
     # Filter predictions with confidence >= 0.3
-    threshold = 0.3
+    threshold = 0.5
     filtered_df = df[df['confidence_score'] >= threshold].copy()
 
     print(f"Original dataset: {len(df)} predictions")
@@ -325,6 +325,13 @@ def analyze_threshold_03_detailed(df):
     print(f"\n=== DETAILED CLASSIFICATION REPORT (FILTERED) ===")
     print(classification_report(y_true_filtered, y_pred_filtered,
                                 target_names=['Class 0 (< 0.01 or > 100)', 'Class 1 (0.01-100)']))
+
+    from sklearn.metrics import confusion_matrix
+
+    # Print Confusion Matrix
+    cm = confusion_matrix(y_true_filtered, y_pred_filtered)
+    print(f"\n=== CONFUSION MATRIX (Filtered, conf ≥ {threshold}) ===")
+    print(cm)
 
     # Save remaining errors after filtering
     errors_df_filtered = filtered_df[~filtered_df['correct_prediction']].copy()

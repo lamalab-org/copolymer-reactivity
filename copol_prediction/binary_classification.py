@@ -5,6 +5,8 @@ import xgboost as xgb
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import matplotlib
+from sklearn.calibration import CalibratedClassifierCV
+
 
 matplotlib.use('Agg')  # Set non-interactive backend
 
@@ -136,13 +138,32 @@ def run_binary_classification(df, random_state=42):
             n_iter=10, cv=3, scoring='f1', verbose=0, random_state=random_state, n_jobs=-1
         )
 
-        # Fit model
+        from sklearn.calibration import CalibratedClassifierCV
+
+        # Step 1: Fit the XGBoost classifier with randomized hyperparameter search
         random_search.fit(X_train, y_train)
         best_model = random_search.best_estimator_
+
+        # Step 2: Calibrate the best model using isotonic regression (or use 'sigmoid' for Platt scaling)
+        #calibrated_model = CalibratedClassifierCV(best_model_uncalibrated, method='sigmoid', cv='prefit')
+        #calibrated_model.fit(X_test, y_test)  # Calibration is done on the test fold
+
+        # Use the calibrated model from here on
+        #best_model = calibrated_model
 
         # Predictions with confidence estimation
         y_pred = best_model.predict(X_test)
         y_pred_proba = best_model.predict_proba(X_test)[:, 1]
+
+        from sklearn.metrics import brier_score_loss
+
+        # Compare uncalibrated vs calibrated Brier score
+        #y_pred_proba_uncal = best_model_uncalibrated.predict_proba(X_test)[:, 1]
+        #brier_uncal = brier_score_loss(y_test, y_pred_proba_uncal)
+        #brier_cal = brier_score_loss(y_test, y_pred_proba)
+
+        #print(f"  Brier Score (uncalibrated): {brier_uncal:.4f}")
+        #print(f"  Brier Score (calibrated):   {brier_cal:.4f}")
 
         # Calculate prediction confidence using multiple methods
         confidence_scores = calculate_prediction_confidence(best_model, X_test, y_pred_proba)
@@ -225,6 +246,8 @@ def run_binary_classification(df, random_state=42):
         int(is_extreme_r(row['constant_1']) or is_extreme_r(row['constant_2']))
         for _, row in df_clean.iterrows()
     ]
+
+    import numpy as np
 
     # Convert to array
     y_true_r_single = np.array(y_true_r_single)
@@ -325,6 +348,95 @@ def run_binary_classification(df, random_state=42):
 
     perform_error_analysis(all_y_true, all_y_pred_corrected, all_y_pred_proba, all_prediction_confidence, df_clean,
                                          kf_splits)
+
+    from sklearn.calibration import CalibratedClassifierCV
+
+    print("\n=== Global Calibration on Full Dataset ===")
+
+    # Step 1: Fit final XGBoost model on full data
+    # Use average best_params across folds or pick best from first fold
+    best_params = fold_scores[0]['best_params']  # or implement a best-of-all strategy
+
+    from sklearn.model_selection import train_test_split
+
+    # Split full data into training + calibration holdout
+    X_train_final, X_calib, y_train_final, y_calib = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+    # Fit model on training data
+    final_model = xgb.XGBClassifier(**best_params, eval_metric='logloss', use_label_encoder=False, random_state=42)
+    final_model.fit(X_train_final, y_train_final)
+
+    # Calibrate on holdout set
+    calibrated_model = CalibratedClassifierCV(final_model, method='sigmoid', cv='prefit')
+    calibrated_model.fit(X_calib, y_calib)
+    from sklearn.calibration import calibration_curve
+
+    # Predict on full calibration set using the calibrated model
+    y_pred_calibrated = calibrated_model.predict(X)
+    y_proba_calibrated = calibrated_model.predict_proba(X)[:, 1]
+
+    cm = confusion_matrix(y, y_pred_calibrated)
+    print(f"\n=== CONFUSION MATRIX after Calibration ===")
+    print(cm)
+
+    # 2. Calibration curve
+    prob_true, prob_pred = calibration_curve(y, y_proba_calibrated, n_bins=10)
+
+    # === Plot 1: Calibration Curve ===
+    plt.figure(figsize=(6, 5))
+    plt.plot(prob_pred, prob_true, 'o-', color='blue', label='Calibrated (Global)')
+    plt.plot([0, 1], [0, 1], 'k--', label='Perfect Calibration')
+    plt.xlabel("Confidence")
+    plt.ylabel("Accuracy")
+    plt.title("Global Confidence Calibration (cv=5)")
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("output/calibration_curve_global.png", dpi=300)
+    plt.close()
+
+    # === Plot 2: Confidence Histogram (Correct vs Incorrect) ===
+
+    # Determine correctness
+    correct = (y_pred_calibrated == y)
+
+    # Split calibrated confidence by correctness
+    conf_correct = y_proba_calibrated[correct]
+    conf_incorrect = y_proba_calibrated[~correct]
+
+    # Define bins
+    bins = np.linspace(0, 1, 21)
+
+    plt.figure(figsize=(6, 5))
+    plt.hist(conf_correct, bins=bins, alpha=0.7, label='Correct Predictions', color='green', edgecolor='black')
+    plt.hist(conf_incorrect, bins=bins, alpha=0.7, label='Incorrect Predictions', color='red', edgecolor='black')
+    plt.xlabel('Confidence Score (Calibrated)')
+    plt.ylabel('Count')
+    plt.title('Confidence Distribution: Correct vs Incorrect Predictions')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("output/confidence_hist_correct_vs_incorrect.png", dpi=300)
+    plt.close()
+
+    # === Recalculate entropy-based confidence (optional, for consistency)
+    calibrated_confidence = calculate_prediction_confidence(calibrated_model, X, y_proba_calibrated)
+
+    # === Run error analysis on calibrated model
+    print("\n=== Error Analysis: Calibrated Global Model ===")
+
+    # Dummy CV splits if needed (not used here but required by function signature)
+    dummy_splits = [(np.arange(len(X)), np.arange(len(X)))]
+
+    perform_error_analysis(
+        all_y_true=y,
+        all_y_pred=y_pred_calibrated,
+        all_y_pred_proba=y_proba_calibrated,
+        all_prediction_confidence=calibrated_confidence,
+        df_clean=df_clean,
+        kf_splits=dummy_splits
+    )
 
     return {
         'fold_scores': fold_scores_df,
@@ -690,7 +802,17 @@ def save_results_with_confidence(fold_scores_df, features, class_counts, overall
 def plot_feature_importance(model, feature_names, top_n=20):
     """Plots feature importance for XGBoost model"""
 
-    importance = model.feature_importances_
+    # Check if model is a CalibratedClassifierCV wrapper
+    if hasattr(model, "estimator"):
+        model = model.estimator  # Compatible access for scikit-learn ≥0.24
+
+    # Now extract feature importances
+    if hasattr(model, "feature_importances_"):
+        importance = model.feature_importances_
+    else:
+        print("Model has no feature_importances_. Skipping plot.")
+        return
+
     indices = np.argsort(importance)[::-1][:top_n]
 
     plt.figure(figsize=(12, 8))
