@@ -10,12 +10,10 @@ import matplotlib
 matplotlib.use('Agg')
 
 
-def perform_error_analysis(all_y_true, all_y_pred, all_y_pred_proba, all_prediction_confidence, df_clean, kf_splits):
+def perform_error_analysis(all_y_true, all_y_pred, all_y_pred_proba, all_prediction_confidence, df_clean, kf_splits, detailed_error_analyis):
     """
-    Error analysis direkt mit den Daten aus dem Binary Classification
+    Error analysis with data from the Binary Classification
     """
-
-    print("=== Error Analysis with Direct Data ===")
 
     # Create all test indices from K-fold splits
     all_test_indices = []
@@ -42,23 +40,20 @@ def perform_error_analysis(all_y_true, all_y_pred, all_y_pred_proba, all_predict
     errors_df = predictions_df[~predictions_df['correct_prediction']].copy()
     errors_df = errors_df.sort_values('confidence_score', ascending=False)
 
-    # Save error files
-    errors_df.to_csv('output/all_errors_for_manual_analysis.csv', index=False)
-    print(f"✓ Saved {len(errors_df)} errors for manual analysis")
-
     # Run all analysis functions
-    analyze_confidence_errors(predictions_df)
-    analyze_r_product_errors(predictions_df)
-    analyze_chemical_errors(predictions_df)
-    analyze_confidence_thresholds(predictions_df)
-    analyze_threshold_03_detailed(predictions_df)
 
-    save_high_confidence_errors_detailed(predictions_df, threshold=0.3)
+    if detailed_error_analyis:
+        analyze_confidence_errors(predictions_df)
+        analyze_r_product_errors(predictions_df)
+        analyze_chemical_errors(predictions_df)
+        analyze_confidence_thresholds(predictions_df)
+        analyze_threshold_03_detailed(predictions_df)
+    else:
+        analyze_confidence_thresholds(predictions_df)
+        analyze_threshold_03_detailed(predictions_df)
 
     create_comprehensive_error_plots(predictions_df, errors_df)
-    generate_error_report(predictions_df)
 
-    print(f"=== Error Analysis Complete ===")
 
 
 def analyze_confidence_errors(df):
@@ -75,12 +70,8 @@ def analyze_confidence_errors(df):
     print(
         f"Incorrect predictions - Mean confidence: {incorrect_confidence.mean():.4f}, Std: {incorrect_confidence.std():.4f}")
 
-    # Statistical test
-    t_stat, p_value = stats.ttest_ind(correct_confidence, incorrect_confidence)
-    print(f"T-test p-value: {p_value:.6f}")
-
     # Low confidence errors
-    low_confidence_threshold = 0.3
+    low_confidence_threshold = 0.5
     low_confidence_errors = df[(~df['correct_prediction']) & (df['confidence_score'] < low_confidence_threshold)]
     high_confidence_errors = df[(~df['correct_prediction']) & (df['confidence_score'] > 0.7)]
 
@@ -297,13 +288,6 @@ def analyze_threshold_03_detailed(df):
     f1 = f1_score(y_true_filtered, y_pred_filtered, zero_division=0)
     auc = roc_auc_score(y_true_filtered, y_pred_proba_filtered) if len(np.unique(y_true_filtered)) > 1 else 0
 
-    print(f"\n=== NEW METRICS AFTER THRESHOLD 0.3 FILTERING ===")
-    print(f"Accuracy:  {accuracy:.4f}")
-    print(f"Precision: {precision:.4f}")
-    print(f"Recall:    {recall:.4f}")
-    print(f"F1-Score:  {f1:.4f}")
-    print(f"AUC:       {auc:.4f}")
-
     # Compare with original metrics
     original_accuracy = accuracy_score(df['true_label'], df['predicted_label'])
     original_precision = precision_score(df['true_label'], df['predicted_label'], zero_division=0)
@@ -320,11 +304,6 @@ def analyze_threshold_03_detailed(df):
     print(f"{'Recall':<12} {original_recall:<10.4f} {recall:<10.4f} {recall - original_recall:<+10.4f}")
     print(f"{'F1-Score':<12} {original_f1:<10.4f} {f1:<10.4f} {f1 - original_f1:<+10.4f}")
     print(f"{'AUC':<12} {original_auc:<10.4f} {auc:<10.4f} {auc - original_auc:<+10.4f}")
-
-    # Detailed classification report
-    print(f"\n=== DETAILED CLASSIFICATION REPORT (FILTERED) ===")
-    print(classification_report(y_true_filtered, y_pred_filtered,
-                                target_names=['Class 0 (< 0.01 or > 100)', 'Class 1 (0.01-100)']))
 
     from sklearn.metrics import confusion_matrix
 
@@ -345,52 +324,18 @@ def analyze_threshold_03_detailed(df):
 def create_comprehensive_error_plots(predictions_df, errors_df):
     """Create comprehensive error analysis visualizations"""
 
-    fig, axes = plt.subplots(3, 3, figsize=(20, 15))
+    fig, axes = plt.subplots(2, 2, figsize=(20, 15))
 
     # 1. Confidence distribution by correctness
     correct_confidence = predictions_df[predictions_df['correct_prediction']]['confidence_score']
     incorrect_confidence = predictions_df[~predictions_df['correct_prediction']]['confidence_score']
 
-    axes[0, 0].hist(correct_confidence, bins=20, alpha=0.7, label='Correct', density=True, color='green')
-    axes[0, 0].hist(incorrect_confidence, bins=20, alpha=0.7, label='Incorrect', density=True, color='red')
+    axes[0, 0].hist(correct_confidence, bins=20, alpha=0.7, label='Correct', density=True, color='#661124')
+    axes[0, 0].hist(incorrect_confidence, bins=20, alpha=0.7, label='Incorrect', density=True, color='#194A81')
     axes[0, 0].set_xlabel('Confidence Score')
     axes[0, 0].set_ylabel('Density')
     axes[0, 0].set_title('Confidence Distribution by Correctness')
     axes[0, 0].legend()
-
-    # 2. R-product distribution by error type
-    if 'r1r2' in predictions_df.columns:
-        correct_r = predictions_df[predictions_df['correct_prediction']]['r1r2'].dropna()
-        fp_r = predictions_df[(predictions_df['predicted_label'] == 1) & (predictions_df['true_label'] == 0)][
-            'r1r2'].dropna()
-        fn_r = predictions_df[(predictions_df['predicted_label'] == 0) & (predictions_df['true_label'] == 1)][
-            'r1r2'].dropna()
-
-        if len(correct_r) > 0:
-            axes[0, 1].hist(correct_r[correct_r <= 10], bins=50, alpha=0.5, label='Correct', density=True,
-                            color='green')
-        if len(fp_r) > 0:
-            axes[0, 1].hist(fp_r[fp_r <= 10], bins=50, alpha=0.7, label='False Positive', density=True, color='red')
-        if len(fn_r) > 0:
-            axes[0, 1].hist(fn_r[fn_r <= 10], bins=50, alpha=0.7, label='False Negative', density=True, color='orange')
-        axes[0, 1].set_xlabel('R-product (clipped at 10)')
-        axes[0, 1].set_ylabel('Density')
-        axes[0, 1].set_title('R-product Distribution by Error Type')
-        axes[0, 1].legend()
-
-    # 3. Error types bar chart
-    error_types = ['False Positive', 'False Negative']
-    error_counts = [
-        (errors_df['predicted_label'] == 1).sum() if len(errors_df) > 0 else 0,
-        (errors_df['predicted_label'] == 0).sum() if len(errors_df) > 0 else 0
-    ]
-
-    bars = axes[0, 2].bar(error_types, error_counts, color=['orange', 'red'], alpha=0.7)
-    axes[0, 2].set_ylabel('Count')
-    axes[0, 2].set_title('Error Types')
-    for bar, count in zip(bars, error_counts):
-        if count > 0:
-            axes[0, 2].text(bar.get_x() + bar.get_width() / 2., count + 1, str(count), ha='center', va='bottom')
 
     # 4. Confidence vs Accuracy calibration
     confidence_array = predictions_df['confidence_score'].values
@@ -408,21 +353,12 @@ def create_comprehensive_error_plots(predictions_df, errors_df):
             bin_accuracies.append(0)
 
     bin_centers = (confidence_bins[:-1] + confidence_bins[1:]) / 2
-    axes[1, 0].plot(bin_centers, bin_accuracies, 'o-', label='Actual Accuracy')
-    axes[1, 0].plot([0, 1], [0, 1], 'k--', label='Perfect Calibration')
-    axes[1, 0].set_xlabel('Confidence')
-    axes[1, 0].set_ylabel('Accuracy')
-    axes[1, 0].set_title('Confidence Calibration')
-    axes[1, 0].legend()
-
-    # 5. Probability vs Confidence scatter
-    scatter = axes[1, 1].scatter(predictions_df['predicted_probability'], predictions_df['confidence_score'],
-                                 c=predictions_df['correct_prediction'], cmap='RdYlGn', alpha=0.6, s=10)
-    axes[1, 1].set_xlabel('Predicted Probability')
-    axes[1, 1].set_ylabel('Confidence Score')
-    axes[1, 1].set_title('Probability vs Confidence')
-    axes[1, 1].axvline(x=0.5, color='black', linestyle='--', alpha=0.5)
-    plt.colorbar(scatter, ax=axes[1, 1], label='Correct Prediction')
+    axes[0, 1].plot(bin_centers, bin_accuracies, 'o-', label='Actual Accuracy', color='#194A81')
+    axes[0, 1].plot([0, 1], [0, 1], 'k--', label='Perfect Calibration')
+    axes[0, 1].set_xlabel('Confidence')
+    axes[0, 1].set_ylabel('Accuracy')
+    axes[0, 1].set_title('Confidence Calibration')
+    axes[0, 1].legend()
 
     # 6. Temperature distribution (if available)
     if 'temperature' in predictions_df.columns:
@@ -430,12 +366,12 @@ def create_comprehensive_error_plots(predictions_df, errors_df):
         temp_incorrect = predictions_df[~predictions_df['correct_prediction']]['temperature'].dropna()
 
         if len(temp_correct) > 0 and len(temp_incorrect) > 0:
-            axes[1, 2].hist(temp_correct, bins=20, alpha=0.7, label='Correct', density=True, color='green')
-            axes[1, 2].hist(temp_incorrect, bins=20, alpha=0.7, label='Incorrect', density=True, color='red')
-            axes[1, 2].set_xlabel('Temperature')
-            axes[1, 2].set_ylabel('Density')
-            axes[1, 2].set_title('Temperature Distribution')
-            axes[1, 2].legend()
+            axes[1, 0].hist(temp_correct, bins=20, alpha=0.7, label='Correct', density=True, color='#661124')
+            axes[1, 0].hist(temp_incorrect, bins=20, alpha=0.7, label='Incorrect', density=True, color='#194A81')
+            axes[1, 0].set_xlabel('Temperature')
+            axes[1, 0].set_ylabel('Density')
+            axes[1, 0].set_title('Temperature Distribution')
+            axes[1, 0].legend()
 
     # 7. R1 vs R2 scatter (if available)
     if 'constant_1' in predictions_df.columns and 'constant_2' in predictions_df.columns:
@@ -448,157 +384,18 @@ def create_comprehensive_error_plots(predictions_df, errors_df):
         plot_df = predictions_df.iloc[plot_indices]
         plot_correct = plot_df['correct_prediction']
 
-        axes[2, 0].scatter(plot_df[plot_correct]['constant_1'], plot_df[plot_correct]['constant_2'],
-                           alpha=0.6, color='green', label='Correct', s=10)
-        axes[2, 0].scatter(plot_df[~plot_correct]['constant_1'], plot_df[~plot_correct]['constant_2'],
-                           alpha=0.8, color='red', label='Incorrect', s=20)
-        axes[2, 0].set_xlabel('R1 (constant_1)')
-        axes[2, 0].set_ylabel('R2 (constant_2)')
-        axes[2, 0].set_title('R1 vs R2 by Correctness')
-        axes[2, 0].legend()
-        axes[2, 0].set_xlim(0, 5)
-        axes[2, 0].set_ylim(0, 5)
-
-    # 8. Error rate by confidence bins
-    bin_error_rates = []
-
-    for i in range(len(confidence_bins) - 1):
-        mask = (confidence_array >= confidence_bins[i]) & (confidence_array < confidence_bins[i + 1])
-        if np.sum(mask) > 0:
-            error_rate = (~correct_predictions[mask]).mean()
-            bin_error_rates.append(error_rate)
-        else:
-            bin_error_rates.append(0)
-
-    axes[2, 1].bar(bin_centers, bin_error_rates, width=0.08, alpha=0.7)
-    axes[2, 1].set_xlabel('Confidence Bins')
-    axes[2, 1].set_ylabel('Error Rate')
-    axes[2, 1].set_title('Error Rate by Confidence')
-
-    # 9. Confidence distribution of errors only
-    if len(errors_df) > 0:
-        axes[2, 2].hist(errors_df['confidence_score'], bins=20, alpha=0.7, color='red', edgecolor='black')
-        axes[2, 2].set_xlabel('Confidence Score')
-        axes[2, 2].set_ylabel('Count')
-        axes[2, 2].set_title('Confidence Distribution (Errors Only)')
+        axes[1, 1].scatter(plot_df[plot_correct]['constant_1'], plot_df[plot_correct]['constant_2'],
+                           alpha=0.8, color='#661124', label='Correct', s=20)
+        axes[1, 1].scatter(plot_df[~plot_correct]['constant_1'], plot_df[~plot_correct]['constant_2'],
+                           alpha=1, color='#4093C3', label='Incorrect', s=40)
+        axes[1, 1].set_xlabel('R1 (constant_1)')
+        axes[1, 1].set_ylabel('R2 (constant_2)')
+        axes[1, 1].set_title('R1 vs R2 by Correctness')
+        axes[1, 1].legend()
+        axes[1, 1].set_xlim(0, 5)
+        axes[1, 1].set_ylim(0, 5)
 
     plt.tight_layout()
-    plt.savefig('output/comprehensive_error_analysis_plots.png', dpi=300, bbox_inches='tight')
-    plt.close()
+    plt.savefig('output/error_analysis.png', dpi=300, bbox_inches='tight')
 
     print(f"Comprehensive error analysis plots saved to: comprehensive_error_analysis_plots.png")
-
-
-def generate_error_report(df):
-    """Generate comprehensive error analysis report"""
-
-    with open('output/error_analysis_report.txt', 'w') as f:
-        f.write("Comprehensive Error Analysis Report\n")
-        f.write("=" * 50 + "\n\n")
-
-        # Basic statistics
-        n_total = len(df)
-        n_correct = df['correct_prediction'].sum()
-        n_incorrect = (~df['correct_prediction']).sum()
-
-        f.write(f"Overall Statistics:\n")
-        f.write(f"Total predictions: {n_total}\n")
-        f.write(f"Correct: {n_correct} ({n_correct / n_total * 100:.1f}%)\n")
-        f.write(f"Incorrect: {n_incorrect} ({n_incorrect / n_total * 100:.1f}%)\n\n")
-
-        # Error types
-        false_positives = ((df['predicted_label'] == 1) & (df['true_label'] == 0)).sum()
-        false_negatives = ((df['predicted_label'] == 0) & (df['true_label'] == 1)).sum()
-
-        f.write(f"Error Breakdown:\n")
-        f.write(f"False Positives: {false_positives} ({false_positives / n_total * 100:.1f}%)\n")
-        f.write(f"False Negatives: {false_negatives} ({false_negatives / n_total * 100:.1f}%)\n\n")
-
-        # Confidence analysis - HIER WAR DER FEHLER: Variablen definieren
-        correct_confidence = df[df['correct_prediction']]['confidence_score']
-        incorrect_confidence = df[~df['correct_prediction']]['confidence_score']
-
-        f.write(f"Confidence Analysis:\n")
-        f.write(f"Correct predictions - Mean: {correct_confidence.mean():.4f}, Std: {correct_confidence.std():.4f}\n")
-        f.write(
-            f"Incorrect predictions - Mean: {incorrect_confidence.mean():.4f}, Std: {incorrect_confidence.std():.4f}\n\n")
-
-        # High confidence errors (most concerning)
-        high_conf_errors = df[(~df['correct_prediction']) & (df['confidence_score'] > 0.7)]
-        f.write(f"High Confidence Errors (>0.7): {len(high_conf_errors)}\n")
-        if len(high_conf_errors) > 0:
-            f.write(f"These are the most concerning errors where the model was very confident but wrong:\n")
-            for idx, row in high_conf_errors.head(10).iterrows():
-                if 'r1r2' in row and pd.notna(row['r1r2']):
-                    f.write(f"  R-product: {row['r1r2']:.6f}, Confidence: {row['confidence_score']:.4f}, "
-                            f"Predicted: {row['predicted_label']}, True: {row['true_label']}\n")
-        f.write("\n")
-
-        # Boundary cases
-        if 'r1r2' in df.columns:
-            boundary_errors_lower = df[(~df['correct_prediction']) &
-                                       (df['r1r2'] >= 0.008) & (df['r1r2'] <= 0.012)]
-            boundary_errors_upper = df[(~df['correct_prediction']) &
-                                       (df['r1r2'] >= 80) & (df['r1r2'] <= 120)]
-
-            f.write(f"Boundary Region Errors:\n")
-            f.write(f"Near lower boundary (0.008-0.012): {len(boundary_errors_lower)}\n")
-            f.write(f"Near upper boundary (80-120): {len(boundary_errors_upper)}\n\n")
-
-        f.write("Recommendations:\n")
-        f.write("1. Focus on high-confidence errors for model improvement\n")
-        f.write("2. Consider boundary region refinement\n")
-        f.write("3. Investigate problematic monomer/solvent combinations\n")
-        f.write("4. Consider ensemble methods or uncertainty quantification\n")
-
-    print("Detailed error report saved to output/error_analysis_report.txt")
-
-
-def save_high_confidence_errors_detailed(df, threshold=0.3):
-    """
-    Save all high confidence errors (above threshold) with all features to CSV
-    """
-
-    print(f"\n=== Saving High Confidence Errors (threshold > {threshold}) ===")
-
-    # Filter errors with confidence above threshold
-    high_conf_errors = df[(~df['correct_prediction']) & (df['confidence_score'] > threshold)].copy()
-
-    if len(high_conf_errors) == 0:
-        print(f"No errors found with confidence > {threshold}")
-        return
-
-    # Sort by confidence (highest first)
-    high_conf_errors = high_conf_errors.sort_values('confidence_score', ascending=False)
-
-    # Save to CSV with all features
-    filename = f'output/high_confidence_errors_above_{threshold}.csv'
-    high_conf_errors.to_csv(filename, index=False)
-
-    print(f"✓ Saved {len(high_conf_errors)} high confidence errors to: {filename}")
-    print(f"  Columns saved: {len(high_conf_errors.columns)}")
-    print(
-        f"  Confidence range: {high_conf_errors['confidence_score'].min():.4f} - {high_conf_errors['confidence_score'].max():.4f}")
-
-    # Show breakdown by error type
-    false_positives = (high_conf_errors['predicted_label'] == 1).sum()
-    false_negatives = (high_conf_errors['predicted_label'] == 0).sum()
-
-    print(f"  Error breakdown:")
-    print(f"    False Positives: {false_positives}")
-    print(f"    False Negatives: {false_negatives}")
-
-    # Show some examples
-    print(f"\n  Top 3 most confident errors:")
-    for i, (_, row) in enumerate(high_conf_errors.head(3).iterrows()):
-        error_type = "FP" if row['predicted_label'] == 1 else "FN"
-        print(f"    {i + 1}. {error_type} - Conf: {row['confidence_score']:.4f}", end="")
-        if 'r1r2' in row and pd.notna(row['r1r2']):
-            print(f", R-product: {row['r1r2']:.6f}", end="")
-        if 'monomer1_name' in row and pd.notna(row['monomer1_name']):
-            print(f", Monomers: {row['monomer1_name']} + {row['monomer2_name']}")
-        else:
-            print()
-
-    return high_conf_errors
-
