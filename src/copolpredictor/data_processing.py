@@ -278,7 +278,7 @@ def process_embeddings(df, column_name, prefix):
     return df
 
 
-def load_and_preprocess_data(input_path="../data_extraction/new/extracted_reactions.csv"):
+def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.csv"):
     """
     Main function to load and preprocess data
 
@@ -351,7 +351,7 @@ def load_and_preprocess_data(input_path="../data_extraction/new/extracted_reacti
             print(f"JSON filename column found: {col} with {combined_df[col].nunique()} unique values")
 
     # Save processed data
-    combined_df.to_csv("processed_data_new.csv", index=False)
+    combined_df.to_csv("processed_data.csv", index=False)
     print("Data saved to processed_data.csv")
 
     return combined_df

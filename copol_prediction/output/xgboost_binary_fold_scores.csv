@@ -1,0 +1,6 @@
+fold,accuracy,precision,recall,f1_score,auc,best_params
+1,0.9078694817658349,0.9482758620689655,0.9482758620689655,0.9482758620689655,0.888365849969752,"{'subsample': 1.0, 'reg_lambda': 1.5, 'reg_alpha': 0.5, 'n_estimators': 200, 'max_depth': 5, 'learning_rate': 0.2, 'colsample_bytree': 0.8}"
+2,0.8694817658349329,0.9575471698113207,0.8903508771929824,0.9227272727272727,0.8680077597840756,"{'subsample': 0.8, 'reg_lambda': 2, 'reg_alpha': 0, 'n_estimators': 100, 'max_depth': 3, 'learning_rate': 0.1, 'colsample_bytree': 0.8}"
+3,0.8973128598848369,0.9526952695269527,0.9311827956989247,0.9418162044589451,0.8819796466973887,"{'subsample': 0.8, 'reg_lambda': 1, 'reg_alpha': 0.5, 'n_estimators': 100, 'max_depth': 3, 'learning_rate': 0.2, 'colsample_bytree': 0.9}"
+4,0.8692307692307693,0.9376391982182628,0.913232104121475,0.9252747252747253,0.8638277142542005,"{'subsample': 0.8, 'reg_lambda': 2, 'reg_alpha': 0.1, 'n_estimators': 200, 'max_depth': 4, 'learning_rate': 0.01, 'colsample_bytree': 0.9}"
+5,0.9057692307692308,0.9462719298245614,0.9462719298245614,0.9462719298245614,0.8601716694078947,"{'subsample': 1.0, 'reg_lambda': 1.5, 'reg_alpha': 0.5, 'n_estimators': 200, 'max_depth': 5, 'learning_rate': 0.2, 'colsample_bytree': 0.8}"
