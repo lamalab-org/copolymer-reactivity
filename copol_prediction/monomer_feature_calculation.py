@@ -186,7 +186,8 @@ def main():
     Main function that loads SMILES from CSV and calculates properties
     """
     # Fixed parameters
-    csv_path = "../data_extraction/extracted_reactions.csv"
+    #csv_path = "../data_extraction/extracted_reactions.csv"
+    csv_path = "artificial_datapoints/augmented_temperature_only.csv"
     output_folder = "output/molecule_properties"
     smiles_error_path = "output/smiles_error.json"
 

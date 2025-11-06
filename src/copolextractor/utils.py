@@ -225,6 +225,8 @@ def get_or_create_embedding(text, model="text-embedding-3-small"):
 
         # Store the new embedding in the cache
         embedding_cache[text_cleaned] = embedding
+
+        print("Embedding: ", embedding)
         return embedding
     except Exception as e:
         print(f"Error getting embedding for '{text_cleaned}': {e}")
@@ -240,39 +242,6 @@ def is_within_deviation(actual_product, expected_product, deviation=0.10):
 
 # Load embeddings when the module is imported
 load_embeddings()
-
-
-def create_grouped_kfold_splits(df, n_splits=5, random_state=42, id_column='reaction_id'):
-    """
-    Create K-Fold splits that keep reactions with the same ID together
-    in either train or test set.
-    """
-    # Check if the ID column exists
-    if id_column not in df.columns:
-        print(f"Warning: {id_column} not found in DataFrame")
-        df['temp_reaction_id'] = df.index
-        id_column = 'temp_reaction_id'
-
-    # Get unique reaction IDs
-    unique_reaction_ids = df[id_column].unique()
-
-    # Shuffle the unique IDs
-    np.random.seed(random_state)
-    np.random.shuffle(unique_reaction_ids)
-
-    # Create folds based on unique reaction IDs
-    folds = np.array_split(unique_reaction_ids, n_splits)
-
-    # Create train/test splits
-    splits = []
-    for i in range(n_splits):
-        test_ids = folds[i]
-        test_mask = df[id_column].isin(test_ids)
-        test_indices = np.where(test_mask)[0]
-        train_indices = np.where(~test_mask)[0]
-        splits.append((train_indices, test_indices))
-
-    return splits
 
 
 # List of radical polymerization types

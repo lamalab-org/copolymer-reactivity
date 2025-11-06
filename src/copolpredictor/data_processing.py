@@ -9,6 +9,36 @@ import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
 from copolextractor import utils
+import re
+
+
+def _normalize_doi_for_key(s: str) -> str:
+    """Normalize various DOI formats (URL, 'doi:', etc.) to plain '10.xxxx/...'."""
+    if not isinstance(s, str) or not s.strip():
+        return ""
+    s = s.strip()
+    lowered = s.lower()
+    for p in ("https://doi.org/", "http://doi.org/", "doi:", "doi "):
+        if lowered.startswith(p):
+            s = s[len(p):]
+            break
+    return s.strip().lower()
+
+def _build_cache_key_from_row(original_source: str) -> str:
+    doi = _normalize_doi_for_key(original_source)
+    return f"doi::{doi}" if doi else ""
+
+def _load_specialized_cache(cache_path: str) -> dict:
+    try:
+        with open(cache_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except FileNotFoundError:
+        print(f"⚠️ specialized_filter cache not found at: {cache_path}")
+        return {}
+    except Exception as e:
+        print(f"⚠️ error reading specialized_filter cache: {e}")
+        return {}
 
 
 def load_molecular_data(smiles, base_path='./output/molecule_properties'):
@@ -36,7 +66,7 @@ def load_molecular_data(smiles, base_path='./output/molecule_properties'):
 
         return d
     except FileNotFoundError:
-        print(f"File not found for SMILES: {smiles}")
+        print(f"File not found for SMILES: {smiles} in {file_path}")
         return None
     except Exception as e:
         print(f"Error processing molecular data for {smiles}: {e}")
@@ -153,12 +183,20 @@ def create_flipped_dataset(df):
     for index, row in df.iterrows():
         flipped_row = row.copy()
         # Swap monomer fields
+        if 'constant_1' in row:
+            flipped_row['constant_1'] = row['constant_2']
+            flipped_row['constant_2'] = row['constant_1']
+            flipped_row['constant_conf_1'] = row['constant_conf_2']
+            flipped_row['constant_conf_2'] = row['constant_conf_1']
+
         flipped_row['monomer1_smiles'] = row['monomer2_smiles']
         flipped_row['monomer2_smiles'] = row['monomer1_smiles']
         flipped_row['monomer1_name'] = row['monomer2_name']
         flipped_row['monomer2_name'] = row['monomer1_name']
-        flipped_row['constant_1'] = row['constant_2']
-        flipped_row['constant_2'] = row['constant_1']
+        flipped_row['delta_HOMO_LUMO_AA'] = row['delta_HOMO_LUMO_BB']
+        flipped_row['delta_HOMO_LUMO_BB'] = row['delta_HOMO_LUMO_AA']
+        flipped_row['delta_HOMO_LUMO_AB'] = row['delta_HOMO_LUMO_BA']
+        flipped_row['delta_HOMO_LUMO_BA'] = row['delta_HOMO_LUMO_AB']
 
         # Swap JSON filenames
         if 'json_filename_1' in row and 'json_filename_2' in row:
@@ -278,7 +316,69 @@ def process_embeddings(df, column_name, prefix):
     return df
 
 
-def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.csv"):
+def add_solvent_features(df):
+    """
+    Adds molecular features derived from the 'solvent_smiles' column.
+    Handles invalid values like 'Na', NaN, or empty strings cleanly.
+    """
+
+    from rdkit import Chem
+    from rdkit.Chem import Descriptors, rdMolDescriptors
+
+    def is_invalid(smiles):
+        if pd.isna(smiles):
+            return True
+        if not isinstance(smiles, str):
+            return True
+        smiles = smiles.strip().lower()
+        return smiles in {"", "na", "nan", "none"}
+
+    def calc_features(smiles):
+        if is_invalid(smiles):
+            return [None] * 10
+
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return [None] * 10
+
+        return [
+            Descriptors.MolLogP(mol),                         # lipophilicity
+            rdMolDescriptors.CalcTPSA(mol),                   # polar surface area
+            rdMolDescriptors.CalcNumHBA(mol),                 # H-bond acceptors
+            rdMolDescriptors.CalcNumHBD(mol),                 # H-bond donors
+            Descriptors.FractionCSP3(mol),                    # saturation
+            Descriptors.MolMR(mol),                           # polarizability
+            rdMolDescriptors.CalcLabuteASA(mol),              # surface area
+            Descriptors.NumRotatableBonds(mol),               # flexibility
+            Descriptors.RingCount(mol),                       # number of rings
+            Descriptors.HeavyAtomCount(mol)                   # heavy atoms
+        ]
+
+    feature_cols = [
+        'solvent_logP',
+        'solvent_TPSA',
+        'solvent_HBA',
+        'solvent_HBD',
+        'solvent_FractionCSP3',
+        'solvent_MolMR',
+        'solvent_LabuteASA',
+        'solvent_NumRotatableBonds',
+        'solvent_RingCount',
+        'solvent_HeavyAtomCount'
+    ]
+
+    print("Calculating solvent molecular features...")
+    feature_values = df['solvent_smiles'].apply(calc_features)
+
+    feature_df = pd.DataFrame(feature_values.tolist(), columns=feature_cols)
+
+    df = pd.concat([df.reset_index(drop=True), feature_df], axis=1)
+
+    return df
+
+
+def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.csv",
+                             specialized_cache_path="llm_specialized_filter/classification_cache.json"):
     """
     Main function to load and preprocess data
 
@@ -298,6 +398,25 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
         print(f"Error loading data: {e}")
         return None
 
+    print("\nMerging specialized_filter from cache...")
+    cache = _load_specialized_cache(specialized_cache_path)
+
+    def _lookup_specialized(row):
+        key = _build_cache_key_from_row(row.get("original_source", ""))
+        if key and key in cache:
+            cls = str(cache[key].get("classification", "")).strip().lower()
+            if cls in ("normal", "specialized", "unclear"):
+                return cls
+        return "unclear"
+
+    if "specialized_filter" not in df.columns:
+        df["specialized_filter"] = df.apply(_lookup_specialized, axis=1)
+    else:
+        mask_empty = ~df["specialized_filter"].astype(str).str.strip().isin(["normal", "specialized", "unclear"])
+        df.loc[mask_empty, "specialized_filter"] = df.loc[mask_empty].apply(_lookup_specialized, axis=1)
+
+    print("specialized_filter value counts:", df["specialized_filter"].value_counts(dropna=False).to_dict())
+
     # Display columns for debugging
     print("\nAvailable columns:")
     for col in sorted(df.columns):
@@ -313,6 +432,47 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
     print(df[['constant_1', 'constant_2']].dtypes)
 
     df['r1r2'] = df['constant_1'] * df['constant_2']
+
+    # Mask for rows where both confidence intervals are present
+    mask_conf = df[['constant_conf_1', 'constant_conf_2']].notnull().all(axis=1)
+
+    # Compute +/- confidence versions of constants
+    df.loc[mask_conf, 'constant_1_plus'] = df.loc[mask_conf, 'constant_1'] + df.loc[mask_conf, 'constant_conf_1']
+    df.loc[mask_conf, 'constant_1_minus'] = df.loc[mask_conf, 'constant_1'] - df.loc[mask_conf, 'constant_conf_1']
+    df.loc[mask_conf, 'constant_2_plus'] = df.loc[mask_conf, 'constant_2'] + df.loc[mask_conf, 'constant_conf_2']
+    df.loc[mask_conf, 'constant_2_minus'] = df.loc[mask_conf, 'constant_2'] - df.loc[mask_conf, 'constant_conf_2']
+
+    # Define all variants
+    c1_variants = {
+        'orig': 'constant_1',
+        'plus': 'constant_1_plus',
+        'minus': 'constant_1_minus',
+    }
+
+    c2_variants = {
+        'orig': 'constant_2',
+        'plus': 'constant_2_plus',
+        'minus': 'constant_2_minus',
+    }
+
+    # Compute all product combinations except (orig, orig)
+    for c1_key, c1_col in c1_variants.items():
+        for c2_key, c2_col in c2_variants.items():
+            if c1_key == 'orig' and c2_key == 'orig':
+                continue  # skip the base case, already computed as 'r1r2'
+            product_col = f'product_c1{c1_key}_c2{c2_key}'
+            df.loc[mask_conf, product_col] = df.loc[mask_conf, c1_col] * df.loc[mask_conf, c2_col]
+
+    # Print preview of computed product columns
+    product_cols = [col for col in df.columns if col.startswith('product_c1')]
+    print(df[['r1r2'] + product_cols].head())
+
+    # Count how many rows have confidence values for both constants
+    num_rows_with_conf = mask_conf.sum()
+    print(f"Number of rows with confidence intervals (and extended product combinations): {num_rows_with_conf}")
+
+    df = add_solvent_features(df)
+    print(f"DataFrame shape after adding solvent features: {df.shape}")
 
     # Add molecular features
     print("Adding molecular features...")
