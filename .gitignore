@@ -420,3 +420,17 @@ copol_prediction/output/extracted_data_w_features_filtered_copol.json
 /data_extraction/output/PDF/
 /data_extraction/processed_images/
 /data_extraction/output/processed_images/
+
+# Data extraction artifacts (heavy, reproducible)
+data_extraction/artifacts/**
+!data_extraction/artifacts/datasets/**
+!data_extraction/artifacts/logs/**
+!data_extraction/artifacts/metadata/output/journals.json
+!data_extraction/artifacts/metadata/output/paper_list.json
+!data_extraction/artifacts/metadata/output/scored_doi.json
+!data_extraction/artifacts/metadata/output/selected_papers.json
+!data_extraction/artifacts/metadata/output/selected_200_papers.json
+
+# Evaluation archives raw caches/images
+data_extraction/archive/evaluations/llm_comparison/artifacts/**
+

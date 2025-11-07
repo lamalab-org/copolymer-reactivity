@@ -1,160 +1,266 @@
-from copolextractor.preextractionfilter.pre_extraction_filter import main as pre_extraction_filter
+"""Convenience entry point for orchestrating the data-extraction pipeline.
+
+The module pulls together the individual building blocks that live in
+``src/copolextractor``.  Two lightweight data classes allow us to declare the
+static configuration (paths, thresholds, prompts, …) and select which steps to
+run.  This is useful because many steps are slow or depend on third-party
+services and should therefore be executed on demand.
+
+Typical usage::
+
+    from data_extraction.obtain_data import ExtractionConfig, ExtractionSteps, obtain_data
+
+    config = ExtractionConfig(...)
+    steps = ExtractionSteps(crossref_search=True, extraction=True)
+    obtain_data(config, steps)
+
+The default ``main`` function keeps the behaviour users are familiar with by
+only executing the expensive LLM-based extraction followed by persisting the
+results.  All other steps can be enabled via the ``ExtractionSteps`` flags.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional
+
 from copolextractor.PDF_download import main as pdf_download
-from copolextractor.predownloadfilter.pre_download_filter import main as pre_download_filter
 from copolextractor.crossref_search import main as crossref_search
-from copolextractor.extraction_with_GPT_PDF import main as extractor
 from copolextractor.data_into_csv import main as save_data
+from copolextractor.extraction_with_GPT_PDF import main as extractor
+from copolextractor.predownloadfilter.pre_download_filter import (
+    main as pre_download_filter,
+)
+from copolextractor.preextractionfilter.pre_extraction_filter import (
+    main as pre_extraction_filter,
+)
+
+
+@dataclass
+class ExtractionConfig:
+    """Holds the static configuration for the extraction pipeline.
+
+    Paths are stored as :class:`~pathlib.Path` objects to avoid fragile
+    string-based path juggling.  Downstream functions still expect strings, so
+    we convert them just before invoking the respective modules.
+    """
+
+    crossref_keyword: str
+    output_file_crossref_search: Path
+    crossref_metadata_output_file: Path
+    keywords_filter: Dict[str, int]
+    output_file_pre_download_filter: Path
+    score_limit: int
+    number_of_selected_papers: int
+    input_folder_images: Path
+    output_folder_data_extraction: Path
+    output_file_data_extraction: Path
+    seed_xgboost_model: int
+    threshold_xgboost_model: float
+    pdf_folder: Path
+    output_folder_images: Path
+    output_folder_llm_score: Path
+    training_file_xgboost_model: Path
+    output_file_xgboost_filter: Path
+    key_embedding_filter: str
+    values_embedding_filter: List[str]
+    scoring_file_embedding_filter: Path
+    existing_doi_csv: Path
+
+
+@dataclass
+class ExtractionSteps:
+    """Select which parts of the pipeline should be executed.
+
+    The defaults mirror the previous behaviour: only the expensive extraction
+    step and the persistence layer run automatically.  Enable additional steps
+    when fresh metadata needs to be collected or the filters have to be
+    re-computed.
+    """
+
+    crossref_search: bool = False
+    pre_download_filter: bool = False
+    pdf_download: bool = False
+    pdf_quality_filter: bool = False
+    extraction: bool = True
+    persist_results: bool = True
+
+
+def _ensure_parent_dir(path: Path) -> None:
+    """Create the parent directory for *path* if necessary."""
+
+    if path.suffix:  # Treat items with a suffix as files
+        path.parent.mkdir(parents=True, exist_ok=True)
+    else:
+        path.mkdir(parents=True, exist_ok=True)
 
 
 def obtain_data(
-    crossref_keyword,
-    output_file_crossref_search,
-    crossref_metadata_output_file,
-    keywords_filter,
-    output_file_pre_download_filter,
-    score_limit,
-    number_of_selected_papers,
-    input_folder_images,
-    output_folder_data_extraction,
-    output_file_data_extraction,
-    seed_xgboost_model,
-    threshold_xgboost_model,
-    pdf_folder,
-    output_folder_images,
-    output_folder_LLM_score,
-    training_file_xgboost_model,
-    output_file_xgboost_filter,
-    key_embedding_filter,
-    values_embedding_filter,
-    scoring_file_embedding_filter,
-existing_doi_csv
-):
-    # crossref search for relevant paper
-    #crossref_search(crossref_keyword, output_file_crossref_search, crossref_metadata_output_file)
+    config: ExtractionConfig,
+    steps: Optional[ExtractionSteps] = None,
+) -> None:
+    """Run the extraction pipeline.
 
-    # metadata filter with keywords and embeddings
-    #pre_download_filter(keywords_filter, score_limit, number_of_selected_papers, crossref_metadata_output_file, output_file_pre_download_filter, key_embedding_filter, values_embedding_filter, scoring_file_embedding_filter, existing_doi_csv)
+    Args:
+        config: Static configuration describing inputs, outputs and thresholds.
+        steps: Optional selection of pipeline stages.  If omitted the default
+            :class:`ExtractionSteps` instance is used (extraction + persistence).
+    """
 
-    # PDF download with Scidownl
-    #pdf_download(output_file_pre_download_filter, pdf_folder)
+    steps = steps or ExtractionSteps()
 
-    # PDF quality XGBoost-filter
-    #pre_extraction_filter(seed_xgboost_model, threshold_xgboost_model, pdf_folder, output_folder_images, output_folder_LLM_score, training_file_xgboost_model, output_file_pre_download_filter, output_file_xgboost_filter)
+    # Ensure that all folders we are about to touch exist.
+    for folder in (
+        config.input_folder_images,
+        config.output_folder_data_extraction,
+        config.pdf_folder,
+        config.output_folder_images,
+        config.output_folder_llm_score,
+    ):
+        folder.mkdir(parents=True, exist_ok=True)
 
-    # Extraction
-    extractor(
-        input_folder_images,
-        output_folder_data_extraction,
-        output_file_xgboost_filter,
-        pdf_folder,
-        output_file_data_extraction,
+    if steps.crossref_search:
+        _ensure_parent_dir(config.output_file_crossref_search)
+        _ensure_parent_dir(config.crossref_metadata_output_file)
+        crossref_search(
+            config.crossref_keyword,
+            str(config.output_file_crossref_search),
+            str(config.crossref_metadata_output_file),
+        )
+
+    if steps.pre_download_filter:
+        _ensure_parent_dir(config.output_file_pre_download_filter)
+        pre_download_filter(
+            config.keywords_filter,
+            config.score_limit,
+            config.number_of_selected_papers,
+            str(config.crossref_metadata_output_file),
+            str(config.output_file_pre_download_filter),
+            config.key_embedding_filter,
+            config.values_embedding_filter,
+            str(config.scoring_file_embedding_filter),
+            str(config.existing_doi_csv),
+        )
+
+    if steps.pdf_download:
+        pdf_download(
+            str(config.output_file_pre_download_filter),
+            str(config.pdf_folder),
+        )
+
+    if steps.pdf_quality_filter:
+        _ensure_parent_dir(config.output_file_xgboost_filter)
+        pre_extraction_filter(
+            config.seed_xgboost_model,
+            config.threshold_xgboost_model,
+            str(config.pdf_folder),
+            str(config.output_folder_images),
+            str(config.output_folder_llm_score),
+            str(config.training_file_xgboost_model),
+            str(config.output_file_pre_download_filter),
+            str(config.output_file_xgboost_filter),
+            enable_pdf_processing=True,
+        )
+
+    if steps.extraction:
+        _ensure_parent_dir(config.output_file_data_extraction)
+        extractor(
+            str(config.input_folder_images),
+            str(config.output_folder_data_extraction),
+            str(config.output_file_xgboost_filter),
+            str(config.pdf_folder),
+            str(config.output_file_data_extraction),
+        )
+
+    if steps.persist_results:
+        save_data(str(config.output_folder_data_extraction))
+
+
+def main() -> None:
+    """Execute the default extraction pipeline configuration.
+
+    The configuration mirrors the previous hard-coded behaviour and keeps all
+    paths relative to the project root.  Only the extraction and CSV export run
+    by default to avoid accidental API calls or large downloads.  Toggle
+    additional steps via :class:`ExtractionSteps`.
+    """
+
+    base_dir = Path(__file__).resolve().parent
+    artifacts_dir = base_dir / "artifacts"
+    metadata_dir = artifacts_dir / "metadata" / "output"
+    llm_dir = artifacts_dir / "llm"
+    datasets_dir = artifacts_dir / "datasets"
+
+    llm_extractions_dir = llm_dir / "extractions" / "model_output_GPT4-o"
+    llm_scores_dir = llm_dir / "model_output_score"
+    llm_images_dir = llm_dir / "processed_images"
+
+    config = ExtractionConfig(
+        crossref_keyword="'copolymerization' AND 'reactivity ratio'",
+        output_file_crossref_search=metadata_dir / "crossref_search.json",
+        crossref_metadata_output_file=metadata_dir / "collected_doi_metadata.json",
+        keywords_filter={
+            "copolymerization": 10,
+            "polymerization": 5,
+            "monomers": 5,
+            "copolymers": 5,
+            "ratios": 20,
+            "reactivity ratios": 40,
+        },
+        output_file_pre_download_filter=metadata_dir / "selected_papers.json",
+        score_limit=65,
+        number_of_selected_papers=2000,
+        input_folder_images=llm_images_dir,
+        output_folder_data_extraction=llm_extractions_dir,
+        output_file_data_extraction=llm_dir / "extractions" / "extracted_data.json",
+        seed_xgboost_model=22,
+        threshold_xgboost_model=0.7,
+        pdf_folder=metadata_dir / "PDF",
+        output_folder_images=llm_images_dir,
+        output_folder_llm_score=llm_scores_dir,
+        training_file_xgboost_model=metadata_dir
+        / "copol_database"
+        / "copol_paper_list.json",
+        output_file_xgboost_filter=metadata_dir / "paper_list.json",
+        key_embedding_filter="polymerization_type",
+        values_embedding_filter=[
+            "free radical",
+            "Free radical",
+            "Free Radical",
+            "atom transfer radical polymerization",
+            "atom-transfer radical polymerization",
+            "nickel-mediated radical",
+            "bulk",
+            "Radical",
+            "radical",
+            "controlled radical",
+            "controlled/living radical",
+            "conventional radical polymerization",
+            "reversible deactivation radical polymerization",
+            "reversible addition-fragmentation chain transfer polymerization",
+            "reversible addition-fragmentation chain transfer",
+            "Homogeneous Radical",
+            "Radiation-induced",
+            "radiation-induced",
+            "Radiation-Initiated",
+            "photo-induced polymerization",
+            "photopolymerization",
+            "thermal polymerization",
+            "thermal",
+            "group transfer polymerization",
+            "Emulsion",
+            "Homogeneous Radical",
+            "semicontinuous emulsion",
+            "emulsion",
+        ],
+        scoring_file_embedding_filter=datasets_dir / "extracted_reactions.csv",
+        existing_doi_csv=datasets_dir / "extracted_reactions.csv",
     )
 
-    # Save data in database
-    save_data(output_folder_data_extraction)
+    steps = ExtractionSteps()
 
-
-def main():
-    # Crossref search
-    crossref_keyword = "'copolymerization' AND 'reactivity ratio'"  # Note that this prompt was created in the
-    # wrong way and collect all paper with reactivity and/or copolymerization in title and abstract
-    output_file_crossref_search = (
-        "./obtain_data/output/crossref_search.json"
-    )
-    crossref_metadata_output_file = (
-        "./obtain_data/output/collected_doi_metadata.json"
-    )
-
-    existing_doi_csv = 'extracted_reactions.csv'
-    # Keywords and weights for pre download scoring
-    keywords_filter = {
-        "copolymerization": 10,
-        "polymerization": 5,
-        "monomers": 5,
-        "copolymers": 5,
-        "ratios": 20,
-        "reactivity ratios": 40,
-    }
-
-    # Embedding filter
-    score_limit = 65  # Minimum score for embedding generation
-    number_of_selected_papers = 2000  # Number of nearest papers to select
-    output_file_pre_download_filter = "./output/selected_papers.json"
-    key_embedding_filter = "polymerization_type"
-    values_embedding_filter = [
-        'free radical', 'Free radical', 'Free Radical',
-        'atom transfer radical polymerization',
-        'atom-transfer radical polymerization',
-        'nickel-mediated radical', 'bulk',
-        'Radical', 'radical',
-        'controlled radical',
-        'controlled/living radical',
-        'conventional radical polymerization',
-        'reversible deactivation radical polymerization',
-        'reversible addition-fragmentation chain transfer polymerization',
-        'reversible addition-fragmentation chain transfer',
-        'Homogeneous Radical',
-        'Radiation-induced', 'radiation-induced',
-        'Radiation-Initiated',
-        'photo-induced polymerization',
-        'photopolymerization',
-        'thermal polymerization',
-        'thermal',
-        'group transfer polymerization',
-        'Emulsion',
-        'Homogeneous Radical',
-        'semicontinuous emulsion',
-        'emulsion'
-    ]
-    scoring_file_embedding_filter = "extracted_reactions.csv"
-
-    # PDF download
-    pdf_folder = "./output/PDF"  # the PDFs get downloaded form the SciHub corpus.
-    # People should be aware of copyright law before using this
-
-    # XGBoost filter
-    seed_xgboost_model = 22
-    threshold_xgboost_model = 0.7  # threshold to define precision limit for the filter
-    # LLM scoring PDF as parameters for XGBoost model
-    output_folder_images = "./output/processed_images"
-    output_folder_LLM_score = "./output/model_output_score"
-
-    training_file_xgboost_model = (
-        "output/copol_database/copol_paper_list.json"
-    )
-    output_file_xgboost_filter = "output/paper_list.json"
-
-    # Data extraction of filtered paper
-    input_folder_images = "./processed_images"
-    output_folder_data_extraction = "./model_output_GPT4-o"
-    output_file_data_extraction = (
-        "./comparison_of_models/extracted_data.json"
-    )
-
-    # run obtain data pipline
-    obtain_data(
-        crossref_keyword,
-        output_file_crossref_search,
-        crossref_metadata_output_file,
-        keywords_filter,
-        output_file_pre_download_filter,
-        score_limit,
-        number_of_selected_papers,
-        input_folder_images,
-        output_folder_data_extraction,
-        output_file_data_extraction,
-        seed_xgboost_model,
-        threshold_xgboost_model,
-        pdf_folder,
-        output_folder_images,
-        output_folder_LLM_score,
-        training_file_xgboost_model,
-        output_file_xgboost_filter,
-        key_embedding_filter,
-        values_embedding_filter,
-        scoring_file_embedding_filter,
-        existing_doi_csv
-    )
+    obtain_data(config, steps)
 
 
 if __name__ == "__main__":

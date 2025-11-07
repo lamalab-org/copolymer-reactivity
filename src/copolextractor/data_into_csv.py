@@ -1,6 +1,8 @@
 import json
 import os
 import csv
+from pathlib import Path
+
 from copolextractor import utils
 
 
@@ -310,15 +312,19 @@ def write_to_csv(data, output_file="output_2.csv"):
 
 
 def main(data_path):
-    output_file = "extracted_reactions.csv"
-    backup_file = output_file.replace(".csv", "_old.csv")
+    data_root = Path(__file__).resolve().parents[2] / "data_extraction"
+    datasets_dir = data_root / "artifacts" / "datasets"
+    datasets_dir.mkdir(parents=True, exist_ok=True)
+
+    output_file = datasets_dir / "extracted_reactions.csv"
+    backup_file = datasets_dir / "extracted_reactions_old.csv"
 
     # Load existing CSV if it exists
     existing_data, processed_sources = load_existing_csv(output_file)
 
     # Back up the old CSV
     if os.path.exists(output_file):
-        os.rename(output_file, backup_file)
+        os.replace(output_file, backup_file)
         print(f"Backup saved to {backup_file}")
 
     # Load raw JSON data

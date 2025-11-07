@@ -2,7 +2,10 @@ import time
 import datetime
 import os
 import json
+from pathlib import Path
+
 from pdf2image import convert_from_path
+
 import copolextractor.prompter as prompter
 import copolextractor.analyzer as az
 import copolextractor.image_processer as ip
@@ -421,7 +424,9 @@ def main(
     Main function to process PDFs and extracted JSON files.
     """
     # Define token stats file path
-    stats_file_path = "./token_stats.json"
+    data_root = Path(__file__).resolve().parents[2] / "data_extraction"
+    stats_file_path = data_root / "artifacts" / "logs" / "token_stats.json"
+    stats_file_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Load or create token statistics
     token_stats = load_or_create_token_stats(stats_file_path)
@@ -462,16 +467,17 @@ def main(
 
 if __name__ == "__main__":
     # Input and output folders
-    input_folder_images = "./processed_images"
-    output_folder = "./model_output_GPT4-o"
-    paper_list_path = "../../data_extraction/data_extraction_GPT-4o/output_2/paper_list.json"
-    pdf_folder = "../obtain_data/output_2/PDF"
-    extracted_data_file = "../../data_extraction/comparison_of_models/extracted_data.json"
+    base_path = Path(__file__).resolve().parents[2] / "data_extraction"
+    input_folder_images = base_path / "artifacts" / "llm" / "processed_images"
+    output_folder = base_path / "artifacts" / "llm" / "extractions" / "model_output_GPT4-o"
+    paper_list_path = base_path / "artifacts" / "metadata" / "output" / "paper_list.json"
+    pdf_folder = base_path / "artifacts" / "metadata" / "output" / "PDF"
+    extracted_data_file = base_path / "artifacts" / "llm" / "extractions" / "extracted_data.json"
 
     main(
-        input_folder_images,
-        output_folder,
-        paper_list_path,
-        pdf_folder,
-        extracted_data_file,
+        str(input_folder_images),
+        str(output_folder),
+        str(paper_list_path),
+        str(pdf_folder),
+        str(extracted_data_file),
     )
