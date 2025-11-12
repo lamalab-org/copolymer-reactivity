@@ -1,7 +1,40 @@
 # See https://setuptools.readthedocs.io/en/latest/build_meta.html
 [build-system]
 requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta:__legacy__"
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "copolymer-reactivity"
+version = "0.1.0"
+requires-python = ">=3.8"
+dependencies = [
+    "requests",
+    "crossrefapi",
+    "pdf2image",
+    "openai",
+    "backoff",
+    "pubchempy",
+    "diskcache",
+    "pyyaml",
+    "pandas",
+    "scikit-learn",
+    "xgboost",
+    "beautifulsoup4",
+    "selenium",
+    "pytesseract",
+    "opencv-python",
+    "Pillow",
+    "thefuzz",
+    "pint",
+    "anthropic",
+    "numpy",
+    "imutils",
+    "rdkit",
+    "doi2pdf",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.black]
 line-length = 100

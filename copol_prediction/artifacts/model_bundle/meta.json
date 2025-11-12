@@ -1,0 +1,26 @@
+{
+  "created_at": "2025-11-12T13:03:34.988232Z",
+  "feature_columns": [
+    "fukui_radical_max_1",
+    "fukui_radical_max_2",
+    "delta_HOMO_LUMO_AA",
+    "delta_HOMO_LUMO_AB",
+    "delta_HOMO_LUMO_BB",
+    "delta_HOMO_LUMO_BA",
+    "temperature",
+    "polytype_emb_1",
+    "polytype_emb_2",
+    "method_emb_1",
+    "method_emb_2",
+    "solvent_logP",
+    "solvent_TPSA",
+    "solvent_HBD",
+    "solvent_FractionCSP3"
+  ],
+  "class_labels": [
+    0,
+    1,
+    2
+  ],
+  "task": "multiclass_r_product_class"
+}

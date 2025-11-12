@@ -1,17 +1,26 @@
 """Convenience entry point for orchestrating the data-extraction pipeline.
 
 The module pulls together the individual building blocks that live in
-``src/copolextractor``.  Two lightweight data classes allow us to declare the
+``src/copolextractor``.  Lightweight data classes allow us to declare the
 static configuration (paths, thresholds, prompts, …) and select which steps to
 run.  This is useful because many steps are slow or depend on third-party
 services and should therefore be executed on demand.
 
 Typical usage::
 
-    from data_extraction.obtain_data import ExtractionConfig, ExtractionSteps, obtain_data
+    from data_extraction.obtain_data import (
+        ExtractionConfig, ExtractionSteps, CrossrefSteps, obtain_data
+    )
 
     config = ExtractionConfig(...)
+    
+    # Run full pipeline
     steps = ExtractionSteps(crossref_search=True, extraction=True)
+    obtain_data(config, steps)
+    
+    # Run only metadata fetch (skip copol database and crossref search)
+    substeps = CrossrefSteps(process_copol=False, process_crossref_search=False, fetch_metadata=True)
+    steps = ExtractionSteps(crossref_search=True, crossref_substeps=substeps, extraction=False)
     obtain_data(config, steps)
 
 The default ``main`` function keeps the behaviour users are familiar with by
@@ -70,6 +79,19 @@ class ExtractionConfig:
 
 
 @dataclass
+class CrossrefSteps:
+    """Select which sub-steps of the Crossref search should be executed.
+    
+    This allows fine-grained control over the Crossref module, enabling scenarios
+    like fetching only metadata for existing DOIs without re-running the search.
+    """
+    
+    process_copol: bool = False
+    process_crossref_search: bool = False
+    fetch_metadata: bool = True
+
+
+@dataclass
 class ExtractionSteps:
     """Select which parts of the pipeline should be executed.
 
@@ -79,7 +101,8 @@ class ExtractionSteps:
     re-computed.
     """
 
-    crossref_search: bool = False
+    crossref_search: bool = True
+    crossref_substeps: Optional[CrossrefSteps] = None
     pre_download_filter: bool = False
     pdf_download: bool = False
     pdf_quality_filter: bool = False
@@ -123,10 +146,17 @@ def obtain_data(
     if steps.crossref_search:
         _ensure_parent_dir(config.output_file_crossref_search)
         _ensure_parent_dir(config.crossref_metadata_output_file)
+        
+        # Use substeps if provided, otherwise run all substeps
+        substeps = steps.crossref_substeps or CrossrefSteps()
+        
         crossref_search(
             config.crossref_keyword,
             str(config.output_file_crossref_search),
             str(config.crossref_metadata_output_file),
+            process_copol=substeps.process_copol,
+            process_crossref_search=substeps.process_crossref_search,
+            fetch_metadata=substeps.fetch_metadata,
         )
 
     if steps.pre_download_filter:
@@ -197,7 +227,7 @@ def main() -> None:
     llm_images_dir = llm_dir / "processed_images"
 
     config = ExtractionConfig(
-        crossref_keyword="'copolymerization' AND 'reactivity ratio'",
+        crossref_keyword='copolymerization AND "reactivity ratio"',
         output_file_crossref_search=metadata_dir / "crossref_search.json",
         crossref_metadata_output_file=metadata_dir / "collected_doi_metadata.json",
         keywords_filter={

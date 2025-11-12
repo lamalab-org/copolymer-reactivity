@@ -44,7 +44,7 @@ def process_crossref(
     """Query CrossRef for papers that match *query* and persist the raw response."""
 
     print("Processing CrossRef papers...")
-    works = Works(timeout=60)
+    works = Works(timeout=120)
     query_result = works.query(bibliographic=query).select(
         "DOI", "title", "author", "type", "publisher", "issued"
     )
@@ -68,10 +68,17 @@ def get_crossref_data(doi: str, source: str, format_type: str | None) -> dict:
     if response.status_code == 200:
         data = response.json()
         item = data.get("message", {})
-        title = item.get("title", ["No title"])[0]
+        
+        # Safely extract title
+        title_list = item.get("title", [])
+        title = title_list[0] if title_list else "No title"
+        
+        # Safely extract journal
+        journal_list = item.get("container-title", [])
+        journal = journal_list[0] if journal_list else "No journal title"
+        
         abstract = item.get("abstract", "No abstract available")
         keywords = item.get("subject", "No keywords available")
-        journal = item.get("container-title", ["No journal title"])[0]
 
         return {
             "DOI": doi,
@@ -151,8 +158,22 @@ def main(
     *,
     copol_file_path: str | Path | None = None,
     collected_doi_output_file: str | Path | None = None,
+    process_copol: bool = True,
+    process_crossref_search: bool = True,
+    fetch_metadata: bool = True,
 ) -> None:
-    """Top-level helper that aggregates DOIs and metadata from various sources."""
+    """Top-level helper that aggregates DOIs and metadata from various sources.
+    
+    Args:
+        crossref_query: Query string for Crossref API search.
+        output_file_crossref_search: Path to save raw Crossref search results.
+        crossref_metadata_output_file: Path to save detailed metadata for all DOIs.
+        copol_file_path: Optional path to copol database file.
+        collected_doi_output_file: Optional path to save aggregated DOI list.
+        process_copol: If True, process copol database DOIs (default: True).
+        process_crossref_search: If True, perform Crossref search (default: True).
+        fetch_metadata: If True, fetch detailed metadata for DOIs (default: True).
+    """
 
     base_dir = _default_base_dir()
     metadata_root = base_dir / "artifacts" / "metadata" / "output"
@@ -172,7 +193,28 @@ def main(
 
     extracted_data: List[dict] = []
 
-    process_copol_database(copol_path, extracted_data)
-    process_crossref(crossref_query, output_crossref_path, extracted_data)
-    save_extracted_data(all_doi_output_path, extracted_data)
-    fetch_and_save_metadata(all_doi_output_path, metadata_output_path, extracted_data)
+    # Step 1: Process copol database (optional)
+    if process_copol:
+        process_copol_database(copol_path, extracted_data)
+    
+    # Step 2: Process Crossref search (optional)
+    if process_crossref_search:
+        process_crossref(crossref_query, output_crossref_path, extracted_data)
+    
+    # If we need to fetch metadata but haven't collected DOIs yet, load existing DOI file
+    if fetch_metadata and not (process_copol or process_crossref_search):
+        if all_doi_output_path.exists():
+            print(f"Loading existing DOI list from {all_doi_output_path}")
+            with all_doi_output_path.open("r", encoding="utf-8") as f:
+                extracted_data = json.load(f)
+        else:
+            print(f"Warning: No DOI data available. Run with process_copol=True or process_crossref_search=True first.")
+            return
+    
+    # Save aggregated DOI list if we collected any
+    if extracted_data and (process_copol or process_crossref_search):
+        save_extracted_data(all_doi_output_path, extracted_data)
+    
+    # Step 3: Fetch detailed metadata (optional)
+    if fetch_metadata:
+        fetch_and_save_metadata(all_doi_output_path, metadata_output_path, extracted_data)

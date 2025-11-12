@@ -96,7 +96,7 @@ def finalize_selected_filters_and_save(
         raise ValueError("reaction_id required for grouped split")
 
     if add_negative_data:
-        add_path = "artificial_datapoints/processed_combined_augmented.csv"
+        add_path = "filter/artificial_datapoints/processed_combined_augmented.csv"
         add_df = pd.read_csv(add_path)
         if 'Class' not in add_df.columns:
             raise ValueError("additional CSV must contain 'Class'")
@@ -569,7 +569,7 @@ def run_classification(
 
     plt.xlabel("r-product", fontsize=12)
     plt.ylabel("Number of reactions in dataset", fontsize=12)
-    plt.savefig("output/data_analysis/r_product_distribution.png")
+    plt.savefig("output/analysis/r_product_distribution.png")
 
     # Toggle: specialized removal
     if remove_specialized and "llm_specialized_filter" in df.columns:
@@ -612,7 +612,7 @@ def run_classification(
     if add_negative_data:
         log.info("Adding negative data from 'artificial_datapoints/processed_combined_augmented.csv'")
         negative_data_fraction = 1
-        additional_csv_path = "artificial_datapoints/processed_combined_augmented.csv"
+        additional_csv_path = "filter/artificial_datapoints/processed_combined_augmented.csv"
         df_new = pd.read_csv(additional_csv_path)
         if 'Class' not in df_new.columns:
             raise ValueError("The additional CSV must contain a 'Class' column.")
@@ -1364,11 +1364,11 @@ def calibrate_model_with_weights(
 
 
 # Integration into main function
-def main(process_data=True):
+def main(process_data=False):
     """Main function to run binary classification model"""
     import os
     # Input data path
-    data_path = "../data_extraction/extracted_reactions.csv"
+    data_path = "../data_extraction/artifacts/datasets/extracted_reactions.csv"
 
     # Set random seed for reproducibility
     random_state = 42
@@ -1390,7 +1390,7 @@ def main(process_data=True):
         # Save processed data
         df.to_csv("output/processed_data.csv", index=False)
     else:
-        df = pd.read_csv("llm_specialized_filter/classified_output.csv")
+        df = pd.read_csv("filter/llm_specialized_filter/classified_output.csv")
 
     # YOUR chosen filter combo (this is what you meant by "parameters")
     chosen = dict(
