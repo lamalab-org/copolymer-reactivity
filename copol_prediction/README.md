@@ -6,157 +6,162 @@ ML system for predicting copolymerization reactivity ratios from molecular descr
 
 Predicts r-product (r₁ × r₂) class:
 - **Class 0**: < 1 (Alternating)
-- **Class 1**: 1-25 (Random to weak block)
-- **Class 2**: > 25 (Strong block)
+- **Class 1**: 1-25 (Random to block-like)
+- **Class 2**: > 25 (Homopolymer)
 
 ## Quick Start
 
+### Installation
 ```bash
-# 1. Calculate molecular features (one-time)
-python monomer_feature_calculation.py
+pip install pandas numpy scikit-learn xgboost joblib morfeus-ml
+# For API: pip install fastapi uvicorn
+```
 
-# 2. Train model
+### Setup (First Time)
+```bash
+# 1. Create central train/test split
+cd ../experiments && python create_data_split.py
+
+# 2. Calculate molecular features (cached, ~1-5 min/monomer)
+cd ../copol_prediction && python monomer_feature_calculation.py
+```
+
+### Training
+```bash
+# Train final model (~20 min, includes automatic analysis)
 python train_final_model.py
 
-# 3. Make predictions
-python api.py  # Start REST API
-# or
+# Or test all filter combinations (~3 hours)
+cd ../experiments && python sweep_filters.py
+```
+
+### Prediction
+```python
 from copolpredictor.inference import CopolymerPredictor
+
 predictor = CopolymerPredictor("artifacts/model_bundle")
 result = predictor.predict_with_confidence(features)
+```
+
+Or via REST API:
+```bash
+python api.py  # http://localhost:8000/docs
+```
+
+## Central Data Split
+
+All scripts use a **central train/test split** (created once, reused everywhere):
+
+```bash
+cd ../experiments && python create_data_split.py [--remove-specialized]
+```
+
+Creates:
+- `artifacts/data_splits/train.csv` (~80% of groups)
+- `artifacts/data_splits/test.csv` (~20% of groups)
+- `artifacts/data_splits/split_info.json`
+
+**Benefits:** Reproducible, fair comparison, no data leakage (group-based split by `reaction_id`)
+
+**Usage in code:**
+```python
+from copol_prediction import load_data_split
+df_train, df_test = load_data_split.load_train_test_split()
 ```
 
 ## Scripts
 
 | Script | Purpose | Time |
 |--------|---------|------|
+| `train_final_model.py` | Train production model + analysis | ~20 min |
+| `analysis/analyze_model.py` | Generate analysis plots | < 1 min |
+| `../experiments/sweep_filters.py` | Test 16 filter combinations | ~3 hours |
+| `../experiments/create_data_split.py` | Create central split | < 1 min |
 | `monomer_feature_calculation.py` | Calculate molecular features | 1-5 min/monomer |
-| `train_final_model.py` | Train production model | ~20 min |
-| `sweep_filters.py` | Test filter combinations | ~3 hours |
-| `analyze_model.py` | Generate analysis plots | < 1 min |
-| `api.py` | REST API for predictions | Instant |
+| `api.py` | REST API server | Instant |
 
 ### train_final_model.py
 
-Train production model with hyperparameter optimization.
+Trains model with hyperparameter optimization and **automatically runs analysis**.
 
 ```bash
 python train_final_model.py [options]
 
 Options:
-  --data-path PATH         Input CSV (default: ../data_extraction/extracted_reactions.csv)
   --output-dir DIR         Model directory (default: artifacts/model_bundle)
   --hyperparam-iter N      Search iterations (default: 25)
   --augmentation-samples N Augmentation samples (default: 5)
   --random-state N         Random seed (default: 42)
 ```
 
-### sweep_filters.py
-
-Test all 16 filter combinations (4×4 matrix) on the same holdout set.
-
-```bash
-python sweep_filters.py [options]
-
-Options:
-  --n-iter N               Iterations per config (default: 10)
-  --output-dir DIR         Results directory
-  --plots-dir DIR          Plots directory
-  --augmentation-samples N Augmentation samples (default: 5)
+**Configuration** (edit lines 371-373 in file):
+```python
+config = {
+    'add_negative_data': True,    # Add synthetic negatives
+    'use_augmentation': False,    # Gaussian augmentation
+}
 ```
 
-**Filter combinations tested (4×4 = 16):**
-- Rows: `remove_specialized` × `add_negative_data` (4 combos)
-- Cols: `use_augmentation` × `apply_polymerization_filter` (4 combos)
+### analysis/analyze_model.py
 
-**Generated visualizations:**
-- `filter_matrix_holdout_f1_weighted.png` - 4×4 heatmap of F1 scores
-- `filter_matrix_holdout_accuracy.png` - 4×4 heatmap of accuracy
-- `filter_matrix_holdout_f1_macro.png` - 4×4 heatmap of macro F1
-- Traditional bar plots for comparison
-
-Results saved to `artifacts/experiments_holdout/` and plots to `output/model_comp/`.
-
-**Note:** All combinations are tested on the **same holdout set** for fair comparison.
-
-### analyze_model.py
-
-Generate analysis plots for trained models.
+Generate analysis plots (automatically runs after training).
 
 ```bash
-python analyze_model.py [options]
+python analysis/analyze_model.py --all [--compare-holdout]
 
-Options:
-  --model-path PATH     Model bundle path (default: artifacts/model_bundle)
-  --data-path PATH      Data CSV path (default: output/processed_data.csv)
-  --output-dir DIR      Output directory (default: output/analysis)
-  --holdout-only        Use only holdout set
-  --compare-holdout     Generate plots for both all data and holdout set
-  
-  # Plot selection (omit to generate all)
-  --all                 Generate all plots
-  --confusion           Confusion matrix
-  --confidence          Confidence distribution
-  --features            Feature importance
-  --calibration         Calibration curves
-  --errors              Error analysis by class
-  --confidence-vs-r1r2  Confidence vs r-product
-  --filtering           Dynamic confidence filtering analysis
-  --min-retention N     Minimum retention rate (default: 0.7)
+Key options:
+  --compare-holdout        Generate plots for all data + holdout
+  --holdout-only          Only holdout set
+  --filtering             Dynamic confidence filtering
+  --min-retention N       Min retention rate (default: 0.7)
 ```
 
 **Generated plots:**
-- `confusion_matrix.png` - Confusion matrix (absolute & normalized)
-- `confidence_distribution.png` - Confidence score distributions
-- `feature_importance.png` - Top feature importances
-- `calibration_curves.png` - Calibration curves per class
-- `error_analysis_by_class.png` - Error analysis breakdown
-- `confidence_vs_r1r2.png` - Confidence vs r-product value
-- `confidence_filtering_analysis.png` - Dynamic filtering analysis (4 subplots)
-- `confidence_filtering_report.txt` - Detailed filtering report
+- Confusion matrices (absolute & normalized)
+- Confidence distributions (correct vs incorrect)
+- Feature importance
+- Calibration curves per class
+- Error analysis by class
+- Confidence vs r-product
+- Confidence filtering analysis
 
-**Plot Styling:** All plots use consistent colors and styling from `plot_config.py`, which loads the LamaLab matplotlib style (`plots_and_figures/lamalab.mplstyle`). Customize colors by editing `plot_config.py`.
+### sweep_filters.py
 
-**Examples:**
+Tests all 16 filter combinations (4×4 matrix) on same holdout set.
+
 ```bash
-# All plots (all data)
-python analyze_model.py --all
-
-# Compare all data vs holdout set
-python analyze_model.py --all --compare-holdout
-
-# Only holdout set
-python analyze_model.py --all --holdout-only
-
-# Specific plots
-python analyze_model.py --confusion --confidence --features
-
-# With confidence filtering (keeps min 70% per class, removes bad high-conf predictions)
-python analyze_model.py --all --min-retention 0.7
-
-# Compare holdout with filtering
-python analyze_model.py --compare-holdout --filtering --min-retention 0.8
+cd ../experiments && python sweep_filters.py [--n-iter N]
 ```
 
-**Confidence Filtering:**  
-Dynamically finds optimal confidence threshold per class:
-- Keeps minimum 70% of predictions per class (adjustable)
-- Removes incorrect predictions with high confidence if they outnumber correct ones
-- Generates detailed report showing accuracy improvement after filtering
+**Combinations tested:**
+- Rows: `remove_specialized` × `add_negative_data` (4 combos)
+- Cols: `use_augmentation` × `apply_polymerization_filter` (4 combos)
 
-### api.py
+Results saved to `artifacts/experiments_holdout/` with heatmap visualizations.
 
-REST API for predictions.
+## Python API
+
+```python
+from copolpredictor.inference import CopolymerPredictor, batch_predict
+
+# Single prediction
+predictor = CopolymerPredictor("artifacts/model_bundle")
+result = predictor.predict_with_confidence(features)
+# Returns: {'predictions': [1], 'probabilities': [...], 'confidence': [0.85]}
+
+# Batch prediction
+batch_predict("input.csv", "output.csv")
+```
+
+## REST API
 
 ```bash
-python api.py
-# API runs at http://localhost:8000
-# Docs at http://localhost:8000/docs
+python api.py  # Runs at http://localhost:8000
 ```
 
 **Endpoints:**
 - `GET /health` - Health check
-- `GET /model/info` - Model info
+- `GET /model/info` - Model metadata
 - `POST /predict` - Single prediction
 - `POST /predict/batch` - Batch predictions
 
@@ -167,109 +172,125 @@ curl -X POST "http://localhost:8000/predict" \
   -d '{"features": {...}}'
 ```
 
-## Python API
-
-```python
-from copolpredictor.inference import CopolymerPredictor
-
-# Load model
-predictor = CopolymerPredictor("artifacts/model_bundle")
-
-# Single prediction
-result = predictor.predict_with_confidence(features)
-# Returns: {'predictions': [1], 'probabilities': [...], 'confidence': [0.85]}
-
-# Batch prediction
-from copolpredictor.inference import batch_predict
-batch_predict("input.csv", "output.csv")
-```
-
-## Configuration
-
-Edit `train_final_model.py` (lines 402-407):
-
-```python
-config = {
-    'remove_specialized': False,   # Remove specialized reactions
-    'add_negative_data': True,     # Add synthetic negatives
-    'use_augmentation': False,     # Gaussian augmentation
-}
-```
-
 ## Data Format
 
-Required columns:
+**Required columns:**
 - `monomer1_smiles`, `monomer2_smiles` - SMILES strings
-- `constant_1`, `constant_2` - Reactivity ratios
+- `constant_1`, `constant_2` - Reactivity ratios (r₁, r₂)
 - `temperature`, `solvent_smiles`, `polymerization_type`, `method`
-- `reaction_id` - Unique identifier
+- `reaction_id` - Unique group identifier
 
 ## Features
 
 ~15 features used:
-- Molecular: Fukui indices, HOMO/LUMO, orbital interactions
-- Conditions: Temperature, solvent properties, method (embedded)
-
-## Modules
-
-```
-src/copolpredictor/
-├── data_processing.py    # Data loading & preprocessing
-├── data_augmentation.py  # Data augmentation
-├── model_training.py     # Training & saving
-├── evaluation.py         # Evaluation & metrics
-├── calibration.py        # Model calibration
-├── holdout_utils.py      # Holdout management
-└── inference.py          # Prediction API
-```
-
-**Key functions:**
-- `train_xgboost_with_cv()` - Train with CV
-- `save_model_bundle()` / `load_model_bundle()` - Model I/O
-- `evaluate_model()` - Evaluation
-- `CopolymerPredictor` - High-level inference
+- **Molecular:** Fukui indices, HOMO/LUMO, orbital interactions
+- **Conditions:** Temperature, solvent properties (logP, TPSA, HBD, FractionCSP3)
+- **Embeddings:** Method and polymerization type (PCA-reduced)
 
 ## Model Pipeline
 
-1. Persistent holdout split (~20%, group-based by reaction_id)
-2. Hyperparameter search (RandomizedSearchCV, 5-fold GroupKFold)
-3. Train on full training set with best params
-4. Evaluate on holdout
-5. Save bundle: `model.joblib`, `meta.json`
+1. Load central train/test split (group-based, ~20% test)
+2. Optional: Add negative data, augmentation
+3. Hyperparameter search (RandomizedSearchCV, 5-fold GroupKFold)
+4. Train final model on full training set
+5. Evaluate on holdout
+6. Save model bundle + metadata
+7. Generate analysis plots
 
 ## Performance
 
 Typical holdout results:
-- Accuracy: 75-85%
-- F1 (weighted): 0.75-0.85
+- **Accuracy:** 75-85%
+- **F1 (weighted):** 0.75-0.85
+
+**Confidence interpretation:**
+- \> 0.8: High confidence
+- 0.6-0.8: Medium confidence
+- < 0.6: Low confidence (validate experimentally)
+
+## Project Structure
+
+```
+copol_prediction/
+├── train_final_model.py       # Main training script
+├── api.py                      # REST API
+├── load_data_split.py          # Load central split
+├── monomer_feature_calculation.py
+├── analysis/
+│   ├── analyze_model.py        # Analysis plots
+│   ├── plot_config.py          # Plot styling
+│   ├── error_analysis.py
+│   └── permutation_analysis.py
+├── artifacts/
+│   ├── data_splits/            # Central train/test split
+│   ├── model_bundle/           # Trained model
+│   └── experiments_holdout/    # Sweep results
+└── output/
+    ├── analysis/               # Analysis plots
+    └── processed_data.csv
+
+src/copolpredictor/             # Core library
+├── data_processing.py
+├── model_training.py
+├── evaluation.py
+├── inference.py                # CopolymerPredictor
+└── ...
+```
+
+## Modules (src/copolpredictor/)
+
+| Module | Purpose |
+|--------|---------|
+| `data_processing.py` | Data loading & preprocessing |
+| `data_augmentation.py` | Gaussian augmentation |
+| `model_training.py` | Training, CV, model saving |
+| `evaluation.py` | Metrics & evaluation |
+| `calibration.py` | Model calibration |
+| `holdout_utils.py` | Holdout set management |
+| `inference.py` | CopolymerPredictor class |
+| `prediction_utils.py` | Feature definitions |
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| Model not found | Run `python train_final_model.py` |
-| Missing features | Run `python monomer_feature_calculation.py` |
+| Model not found | `python train_final_model.py` |
+| Missing features | `python monomer_feature_calculation.py` |
+| No train/test split | `cd ../experiments && python create_data_split.py` |
 | API port in use | `lsof -ti:8000 \| xargs kill` |
+| Quick test | `python train_final_model.py --hyperparam-iter 5` |
 
-## Requirements
+## Common Commands
 
 ```bash
-pip install pandas numpy scikit-learn xgboost joblib
+# Quick test (fewer iterations)
+python train_final_model.py --hyperparam-iter 5
 
-# For API
-pip install fastapi uvicorn
+# Manual analysis (if needed)
+python analysis/analyze_model.py --all --compare-holdout
 
-# For features
-pip install morfeus-ml
+# Recreate data split
+cd ../experiments && python create_data_split.py
+
+# Kill API
+lsof -ti:8000 | xargs kill
+
+# Run specific analysis
+python analysis/analyze_model.py --confusion --confidence --features
 ```
 
-See `requirements_api.txt` for full API dependencies.
+## Notes
+
+- **Plot Styling:** All plots use LamaLab matplotlib style from `plots_and_figures/lamalab.mplstyle`
+- **Confidence Filtering:** Dynamic thresholding per class to improve accuracy
+- **Reproducibility:** Fixed random seed (42), central split ensures consistency
+- **Legacy:** Old `classification.py` kept for reference, use new modular scripts
 
 ## Migration from classification.py
 
-Old `classification.py` is kept for reference. Use instead:
-- `train_final_model.py` → replaces `main()`
-- `sweep_filters.py` → replaces `sweep_filters_and_plot()`
-- `CopolymerPredictor` → replaces manual model loading
+Old monolithic script → New modular system:
+- `classification.py::main()` → `train_final_model.py`
+- `classification.py::sweep_filters_and_plot()` → `experiments/sweep_filters.py`
+- Manual model loading → `CopolymerPredictor` class
 
-All functions preserved in new modules.
+All functionality preserved in new modules under `src/copolpredictor/`.

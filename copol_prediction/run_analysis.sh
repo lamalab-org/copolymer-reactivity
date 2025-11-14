@@ -5,5 +5,5 @@
 export PYTHONPATH="/Users/maraw/PycharmProjects/test/src:$PYTHONPATH"
 
 # Run analysis script with all arguments passed through
-python analyze_model.py "$@"
+python analysis/analyze_model.py "$@"
 

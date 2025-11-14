@@ -9,10 +9,10 @@ import warnings
 import datetime
 
 from copolpredictor import data_processing
-from error_analysis import perform_error_analysis
+from analysis.error_analysis import perform_error_analysis
 from copolpredictor.prediction_utils import feature_columns, compute_quality_weighted_accuracy, create_grouped_kfold_splits
 from copolpredictor.data_augmentation import augment_with_gaussian_samples
-from permutation_analysis import run_permutation_analysis, create_feature_importance_comparison
+from analysis.permutation_analysis import run_permutation_analysis, create_feature_importance_comparison
 
 
 warnings.filterwarnings('ignore')

@@ -27,6 +27,7 @@ from copolpredictor import (
     holdout_utils,
     prediction_utils
 )
+import load_data_split
 
 
 def parse_args():
@@ -35,27 +36,10 @@ def parse_args():
         description="Train final copolymerization prediction model"
     )
     parser.add_argument(
-        "--data-path",
-        type=str,
-        default="../data_extraction/extracted_reactions.csv",
-        help="Path to input data CSV"
-    )
-    parser.add_argument(
         "--output-dir",
         type=str,
         default="artifacts/model_bundle",
         help="Directory to save model bundle"
-    )
-    parser.add_argument(
-        "--holdout-path",
-        type=str,
-        default="artifacts/test_ids.csv",
-        help="Path to persistent holdout group IDs"
-    )
-    parser.add_argument(
-        "--process-data",
-        action="store_true",
-        help="Process data from scratch (otherwise load processed_data.csv)"
     )
     parser.add_argument(
         "--random-state",
@@ -79,61 +63,38 @@ def parse_args():
     return parser.parse_args()
 
 
-def prepare_data(df, config):
+def prepare_data(config):
     """
-    Prepare data for training.
+    Load pre-split data and prepare for training.
     
     Args:
-        df: Input dataframe
         config: Configuration dictionary
         
     Returns:
-        Tuple of (train_df, holdout_df, base_df)
+        Tuple of (train_df, holdout_df, available_features)
     """
     print("\n" + "="*60)
     print("DATA PREPARATION")
     print("="*60)
     
-    # Create base dataset for holdout splitting
-    base_df = holdout_utils.make_base_dataset_for_holdout(df)
-    
-    # Apply filters
-    df_filtered = df.copy()
-    df_filtered = df_filtered[df_filtered['r1r2'].notna()]
-    df_filtered = df_filtered[df_filtered['r1r2'] >= 0]
-    
-    # Remove specialized if configured
-    if config['remove_specialized'] and 'llm_specialized_filter' in df_filtered.columns:
-        original_len = len(df_filtered)
-        df_filtered = df_filtered[df_filtered['llm_specialized_filter'] != 'specialized']
-        print(f"Removed {original_len - len(df_filtered)} specialized samples")
-    
-    # Create target classes
-    bins = [-np.inf, 1, 25, np.inf]
-    labels = [0, 1, 2]
-    df_filtered['r_product_class'] = pd.cut(
-        df_filtered['r1r2'], bins=bins, labels=labels, right=False
-    ).astype(int)
-    
-    # Override extremes
-    if {'constant_1', 'constant_2'}.issubset(df_filtered.columns):
-        extreme_mask = (
-            ((df_filtered['constant_1'] <= 0.1) & (df_filtered['constant_2'] > 25)) |
-            ((df_filtered['constant_2'] <= 0.1) & (df_filtered['constant_1'] > 25))
-        )
-        df_filtered.loc[extreme_mask, 'r_product_class'] = 2
-        print(f"Marked {extreme_mask.sum()} extreme cases as class 2")
+    # Load central train/test split
+    print("Loading central train/test split...")
+    try:
+        df_train, df_test = load_data_split.load_train_test_split()
+        load_data_split.print_split_info()
+    except FileNotFoundError as e:
+        print(f"\nError: {e}")
+        print("\nPlease create the central split first:")
+        print("  cd ../experiments && python create_data_split.py")
+        sys.exit(1)
     
     # Get available features
-    available_features = [c for c in prediction_utils.feature_columns if c in df_filtered.columns]
-    print(f"Using {len(available_features)} features")
+    available_features = [c for c in prediction_utils.feature_columns if c in df_train.columns]
+    print(f"\nUsing {len(available_features)} features")
+    print(f"  Train: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
+    print(f"  Test:  {len(df_test)} samples ({df_test['reaction_id'].nunique()} groups)")
     
-    # Remove NaN rows
-    X_all = df_filtered[available_features]
-    y_all = df_filtered['r_product_class'].astype(int)
-    mask = ~(pd.isna(X_all).any(axis=1) | pd.isna(y_all))
-    df_clean = df_filtered[mask].reset_index(drop=True)
-    print(f"Clean dataset: {len(df_clean)} samples")
+    # Note: NaN removal already done in create_data_split.py
 
     # Add negative data if configured
     if config['add_negative_data']:
@@ -143,26 +104,16 @@ def prepare_data(df, config):
             if 'Class' in df_neg.columns:
                 df_neg = df_neg.rename(columns={'Class': 'r_product_class'})
                 df_neg['r_product_class'] = df_neg['r_product_class'].astype(int)
-                df_filtered = pd.concat([df_clean, df_neg], ignore_index=True)
-                print(f"Added {len(df_neg)} negative data points. Dataset has now {len(df_filtered)}")
+                df_train = pd.concat([df_train, df_neg], ignore_index=True)
+                print(f"Added {len(df_neg)} negative data points to training set")
         else:
             print(f"Warning: Negative data file not found at {neg_path}")
     
-    # Split into train and holdout
-    holdout_groups = holdout_utils.get_or_create_holdout_groups(
-        base_df, 
-        group_col='reaction_id',
-        test_groups_path=config['holdout_path']
-    )
+    print(f"\nFinal dataset:")
+    print(f"  Train: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
+    print(f"  Test:  {len(df_test)} samples ({df_test['reaction_id'].nunique()} groups)")
     
-    df_train, df_holdout = holdout_utils.split_train_holdout(
-        df_filtered, holdout_groups, group_col='reaction_id'
-    )
-    
-    print(f"Training set: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
-    print(f"Holdout set: {len(df_holdout)} samples ({df_holdout['reaction_id'].nunique()} groups)")
-    
-    return df_train, df_holdout, available_features
+    return df_train, df_test, available_features
 
 
 def train_model(df_train, features, config):
@@ -293,6 +244,10 @@ def save_model(model_info, holdout_results, config):
     print("SAVING MODEL")
     print("="*60)
     
+    # Get split info to know if specialized were removed
+    split_info = load_data_split.get_split_info()
+    specialized_removed = split_info.get('remove_specialized_from_test', False) if split_info else False
+    
     # Prepare metadata
     metadata = {
         'best_params': model_info['best_params'],
@@ -305,7 +260,8 @@ def save_model(model_info, holdout_results, config):
             'augmentation_used': config['use_augmentation'],
             'augmentation_samples': config['augmentation_samples'],
             'negative_data_used': config['add_negative_data'],
-            'specialized_removed': config['remove_specialized'],
+            'specialized_removed_from_test': specialized_removed,
+            'used_central_split': True,
             'random_state': config['random_state']
         }
     }
@@ -331,21 +287,88 @@ def save_model(model_info, holdout_results, config):
     print(f"\n✓ Model bundle saved to: {bundle_path}")
 
 
+def run_analysis(model_path, data_path, output_dir):
+    """
+    Run model analysis after training.
+    
+    Args:
+        model_path: Path to trained model bundle
+        data_path: Path to processed data
+        output_dir: Output directory for analysis plots
+    """
+    print("\n" + "="*60)
+    print("RUNNING MODEL ANALYSIS")
+    print("="*60)
+    
+    try:
+        # Import analyze_model module
+        from analysis import analyze_model
+        
+        # Create mock args for analyze_model
+        class AnalysisArgs:
+            def __init__(self):
+                self.model_path = model_path
+                self.data_path = data_path
+                self.output_dir = output_dir
+                self.holdout_only = False
+                self.compare_holdout = True
+                self.all = True
+                self.confusion = False
+                self.confidence = False
+                self.features = False
+                self.calibration = False
+                self.errors = False
+                self.confidence_vs_r1r2 = False
+                self.filtering = False
+                self.min_retention = 0.7
+        
+        # Run analysis
+        analyze_model.setup_style()
+        os.makedirs(output_dir, exist_ok=True)
+        
+        predictor = analyze_model.CopolymerPredictor(model_path)
+        print(f"  ✓ Model loaded ({len(predictor.features)} features)")
+        
+        df_all = pd.read_csv(data_path)
+        print(f"  ✓ Data loaded ({len(df_all)} samples)")
+        
+        args = AnalysisArgs()
+        
+        # Generate plots for both all data and holdout
+        print("\n### All Data ###")
+        print(f"  Samples: {len(df_all)}")
+        analyze_model.generate_plots_for_dataset(df_all, predictor, args, suffix='All Data')
+        
+        print("\n### Holdout Set ###")
+        from copolpredictor.holdout_utils import get_or_create_holdout_groups, make_base_dataset_for_holdout
+        try:
+            base_df = make_base_dataset_for_holdout(df_all)
+            holdout_groups = get_or_create_holdout_groups(base_df)
+            df_holdout = df_all[df_all['reaction_id'].astype(str).isin(holdout_groups)].reset_index(drop=True)
+            print(f"  Samples: {len(df_holdout)}")
+            analyze_model.generate_plots_for_dataset(df_holdout, predictor, args, suffix='Holdout')
+        except Exception as e:
+            print(f"  ✗ Could not filter to holdout: {e}")
+        
+        print("\n  ✓ Analysis complete! Plots saved to: {output_dir}/")
+        
+    except Exception as e:
+        print(f"\n  ✗ Analysis failed: {e}")
+        print("  You can run analysis manually with:")
+        print(f"    python analysis/analyze_model.py --model-path {model_path}")
+
+
 def main():
     """Main training pipeline."""
     args = parse_args()
     
     # Configuration
     config = {
-        'data_path': args.data_path,
         'output_dir': args.output_dir,
-        'holdout_path': args.holdout_path,
-        'process_data': args.process_data,
         'random_state': args.random_state,
         'augmentation_samples': args.augmentation_samples,
         'hyperparam_iter': args.hyperparam_iter,
         # Training settings (can be adjusted)
-        'remove_specialized': False,
         'add_negative_data': True,
         'use_augmentation': False,
     }
@@ -357,28 +380,11 @@ def main():
     for key, value in config.items():
         print(f"  {key}: {value}")
     
-    # Load data
-    print("\n" + "="*60)
-    print("LOADING DATA")
-    print("="*60)
+    print("\nℹ️  Note: Using central train/test split from artifacts/data_splits/")
+    print("   To recreate split: cd ../experiments && python create_data_split.py")
     
-    if config['process_data']:
-        print("Processing data from scratch...")
-        df = data_processing.load_and_preprocess_data(config['data_path'])
-        if df is None or len(df) == 0:
-            print("Error: No data available after preprocessing")
-            sys.exit(1)
-    else:
-        processed_path = "output/processed_data.csv"
-        if not os.path.exists(processed_path):
-            print(f"Processed data not found at {processed_path}")
-            print("Run with --process-data flag to process from scratch")
-            sys.exit(1)
-        df = pd.read_csv(processed_path)
-        print(f"Loaded processed data: {len(df)} samples")
-    
-    # Prepare data
-    df_train, df_holdout, features = prepare_data(df, config)
+    # Prepare data (loads central split)
+    df_train, df_holdout, features = prepare_data(config)
     
     # Train model
     model_info = train_model(df_train, features, config)
@@ -397,6 +403,13 @@ def main():
     print("  from copolpredictor.inference import CopolymerPredictor")
     print(f"  predictor = CopolymerPredictor('{config['output_dir']}')")
     print("  predictions = predictor.predict(X)")
+    
+    # Run automatic analysis
+    run_analysis(
+        model_path=config['output_dir'],
+        data_path="output/processed_data.csv",
+        output_dir="output/analysis"
+    )
 
 
 if __name__ == "__main__":

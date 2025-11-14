@@ -1,5 +1,5 @@
 {
-  "created_at": "2025-11-12T13:03:34.988232Z",
+  "created_at": "2025-11-14T09:22:31.654067Z",
   "feature_columns": [
     "fukui_radical_max_1",
     "fukui_radical_max_2",
@@ -22,5 +22,35 @@
     1,
     2
   ],
-  "task": "multiclass_r_product_class"
+  "task": "multiclass_r_product_class",
+  "n_features": 15,
+  "n_classes": 3,
+  "best_params": {
+    "subsample": 0.85,
+    "reg_lambda": 2.0,
+    "reg_alpha": 0.0,
+    "n_estimators": 700,
+    "min_child_weight": 2,
+    "max_depth": 5,
+    "learning_rate": 0.06,
+    "gamma": 0.3,
+    "colsample_bytree": 0.9
+  },
+  "cv_score": 0.8459712892169138,
+  "holdout_accuracy": 0.7859237536656891,
+  "holdout_f1_weighted": 0.7896481215041806,
+  "holdout_f1_macro": 0.6780671856224151,
+  "class_weights": {
+    "0": 0.5532,
+    "1": 2.0865,
+    "2": 1.4021
+  },
+  "training_config": {
+    "augmentation_used": false,
+    "augmentation_samples": 5,
+    "negative_data_used": true,
+    "specialized_removed_from_test": false,
+    "used_central_split": true,
+    "random_state": 42
+  }
 }

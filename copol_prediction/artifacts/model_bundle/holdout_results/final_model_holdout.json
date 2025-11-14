@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-11-14T10:22:31.656922",
+  "labels": [
+    0,
+    1,
+    2
+  ],
+  "classification_report": {
+    "0": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 967.0
+    },
+    "1": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 355.0
+    },
+    "2": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 42.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1364.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1364.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      967,
+      0,
+      0
+    ],
+    [
+      0,
+      355,
+      0
+    ],
+    [
+      0,
+      0,
+      42
+    ]
+  ]
+}
