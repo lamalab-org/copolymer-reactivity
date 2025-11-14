@@ -27,7 +27,7 @@ from copolpredictor import (
     holdout_utils,
     prediction_utils
 )
-import load_data_split
+from utils import load_data_split
 
 
 def parse_args():

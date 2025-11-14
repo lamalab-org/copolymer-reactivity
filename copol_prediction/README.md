@@ -2,6 +2,21 @@
 
 ML system for predicting copolymerization reactivity ratios from molecular descriptors.
 
+## 🚀 REST API
+
+**The production-ready REST API is now available in the [`api/`](api/) directory!**
+
+Quick start:
+```bash
+cd api
+pip install -r requirements.txt
+python app.py
+```
+
+Then open: http://localhost:8000/docs for interactive API documentation.
+
+See [`api/README.md`](api/README.md) for full documentation.
+
 ## Overview
 
 Predicts r-product (r₁ × r₂) class:
@@ -45,7 +60,7 @@ result = predictor.predict_with_confidence(features)
 
 Or via REST API:
 ```bash
-python api.py  # http://localhost:8000/docs
+cd api && python app.py  # http://localhost:8000/docs
 ```
 
 ## Central Data Split
@@ -53,7 +68,8 @@ python api.py  # http://localhost:8000/docs
 All scripts use a **central train/test split** (created once, reused everywhere):
 
 ```bash
-cd ../experiments && python create_data_split.py [--remove-specialized]
+cd ../experiments
+python create_data_split.py [--remove-specialized]
 ```
 
 Creates:
@@ -65,7 +81,7 @@ Creates:
 
 **Usage in code:**
 ```python
-from copol_prediction import load_data_split
+from copol_prediction.utils import load_data_split
 df_train, df_test = load_data_split.load_train_test_split()
 ```
 
@@ -125,12 +141,13 @@ Key options:
 - Confidence vs r-product
 - Confidence filtering analysis
 
-### sweep_filters.py
+### ../experiments/sweep_filters.py
 
 Tests all 16 filter combinations (4×4 matrix) on same holdout set.
 
 ```bash
-cd ../experiments && python sweep_filters.py [--n-iter N]
+cd ../experiments
+python sweep_filters.py [--n-iter N]
 ```
 
 **Combinations tested:**
@@ -156,14 +173,17 @@ batch_predict("input.csv", "output.csv")
 ## REST API
 
 ```bash
-python api.py  # Runs at http://localhost:8000
+cd api && python app.py  # Runs at http://localhost:8000
 ```
+
+**See [`api/README.md`](api/README.md) for full API documentation.**
 
 **Endpoints:**
 - `GET /health` - Health check
 - `GET /model/info` - Model metadata
 - `POST /predict` - Single prediction
 - `POST /predict/batch` - Batch predictions
+- `GET /docs` - Interactive API documentation (Swagger UI)
 
 **Example:**
 ```bash
@@ -213,21 +233,34 @@ Typical holdout results:
 ```
 copol_prediction/
 ├── train_final_model.py       # Main training script
-├── api.py                      # REST API
-├── load_data_split.py          # Load central split
 ├── monomer_feature_calculation.py
-├── analysis/
-│   ├── analyze_model.py        # Analysis plots
+├── utils/                      # Utility functions
+│   ├── __init__.py
+│   └── load_data_split.py     # Load central split utility
+├── api/                        # REST API
+│   ├── app.py                  # FastAPI application
+│   ├── README.md               # API documentation
+│   ├── test_api.py             # API tests
+│   ├── example_client.py       # Usage examples
+│   ├── Dockerfile              # Docker deployment
+│   ├── docker-compose.yml      # Docker Compose
+│   └── start.sh                # Quick start script
+├── analysis/                   # Analysis tools
+│   ├── analyze_model.py        # Main analysis script
 │   ├── plot_config.py          # Plot styling
-│   ├── error_analysis.py
-│   └── permutation_analysis.py
+│   ├── error_analysis.py       # Error analysis
+│   ├── permutation_analysis.py # Permutation importance
+│   ├── model_analysis.py       # Model analysis utils
+│   ├── model_comp.py           # Model comparison
+│   ├── data_analysis.py        # Data analysis
+│   └── run_analysis.sh         # Run analysis script
 ├── artifacts/
 │   ├── data_splits/            # Central train/test split
 │   ├── model_bundle/           # Trained model
 │   └── experiments_holdout/    # Sweep results
 └── output/
-    ├── analysis/               # Analysis plots
-    └── processed_data.csv
+    ├── analysis/               # Generated plots
+    └── processed_data.csv      # Processed dataset
 
 src/copolpredictor/             # Core library
 ├── data_processing.py
@@ -276,12 +309,12 @@ cd ../experiments && python create_data_split.py
 lsof -ti:8000 | xargs kill
 
 # Run specific analysis
-python analysis/analyze_model.py --confusion --confidence --features
+cd analysis && python analyze_model.py --confusion --confidence --features
 ```
 
 ## Notes
 
-- **Plot Styling:** All plots use LamaLab matplotlib style from `plots_and_figures/lamalab.mplstyle`
+- **Plot Styling:** All plots use LamaLab matplotlib style from `analysis/plot_config.py`
 - **Confidence Filtering:** Dynamic thresholding per class to improve accuracy
 - **Reproducibility:** Fixed random seed (42), central split ensures consistency
 - **Legacy:** Old `classification.py` kept for reference, use new modular scripts

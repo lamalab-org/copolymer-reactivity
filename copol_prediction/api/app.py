@@ -6,13 +6,14 @@ This module provides a REST API interface for making predictions
 with the trained copolymerization model.
 
 Usage:
-    uvicorn api:app --reload --host 0.0.0.0 --port 8000
+    uvicorn app:app --reload --host 0.0.0.0 --port 8000
 """
 
 import os
 import sys
 from typing import List, Dict, Optional
 from datetime import datetime
+from pathlib import Path
 
 # FastAPI dependencies
 try:
@@ -23,8 +24,8 @@ except ImportError:
     print("Error: FastAPI not installed. Install with: pip install fastapi uvicorn")
     sys.exit(1)
 
-# Add parent directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from copolpredictor.inference import CopolymerPredictor
 
@@ -116,7 +117,7 @@ app = FastAPI(
 predictor: Optional[CopolymerPredictor] = None
 
 # Model path (can be configured via environment variable)
-MODEL_PATH = os.environ.get("MODEL_PATH", "artifacts/model_bundle")
+MODEL_PATH = os.environ.get("MODEL_PATH", "../artifacts/model_bundle")
 
 
 # ============================================================================
@@ -128,8 +129,10 @@ async def startup_event():
     """Load model on startup."""
     global predictor
     try:
-        print(f"Loading model from {MODEL_PATH}...")
-        predictor = CopolymerPredictor(MODEL_PATH)
+        # Resolve relative path from api directory
+        model_path = Path(__file__).parent / MODEL_PATH
+        print(f"Loading model from {model_path}...")
+        predictor = CopolymerPredictor(str(model_path))
         print("✓ Model loaded successfully")
     except Exception as e:
         print(f"✗ Error loading model: {e}")
@@ -340,7 +343,7 @@ if __name__ == "__main__":
     print("  - ReDoc: http://localhost:8000/redoc")
     
     uvicorn.run(
-        "api:app",
+        "app:app",
         host="0.0.0.0",
         port=8000,
         reload=True,
