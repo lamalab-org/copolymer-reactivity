@@ -5,7 +5,7 @@ Model analysis script for copolymerization prediction.
 Generates various analysis plots for trained models.
 
 Usage:
-    python analyze_model.py [--all] [--confusion] [--confidence] [--features] [--calibration]
+    python analyze_model.py [--all] [--combined] [--confusion] [--confidence] [--features] [--calibration]
 """
 
 import os
@@ -24,7 +24,7 @@ from sklearn.calibration import calibration_curve
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from copolpredictor.inference import CopolymerPredictor
-from analysis.plot_config import (
+from plot_config import (
     setup_plot_style, 
     CLASS_COLORS, 
     CLASS_LABELS, 
@@ -38,20 +38,25 @@ from analysis.plot_config import (
     ERROR_ANALYSIS_CONFIG,
     get_class_color,
     get_class_label,
+    ONE_COL_WIDTH_INCH,
+    TWO_COL_WIDTH_INCH,
+    ONE_COL_GOLDEN_RATIO_HEIGHT_INCH,
+    TWO_COL_GOLDEN_RATIO_HEIGHT_INCH,
 )
 
 
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Analyze trained model")
-    parser.add_argument("--model-path", default="artifacts/model_bundle", help="Path to model bundle")
-    parser.add_argument("--data-path", default="output/processed_data.csv", help="Path to processed data")
-    parser.add_argument("--output-dir", default="output/analysis", help="Output directory for plots")
+    parser.add_argument("--model-path", default="../artifacts/model_bundle", help="Path to model bundle")
+    parser.add_argument("--data-path", default="../output/processed_data.csv", help="Path to processed data")
+    parser.add_argument("--output-dir", default="../output/analysis", help="Output directory for plots")
     parser.add_argument("--holdout-only", action="store_true", help="Use only holdout set")
     parser.add_argument("--compare-holdout", action="store_true", help="Generate plots for both all data and holdout set")
     
     # Plot selection
     parser.add_argument("--all", action="store_true", help="Generate all plots")
+    parser.add_argument("--combined", action="store_true", help="Combined confusion matrix and confidence plot")
     parser.add_argument("--confusion", action="store_true", help="Confusion matrix")
     parser.add_argument("--confidence", action="store_true", help="Confidence distribution")
     parser.add_argument("--features", action="store_true", help="Feature importance")
@@ -69,19 +74,87 @@ def setup_style():
     setup_plot_style()  # Load lamalab.mplstyle and set color scheme
 
 
+def plot_confusion_matrix_and_confidence(y_true, y_pred, confidence_scores, correct_mask, output_dir, suffix=''):
+    """Plot confusion matrix and confidence distribution in combined figure."""
+    print(f"Generating combined confusion matrix and confidence plot{' (' + suffix + ')' if suffix else ''}...")
+    
+    # Create figure with 2 subplots (TWO_COL width, maintaining original 14:5 aspect ratio)
+    # Original was (14, 5), so height = width * (5/14)
+    height = TWO_COL_WIDTH_INCH * (5/14)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(TWO_COL_WIDTH_INCH, height))
+    
+    # Left subplot: Confusion Matrix
+    cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2])
+    disp = ConfusionMatrixDisplay(
+        confusion_matrix=cm,
+        display_labels=[get_class_label(i) for i in range(3)]
+    )
+    im = disp.plot(cmap=CONFUSION_MATRIX_CONFIG['cmap'], ax=ax1, 
+              values_format=CONFUSION_MATRIX_CONFIG['values_format'],
+              im_kw={'vmin': 0, 'vmax': 2500},
+              text_kw={'fontsize': 7})
+    ax1.set_title('a', fontsize=10, loc='left', fontweight='bold')
+    ax1.set_xlabel(ax1.get_xlabel(), fontsize=8)
+    ax1.set_ylabel(ax1.get_ylabel(), fontsize=8)
+    ax1.tick_params(labelsize=6)
+    ax1.grid(False)
+    # Adjust colorbar font size
+    if im.im_ is not None:
+        cbar = im.im_.colorbar
+        if cbar is not None:
+            cbar.ax.tick_params(labelsize=6)
+    
+    # Right subplot: Confidence Distribution (Correct vs Incorrect)
+    correct_conf = confidence_scores[correct_mask]
+    incorrect_conf = confidence_scores[~correct_mask]
+    
+    ax2.hist(correct_conf, bins=CONFIDENCE_PLOT_CONFIG['bins'], 
+             alpha=CONFIDENCE_PLOT_CONFIG['alpha'], label='Correct', 
+             color=COMPARISON_COLORS['correct'], edgecolor=CONFIDENCE_PLOT_CONFIG['edgecolor'])
+    ax2.hist(incorrect_conf, bins=CONFIDENCE_PLOT_CONFIG['bins'], 
+             alpha=CONFIDENCE_PLOT_CONFIG['alpha'], label='Incorrect', 
+             color=COMPARISON_COLORS['incorrect'], edgecolor=CONFIDENCE_PLOT_CONFIG['edgecolor'])
+    ax2.set_xlabel('Confidence Score', fontsize=8)
+    ax2.set_ylabel('Count', fontsize=8)
+    ax2.set_title('b', fontsize=10, loc='left', fontweight='bold')
+    ax2.legend(fontsize=7)
+    ax2.grid(False)
+    ax2.tick_params(labelsize=6)
+    # Remove top and right spines (box)
+    ax2.spines['top'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    
+    plt.tight_layout()
+    
+    # Save as PNG
+    filename_png = f'confusion_and_confidence{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.png'
+    path_png = os.path.join(output_dir, filename_png)
+    plt.savefig(path_png, dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved PNG to {path_png}")
+    
+    # Save as PDF
+    filename_pdf = f'confusion_and_confidence{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.pdf'
+    path_pdf = os.path.join(output_dir, filename_pdf)
+    plt.savefig(path_pdf, bbox_inches='tight')
+    print(f"  ✓ Saved PDF to {path_pdf}")
+    
+    plt.close()
+
+
 def plot_confusion_matrix(y_true, y_pred, output_dir, suffix=''):
     """Plot confusion matrix."""
     print(f"Generating confusion matrix{' (' + suffix + ')' if suffix else ''}...")
     
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2])
     
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(ONE_COL_WIDTH_INCH, 3))
     disp = ConfusionMatrixDisplay(
         confusion_matrix=cm,
         display_labels=[get_class_label(i) for i in range(3)]
     )
     disp.plot(cmap=CONFUSION_MATRIX_CONFIG['cmap'], ax=ax, 
-              values_format=CONFUSION_MATRIX_CONFIG['values_format'])
+              values_format=CONFUSION_MATRIX_CONFIG['values_format'],
+              im_kw={'vmin': 0, 'vmax': 2500})
     
     title = 'Confusion Matrix' + (' - ' + suffix if suffix else '')
     plt.title(title, fontsize=14, pad=20)
@@ -97,7 +170,7 @@ def plot_confusion_matrix(y_true, y_pred, output_dir, suffix=''):
     # Also save normalized version
     cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(ONE_COL_WIDTH_INCH, 3))
     disp = ConfusionMatrixDisplay(
         confusion_matrix=cm_norm,
         display_labels=[get_class_label(i) for i in range(3)]
@@ -120,7 +193,7 @@ def plot_confidence_distribution(confidence_scores, correct_mask, output_dir, su
     """Plot confidence score distribution."""
     print(f"Generating confidence distribution plot{' (' + suffix + ')' if suffix else ''}...")
     
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(TWO_COL_WIDTH_INCH, 3.5))
     
     # Overall distribution
     ax1.hist(confidence_scores, bins=CONFIDENCE_PLOT_CONFIG['bins'], 
@@ -164,6 +237,34 @@ def plot_confidence_distribution(confidence_scores, correct_mask, output_dir, su
     print(f"  Mean confidence (incorrect): {incorrect_conf.mean():.3f}")
 
 
+def format_feature_name(name):
+    """Format feature name for display."""
+    # Special replacements with numbered suffixes (specific ones first)
+    name = name.replace('polytype_emb_1', 'polymerization type emb. 1')
+    name = name.replace('polytype_emb_2', 'polymerization type emb. 2')
+    name = name.replace('method_emb_1', 'polymerization method emb. 1')
+    name = name.replace('method_emb_2', 'polymerization method emb. 2')
+    # General cases without numbers
+    name = name.replace('polytype_emb', 'polymerization type emb.')
+    name = name.replace('method_emb', 'polymerization method emb.')
+    
+    # Delta HOMO-LUMO formatting
+    if 'delta_HOMO_LUMO' in name or 'delta_homo_lumo' in name:
+        # Replace delta with symbol
+        name = name.replace('delta_HOMO_LUMO', 'Δ HOMO-LUMO')
+        name = name.replace('delta_homo_lumo', 'Δ HOMO-LUMO')
+        # Replace AA, AB, BA, BB with 1-1, 1-2, 2-1, 2-2
+        name = name.replace('_AA', ' 1-1')
+        name = name.replace('_AB', ' 1-2')
+        name = name.replace('_BA', ' 2-1')
+        name = name.replace('_BB', ' 2-2')
+    
+    # Replace remaining underscores with spaces
+    name = name.replace('_', ' ')
+    
+    return name
+
+
 def plot_feature_importance(predictor, output_dir, top_n=20):
     """Plot feature importance from model."""
     print("Generating feature importance plot...")
@@ -171,21 +272,37 @@ def plot_feature_importance(predictor, output_dir, top_n=20):
     importance_df = predictor.get_feature_importance()
     top_features = importance_df.head(top_n)
     
-    plt.figure(figsize=(10, max(6, top_n * 0.3)))
-    plt.barh(range(len(top_features)), top_features['importance'], 
-             color=FEATURE_IMPORTANCE_CONFIG['color'])
-    plt.yticks(range(len(top_features)), top_features['feature'])
-    plt.xlabel('Importance', fontsize=12)
-    plt.title(f'Top {top_n} Feature Importances', fontsize=14)
-    plt.gca().invert_yaxis()
-    plt.grid(axis='x', alpha=0.3)
+    # Format feature names
+    formatted_names = [format_feature_name(name) for name in top_features['feature']]
+    
+    # Use TWO_COL width, dynamic height based on number of features
+    height = max(4, top_n * 0.2)
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
+    
+    ax.barh(range(len(top_features)), top_features['importance'], 
+            color=FEATURE_IMPORTANCE_CONFIG['color'])
+    ax.set_yticks(range(len(top_features)))
+    ax.set_yticklabels(formatted_names, fontsize=7)
+    ax.set_xlabel('Importance', fontsize=9)
+    ax.tick_params(axis='x', labelsize=7)
+    ax.invert_yaxis()
+    ax.grid(False)
+    # Remove top and right spines
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
     plt.tight_layout()
     
-    path = os.path.join(output_dir, 'feature_importance.png')
-    plt.savefig(path, dpi=300, bbox_inches='tight')
-    plt.close()
+    # Save as PNG
+    path_png = os.path.join(output_dir, 'feature_importance.png')
+    plt.savefig(path_png, dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved PNG to {path_png}")
     
-    print(f"  ✓ Saved to {path}")
+    # Save as PDF
+    path_pdf = os.path.join(output_dir, 'feature_importance.pdf')
+    plt.savefig(path_pdf, bbox_inches='tight')
+    print(f"  ✓ Saved PDF to {path_pdf}")
+    
+    plt.close()
     
     # Save to CSV
     csv_path = os.path.join(output_dir, 'feature_importance.csv')
@@ -197,9 +314,10 @@ def plot_calibration_curve_multiclass(y_true, y_proba, output_dir, suffix=''):
     """Plot calibration curves for each class."""
     print(f"Generating calibration curves{' (' + suffix + ')' if suffix else ''}...")
     
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    # Original was (15, 5), ratio 3:1. With width 7, height = 7/3 ≈ 2.33, let's use 3 for better visibility
+    fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH, 3))
     
-    class_names = ["Class 0 (< 1)", "Class 1 (1-25)", "Class 2 (> 25)"]
+    class_names = [get_class_label(i, style='long') for i in range(3)]
     
     for i, (ax, class_name) in enumerate(zip(axes, class_names)):
         # Binary indicator for this class
@@ -213,36 +331,46 @@ def plot_calibration_curve_multiclass(y_true, y_proba, output_dir, suffix=''):
         
         # Plot
         ax.plot(prob_pred, prob_true, marker=CALIBRATION_CONFIG['marker'], 
-                linewidth=CALIBRATION_CONFIG['linewidth'], 
-                markersize=CALIBRATION_CONFIG['markersize'],
+                linewidth=1.5, 
+                markersize=4,
                 color=get_class_color(i), label='Model')
         ax.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Perfect Calibration')
         
-        ax.set_xlabel('Mean Predicted Probability', fontsize=11)
-        ax.set_ylabel('Fraction of Positives', fontsize=11)
-        ax.set_title(class_name, fontsize=12)
-        ax.legend()
-        ax.grid(alpha=0.3)
+        ax.set_xlabel('Mean Predicted Probability', fontsize=8)
+        ax.set_ylabel('Fraction of Positives', fontsize=8)
+        ax.set_title(class_name, fontsize=9)
+        ax.legend(fontsize=6)
+        ax.tick_params(labelsize=6)
+        ax.grid(False)
+        # Remove top and right spines
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
     
-    title = 'Calibration Curves by Class' + (' - ' + suffix if suffix else '')
-    plt.suptitle(title, fontsize=14, y=1.02)
     plt.tight_layout()
     
-    filename = f'calibration_curves{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.png'
-    path = os.path.join(output_dir, filename)
-    plt.savefig(path, dpi=300, bbox_inches='tight')
-    plt.close()
+    # Save as PNG
+    filename_png = f'calibration_curves{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.png'
+    path_png = os.path.join(output_dir, filename_png)
+    plt.savefig(path_png, dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved PNG to {path_png}")
     
-    print(f"  ✓ Saved to {path}")
+    # Save as PDF
+    filename_pdf = f'calibration_curves{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.pdf'
+    path_pdf = os.path.join(output_dir, filename_pdf)
+    plt.savefig(path_pdf, bbox_inches='tight')
+    print(f"  ✓ Saved PDF to {path_pdf}")
+    
+    plt.close()
 
 
 def plot_error_analysis_by_class(y_true, y_pred, confidence_scores, output_dir, suffix=''):
     """Analyze errors by true class."""
     print(f"Generating error analysis{' (' + suffix + ')' if suffix else ''}...")
     
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    # Original was (15, 5), ratio 3:1. With width 7, use height 3 for better visibility
+    fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH, 3))
     
-    class_names = ["Class 0 (< 1)", "Class 1 (1-25)", "Class 2 (> 25)"]
+    class_names = [get_class_label(i, style='long') for i in range(3)]
     
     for i, (ax, class_name) in enumerate(zip(axes, class_names)):
         mask = y_true == i
@@ -264,28 +392,31 @@ def plot_error_analysis_by_class(y_true, y_pred, confidence_scores, output_dir, 
                 color=COMPARISON_COLORS['incorrect'], 
                 edgecolor=ERROR_ANALYSIS_CONFIG['edgecolor'])
         
-        ax.set_xlabel('Confidence Score', fontsize=11)
-        ax.set_ylabel('Count', fontsize=11)
-        ax.set_title(class_name, fontsize=12)
-        ax.legend()
-        ax.grid(alpha=0.3)
-        
-        # Add accuracy text
-        acc = correct.sum() / len(correct) if len(correct) > 0 else 0
-        ax.text(0.05, 0.95, f'Accuracy: {acc:.2%}', 
-                transform=ax.transAxes, verticalalignment='top',
-                bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.5))
+        ax.set_xlabel('Confidence Score', fontsize=8)
+        ax.set_ylabel('Count', fontsize=8)
+        ax.set_title(class_name, fontsize=9)
+        ax.legend(fontsize=6)
+        ax.tick_params(labelsize=6)
+        ax.grid(False)
+        # Remove top and right spines
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
     
-    title = 'Error Analysis by True Class' + (' - ' + suffix if suffix else '')
-    plt.suptitle(title, fontsize=14, y=1.02)
     plt.tight_layout()
     
-    filename = f'error_analysis_by_class{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.png'
-    path = os.path.join(output_dir, filename)
-    plt.savefig(path, dpi=300, bbox_inches='tight')
-    plt.close()
+    # Save as PNG
+    filename_png = f'error_analysis_by_class{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.png'
+    path_png = os.path.join(output_dir, filename_png)
+    plt.savefig(path_png, dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved PNG to {path_png}")
     
-    print(f"  ✓ Saved to {path}")
+    # Save as PDF
+    filename_pdf = f'error_analysis_by_class{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.pdf'
+    path_pdf = os.path.join(output_dir, filename_pdf)
+    plt.savefig(path_pdf, bbox_inches='tight')
+    print(f"  ✓ Saved PDF to {path_pdf}")
+    
+    plt.close()
 
 
 def plot_confidence_vs_r1r2(df, predictions, confidence_scores, output_dir, suffix=''):
@@ -302,7 +433,7 @@ def plot_confidence_vs_r1r2(df, predictions, confidence_scores, output_dir, suff
     # Filter extreme values for better visualization
     plot_df = plot_df[(plot_df['r1r2'] > 0.01) & (plot_df['r1r2'] < 100)]
     
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(TWO_COL_WIDTH_INCH, 3))
     
     # Scatter plot
     for cls in [0, 1, 2]:
@@ -351,7 +482,7 @@ def print_classification_report(y_true, y_pred):
     
     report = classification_report(
         y_true, y_pred,
-        target_names=["Class 0 (< 1)", "Class 1 (1-25)", "Class 2 (> 25)"],
+        target_names=[get_class_label(i, style='long') for i in range(3)],
         digits=3
     )
     print(report)
@@ -485,11 +616,11 @@ def analyze_confidence_filtering(y_true, y_pred, confidence_scores, output_dir, 
         })
     
     # Create visualization
-    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig, axes = plt.subplots(2, 2, figsize=(TWO_COL_WIDTH_INCH, 6))
     
     # 1. Threshold and retention per class
     ax1 = axes[0, 0]
-    class_names = ['Class 0\n(< 1)', 'Class 1\n(1-25)', 'Class 2\n(> 25)']
+    class_names = [get_class_label(i) for i in range(3)]
     thresholds_list = [s['threshold'] for s in class_stats]
     retention_list = [s['retention_rate'] for s in class_stats]
     
@@ -651,7 +782,7 @@ def analyze_confidence_filtering(y_true, y_pred, confidence_scores, output_dir, 
         
         report = classification_report(
             y_true_filtered, y_pred_filtered,
-            target_names=["Class 0 (< 1)", "Class 1 (1-25)", "Class 2 (> 25)"],
+            target_names=[get_class_label(i, style='long') for i in range(3)],
             digits=4
         )
         f.write(report)
@@ -709,12 +840,15 @@ def generate_plots_for_dataset(df, predictor, args, suffix=''):
     
     # Determine which plots to generate
     generate_all = args.all or not any([
-        args.confusion, args.confidence, args.features, 
+        args.combined, args.confusion, args.confidence, args.features, 
         args.calibration, args.errors, args.confidence_vs_r1r2, args.filtering
     ])
     
     # Generate plots
     print(f"\nGenerating plots{' (' + suffix + ')' if suffix else ''}...")
+    
+    if generate_all or args.combined:
+        plot_confusion_matrix_and_confidence(y_true, y_pred, confidence, correct_mask, args.output_dir, suffix)
     
     if generate_all or args.confusion:
         plot_confusion_matrix(y_true, y_pred, args.output_dir, suffix)

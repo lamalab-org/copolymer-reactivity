@@ -73,6 +73,22 @@ HIGHLIGHT_COLORS = {
 
 
 # ============================================================================
+# FIGURE SIZES (based on golden ratio)
+# ============================================================================
+
+# Golden ratio
+golden = 1.618
+
+# Column widths
+ONE_COL_WIDTH_INCH = 3
+TWO_COL_WIDTH_INCH = 7
+
+# Heights based on golden ratio
+ONE_COL_GOLDEN_RATIO_HEIGHT_INCH = ONE_COL_WIDTH_INCH / golden
+TWO_COL_GOLDEN_RATIO_HEIGHT_INCH = TWO_COL_WIDTH_INCH / golden
+
+
+# ============================================================================
 # STYLE SETTINGS
 # ============================================================================
 
@@ -197,21 +213,21 @@ ERROR_ANALYSIS_CONFIG = {
 # ============================================================================
 
 CLASS_LABELS = {
-    0: "Class 0\n(< 1)",
-    1: "Class 1\n(1-25)",
-    2: "Class 2\n(> 25)",
+    0: "Class 0:\nAlternating",
+    1: "Class 1:\nBlock-like",
+    2: "Class 2:\nHomopolymer",
 }
 
 CLASS_LABELS_SHORT = {
-    0: "< 1",
-    1: "1-25",
-    2: "> 25",
+    0: "Alternating",
+    1: "Block-like",
+    2: "Homopolymer",
 }
 
 CLASS_LABELS_LONG = {
-    0: "Class 0 (< 1) - Alternating",
-    1: "Class 1 (1-25) - Random/Weak Block",
-    2: "Class 2 (> 25) - Strong Block",
+    0: "Class 0: Alternating",
+    1: "Class 1: Block-like",
+    2: "Class 2: Homopolymer",
 }
 
 

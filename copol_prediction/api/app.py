@@ -11,6 +11,7 @@ Usage:
 
 import os
 import sys
+import json
 from typing import List, Dict, Optional
 from datetime import datetime
 from pathlib import Path
@@ -28,6 +29,19 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from copolpredictor.inference import CopolymerPredictor
+from copolpredictor.data_processing import load_molecular_data
+from copolextractor.utils import name_to_smiles
+from rdkit import Chem
+from rdkit.Chem import Descriptors, rdMolDescriptors
+
+# Import monomer feature calculation functions
+try:
+    from morfeus.conformer import ConformerEnsemble
+    from morfeus import XTB
+    MORFEUS_AVAILABLE = True
+except ImportError:
+    MORFEUS_AVAILABLE = False
+    print("Warning: morfeus not available. Monomer feature calculation will be limited.")
 
 
 # ============================================================================
@@ -100,6 +114,35 @@ class HealthCheck(BaseModel):
     model_loaded: bool
 
 
+class SolventPreprocessInput(BaseModel):
+    """Input schema for solvent preprocessing."""
+    solvent_name: str = Field(..., description="Name of the solvent")
+
+
+class SolventPreprocessOutput(BaseModel):
+    """Output schema for solvent preprocessing."""
+    solvent_name: str = Field(..., description="Input solvent name")
+    solvent_smiles: Optional[str] = Field(None, description="SMILES representation of the solvent")
+    features: Dict[str, Optional[float]] = Field(..., description="Calculated solvent features")
+    success: bool = Field(..., description="Whether preprocessing was successful")
+    error: Optional[str] = Field(None, description="Error message if preprocessing failed")
+
+
+class MonomerPreprocessInput(BaseModel):
+    """Input schema for monomer preprocessing."""
+    monomer_name: str = Field(..., description="Name of the monomer")
+
+
+class MonomerPreprocessOutput(BaseModel):
+    """Output schema for monomer preprocessing."""
+    monomer_name: str = Field(..., description="Input monomer name")
+    monomer_smiles: Optional[str] = Field(None, description="SMILES representation of the monomer")
+    features: Dict[str, Optional[float]] = Field(..., description="Calculated monomer features")
+    success: bool = Field(..., description="Whether preprocessing was successful")
+    error: Optional[str] = Field(None, description="Error message if preprocessing failed")
+    from_cache: bool = Field(..., description="Whether features were loaded from cache")
+
+
 # ============================================================================
 # FastAPI Application
 # ============================================================================
@@ -119,6 +162,10 @@ predictor: Optional[CopolymerPredictor] = None
 # Model path (can be configured via environment variable)
 MODEL_PATH = os.environ.get("MODEL_PATH", "../artifacts/model_bundle")
 
+# Global embedding dictionaries
+method_embeddings: Dict[str, Dict[str, float]] = {}
+polytype_embeddings: Dict[str, Dict[str, float]] = {}
+
 
 # ============================================================================
 # Startup/Shutdown Events
@@ -126,8 +173,32 @@ MODEL_PATH = os.environ.get("MODEL_PATH", "../artifacts/model_bundle")
 
 @app.on_event("startup")
 async def startup_event():
-    """Load model on startup."""
-    global predictor
+    """Load model and embeddings on startup."""
+    global predictor, method_embeddings, polytype_embeddings
+    
+    # Load embeddings
+    try:
+        api_dir = Path(__file__).parent
+        method_emb_path = api_dir / "method_emb_pca_values.json"
+        polytype_emb_path = api_dir / "polytype_emb_pca_values.json"
+        
+        if method_emb_path.exists():
+            with open(method_emb_path, 'r') as f:
+                method_embeddings = json.load(f)
+            print(f"✓ Loaded {len(method_embeddings)} method embeddings")
+        else:
+            print(f"⚠ Warning: Method embeddings file not found at {method_emb_path}")
+        
+        if polytype_emb_path.exists():
+            with open(polytype_emb_path, 'r') as f:
+                polytype_embeddings = json.load(f)
+            print(f"✓ Loaded {len(polytype_embeddings)} polytype embeddings")
+        else:
+            print(f"⚠ Warning: Polytype embeddings file not found at {polytype_emb_path}")
+    except Exception as e:
+        print(f"✗ Error loading embeddings: {e}")
+    
+    # Load model
     try:
         # Resolve relative path from api directory
         model_path = Path(__file__).parent / MODEL_PATH
@@ -232,7 +303,6 @@ async def predict(input_data: PredictionInput):
             r_product_range=range_labels[pred_class],
             timestamp=datetime.now().isoformat()
         )
-        
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -310,6 +380,399 @@ async def get_required_features():
         "required_features": predictor.features,
         "n_features": len(predictor.features)
     }
+
+
+def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
+    """
+    Calculate solvent features from SMILES string.
+    Returns only the features needed by the model:
+    - solvent_logP
+    - solvent_TPSA
+    - solvent_HBD
+    - solvent_FractionCSP3
+    """
+    def is_invalid(smiles):
+        if not smiles or not isinstance(smiles, str):
+            return True
+        smiles_clean = smiles.strip().lower()
+        return smiles_clean in {"", "na", "nan", "none"}
+    
+    if is_invalid(smiles):
+        return {
+            "solvent_logP": None,
+            "solvent_TPSA": None,
+            "solvent_HBD": None,
+            "solvent_FractionCSP3": None
+        }
+    
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return {
+                "solvent_logP": None,
+                "solvent_TPSA": None,
+                "solvent_HBD": None,
+                "solvent_FractionCSP3": None
+            }
+        
+        return {
+            "solvent_logP": float(Descriptors.MolLogP(mol)),
+            "solvent_TPSA": float(rdMolDescriptors.CalcTPSA(mol)),
+            "solvent_HBD": float(rdMolDescriptors.CalcNumHBD(mol)),
+            "solvent_FractionCSP3": float(Descriptors.FractionCSP3(mol))
+        }
+    except Exception as e:
+        return {
+            "solvent_logP": None,
+            "solvent_TPSA": None,
+            "solvent_HBD": None,
+            "solvent_FractionCSP3": None
+        }
+
+
+@app.post("/preprocess/solvent", response_model=SolventPreprocessOutput)
+async def preprocess_solvent(input_data: SolventPreprocessInput):
+    """
+    Preprocess a solvent: convert name to SMILES and calculate features.
+    
+    Args:
+        input_data: Solvent name
+        
+    Returns:
+        SMILES representation and calculated features
+    """
+    try:
+        # Convert name to SMILES
+        solvent_smiles = name_to_smiles(input_data.solvent_name, force_retry=True)
+        
+        if solvent_smiles is None:
+            return SolventPreprocessOutput(
+                solvent_name=input_data.solvent_name,
+                solvent_smiles=None,
+                features={
+                    "solvent_logP": None,
+                    "solvent_TPSA": None,
+                    "solvent_HBD": None,
+                    "solvent_FractionCSP3": None
+                },
+                success=False,
+                error=f"Could not convert solvent name '{input_data.solvent_name}' to SMILES"
+            )
+        
+        # Calculate features
+        features = calculate_solvent_features(solvent_smiles)
+        
+        # Check if any features are None (indicating calculation failure)
+        if any(v is None for v in features.values()):
+            return SolventPreprocessOutput(
+                solvent_name=input_data.solvent_name,
+                solvent_smiles=solvent_smiles,
+                features=features,
+                success=False,
+                error="Failed to calculate some features from SMILES"
+            )
+        
+        return SolventPreprocessOutput(
+            solvent_name=input_data.solvent_name,
+            solvent_smiles=solvent_smiles,
+            features=features,
+            success=True,
+            error=None
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Solvent preprocessing failed: {str(e)}"
+        )
+
+
+@app.get("/embeddings/methods", response_model=Dict[str, List[str]])
+async def get_available_methods():
+    """
+    Get list of all available method strings for selection.
+    
+    Returns:
+        List of all method names that have embeddings
+    """
+    return {
+        "methods": sorted(list(method_embeddings.keys())),
+        "count": len(method_embeddings)
+    }
+
+
+@app.get("/embeddings/polytypes", response_model=Dict[str, List[str]])
+async def get_available_polytypes():
+    """
+    Get list of all available polymerization type strings for selection.
+    
+    Returns:
+        List of all polytype names that have embeddings
+    """
+    return {
+        "polytypes": sorted(list(polytype_embeddings.keys())),
+        "count": len(polytype_embeddings)
+    }
+
+
+@app.get("/embeddings/method/{method_name}", response_model=Dict[str, Optional[float]])
+async def get_method_embeddings(method_name: str):
+    """
+    Get PCA-reduced embeddings for a specific method string.
+    
+    Args:
+        method_name: The method string to get embeddings for
+        
+    Returns:
+        Dictionary with pca_1 and pca_2 values
+    """
+    if method_name not in method_embeddings:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Method '{method_name}' not found. Use /embeddings/methods to see available options."
+        )
+    
+    return method_embeddings[method_name]
+
+
+@app.get("/embeddings/polytype/{polytype_name}", response_model=Dict[str, Optional[float]])
+async def get_polytype_embeddings(polytype_name: str):
+    """
+    Get PCA-reduced embeddings for a specific polymerization type string.
+    
+    Args:
+        polytype_name: The polytype string to get embeddings for
+        
+    Returns:
+        Dictionary with pca_1 and pca_2 values
+    """
+    if polytype_name not in polytype_embeddings:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Polytype '{polytype_name}' not found. Use /embeddings/polytypes to see available options."
+        )
+    
+    return polytype_embeddings[polytype_name]
+
+
+def get_safe_filename(smiles: str) -> str:
+    """Create a safe filename from SMILES by replacing problematic characters."""
+    return smiles.replace('/', '_').replace('\\', '_').replace(':', '_')
+
+
+def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Optional[Dict]:
+    """
+    Load monomer features from JSON file if it exists.
+    Returns None if file doesn't exist.
+    """
+    if base_path is None:
+        base_path = Path(__file__).parent / "molecule_properties"
+    elif isinstance(base_path, str):
+        base_path = Path(base_path)
+    
+    safe_smiles = get_safe_filename(smiles)
+    file_path = base_path / f"{safe_smiles}.json"
+    
+    if not file_path.exists():
+        return None
+    
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        
+        # Process dict fields: take min, max, mean (same as in data_processing.py)
+        for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
+            if key in data and isinstance(data[key], dict) and data[key]:
+                data[key + '_min'] = min(data[key].values())
+                data[key + '_max'] = max(data[key].values())
+                data[key + '_mean'] = sum(data[key].values()) / len(data[key].values())
+        
+        return data
+    except Exception as e:
+        print(f"Error loading monomer features from {file_path}: {e}")
+        return None
+
+
+def extract_monomer_features_for_model(data: Dict) -> Dict[str, Optional[float]]:
+    """
+    Extract only the features needed for the model from the full molecular data.
+    Returns: fukui_radical_max, homo, lumo
+    """
+    features = {
+        "fukui_radical_max": data.get("fukui_radical_max"),
+        "homo": data.get("homo"),
+        "lumo": data.get("lumo")
+    }
+    return features
+
+
+def calculate_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Dict:
+    """
+    Calculate monomer features using morfeus (same as monomer_feature_calculation.py).
+    This is a long-running operation and should be used asynchronously.
+    """
+    if not MORFEUS_AVAILABLE:
+        raise RuntimeError("morfeus is not available. Cannot calculate monomer features.")
+    
+    if base_path is None:
+        base_path = Path(__file__).parent / "molecule_properties"
+    elif isinstance(base_path, str):
+        base_path = Path(base_path)
+    
+    from morfeus.conformer import ConformerEnsemble
+    
+    # Optimize conformer
+    ce = ConformerEnsemble.from_rdkit(smiles, optimize="MMFF94")
+    ce.prune_rmsd()
+    ce.sort()
+    
+    try:
+        ce.optimize_qc_engine(
+            program="xtb", model={"method": "GFN-FF"}, procedure="geometric"
+        )
+    except Exception as e:
+        print(f"GFN-FF optimization failed for {smiles}: {e}")
+        ce = ConformerEnsemble.from_rdkit(smiles, optimize="MMFF94")
+        ce.prune_rmsd()
+        ce.sort()
+    
+    try:
+        ce.optimize_qc_engine(
+            program="xtb", model={"method": "GFN2-xTB"}, procedure="geometric"
+        )
+    except Exception as e:
+        print(f"GFN2-xTB optimization failed for {smiles}: {e}")
+    
+    ce.sp_qc_engine(program="xtb", model={"method": "GFN2-xTB"})
+    best_conformer = ce.conformers[0]
+    
+    elements = best_conformer.elements.tolist()
+    coordinates = best_conformer.coordinates.tolist()
+    energy = best_conformer.energy
+    
+    # Calculate properties
+    xtb = XTB(elements, coordinates)
+    
+    properties = {
+        "smiles": smiles,
+        "best_conformer_coordinates": coordinates,
+        "best_conformer_elements": elements,
+        "best_conformer_energy": energy,
+        "ip": xtb.get_ip(),
+        "ip_corrected": xtb.get_ip(corrected=True),
+        "ea": xtb.get_ea(),
+        "homo": xtb.get_homo(),
+        "lumo": xtb.get_lumo(),
+        "charges": xtb.get_charges(),
+        "dipole": xtb.get_dipole().tolist(),
+        "global_electrophilicity": xtb.get_global_descriptor("electrophilicity", corrected=True),
+        "global_nucleophilicity": xtb.get_global_descriptor("nucleophilicity", corrected=True),
+        "fukui_electrophilicity": xtb.get_fukui("electrophilicity"),
+        "fukui_nucleophilicity": xtb.get_fukui("nucleophilicity"),
+        "fukui_radical": xtb.get_fukui("radical"),
+    }
+    
+    # Process dict fields
+    for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
+        if key in properties and isinstance(properties[key], dict) and properties[key]:
+            properties[key + '_min'] = min(properties[key].values())
+            properties[key + '_max'] = max(properties[key].values())
+            properties[key + '_mean'] = sum(properties[key].values()) / len(properties[key].values())
+    
+    # Save to file
+    if base_path is None:
+        base_path = Path(__file__).parent / "molecule_properties"
+    
+    base_path.mkdir(exist_ok=True)
+    safe_smiles = get_safe_filename(smiles)
+    file_path = base_path / f"{safe_smiles}.json"
+    
+    with open(file_path, 'w') as f:
+        json.dump(properties, f, indent=4)
+    
+    return properties
+
+
+@app.post("/preprocess/monomer", response_model=MonomerPreprocessOutput)
+async def preprocess_monomer(input_data: MonomerPreprocessInput):
+    """
+    Preprocess a monomer: convert name to SMILES, check for existing features,
+    or calculate new features if needed.
+    
+    Args:
+        input_data: Monomer name
+        
+    Returns:
+        SMILES representation and calculated features
+    """
+    try:
+        # Convert name to SMILES
+        monomer_smiles = name_to_smiles(input_data.monomer_name, force_retry=True)
+        
+        if monomer_smiles is None:
+            return MonomerPreprocessOutput(
+                monomer_name=input_data.monomer_name,
+                monomer_smiles=None,
+                features={
+                    "fukui_radical_max": None,
+                    "homo": None,
+                    "lumo": None
+                },
+                success=False,
+                error=f"Could not convert monomer name '{input_data.monomer_name}' to SMILES",
+                from_cache=False
+            )
+        
+        # Try to load existing features
+        base_path = Path(__file__).parent / "molecule_properties"
+        existing_data = load_monomer_features(monomer_smiles, base_path)
+        
+        if existing_data is not None:
+            # Features found in cache
+            features = extract_monomer_features_for_model(existing_data)
+            return MonomerPreprocessOutput(
+                monomer_name=input_data.monomer_name,
+                monomer_smiles=monomer_smiles,
+                features=features,
+                success=True,
+                error=None,
+                from_cache=True
+            )
+        
+        # Features not found, need to calculate
+        if not MORFEUS_AVAILABLE:
+            return MonomerPreprocessOutput(
+                monomer_name=input_data.monomer_name,
+                monomer_smiles=monomer_smiles,
+                features={
+                    "fukui_radical_max": None,
+                    "homo": None,
+                    "lumo": None
+                },
+                success=False,
+                error="morfeus is not available. Cannot calculate monomer features.",
+                from_cache=False
+            )
+        
+        # Calculate features (this is a long-running operation)
+        # Note: In production, you might want to run this in a background task
+        calculated_data = calculate_monomer_features(monomer_smiles, base_path)
+        features = extract_monomer_features_for_model(calculated_data)
+        
+        return MonomerPreprocessOutput(
+            monomer_name=input_data.monomer_name,
+            monomer_smiles=monomer_smiles,
+            features=features,
+            success=True,
+            error=None,
+            from_cache=False
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Monomer preprocessing failed: {str(e)}"
+        )
 
 
 # ============================================================================

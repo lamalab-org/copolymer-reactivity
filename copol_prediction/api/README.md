@@ -186,9 +186,212 @@ POST /predict/batch
 }
 ```
 
+### 6. Preprocess Solvent
+```bash
+POST /preprocess/solvent
+```
+
+Converts a solvent name to SMILES and calculates solvent features.
+
+**Request Body:**
+```json
+{
+  "solvent_name": "toluene"
+}
+```
+
+**Response:**
+```json
+{
+  "solvent_name": "toluene",
+  "solvent_smiles": "Cc1ccccc1",
+  "features": {
+    "solvent_logP": 2.73,
+    "solvent_TPSA": 0.0,
+    "solvent_HBD": 0.0,
+    "solvent_FractionCSP3": 0.14
+  },
+  "success": true,
+  "error": null
+}
+```
+
+### 7. Preprocess Monomer
+```bash
+POST /preprocess/monomer
+```
+
+Converts a monomer name to SMILES, checks for existing features in cache, or calculates new features if needed.
+
+**Request Body:**
+```json
+{
+  "monomer_name": "styrene"
+}
+```
+
+**Response:**
+```json
+{
+  "monomer_name": "styrene",
+  "monomer_smiles": "C=Cc1ccccc1",
+  "features": {
+    "fukui_radical_max": 0.203,
+    "homo": -0.416,
+    "lumo": -0.207
+  },
+  "success": true,
+  "error": null,
+  "from_cache": true
+}
+```
+
+**Note:** If features need to be calculated, this may take several minutes as it performs quantum chemical calculations.
+
+### 8. Get Available Methods
+```bash
+GET /embeddings/methods
+```
+
+Returns a list of all available method strings that have embeddings.
+
+**Response:**
+```json
+{
+  "methods": ["bulk", "emulsion", "solution", "solvent", ...],
+  "count": 30
+}
+```
+
+### 9. Get Available Polytypes
+```bash
+GET /embeddings/polytypes
+```
+
+Returns a list of all available polymerization type strings that have embeddings.
+
+**Response:**
+```json
+{
+  "polytypes": ["free radical", "cationic", "anionic", ...],
+  "count": 75
+}
+```
+
+### 10. Get Method Embeddings
+```bash
+GET /embeddings/method/{method_name}
+```
+
+Returns PCA-reduced embeddings for a specific method string.
+
+**Example:**
+```bash
+GET /embeddings/method/solution
+```
+
+**Response:**
+```json
+{
+  "pca_1": -3.403,
+  "pca_2": 2.568
+}
+```
+
+### 11. Get Polytype Embeddings
+```bash
+GET /embeddings/polytype/{polytype_name}
+```
+
+Returns PCA-reduced embeddings for a specific polymerization type string.
+
+**Example:**
+```bash
+GET /embeddings/polytype/free radical
+```
+
+**Response:**
+```json
+{
+  "pca_1": 7.497,
+  "pca_2": -0.463
+}
+```
+
 ## 💻 Usage Examples
 
-### Python with requests
+### Complete Workflow: From Names to Prediction
+
+```python
+import requests
+
+API_URL = "http://localhost:8000"
+
+# Step 1: Preprocess monomers
+monomer1_response = requests.post(
+    f"{API_URL}/preprocess/monomer",
+    json={"monomer_name": "styrene"}
+)
+monomer1 = monomer1_response.json()
+
+monomer2_response = requests.post(
+    f"{API_URL}/preprocess/monomer",
+    json={"monomer_name": "methyl methacrylate"}
+)
+monomer2 = monomer2_response.json()
+
+# Step 2: Preprocess solvent
+solvent_response = requests.post(
+    f"{API_URL}/preprocess/solvent",
+    json={"solvent_name": "toluene"}
+)
+solvent = solvent_response.json()
+
+# Step 3: Get embeddings
+method_response = requests.get(f"{API_URL}/embeddings/method/solution")
+method_emb = method_response.json()
+
+polytype_response = requests.get(f"{API_URL}/embeddings/polytype/free radical")
+polytype_emb = polytype_response.json()
+
+# Step 4: Calculate HOMO-LUMO deltas
+homo_1 = monomer1["features"]["homo"]
+lumo_1 = monomer1["features"]["lumo"]
+homo_2 = monomer2["features"]["homo"]
+lumo_2 = monomer2["features"]["lumo"]
+
+# Step 5: Prepare features for prediction
+features = {
+    "fukui_radical_max_1": monomer1["features"]["fukui_radical_max"],
+    "fukui_radical_max_2": monomer2["features"]["fukui_radical_max"],
+    "delta_HOMO_LUMO_AA": homo_1 - lumo_1,
+    "delta_HOMO_LUMO_AB": homo_1 - lumo_2,
+    "delta_HOMO_LUMO_BB": homo_2 - lumo_2,
+    "delta_HOMO_LUMO_BA": homo_2 - lumo_1,
+    "temperature": 60.0,
+    "polytype_emb_1": polytype_emb["pca_1"],
+    "polytype_emb_2": polytype_emb["pca_2"],
+    "method_emb_1": method_emb["pca_1"],
+    "method_emb_2": method_emb["pca_2"],
+    "solvent_logP": solvent["features"]["solvent_logP"],
+    "solvent_TPSA": solvent["features"]["solvent_TPSA"],
+    "solvent_HBD": solvent["features"]["solvent_HBD"],
+    "solvent_FractionCSP3": solvent["features"]["solvent_FractionCSP3"]
+}
+
+# Step 6: Make prediction
+response = requests.post(
+    f"{API_URL}/predict",
+    json={"features": features}
+)
+
+result = response.json()
+print(f"Predicted class: {result['predicted_class']}")
+print(f"Range: {result['r_product_range']}")
+print(f"Confidence: {result['confidence']:.2f}")
+```
+
+### Simple Prediction with Pre-calculated Features
 
 ```python
 import requests
@@ -253,84 +456,6 @@ curl -X POST "http://localhost:8000/predict" \
   }'
 ```
 
-## 🚢 Production Deployment
-
-### With Gunicorn (recommended for production)
-
-```bash
-# Install gunicorn if not installed
-pip install gunicorn
-
-# Start with 4 worker processes
-gunicorn app:app \
-  --workers 4 \
-  --worker-class uvicorn.workers.UvicornWorker \
-  --bind 0.0.0.0:8000 \
-  --timeout 120 \
-  --access-logfile - \
-  --error-logfile -
-```
-
-### Environment Variables
-
-```bash
-# Customize model path (optional)
-export MODEL_PATH="/path/to/model_bundle"
-
-# Start API
-python app.py
-```
-
-## 🐳 Docker Deployment
-
-See `Dockerfile` and `docker-compose.yml` for container deployment.
-
-```bash
-# Build Docker image
-docker build -t copol-api .
-
-# Run container
-docker run -p 8000:8000 copol-api
-```
-
-## 📝 Class Interpretation
-
-The model classifies copolymerization reactions into 3 classes based on the r-product:
-
-- **Class 0**: r₁·r₂ < 1 → **Strong alternating tendency**
-  - Monomers strongly prefer to react with the other monomer
-  - Leads to alternating copolymer
-
-- **Class 1**: 1 ≤ r₁·r₂ ≤ 25 → **Random to weak block formation**
-  - Monomers show similar or slightly preferred reactivity
-  - Leads to random or weakly block-forming copolymers
-
-- **Class 2**: r₁·r₂ > 25 → **Strong block formation**
-  - Monomers strongly prefer to react with themselves
-  - Leads to block copolymers or homopolymer mixtures
-
-## 🔒 Security
-
-For production deployment, consider implementing:
-
-1. **API Keys / Authentication**
-2. **Rate Limiting** (e.g., with `slowapi`)
-3. **HTTPS** activation
-4. **CORS** configuration if needed
-5. Extended **Input Validation**
-
-## 📊 Monitoring
-
-The API provides basic monitoring via:
-
-- `/health` - Health check endpoint
-- `/model/info` - Model metadata
-
-For production monitoring, we recommend:
-- Prometheus metrics
-- ELK Stack for logs
-- Sentry for error tracking
-
 ## 🐛 Troubleshooting
 
 ### Problem: "Model not loaded"
@@ -357,15 +482,4 @@ uvicorn app:app --port 8001
 
 ## 📚 Additional Information
 
-- See `test_api.py` for API tests
-- See `example_client.py` for usage examples
-- See `/docs` (when API is running) for interactive API documentation
 - See `../train_final_model.py` for model training details
-
-## 🤝 Support
-
-For questions or issues:
-1. Check the interactive documentation at `/docs`
-2. Check the API logs
-3. Test with the included `test_api.py` script
-

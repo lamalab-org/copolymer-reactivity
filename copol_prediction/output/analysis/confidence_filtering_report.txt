@@ -24,12 +24,12 @@ Class      Threshold    Orig Count   Filt Count   Retention    Orig Acc   Filt A
 FILTERED CLASSIFICATION REPORT
 ================================================================================
 
-                precision    recall  f1-score   support
+                      precision    recall  f1-score   support
 
- Class 0 (< 1)     0.9559    0.8939    0.9238      5890
-Class 1 (1-25)     0.7144    0.8166    0.7621      1565
-Class 2 (> 25)     0.1983    0.6216    0.3007        74
+Class 0: Alternating     0.9559    0.8939    0.9238      5890
+ Class 1: Block-like     0.7144    0.8166    0.7621      1565
+Class 2: Homopolymer     0.1983    0.6216    0.3007        74
 
-      accuracy                         0.8751      7529
-     macro avg     0.6228    0.7774    0.6622      7529
-  weighted avg     0.8982    0.8751    0.8841      7529
+            accuracy                         0.8751      7529
+           macro avg     0.6228    0.7774    0.6622      7529
+        weighted avg     0.8982    0.8751    0.8841      7529

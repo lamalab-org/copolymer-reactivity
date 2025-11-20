@@ -22,22 +22,44 @@ if [ ! -f "data/train.csv" ] || [ ! -f "data/train_morgan.csv" ]; then
     echo ""
 fi
 
-# Baseline
-echo ">> Baseline experiment"
-cd baseline && python train.py && cd ..
-echo ""
-
-# Fingerprint
-echo ">> Fingerprint experiment"
-cd fingerprint && python train.py && cd ..
-echo ""
-
-# Compare
-echo ">> Comparing results"
-python compare_results.py
-echo ""
-
+# Feature Comparison Experiments
 echo "=========================================="
-echo "Complete!"
+echo "FEATURE COMPARISON EXPERIMENTS"
 echo "=========================================="
+echo ""
+
+# Baseline (Quantum Features)
+echo ">> Training Baseline Model (Quantum Features)"
+cd feature_comparison/baseline && python train.py && cd ../..
+echo ""
+
+# Morgan Fingerprint
+echo ">> Training Fingerprint Model (Morgan)"
+cd feature_comparison/fingerprint && python train.py && cd ../..
+echo ""
+
+# Compare Feature Models
+echo ">> Comparing Feature Models"
+cd feature_comparison/comparison && python compare.py && cd ../..
+echo ""
+
+# Filter Comparison Experiments
+echo "=========================================="
+echo "FILTER COMPARISON EXPERIMENTS"
+echo "=========================================="
+echo ""
+
+echo ">> Running Filter Sweep"
+cd filter_comparison && python sweep_filters.py && cd ..
+echo ""
+
+# Summary
+echo "=========================================="
+echo "COMPLETE!"
+echo "=========================================="
+echo ""
+echo "Results:"
+echo "  - Feature comparison plots: feature_comparison/comparison/plots/"
+echo "  - Filter comparison results: filter_comparison/results/"
+echo ""
 
