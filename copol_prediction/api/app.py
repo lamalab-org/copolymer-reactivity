@@ -183,20 +183,38 @@ async def startup_event():
         polytype_emb_path = api_dir / "polytype_emb_pca_values.json"
         
         if method_emb_path.exists():
-            with open(method_emb_path, 'r') as f:
-                method_embeddings = json.load(f)
-            print(f"✓ Loaded {len(method_embeddings)} method embeddings")
+            try:
+                with open(method_emb_path, 'r') as f:
+                    method_embeddings = json.load(f)
+                print(f"✓ Loaded {len(method_embeddings)} method embeddings")
+            except json.JSONDecodeError as e:
+                print(f"✗ Error parsing method embeddings JSON: {e}")
+                method_embeddings = {}
+            except Exception as e:
+                print(f"✗ Error loading method embeddings: {e}")
+                method_embeddings = {}
         else:
             print(f"⚠ Warning: Method embeddings file not found at {method_emb_path}")
+            method_embeddings = {}
         
         if polytype_emb_path.exists():
-            with open(polytype_emb_path, 'r') as f:
-                polytype_embeddings = json.load(f)
-            print(f"✓ Loaded {len(polytype_embeddings)} polytype embeddings")
+            try:
+                with open(polytype_emb_path, 'r') as f:
+                    polytype_embeddings = json.load(f)
+                print(f"✓ Loaded {len(polytype_embeddings)} polytype embeddings")
+            except json.JSONDecodeError as e:
+                print(f"✗ Error parsing polytype embeddings JSON: {e}")
+                polytype_embeddings = {}
+            except Exception as e:
+                print(f"✗ Error loading polytype embeddings: {e}")
+                polytype_embeddings = {}
         else:
             print(f"⚠ Warning: Polytype embeddings file not found at {polytype_emb_path}")
+            polytype_embeddings = {}
     except Exception as e:
         print(f"✗ Error loading embeddings: {e}")
+        method_embeddings = {}
+        polytype_embeddings = {}
     
     # Load model
     try:
@@ -367,7 +385,7 @@ async def predict_batch(input_data: BatchPredictionInput):
         )
 
 
-@app.get("/features", response_model=Dict[str, List[str]])
+@app.get("/features")
 async def get_required_features():
     """Get list of required features for prediction."""
     if not predictor:
@@ -376,10 +394,17 @@ async def get_required_features():
             detail="Model not loaded"
         )
     
-    return {
-        "required_features": predictor.features,
-        "n_features": len(predictor.features)
-    }
+    try:
+        features = predictor.features if predictor.features else []
+        return {
+            "required_features": features,
+            "n_features": len(features) if features else 0
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving features: {str(e)}"
+        )
 
 
 def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
@@ -487,7 +512,7 @@ async def preprocess_solvent(input_data: SolventPreprocessInput):
         )
 
 
-@app.get("/embeddings/methods", response_model=Dict[str, List[str]])
+@app.get("/embeddings/methods")
 async def get_available_methods():
     """
     Get list of all available method strings for selection.
@@ -495,13 +520,36 @@ async def get_available_methods():
     Returns:
         List of all method names that have embeddings
     """
-    return {
-        "methods": sorted(list(method_embeddings.keys())),
-        "count": len(method_embeddings)
-    }
+    global method_embeddings
+    try:
+        if not method_embeddings:
+            # Try to reload embeddings if they're empty
+            api_dir = Path(__file__).parent
+            method_emb_path = api_dir / "method_emb_pca_values.json"
+            if method_emb_path.exists():
+                try:
+                    with open(method_emb_path, 'r') as f:
+                        method_embeddings = json.load(f)
+                    print(f"✓ Reloaded {len(method_embeddings)} method embeddings")
+                except Exception as e:
+                    print(f"Error reloading method embeddings: {e}")
+        
+        methods = sorted(list(method_embeddings.keys())) if method_embeddings else []
+        return {
+            "methods": methods,
+            "count": len(methods)
+        }
+    except Exception as e:
+        import traceback
+        error_detail = f"Error retrieving methods: {str(e)}\n{traceback.format_exc()}"
+        print(error_detail)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving methods: {str(e)}"
+        )
 
 
-@app.get("/embeddings/polytypes", response_model=Dict[str, List[str]])
+@app.get("/embeddings/polytypes")
 async def get_available_polytypes():
     """
     Get list of all available polymerization type strings for selection.
@@ -509,10 +557,33 @@ async def get_available_polytypes():
     Returns:
         List of all polytype names that have embeddings
     """
-    return {
-        "polytypes": sorted(list(polytype_embeddings.keys())),
-        "count": len(polytype_embeddings)
-    }
+    global polytype_embeddings
+    try:
+        if not polytype_embeddings:
+            # Try to reload embeddings if they're empty
+            api_dir = Path(__file__).parent
+            polytype_emb_path = api_dir / "polytype_emb_pca_values.json"
+            if polytype_emb_path.exists():
+                try:
+                    with open(polytype_emb_path, 'r') as f:
+                        polytype_embeddings = json.load(f)
+                    print(f"✓ Reloaded {len(polytype_embeddings)} polytype embeddings")
+                except Exception as e:
+                    print(f"Error reloading polytype embeddings: {e}")
+        
+        polytypes = sorted(list(polytype_embeddings.keys())) if polytype_embeddings else []
+        return {
+            "polytypes": polytypes,
+            "count": len(polytypes)
+        }
+    except Exception as e:
+        import traceback
+        error_detail = f"Error retrieving polytypes: {str(e)}\n{traceback.format_exc()}"
+        print(error_detail)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving polytypes: {str(e)}"
+        )
 
 
 @app.get("/embeddings/method/{method_name}", response_model=Dict[str, Optional[float]])
