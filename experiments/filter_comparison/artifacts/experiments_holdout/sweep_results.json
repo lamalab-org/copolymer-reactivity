@@ -8,37 +8,37 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1,
-      "reg_alpha": 0.1,
-      "n_estimators": 300,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7982154014497534,
-    "holdout_accuracy": 0.780791788856305,
-    "holdout_f1_macro": 0.6804545895234263,
-    "holdout_f1_weighted": 0.7863729051285028,
-    "holdout_precision_macro": 0.6580880358253306,
-    "holdout_recall_macro": 0.709385992067765,
+    "cv_score": 0.7982572804395378,
+    "holdout_accuracy": 0.7859237536656891,
+    "holdout_f1_macro": 0.6930635326143676,
+    "holdout_f1_weighted": 0.7905959389036982,
+    "holdout_precision_macro": 0.6817051758010959,
+    "holdout_recall_macro": 0.7068337012311116,
     "confusion_matrix": [
       [
-        838,
+        846,
         144,
-        22
-      ],
-      [
-        98,
-        184,
         14
       ],
       [
+        100,
+        184,
+        12
+      ],
+      [
         12,
-        9,
-        43
+        10,
+        42
       ]
     ],
     "cm_plot": "confusion_matrix_spec0_poly0_neg0_aug0.png",
@@ -54,36 +54,36 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.9,
-      "reg_lambda": 1,
-      "reg_alpha": 0.5,
-      "n_estimators": 600,
-      "min_child_weight": 2,
-      "max_depth": 8,
+      "subsample": 0.95,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
+      "min_child_weight": 3,
+      "max_depth": 6,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7707028798339067,
+    "cv_score": 0.7634443206184398,
     "holdout_accuracy": 0.7602639296187683,
-    "holdout_f1_macro": 0.6671130805297913,
-    "holdout_f1_weighted": 0.7709113084820792,
-    "holdout_precision_macro": 0.6389684307278962,
+    "holdout_f1_macro": 0.6615058553684311,
+    "holdout_f1_weighted": 0.7714883912575382,
+    "holdout_precision_macro": 0.6309286936749978,
     "holdout_recall_macro": 0.7105250170489215,
     "confusion_matrix": [
       [
         802,
-        183,
-        19
+        180,
+        22
       ],
       [
-        84,
+        82,
         191,
-        21
+        23
       ],
       [
-        12,
-        8,
+        10,
+        10,
         44
       ]
     ],
@@ -100,37 +100,37 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1.5,
-      "reg_alpha": 0.5,
-      "n_estimators": 600,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 1.0
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.8452675014830822,
-    "holdout_accuracy": 0.783724340175953,
-    "holdout_f1_macro": 0.6778123572489333,
-    "holdout_f1_weighted": 0.7876480680461379,
-    "holdout_precision_macro": 0.7126079145583996,
-    "holdout_recall_macro": 0.6602508883385377,
+    "cv_score": 0.8459712892169138,
+    "holdout_accuracy": 0.7859237536656891,
+    "holdout_f1_macro": 0.6780671856224151,
+    "holdout_f1_weighted": 0.7896481215041806,
+    "holdout_precision_macro": 0.7183768819974888,
+    "holdout_recall_macro": 0.6587529386956678,
     "confusion_matrix": [
       [
-        849,
-        147,
+        850,
+        146,
         8
       ],
       [
-        104,
-        188,
-        4
+        102,
+        191,
+        3
       ],
       [
-        14,
+        15,
         18,
-        32
+        31
       ]
     ],
     "cm_plot": "confusion_matrix_spec0_poly0_neg1_aug0.png",
@@ -146,27 +146,27 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1.5,
-      "reg_alpha": 0.5,
-      "n_estimators": 800,
+      "subsample": 0.95,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
       "min_child_weight": 3,
-      "max_depth": 8,
-      "learning_rate": 0.04,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "max_depth": 6,
+      "learning_rate": 0.06,
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7813434763630795,
-    "holdout_accuracy": 0.7624633431085044,
-    "holdout_f1_macro": 0.6628974439650163,
-    "holdout_f1_weighted": 0.7719035187068295,
-    "holdout_precision_macro": 0.640114272847533,
-    "holdout_recall_macro": 0.6960979281073904,
+    "cv_score": 0.7777301676104351,
+    "holdout_accuracy": 0.7536656891495601,
+    "holdout_f1_macro": 0.6618572979130026,
+    "holdout_f1_weighted": 0.7648371083922745,
+    "holdout_precision_macro": 0.6361859397013303,
+    "holdout_recall_macro": 0.701866520404867,
     "confusion_matrix": [
       [
-        809,
-        177,
-        18
+        795,
+        190,
+        19
       ],
       [
         87,
@@ -174,9 +174,9 @@
         19
       ],
       [
-        15,
-        8,
-        41
+        12,
+        9,
+        43
       ]
     ],
     "cm_plot": "confusion_matrix_spec0_poly0_neg1_aug1.png",
@@ -192,37 +192,37 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1,
-      "reg_alpha": 0.1,
-      "n_estimators": 300,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7982154014497534,
-    "holdout_accuracy": 0.780791788856305,
-    "holdout_f1_macro": 0.6804545895234263,
-    "holdout_f1_weighted": 0.7863729051285028,
-    "holdout_precision_macro": 0.6580880358253306,
-    "holdout_recall_macro": 0.709385992067765,
+    "cv_score": 0.7982572804395378,
+    "holdout_accuracy": 0.7859237536656891,
+    "holdout_f1_macro": 0.6930635326143676,
+    "holdout_f1_weighted": 0.7905959389036982,
+    "holdout_precision_macro": 0.6817051758010959,
+    "holdout_recall_macro": 0.7068337012311116,
     "confusion_matrix": [
       [
-        838,
+        846,
         144,
-        22
-      ],
-      [
-        98,
-        184,
         14
       ],
       [
+        100,
+        184,
+        12
+      ],
+      [
         12,
-        9,
-        43
+        10,
+        42
       ]
     ],
     "cm_plot": "confusion_matrix_spec0_poly1_neg0_aug0.png",
@@ -238,36 +238,36 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.9,
-      "reg_lambda": 1,
-      "reg_alpha": 0.5,
-      "n_estimators": 600,
-      "min_child_weight": 2,
-      "max_depth": 8,
+      "subsample": 0.95,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
+      "min_child_weight": 3,
+      "max_depth": 6,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7707028798339067,
+    "cv_score": 0.7634443206184398,
     "holdout_accuracy": 0.7602639296187683,
-    "holdout_f1_macro": 0.6671130805297913,
-    "holdout_f1_weighted": 0.7709113084820792,
-    "holdout_precision_macro": 0.6389684307278962,
+    "holdout_f1_macro": 0.6615058553684311,
+    "holdout_f1_weighted": 0.7714883912575382,
+    "holdout_precision_macro": 0.6309286936749978,
     "holdout_recall_macro": 0.7105250170489215,
     "confusion_matrix": [
       [
         802,
-        183,
-        19
+        180,
+        22
       ],
       [
-        84,
+        82,
         191,
-        21
+        23
       ],
       [
-        12,
-        8,
+        10,
+        10,
         44
       ]
     ],
@@ -284,37 +284,37 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1.5,
-      "reg_alpha": 0.5,
-      "n_estimators": 600,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 1.0
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.8452675014830822,
-    "holdout_accuracy": 0.783724340175953,
-    "holdout_f1_macro": 0.6778123572489333,
-    "holdout_f1_weighted": 0.7876480680461379,
-    "holdout_precision_macro": 0.7126079145583996,
-    "holdout_recall_macro": 0.6602508883385377,
+    "cv_score": 0.8459712892169138,
+    "holdout_accuracy": 0.7859237536656891,
+    "holdout_f1_macro": 0.6780671856224151,
+    "holdout_f1_weighted": 0.7896481215041806,
+    "holdout_precision_macro": 0.7183768819974888,
+    "holdout_recall_macro": 0.6587529386956678,
     "confusion_matrix": [
       [
-        849,
-        147,
+        850,
+        146,
         8
       ],
       [
-        104,
-        188,
-        4
+        102,
+        191,
+        3
       ],
       [
-        14,
+        15,
         18,
-        32
+        31
       ]
     ],
     "cm_plot": "confusion_matrix_spec0_poly1_neg1_aug0.png",
@@ -330,27 +330,27 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1.5,
-      "reg_alpha": 0.5,
-      "n_estimators": 800,
+      "subsample": 0.95,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
       "min_child_weight": 3,
-      "max_depth": 8,
-      "learning_rate": 0.04,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "max_depth": 6,
+      "learning_rate": 0.06,
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7813434763630795,
-    "holdout_accuracy": 0.7624633431085044,
-    "holdout_f1_macro": 0.6628974439650163,
-    "holdout_f1_weighted": 0.7719035187068295,
-    "holdout_precision_macro": 0.640114272847533,
-    "holdout_recall_macro": 0.6960979281073904,
+    "cv_score": 0.7777301676104351,
+    "holdout_accuracy": 0.7536656891495601,
+    "holdout_f1_macro": 0.6618572979130026,
+    "holdout_f1_weighted": 0.7648371083922745,
+    "holdout_precision_macro": 0.6361859397013303,
+    "holdout_recall_macro": 0.701866520404867,
     "confusion_matrix": [
       [
-        809,
-        177,
-        18
+        795,
+        190,
+        19
       ],
       [
         87,
@@ -358,9 +358,9 @@
         19
       ],
       [
-        15,
-        8,
-        41
+        12,
+        9,
+        43
       ]
     ],
     "cm_plot": "confusion_matrix_spec0_poly1_neg1_aug1.png",
@@ -376,37 +376,37 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1,
-      "reg_alpha": 0.1,
-      "n_estimators": 300,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.8113378280503973,
-    "holdout_accuracy": 0.7937262357414449,
-    "holdout_f1_macro": 0.6645403497539643,
-    "holdout_f1_weighted": 0.796144518636137,
-    "holdout_precision_macro": 0.6559847721661831,
-    "holdout_recall_macro": 0.6739470911473547,
+    "cv_score": 0.8073830054961881,
+    "holdout_accuracy": 0.8032319391634981,
+    "holdout_f1_macro": 0.6760057101563293,
+    "holdout_f1_weighted": 0.8052748358912393,
+    "holdout_precision_macro": 0.6737531779978124,
+    "holdout_recall_macro": 0.6789540214879795,
     "confusion_matrix": [
       [
-        1366,
-        190,
-        32
+        1374,
+        184,
+        30
       ],
       [
-        162,
-        254,
-        12
+        152,
+        268,
+        8
       ],
       [
-        26,
-        12,
-        50
+        30,
+        10,
+        48
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly0_neg0_aug0.png",
@@ -422,37 +422,37 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1.5,
-      "reg_alpha": 0.5,
-      "n_estimators": 800,
+      "subsample": 0.95,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
       "min_child_weight": 3,
-      "max_depth": 8,
-      "learning_rate": 0.04,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "max_depth": 6,
+      "learning_rate": 0.06,
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7764628467801298,
-    "holdout_accuracy": 0.7423954372623575,
-    "holdout_f1_macro": 0.6079273684462246,
-    "holdout_f1_weighted": 0.7535395900409656,
-    "holdout_precision_macro": 0.5861008516610177,
-    "holdout_recall_macro": 0.6407076723115236,
+    "cv_score": 0.769375692767706,
+    "holdout_accuracy": 0.75,
+    "holdout_f1_macro": 0.6001780679217184,
+    "holdout_f1_weighted": 0.7619467221488023,
+    "holdout_precision_macro": 0.5760140503619651,
+    "holdout_recall_macro": 0.638856846912592,
     "confusion_matrix": [
       [
-        1266,
-        288,
-        34
+        1270,
+        270,
+        48
       ],
       [
-        150,
-        248,
+        134,
+        264,
         30
       ],
       [
         30,
-        10,
-        48
+        14,
+        44
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly0_neg0_aug1.png",
@@ -468,22 +468,22 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1,
-      "reg_alpha": 0.1,
-      "n_estimators": 300,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.8421960462165984,
-    "holdout_accuracy": 0.7899239543726235,
-    "holdout_f1_macro": 0.6372923487549734,
-    "holdout_f1_weighted": 0.7920976146890822,
-    "holdout_precision_macro": 0.6454375157627541,
-    "holdout_recall_macro": 0.6327456276077948,
+    "cv_score": 0.844000212039492,
+    "holdout_accuracy": 0.7880228136882129,
+    "holdout_f1_macro": 0.6332107639424712,
+    "holdout_f1_weighted": 0.7893138637718068,
+    "holdout_precision_macro": 0.648984999597985,
+    "holdout_recall_macro": 0.6236122376332833,
     "confusion_matrix": [
       [
         1364,
@@ -491,14 +491,14 @@
         28
       ],
       [
-        160,
-        260,
-        8
+        166,
+        258,
+        4
       ],
       [
-        28,
-        22,
-        38
+        32,
+        20,
+        36
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly0_neg1_aug0.png",
@@ -514,37 +514,37 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.9,
-      "reg_lambda": 3,
-      "reg_alpha": 0.1,
-      "n_estimators": 800,
-      "min_child_weight": 3,
-      "max_depth": 8,
-      "learning_rate": 0.07,
-      "gamma": 0.6,
-      "colsample_bytree": 1.0
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 6,
+      "learning_rate": 0.06,
+      "gamma": 0.7,
+      "colsample_bytree": 0.85
     },
-    "cv_score": 0.7789785106592462,
-    "holdout_accuracy": 0.75,
-    "holdout_f1_macro": 0.6100703357745006,
-    "holdout_f1_weighted": 0.7601638206873941,
-    "holdout_precision_macro": 0.5893493433456259,
-    "holdout_recall_macro": 0.6403237036196852,
+    "cv_score": 0.7752737361161925,
+    "holdout_accuracy": 0.7461977186311787,
+    "holdout_f1_macro": 0.6129704268388131,
+    "holdout_f1_weighted": 0.7577527073431995,
+    "holdout_precision_macro": 0.5895781062883673,
+    "holdout_recall_macro": 0.6492138361414944,
     "confusion_matrix": [
       [
-        1278,
-        274,
-        36
+        1262,
+        288,
+        38
       ],
       [
-        146,
-        254,
+        140,
+        260,
         28
       ],
       [
         32,
-        10,
-        46
+        8,
+        48
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly0_neg1_aug1.png",
@@ -560,37 +560,37 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1,
-      "reg_alpha": 0.1,
-      "n_estimators": 300,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.8113378280503973,
-    "holdout_accuracy": 0.7937262357414449,
-    "holdout_f1_macro": 0.6645403497539643,
-    "holdout_f1_weighted": 0.796144518636137,
-    "holdout_precision_macro": 0.6559847721661831,
-    "holdout_recall_macro": 0.6739470911473547,
+    "cv_score": 0.8073830054961881,
+    "holdout_accuracy": 0.8032319391634981,
+    "holdout_f1_macro": 0.6760057101563293,
+    "holdout_f1_weighted": 0.8052748358912393,
+    "holdout_precision_macro": 0.6737531779978124,
+    "holdout_recall_macro": 0.6789540214879795,
     "confusion_matrix": [
       [
-        1366,
-        190,
-        32
+        1374,
+        184,
+        30
       ],
       [
-        162,
-        254,
-        12
+        152,
+        268,
+        8
       ],
       [
-        26,
-        12,
-        50
+        30,
+        10,
+        48
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly1_neg0_aug0.png",
@@ -606,37 +606,37 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1.5,
-      "reg_alpha": 0.5,
-      "n_estimators": 800,
+      "subsample": 0.95,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
       "min_child_weight": 3,
-      "max_depth": 8,
-      "learning_rate": 0.04,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "max_depth": 6,
+      "learning_rate": 0.06,
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.7764628467801298,
-    "holdout_accuracy": 0.7423954372623575,
-    "holdout_f1_macro": 0.6079273684462246,
-    "holdout_f1_weighted": 0.7535395900409656,
-    "holdout_precision_macro": 0.5861008516610177,
-    "holdout_recall_macro": 0.6407076723115236,
+    "cv_score": 0.769375692767706,
+    "holdout_accuracy": 0.75,
+    "holdout_f1_macro": 0.6001780679217184,
+    "holdout_f1_weighted": 0.7619467221488023,
+    "holdout_precision_macro": 0.5760140503619651,
+    "holdout_recall_macro": 0.638856846912592,
     "confusion_matrix": [
       [
-        1266,
-        288,
-        34
+        1270,
+        270,
+        48
       ],
       [
-        150,
-        248,
+        134,
+        264,
         30
       ],
       [
         30,
-        10,
-        48
+        14,
+        44
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly1_neg0_aug1.png",
@@ -652,22 +652,22 @@
       "use_augmentation": false
     },
     "best_params": {
-      "subsample": 0.8,
-      "reg_lambda": 1,
-      "reg_alpha": 0.1,
-      "n_estimators": 300,
-      "min_child_weight": 3,
-      "max_depth": 8,
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.0,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 5,
       "learning_rate": 0.06,
-      "gamma": 0.5,
-      "colsample_bytree": 0.8
+      "gamma": 0.3,
+      "colsample_bytree": 0.9
     },
-    "cv_score": 0.8421960462165984,
-    "holdout_accuracy": 0.7899239543726235,
-    "holdout_f1_macro": 0.6372923487549734,
-    "holdout_f1_weighted": 0.7920976146890822,
-    "holdout_precision_macro": 0.6454375157627541,
-    "holdout_recall_macro": 0.6327456276077948,
+    "cv_score": 0.844000212039492,
+    "holdout_accuracy": 0.7880228136882129,
+    "holdout_f1_macro": 0.6332107639424712,
+    "holdout_f1_weighted": 0.7893138637718068,
+    "holdout_precision_macro": 0.648984999597985,
+    "holdout_recall_macro": 0.6236122376332833,
     "confusion_matrix": [
       [
         1364,
@@ -675,14 +675,14 @@
         28
       ],
       [
-        160,
-        260,
-        8
+        166,
+        258,
+        4
       ],
       [
-        28,
-        22,
-        38
+        32,
+        20,
+        36
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly1_neg1_aug0.png",
@@ -698,37 +698,37 @@
       "use_augmentation": true
     },
     "best_params": {
-      "subsample": 0.9,
-      "reg_lambda": 3,
-      "reg_alpha": 0.1,
-      "n_estimators": 800,
-      "min_child_weight": 3,
-      "max_depth": 8,
-      "learning_rate": 0.07,
-      "gamma": 0.6,
-      "colsample_bytree": 1.0
+      "subsample": 0.85,
+      "reg_lambda": 2.0,
+      "reg_alpha": 0.3,
+      "n_estimators": 700,
+      "min_child_weight": 2,
+      "max_depth": 6,
+      "learning_rate": 0.06,
+      "gamma": 0.7,
+      "colsample_bytree": 0.85
     },
-    "cv_score": 0.7789785106592462,
-    "holdout_accuracy": 0.75,
-    "holdout_f1_macro": 0.6100703357745006,
-    "holdout_f1_weighted": 0.7601638206873941,
-    "holdout_precision_macro": 0.5893493433456259,
-    "holdout_recall_macro": 0.6403237036196852,
+    "cv_score": 0.7752737361161925,
+    "holdout_accuracy": 0.7461977186311787,
+    "holdout_f1_macro": 0.6129704268388131,
+    "holdout_f1_weighted": 0.7577527073431995,
+    "holdout_precision_macro": 0.5895781062883673,
+    "holdout_recall_macro": 0.6492138361414944,
     "confusion_matrix": [
       [
-        1278,
-        274,
-        36
+        1262,
+        288,
+        38
       ],
       [
-        146,
-        254,
+        140,
+        260,
         28
       ],
       [
         32,
-        10,
-        46
+        8,
+        48
       ]
     ],
     "cm_plot": "confusion_matrix_spec1_poly1_neg1_aug1.png",

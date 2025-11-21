@@ -5,10 +5,10 @@ Filter sweep script for copolymerization prediction.
 This script tests different combinations of data filters and preprocessing
 options to find the best configuration for the model.
 
-IMPORTANT: This script uses the global train/test split from experiments/data/
-(created by create_train_test_split.py) to ensure consistency with other
-experiments (baseline, fingerprint, etc.). All filter configurations are
-evaluated on the same holdout set for fair comparison.
+IMPORTANT: This script uses the central train/test split from 
+copol_prediction/artifacts/data_splits/ (created by create_data_split.py) 
+to ensure consistency with train_final_model.py and all other training scripts.
+All filter configurations are evaluated on the same holdout set for fair comparison.
 
 Usage:
     python sweep_filters.py [--data-path PATH] [--output-dir DIR]
@@ -29,6 +29,8 @@ import seaborn as sns
 
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add copol_prediction to path for utils
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../copol_prediction'))
 
 from copolpredictor import (
     data_processing,
@@ -38,6 +40,7 @@ from copolpredictor import (
     holdout_utils,
     prediction_utils
 )
+from utils import load_data_split
 
 # Import plot configuration
 try:
@@ -80,8 +83,8 @@ def parse_args():
     parser.add_argument(
         "--n-iter",
         type=int,
-        default=50,
-        help="Hyperparameter search iterations per run (increased to match classification.py)"
+        default=25,
+        help="Hyperparameter search iterations per run (matches train_final_model.py)"
     )
     parser.add_argument(
         "--augmentation-samples",
@@ -119,28 +122,36 @@ def plot_confusion_matrix(cm, labels, title, save_path):
     Args:
         cm: Confusion matrix array
         labels: Class labels
-        title: Plot title
+        title: Plot title (not used, kept for compatibility)
         save_path: Path to save the plot
     """
-    plt.figure(figsize=(8, 6))
-    plt.imshow(cm, interpolation='nearest', cmap='Blues')
-    plt.title(title, fontsize=14)
-    plt.colorbar()
+    fig, ax = plt.subplots(figsize=(8, 6))
     
+    # Plot confusion matrix
+    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
+    plt.colorbar(im, ax=ax)
+    
+    # No grid
+    ax.grid(False)
+    
+    # Set labels with larger font
     tick_marks = np.arange(len(labels))
-    plt.xticks(tick_marks, labels)
-    plt.yticks(tick_marks, labels)
-    plt.xlabel('Predicted Class', fontsize=12)
-    plt.ylabel('True Class', fontsize=12)
+    ax.set_xticks(tick_marks)
+    ax.set_yticks(tick_marks)
+    ax.set_xticklabels(labels, fontsize=16)
+    ax.set_yticklabels(labels, fontsize=16)
+    ax.set_xlabel('Predicted Class', fontsize=16, fontweight='bold')
+    ax.set_ylabel('True Class', fontsize=16, fontweight='bold')
     
-    # Annotate cells
+    # Annotate cells with larger font
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
-            plt.text(j, i, int(cm[i, j]),
-                    ha="center", va="center",
-                    color="white" if cm[i, j] > cm.max() / 2 else "black",
-                    fontsize=12)
+            ax.text(j, i, int(cm[i, j]),
+                   ha="center", va="center",
+                   color="white" if cm[i, j] > cm.max() / 2 else "black",
+                   fontsize=18, fontweight='bold')
     
+    # No title
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -150,7 +161,8 @@ def plot_confusion_matrix(cm, labels, title, save_path):
 def prepare_filtered_data(df, filters, config, *, random_state=42, debug=True):
     """
     Load global train/test split and apply filters.
-    Uses the pre-split data from experiments/data/ for consistency across all experiments.
+    Uses the central train/test split from copol_prediction/artifacts/data_splits/ 
+    for consistency with train_final_model.py and all other training scripts.
     Returns (train_df, test_df, features).
     """
 
@@ -161,21 +173,33 @@ def prepare_filtered_data(df, filters, config, *, random_state=42, debug=True):
     # ---------------- 1) Load global train/test split ----------------
     log("\n[Split] Loading global train/test split...")
     
-    train_path = os.path.join(os.path.dirname(__file__), '../data/train.csv')
-    test_path = os.path.join(os.path.dirname(__file__), '../data/test.csv')
-    
-    if not os.path.exists(train_path) or not os.path.exists(test_path):
+    # Use the same utility function as train_final_model.py
+    # This loads from copol_prediction/artifacts/data_splits/
+    try:
+        # Calculate path to copol_prediction directory
+        script_dir = os.path.dirname(__file__)
+        copol_pred_dir = os.path.join(script_dir, '../../copol_prediction')
+        copol_pred_dir = os.path.abspath(copol_pred_dir)
+        
+        # Change to copol_prediction directory temporarily to use relative paths
+        original_cwd = os.getcwd()
+        os.chdir(copol_pred_dir)
+        
+        try:
+            df_train, df_test = load_data_split.load_train_test_split()
+            load_data_split.print_split_info()
+        finally:
+            os.chdir(original_cwd)
+        
+        log(f"[Split] Loaded train: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
+        log(f"[Split] Loaded test: {len(df_test)} samples ({df_test['reaction_id'].nunique()} groups)")
+    except FileNotFoundError as e:
         raise FileNotFoundError(
             f"Global train/test split not found!\n"
-            f"Expected:\n  - {train_path}\n  - {test_path}\n"
-            f"Run: cd ../copol_prediction && python create_data_split.py"
+            f"{e}\n"
+            f"Please create the central split first:\n"
+            f"  cd copol_prediction && python create_data_split.py"
         )
-    
-    df_train = pd.read_csv(train_path)
-    df_test = pd.read_csv(test_path)
-    
-    log(f"[Split] Loaded train: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
-    log(f"[Split] Loaded test: {len(df_test)} samples ({df_test['reaction_id'].nunique()} groups)")
 
     # ---------------- 2) Apply filters to both train and test ----------------
     def apply_filters_to_set(df_set, set_name):
@@ -350,17 +374,17 @@ def run_single_configuration(df, filters, config):
         pct = 100 * count / len(y_train)
         print(f"    Class {cls}: {count:4d} samples ({pct:5.1f}%) | weight: {class_weights.get(cls, 1.0):.3f}")
     
-    # Hyperparameter grid (matching classification.py)
+    # Hyperparameter grid (matching train_final_model.py for consistency)
     param_grid = {
-        'n_estimators': [100, 300, 600, 800],
-        'max_depth': [3, 5, 8],
-        'learning_rate': [0.04, 0.05, 0.06, 0.07],
-        'subsample': [0.8, 0.9, 0.95],
-        'colsample_bytree': [0.8, 0.9, 1.0],
-        'reg_alpha': [0, 0.1, 0.5, 0.6],
-        'reg_lambda': [1, 1.5, 2, 3],
-        'min_child_weight': [2, 3, 5, 7],
-        'gamma': [0.5, 0.6],
+        'n_estimators': [500, 600, 700],
+        'max_depth': [4, 5, 6],
+        'learning_rate': [0.04, 0.05, 0.06],
+        'subsample': [0.85, 0.9, 0.95],
+        'colsample_bytree': [0.85, 0.9, 1.0],
+        'reg_alpha': [0.0, 0.1, 0.3],
+        'reg_lambda': [1.0, 1.5, 2.0],
+        'min_child_weight': [2, 3, 5],
+        'gamma': [0.3, 0.5, 0.7],
     }
     
     # Train with CV
@@ -474,161 +498,50 @@ def run_single_configuration(df, filters, config):
         return None
 
 
-def plot_4x4_matrix(results_df, plots_dir, metric='holdout_f1_macro', metric_label='F1 Score (Macro)'):
+# Plot functions moved to plot_sweep_results.py
+# Define local version with updated style (no grid, larger font, no title)
+def plot_confusion_matrix(cm, labels, title, save_path):
     """
-    Create 4x4 matrix heatmap showing all filter combinations.
+    Plot and save a confusion matrix.
+    Updated style: no grid, larger font, no title.
     
     Args:
-        results_df: DataFrame with results including 'filters' column
-        plots_dir: Directory to save plots
-        metric: Metric column name to plot
-        metric_label: Label for the metric
+        cm: Confusion matrix array
+        labels: Class labels
+        title: Plot title (not used, kept for compatibility)
+        save_path: Path to save the plot
     """
-    setup_plot_style()
+    fig, ax = plt.subplots(figsize=(8, 6))
     
-    # Extract filter values from results
-    filter_data = []
-    for _, row in results_df.iterrows():
-        filters = row['filters']
-        filter_data.append({
-            'remove_specialized': int(filters.get('remove_specialized', False)),
-            'add_negative_data': int(filters.get('add_negative_data', False)),
-            'use_augmentation': int(filters.get('use_augmentation', False)),
-            'apply_polymerization_filter': int(filters.get('apply_polymerization_filter', False)),
-            'metric': row[metric]
-        })
+    # Plot confusion matrix
+    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
+    plt.colorbar(im, ax=ax)
     
-    filter_df = pd.DataFrame(filter_data)
+    # No grid
+    ax.grid(False)
     
-    # Create matrix: rows = specialized + negative (4 combos), cols = aug + poly (4 combos)
-    # Row axis: (remove_specialized, add_negative_data)
-    # Col axis: (use_augmentation, apply_polymerization_filter)
+    # Set labels with larger font
+    tick_marks = np.arange(len(labels))
+    ax.set_xticks(tick_marks)
+    ax.set_yticks(tick_marks)
+    ax.set_xticklabels(labels, fontsize=16)
+    ax.set_yticklabels(labels, fontsize=16)
+    ax.set_xlabel('Predicted Class', fontsize=16, fontweight='bold')
+    ax.set_ylabel('True Class', fontsize=16, fontweight='bold')
     
-    matrix = np.full((4, 4), np.nan)
-    labels_row = []
-    labels_col = []
+    # Annotate cells with larger font
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, int(cm[i, j]),
+                   ha="center", va="center",
+                   color="white" if cm[i, j] > cm.max() / 2 else "black",
+                   fontsize=18, fontweight='bold')
     
-    # Generate row labels: (remove_spec, add_neg)
-    for spec in [0, 1]:
-        for neg in [0, 1]:
-            spec_str = "Spec+" if spec else "Spec-"
-            neg_str = "Neg+" if neg else "Neg-"
-            labels_row.append(f"{spec_str}\n{neg_str}")
-    
-    # Generate col labels: (augment, poly_filter)
-    for aug in [0, 1]:
-        for poly in [0, 1]:
-            aug_str = "Aug+" if aug else "Aug-"
-            poly_str = "Poly+" if poly else "Poly-"
-            labels_col.append(f"{aug_str}\n{poly_str}")
-    
-    # Fill matrix
-    for _, row in filter_df.iterrows():
-        row_idx = int(row['remove_specialized'] * 2 + row['add_negative_data'])
-        col_idx = int(row['use_augmentation'] * 2 + row['apply_polymerization_filter'])
-        matrix[row_idx, col_idx] = row['metric']
-    
-    # Create heatmap
-    fig, ax = plt.subplots(figsize=(12, 10))
-    
-    # Use mask for missing values
-    mask = np.isnan(matrix)
-    
-    sns.heatmap(
-        matrix,
-        annot=True,
-        fmt='.4f',
-        cmap=HEATMAP_CMAP,
-        mask=mask,
-        cbar_kws={'label': metric_label},
-        xticklabels=labels_col,
-        yticklabels=labels_row,
-        ax=ax,
-        vmin=matrix[~mask].min() if not mask.all() else 0,
-        vmax=matrix[~mask].max() if not mask.all() else 1,
-        linewidths=0.5,
-        linecolor='gray'
-    )
-    
-    ax.set_title(f'Filter Sweep Results: {metric_label}\n(All combinations on same holdout set)', 
-                 fontsize=14, pad=20)
-    ax.set_xlabel('Augmentation & Polymerization Filter', fontsize=12)
-    ax.set_ylabel('Specialized Removal & Negative Data', fontsize=12)
-    
+    # No title
     plt.tight_layout()
-    
-    filename = f'filter_matrix_{metric}.png'
-    path = os.path.join(plots_dir, filename)
-    plt.savefig(path, dpi=300, bbox_inches='tight')
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
-    
-    print(f"  Saved 4x4 matrix to {path}")
-
-
-def plot_sweep_results(results_df, plots_dir):
-    """
-    Create visualizations of sweep results.
-    
-    Args:
-        results_df: DataFrame with results
-        plots_dir: Directory to save plots
-    """
-    os.makedirs(plots_dir, exist_ok=True)
-    
-    # Create 4x4 matrix plots (macro als primär)
-    print("\n  Creating 4x4 matrix visualizations...")
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_f1_macro', metric_label='F1 Score (Macro)')
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_accuracy', metric_label='Accuracy')
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_precision_macro', metric_label='Precision (Macro)')
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_recall_macro', metric_label='Recall (Macro)')
-    
-    # Sort by F1 MACRO
-    results_sorted = results_df.sort_values('holdout_f1_macro', ascending=True)
-    
-    # Plot 1: F1 scores (MACRO)
-    plt.figure(figsize=(12, 8))
-    plt.barh(results_sorted['run_name'], results_sorted['holdout_f1_macro'], color='#661124')
-    plt.xlabel('Macro F1 Score (Holdout)', fontsize=12)
-    plt.title('Model Performance Across Filter Combinations (Macro F1)', fontsize=14)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, 'F1_score_macro.png'), dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved F1 (macro) plot to {plots_dir}/F1_score_macro.png")
-    
-    # Plot 2: Accuracy
-    plt.figure(figsize=(12, 8))
-    plt.barh(results_sorted['run_name'], results_sorted['holdout_accuracy'], color='#2d5c8f')
-    plt.xlabel('Accuracy (Holdout)', fontsize=12)
-    plt.title('Holdout Accuracy Across Filter Combinations', fontsize=14)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, 'Accuracy.png'), dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved Accuracy plot to {plots_dir}/Accuracy.png")
-    
-    # Plot 3: Note about individual confusion matrices
-    print(f"  Individual confusion matrices saved for each configuration in {plots_dir}/")
-    
-    # Plot 4: Comparison of metrics (mit MACRO)
-    metrics = ['holdout_accuracy', 'holdout_f1_macro', 'holdout_precision_macro', 'holdout_recall_macro']
-    metric_labels = ['Accuracy', 'F1 (macro)', 'Precision (macro)', 'Recall (macro)']
-    
-    fig, ax = plt.subplots(figsize=(14, 8))
-    x = np.arange(len(results_sorted))
-    width = 0.2
-    
-    for i, (metric, label) in enumerate(zip(metrics, metric_labels)):
-        ax.barh(x + i * width, results_sorted[metric], width, label=label)
-    
-    ax.set_yticks(x + width * 1.5)
-    ax.set_yticklabels(results_sorted['run_name'])
-    ax.set_xlabel('Score', fontsize=12)
-    ax.set_title('Comparison of Macro Metrics Across Configurations', fontsize=14)
-    ax.legend()
-    
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, 'Metrics_comparison_macro.png'), dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved metrics comparison to {plots_dir}/Metrics_comparison_macro.png")
+    print(f"  Saved confusion matrix to {save_path}")
 
 
 def main():
@@ -674,27 +587,27 @@ def main():
     print("CHECKING GLOBAL TRAIN/TEST SPLIT")
     print("="*60)
     
-    train_path = os.path.join(os.path.dirname(__file__), '../data/train.csv')
-    test_path = os.path.join(os.path.dirname(__file__), '../data/test.csv')
+    # Use the same utility function as train_final_model.py
+    script_dir = os.path.dirname(__file__)
+    copol_pred_dir = os.path.join(script_dir, '../../copol_prediction')
+    copol_pred_dir = os.path.abspath(copol_pred_dir)
     
-    if not os.path.exists(train_path) or not os.path.exists(test_path):
+    original_cwd = os.getcwd()
+    os.chdir(copol_pred_dir)
+    
+    try:
+        df_train_check, df_test_check = load_data_split.load_train_test_split()
+        load_data_split.print_split_info()
+        print(f"\n✓ Using central train/test split from: {os.path.join(copol_pred_dir, 'artifacts/data_splits/')}")
+    except FileNotFoundError as e:
         print("\nError: Global train/test split not found!")
-        print(f"Expected files:")
-        print(f"  - {train_path}")
-        print(f"  - {test_path}")
-        print("\nPlease run the following commands to create the split:")
-        print("  cd ../copol_prediction")
+        print(f"{e}")
+        print("\nPlease run the following command to create the split:")
+        print("  cd copol_prediction")
         print("  python create_data_split.py")
-        print("  cd ../experiments")
-        print("  python archive/create_train_test_split.py")
         sys.exit(1)
-    
-    # Verify split files
-    df_train_check = pd.read_csv(train_path)
-    df_test_check = pd.read_csv(test_path)
-    print(f"\n✓ Found global split:")
-    print(f"  Train: {len(df_train_check)} samples ({df_train_check['reaction_id'].nunique()} groups)")
-    print(f"  Test: {len(df_test_check)} samples ({df_test_check['reaction_id'].nunique()} groups)")
+    finally:
+        os.chdir(original_cwd)
     
     # Create output directories
     os.makedirs(config['output_dir'], exist_ok=True)
@@ -764,7 +677,14 @@ def main():
     print("CREATING PLOTS")
     print("="*60)
     
-    plot_sweep_results(results_df, config['plots_dir'])
+    # Use the plot_sweep_results module
+    try:
+        from plot_sweep_results import plot_sweep_results
+        plot_sweep_results(results_df, config['plots_dir'])
+    except ImportError:
+        print("  Warning: Could not import plot_sweep_results module.")
+        print("  Plots will be generated during training only.")
+        print("  To regenerate plots later, run: python plot_sweep_results.py")
     
     print("\n" + "="*60)
     print("SWEEP COMPLETE!")
