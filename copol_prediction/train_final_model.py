@@ -287,6 +287,174 @@ def save_model(model_info, holdout_results, config):
     print(f"\n✓ Model bundle saved to: {bundle_path}")
 
 
+def save_all_metrics_to_file(model, df_train, df_test, features, output_dir, config):
+    """
+    Evaluate model on both train and test sets and save all metrics to a text file.
+    
+    Args:
+        model: Trained model
+        df_train: Training dataframe
+        df_test: Test dataframe
+        features: List of feature names
+        output_dir: Output directory
+        config: Configuration dictionary
+    """
+    from sklearn.metrics import (
+        classification_report,
+        confusion_matrix,
+        accuracy_score,
+        precision_score,
+        recall_score,
+        f1_score
+    )
+    
+    print("\n" + "="*60)
+    print("CALCULATING ALL METRICS")
+    print("="*60)
+    
+    # Evaluate on training set
+    print("Evaluating on training set...")
+    X_train = df_train[features]
+    y_train = df_train['r_product_class'].astype(int).values
+    y_train_pred = model.predict(X_train)
+    
+    train_cm = confusion_matrix(y_train, y_train_pred, labels=[0, 1, 2])
+    train_accuracy = accuracy_score(y_train, y_train_pred)
+    train_precision_weighted = precision_score(y_train, y_train_pred, average='weighted', zero_division=0)
+    train_recall_weighted = recall_score(y_train, y_train_pred, average='weighted', zero_division=0)
+    train_f1_weighted = f1_score(y_train, y_train_pred, average='weighted', zero_division=0)
+    train_precision_macro = precision_score(y_train, y_train_pred, average='macro', zero_division=0)
+    train_recall_macro = recall_score(y_train, y_train_pred, average='macro', zero_division=0)
+    train_f1_macro = f1_score(y_train, y_train_pred, average='macro', zero_division=0)
+    
+    # Per-class metrics for train
+    train_precision_per_class = precision_score(y_train, y_train_pred, average=None, zero_division=0, labels=[0, 1, 2])
+    train_recall_per_class = recall_score(y_train, y_train_pred, average=None, zero_division=0, labels=[0, 1, 2])
+    train_f1_per_class = f1_score(y_train, y_train_pred, average=None, zero_division=0, labels=[0, 1, 2])
+    
+    # Evaluate on test set
+    print("Evaluating on test set...")
+    X_test = df_test[features]
+    y_test = df_test['r_product_class'].astype(int).values
+    y_test_pred = model.predict(X_test)
+    
+    test_cm = confusion_matrix(y_test, y_test_pred, labels=[0, 1, 2])
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+    test_precision_weighted = precision_score(y_test, y_test_pred, average='weighted', zero_division=0)
+    test_recall_weighted = recall_score(y_test, y_test_pred, average='weighted', zero_division=0)
+    test_f1_weighted = f1_score(y_test, y_test_pred, average='weighted', zero_division=0)
+    test_precision_macro = precision_score(y_test, y_test_pred, average='macro', zero_division=0)
+    test_recall_macro = recall_score(y_test, y_test_pred, average='macro', zero_division=0)
+    test_f1_macro = f1_score(y_test, y_test_pred, average='macro', zero_division=0)
+    
+    # Per-class metrics for test
+    test_precision_per_class = precision_score(y_test, y_test_pred, average=None, zero_division=0, labels=[0, 1, 2])
+    test_recall_per_class = recall_score(y_test, y_test_pred, average=None, zero_division=0, labels=[0, 1, 2])
+    test_f1_per_class = f1_score(y_test, y_test_pred, average=None, zero_division=0, labels=[0, 1, 2])
+    
+    # Classification reports
+    train_classification_report = classification_report(y_train, y_train_pred, labels=[0, 1, 2])
+    test_classification_report = classification_report(y_test, y_test_pred, labels=[0, 1, 2])
+    
+    # Write to file
+    metrics_file = os.path.join(output_dir, "all_metrics.txt")
+    with open(metrics_file, 'w') as f:
+        f.write("="*80 + "\n")
+        f.write("COMPLETE MODEL EVALUATION METRICS\n")
+        f.write("="*80 + "\n\n")
+        
+        # Configuration
+        f.write("CONFIGURATION\n")
+        f.write("-"*80 + "\n")
+        f.write(f"Random State: {config['random_state']}\n")
+        f.write(f"Augmentation Used: {config['use_augmentation']}\n")
+        f.write(f"Augmentation Samples: {config['augmentation_samples']}\n")
+        f.write(f"Negative Data Used: {config['add_negative_data']}\n")
+        f.write(f"Number of Features: {len(features)}\n")
+        f.write(f"Train Samples: {len(df_train)}\n")
+        f.write(f"Test Samples: {len(df_test)}\n")
+        f.write("\n")
+        
+        # Training Set Metrics
+        f.write("="*80 + "\n")
+        f.write("TRAINING SET METRICS\n")
+        f.write("="*80 + "\n\n")
+        
+        f.write("Confusion Matrix:\n")
+        f.write("-"*80 + "\n")
+        f.write("                Predicted\n")
+        f.write("              Class 0  Class 1  Class 2\n")
+        f.write(f"Actual Class 0  {train_cm[0,0]:6d}  {train_cm[0,1]:6d}  {train_cm[0,2]:6d}\n")
+        f.write(f"Actual Class 1  {train_cm[1,0]:6d}  {train_cm[1,1]:6d}  {train_cm[1,2]:6d}\n")
+        f.write(f"Actual Class 2  {train_cm[2,0]:6d}  {train_cm[2,1]:6d}  {train_cm[2,2]:6d}\n")
+        f.write("\n")
+        
+        f.write("Overall Metrics:\n")
+        f.write("-"*80 + "\n")
+        f.write(f"Accuracy:              {train_accuracy:.6f}\n")
+        f.write(f"Precision (weighted):   {train_precision_weighted:.6f}\n")
+        f.write(f"Recall (weighted):      {train_recall_weighted:.6f}\n")
+        f.write(f"F1 Score (weighted):    {train_f1_weighted:.6f}\n")
+        f.write(f"Precision (macro):      {train_precision_macro:.6f}\n")
+        f.write(f"Recall (macro):         {train_recall_macro:.6f}\n")
+        f.write(f"F1 Score (macro):       {train_f1_macro:.6f}\n")
+        f.write("\n")
+        
+        f.write("Per-Class Metrics:\n")
+        f.write("-"*80 + "\n")
+        f.write(f"{'Class':<10} {'Precision':<15} {'Recall':<15} {'F1 Score':<15}\n")
+        f.write("-"*80 + "\n")
+        for i, class_label in enumerate([0, 1, 2]):
+            f.write(f"Class {class_label:<6} {train_precision_per_class[i]:<15.6f} {train_recall_per_class[i]:<15.6f} {train_f1_per_class[i]:<15.6f}\n")
+        f.write("\n")
+        
+        f.write("Classification Report:\n")
+        f.write("-"*80 + "\n")
+        f.write(train_classification_report)
+        f.write("\n\n")
+        
+        # Test Set Metrics
+        f.write("="*80 + "\n")
+        f.write("TEST SET METRICS\n")
+        f.write("="*80 + "\n\n")
+        
+        f.write("Confusion Matrix:\n")
+        f.write("-"*80 + "\n")
+        f.write("                Predicted\n")
+        f.write("              Class 0  Class 1  Class 2\n")
+        f.write(f"Actual Class 0  {test_cm[0,0]:6d}  {test_cm[0,1]:6d}  {test_cm[0,2]:6d}\n")
+        f.write(f"Actual Class 1  {test_cm[1,0]:6d}  {test_cm[1,1]:6d}  {test_cm[1,2]:6d}\n")
+        f.write(f"Actual Class 2  {test_cm[2,0]:6d}  {test_cm[2,1]:6d}  {test_cm[2,2]:6d}\n")
+        f.write("\n")
+        
+        f.write("Overall Metrics:\n")
+        f.write("-"*80 + "\n")
+        f.write(f"Accuracy:              {test_accuracy:.6f}\n")
+        f.write(f"Precision (weighted):   {test_precision_weighted:.6f}\n")
+        f.write(f"Recall (weighted):      {test_recall_weighted:.6f}\n")
+        f.write(f"F1 Score (weighted):    {test_f1_weighted:.6f}\n")
+        f.write(f"Precision (macro):      {test_precision_macro:.6f}\n")
+        f.write(f"Recall (macro):         {test_recall_macro:.6f}\n")
+        f.write(f"F1 Score (macro):       {test_f1_macro:.6f}\n")
+        f.write("\n")
+        
+        f.write("Per-Class Metrics:\n")
+        f.write("-"*80 + "\n")
+        f.write(f"{'Class':<10} {'Precision':<15} {'Recall':<15} {'F1 Score':<15}\n")
+        f.write("-"*80 + "\n")
+        for i, class_label in enumerate([0, 1, 2]):
+            f.write(f"Class {class_label:<6} {test_precision_per_class[i]:<15.6f} {test_recall_per_class[i]:<15.6f} {test_f1_per_class[i]:<15.6f}\n")
+        f.write("\n")
+        
+        f.write("Classification Report:\n")
+        f.write("-"*80 + "\n")
+        f.write(test_classification_report)
+        f.write("\n")
+    
+    print(f"\n✓ All metrics saved to: {metrics_file}")
+    return metrics_file
+
+
 def run_analysis(model_path, data_path, output_dir):
     """
     Run model analysis after training.
@@ -394,6 +562,16 @@ def main():
     
     # Save model
     save_model(model_info, holdout_results, config)
+    
+    # Save all metrics to text file
+    save_all_metrics_to_file(
+        model=model_info['model'],
+        df_train=df_train,
+        df_test=df_holdout,
+        features=features,
+        output_dir=config['output_dir'],
+        config=config
+    )
     
     print("\n" + "="*60)
     print("TRAINING COMPLETE!")

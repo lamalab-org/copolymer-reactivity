@@ -30,8 +30,8 @@ CLASS_COLORS = {
 
 # Comparison colors (Original vs Filtered, Before vs After, etc.)
 COMPARISON_COLORS = {
-    'original': '#920506',      # Light red/coral
-    'filtered': '#2266ac',      # Light green
+    'original': '#661124',      # Light red/coral
+    'filtered': '#143D60',      # Light green
     'correct': '#2266ac',       # Light green
     'incorrect': '#920506',     # Light red
     'train': '#920506',         # Light blue

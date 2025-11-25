@@ -12,6 +12,10 @@ experiments/
 │   └── comparison/            # Analysis and plots
 ├── filter_comparison/         # Compare data filtering strategies
 │   └── sweep_filters.py
+├── reaction_conditions_comparison/  # Compare with/without reaction conditions
+│   ├── full_model/            # Model with all features
+│   ├── no_reaction_conditions/ # Model without reaction condition features
+│   └── comparison/            # Analysis and plots
 ├── data/                      # Shared train/test splits
 ├── archive/                   # Old/deprecated scripts
 ├── create_train_test_split.py # Split generation script
@@ -62,6 +66,13 @@ Filter comparison:
 cd filter_comparison && python sweep_filters.py
 ```
 
+Reaction conditions comparison:
+```bash
+cd reaction_conditions_comparison/full_model && python train.py
+cd ../no_reaction_conditions && python train.py
+cd ../comparison && python compare.py
+```
+
 ## 📊 Experiments
 
 ### Feature Comparison
@@ -83,6 +94,17 @@ cd filter_comparison && python sweep_filters.py
 - Combined filters
 
 **Results**: See `filter_comparison/README.md`
+
+### Reaction Conditions Comparison
+
+**Goal**: Compare model performance with and without reaction condition features
+
+- **Full Model**: All features including reaction conditions (temperature, polytype embeddings, method embeddings, solvent properties)
+- **No Reaction Conditions**: Model trained without reaction condition features (only molecular descriptors and HOMO-LUMO differences)
+
+**Excluded features**: `temperature`, `polytype_emb_1`, `polytype_emb_2`, `method_emb_1`, `method_emb_2`, `solvent_logP`, `solvent_TPSA`, `solvent_HBD`, `solvent_FractionCSP3`
+
+**Results**: Plots saved to `reaction_conditions_comparison/comparison/plots/`
 
 ## 📝 Notes
 
