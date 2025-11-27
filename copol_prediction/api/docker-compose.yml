@@ -1,0 +1,48 @@
+services:
+  copol-prediction-api:
+    build:
+      context: ../..
+      dockerfile: copol_prediction/api/Dockerfile
+    container_name: copol-prediction-api
+    image: copol-prediction-api:latest
+    ports:
+      - "8000:8000"
+    environment:
+      # Model configuration
+      - MODEL_PATH=/app/artifacts/model_bundle
+      # Python settings
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=info
+      # XTB configuration (for quantum chemistry calculations via xtb-python)
+      - OMP_NUM_THREADS=1
+      - OMP_STACKSIZE=1G
+      - OMP_MAX_ACTIVE_LEVELS=1
+    volumes:
+      # Mount cache directory for persistence
+      - ./cache:/app/cache
+      # Mount molecule properties cache for faster lookups
+      - ./molecule_properties:/app/molecule_properties
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "conda", "run", "-n", "copol", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Resource limits - sufficient for XTB quantum chemistry calculations
+    # XTB calculations can be memory intensive
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 6G
+        reservations:
+          cpus: '1'
+          memory: 3G
+    networks:
+      - copol-network
+
+networks:
+  copol-network:
+    driver: bridge
+

@@ -37,8 +37,27 @@ from rdkit.Chem import Descriptors, rdMolDescriptors
 # Import monomer feature calculation functions
 try:
     from morfeus.conformer import ConformerEnsemble
-    from morfeus import XTB
+    import qcengine
+    
+    # Try to import patched XTB class, fall back to original if not available
+    try:
+        from morfeus_patch import XTB
+        print("✓ Using patched XTB class for better compatibility")
+    except ImportError:
+        from morfeus import XTB
+        print("⚠ Using original XTB class (may have compatibility issues with newer XTB versions)")
+    
     MORFEUS_AVAILABLE = True
+    
+    # Configure QCEngine to find xtb binary via environment variable
+    # QCEngine looks for QC_{PROGRAM}_EXE environment variable
+    xtb_path = "/opt/xtb/bin/xtb"
+    if os.path.exists(xtb_path):
+        try:
+            os.environ["QC_XTB_EXE"] = xtb_path
+            print(f"✓ QCEngine configured with XTB at: {xtb_path}")
+        except Exception as e:
+            print(f"⚠ Warning: Could not configure QCEngine XTB path: {e}")
 except ImportError:
     MORFEUS_AVAILABLE = False
     print("Warning: morfeus not available. Monomer feature calculation will be limited.")
@@ -179,8 +198,8 @@ async def startup_event():
     # Load embeddings
     try:
         api_dir = Path(__file__).parent
-        method_emb_path = api_dir / "method_emb_pca_values.json"
-        polytype_emb_path = api_dir / "polytype_emb_pca_values.json"
+        method_emb_path = api_dir / "data" / "method_emb_pca_values.json"
+        polytype_emb_path = api_dir / "data" / "polytype_emb_pca_values.json"
         
         if method_emb_path.exists():
             try:
@@ -525,7 +544,7 @@ async def get_available_methods():
         if not method_embeddings:
             # Try to reload embeddings if they're empty
             api_dir = Path(__file__).parent
-            method_emb_path = api_dir / "method_emb_pca_values.json"
+            method_emb_path = api_dir / "data" / "method_emb_pca_values.json"
             if method_emb_path.exists():
                 try:
                     with open(method_emb_path, 'r') as f:
@@ -562,7 +581,7 @@ async def get_available_polytypes():
         if not polytype_embeddings:
             # Try to reload embeddings if they're empty
             api_dir = Path(__file__).parent
-            polytype_emb_path = api_dir / "polytype_emb_pca_values.json"
+            polytype_emb_path = api_dir / "data" / "polytype_emb_pca_values.json"
             if polytype_emb_path.exists():
                 try:
                     with open(polytype_emb_path, 'r') as f:

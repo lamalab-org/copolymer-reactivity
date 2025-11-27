@@ -272,3 +272,4 @@ def load_model_bundle(bundle_dir="artifacts/model_bundle"):
         'metadata': meta
     }
 
+
