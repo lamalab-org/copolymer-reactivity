@@ -33,6 +33,12 @@ dependencies = [
     "doi2pdf",
 ]
 
+[project.optional-dependencies]
+testing = [
+    "pytest>=7.0",
+    "pytest-cov",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
