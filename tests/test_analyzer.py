@@ -144,29 +144,29 @@ def test_find_matching_reaction(data, monomers, expected):
             0,
             0.9,
         ),
-        (
-            [
-                {
-                    "solvent": "water",
-                    "temperature": 10,
-                    "temperature_unit": "°C",
-                    "polymerization_type": "radical (A)",
-                    "method": "A",
-                    "determination_method": "B",
-                },
-                {
-                    "solvent": "ethanol",
-                    "temperature": 20,
-                    "temperature_unit": "K",
-                    "polymerization_type": "radical",
-                    "method": "A",
-                    "determination_method": "Tudor",
-                },
-            ],
-            ("ethanol", 20, "K" "radical", "A", "Tudor"),
-            1,
-            0.9,
-        ),
+            (
+                [
+                    {
+                        "solvent": "water",
+                        "temperature": 10,
+                        "temperature_unit": "°C",
+                        "polymerization_type": "radical (A)",
+                        "method": "A",
+                        "determination_method": "B",
+                    },
+                    {
+                        "solvent": "ethanol",
+                        "temperature": 20,
+                        "temperature_unit": "K",
+                        "polymerization_type": "radical",
+                        "method": "A",
+                        "determination_method": "Tudor",
+                    },
+                ],
+                ("ethanol", 20, "K", "radical", "A", "Tudor"),
+                1,
+                0.9,
+            ),
     ],
 )
 def test_find_matching_reaction_conditions(
@@ -181,17 +181,19 @@ def test_find_matching_reaction_conditions(
 
 
 @pytest.mark.parametrize(
-    "temp1, temp2, unit1, unit2, expected_temp1, expected_temp2",
+    "temp, unit, expected_temp",
     [
-        (30, 35, "°C", "°C", 30, 35),
-        (32, 50, "°F", "K", 0, -223.15),
-        (200, 200, "K", "°C", -73.15, 200),
+        (30, "°C", 30),
+        (35, "°C", 35),
+        (32, "°F", 0),
+        (50, "K", -223.15),
+        (200, "K", -73.15),
+        (200, "°C", 200),
     ],
 )
-def test_covert_unit(temp1, temp2, unit1, unit2, expected_temp1, expected_temp2):
-    temp_conv1, temp_conv2 = convert_unit(temp1, temp2, unit1, unit2)
-    assert abs(expected_temp1 - temp_conv1) < 0.01
-    assert abs(expected_temp2 - temp_conv2) < 0.01
+def test_covert_unit(temp, unit, expected_temp):
+    temp_conv = convert_unit(temp, unit)
+    assert abs(expected_temp - temp_conv) < 0.01
 
 
 @pytest.mark.parametrize(
