@@ -58,42 +58,76 @@ POST /predict/batch
 ### Preprocessing
 
 ```bash
-# Convert names to features
-POST /preprocess/solvent   # Fast
-POST /preprocess/monomer   # Slow (XTB calculation on first request)
+# Convert SMILES to features
+POST /preprocess/solvent   # Fast (takes solvent SMILES)
+POST /preprocess/monomer   # Slow (XTB calculation on first request, takes monomer SMILES)
+POST /preprocess_all       # Combined preprocessing (monomers + solvent + embeddings → features ready for prediction)
 ```
 
 ### Embeddings
 
 ```bash
-GET /embeddings/methods
-GET /embeddings/polytypes
 GET /embeddings/method/{name}
 GET /embeddings/polytype/{name}
 ```
 
 ## 💻 Usage Example
 
+### Simple Approach (Recommended)
+
 ```python
 import requests
 
 API_URL = "http://localhost:8000"
 
-# Preprocess monomers (uses XTB for quantum chemistry)
+# Preprocess everything at once (recommended for web integrations)
+preprocessed = requests.post(
+    f"{API_URL}/preprocess_all",
+    json={
+        "monomer1_smiles": "C=CC1=CC=CC=C1",  # styrene
+        "monomer2_smiles": "CC(=O)OC(C)=C",   # methyl methacrylate
+        "solvent_smiles": "CC1=CC=CC=C1",     # toluene
+        "method": "solvent",
+        "polytype": "free radical",
+        "temperature": 60.0
+    }
+).json()
+
+if preprocessed["success"]:
+    # Make prediction directly with preprocessed features
+    result = requests.post(
+        f"{API_URL}/predict",
+        json={"features": preprocessed["features"]}
+    ).json()
+    
+    print(f"Predicted class: {result['predicted_class']} ({result['r_product_range']})")
+    print(f"Confidence: {result['confidence']:.2%}")
+else:
+    print(f"Preprocessing failed: {preprocessed.get('error')}")
+```
+
+### Step-by-Step Approach
+
+```python
+import requests
+
+API_URL = "http://localhost:8000"
+
+# Preprocess monomers (uses XTB for quantum chemistry, input as SMILES)
 monomer1 = requests.post(
     f"{API_URL}/preprocess/monomer",
-    json={"monomer_name": "styrene"}
+    json={"monomer_smiles": "C=CC1=CC=CC=C1"}  # styrene SMILES
 ).json()
 
 monomer2 = requests.post(
     f"{API_URL}/preprocess/monomer",
-    json={"monomer_name": "methyl methacrylate"}
+    json={"monomer_smiles": "CC(=O)OC(C)=C"}  # methyl methacrylate SMILES
 ).json()
 
-# Get other features
+# Get other features (solvent SMILES)
 solvent = requests.post(
     f"{API_URL}/preprocess/solvent",
-    json={"solvent_name": "toluene"}
+    json={"solvent_smiles": "CC1=CC=CC=C1"}  # toluene SMILES
 ).json()
 
 method_emb = requests.get(f"{API_URL}/embeddings/method/solution").json()

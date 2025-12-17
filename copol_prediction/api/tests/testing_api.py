@@ -313,50 +313,6 @@ def test_preprocess_monomer(base_url: str) -> bool:
         return False
 
 
-def test_embeddings_methods(base_url: str) -> bool:
-    """Test get available methods endpoint."""
-    print("\n" + "="*60)
-    print("Testing: Get Available Methods")
-    print("="*60)
-    
-    try:
-        response = requests.get(f"{base_url}/embeddings/methods")
-        response.raise_for_status()
-        data = response.json()
-        
-        print(f"✓ Status: {response.status_code}")
-        print(f"✓ Total Methods: {data['count']}")
-        print(f"✓ Sample Methods: {data['methods'][:5]}")
-        
-        return True
-        
-    except Exception as e:
-        print(f"✗ Error: {e}")
-        return False
-
-
-def test_embeddings_polytypes(base_url: str) -> bool:
-    """Test get available polytypes endpoint."""
-    print("\n" + "="*60)
-    print("Testing: Get Available Polytypes")
-    print("="*60)
-    
-    try:
-        response = requests.get(f"{base_url}/embeddings/polytypes")
-        response.raise_for_status()
-        data = response.json()
-        
-        print(f"✓ Status: {response.status_code}")
-        print(f"✓ Total Polytypes: {data['count']}")
-        print(f"✓ Sample Polytypes: {data['polytypes'][:5]}")
-        
-        return True
-        
-    except Exception as e:
-        print(f"✗ Error: {e}")
-        return False
-
-
 def test_embeddings_method(base_url: str) -> bool:
     """Test get method embeddings endpoint."""
     print("\n" + "="*60)
@@ -364,17 +320,8 @@ def test_embeddings_method(base_url: str) -> bool:
     print("="*60)
     
     try:
-        # First get available methods
-        methods_response = requests.get(f"{base_url}/embeddings/methods")
-        methods_data = methods_response.json()
-        
-        if not methods_data.get('methods'):
-            print("⚠ No methods available")
-            return False
-        
-        # Test with first available method
-        method_name = methods_data['methods'][0]
-        # URL encode the method name in case it contains special characters
+        # Use a known example method that exists in embeddings JSON
+        method_name = "solvent"
         encoded_method = quote(method_name, safe='')
         response = requests.get(f"{base_url}/embeddings/method/{encoded_method}")
         response.raise_for_status()
@@ -401,17 +348,8 @@ def test_embeddings_polytype(base_url: str) -> bool:
     print("="*60)
     
     try:
-        # First get available polytypes
-        polytypes_response = requests.get(f"{base_url}/embeddings/polytypes")
-        polytypes_data = polytypes_response.json()
-        
-        if not polytypes_data.get('polytypes'):
-            print("⚠ No polytypes available")
-            return False
-        
-        # Test with first available polytype
-        polytype_name = polytypes_data['polytypes'][0]
-        # URL encode the polytype name in case it contains special characters
+        # Use a known example polytype that exists in embeddings JSON
+        polytype_name = "free radical"
         encoded_polytype = quote(polytype_name, safe='')
         response = requests.get(f"{base_url}/embeddings/polytype/{encoded_polytype}")
         response.raise_for_status()
@@ -471,8 +409,6 @@ def main():
         "Error Handling": test_error_handling(base_url),
         "Preprocess Solvent": test_preprocess_solvent(base_url),
         "Preprocess Monomer": test_preprocess_monomer(base_url),
-        "Get Available Methods": test_embeddings_methods(base_url),
-        "Get Available Polytypes": test_embeddings_polytypes(base_url),
         "Get Method Embeddings": test_embeddings_method(base_url),
         "Get Polytype Embeddings": test_embeddings_polytype(base_url),
     }
