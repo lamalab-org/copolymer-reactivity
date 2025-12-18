@@ -558,6 +558,17 @@ def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
             "solvent_HBD": None,
             "solvent_FractionCSP3": None
         }
+
+
+def canonicalize_smiles_local(smiles: str) -> str:
+    """
+    Canonicalize a SMILES string using RDKit.
+    Kept local to the API to avoid importing heavier utilities (and their caches).
+    """
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        raise ValueError(f"Invalid SMILES string: {smiles}")
+    return Chem.MolToSmiles(mol)
     
     try:
         mol = Chem.MolFromSmiles(smiles)
@@ -706,15 +717,8 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
             print(f"Error loading monomer features from {file_path}: {e}")
             return None
     
-    # 2) Fallback: canonical SMILES-based lookup (for backward compatibility)
     try:
-        from copolextractor.utils import canonicalize_smiles
-    except Exception as e:
-        print(f"Warning: cannot canonicalize SMILES for '{smiles}': {e}")
-        return None
-    
-    try:
-        target_canonical = canonicalize_smiles(smiles)
+        target_canonical = canonicalize_smiles_local(smiles)
     except Exception as e:
         print(f"Warning: failed to canonicalize SMILES '{smiles}': {e}")
         return None
@@ -732,7 +736,7 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
                 continue
             
             try:
-                if canonicalize_smiles(stored_smiles) == target_canonical:
+                if canonicalize_smiles_local(stored_smiles) == target_canonical:
                     # Found a match; post-process fields as above
                     for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
                         if key in candidate_data and isinstance(candidate_data[key], dict) and candidate_data[key]:
