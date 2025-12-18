@@ -82,7 +82,9 @@ def cactus_request_w_backoff(inp, rep="SMILES"):
     return resp
 
 
-cache = dc.Cache("cache")
+CACHE_DIR = os.environ.get("CACHE_DIR", "/app/cache")
+os.makedirs(CACHE_DIR, exist_ok=True)
+cache = dc.Cache(CACHE_DIR)
 
 
 def name_to_smiles(name: str, force_retry: bool = True) -> str:

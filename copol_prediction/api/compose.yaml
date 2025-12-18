@@ -13,6 +13,7 @@ services:
       # Python settings
       - PYTHONUNBUFFERED=1
       - LOG_LEVEL=info
+      - CACHE_DIR=/app/cache
       # XTB configuration (for quantum chemistry calculations via xtb-python)
       - OMP_NUM_THREADS=1
       - OMP_STACKSIZE=1G
