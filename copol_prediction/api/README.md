@@ -71,6 +71,22 @@ GET /embeddings/method/{name}
 GET /embeddings/polytype/{name}
 ```
 
+### Dataset Query
+
+```bash
+POST /check_doi   # Check if a DOI exists in the dataset
+```
+
+### Similar Papers (NEW!)
+
+The `/preprocess_all` endpoint now automatically returns the **10 most similar papers** from the dataset based on:
+- Monomer similarity (Tanimoto)
+- Solvent similarity
+- Temperature proximity
+- Method/Polytype embeddings
+
+See `SIMILAR_PAPERS_GUIDE.md` for details.
+
 ## 💻 Usage Example
 
 ### Simple Approach (Recommended)
@@ -160,6 +176,57 @@ result = requests.post(f"{API_URL}/predict", json={"features": features}).json()
 print(f"Predicted class: {result['predicted_class']} ({result['r_product_range']})")
 print(f"Confidence: {result['confidence']:.2%}")
 ```
+
+### DOI Check Example
+
+Check if a paper (by DOI) exists in the training dataset:
+
+```python
+import requests
+
+API_URL = "http://localhost:8000"
+
+# Check if DOI exists in dataset
+result = requests.post(
+    f"{API_URL}/check_doi",
+    json={"doi": "10.1016/0014-3057(84)90010-7"}
+).json()
+
+if result["exists"]:
+    print(f"✓ DOI found in dataset!")
+    print(f"DOI: {result['doi']}")
+    print(f"Normalized: {result['normalized_doi']}")
+else:
+    print(f"✗ DOI not found in dataset")
+
+# Also works with full URL
+result = requests.post(
+    f"{API_URL}/check_doi",
+    json={"doi": "https://doi.org/10.1016/0014-3057(84)90010-7"}
+).json()
+
+print(f"Exists: {'YES' if result['exists'] else 'NO'}")
+```
+
+**Example files:**
+- Python: `doi_check_example.py`
+- JavaScript: `doi_check_example.js`
+
+## 📊 Confidence Score
+
+The API returns a confidence score (0-1) for each prediction. The confidence is calculated using a **weighted metric**:
+
+```python
+confidence = 0.7 × max_probability + 0.3 × margin_to_second_best
+```
+
+**Interpretation:**
+- **> 0.80**: Very certain (e.g., `[0.90, 0.05, 0.05]` → 94% confidence)
+- **0.60-0.80**: Quite certain (e.g., `[0.70, 0.20, 0.10]` → 64% confidence)
+- **0.50-0.60**: Somewhat uncertain (e.g., `[0.65, 0.35, 0.00]` → 55% confidence)
+- **< 0.50**: Uncertain (e.g., `[0.50, 0.45, 0.05]` → 43% confidence)
+
+For more details, see `CONFIDENCE_EXPLAINED.md`.
 
 ## 🐋 Docker
 

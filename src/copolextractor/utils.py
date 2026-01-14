@@ -82,7 +82,17 @@ def cactus_request_w_backoff(inp, rep="SMILES"):
     return resp
 
 
-CACHE_DIR = os.environ.get("CACHE_DIR", "/app/cache")
+# Determine cache directory: use environment variable if set, otherwise use local cache directory
+# Try to find project root by navigating up from this file (src/copolextractor/utils.py)
+if "CACHE_DIR" in os.environ:
+    CACHE_DIR = os.environ["CACHE_DIR"]
+else:
+    # Navigate up from src/copolextractor/utils.py to project root
+    current_path = Path(__file__).resolve()
+    project_root = current_path.parent.parent.parent
+    cache_path = project_root / "cache"
+    CACHE_DIR = str(cache_path)
+
 os.makedirs(CACHE_DIR, exist_ok=True)
 cache = dc.Cache(CACHE_DIR)
 

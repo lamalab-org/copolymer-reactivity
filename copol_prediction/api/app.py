@@ -34,6 +34,15 @@ from copolpredictor.inference import CopolymerPredictor
 from copolpredictor.data_processing import load_molecular_data
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
+import pandas as pd
+
+# Import paper similarity module
+try:
+    from paper_similarity import find_similar_papers, format_similarity_output
+    SIMILARITY_AVAILABLE = True
+except ImportError:
+    SIMILARITY_AVAILABLE = False
+    print("Warning: paper_similarity module not available. Similar papers feature disabled.")
 
 # Import monomer feature calculation functions
 try:
@@ -109,6 +118,17 @@ class BatchPredictionInput(BaseModel):
     )
 
 
+class SimilarPaper(BaseModel):
+    """Similar paper information."""
+    rank: int = Field(..., description="Ranking (1-10)")
+    doi: str = Field(..., description="DOI of the paper")
+    paper_name: str = Field(..., description="Paper filename/name")
+    similarity_score: float = Field(..., description="Overall similarity score (0-1)")
+    match_quality: str = Field(..., description="Match quality label")
+    details: Dict[str, float] = Field(..., description="Component similarity scores")
+    reaction_info: Dict = Field(..., description="Reaction information from paper")
+
+
 class PredictionOutput(BaseModel):
     """Output schema for prediction."""
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
@@ -116,6 +136,7 @@ class PredictionOutput(BaseModel):
     confidence: float = Field(..., description="Prediction confidence (0-1)")
     r_product_range: str = Field(..., description="Human-readable r-product range")
     class_descriptions: Dict[str, str] = Field(..., description="Description for each class label")
+    similar_papers: Optional[List[SimilarPaper]] = Field(None, description="Most similar papers from dataset")
     timestamp: str = Field(..., description="Prediction timestamp")
 
 
@@ -175,6 +196,20 @@ class PreprocessAllOutput(BaseModel):
     features: Dict[str, float] = Field(..., description="All calculated features ready for prediction")
     success: bool = Field(..., description="Whether preprocessing was successful")
     error: Optional[str] = Field(None, description="Error message if preprocessing failed")
+    similar_papers: Optional[List[SimilarPaper]] = Field(None, description="Most similar papers from dataset")
+
+
+class DOICheckInput(BaseModel):
+    """Input schema for DOI check."""
+    doi: str = Field(..., description="DOI to check (e.g., '10.1016/0014-3057(84)90010-7' or 'https://doi.org/10.1016/0014-3057(84)90010-7')")
+
+
+class DOICheckOutput(BaseModel):
+    """Output schema for DOI check."""
+    doi: str = Field(..., description="The queried DOI")
+    exists: bool = Field(..., description="Whether the DOI exists in the dataset")
+    normalized_doi: str = Field(..., description="The normalized DOI used for matching")
+    timestamp: str = Field(..., description="Check timestamp")
 
 
 # ============================================================================
@@ -205,9 +240,15 @@ predictor: Optional[CopolymerPredictor] = None
 # Model path (can be configured via environment variable)
 MODEL_PATH = os.environ.get("MODEL_PATH", "../artifacts/model_bundle")
 
+# Dataset path for DOI checking (can be configured via environment variable)
+DATASET_PATH = os.environ.get("DATASET_PATH", "../processed_data.csv")
+
 # Global embedding dictionaries
 method_embeddings: Dict[str, Dict[str, float]] = {}
 polytype_embeddings: Dict[str, Dict[str, float]] = {}
+
+# Global dataset cache
+dataset_df: Optional[pd.DataFrame] = None
 
 
 # ============================================================================
@@ -216,8 +257,8 @@ polytype_embeddings: Dict[str, Dict[str, float]] = {}
 
 @app.on_event("startup")
 async def startup_event():
-    """Load model and embeddings on startup."""
-    global predictor, method_embeddings, polytype_embeddings
+    """Load model, embeddings, and dataset on startup."""
+    global predictor, method_embeddings, polytype_embeddings, dataset_df
 
     # Load embeddings
     try:
@@ -269,6 +310,23 @@ async def startup_event():
     except Exception as e:
         print(f"✗ Error loading model: {e}")
         print("API will start but predictions will fail until model is loaded")
+
+    # Load dataset for DOI checking
+    try:
+        # Resolve relative path from api directory
+        dataset_path = Path(__file__).parent / DATASET_PATH
+        if dataset_path.exists():
+            print(f"Loading dataset from {dataset_path}...")
+            dataset_df = pd.read_csv(dataset_path)
+            print(f"✓ Dataset loaded successfully ({len(dataset_df)} rows)")
+        else:
+            print(f"⚠ Warning: Dataset file not found at {dataset_path}")
+            print("DOI checking will not be available")
+            dataset_df = None
+    except Exception as e:
+        print(f"✗ Error loading dataset: {e}")
+        print("DOI checking will not be available")
+        dataset_df = None
 
 
 @app.on_event("shutdown")
@@ -525,10 +583,34 @@ async def preprocess_all(input_data: PreprocessAllInput):
             "solvent_FractionCSP3": solvent_features["solvent_FractionCSP3"]
         }
 
+        # Find similar papers if dataset is available
+        similar_papers_list = None
+        if SIMILARITY_AVAILABLE and dataset_df is not None:
+            try:
+                method_emb_tuple = (method_emb["pca_1"], method_emb["pca_2"])
+                polytype_emb_tuple = (polytype_emb["pca_1"], polytype_emb["pca_2"])
+                
+                similar_papers = find_similar_papers(
+                    dataset_df,
+                    input_data.monomer1_smiles,
+                    input_data.monomer2_smiles,
+                    input_data.solvent_smiles,
+                    input_data.temperature,
+                    method_emb_tuple,
+                    polytype_emb_tuple,
+                    top_n=10
+                )
+                
+                similar_papers_list = format_similarity_output(similar_papers)
+            except Exception as e:
+                print(f"Warning: Failed to find similar papers: {e}")
+                similar_papers_list = None
+
         return PreprocessAllOutput(
             features=features,
             success=True,
-            error=None
+            error=None,
+            similar_papers=similar_papers_list
         )
 
     except Exception as e:
@@ -920,6 +1002,65 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Monomer preprocessing failed: {str(e)}"
+        )
+
+
+@app.post("/check_doi", response_model=DOICheckOutput)
+async def check_doi(input_data: DOICheckInput):
+    """
+    Check if a given DOI exists in the dataset.
+    
+    Args:
+        input_data: DOICheckInput containing the DOI to check
+        
+    Returns:
+        DOICheckOutput with existence status and normalized DOI
+    """
+    if dataset_df is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Dataset not loaded. DOI checking is not available."
+        )
+    
+    try:
+        # Normalize the DOI for comparison
+        doi_input = input_data.doi.strip()
+        
+        # Remove common prefixes if present
+        if doi_input.startswith("https://doi.org/"):
+            normalized_doi = doi_input.replace("https://doi.org/", "")
+        elif doi_input.startswith("http://doi.org/"):
+            normalized_doi = doi_input.replace("http://doi.org/", "")
+        elif doi_input.startswith("doi.org/"):
+            normalized_doi = doi_input.replace("doi.org/", "")
+        else:
+            normalized_doi = doi_input
+            
+        # Check if the DOI exists in the dataset
+        # The dataset stores DOIs in the 'original_source' column
+        # They can be in various formats, so we check for multiple formats
+        exists = False
+        
+        if 'original_source' in dataset_df.columns:
+            # Check for exact match with normalized DOI
+            exists = dataset_df['original_source'].astype(str).str.contains(
+                normalized_doi, 
+                case=False, 
+                na=False,
+                regex=False
+            ).any()
+        
+        return DOICheckOutput(
+            doi=doi_input,
+            exists=exists,
+            normalized_doi=normalized_doi,
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"DOI check failed: {str(e)}"
         )
 
 

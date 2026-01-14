@@ -10,6 +10,8 @@ services:
     environment:
       # Model configuration
       - MODEL_PATH=/app/artifacts/model_bundle
+      # Dataset configuration (for DOI checking)
+      - DATASET_PATH=/app/processed_data.csv
       # Python settings
       - PYTHONUNBUFFERED=1
       - LOG_LEVEL=info
@@ -23,6 +25,8 @@ services:
       - ./cache:/app/cache
       # Mount molecule properties cache for faster lookups
       - ./molecule_properties:/app/molecule_properties
+      # Mount dataset for DOI checking
+      - ../processed_data.csv:/app/processed_data.csv:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "conda", "run", "-n", "copol", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]

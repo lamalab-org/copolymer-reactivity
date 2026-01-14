@@ -17,13 +17,18 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.metrics import confusion_matrix, classification_report, ConfusionMatrixDisplay
+from sklearn.metrics import (
+    confusion_matrix, classification_report, ConfusionMatrixDisplay,
+    accuracy_score, precision_score, recall_score, f1_score
+)
 from sklearn.calibration import calibration_curve
+from copolpredictor.prediction_utils import create_grouped_kfold_splits
 
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from copolpredictor.inference import CopolymerPredictor
+from utils.load_data_split import load_train_test_split
 from plot_config import (
     setup_plot_style, 
     CLASS_COLORS, 
@@ -65,6 +70,9 @@ def parse_args():
     parser.add_argument("--confidence-vs-r1r2", action="store_true", help="Confidence vs r1r2 plot")
     parser.add_argument("--filtering", action="store_true", help="Confidence filtering analysis")
     parser.add_argument("--min-retention", type=float, default=0.7, help="Minimum retention rate for filtering (default: 0.7)")
+    parser.add_argument("--confidence-threshold", type=float, default=0.7, help="Minimum confidence threshold for combined plot (default: 0.7)")
+    parser.add_argument("--no-latex-table", dest="latex_table", action="store_false", default=True, help="Skip LaTeX performance table generation (default: table is created)")
+    parser.add_argument("--n-folds", type=int, default=5, help="Number of CV folds for error bars (default: 5)")
     
     return parser.parse_args()
 
@@ -74,66 +82,144 @@ def setup_style():
     setup_plot_style()  # Load lamalab.mplstyle and set color scheme
 
 
-def plot_confusion_matrix_and_confidence(y_true, y_pred, confidence_scores, correct_mask, output_dir, suffix=''):
-    """Plot confusion matrix and confidence distribution in combined figure."""
-    print(f"Generating combined confusion matrix and confidence plot{' (' + suffix + ')' if suffix else ''}...")
+def plot_confusion_matrix_and_confidence(y_true, y_pred, confidence_scores, correct_mask, output_dir, suffix='', confidence_threshold=0.7):
+    """Plot confusion matrix and confidence distribution in combined figure.
     
-    # Create figure with 2 subplots (TWO_COL width, maintaining original 14:5 aspect ratio)
-    # Original was (14, 5), so height = width * (5/14)
-    height = TWO_COL_WIDTH_INCH * (5/14)
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(TWO_COL_WIDTH_INCH, height))
+    Args:
+        y_true: True labels
+        y_pred: Predicted labels
+        confidence_scores: Confidence scores
+        correct_mask: Boolean mask indicating correct predictions
+        output_dir: Output directory for plots
+        suffix: Suffix for filename
+        confidence_threshold: Minimum confidence threshold to filter data (None = no filtering)
+    """
+    # Store original data before filtering
+    # Use np.array to ensure we have a proper numpy array and make a deep copy
+    y_true_original = np.array(y_true).copy()
+    y_pred_original = np.array(y_pred).copy()
+    confidence_scores_original = np.array(confidence_scores).copy()
+    correct_mask_original = np.array(correct_mask).copy()
+    original_count = len(y_true)
     
-    # Left subplot: Confusion Matrix
-    cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2])
-    disp = ConfusionMatrixDisplay(
-        confusion_matrix=cm,
+    # Debug: Print confidence score statistics
+    print(f"  Confidence score range (original): {confidence_scores_original.min():.3f} - {confidence_scores_original.max():.3f}")
+    print(f"  Confidence score < 0.3: {(confidence_scores_original < 0.3).sum()} samples")
+    
+    # Filter by confidence threshold if specified and > 0
+    if confidence_threshold is not None and confidence_threshold > 0:
+        threshold_mask = confidence_scores >= confidence_threshold
+        y_true_filtered = y_true[threshold_mask]
+        y_pred_filtered = y_pred[threshold_mask]
+        confidence_scores_filtered = confidence_scores[threshold_mask]
+        correct_mask_filtered = correct_mask[threshold_mask]
+        print(f"Generating combined confusion matrix and confidence plot{' (' + suffix + ')' if suffix else ''} (threshold: {confidence_threshold:.3f})...")
+        print(f"  Filtered: {original_count} → {len(y_true_filtered)} samples ({len(y_true_filtered)/original_count*100:.1f}% retained)")
+    else:
+        y_true_filtered = y_true
+        y_pred_filtered = y_pred
+        confidence_scores_filtered = confidence_scores
+        correct_mask_filtered = correct_mask
+        print(f"Generating combined confusion matrix and confidence plot{' (' + suffix + ')' if suffix else ''}...")
+    
+    # Create figure with 3 subplots
+    # Use TWO_COL width, adjust height for 3 subplots
+    height = TWO_COL_WIDTH_INCH * (5/14) * 1.2  # Slightly taller for 3 subplots
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH * 1.5, height))
+    
+    # Subplot 1: Confusion Matrix (All data)
+    cm_all = confusion_matrix(y_true_original, y_pred_original, labels=[0, 1, 2])
+    vmax_all = max(2500, cm_all.max() * 1.1)
+    disp_all = ConfusionMatrixDisplay(
+        confusion_matrix=cm_all,
         display_labels=[get_class_label(i) for i in range(3)]
     )
-    im = disp.plot(cmap=CONFUSION_MATRIX_CONFIG['cmap'], ax=ax1, 
+    im_all = disp_all.plot(cmap=CONFUSION_MATRIX_CONFIG['cmap'], ax=ax1, 
               values_format=CONFUSION_MATRIX_CONFIG['values_format'],
-              im_kw={'vmin': 0, 'vmax': 2500},
+              im_kw={'vmin': 0, 'vmax': vmax_all},
               text_kw={'fontsize': 7})
     ax1.set_title('a', fontsize=10, loc='left', fontweight='bold')
     ax1.set_xlabel(ax1.get_xlabel(), fontsize=8)
     ax1.set_ylabel(ax1.get_ylabel(), fontsize=8)
     ax1.tick_params(labelsize=6)
     ax1.grid(False)
-    # Adjust colorbar font size
-    if im.im_ is not None:
-        cbar = im.im_.colorbar
-        if cbar is not None:
-            cbar.ax.tick_params(labelsize=6)
+    if im_all.im_ is not None:
+        cbar_all = im_all.im_.colorbar
+        if cbar_all is not None:
+            cbar_all.ax.tick_params(labelsize=6)
     
-    # Right subplot: Confidence Distribution (Correct vs Incorrect)
-    correct_conf = confidence_scores[correct_mask]
-    incorrect_conf = confidence_scores[~correct_mask]
+    # Subplot 2: Confusion Matrix (Filtered data)
+    if confidence_threshold is not None and confidence_threshold > 0:
+        cm_filtered = confusion_matrix(y_true_filtered, y_pred_filtered, labels=[0, 1, 2])
+        vmax_filtered = max(2500, cm_filtered.max() * 1.1)
+        disp_filtered = ConfusionMatrixDisplay(
+            confusion_matrix=cm_filtered,
+            display_labels=[get_class_label(i) for i in range(3)]
+        )
+        im_filtered = disp_filtered.plot(cmap=CONFUSION_MATRIX_CONFIG['cmap'], ax=ax2, 
+                  values_format=CONFUSION_MATRIX_CONFIG['values_format'],
+                  im_kw={'vmin': 0, 'vmax': vmax_filtered},
+                  text_kw={'fontsize': 7})
+    else:
+        # If no threshold, show same as all data
+        cm_filtered = cm_all
+        vmax_filtered = vmax_all
+        disp_filtered = ConfusionMatrixDisplay(
+            confusion_matrix=cm_filtered,
+            display_labels=[get_class_label(i) for i in range(3)]
+        )
+        im_filtered = disp_filtered.plot(cmap=CONFUSION_MATRIX_CONFIG['cmap'], ax=ax2, 
+                  values_format=CONFUSION_MATRIX_CONFIG['values_format'],
+                  im_kw={'vmin': 0, 'vmax': vmax_filtered},
+                  text_kw={'fontsize': 7})
+    ax2.set_title('b', fontsize=10, loc='left', fontweight='bold')
+    ax2.set_xlabel(ax2.get_xlabel(), fontsize=8)
+    ax2.set_ylabel(ax2.get_ylabel(), fontsize=8)
+    ax2.tick_params(labelsize=6)
+    ax2.grid(False)
+    if im_filtered.im_ is not None:
+        cbar_filtered = im_filtered.im_.colorbar
+        if cbar_filtered is not None:
+            cbar_filtered.ax.tick_params(labelsize=6)
     
-    ax2.hist(correct_conf, bins=CONFIDENCE_PLOT_CONFIG['bins'], 
+    # Subplot 3: Confidence Distribution (All data, 0-1)
+    correct_conf_all = confidence_scores_original[correct_mask_original]
+    incorrect_conf_all = confidence_scores_original[~correct_mask_original]
+    
+    # Debug: Print statistics for confidence distribution
+    print(f"  Confidence distribution - Correct: min={correct_conf_all.min():.3f}, max={correct_conf_all.max():.3f}, <0.3: {(correct_conf_all < 0.3).sum()}")
+    print(f"  Confidence distribution - Incorrect: min={incorrect_conf_all.min():.3f}, max={incorrect_conf_all.max():.3f}, <0.3: {(incorrect_conf_all < 0.3).sum()}")
+    
+    # Use explicit bins from 0 to 1 to ensure full range is shown
+    bins = np.linspace(0, 1, CONFIDENCE_PLOT_CONFIG['bins'] + 1)
+    ax3.hist(correct_conf_all, bins=bins, 
              alpha=CONFIDENCE_PLOT_CONFIG['alpha'], label='Correct', 
              color=COMPARISON_COLORS['correct'], edgecolor=CONFIDENCE_PLOT_CONFIG['edgecolor'])
-    ax2.hist(incorrect_conf, bins=CONFIDENCE_PLOT_CONFIG['bins'], 
+    ax3.hist(incorrect_conf_all, bins=bins, 
              alpha=CONFIDENCE_PLOT_CONFIG['alpha'], label='Incorrect', 
              color=COMPARISON_COLORS['incorrect'], edgecolor=CONFIDENCE_PLOT_CONFIG['edgecolor'])
-    ax2.set_xlabel('Confidence Score', fontsize=8)
-    ax2.set_ylabel('Count', fontsize=8)
-    ax2.set_title('b', fontsize=10, loc='left', fontweight='bold')
-    ax2.legend(fontsize=7)
-    ax2.grid(False)
-    ax2.tick_params(labelsize=6)
+    ax3.set_xlabel('Confidence Score', fontsize=8)
+    ax3.set_ylabel('Count', fontsize=8)
+    ax3.set_title('c', fontsize=10, loc='left', fontweight='bold')
+    ax3.set_xlim(0, 1)  # Ensure x-axis goes from 0 to 1
+    ax3.legend(fontsize=7)
+    ax3.grid(False)
+    ax3.tick_params(labelsize=6)
     # Remove top and right spines (box)
-    ax2.spines['top'].set_visible(False)
-    ax2.spines['right'].set_visible(False)
+    ax3.spines['top'].set_visible(False)
+    ax3.spines['right'].set_visible(False)
     
     plt.tight_layout()
     
     # Save as PNG
-    filename_png = f'confusion_and_confidence{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.png'
+    threshold_suffix = f"_threshold_{confidence_threshold:.3f}" if (confidence_threshold is not None and confidence_threshold > 0) else ""
+    filename_png = f'confusion_and_confidence{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}{threshold_suffix}.png'
     path_png = os.path.join(output_dir, filename_png)
     plt.savefig(path_png, dpi=300, bbox_inches='tight')
     print(f"  ✓ Saved PNG to {path_png}")
     
     # Save as PDF
-    filename_pdf = f'confusion_and_confidence{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}.pdf'
+    filename_pdf = f'confusion_and_confidence{("_" + suffix.lower().replace(" ", "_")) if suffix else ""}{threshold_suffix}.pdf'
     path_pdf = os.path.join(output_dir, filename_pdf)
     plt.savefig(path_pdf, bbox_inches='tight')
     print(f"  ✓ Saved PDF to {path_pdf}")
@@ -804,6 +890,153 @@ def analyze_confidence_filtering(y_true, y_pred, confidence_scores, output_dir, 
     print("="*60)
 
 
+def calculate_metrics_with_cv(df, predictor, n_folds=5, id_column='reaction_id'):
+    """
+    Calculate metrics with group-based cross-validation.
+    Uses grouped KFold to ensure no data leakage (e.g., normal and flipped
+    variants of the same reaction stay together).
+    
+    Args:
+        df: DataFrame with features and labels (must contain id_column)
+        predictor: Trained predictor
+        n_folds: Number of CV folds
+        id_column: Column name for grouping (default: 'reaction_id')
+        
+    Returns:
+        Dictionary with mean and std for each metric
+    """
+    # Storage for CV metrics
+    metrics_list = {
+        'accuracy': [],
+        'precision_macro': [],
+        'recall_macro': [],
+        'f1_macro': [],
+        'precision_weighted': [],
+        'recall_weighted': [],
+        'f1_weighted': []
+    }
+    
+    # Create group-based folds
+    splits = create_grouped_kfold_splits(df, n_splits=n_folds, id_column=id_column)
+    
+    # Cross-validation
+    for fold_idx, (train_idx, test_idx) in enumerate(splits):
+        # Get test fold data
+        df_test_fold = df.iloc[test_idx]
+        X_test_fold = df_test_fold[predictor.features]
+        y_test_fold = df_test_fold['r_product_class'].astype(int).values
+        
+        # Make predictions
+        y_pred_fold = predictor.model.predict(X_test_fold)
+        
+        # Calculate metrics
+        metrics_list['accuracy'].append(accuracy_score(y_test_fold, y_pred_fold))
+        metrics_list['precision_macro'].append(precision_score(y_test_fold, y_pred_fold, average='macro', zero_division=0))
+        metrics_list['recall_macro'].append(recall_score(y_test_fold, y_pred_fold, average='macro', zero_division=0))
+        metrics_list['f1_macro'].append(f1_score(y_test_fold, y_pred_fold, average='macro', zero_division=0))
+        metrics_list['precision_weighted'].append(precision_score(y_test_fold, y_pred_fold, average='weighted', zero_division=0))
+        metrics_list['recall_weighted'].append(recall_score(y_test_fold, y_pred_fold, average='weighted', zero_division=0))
+        metrics_list['f1_weighted'].append(f1_score(y_test_fold, y_pred_fold, average='weighted', zero_division=0))
+    
+    # Calculate mean and std
+    results = {}
+    for metric_name, values in metrics_list.items():
+        results[metric_name] = {
+            'mean': np.mean(values),
+            'std': np.std(values, ddof=1)  # Sample standard deviation
+        }
+    
+    return results
+
+
+def create_latex_performance_table(predictor, output_dir, n_folds=5):
+    """
+    Create LaTeX performance table from trained model and train/test splits with error bars.
+    Uses group-based cross-validation to avoid data leakage.
+    
+    Args:
+        predictor: Trained predictor
+        output_dir: Output directory
+        n_folds: Number of CV folds
+    """
+    print("\n" + "="*60)
+    print("GENERATING LATEX PERFORMANCE TABLE")
+    print("="*60)
+    
+    try:
+        # Load train/test splits
+        # Path should be relative to project root (parent of analysis directory)
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)  # Go up from analysis/ to copol_prediction/
+        split_dir = os.path.join(project_root, "artifacts", "data_splits")
+        
+        print("Loading train/test splits...")
+        df_train, df_test = load_train_test_split(split_dir=split_dir)
+        print(f"  Train: {len(df_train)} samples")
+        print(f"  Test:  {len(df_test)} samples")
+        
+        # Calculate metrics with group-based cross-validation
+        print(f"Calculating metrics with group-based cross-validation (n_folds={n_folds})...")
+        print("  Train set...")
+        train_metrics = calculate_metrics_with_cv(df_train, predictor, n_folds=n_folds)
+        
+        print("  Test set...")
+        test_metrics = calculate_metrics_with_cv(df_test, predictor, n_folds=n_folds)
+        
+        # Create LaTeX table with error bars
+        latex_file = os.path.join(output_dir, "performance_table.tex")
+        with open(latex_file, 'w') as f:
+            f.write("\\begin{table}[h!]\n")
+            f.write("\\centering\n")
+            f.write("\\caption{\\textbf{Overall performance of the copolymer reactivity model:} Overall performance of the copolymer model in the train and testset. Error bars represent standard deviations calculated from ")
+            f.write(f"{n_folds}-fold group-based cross-validation.}\n")
+            f.write("\\begin{tabular}{lcccc}\n")
+            f.write("\\toprule\n")
+            f.write("\\textbf{Metric} & \\textbf{Train} & \\textbf{Test} \\\\\n")
+            f.write("\\midrule\n")
+            f.write(f"Samples & {len(df_train)} & {len(df_test)} \\\\[3pt]\n")
+            
+            # Accuracy with error bars
+            f.write(f"Accuracy & ${train_metrics['accuracy']['mean']:.3f} \\pm {train_metrics['accuracy']['std']:.3f}$ & "
+                   f"${test_metrics['accuracy']['mean']:.3f} \\pm {test_metrics['accuracy']['std']:.3f}$ \\\\[3pt]\n")
+            
+            # Macro metrics with error bars
+            f.write(f"Precision (macro) & ${train_metrics['precision_macro']['mean']:.3f} \\pm {train_metrics['precision_macro']['std']:.3f}$ & "
+                   f"${test_metrics['precision_macro']['mean']:.3f} \\pm {test_metrics['precision_macro']['std']:.3f}$ \\\\\n")
+            f.write(f"Recall (macro)    & ${train_metrics['recall_macro']['mean']:.3f} \\pm {train_metrics['recall_macro']['std']:.3f}$ & "
+                   f"${test_metrics['recall_macro']['mean']:.3f} \\pm {test_metrics['recall_macro']['std']:.3f}$ \\\\\n")
+            f.write(f"F1-score (macro)  & ${train_metrics['f1_macro']['mean']:.3f} \\pm {train_metrics['f1_macro']['std']:.3f}$ & "
+                   f"${test_metrics['f1_macro']['mean']:.3f} \\pm {test_metrics['f1_macro']['std']:.3f}$ \\\\[3pt]\n")
+            
+            # Weighted metrics with error bars
+            f.write(f"Precision (weighted) & ${train_metrics['precision_weighted']['mean']:.3f} \\pm {train_metrics['precision_weighted']['std']:.3f}$ & "
+                   f"${test_metrics['precision_weighted']['mean']:.3f} \\pm {test_metrics['precision_weighted']['std']:.3f}$ \\\\\n")
+            f.write(f"Recall (weighted)    & ${train_metrics['recall_weighted']['mean']:.3f} \\pm {train_metrics['recall_weighted']['std']:.3f}$ & "
+                   f"${test_metrics['recall_weighted']['mean']:.3f} \\pm {test_metrics['recall_weighted']['std']:.3f}$ \\\\\n")
+            f.write(f"F1-score (weighted)  & ${train_metrics['f1_weighted']['mean']:.3f} \\pm {train_metrics['f1_weighted']['std']:.3f}$ & "
+                   f"${test_metrics['f1_weighted']['mean']:.3f} \\pm {test_metrics['f1_weighted']['std']:.3f}$ \\\\\n")
+            
+            f.write("\\bottomrule\n")
+            f.write("\\end{tabular}\n")
+            f.write("\\label{tab:model_performance}\n")
+            f.write("\\end{table}\n")
+        
+        print(f"\n✓ LaTeX table saved to: {latex_file}")
+        return latex_file
+        
+    except FileNotFoundError as e:
+        print(f"✗ Error creating LaTeX table: {e}")
+        print("  Note: Train/test splits are required for LaTeX table generation.")
+        print("  The table will be skipped. Other analysis will continue.")
+        return None
+    except Exception as e:
+        print(f"✗ Error creating LaTeX table: {e}")
+        import traceback
+        traceback.print_exc()
+        print("  Note: The table will be skipped. Other analysis will continue.")
+        return None
+
+
 def generate_plots_for_dataset(df, predictor, args, suffix=''):
     """Generate plots for a given dataset."""
     # Prepare features
@@ -848,7 +1081,7 @@ def generate_plots_for_dataset(df, predictor, args, suffix=''):
     print(f"\nGenerating plots{' (' + suffix + ')' if suffix else ''}...")
     
     if generate_all or args.combined:
-        plot_confusion_matrix_and_confidence(y_true, y_pred, confidence, correct_mask, args.output_dir, suffix)
+        plot_confusion_matrix_and_confidence(y_true, y_pred, confidence, correct_mask, args.output_dir, suffix, args.confidence_threshold)
     
     if generate_all or args.confusion:
         plot_confusion_matrix(y_true, y_pred, args.output_dir, suffix)
@@ -895,6 +1128,14 @@ def main():
     except Exception as e:
         print(f"  ✗ Error loading model: {e}")
         sys.exit(1)
+    
+    # Generate LaTeX table if requested
+    if args.latex_table:
+        create_latex_performance_table(
+            predictor, 
+            args.output_dir, 
+            n_folds=args.n_folds
+        )
     
     # Load data
     print("\nLoading data...")

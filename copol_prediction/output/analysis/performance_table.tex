@@ -1,0 +1,24 @@
+\begin{table}[h!]
+\centering
+\caption{\textbf{Overall performance of the copolymer reactivity model for the training and test set.}}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Metric} & \textbf{Train} & \textbf{Test} \\
+\midrule
+Samples & 5448 & 1364 \\[3pt]
+Accuracy & $0.927 \pm 0.010$ & $0.786 \pm 0.038$ \\[3pt]
+Precision (macro) & $0.880 \pm 0.027$ & $0.727 \pm 0.103$ \\
+Recall (macro)    & $0.925 \pm 0.011$ & $0.647 \pm 0.089$ \\
+F1-score (macro)  & $0.897 \pm 0.018$ & $0.663 \pm 0.090$ \\[3pt]
+Precision (weighted) & $0.939 \pm 0.005$ & $0.801 \pm 0.036$ \\
+Recall (weighted)    & $0.927 \pm 0.010$ & $0.786 \pm 0.038$ \\
+F1-score (weighted)  & $0.930 \pm 0.009$ & $0.789 \pm 0.037$ \\
+\bottomrule
+\end{tabular}
+\begin{footnotesize}
+\begin{tablenotes}[flushleft]
+\item Error bars represent standard deviations calculated from 5-fold group-based cross-validation. Groups (reaction\_id) were kept together within folds to prevent data leakage, ensuring that normal and flipped variants of the same reaction remain in the same fold. Values are reported as mean $\pm$ standard deviation across folds.
+\end{tablenotes}
+\end{footnotesize}
+\label{tab:model_performance}
+\end{table}

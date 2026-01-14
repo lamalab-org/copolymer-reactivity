@@ -100,12 +100,15 @@ class CopolymerPredictor:
         y_pred = self.model.predict(X_processed)
         y_proba = self.model.predict_proba(X_processed)
         
-        # Calculate confidence (entropy-based)
-        epsilon = 1e-15
-        y_proba_clipped = np.clip(y_proba, epsilon, 1 - epsilon)
-        entropy = -np.sum(y_proba_clipped * np.log(y_proba_clipped), axis=1)
-        max_entropy = np.log(len(self.class_labels))
-        confidence = 1 - (entropy / max_entropy)
+        # Calculate confidence (weighted: max probability + margin)
+        # This is less strict than entropy-based confidence
+        max_proba = np.max(y_proba, axis=1)
+        sorted_proba = np.sort(y_proba, axis=1)[:, ::-1]
+        margin = sorted_proba[:, 0] - sorted_proba[:, 1]
+        
+        # Weighted combination: 70% max probability, 30% margin
+        # This gives more meaningful differentiation between predictions
+        confidence = 0.7 * max_proba + 0.3 * margin
         
         return {
             'predictions': y_pred,

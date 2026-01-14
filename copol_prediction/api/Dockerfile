@@ -77,6 +77,7 @@ WORKDIR /app
 # Copy application code and config
 COPY --chown=apiuser:apiuser copol_prediction/api/app.py /app/
 COPY --chown=apiuser:apiuser copol_prediction/api/morfeus_patch.py /app/
+COPY --chown=apiuser:apiuser copol_prediction/api/paper_similarity.py /app/
 COPY --chown=apiuser:apiuser copol_prediction/api/requirements.txt /app/
 
 # Copy tests
