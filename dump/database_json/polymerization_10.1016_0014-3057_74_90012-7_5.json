@@ -1,0 +1,37 @@
+{
+  "monomer1": "2-Hydroxyethylmethacrylate",
+  "monomer2": "N-(trans-4-nitro-4-stilbenyl)isobutyroamide",
+  "r_values": {
+    "constant_1": 1.65,
+    "constant_2": 0.41
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.41,
+    "constant_conf_2": 0.41
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": "CN(C)C=O",
+  "method": "bulk",
+  "r-product": null,
+  "source": "https://doi.org/10.1016/0014-3057(74)90012-7",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "logP": -0.2956000000000001,
+  "monomer1_smiles": "C=C(C)C(=O)OCCO",
+  "monomer2_smiles": "CC(C)C(=O)NC1([N+](=O)[O-])C=CC(/C=C/c2ccccc2)=CC1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -7.23088245290138,
+  "method_emb_2": -0.5848044902383194,
+  "solvent_logP": -0.2956000000000001,
+  "solvent_TPSA": 20.310000000000002,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.6666666666666666,
+  "solvent_MolMR": 19.750999999999998,
+  "solvent_LabuteASA": 31.390491026869903,
+  "solvent_NumRotatableBonds": 1.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 5.0
+}

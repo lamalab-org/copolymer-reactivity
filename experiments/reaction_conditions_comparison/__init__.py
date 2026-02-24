@@ -1,2 +1,0 @@
-# Reaction conditions comparison experiment
-

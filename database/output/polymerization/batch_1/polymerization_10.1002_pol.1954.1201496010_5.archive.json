@@ -1,0 +1,33 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.1954.1201496010"
+        },
+        "monomers": [
+            {
+                "name": "vinyl acetate"
+            },
+            {
+                "name": "crotonic acid"
+            }
+        ],
+        "reaction_conditions": {
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Barb",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.33
+                },
+                {
+                    "reaction_constant": 0
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

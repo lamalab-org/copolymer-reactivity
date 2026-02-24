@@ -6,6 +6,10 @@ This script:
 1. Loads the central train/test split from copol_prediction/artifacts/data_splits/
 2. Creates experiment-specific versions (e.g., with Morgan fingerprints)
 
+NOTE: This script only creates derived data (Morgan fingerprints). 
+The normal splits (train.csv, test.csv) should NOT be duplicated.
+All scripts should use the central split directly from copol_prediction/artifacts/data_splits/
+
 The central split should be created FIRST by running:
     cd ../copol_prediction && python create_data_split.py
 """
@@ -58,22 +62,21 @@ def load_central_split():
 
 
 def copy_baseline_split(df_train, df_test, output_dir='data'):
-    """Copy central split to experiment directory for baseline experiments."""
+    """
+    DEPRECATED: Do not copy baseline splits anymore.
+    
+    All scripts should use the central split directly from:
+    copol_prediction/artifacts/data_splits/
+    
+    This function is kept for backward compatibility but does nothing.
+    """
     print("\n" + "="*70)
-    print("CREATING BASELINE EXPERIMENT DATA")
+    print("NOTE: Baseline splits are no longer copied")
     print("="*70)
-    # Save copies for baseline experiments
-    os.makedirs(output_dir, exist_ok=True)
-    
-    train_path = os.path.join(output_dir, 'train.csv')
-    test_path = os.path.join(output_dir, 'test.csv')
-    
-    df_train.to_csv(train_path, index=False)
-    df_test.to_csv(test_path, index=False)
-    
-    print(f"\n✓ Copied to: {train_path}")
-    print(f"✓ Copied to: {test_path}")
-    
+    print("\nAll scripts should use the central split directly:")
+    print("  copol_prediction/artifacts/data_splits/train.csv")
+    print("  copol_prediction/artifacts/data_splits/test.csv")
+    print("\nUse load_data_split.load_train_test_split() in your scripts.")
     return df_train, df_test
 
 
@@ -84,7 +87,9 @@ def create_morgan_split(df_train, df_test, output_dir='data', n_bits=2048, radiu
     print("="*70)
     print(f"Parameters: {n_bits} bits, radius {radius}")
     
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'fingerprint'))
+    # Import from feature_comparison/fingerprint
+    fingerprint_dir = os.path.join(os.path.dirname(__file__), '..', 'feature_comparison', 'fingerprint')
+    sys.path.insert(0, fingerprint_dir)
     import data_processing_morgan
     
     print("\nGenerating Morgan fingerprints for train set...")
@@ -125,6 +130,9 @@ def create_morgan_split(df_train, df_test, output_dir='data', n_bits=2048, radiu
         print(f"  Removed {test_removed} NaN rows from test set")
     print(f"  Final: train={len(df_train_morgan)}, test={len(df_test_morgan)}")
     
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
     # Save
     train_path = os.path.join(output_dir, 'train_morgan.csv')
     test_path = os.path.join(output_dir, 'test_morgan.csv')
@@ -152,13 +160,17 @@ if __name__ == "__main__":
     # Load central split
     df_train, df_test = load_central_split()
     
-    # Copy for baseline experiments
-    print("\nCopying baseline data...")
-    copy_baseline_split(df_train, df_test)
+    # NOTE: We no longer copy baseline splits to experiments/data/
+    # All scripts should use the central split directly
     
     # Optionally create Morgan fingerprint version
     if args.fingerprints:
-        create_morgan_split(df_train, df_test)
+        # Save Morgan data in feature_comparison directory
+        morgan_output_dir = os.path.join('feature_comparison', 'data')
+        create_morgan_split(df_train, df_test, output_dir=morgan_output_dir)
+    else:
+        print("\n⚠️  No action specified. Use --fingerprints to create Morgan fingerprint data.")
+        print("   Normal splits should be loaded directly from the central location.")
     
     print("\n" + "="*70)
     print("EXPERIMENT DATA READY")

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Plot generation script for filter sweep results.
+Plot generation script for voting-model filter sweep results.
 
-This script loads results from sweep_filters.py and generates all plots.
-This allows regenerating plots without rerunning the entire experiment.
+Reads results from sweep_filters.py and generates all plots.
+Can be run independently to regenerate plots without re-training.
 
 Usage:
     python plot_sweep_results.py [--results-path PATH] [--plots-dir DIR]
@@ -13,512 +13,684 @@ import os
 import sys
 import argparse
 import ast
-import pandas as pd
+from decimal import Decimal, ROUND_HALF_UP
+
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import ConfusionMatrixDisplay
 
-# Add parent directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../copol_prediction'))
+# ---------------------------------------------------------------------------
+# Path setup
+# ---------------------------------------------------------------------------
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.abspath(os.path.join(_SCRIPT_DIR, '..', '..'))
+sys.path.insert(0, _PROJECT_ROOT)
+sys.path.insert(0, os.path.join(_SCRIPT_DIR, '..'))
+sys.path.insert(0, os.path.join(_PROJECT_ROOT, 'copol_prediction'))
 
-# Import plot configuration from copol_prediction/analysis/plot_config.py
 try:
-    # Try direct import
     from copol_prediction.analysis.plot_config import (
-        setup_plot_style, 
+        setup_plot_style,
         HEATMAP_CMAP,
         TWO_COL_WIDTH_INCH,
         ONE_COL_WIDTH_INCH,
         CLASS_COLORS,
-        get_class_label
+        get_class_label,
+        CONFUSION_MATRIX_CONFIG,
     )
 except ImportError:
-    # Fallback: try relative path import
-    try:
-        plot_config_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), 
-            '../../copol_prediction/analysis/plot_config.py'
-        ))
-        if os.path.exists(plot_config_path):
-            import importlib.util
-            spec = importlib.util.spec_from_file_location("plot_config", plot_config_path)
-            plot_config = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(plot_config)
-            setup_plot_style = plot_config.setup_plot_style
-            HEATMAP_CMAP = plot_config.HEATMAP_CMAP
-            TWO_COL_WIDTH_INCH = plot_config.TWO_COL_WIDTH_INCH
-        else:
-            raise ImportError(f"plot_config.py not found at {plot_config_path}")
-    except Exception as e:
-        # Final fallback
-        print(f"Warning: Could not load plot_config.py: {e}")
-        print("Using default plot settings")
-        def setup_plot_style():
-            pass
-        HEATMAP_CMAP = 'Blues'
-        TWO_COL_WIDTH_INCH = 7
-        ONE_COL_WIDTH_INCH = 3
-        CLASS_COLORS = {0: '#3A3B73', 1: '#e27f07', 2: '#6a040f'}
-        def get_class_label(class_id, style='default'):
-            labels = {0: "Class 0:\nAlternating", 1: "Class 1:\nBlock-like", 2: "Class 2:\nHomopolymer"}
-            return labels.get(class_id, f"Class {class_id}")
+    def setup_plot_style():
+        pass
+    HEATMAP_CMAP = 'Blues'
+    TWO_COL_WIDTH_INCH = 7
+    ONE_COL_WIDTH_INCH = 3.5
+    CLASS_COLORS = {0: '#3A3B73', 1: '#e27f07', 2: '#6a040f'}
+    CONFUSION_MATRIX_CONFIG = {'cmap': 'Blues', 'values_format': 'd'}
+    def get_class_label(cid, style='default'):
+        labels = {0: "Alternating", 1: "Block-like", 2: "Homopolymer"}
+        return labels.get(cid, f"Class {cid}")
+
+# Style for matplotlib
+try:
+    _STYLE_PATH = os.path.join(_PROJECT_ROOT, 'copol_prediction', 'analysis',
+                                'lamalab.mplstyle')
+    if os.path.exists(_STYLE_PATH):
+        plt.style.use(_STYLE_PATH)
+except Exception:
+    pass
+
+# Note: Negative data is now only a boolean (XGBoost only, NOT for Lookup)
+# The old NEG_TARGETS and NEG_LABELS are kept for backward compatibility
+# but should not be used in new code
+NEG_TARGETS = ['none', 'xgb_only', 'lookup_only', 'both']
+NEG_LABELS = {
+    'none': 'Neg: neither',
+    'xgb_only': 'Neg: XGB only',
+    'lookup_only': 'Neg: Lookup only',
+    'both': 'Neg: both',
+}
 
 
-def parse_args():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(
-        description="Generate plots from filter sweep results"
-    )
-    parser.add_argument(
-        "--results-path",
-        type=str,
-        default="artifacts/experiments_holdout/sweep_results.csv",
-        help="Path to sweep_results.csv"
-    )
-    parser.add_argument(
-        "--plots-dir",
-        type=str,
-        default="output/model_comp",
-        help="Directory to save plots"
-    )
+# ---------------------------------------------------------------------------
+# Rounding helper: always round 0.5 up
+# ---------------------------------------------------------------------------
+def round_up_half(val, decimals=2):
+    """Round to decimals places, always rounding 0.5 up (not banker's rounding).
     
+    Example: 0.725 -> 0.73 (third decimal >= 5, so round second decimal up)
+    """
+    if pd.isna(val) or np.isnan(val):
+        return np.nan
+    # Use Decimal with ROUND_HALF_UP to ensure 0.5 always rounds up
+    # Convert to Decimal via string to avoid floating point precision issues
+    val_decimal = Decimal(str(val))
+    quantize_str = '0.' + '0' * decimals
+    quantize_decimal = Decimal(quantize_str)
+    rounded = val_decimal.quantize(quantize_decimal, rounding=ROUND_HALF_UP)
+    return float(rounded)
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Generate plots from voting-model filter sweep results"
+    )
+    parser.add_argument("--results-path", type=str,
+                        default="artifacts/experiments_voting/sweep_results.csv")
+    parser.add_argument("--plots-dir", type=str,
+                        default="output/voting_sweep")
     return parser.parse_args()
 
 
-def plot_confusion_matrix(cm, labels, save_path, run_name=None):
-    """
-    Plot and save a confusion matrix.
-    
-    Args:
-        cm: Confusion matrix array
-        labels: Class labels
-        save_path: Path to save the plot
-        run_name: Optional run name (not used in title, but for filename)
-    """
-    fig, ax = plt.subplots(figsize=(8, 6))
-    
-    # Plot confusion matrix
-    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
-    plt.colorbar(im, ax=ax)
-    
-    # No grid
-    ax.grid(False)
-    
-    # Set labels
-    tick_marks = np.arange(len(labels))
-    ax.set_xticks(tick_marks)
-    ax.set_yticks(tick_marks)
-    ax.set_xticklabels(labels, fontsize=16)
-    ax.set_yticklabels(labels, fontsize=16)
-    ax.set_xlabel('Predicted Class', fontsize=16, fontweight='bold')
-    ax.set_ylabel('True Class', fontsize=16, fontweight='bold')
-    
-    # Annotate cells with larger font
-    for i in range(cm.shape[0]):
-        for j in range(cm.shape[1]):
-            ax.text(j, i, int(cm[i, j]),
-                   ha="center", va="center",
-                   color="white" if cm[i, j] > cm.max() / 2 else "black",
-                   fontsize=18, fontweight='bold')
-    
-    # No title
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved confusion matrix to {save_path}")
+# ---------------------------------------------------------------------------
+# Heatmap: per neg_data_target (2×2 grid of heatmaps)
+# ---------------------------------------------------------------------------
+def plot_heatmap_grid(results_df, plots_dir, metric='macro_accuracy',
+                      metric_label='Macro Accuracy'):
+    """Create a 2×2 grid of heatmaps — one per neg_data setting.
 
-
-def plot_4x4_matrix(results_df, plots_dir, metric='holdout_f1_macro', metric_label='F1 Score (Macro)'):
+    Within each heatmap:
+      rows = (spec × poly)  → 4
+      cols = aug on/off      → 2
     """
-    Create 4x4 matrix heatmap showing all filter combinations.
-    
-    Args:
-        results_df: DataFrame with results including 'filters' column
-        plots_dir: Directory to save plots
-        metric: Metric column name to plot
-        metric_label: Label for the metric
-    """
-    # Use plot style from copol_prediction/analysis/plot_config.py
     setup_plot_style()
-    
-    # Extract filter values from results
-    filter_data = []
-    for _, row in results_df.iterrows():
-        filters = row['filters']
-        if isinstance(filters, str):
-            filters = ast.literal_eval(filters)
-        filter_data.append({
-            'remove_specialized': int(filters.get('remove_specialized', False)),
-            'add_negative_data': int(filters.get('add_negative_data', False)),
-            'use_augmentation': int(filters.get('use_augmentation', False)),
-            'apply_polymerization_filter': int(filters.get('apply_polymerization_filter', False)),
-            'metric': row[metric]
-        })
-    
-    filter_df = pd.DataFrame(filter_data)
-    
-    # Create matrix: rows = specialized + negative (4 combos), cols = aug + poly (4 combos)
-    # Row axis: (remove_specialized, add_negative_data)
-    # Col axis: (use_augmentation, apply_polymerization_filter)
-    
-    matrix = np.full((4, 4), np.nan)
-    labels_row = []
-    labels_col = []
-    
-    # Generate row labels: (remove_spec, add_neg)
-    for spec in [0, 1]:
-        for neg in [0, 1]:
-            spec_str = "Spec+" if spec else "Spec-"
-            neg_str = "Neg+" if neg else "Neg-"
-            labels_row.append(f"{spec_str}\n{neg_str}")
-    
-    # Generate col labels: (augment, poly_filter)
-    for aug in [0, 1]:
-        for poly in [0, 1]:
-            aug_str = "Aug+" if aug else "Aug-"
-            poly_str = "Poly+" if poly else "Poly-"
-            labels_col.append(f"{aug_str}\n{poly_str}")
-    
-    # Fill matrix
-    for _, row in filter_df.iterrows():
-        row_idx = int(row['remove_specialized'] * 2 + row['add_negative_data'])
-        col_idx = int(row['use_augmentation'] * 2 + row['apply_polymerization_filter'])
-        matrix[row_idx, col_idx] = row['metric']
-    
-    # Create heatmap with TWO_COL_WIDTH_INCH (same style as analyze_model.py)
-    # Use golden ratio for height
-    golden = 1.618
-    height = TWO_COL_WIDTH_INCH / golden
-    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
-    
-    # Use mask for missing values
-    mask = np.isnan(matrix)
-    
-    # Create heatmap
-    heatmap = sns.heatmap(
-        matrix,
-        annot=True,
-        fmt='.4f',
-        cmap=HEATMAP_CMAP,
-        mask=mask,
-        cbar_kws={'label': metric_label},
-        xticklabels=labels_col,
-        yticklabels=labels_row,
-        ax=ax,
-        vmin=matrix[~mask].min() if not mask.all() else 0,
-        vmax=matrix[~mask].max() if not mask.all() else 1,
-        linewidths=0.5,
-        linecolor='gray',
-        annot_kws={'fontsize': 14}  # Larger but not bold
-    )
-    
-    # Adjust colorbar font size
-    # Find colorbar in the figure (seaborn creates it as a separate axes)
-    for cbar_ax in fig.axes:
-        if cbar_ax != ax:  # Colorbar is a different axes than the main plot
-            # This is likely the colorbar
-            cbar_ax.set_ylabel(metric_label, fontsize=12, fontweight='bold')
-            cbar_ax.tick_params(labelsize=11)
-            break
-    
-    # No title
-    ax.set_xlabel('Augmentation & Polymerization Filter', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Specialized Removal & Negative Data', fontsize=12, fontweight='bold')
-    
-    # Tick labels (larger but consistent with analyze_model style)
-    ax.tick_params(labelsize=11, which='both')
-    
-    # No grid (same as analyze_model)
-    ax.grid(False)
-    
-    # Remove top and right spines (same style as analyze_model)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    
-    plt.tight_layout()
-    
-    # Save as PNG
-    filename_png = f'filter_matrix_{metric}.png'
-    path_png = os.path.join(plots_dir, filename_png)
-    plt.savefig(path_png, dpi=300, bbox_inches='tight')
-    print(f"  ✓ Saved PNG to {path_png}")
-    
-    # Save as PDF
-    filename_pdf = f'filter_matrix_{metric}.pdf'
-    path_pdf = os.path.join(plots_dir, filename_pdf)
-    plt.savefig(path_pdf, bbox_inches='tight')
-    print(f"  ✓ Saved PDF to {path_pdf}")
-    
-    plt.close()
 
+    fig, axes = plt.subplots(2, 2, figsize=(TWO_COL_WIDTH_INCH, TWO_COL_WIDTH_INCH * 0.85))
+    axes_flat = axes.flatten()
 
-def plot_sweep_results(results_df, plots_dir):
-    """
-    Create visualizations of sweep results.
-    
-    Args:
-        results_df: DataFrame with results
-        plots_dir: Directory to save plots
-    """
-    # Setup plot style from copol_prediction/analysis/plot_config.py
-    setup_plot_style()
-    
-    os.makedirs(plots_dir, exist_ok=True)
-    
-    # Create 4x4 matrix plots (macro als primär)
-    print("\n  Creating 4x4 matrix visualizations...")
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_f1_macro', metric_label='F1 Score (Macro)')
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_accuracy', metric_label='Accuracy')
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_precision_macro', metric_label='Precision (Macro)')
-    plot_4x4_matrix(results_df, plots_dir, metric='holdout_recall_macro', metric_label='Recall (Macro)')
-    
-    # Sort by F1 MACRO
-    results_sorted = results_df.sort_values('holdout_f1_macro', ascending=True)
-    
-    # Plot 1: F1 scores (MACRO)
-    plt.figure(figsize=(12, 8))
-    plt.barh(results_sorted['run_name'], results_sorted['holdout_f1_macro'], color='#661124')
-    plt.xlabel('Macro F1 Score (Holdout)', fontsize=12)
-    plt.title('Model Performance Across Filter Combinations (Macro F1)', fontsize=14)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, 'F1_score_macro.png'), dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved F1 (macro) plot to {plots_dir}/F1_score_macro.png")
-    
-    # Plot 2: Accuracy
-    plt.figure(figsize=(12, 8))
-    plt.barh(results_sorted['run_name'], results_sorted['holdout_accuracy'], color='#2d5c8f')
-    plt.xlabel('Accuracy (Holdout)', fontsize=12)
-    plt.title('Holdout Accuracy Across Filter Combinations', fontsize=14)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, 'Accuracy.png'), dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved Accuracy plot to {plots_dir}/Accuracy.png")
-    
-    # Plot 3: Generate confusion matrices for all configurations
-    print(f"\n  Generating confusion matrices for all configurations...")
-    for _, row in results_df.iterrows():
-        cm = np.array(row['confusion_matrix'])
-        if isinstance(cm, str):
-            cm = ast.literal_eval(cm)
-        cm = np.array(cm)
-        
-        run_name = row['run_name']
-        cm_filename = f"confusion_matrix_{run_name}.png"
-        cm_path = os.path.join(plots_dir, cm_filename)
-        
-        plot_confusion_matrix(
-            cm=cm,
-            labels=[0, 1, 2],
-            save_path=cm_path,
-            run_name=run_name
-        )
-    
-    # Plot 4: Comparison of metrics (mit MACRO)
-    metrics = ['holdout_accuracy', 'holdout_f1_macro', 'holdout_precision_macro', 'holdout_recall_macro']
-    metric_labels = ['Accuracy', 'F1 (macro)', 'Precision (macro)', 'Recall (macro)']
-    
-    fig, ax = plt.subplots(figsize=(14, 8))
-    x = np.arange(len(results_sorted))
-    width = 0.2
-    
-    for i, (metric, label) in enumerate(zip(metrics, metric_labels)):
-        ax.barh(x + i * width, results_sorted[metric], width, label=label)
-    
-    ax.set_yticks(x + width * 1.5)
-    ax.set_yticklabels(results_sorted['run_name'])
-    ax.set_xlabel('Score', fontsize=12)
-    ax.set_title('Comparison of Macro Metrics Across Configurations', fontsize=14)
-    ax.legend()
-    
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, 'Metrics_comparison_macro.png'), dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved metrics comparison to {plots_dir}/Metrics_comparison_macro.png")
+    row_labels = []
+    for spec in [False, True]:
+        for poly in [False, True]:
+            s = "Spec+" if spec else "Spec-"
+            p = "Poly+" if poly else "Poly-"
+            row_labels.append(f"{s}\n{p}")
 
+    col_labels = ["Aug-", "Aug+"]
 
-def plot_class_distribution_after_neg_data_augmentation(results_df, plots_dir):
-    """
-    Plot class distribution after negative data augmentation for configurations that use it.
-    Similar to plot_class_distribution in data_analysis.py.
-    """
-    print("\n  Generating class distribution plots after neg data augmentation...")
-    
-    # Find configurations that use negative data
-    neg_data_configs = results_df[results_df['filters'].apply(
-        lambda x: x.get('add_negative_data', False) if isinstance(x, dict) else False
-    )]
-    
-    if len(neg_data_configs) == 0:
-        print("  No configurations with negative data found, skipping class distribution plot")
-        return
-    
-    # We need to load the actual data to get class counts
-    # For now, we'll use the n_train from results, but ideally we'd load the actual data
-    # Let's create a plot showing the training set sizes per configuration
-    
-    # For each configuration with neg data, try to load the data and plot
-    for idx, row in neg_data_configs.iterrows():
-        run_name = row['run_name']
-        filters = row['filters'] if isinstance(row['filters'], dict) else ast.literal_eval(row['filters'])
-        
-        if not filters.get('add_negative_data', False):
-            continue
-        
-        # Try to load the data using the same logic as in sweep_filters.py
-        try:
-            # Import necessary modules
-            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../copol_prediction'))
-            from utils import load_data_split
-            from copolpredictor import prediction_utils
-            
-            # Load global split
-            script_dir = os.path.dirname(__file__)
-            copol_pred_dir = os.path.abspath(os.path.join(script_dir, '../../copol_prediction'))
-            original_cwd = os.getcwd()
-            os.chdir(copol_pred_dir)
-            
-            try:
-                df_train, df_test = load_data_split.load_train_test_split()
-            finally:
-                os.chdir(original_cwd)
-            
-            # Apply filters (simplified - just for getting class distribution)
-            # Add negative data
-            neg_paths = [
-                os.path.join(copol_pred_dir, 'filter/artificial_datapoints/processed_combined_augmented.csv'),
-                os.path.join(script_dir, '../../copol_prediction/filter/artificial_datapoints/processed_combined_augmented.csv'),
-            ]
-            
-            for neg_path in neg_paths:
-                if os.path.exists(neg_path):
-                    df_neg = pd.read_csv(neg_path)
-                    if 'Class' in df_neg.columns:
-                        df_neg = df_neg.rename(columns={'Class': 'r_product_class'})
-                        df_neg['r_product_class'] = df_neg['r_product_class'].astype(int)
-                        df_train = pd.concat([df_train, df_neg], ignore_index=True)
-                        break
-            
-            # Apply augmentation if used
-            if filters.get('use_augmentation', False):
-                sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-                from copolpredictor import data_augmentation
-                df_train = data_augmentation.augment_with_gaussian_samples(
-                    df_train,
-                    num_samples=5,  # Default
-                    std_factor=0.3,
-                    random_state=42
-                )
-            
-            # Calculate class distribution
-            if 'r_product_class' in df_train.columns:
-                class_counts = df_train['r_product_class'].value_counts().sort_index()
-                
-                # Ensure all classes are present
-                for cls in [0, 1, 2]:
-                    if cls not in class_counts.index:
-                        class_counts[cls] = 0
-                
-                class_counts = class_counts.sort_index()
-                
-                # Create plot (same style as data_analysis.py)
-                class_labels = [
-                    get_class_label(0, style='default'),
-                    get_class_label(1, style='default'),
-                    get_class_label(2, style='default')
+    # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
+    vmin = round_up_half(results_df[metric].min(), decimals=2)
+    vmax = round_up_half(results_df[metric].max(), decimals=2)
+
+    # Check if using new format (add_negative_data) or old format (neg_data_target)
+    if 'add_negative_data' in results_df.columns:
+        # New format: 2x2 grid for (aug, neg) combinations
+        for ax_idx, neg_data in enumerate([False, True]):
+            for aug_idx, aug in enumerate([False, True]):
+                ax = axes_flat[ax_idx * 2 + aug_idx]
+                subset = results_df[
+                    (results_df['add_negative_data'] == neg_data) &
+                    (results_df['use_augmentation'] == aug)
                 ]
                 
-                counts = [class_counts.get(0, 0), class_counts.get(1, 0), class_counts.get(2, 0)]
-                colors = [CLASS_COLORS[0], CLASS_COLORS[1], CLASS_COLORS[2]]
+                matrix = np.full((4, 2), np.nan)
+                annot_matrix = np.empty((4, 2), dtype=object)
+                annot_matrix.fill('')
+                for _, row in subset.iterrows():
+                    r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+                    c_idx = int(row['use_augmentation'])
+                    val = row[metric]
+                    rounded_val = round_up_half(val, decimals=2)
+                    matrix[r_idx, c_idx] = rounded_val
+                    if not np.isnan(rounded_val):
+                        annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
                 
-                # Use ONE_COL width for single plot
-                fig, ax = plt.subplots(figsize=(ONE_COL_WIDTH_INCH, ONE_COL_WIDTH_INCH / 1.618))
+                neg_label = "Neg+" if neg_data else "Neg-"
+                aug_label = "Aug+" if aug else "Aug-"
+                title = f"{neg_label} / {aug_label}"
                 
-                # Create bar plot with narrower bars
-                bars = ax.bar(class_labels, counts, color=colors, alpha=0.8, edgecolor='none', width=0.5)
-                
-                # Add value labels on bars
-                for bar, count in zip(bars, counts):
-                    height = bar.get_height()
-                    ax.text(bar.get_x() + bar.get_width()/2., height,
-                           f'{count:,}',
-                           ha='center', va='bottom', fontsize=6)
-                
-                ax.set_ylabel('Count', fontsize=8)
-                ax.set_xlabel('', fontsize=8)
-                ax.tick_params(labelsize=6)
-                ax.set_xticklabels(class_labels, rotation=0, ha='center', fontsize=6)
+                sns.heatmap(
+                    matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
+                    xticklabels=col_labels, yticklabels=row_labels if aug_idx == 0 else [],
+                    ax=ax, vmin=vmin, vmax=vmax,
+                    linewidths=0.5, linecolor='gray',
+                    annot_kws={'fontsize': 10},
+                    cbar=ax_idx == 1 and aug_idx == 1,
+                    cbar_kws={'label': metric_label} if (ax_idx == 1 and aug_idx == 1) else {},
+                )
+                ax.set_title(title, fontsize=11, fontweight='bold')
+                ax.tick_params(labelsize=9)
                 ax.grid(False)
-                ax.spines['top'].set_visible(False)
-                ax.spines['right'].set_visible(False)
-                
-                plt.tight_layout()
-                
-                # Save plot as PNG
-                filename_png = f'class_distribution_after_neg_aug_{run_name}.png'
-                path_png = os.path.join(plots_dir, filename_png)
-                plt.savefig(path_png, dpi=300, bbox_inches='tight')
-                print(f"  ✓ Saved PNG to {path_png}")
-                
-                # Save plot as PDF
-                filename_pdf = f'class_distribution_after_neg_aug_{run_name}.pdf'
-                path_pdf = os.path.join(plots_dir, filename_pdf)
-                plt.savefig(path_pdf, bbox_inches='tight')
-                print(f"  ✓ Saved PDF to {path_pdf}")
-                
-                plt.close()
-                break  # Only create one plot for now (first config with neg data)
+    else:
+        # Old format: use neg_data_target
+        for ax_idx, neg_target in enumerate(NEG_TARGETS):
+            ax = axes_flat[ax_idx]
+            subset = results_df[results_df['neg_data_target'] == neg_target]
+
+        matrix = np.full((4, 2), np.nan)
+        annot_matrix = np.empty((4, 2), dtype=object)
+        annot_matrix.fill('')
+        for _, row in subset.iterrows():
+            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+            c_idx = int(row['use_augmentation'])
+            val = row[metric]
+            # Round to exactly 2 decimal places (0.5 always rounds up)
+            rounded_val = round_up_half(val, decimals=2)
+            if ax_idx == 0 and r_idx == 0 and c_idx == 0:  # Print first value as example
+                print(f"      Example rounding: {val} -> {rounded_val}")
+            matrix[r_idx, c_idx] = rounded_val
+            if not np.isnan(rounded_val):
+                # Format as string with exactly 2 decimal places
+                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
+
+        sns.heatmap(
+            matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
+            xticklabels=col_labels, yticklabels=row_labels,
+            ax=ax, vmin=vmin, vmax=vmax,
+            linewidths=0.5, linecolor='gray',
+            annot_kws={'fontsize': 10},
+            cbar=ax_idx in [1, 3],
+            cbar_kws={'label': metric_label} if ax_idx in [1, 3] else {},
+        )
+        ax.set_title(NEG_LABELS[neg_target], fontsize=11, fontweight='bold')
+        ax.tick_params(labelsize=9)
+        ax.grid(False)
+
+    plt.tight_layout()
+
+    for ext in ['png', 'pdf']:
+        path = os.path.join(plots_dir, f'heatmap_grid_{metric}.{ext}')
+        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
+        print(f"  ✓ Saved {path}")
+    plt.close()
+
+
+# ---------------------------------------------------------------------------
+# Combined wide heatmap: rows=(spec×poly), cols=(neg_target×aug)
+# ---------------------------------------------------------------------------
+def plot_combined_heatmap(results_df, plots_dir, metric='macro_accuracy',
+                          metric_label='Macro Accuracy'):
+    """Create a single 4×4 heatmap showing all 16 combinations."""
+    setup_plot_style()
+
+    row_labels = []
+    for spec in [False, True]:
+        for poly in [False, True]:
+            s = "Spec+" if spec else "Spec-"
+            p = "Poly+" if poly else "Poly-"
+            row_labels.append(f"{s} / {p}")
+
+    # Check if using new format (add_negative_data) or old format (neg_data_target)
+    if 'add_negative_data' in results_df.columns:
+        # New format: 4 columns for (aug, neg) combinations
+        col_labels = []
+        for aug in [False, True]:
+            for neg in [False, True]:
+                a = "Aug+" if aug else "Aug-"
+                n = "Neg+" if neg else "Neg-"
+                col_labels.append(f"{a} / {n}")
         
-        except Exception as e:
-            print(f"  Warning: Could not create class distribution plot for {run_name}: {e}")
-            continue
+        matrix = np.full((4, 4), np.nan)
+        annot_matrix = np.empty((4, 4), dtype=object)
+        annot_matrix.fill('')
+        
+        for _, row in results_df.iterrows():
+            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+            c_idx = int(row['use_augmentation']) * 2 + int(row['add_negative_data'])
+            val = row[metric]
+            rounded_val = round_up_half(val, decimals=2)
+            matrix[r_idx, c_idx] = rounded_val
+            if not np.isnan(rounded_val):
+                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
+        
+        # Make plot square (4x4 grid)
+        fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH * 0.9,
+                                     TWO_COL_WIDTH_INCH * 0.9))
+        
+        # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
+        vmin = round_up_half(results_df[metric].min(), decimals=2)
+        vmax = round_up_half(results_df[metric].max(), decimals=2)
+        
+        sns.heatmap(
+            matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
+            xticklabels=col_labels, yticklabels=row_labels,
+            ax=ax, vmin=vmin, vmax=vmax, linewidths=0.5, linecolor='gray',
+            annot_kws={'fontsize': 14},  # Larger text in cells
+            cbar_kws={'label': metric_label, 'shrink': 0.6},  # Smaller colorbar
+            square=True,  # Make each cell square
+        )
+        ax.tick_params(labelsize=12)  # Larger tick labels
+        ax.grid(False)
+        
+        # Adjust colorbar font size
+        cbar = ax.collections[0].colorbar
+        if cbar is not None:
+            cbar.ax.tick_params(labelsize=11)
+            cbar.set_label(metric_label, fontsize=12)
+        
+        # Separator lines between aug groups
+        ax.axvline(x=2, color='black', linewidth=2)
+    else:
+        # Old format: 4×8 heatmap
+        col_labels = []
+        for neg_target in NEG_TARGETS:
+            for aug in [False, True]:
+                a = "Aug+" if aug else "Aug-"
+                col_labels.append(f"{NEG_LABELS[neg_target]}\n{a}")
+
+        # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
+        vmin = round_up_half(results_df[metric].min(), decimals=2)
+        vmax = round_up_half(results_df[metric].max(), decimals=2)
+        
+        matrix = np.full((4, 8), np.nan)
+        annot_matrix = np.empty((4, 8), dtype=object)
+        annot_matrix.fill('')
+
+        for _, row in results_df.iterrows():
+            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+            neg_idx = NEG_TARGETS.index(row['neg_data_target'])
+            c_idx = neg_idx * 2 + int(row['use_augmentation'])
+            val = row[metric]
+            rounded_val = round_up_half(val, decimals=2)
+            matrix[r_idx, c_idx] = rounded_val
+            if not np.isnan(rounded_val):
+                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
+
+        fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH * 1.5,
+                                         TWO_COL_WIDTH_INCH * 0.45))
+
+        sns.heatmap(
+            matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
+            xticklabels=col_labels, yticklabels=row_labels,
+            ax=ax, vmin=vmin, vmax=vmax, linewidths=0.5, linecolor='gray',
+            annot_kws={'fontsize': 9},
+            cbar_kws={'label': metric_label},
+        )
+        ax.tick_params(labelsize=8)
+        ax.grid(False)
+
+        # Separator lines between neg_target groups
+        for k in range(1, 4):
+            ax.axvline(x=k * 2, color='black', linewidth=2)
+
+    plt.tight_layout()
+    for ext in ['png', 'pdf']:
+        path = os.path.join(plots_dir, f'heatmap_combined_{metric}.{ext}')
+        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
+        print(f"  ✓ Saved {path}")
+    plt.close()
 
 
+# ---------------------------------------------------------------------------
+# Bar plot: grouped by neg_data_target
+# ---------------------------------------------------------------------------
+def plot_neg_target_comparison(results_df, plots_dir):
+    """Bar plot comparing negative data variants (averaged over other filters)."""
+    setup_plot_style()
+
+    # Check if using new format (add_negative_data) or old format (neg_data_target)
+    if 'add_negative_data' in results_df.columns:
+        # New format: compare neg_data=True vs False
+        grouped = results_df.groupby('add_negative_data').agg({
+            'macro_accuracy': ['mean', 'std'],
+            'macro_precision': ['mean', 'std'],
+            'coverage': ['mean', 'std'],
+        })
+        
+        metrics = [
+            ('macro_accuracy', 'Macro Accuracy'),
+            ('macro_precision', 'Macro Precision'),
+            ('coverage', 'Coverage'),
+        ]
+        
+        fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH * 1.2,
+                                                 TWO_COL_WIDTH_INCH * 0.35))
+        
+        colors = ['#3A3B73', '#e27f07']
+        labels = ['Neg-', 'Neg+']
+        
+        for ax, (metric, label) in zip(axes, metrics):
+            means = [grouped.loc[False, (metric, 'mean')] if False in grouped.index else 0,
+                     grouped.loc[True, (metric, 'mean')] if True in grouped.index else 0]
+            stds = [grouped.loc[False, (metric, 'std')] if False in grouped.index else 0,
+                    grouped.loc[True, (metric, 'std')] if True in grouped.index else 0]
+            
+            means_rounded = [round_up_half(m, decimals=2) for m in means]
+            stds_rounded = [round_up_half(s, decimals=2) for s in stds]
+            
+            bars = ax.bar(range(2), means_rounded, yerr=stds_rounded, color=colors, alpha=0.85,
+                          capsize=3)
+            for bar in bars:
+                h = bar.get_height()
+                ax.text(bar.get_x() + bar.get_width() / 2, h + 0.005,
+                        f'{h:.2f}', ha='center', va='bottom', fontsize=7)
+            
+            ax.set_ylabel(label, fontsize=9)
+            ax.set_xticks(range(2))
+            ax.set_xticklabels(labels, fontsize=7, rotation=0, ha='center')
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.grid(False)
+    else:
+        # Old format: use neg_data_target
+        grouped = results_df.groupby('neg_data_target').agg({
+            'macro_accuracy': ['mean', 'std'],
+            'macro_precision': ['mean', 'std'],
+            'coverage': ['mean', 'std'],
+        })
+
+        metrics = [
+            ('macro_accuracy', 'Macro Accuracy'),
+            ('macro_precision', 'Macro Precision'),
+            ('coverage', 'Coverage'),
+        ]
+
+        fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH * 1.2,
+                                                 TWO_COL_WIDTH_INCH * 0.35))
+
+        colors = ['#3A3B73', '#e27f07', '#1e8db9', '#6a040f']
+
+        for ax, (metric, label) in zip(axes, metrics):
+            means = [grouped.loc[nt, (metric, 'mean')] if nt in grouped.index else 0
+                     for nt in NEG_TARGETS]
+            stds = [grouped.loc[nt, (metric, 'std')] if nt in grouped.index else 0
+                    for nt in NEG_TARGETS]
+
+            # Round means to 2 decimal places (0.5 always rounds up)
+            means_rounded = [round_up_half(m, decimals=2) for m in means]
+            stds_rounded = [round_up_half(s, decimals=2) for s in stds]
+            
+            bars = ax.bar(range(4), means_rounded, yerr=stds_rounded, color=colors, alpha=0.85,
+                          capsize=3)
+            for bar in bars:
+                h = bar.get_height()
+                ax.text(bar.get_x() + bar.get_width() / 2, h + 0.005,
+                        f'{h:.2f}', ha='center', va='bottom', fontsize=7)
+
+            ax.set_ylabel(label, fontsize=9)
+            ax.set_xticks(range(4))
+            ax.set_xticklabels([NEG_LABELS[nt] for nt in NEG_TARGETS],
+                               fontsize=7, rotation=20, ha='right')
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.grid(False)
+
+    plt.tight_layout()
+    for ext in ['png', 'pdf']:
+        path = os.path.join(plots_dir, f'neg_target_comparison.{ext}')
+        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
+        print(f"  ✓ Saved {path}")
+    plt.close()
+
+
+# ---------------------------------------------------------------------------
+# Sorted bar chart
+# ---------------------------------------------------------------------------
+def plot_sorted_bar(results_df, plots_dir, metric='macro_accuracy',
+                    metric_label='Macro Accuracy'):
+    """Horizontal bar chart of all runs sorted by metric."""
+    setup_plot_style()
+
+    df_sorted = results_df.sort_values(metric, ascending=True)
+
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH,
+                                     max(4, len(df_sorted) * 0.28)))
+    ax.barh(range(len(df_sorted)), df_sorted[metric], color='#3A3B73',
+            alpha=0.85)
+    ax.set_yticks(range(len(df_sorted)))
+    ax.set_yticklabels(df_sorted['run_name'], fontsize=7)
+    ax.set_xlabel(metric_label, fontsize=10)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.grid(False)
+
+    plt.tight_layout()
+    for ext in ['png', 'pdf']:
+        path = os.path.join(plots_dir, f'sorted_bar_{metric}.{ext}')
+        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
+        print(f"  ✓ Saved {path}")
+    plt.close()
+
+
+# ---------------------------------------------------------------------------
+# Coverage heatmap
+# ---------------------------------------------------------------------------
+def plot_coverage_heatmap(results_df, plots_dir):
+    """2×2 grid of heatmaps showing coverage per neg_data_target."""
+    plot_heatmap_grid(results_df, plots_dir, metric='coverage',
+                      metric_label='Coverage (models agree)')
+
+
+# ---------------------------------------------------------------------------
+# 4x4 Grid of Confusion Matrices
+# ---------------------------------------------------------------------------
+def plot_confusion_matrix_grid(results_df, plots_dir):
+    """Create a SINGLE 4×4 grid showing confusion matrices for all 16 filter combinations.
+    
+    Grid structure:
+    - Rows: (spec, poly) combinations (4 rows)
+    - Columns: (aug, neg) combinations (4 columns)
+    Each cell contains a 3×3 confusion matrix for the voting model.
+    """
+    setup_plot_style()
+    
+    # Create 4x4 grid with larger figure size for better visibility
+    fig, axes = plt.subplots(4, 4, figsize=(TWO_COL_WIDTH_INCH * 2.5, TWO_COL_WIDTH_INCH * 2.5))
+    
+    # Row labels: (spec, poly) combinations
+    row_labels = []
+    for spec in [False, True]:
+        for poly in [False, True]:
+            s = "Spec+" if spec else "Spec-"
+            p = "Poly+" if poly else "Poly-"
+            row_labels.append(f"{s} / {p}")
+    
+    # Column labels: (aug, neg) combinations
+    col_labels = []
+    for aug in [False, True]:
+        for neg in [False, True]:
+            a = "Aug+" if aug else "Aug-"
+            n = "Neg+" if neg else "Neg-"
+            col_labels.append(f"{a} / {n}")
+    
+    # Initialize a dictionary to store matrices by position
+    matrix_dict = {}
+    for _, result_row in results_df.iterrows():
+        spec = result_row['remove_specialized']
+        poly = result_row['apply_polymerization_filter']
+        aug = result_row['use_augmentation']
+        neg = result_row['add_negative_data']
+        
+        # Calculate grid position
+        row_idx = int(spec) * 2 + int(poly)
+        col_idx = int(aug) * 2 + int(neg)
+        
+        # Convert confusion matrix to numpy array (handle string format from CSV)
+        cm_raw = result_row['confusion_matrix']
+        if isinstance(cm_raw, str):
+            import ast
+            cm_raw = ast.literal_eval(cm_raw)
+        cm = np.array(cm_raw, dtype=int)
+        if cm.size > 0 and cm.sum() > 0:
+            matrix_dict[(row_idx, col_idx)] = cm
+    
+    # Plot each combination
+    for row_idx in range(4):
+        for col_idx in range(4):
+            ax = axes[row_idx, col_idx]
+            
+            if (row_idx, col_idx) not in matrix_dict:
+                ax.text(0.5, 0.5, 'No data', ha='center', va='center', 
+                       transform=ax.transAxes, fontsize=8)
+                ax.set_xticks([])
+                ax.set_yticks([])
+            else:
+                cm = matrix_dict[(row_idx, col_idx)]
+                
+                # Normalize confusion matrix for better visualization
+                cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+                cm_norm = np.nan_to_num(cm_norm)
+                
+                disp = ConfusionMatrixDisplay(
+                    confusion_matrix=cm_norm,
+                    display_labels=[get_class_label(i) for i in range(3)]
+                )
+                disp.plot(
+                    cmap=CONFUSION_MATRIX_CONFIG.get('cmap', 'Blues'),
+                    ax=ax,
+                    values_format='.2f',
+                    im_kw={'vmin': 0, 'vmax': 1},
+                    text_kw={'fontsize': 7}
+                )
+                
+                # Remove colorbar from individual subplots
+                if disp.im_ is not None and disp.im_.colorbar is not None:
+                    disp.im_.colorbar.remove()
+                
+                # Add counts as text overlay (smaller font, below normalized values)
+                for i in range(3):
+                    for j in range(3):
+                        count = cm[i, j]
+                        if count > 0:
+                            ax.text(j, i + 0.35, f'({count})', ha='center', va='center',
+                                   fontsize=5, color='gray', alpha=0.7)
+            
+            # Set labels only on outer edges
+            if row_idx == 3:
+                ax.set_xlabel(col_labels[col_idx], fontsize=9, fontweight='bold')
+            else:
+                ax.set_xlabel('')
+                ax.set_xticklabels([])
+            
+            if col_idx == 0:
+                ax.set_ylabel(row_labels[row_idx], fontsize=9, fontweight='bold')
+            else:
+                ax.set_ylabel('')
+                ax.set_yticklabels([])
+            
+            ax.tick_params(labelsize=7)
+            ax.grid(False)
+    
+    # Add overall title
+    fig.suptitle('Confusion Matrices: Voting Model (All 16 Filter Combinations)', 
+                 fontsize=14, fontweight='bold', y=0.995)
+    
+    # Add colorbar for the whole figure (shared across all subplots)
+    if len(matrix_dict) > 0:
+        # Use the first subplot's image for colorbar
+        first_ax = None
+        for row_idx in range(4):
+            for col_idx in range(4):
+                if (row_idx, col_idx) in matrix_dict and len(axes[row_idx, col_idx].images) > 0:
+                    first_ax = axes[row_idx, col_idx]
+                    break
+            if first_ax is not None:
+                break
+        
+        if first_ax is not None and len(first_ax.images) > 0:
+            im = first_ax.images[0]
+            cbar = fig.colorbar(im, ax=axes, fraction=0.02, pad=0.02)
+            cbar.set_label('Normalized Count', fontsize=10)
+            cbar.ax.tick_params(labelsize=8)
+    
+    plt.tight_layout(rect=[0, 0, 1, 0.97])
+    
+    for ext in ['png', 'pdf']:
+        path = os.path.join(plots_dir, f'confusion_matrix_grid_4x4.{ext}')
+        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
+        print(f"  ✓ Saved {path}")
+    plt.close()
+
+
+# ---------------------------------------------------------------------------
+# Public entry point
+# ---------------------------------------------------------------------------
+def plot_sweep_results(results_df, plots_dir):
+    """Generate all plots from sweep results."""
+    setup_plot_style()
+    os.makedirs(plots_dir, exist_ok=True)
+
+    # Round all numeric metrics to 2 decimal places BEFORE plotting (0.5 always rounds up)
+    results_df = results_df.copy()
+    print(f"\n  Rounding values to 2 decimal places:")
+    for metric_col in ['macro_accuracy', 'macro_precision', 'coverage']:
+        if metric_col in results_df.columns:
+            sample_before = results_df[metric_col].dropna().head(5).tolist()
+            results_df[metric_col] = results_df[metric_col].apply(
+                lambda x: round_up_half(x, decimals=2)
+            )
+            sample_after = results_df[metric_col].dropna().head(5).tolist()
+            print(f"    {metric_col}:")
+            for b, a in zip(sample_before, sample_after):
+                print(f"      {b} -> {a}")
+
+    print("\n  Generating heatmap grids …")
+    plot_heatmap_grid(results_df, plots_dir, 'macro_accuracy', 'Macro Accuracy')
+    plot_heatmap_grid(results_df, plots_dir, 'macro_precision', 'Macro Precision')
+
+    print("\n  Generating combined heatmaps …")
+    plot_combined_heatmap(results_df, plots_dir, 'macro_accuracy', 'Macro Accuracy')
+    plot_combined_heatmap(results_df, plots_dir, 'macro_precision', 'Macro Precision')
+
+    print("\n  Generating coverage heatmaps …")
+    plot_coverage_heatmap(results_df, plots_dir)
+
+    print("\n  Generating neg-target comparison …")
+    plot_neg_target_comparison(results_df, plots_dir)
+
+    print("\n  Generating sorted bar charts …")
+    plot_sorted_bar(results_df, plots_dir, 'macro_accuracy', 'Macro Accuracy')
+    plot_sorted_bar(results_df, plots_dir, 'macro_precision', 'Macro Precision')
+    
+    print("\n  Generating 4x4 confusion matrix grid …")
+    plot_confusion_matrix_grid(results_df, plots_dir)
+
+
+# ---------------------------------------------------------------------------
+# Standalone main
+# ---------------------------------------------------------------------------
 def main():
-    """Main plotting pipeline."""
     args = parse_args()
-    
-    print("="*60)
-    print("FILTER SWEEP - PLOT GENERATION")
-    print("="*60)
-    print(f"\nLoading results from: {args.results_path}")
-    
-    # Load results
+
+    print("=" * 60)
+    print("FILTER SWEEP — PLOT GENERATION")
+    print("=" * 60)
+    print(f"  Results: {args.results_path}")
+    print(f"  Plots:   {args.plots_dir}")
+
     if not os.path.exists(args.results_path):
         print(f"\nError: Results file not found at {args.results_path}")
-        print("Please run sweep_filters.py first to generate results.")
+        print("Run sweep_filters.py first.")
         sys.exit(1)
-    
+
     results_df = pd.read_csv(args.results_path)
-    
-    # Convert filters column from string to dict if needed
-    if isinstance(results_df['filters'].iloc[0], str):
-        results_df['filters'] = results_df['filters'].apply(ast.literal_eval)
-    
-    # Convert confusion_matrix column if needed
-    if 'confusion_matrix' in results_df.columns:
-        if isinstance(results_df['confusion_matrix'].iloc[0], str):
-            results_df['confusion_matrix'] = results_df['confusion_matrix'].apply(ast.literal_eval)
-    
-    print(f"Loaded {len(results_df)} configurations")
-    
-    # Create plots
-    print("\n" + "="*60)
-    print("CREATING PLOTS")
-    print("="*60)
-    
+
+    # Parse stringified dicts/lists if needed
+    for col in ['confusion_matrix']:
+        if col in results_df.columns and isinstance(results_df[col].iloc[0], str):
+            results_df[col] = results_df[col].apply(ast.literal_eval)
+
+    print(f"  Loaded {len(results_df)} configurations")
+
     plot_sweep_results(results_df, args.plots_dir)
-    
-    # Plot class distribution after neg data augmentation
-    plot_class_distribution_after_neg_data_augmentation(results_df, args.plots_dir)
-    
-    print("\n" + "="*60)
-    print("PLOT GENERATION COMPLETE!")
-    print("="*60)
-    print(f"\nPlots saved to: {args.plots_dir}/")
+
+    print("\n" + "=" * 60)
+    print("DONE")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
     main()
-

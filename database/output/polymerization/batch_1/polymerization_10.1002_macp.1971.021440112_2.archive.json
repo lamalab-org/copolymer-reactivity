@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/macp.1971.021440112"
+        },
+        "monomers": [
+            {
+                "name": "acrylamide"
+            },
+            {
+                "name": "styrene"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "solvent": {
+                "smile": "C1COCCO1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.03320000000000001,
+                "TPSA": 18.46,
+                "HBA": 2.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 21.637999999999995,
+                "labute_ASA": 37.055336676503906,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman and Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.38,
+                    "reaction_constant_confi": 0.09
+                },
+                {
+                    "reaction_constant": 1.27,
+                    "reaction_constant_confi": 0.17
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

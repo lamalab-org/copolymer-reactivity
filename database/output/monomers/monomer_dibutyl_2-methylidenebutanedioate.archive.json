@@ -1,0 +1,492 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.Monomer",
+        "name": "dibutyl 2-methylidenebutanedioate",
+        "smiles": "C=C(CC(=O)OCCCC)C(=O)OCCCC",
+        "xtb_features": {
+            "energy": -55.33689352065241,
+            "ionization_potential": 13.10921178283466,
+            "ionization_potential_corrected": 8.26321178283466,
+            "electron_affinity": 4.289620950127782,
+            "homo_energy": -0.40672510359220965,
+            "lumo_energy": -0.2727435342754905,
+            "global_electrophilicity": 0.8418087627375785,
+            "global_nucleophilicity": -8.26321178283466,
+            "dipole_moment": [
+                -0.3242901955440489,
+                -0.2112130974279162,
+                -0.39463023584295714
+            ],
+            "atomic_features": [
+                {
+                    "positions": [
+                        1.486540335957472,
+                        -1.3317363463381549,
+                        3.1105813284276933
+                    ],
+                    "element": "C",
+                    "charge": -0.07647724924796023,
+                    "fukui_electrophilicity": 0.08005213052184942,
+                    "fukui_nucleophilicity": 0.0205565685666731,
+                    "fukui_radical": 0.0500968495527693
+                },
+                {
+                    "positions": [
+                        0.41984849279584296,
+                        -0.8712000386086721,
+                        2.4688348590726688
+                    ],
+                    "element": "C",
+                    "charge": -0.002201898791039325,
+                    "fukui_electrophilicity": 0.06610813679803577,
+                    "fukui_nucleophilicity": 0.015416408564303513,
+                    "fukui_radical": 0.03939771746770135
+                },
+                {
+                    "positions": [
+                        -0.9976925829260399,
+                        -1.087707117891178,
+                        2.9103329330374823
+                    ],
+                    "element": "C",
+                    "charge": -0.09025320834697133,
+                    "fukui_electrophilicity": -0.021099436727982146,
+                    "fukui_nucleophilicity": 0.002030056482561729,
+                    "fukui_radical": -0.008884296984450472
+                },
+                {
+                    "positions": [
+                        -1.7827764459337,
+                        -1.7484896469614848,
+                        1.7834632507013173
+                    ],
+                    "element": "C",
+                    "charge": 0.37213181670396006,
+                    "fukui_electrophilicity": 0.02375356416154123,
+                    "fukui_nucleophilicity": 0.006929441559964222,
+                    "fukui_radical": 0.01603179236841132
+                },
+                {
+                    "positions": [
+                        -1.3741157773115042,
+                        -2.6666533569028337,
+                        1.1234080257281973
+                    ],
+                    "element": "O",
+                    "charge": -0.41702355079289977,
+                    "fukui_electrophilicity": 0.06178077113036279,
+                    "fukui_nucleophilicity": 0.07462936817947963,
+                    "fukui_radical": 0.07161454906342904
+                },
+                {
+                    "positions": [
+                        -2.9892345696582714,
+                        -1.2047976100195805,
+                        1.667725578082952
+                    ],
+                    "element": "O",
+                    "charge": -0.2536019869086167,
+                    "fukui_electrophilicity": 0.03860301419359802,
+                    "fukui_nucleophilicity": 0.03215721342334238,
+                    "fukui_radical": 0.03634483257078555
+                },
+                {
+                    "positions": [
+                        -3.8261007294024596,
+                        -1.6927420706239618,
+                        0.6174502621972174
+                    ],
+                    "element": "C",
+                    "charge": 0.08016049289498771,
+                    "fukui_electrophilicity": -0.009569066341889657,
+                    "fukui_nucleophilicity": -0.010509587169179394,
+                    "fukui_radical": -0.013811638217368017
+                },
+                {
+                    "positions": [
+                        -3.451936817014565,
+                        -1.0833015241373236,
+                        -0.7303905249675485
+                    ],
+                    "element": "C",
+                    "charge": -0.06778189378455408,
+                    "fukui_electrophilicity": -0.0026488020501799076,
+                    "fukui_nucleophilicity": -0.005601287040896602,
+                    "fukui_radical": -0.007142100797697747
+                },
+                {
+                    "positions": [
+                        -3.5951068637633674,
+                        0.43630130856931915,
+                        -0.7343154658592168
+                    ],
+                    "element": "C",
+                    "charge": -0.05648504846665209,
+                    "fukui_electrophilicity": -0.0018414343647913528,
+                    "fukui_nucleophilicity": -0.003926961944698153,
+                    "fukui_radical": -0.003961693160822854
+                },
+                {
+                    "positions": [
+                        -3.236203905881832,
+                        1.0242434977791803,
+                        -2.0924037289106585
+                    ],
+                    "element": "C",
+                    "charge": -0.1052291510850235,
+                    "fukui_electrophilicity": -0.005091326418144235,
+                    "fukui_nucleophilicity": -0.01274944945763655,
+                    "fukui_radical": -0.010843064724602433
+                },
+                {
+                    "positions": [
+                        0.5283992033329024,
+                        -0.11724006573529461,
+                        1.1893819437578792
+                    ],
+                    "element": "C",
+                    "charge": 0.35762180655244297,
+                    "fukui_electrophilicity": 0.06428391953353635,
+                    "fukui_nucleophilicity": 0.00369509879933666,
+                    "fukui_radical": 0.032946255866969504
+                },
+                {
+                    "positions": [
+                        -0.4298774270420907,
+                        0.2944155897832212,
+                        0.5788861801000095
+                    ],
+                    "element": "O",
+                    "charge": -0.41611730615679804,
+                    "fukui_electrophilicity": 0.15310773780235326,
+                    "fukui_nucleophilicity": 0.040153991492844154,
+                    "fukui_radical": 0.08878276107131414
+                },
+                {
+                    "positions": [
+                        1.7862568350878083,
+                        0.05635563481684822,
+                        0.7834631383161096
+                    ],
+                    "element": "O",
+                    "charge": -0.2606723807681271,
+                    "fukui_electrophilicity": 0.06463412056519485,
+                    "fukui_nucleophilicity": 0.029786316854345407,
+                    "fukui_radical": 0.044551930581689325
+                },
+                {
+                    "positions": [
+                        1.9542768822647139,
+                        0.7452048556473916,
+                        -0.45545296599221335
+                    ],
+                    "element": "C",
+                    "charge": 0.07657284312546488,
+                    "fukui_electrophilicity": -0.019224259285495718,
+                    "fukui_nucleophilicity": -0.01122268522583414,
+                    "fukui_radical": -0.01269587506138796
+                },
+                {
+                    "positions": [
+                        3.4424619297085983,
+                        0.8616727634070022,
+                        -0.7464867830925788
+                    ],
+                    "element": "C",
+                    "charge": -0.0656537348604121,
+                    "fukui_electrophilicity": -0.002638914382334684,
+                    "fukui_nucleophilicity": -0.005712268508324986,
+                    "fukui_radical": -0.004993189874897518
+                },
+                {
+                    "positions": [
+                        3.700151369674732,
+                        1.5884531662600043,
+                        -2.0638718649817624
+                    ],
+                    "element": "C",
+                    "charge": -0.05566425008787503,
+                    "fukui_electrophilicity": -0.003419246886739967,
+                    "fukui_nucleophilicity": -0.0055755448416513614,
+                    "fukui_radical": -0.003463925598009114
+                },
+                {
+                    "positions": [
+                        5.19109682184176,
+                        1.705701626018435,
+                        -2.355042270600079
+                    ],
+                    "element": "C",
+                    "charge": -0.10470232183251113,
+                    "fukui_electrophilicity": -0.006837695149074119,
+                    "fukui_nucleophilicity": -0.012279175733905606,
+                    "fukui_radical": -0.009303980133598379
+                },
+                {
+                    "positions": [
+                        2.4801339780563993,
+                        -1.1550777872922973,
+                        2.7383427949107637
+                    ],
+                    "element": "H",
+                    "charge": 0.0627770351406679,
+                    "fukui_electrophilicity": 0.10234039472015238,
+                    "fukui_nucleophilicity": 0.04240541487362545,
+                    "fukui_radical": 0.06326279186507268
+                },
+                {
+                    "positions": [
+                        1.3959598359696253,
+                        -1.8958414501131704,
+                        4.02358188516448
+                    ],
+                    "element": "H",
+                    "charge": 0.07302538496831625,
+                    "fukui_electrophilicity": 0.09224522179217239,
+                    "fukui_nucleophilicity": 0.03639495537414404,
+                    "fukui_radical": 0.07117230715511505
+                },
+                {
+                    "positions": [
+                        -1.4808864998074578,
+                        -0.13808649677038765,
+                        3.144789715939891
+                    ],
+                    "element": "H",
+                    "charge": 0.08276016215636733,
+                    "fukui_electrophilicity": 0.05611060858736125,
+                    "fukui_nucleophilicity": 0.036796964503718485,
+                    "fukui_radical": 0.04483800852653563
+                },
+                {
+                    "positions": [
+                        -1.0268573732861155,
+                        -1.7379804105048497,
+                        3.785391120152355
+                    ],
+                    "element": "H",
+                    "charge": 0.07597180127830487,
+                    "fukui_electrophilicity": 0.05340462817068796,
+                    "fukui_nucleophilicity": 0.03629227394828506,
+                    "fukui_radical": 0.045162032744733786
+                },
+                {
+                    "positions": [
+                        -3.73985152184206,
+                        -2.783972012806912,
+                        0.5748121330136419
+                    ],
+                    "element": "H",
+                    "charge": 0.05554036187907279,
+                    "fukui_electrophilicity": 0.009507513718408613,
+                    "fukui_nucleophilicity": 0.019355477440087344,
+                    "fukui_radical": 0.022327469600568736
+                },
+                {
+                    "positions": [
+                        -4.839195681847892,
+                        -1.4084610504533732,
+                        0.9106462145936121
+                    ],
+                    "element": "H",
+                    "charge": 0.04748036893344776,
+                    "fukui_electrophilicity": 0.020655998293737887,
+                    "fukui_nucleophilicity": 0.026466346157446044,
+                    "fukui_radical": 0.03495888534554895
+                },
+                {
+                    "positions": [
+                        -2.4174285687938997,
+                        -1.347494847143055,
+                        -0.9548246374837411
+                    ],
+                    "element": "H",
+                    "charge": 0.055141024431329906,
+                    "fukui_electrophilicity": 0.005482664659525904,
+                    "fukui_nucleophilicity": 0.03878782375224928,
+                    "fukui_radical": 0.014685369882559272
+                },
+                {
+                    "positions": [
+                        -4.093783083373072,
+                        -1.5267177205076155,
+                        -1.4946684189722061
+                    ],
+                    "element": "H",
+                    "charge": 0.04979660941379155,
+                    "fukui_electrophilicity": 0.011321596734399364,
+                    "fukui_nucleophilicity": 0.04155363728699628,
+                    "fukui_radical": 0.03913170379450783
+                },
+                {
+                    "positions": [
+                        -2.9293614671023236,
+                        0.850670572008467,
+                        0.023180895709362576
+                    ],
+                    "element": "H",
+                    "charge": 0.03620837040626215,
+                    "fukui_electrophilicity": 0.004170312605946906,
+                    "fukui_nucleophilicity": 0.049468114336274085,
+                    "fukui_radical": 0.020106029611049146
+                },
+                {
+                    "positions": [
+                        -4.622073198426128,
+                        0.7059959471513076,
+                        -0.47505725977783264
+                    ],
+                    "element": "H",
+                    "charge": 0.03438485992256653,
+                    "fukui_electrophilicity": 0.007486561191156271,
+                    "fukui_nucleophilicity": 0.054017478775090305,
+                    "fukui_radical": 0.043551004895653334
+                },
+                {
+                    "positions": [
+                        -3.8768774188583226,
+                        0.6153436771111976,
+                        -2.8716637610803932
+                    ],
+                    "element": "H",
+                    "charge": 0.037942298980425726,
+                    "fukui_electrophilicity": 0.007133965814331317,
+                    "fukui_nucleophilicity": 0.04275616766809402,
+                    "fukui_radical": 0.033992687278876194
+                },
+                {
+                    "positions": [
+                        -3.3523291469722074,
+                        2.1053643724887023,
+                        -2.083003671819932
+                    ],
+                    "element": "H",
+                    "charge": 0.03888294731625989,
+                    "fukui_electrophilicity": 0.012823067343348347,
+                    "fukui_nucleophilicity": 0.035794599353407945,
+                    "fukui_radical": 0.023013953378642822
+                },
+                {
+                    "positions": [
+                        -2.202806763431313,
+                        0.7926671157142343,
+                        -2.3381925077813883
+                    ],
+                    "element": "H",
+                    "charge": 0.03908486133257547,
+                    "fukui_electrophilicity": 0.005046083468337771,
+                    "fukui_nucleophilicity": 0.041752416863696344,
+                    "fukui_radical": 0.017005732322942124
+                },
+                {
+                    "positions": [
+                        1.4378655516537742,
+                        0.18620155320350573,
+                        -1.2443490312435397
+                    ],
+                    "element": "H",
+                    "charge": 0.05604103987041244,
+                    "fukui_electrophilicity": 0.02267218403419175,
+                    "fukui_nucleophilicity": 0.020018058588427118,
+                    "fukui_radical": 0.021172245255003025
+                },
+                {
+                    "positions": [
+                        1.4844567445602903,
+                        1.7330334934403144,
+                        -0.38065106369888624
+                    ],
+                    "element": "H",
+                    "charge": 0.05323929647384584,
+                    "fukui_electrophilicity": 0.042675444005681545,
+                    "fukui_nucleophilicity": 0.034416540167910376,
+                    "fukui_radical": 0.023885538603093552
+                },
+                {
+                    "positions": [
+                        3.872481357562962,
+                        -0.14065037634560076,
+                        -0.7850409673087874
+                    ],
+                    "element": "H",
+                    "charge": 0.046334312616726075,
+                    "fukui_electrophilicity": 0.013830444577680574,
+                    "fukui_nucleophilicity": 0.036527180410232105,
+                    "fukui_radical": 0.02327671069024176
+                },
+                {
+                    "positions": [
+                        3.9211640433157564,
+                        1.399344427169197,
+                        0.07401578142625569
+                    ],
+                    "element": "H",
+                    "charge": 0.05624504553613144,
+                    "fukui_electrophilicity": -0.004041372689244108,
+                    "fukui_nucleophilicity": 0.03059811383929316,
+                    "fukui_radical": 0.024201488060249368
+                },
+                {
+                    "positions": [
+                        3.258126260129387,
+                        2.5860382542101417,
+                        -2.0187268552866455
+                    ],
+                    "element": "H",
+                    "charge": 0.03590619293259262,
+                    "fukui_electrophilicity": 0.009682314088812809,
+                    "fukui_nucleophilicity": 0.05014949419633993,
+                    "fukui_radical": 0.028929903165357783
+                },
+                {
+                    "positions": [
+                        3.2118931946166467,
+                        1.046632556236967,
+                        -2.876501795676982
+                    ],
+                    "element": "H",
+                    "charge": 0.031367456061352515,
+                    "fukui_electrophilicity": 0.014897724986679739,
+                    "fukui_nucleophilicity": 0.05908377395698417,
+                    "fukui_radical": 0.02753081747100085
+                },
+                {
+                    "positions": [
+                        5.6452527702686375,
+                        0.719872367880812,
+                        -2.4224163815266007
+                    ],
+                    "element": "H",
+                    "charge": 0.04094517988628211,
+                    "fukui_electrophilicity": 0.004744249817429769,
+                    "fukui_nucleophilicity": 0.03691791804050242,
+                    "fukui_radical": 0.02448163468886389
+                },
+                {
+                    "positions": [
+                        5.6920353683806875,
+                        2.2599025065424585,
+                        -1.5646476082857146
+                    ],
+                    "element": "H",
+                    "charge": 0.03812968222935012,
+                    "fukui_electrophilicity": 0.008986236055905393,
+                    "fukui_nucleophilicity": 0.04133280486954902,
+                    "fukui_radical": 0.024595908067499367
+                },
+                {
+                    "positions": [
+                        5.3560948674953135,
+                        2.224734649008026,
+                        -3.2958980360484205
+                    ],
+                    "element": "H",
+                    "charge": 0.03817273008648964,
+                    "fukui_electrophilicity": 0.018870944923450584,
+                    "fukui_nucleophilicity": 0.03133694159683381,
+                    "fukui_radical": 0.024050853607334395
+                }
+            ]
+        }
+    }
+}

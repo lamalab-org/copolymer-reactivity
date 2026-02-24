@@ -45,14 +45,10 @@ All analysis and visualization tools.
 ```
 analysis/
 ├── analyze_model.py        # Main analysis script
-├── run_analysis.sh         # Helper script to run analysis
 ├── plot_config.py          # Plot styling configuration
-├── error_analysis.py       # Error analysis utilities
-├── permutation_analysis.py # Permutation importance
-├── model_analysis.py       # Model analysis utilities
-├── model_comp.py           # Model comparison tools
-└── data_analysis.py        # Data analysis utilities
+└── lamalab.mplstyle        # Plot style file
 ```
+(Permutation importance lives in experiments/permutation_importance/.)
 
 **Run analysis**: `cd analysis && python analyze_model.py --all`
 

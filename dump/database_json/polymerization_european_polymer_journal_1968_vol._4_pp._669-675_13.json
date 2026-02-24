@@ -1,0 +1,37 @@
+{
+  "monomer1": "vinyl acetate",
+  "monomer2": "vinyl butyrate",
+  "r_values": {
+    "constant_1": 1.0,
+    "constant_2": 0.97
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.07,
+    "constant_conf_2": 0.07
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": "c1ccccc1",
+  "method": "solvent",
+  "r-product": null,
+  "source": "European Polymer Journal, 1968, Vol. 4, pp. 669-675",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "logP": 1.6866,
+  "monomer1_smiles": "C=COC(C)=O",
+  "monomer2_smiles": "C=COC(=O)CCC",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 1.6866,
+  "solvent_TPSA": 0.0,
+  "solvent_HBA": 0.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.0,
+  "solvent_MolMR": 26.441999999999993,
+  "solvent_LabuteASA": 37.43140311949697,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 1.0,
+  "solvent_HeavyAtomCount": 6.0
+}

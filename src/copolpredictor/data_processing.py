@@ -176,6 +176,67 @@ def add_molecular_features(df):
     return result_df
 
 
+def enrich_df_with_molecular_features(df, base_path='./output/molecule_properties', feature_columns=None):
+    """
+    Add missing molecular feature columns to an existing DataFrame by loading from monomer JSON files.
+    Keeps all rows; fills NaN for missing JSON or missing keys.
+    """
+    from copolpredictor import prediction_utils
+    wanted = list(feature_columns or prediction_utils.feature_columns_all)
+    missing = [c for c in wanted if c not in df.columns]
+    if not missing:
+        return df
+
+    # Columns that come from monomer 1/2 (suffix _1, _2)
+    mono1 = [c for c in missing if c.endswith('_1')]
+    mono2 = [c for c in missing if c.endswith('_2')]
+    delta_cols = [c for c in missing if c.startswith('delta_HOMO_LUMO')]
+    other = [c for c in missing if c not in mono1 and c not in mono2 and c not in delta_cols]
+
+    new_data = {c: [] for c in missing}
+    for _, row in df.iterrows():
+        m1_smiles = row.get('monomer1_smiles')
+        m2_smiles = row.get('monomer2_smiles')
+        d1 = load_molecular_data(m1_smiles, base_path) if pd.notna(m1_smiles) and m1_smiles else None
+        d2 = load_molecular_data(m2_smiles, base_path) if pd.notna(m2_smiles) and m2_smiles else None
+
+        for c in mono1:
+            key = c[:-2]
+            val = None
+            if d1 is not None:
+                val = d1.get(key)
+            new_data[c].append(val)
+
+        for c in mono2:
+            key = c[:-2]
+            val = None
+            if d2 is not None:
+                val = d2.get(key)
+            new_data[c].append(val)
+
+        for c in delta_cols:
+            val = None
+            if d1 is not None and d2 is not None:
+                homo1 = d1.get('homo'); lumo1 = d1.get('lumo')
+                homo2 = d2.get('homo'); lumo2 = d2.get('lumo')
+                if homo1 is not None and lumo1 is not None and homo2 is not None and lumo2 is not None:
+                    if c == 'delta_HOMO_LUMO_AA': val = homo1 - lumo1
+                    elif c == 'delta_HOMO_LUMO_AB': val = homo1 - lumo2
+                    elif c == 'delta_HOMO_LUMO_BB': val = homo2 - lumo2
+                    elif c == 'delta_HOMO_LUMO_BA': val = homo2 - lumo1
+            new_data[c].append(val)
+
+        for c in other:
+            val = row.get(c)
+            if val is None and c == 'solvent_logp':
+                val = row.get('solvent_logP')
+            new_data[c].append(val)
+
+    for c in missing:
+        df[c] = new_data[c]
+    return df
+
+
 def create_flipped_dataset(df):
     """Create another dataset with flipped monomers, preserving reaction_id for proper train/test splits"""
     flipped_rows = []

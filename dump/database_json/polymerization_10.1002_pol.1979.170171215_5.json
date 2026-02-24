@@ -1,0 +1,35 @@
+{
+  "monomer1": "Methyl Methacrylate",
+  "monomer2": "Phenyl Methacrylate",
+  "r_values": {
+    "constant_1": 0.19,
+    "constant_2": 29.2
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.0,
+    "constant_conf_2": 10.9
+  },
+  "temperature": -78.0,
+  "temperature_unit": "°C",
+  "solvent": "C1CCOC1",
+  "method": "solvent",
+  "r-product": null,
+  "source": "https://doi.org/10.1002/pol.1979.170171215",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "Anionic",
+  "logP": 0.7968,
+  "monomer1_smiles": "C=C(C)C(=O)OC",
+  "monomer2_smiles": "C=C(C)C(=O)Oc1ccccc1",
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 0.7968,
+  "solvent_TPSA": 9.23,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 20.052999999999997,
+  "solvent_LabuteASA": 31.941791446997026,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 1.0,
+  "solvent_HeavyAtomCount": 5.0
+}

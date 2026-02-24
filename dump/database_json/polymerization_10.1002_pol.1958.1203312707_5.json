@@ -1,0 +1,37 @@
+{
+  "monomer1": "Styrene",
+  "monomer2": "Ethyl alpha-Acetoxyacrylate",
+  "r_values": {
+    "constant_1": 0.57,
+    "constant_2": 0.2
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.05,
+    "constant_conf_2": 0.05
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": "CCCCCC",
+  "method": "bulk",
+  "r-product": 0.114,
+  "source": "https://doi.org/10.1002/pol.1958.1203312707",
+  "calculation_method": "graphical method of intersections",
+  "polymerization_type": "free radical",
+  "logP": 2.5866000000000007,
+  "monomer1_smiles": "C=Cc1ccccc1",
+  "monomer2_smiles": "C=C(OC(C)=O)C(=O)OCC",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -7.23088245290138,
+  "method_emb_2": -0.5848044902383194,
+  "solvent_logP": 2.5866000000000007,
+  "solvent_TPSA": 0.0,
+  "solvent_HBA": 0.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 29.81599999999998,
+  "solvent_LabuteASA": 40.563961599812586,
+  "solvent_NumRotatableBonds": 3.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 6.0
+}

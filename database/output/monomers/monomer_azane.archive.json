@@ -1,0 +1,60 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.Monomer",
+        "name": "azane",
+        "smiles": "[NH2]",
+        "xtb_features": {
+            "energy": -3.8089254946609903,
+            "ionization_potential": 17.380416380028244,
+            "ionization_potential_corrected": 12.534416380028244,
+            "electron_affinity": 5.18449950902598,
+            "homo_energy": -0.4262339582168267,
+            "lumo_energy": -0.4221269788145953,
+            "global_electrophilicity": 1.6984369158077741,
+            "global_nucleophilicity": -12.534416380028244,
+            "dipole_moment": [
+                -5.178061134324003e-05,
+                -0.7335333059406624,
+                -2.388563396193582e-06
+            ],
+            "atomic_features": [
+                {
+                    "positions": [
+                        2.743024462793205e-05,
+                        0.3885786968966816,
+                        1.2654091819578462e-06
+                    ],
+                    "element": "N",
+                    "charge": -0.33192387760258185,
+                    "fukui_electrophilicity": 0.5081044639850594,
+                    "fukui_nucleophilicity": 0.5726155611639973,
+                    "fukui_radical": 0.5403600125745284
+                },
+                {
+                    "positions": [
+                        0.8298849895896857,
+                        -0.19434792881009583,
+                        -6.327045920044509e-07
+                    ],
+                    "element": "H",
+                    "charge": 0.16596193884860633,
+                    "fukui_electrophilicity": 0.24594776785104186,
+                    "fukui_nucleophilicity": 0.21369221929569376,
+                    "fukui_radical": 0.2298199935733678
+                },
+                {
+                    "positions": [
+                        -0.829912419834314,
+                        -0.1942307627948131,
+                        -6.327045897829601e-07
+                    ],
+                    "element": "H",
+                    "charge": 0.1659619387539717,
+                    "fukui_electrophilicity": 0.24594776816389585,
+                    "fukui_nucleophilicity": 0.21369221954036866,
+                    "fukui_radical": 0.22981999385213225
+                }
+            ]
+        }
+    }
+}

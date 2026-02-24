@@ -1,0 +1,37 @@
+{
+  "monomer1": "Methyl methacrylate",
+  "monomer2": "Isobutyl acrylate",
+  "r_values": {
+    "constant_1": 3.7,
+    "constant_2": 0.11
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.2,
+    "constant_conf_2": 0.01
+  },
+  "temperature": null,
+  "temperature_unit": "°C",
+  "solvent": "CCO",
+  "method": "solvent",
+  "r-product": null,
+  "source": "https://doi.org/10.1002/macp.1983.021840111",
+  "calculation_method": "Kelen-Tudos",
+  "polymerization_type": "free radical",
+  "logP": -0.0014000000000000123,
+  "monomer1_smiles": "C=C(C)C(=O)OC",
+  "monomer2_smiles": "C=CC(=O)OCC(C)C",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": -0.0014000000000000123,
+  "solvent_TPSA": 20.23,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 1.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 12.759800000000002,
+  "solvent_LabuteASA": 19.89842689442217,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 3.0
+}

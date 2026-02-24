@@ -15,10 +15,10 @@ if [ ! -f "../copol_prediction/artifacts/data_splits/train.csv" ]; then
     exit 1
 fi
 
-# Check if experiment data exists
-if [ ! -f "data/train.csv" ] || [ ! -f "data/train_morgan.csv" ]; then
-    echo ">> Creating experiment data (first time setup)"
-    python create_train_test_split.py --fingerprints
+# Check if Morgan fingerprint data exists (only derived data needed)
+if [ ! -f "feature_comparison/data/train_morgan.csv" ]; then
+    echo ">> Creating Morgan fingerprint data (first time setup)"
+    python archive/create_train_test_split.py --fingerprints
     echo ""
 fi
 

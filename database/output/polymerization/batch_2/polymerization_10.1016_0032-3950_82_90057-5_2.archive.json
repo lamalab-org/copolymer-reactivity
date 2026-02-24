@@ -1,0 +1,47 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/0032-3950(82)90057-5"
+        },
+        "monomers": [
+            {
+                "name": "m-Phenylenediamine"
+            },
+            {
+                "name": "Isophthalic acid dichloride"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 298.16,
+            "solvent": {
+                "smile": "C1CCOC1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.7968,
+                "TPSA": 9.23,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 20.052999999999997,
+                "labute_ASA": 31.941791446997026,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "Solvent",
+            "polymerization_type": "Polycondensation",
+            "calculation_method": "Multiparameter correlation equation",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 2.65
+                },
+                {
+                    "reaction_constant": 1.66
+                }
+            ],
+            "method_emb_1": 1.125733258863235,
+            "method_emb_2": 0.12017221573952507
+        }
+    }
+}

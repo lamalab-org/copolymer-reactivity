@@ -1,0 +1,228 @@
+{
+  "selected_features": [
+    "charges_max_1",
+    "charges_max_2",
+    "charges_mean_1",
+    "charges_mean_2",
+    "charges_min_1",
+    "charges_min_2",
+    "delta_HOMO_LUMO_AA",
+    "delta_HOMO_LUMO_AB",
+    "delta_HOMO_LUMO_BA",
+    "delta_HOMO_LUMO_BB",
+    "dipole_x_1",
+    "dipole_x_2",
+    "dipole_y_1",
+    "dipole_y_2",
+    "dipole_z_1",
+    "ea_1",
+    "ea_2",
+    "homo_2",
+    "lumo_1",
+    "lumo_2",
+    "method_emb_1",
+    "polytype_emb_1",
+    "polytype_emb_2",
+    "solvent_FractionCSP3",
+    "solvent_logp",
+    "temperature"
+  ],
+  "n_features": 26,
+  "n_groups": 20,
+  "groups": [
+    {
+      "group_label": "temperature",
+      "importance_mean": 0.21049885,
+      "importance_std": 0.16642375,
+      "n_features_in_group": 1,
+      "features": [
+        "temperature"
+      ]
+    },
+    {
+      "group_label": "solvent_logp",
+      "importance_mean": 0.17875661,
+      "importance_std": 0.0943657,
+      "n_features_in_group": 1,
+      "features": [
+        "solvent_logp"
+      ]
+    },
+    {
+      "group_label": "polytype_emb_1",
+      "importance_mean": 0.12600182,
+      "importance_std": 0.08138797,
+      "n_features_in_group": 1,
+      "features": [
+        "polytype_emb_1"
+      ]
+    },
+    {
+      "group_label": "delta_HOMO_LUMO_AB (+3)",
+      "importance_mean": 0.12529704,
+      "importance_std": 0.055121135,
+      "n_features_in_group": 4,
+      "features": [
+        "delta_HOMO_LUMO_AB",
+        "delta_HOMO_LUMO_BB",
+        "ea_2",
+        "lumo_2"
+      ]
+    },
+    {
+      "group_label": "charges_min_2",
+      "importance_mean": 0.12432244,
+      "importance_std": 0.09985884,
+      "n_features_in_group": 1,
+      "features": [
+        "charges_min_2"
+      ]
+    },
+    {
+      "group_label": "delta_HOMO_LUMO_AA (+3)",
+      "importance_mean": 0.12155469,
+      "importance_std": 0.055337965,
+      "n_features_in_group": 4,
+      "features": [
+        "delta_HOMO_LUMO_AA",
+        "delta_HOMO_LUMO_BA",
+        "ea_1",
+        "lumo_1"
+      ]
+    },
+    {
+      "group_label": "polytype_emb_2",
+      "importance_mean": 0.1061655,
+      "importance_std": 0.10920673,
+      "n_features_in_group": 1,
+      "features": [
+        "polytype_emb_2"
+      ]
+    },
+    {
+      "group_label": "method_emb_1",
+      "importance_mean": 0.10553331,
+      "importance_std": 0.11434265,
+      "n_features_in_group": 1,
+      "features": [
+        "method_emb_1"
+      ]
+    },
+    {
+      "group_label": "charges_min_1",
+      "importance_mean": 0.1051657,
+      "importance_std": 0.08730008,
+      "n_features_in_group": 1,
+      "features": [
+        "charges_min_1"
+      ]
+    },
+    {
+      "group_label": "solvent_FractionCSP3",
+      "importance_mean": 0.09675333,
+      "importance_std": 0.07591847,
+      "n_features_in_group": 1,
+      "features": [
+        "solvent_FractionCSP3"
+      ]
+    },
+    {
+      "group_label": "dipole_x_1",
+      "importance_mean": 0.0963251,
+      "importance_std": 0.10182112,
+      "n_features_in_group": 1,
+      "features": [
+        "dipole_x_1"
+      ]
+    },
+    {
+      "group_label": "dipole_x_2",
+      "importance_mean": 0.09287987,
+      "importance_std": 0.1006098,
+      "n_features_in_group": 1,
+      "features": [
+        "dipole_x_2"
+      ]
+    },
+    {
+      "group_label": "charges_mean_2",
+      "importance_mean": 0.08892604,
+      "importance_std": 0.039721094,
+      "n_features_in_group": 1,
+      "features": [
+        "charges_mean_2"
+      ]
+    },
+    {
+      "group_label": "charges_mean_1",
+      "importance_mean": 0.0832309,
+      "importance_std": 0.039438896,
+      "n_features_in_group": 1,
+      "features": [
+        "charges_mean_1"
+      ]
+    },
+    {
+      "group_label": "dipole_y_1",
+      "importance_mean": 0.08139757,
+      "importance_std": 0.07702241,
+      "n_features_in_group": 1,
+      "features": [
+        "dipole_y_1"
+      ]
+    },
+    {
+      "group_label": "charges_max_1",
+      "importance_mean": 0.077465564,
+      "importance_std": 0.048452128,
+      "n_features_in_group": 1,
+      "features": [
+        "charges_max_1"
+      ]
+    },
+    {
+      "group_label": "charges_max_2",
+      "importance_mean": 0.07397151,
+      "importance_std": 0.046070818,
+      "n_features_in_group": 1,
+      "features": [
+        "charges_max_2"
+      ]
+    },
+    {
+      "group_label": "dipole_z_1",
+      "importance_mean": 0.07102243,
+      "importance_std": 0.041728713,
+      "n_features_in_group": 1,
+      "features": [
+        "dipole_z_1"
+      ]
+    },
+    {
+      "group_label": "dipole_y_2",
+      "importance_mean": 0.06452014,
+      "importance_std": 0.06201295,
+      "n_features_in_group": 1,
+      "features": [
+        "dipole_y_2"
+      ]
+    },
+    {
+      "group_label": "homo_2",
+      "importance_mean": 0.06401717,
+      "importance_std": 0.050758526,
+      "n_features_in_group": 1,
+      "features": [
+        "homo_2"
+      ]
+    }
+  ],
+  "expand_groups": true,
+  "metadata": {
+    "strategy": "top-n",
+    "n_selected": 26,
+    "n_original": 59,
+    "shap_results_file": "results/shap_importance_detailed.csv",
+    "n": 20
+  }
+}

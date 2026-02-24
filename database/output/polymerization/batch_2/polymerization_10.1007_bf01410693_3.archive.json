@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1007/BF01410693"
+        },
+        "monomers": [
+            {
+                "name": "methyl methacrylate"
+            },
+            {
+                "name": "1-vinyl naphthalene"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-Tudor",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.32,
+                    "reaction_constant_confi": 0.1
+                },
+                {
+                    "reaction_constant": 0.57,
+                    "reaction_constant_confi": 0.07
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

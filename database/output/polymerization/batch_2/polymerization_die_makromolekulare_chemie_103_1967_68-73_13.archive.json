@@ -1,0 +1,50 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "Die Makromolekulare Chemie 103 (1967) 68-73"
+        },
+        "monomers": [
+            {
+                "name": "Methacrylate"
+            },
+            {
+                "name": "alpha-Methoxystyrene"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "C1CCOC1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.7968,
+                "TPSA": 9.23,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 20.052999999999997,
+                "labute_ASA": 31.941791446997026,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-Tudor",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.17,
+                    "reaction_constant_confi": 0.01
+                },
+                {
+                    "reaction_constant": 0.0
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

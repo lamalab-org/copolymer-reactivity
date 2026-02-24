@@ -22,6 +22,20 @@ docker compose down
 - API: http://localhost:8000
 - Docs: http://localhost:8000/docs
 
+### Public HTTPS Access (ngrok)
+
+To expose your API publicly with HTTPS for testing with external websites:
+
+```bash
+# 1. Install ngrok: https://ngrok.com/download
+# 2. Authenticate: ngrok config add-authtoken YOUR_TOKEN
+# 3. Start API: python app.py
+# 4. In another terminal: ngrok http 8000
+# 5. Use the https:// URL shown by ngrok
+```
+
+See `NGROK_SETUP.md` for detailed instructions.
+
 ### Local Development
 
 ```bash
@@ -31,6 +45,18 @@ python app.py
 ```
 
 **Note:** Requires XTB installation (`conda install -c conda-forge xtb-python`)
+
+### Testing
+
+Run comprehensive tests for all features:
+
+```bash
+# Test against local API
+python test_all_features.py
+
+# Test against ngrok URL (for public HTTPS access)
+python test_all_features.py --url https://your-ngrok-url.ngrok-free.app
+```
 
 ## 📊 Model
 
@@ -77,15 +103,34 @@ GET /embeddings/polytype/{name}
 POST /check_doi   # Check if a DOI exists in the dataset
 ```
 
-### Similar Papers (NEW!)
+### Reaction Optimization (NEW!)
 
-The `/preprocess_all` endpoint now automatically returns the **10 most similar papers** from the dataset based on:
-- Monomer similarity (Tanimoto)
-- Solvent similarity
-- Temperature proximity
-- Method/Polytype embeddings
+```bash
+POST /optimize_reaction   # Explore 3x3 grid of predictions (3 temperatures × 3 solvents)
+```
 
-See `SIMILAR_PAPERS_GUIDE.md` for details.
+The `/optimize_reaction` endpoint performs reaction optimization by:
+- Varying temperature: base_temp - step, base_temp, base_temp + step (default step: 20°C)
+- Finding similar solvents: selects solvents with similar logP values from the dataset
+- Generating predictions: creates a 3x3 grid of predictions (9 total)
+- Returns: predicted class and probabilities for each combination
+
+### Similar Papers & Nearest Neighbors (NEW!)
+
+The `/preprocess_all` endpoint now automatically returns:
+
+1. **10 most similar papers** from the dataset based on:
+   - Monomer similarity (Tanimoto)
+   - Solvent similarity
+   - Temperature proximity
+   - Method/Polytype embeddings
+
+2. **10 nearest data points** from the training database using baseline lookup:
+   - Based on Tanimoto similarity of monomer and solvent SMILES fingerprints
+   - Returns: class, monomer names, solvent name, conditions, source (DOI), similarity score
+   - Uses the same approach as `experiments/baseline` database lookup model
+
+See `SIMILAR_PAPERS_GUIDE.md` for details on similar papers.
 
 ## 💻 Usage Example
 
@@ -110,16 +155,58 @@ preprocessed = requests.post(
 ).json()
 
 if preprocessed["success"]:
+    # Access nearest neighbors
+    if preprocessed.get("nearest_neighbors"):
+        print("\nTop 3 nearest neighbors:")
+        for neighbor in preprocessed["nearest_neighbors"][:3]:
+            print(f"  Rank {neighbor['rank']}: {neighbor['monomer1_name']} + {neighbor['monomer2_name']} "
+                  f"(similarity: {neighbor['similarity']:.3f}, class: {neighbor.get('class', neighbor.get('predicted_class'))})")
+    
     # Make prediction directly with preprocessed features
     result = requests.post(
         f"{API_URL}/predict",
         json={"features": preprocessed["features"]}
     ).json()
     
-    print(f"Predicted class: {result['predicted_class']} ({result['r_product_range']})")
+    print(f"\nPredicted class: {result['predicted_class']} ({result['r_product_range']})")
     print(f"Confidence: {result['confidence']:.2%}")
 else:
     print(f"Preprocessing failed: {preprocessed.get('error')}")
+```
+
+### Reaction Optimization Example
+
+```python
+import requests
+
+API_URL = "http://localhost:8000"
+
+# Optimize reaction conditions
+optimization = requests.post(
+    f"{API_URL}/optimize_reaction",
+    json={
+        "monomer1_smiles": "C=CC1=CC=CC=C1",  # styrene
+        "monomer2_smiles": "CC(=O)OC(C)=C",   # methyl methacrylate
+        "solvent_smiles": "CC1=CC=CC=C1",     # toluene (base solvent)
+        "method": "solvent",
+        "polytype": "free radical",
+        "temperature": 60.0,  # Base temperature
+        "temperature_step": 20.0,  # ±20°C variation
+        "n_solvents": 3  # 3 solvents
+    }
+).json()
+
+if optimization["success"]:
+    print(f"Generated {len(optimization['predictions'])} predictions")
+    
+    # Display results
+    for pred in optimization['predictions']:
+        print(f"\nTemp: {pred['temperature']:.1f}°C, "
+              f"Solvent: {pred['solvent_name']} (logP: {pred['solvent_logp']:.3f})")
+        print(f"  Class: {pred['predicted_class']}, "
+              f"Confidence: {pred['confidence']:.4f}")
+else:
+    print(f"Optimization failed: {optimization.get('error')}")
 ```
 
 ### Step-by-Step Approach

@@ -6,7 +6,7 @@ from sklearn.metrics import confusion_matrix
 import xgboost as xgb
 
 
-feature_columns = [
+feature_columns_ = [
         # Molecular descriptors for Monomer 1
          'fukui_radical_max_1',
 
@@ -25,14 +25,12 @@ feature_columns = [
     ]
 
 
-feature_columns_ = [
+feature_columns = [
         # Molecular descriptors for Monomer 1
-        'ip_1', 'ea_1', 'homo_1', 'lumo_1',
-        'fukui_radical_min_1', 'fukui_radical_max_1'
+         'fukui_radical_max_1', 'global_electrophilicity_1', 'global_nucleophilicity_1', 'dipole_x_1', 'dipole_y_1', 'dipole_z_1',
 
         # Molecular descriptors for Monomer 2
-         'ip_2',  'ea_2', 'homo_2', 'lumo_2',
-         'fukui_radical_min_2', 'fukui_radical_max_2'
+          'fukui_radical_max_2', 'global_electrophilicity_2', 'global_nucleophilicity_2', 'dipole_x_2', 'dipole_y_2', 'dipole_z_2',
 
         # HOMO-LUMO differences
         'delta_HOMO_LUMO_AA', 'delta_HOMO_LUMO_AB', 'delta_HOMO_LUMO_BB', 'delta_HOMO_LUMO_BA',
@@ -46,7 +44,7 @@ feature_columns_ = [
     ]
 
 
-feature_columns_2 = [
+feature_columns_all = [
         # Molecular descriptors for Monomer 1
         'best_conformer_energy_1', 'ip_1', 'ip_corrected_1', 'ea_1', 'homo_1', 'lumo_1',
         'global_electrophilicity_1', 'global_nucleophilicity_1', 'charges_min_1', 'charges_max_1',

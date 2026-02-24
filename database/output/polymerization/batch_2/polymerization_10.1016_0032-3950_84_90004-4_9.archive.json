@@ -1,0 +1,50 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/0032-3950(84)90004-4"
+        },
+        "monomers": [
+            {
+                "name": "Styrene"
+            },
+            {
+                "name": "Methacrylic Acid"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.0,
+            "solvent": {
+                "smile": "C1COCCO1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.03320000000000001,
+                "TPSA": 18.46,
+                "HBA": 2.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 21.637999999999995,
+                "labute_ASA": 37.055336676503906,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "Bulk",
+            "polymerization_type": "Homogeneous Radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.16,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.62,
+                    "reaction_constant_confi": 0.03
+                }
+            ],
+            "polytype_emb_1": -2.4396278967175387,
+            "polytype_emb_2": 5.11014537328129,
+            "method_emb_1": 15.331750999090334,
+            "method_emb_2": 11.481993634068832
+        }
+    }
+}

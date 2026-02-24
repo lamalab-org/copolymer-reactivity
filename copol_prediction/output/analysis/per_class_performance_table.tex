@@ -1,0 +1,20 @@
+\begin{table}[h!]
+\centering
+\caption{Per-class accuracy and precision of the voting model (XGBoost + Lookup).}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Class} & \textbf{Train} & \textbf{Test} & \textbf{Filtered Test} \\
+\midrule
+\multicolumn{4}{l}{\textit{Accuracy (per class)}} \\
+\quad 0 (Alternating) & $0.85$ & $0.92$ & $0.95$ \\
+\quad 1 (Block-like) & $0.76$ & $0.67$ & $0.66$ \\
+\quad 2 (Homopolymer) & $0.11$ & $0.59$ & $0.89$ \\
+\midrule
+\multicolumn{4}{l}{\textit{Precision (per class)}} \\
+\quad 0 (Alternating) & $0.92$ & $0.91$ & $0.94$ \\
+\quad 1 (Block-like) & $0.29$ & $0.69$ & $0.76$ \\
+\quad 2 (Homopolymer) & $0.52$ & $0.59$ & $0.73$ \\
+\bottomrule
+\end{tabular}
+\label{tab:class_performance}
+\end{table}

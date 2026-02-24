@@ -1,0 +1,37 @@
+{
+  "monomer1": "Itaconic Anhydride",
+  "monomer2": "2-Chloroethyl Acrylate",
+  "r_values": {
+    "constant_1": 3.1,
+    "constant_2": 0.32
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.1,
+    "constant_conf_2": 0.04
+  },
+  "temperature": 64.0,
+  "temperature_unit": "°C",
+  "solvent": "C1CCOC1",
+  "method": "solvent",
+  "r-product": 0.992,
+  "source": "http://dx.doi.org/10.1080/00222337608061235",
+  "calculation_method": null,
+  "polymerization_type": "free radical",
+  "logP": 0.7968,
+  "monomer1_smiles": "C=C1CC(=O)OC1=O",
+  "monomer2_smiles": "C=CC(=O)OCCCl",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 0.7968,
+  "solvent_TPSA": 9.23,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 20.052999999999997,
+  "solvent_LabuteASA": 31.941791446997026,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 1.0,
+  "solvent_HeavyAtomCount": 5.0
+}

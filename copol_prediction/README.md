@@ -246,14 +246,9 @@ copol_prediction/
 │   ├── docker-compose.yml      # Docker Compose
 │   └── start.sh                # Quick start script
 ├── analysis/                   # Analysis tools
-│   ├── analyze_model.py        # Main analysis script
+│   ├── analyze_model.py       # Main analysis script
 │   ├── plot_config.py          # Plot styling
-│   ├── error_analysis.py       # Error analysis
-│   ├── permutation_analysis.py # Permutation importance
-│   ├── model_analysis.py       # Model analysis utils
-│   ├── model_comp.py           # Model comparison
-│   ├── data_analysis.py        # Data analysis
-│   └── run_analysis.sh         # Run analysis script
+│   └── lamalab.mplstyle        # Plot style file
 ├── artifacts/
 │   ├── data_splits/            # Central train/test split
 │   ├── model_bundle/           # Trained model

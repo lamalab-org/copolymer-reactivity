@@ -32,21 +32,26 @@ FEATURE_COLUMNS = [
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Create central train/test split")
+    parser = argparse.ArgumentParser(description="Create central train/validation/test split")
     parser.add_argument('--remove-specialized', action='store_true',
                        help='Remove datapoints with specialized_filter=specialized')
+    parser.add_argument('--test-size', type=float, default=0.2,
+                       help='Fraction of data for test set (default: 0.2)')
+    parser.add_argument('--val-size', type=float, default=0.1,
+                       help='Fraction of data for validation set (default: 0.1)')
     return parser.parse_args()
 
 
-def create_split(remove_specialized=False):
+def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
     """
-    Create train/test split and save to artifacts/data_splits/
+    Create train/validation/test split and save to artifacts/data_splits/
     """
     print("="*70)
-    print("CREATING CENTRAL TRAIN/TEST SPLIT")
+    print("CREATING CENTRAL TRAIN/VALIDATION/TEST SPLIT")
     print("="*70)
     print("\nThis split will be used by all training scripts and experiments")
     print("to ensure fair comparison.\n")
+    print(f"Split sizes: Train ~{1-test_size-val_size:.1%}, Validation ~{val_size:.1%}, Test ~{test_size:.1%}\n")
     
     # Load processed data
     processed_path = "output/processed_data.csv"
@@ -165,24 +170,31 @@ def create_split(remove_specialized=False):
     # Create base dataset for holdout splitting
     base_df = holdout_utils.make_base_dataset_for_holdout(df_clean)
     
-    # Get or create holdout groups
-    holdout_path = "artifacts/test_ids.csv"
-    holdout_groups = holdout_utils.get_or_create_holdout_groups(
+    # Get or create train/val/test groups
+    test_path = "artifacts/test_ids.csv"
+    val_path = "artifacts/val_ids.csv"
+    train_groups, val_groups, test_groups = holdout_utils.get_or_create_train_val_test_groups(
         base_df, 
         group_col='reaction_id',
-        test_groups_path=holdout_path
+        test_groups_path=test_path,
+        val_groups_path=val_path,
+        test_size=test_size,
+        val_size=val_size
     )
     
-    print(f"\nHoldout groups saved to: {holdout_path}")
+    print(f"\nSplit groups saved to:")
+    print(f"  Test: {test_path}")
+    print(f"  Validation: {val_path}")
     
-    # Split into train and test (using df_clean, not df_filtered!)
-    df_train, df_test = holdout_utils.split_train_holdout(
-        df_clean, holdout_groups, group_col='reaction_id'
+    # Split into train, validation, and test (using df_clean, not df_filtered!)
+    df_train, df_val, df_test = holdout_utils.split_train_val_test(
+        df_clean, train_groups, val_groups, test_groups, group_col='reaction_id'
     )
     
     print(f"\nInitial split:")
-    print(f"  Train: {len(df_train):4d} samples ({df_train['reaction_id'].nunique()} groups)")
-    print(f"  Test:  {len(df_test):4d} samples ({df_test['reaction_id'].nunique()} groups)")
+    print(f"  Train:      {len(df_train):4d} samples ({df_train['reaction_id'].nunique()} groups)")
+    print(f"  Validation: {len(df_val):4d} samples ({df_val['reaction_id'].nunique()} groups)")
+    print(f"  Test:       {len(df_test):4d} samples ({df_test['reaction_id'].nunique()} groups)")
     
     # Optionally remove specialized datapoints from TEST SET ONLY
     if remove_specialized:
@@ -191,19 +203,27 @@ def create_split(remove_specialized=False):
             df_test = df_test[df_test['specialized_filter'] != 'specialized']
             removed = before - len(df_test)
             print(f"\n⚠️  Removed {removed} specialized datapoints from TEST SET")
-            print(f"  Train: {len(df_train):4d} samples (unchanged)")
-            print(f"  Test:  {len(df_test):4d} samples (after filter)")
+            print(f"  Train:      {len(df_train):4d} samples (unchanged)")
+            print(f"  Validation: {len(df_val):4d} samples (unchanged)")
+            print(f"  Test:       {len(df_test):4d} samples (after filter)")
         else:
             print("\nWarning: specialized_filter column not found, skipping")
     
     print(f"\nFinal split:")
-    print(f"  Train: {len(df_train):4d} samples ({df_train['reaction_id'].nunique()} groups)")
-    print(f"  Test:  {len(df_test):4d} samples ({df_test['reaction_id'].nunique()} groups)")
+    print(f"  Train:      {len(df_train):4d} samples ({df_train['reaction_id'].nunique()} groups)")
+    print(f"  Validation: {len(df_val):4d} samples ({df_val['reaction_id'].nunique()} groups)")
+    print(f"  Test:       {len(df_test):4d} samples ({df_test['reaction_id'].nunique()} groups)")
     
     print("\nTrain class distribution:")
     train_class_counts = df_train['r_product_class'].value_counts().sort_index()
     for cls, count in train_class_counts.items():
         pct = count / len(df_train) * 100
+        print(f"  Class {cls}: {count:4d} ({pct:5.2f}%)")
+    
+    print("\nValidation class distribution:")
+    val_class_counts = df_val['r_product_class'].value_counts().sort_index()
+    for cls, count in val_class_counts.items():
+        pct = count / len(df_val) * 100
         print(f"  Class {cls}: {count:4d} ({pct:5.2f}%)")
     
     print("\nTest class distribution:")
@@ -217,13 +237,16 @@ def create_split(remove_specialized=False):
     os.makedirs(output_dir, exist_ok=True)
     
     train_path = os.path.join(output_dir, 'train.csv')
+    val_path = os.path.join(output_dir, 'val.csv')
     test_path = os.path.join(output_dir, 'test.csv')
     
     df_train.to_csv(train_path, index=False)
+    df_val.to_csv(val_path, index=False)
     df_test.to_csv(test_path, index=False)
     
-    print(f"\n✓ Saved train split to: {train_path}")
-    print(f"✓ Saved test split to: {test_path}")
+    print(f"\n✓ Saved train split to:      {train_path}")
+    print(f"✓ Saved validation split to: {val_path}")
+    print(f"✓ Saved test split to:        {test_path}")
     
     # Save split metadata
     filters_applied = ['r1r2 >= 0', 'r1r2 not null', 'removed rows with NaN features']
@@ -233,13 +256,18 @@ def create_split(remove_specialized=False):
     split_info = {
         'total_samples': len(df_clean),
         'train_samples': len(df_train),
+        'val_samples': len(df_val),
         'test_samples': len(df_test),
         'train_groups': int(df_train['reaction_id'].nunique()),
+        'val_groups': int(df_val['reaction_id'].nunique()),
         'test_groups': int(df_test['reaction_id'].nunique()),
         'train_class_counts': {int(k): int(v) for k, v in train_class_counts.items()},
+        'val_class_counts': {int(k): int(v) for k, v in val_class_counts.items()},
         'test_class_counts': {int(k): int(v) for k, v in test_class_counts.items()},
-        'test_ids_path': holdout_path,
+        'test_ids_path': test_path,
+        'val_ids_path': val_path,
         'test_size_ratio': len(df_test) / len(df_clean),
+        'val_size_ratio': len(df_val) / len(df_clean),
         'filters_applied': filters_applied,
         'remove_specialized_from_test': remove_specialized,
         'bins': bins,
@@ -264,5 +292,9 @@ def create_split(remove_specialized=False):
 
 if __name__ == "__main__":
     args = parse_args()
-    create_split(remove_specialized=args.remove_specialized)
+    create_split(
+        remove_specialized=args.remove_specialized,
+        test_size=args.test_size,
+        val_size=args.val_size
+    )
 

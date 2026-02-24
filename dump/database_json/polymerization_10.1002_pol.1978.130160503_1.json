@@ -1,0 +1,26 @@
+{
+  "monomer1": "1-vinylimidazole",
+  "monomer2": "styrene",
+  "r_values": {
+    "constant_1": 0.1,
+    "constant_2": 10.0
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.02,
+    "constant_conf_2": 0.2
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": null,
+  "method": "bulk",
+  "r-product": null,
+  "source": "https://doi.org/10.1002/pol.1978.130160503",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "monomer1_smiles": "C=Cn1ccnc1",
+  "monomer2_smiles": "C=Cc1ccccc1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -7.23088245290138,
+  "method_emb_2": -0.5848044902383194
+}

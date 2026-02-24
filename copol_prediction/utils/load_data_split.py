@@ -39,6 +39,45 @@ def load_train_test_split(split_dir="artifacts/data_splits"):
     return df_train, df_test
 
 
+def load_train_val_test_split(split_dir="artifacts/data_splits"):
+    """
+    Load the central train/validation/test split.
+    
+    Returns:
+        tuple: (df_train, df_val, df_test)
+    
+    Raises:
+        FileNotFoundError: If split files don't exist
+    """
+    train_path = os.path.join(split_dir, 'train.csv')
+    val_path = os.path.join(split_dir, 'val.csv')
+    test_path = os.path.join(split_dir, 'test.csv')
+    
+    if not os.path.exists(train_path):
+        raise FileNotFoundError(
+            f"Train split not found at {train_path}\n"
+            f"Run: python create_data_split.py"
+        )
+    
+    if not os.path.exists(val_path):
+        raise FileNotFoundError(
+            f"Validation split not found at {val_path}\n"
+            f"Run: python create_data_split.py"
+        )
+    
+    if not os.path.exists(test_path):
+        raise FileNotFoundError(
+            f"Test split not found at {test_path}\n"
+            f"Run: python create_data_split.py"
+        )
+    
+    df_train = pd.read_csv(train_path)
+    df_val = pd.read_csv(val_path)
+    df_test = pd.read_csv(test_path)
+    
+    return df_train, df_val, df_test
+
+
 def get_split_info(split_dir="artifacts/data_splits"):
     """
     Get metadata about the train/test split.
@@ -69,10 +108,14 @@ def print_split_info(split_dir="artifacts/data_splits"):
     print("CURRENT DATA SPLIT INFO")
     print("="*60)
     print(f"Total samples: {info['total_samples']}")
-    print(f"Train samples: {info['train_samples']} ({info['train_samples']/info['total_samples']*100:.1f}%)")
-    print(f"Test samples:  {info['test_samples']} ({info['test_samples']/info['total_samples']*100:.1f}%)")
-    print(f"Train groups:  {info['train_groups']}")
-    print(f"Test groups:   {info['test_groups']}")
+    print(f"Train samples:      {info['train_samples']} ({info['train_samples']/info['total_samples']*100:.1f}%)")
+    if 'val_samples' in info:
+        print(f"Validation samples: {info['val_samples']} ({info['val_samples']/info['total_samples']*100:.1f}%)")
+    print(f"Test samples:       {info['test_samples']} ({info['test_samples']/info['total_samples']*100:.1f}%)")
+    print(f"Train groups:       {info['train_groups']}")
+    if 'val_groups' in info:
+        print(f"Validation groups:  {info['val_groups']}")
+    print(f"Test groups:        {info['test_groups']}")
     
     # Show filters
     if 'filters_applied' in info:
@@ -84,6 +127,11 @@ def print_split_info(split_dir="artifacts/data_splits"):
     for cls, count in sorted(info['train_class_counts'].items()):
         pct = count / info['train_samples'] * 100
         print(f"  Class {cls}: {count:4d} ({pct:5.2f}%)")
+    if 'val_class_counts' in info:
+        print("\nValidation class distribution:")
+        for cls, count in sorted(info['val_class_counts'].items()):
+            pct = count / info['val_samples'] * 100
+            print(f"  Class {cls}: {count:4d} ({pct:5.2f}%)")
     print("\nTest class distribution:")
     for cls, count in sorted(info['test_class_counts'].items()):
         pct = count / info['test_samples'] * 100

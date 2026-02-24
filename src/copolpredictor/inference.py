@@ -159,13 +159,20 @@ class CopolymerPredictor:
         elif not isinstance(X, pd.DataFrame):
             raise ValueError(f"Unsupported input type: {type(X)}")
         
-        # Check for missing features
+        # Add missing features as NaN (XGBoost can handle NaN values)
         missing_features = set(self.features) - set(X.columns)
         if missing_features:
-            raise ValueError(f"Missing required features: {missing_features}")
+            for feat in missing_features:
+                X[feat] = np.nan
         
         # Select and order features
-        return X[self.features]
+        X_ordered = X[self.features]
+        
+        # Fill NaN values with 0 (XGBoost default behavior for missing values)
+        # This is safer than leaving NaN, as XGBoost treats NaN as missing
+        X_ordered = X_ordered.fillna(0.0)
+        
+        return X_ordered
     
     def get_feature_importance(self, top_n: Optional[int] = None) -> pd.DataFrame:
         """

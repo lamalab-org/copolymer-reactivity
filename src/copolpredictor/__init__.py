@@ -30,10 +30,7 @@ from .evaluation import (
     save_holdout_metrics_json
 )
 
-from .calibration import (
-    calibrate_model_with_weights,
-    calculate_prediction_confidence
-)
+from .calibration import calibrate_model_with_weights
 
 __all__ = [
     'data_processing',
@@ -51,7 +48,6 @@ __all__ = [
     'print_evaluation_results',
     'save_holdout_metrics_json',
     'calibrate_model_with_weights',
-    'calculate_prediction_confidence',
 ]
 
 

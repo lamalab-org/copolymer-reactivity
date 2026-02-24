@@ -1,0 +1,27 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.1965.110030308"
+        },
+        "monomers": [
+            {
+                "name": "Ethylene"
+            },
+            {
+                "name": "Octene-1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 403.15,
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 3.2
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577
+        }
+    }
+}

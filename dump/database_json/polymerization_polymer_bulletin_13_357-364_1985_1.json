@@ -1,0 +1,37 @@
+{
+  "monomer1": "Sodium Styrene Sulfonate",
+  "monomer2": "Sodium Chloroacrylate",
+  "r_values": {
+    "constant_1": 1.39,
+    "constant_2": 0.26
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.14,
+    "constant_conf_2": 0.05
+  },
+  "temperature": 70.0,
+  "temperature_unit": "°C",
+  "solvent": "CC(C)O",
+  "method": "solvent",
+  "r-product": null,
+  "source": "Polymer Bulletin 13, 357-364 (1985)",
+  "calculation_method": "integrated copolymer equation",
+  "polymerization_type": "free radical",
+  "logP": 0.38710000000000006,
+  "monomer1_smiles": "O=S(=O)([O-])C=Cc1ccccc1.[Na+]",
+  "monomer2_smiles": "C=CC(=O)OCl.[Na]",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 0.38710000000000006,
+  "solvent_TPSA": 20.23,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 1.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 17.354800000000004,
+  "solvent_LabuteASA": 26.263369008818774,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 4.0
+}

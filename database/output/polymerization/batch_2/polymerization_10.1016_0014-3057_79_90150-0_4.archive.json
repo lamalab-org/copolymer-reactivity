@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "10.1016/0014-3057(79)90150-0"
+        },
+        "monomers": [
+            {
+                "name": "Acrylonitrile"
+            },
+            {
+                "name": "Vinylmethyldiethoxysilane"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 323.15,
+            "polymerization_method": "Bulk",
+            "polymerization_type": "Free radical",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 2.26,
+                    "reaction_constant_confi": 0.25
+                },
+                {
+                    "reaction_constant": 0.25,
+                    "reaction_constant_confi": 0.0
+                }
+            ],
+            "polytype_emb_1": 5.79912604668028,
+            "polytype_emb_2": 6.51492902416655,
+            "method_emb_1": 15.331750999090334,
+            "method_emb_2": 11.481993634068832
+        }
+    }
+}

@@ -112,36 +112,3 @@ def calibrate_model_with_weights(
         raise ValueError(f"Unknown calibration method '{method}'. Use 'sigmoid' or 'isotonic'.")
 
     return CalibratedModel(model, calibrator)
-
-
-def calculate_prediction_confidence(model, X_test):
-    """
-    Calculate prediction confidence using entropy-based uncertainty.
-    Lower entropy = higher confidence
-    
-    Args:
-        model: Trained model with predict_proba method
-        X_test: Test feature matrix
-        
-    Returns:
-        Array of confidence scores (0 to 1)
-    """
-    # Get probabilities for all classes
-    y_pred_proba = model.predict_proba(X_test)
-
-    # Avoid log(0) by clipping probabilities
-    epsilon = 1e-15
-    y_pred_proba = np.clip(y_pred_proba, epsilon, 1 - epsilon)
-
-    # Calculate entropy: H = -sum(p * log(p))
-    entropy = -np.sum(y_pred_proba * np.log(y_pred_proba), axis=1)
-
-    # Maximum entropy
-    max_entropy = np.log(y_pred_proba.shape[1])
-
-    # Convert entropy to confidence: confidence = 1 - (entropy / max_entropy)
-    confidence = 1 - (entropy / max_entropy)
-
-    return confidence
-
-

@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "http://dx.doi.org/10.1080/00222337008069375"
+        },
+        "monomers": [
+            {
+                "name": "Acrylonitrile"
+            },
+            {
+                "name": "Allyl Alcohol"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 293.15,
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.6,
+                    "reaction_constant_confi": 0.13
+                },
+                {
+                    "reaction_constant": 0.01,
+                    "reaction_constant_confi": 0.1
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

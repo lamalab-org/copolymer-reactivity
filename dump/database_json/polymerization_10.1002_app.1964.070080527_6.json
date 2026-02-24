@@ -1,0 +1,37 @@
+{
+  "monomer1": "N-Allylstearamide",
+  "monomer2": "Acrylonitrile",
+  "r_values": {
+    "constant_1": 0.118,
+    "constant_2": 3.61
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.084,
+    "constant_conf_2": 0.087
+  },
+  "temperature": 80.0,
+  "temperature_unit": "°C",
+  "solvent": "CC(C)(C)O",
+  "method": "solvent",
+  "r-product": null,
+  "source": "https://doi.org/10.1002/app.1964.070080527",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "logP": 0.7771999999999999,
+  "monomer1_smiles": "C=CCNC(=O)CCCCCCCCCCCCCCCCC",
+  "monomer2_smiles": "C=CC#N",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 0.7771999999999999,
+  "solvent_TPSA": 20.23,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 1.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 21.971799999999995,
+  "solvent_LabuteASA": 32.62831112321538,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 5.0
+}

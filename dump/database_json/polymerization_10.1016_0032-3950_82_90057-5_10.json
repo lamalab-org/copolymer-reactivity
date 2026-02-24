@@ -1,0 +1,35 @@
+{
+  "monomer1": "m-Phenylenediamine",
+  "monomer2": "Isophthalic acid dichloride",
+  "r_values": {
+    "constant_1": 2.72,
+    "constant_2": 1.72
+  },
+  "conf_intervals": {
+    "constant_conf_1": null,
+    "constant_conf_2": null
+  },
+  "temperature": 25.010000000000048,
+  "temperature_unit": "°C",
+  "solvent": "O=C1CCCCC1",
+  "method": "Solvent",
+  "r-product": null,
+  "source": "https://doi.org/10.1016/0032-3950(82)90057-5",
+  "calculation_method": "Multiparameter correlation equation",
+  "polymerization_type": "Polycondensation",
+  "logP": 1.5196,
+  "monomer1_smiles": "Nc1cccc(N)c1",
+  "monomer2_smiles": "O=C(O)c1cccc(C(=O)O)c1.[Cl-].[Cl-]",
+  "method_emb_1": 1.125733258863235,
+  "method_emb_2": 0.12017221573952507,
+  "solvent_logP": 1.5196,
+  "solvent_TPSA": 17.07,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.8333333333333334,
+  "solvent_MolMR": 28.091999999999985,
+  "solvent_LabuteASA": 43.719652546327126,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 1.0,
+  "solvent_HeavyAtomCount": 7.0
+}

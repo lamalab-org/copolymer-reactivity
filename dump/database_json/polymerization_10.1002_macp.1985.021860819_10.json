@@ -1,0 +1,37 @@
+{
+  "monomer1": "methacrylic acid",
+  "monomer2": "styrene",
+  "r_values": {
+    "constant_1": 0.06,
+    "constant_2": 0.29
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.02,
+    "constant_conf_2": 0.0
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": "CC#N",
+  "method": "solvent",
+  "r-product": null,
+  "source": "https://doi.org/10.1002/macp.1985.021860819",
+  "calculation_method": "Kelen-Tudor",
+  "polymerization_type": "free radical",
+  "logP": 0.52988,
+  "monomer1_smiles": "C=C(C)C(=O)O",
+  "monomer2_smiles": "C=Cc1ccccc1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 0.52988,
+  "solvent_TPSA": 23.79,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.5,
+  "solvent_MolMR": 11.287,
+  "solvent_LabuteASA": 19.496772823694872,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 3.0
+}

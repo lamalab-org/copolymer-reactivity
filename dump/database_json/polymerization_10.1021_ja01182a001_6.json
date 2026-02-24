@@ -1,0 +1,37 @@
+{
+  "monomer1": "butadiene",
+  "monomer2": "1-cyanobutadiene",
+  "r_values": {
+    "constant_1": -0.08,
+    "constant_2": 1.7
+  },
+  "conf_intervals": {
+    "constant_conf_1": null,
+    "constant_conf_2": null
+  },
+  "temperature": 50.0,
+  "temperature_unit": "°C",
+  "solvent": "O",
+  "method": "emulsion",
+  "r-product": null,
+  "source": "https://doi.org/10.1021/ja01182a001",
+  "calculation_method": "logarithm plot",
+  "polymerization_type": "free radical",
+  "logP": -0.8247,
+  "monomer1_smiles": "C=CC=C",
+  "monomer2_smiles": "C=CC=CC#N",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -4.911729965574156,
+  "method_emb_2": 0.07905181466983252,
+  "solvent_logP": -0.8247,
+  "solvent_TPSA": 31.5,
+  "solvent_HBA": 0.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.0,
+  "solvent_MolMR": 3.6138,
+  "solvent_LabuteASA": 6.84923118831809,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 1.0
+}

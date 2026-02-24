@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
 """
-Filter sweep script for copolymerization prediction.
+Filter sweep for copolymerization reactivity prediction (Voting Model).
 
-This script tests different combinations of data filters and preprocessing
-options to find the best configuration for the model.
+Tests combinations of data filters with the voting model (XGBoost + Lookup).
+For each configuration, only samples where XGBoost and Lookup agree are
+evaluated ("voting").
 
-IMPORTANT: This script uses the central train/test split from 
-copol_prediction/artifacts/data_splits/ (created by create_data_split.py) 
-to ensure consistency with train_final_model.py and all other training scripts.
-All filter configurations are evaluated on the same holdout set for fair comparison.
+Search space (16 combinations = 2 x 2 x 2 x 2):
+  - remove_specialized:          [False, True]
+  - apply_polymerization_filter: [False, True]
+  - use_augmentation:            [False, True]  (XGBoost training only)
+  - add_negative_data:            [False, True]  (XGBoost training only, NOT for Lookup)
+
+Caching strategy (avoids redundant training):
+  - 16 unique XGBoost models  (spec x poly x aug x neg_data)
+  - 4  unique Lookup pred sets (spec x poly, NO negative data)
+  - 16 voting evaluations using cached predictions
+
+Uses the central train/test split from copol_prediction/artifacts/data_splits/.
 
 Usage:
-    python sweep_filters.py [--data-path PATH] [--output-dir DIR]
+    python sweep_filters.py [--output-dir DIR] [--plots-dir DIR]
 """
 
 import os
@@ -20,29 +29,37 @@ import json
 import argparse
 import itertools
 from pathlib import Path
-from typing import Dict, List
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+from sklearn.metrics import (
+    balanced_accuracy_score,
+    precision_score,
+    recall_score,
+    confusion_matrix as sk_confusion_matrix,
+)
 
-# Add parent directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-# Add copol_prediction to path for utils
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../copol_prediction'))
+# ---------------------------------------------------------------------------
+# Path setup
+# ---------------------------------------------------------------------------
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.abspath(os.path.join(_SCRIPT_DIR, '..', '..'))
+
+sys.path.insert(0, _PROJECT_ROOT)
+sys.path.insert(0, os.path.join(_SCRIPT_DIR, '..'))
+sys.path.insert(0, os.path.join(_PROJECT_ROOT, 'copol_prediction'))
 
 from copolpredictor import (
-    data_processing,
     data_augmentation,
     model_training,
-    evaluation,
-    holdout_utils,
-    prediction_utils
+    prediction_utils,
 )
 from utils import load_data_split
+from copol_prediction.analysis.analyze_model import (
+    compute_naive_baseline_predictions_with_similarity,
+    compute_fingerprints_for_smiles,
+)
 
-# Import plot configuration
 try:
     from copol_prediction.analysis.plot_config import setup_plot_style, HEATMAP_CMAP
 except ImportError:
@@ -50,651 +67,509 @@ except ImportError:
         pass
     HEATMAP_CMAP = 'Blues'
 
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+# Note: Negative data is only applied to XGBoost training (like augmentation),
+# NOT to Lookup pool. This simplifies to a boolean flag.
 
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 def parse_args():
-    """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="Sweep over filter combinations for copolymerization prediction"
+        description="Sweep filter combinations for the voting model"
     )
-    parser.add_argument(
-        "--data-path",
-        type=str,
-        default="../data_extraction/extracted_reactions.csv",
-        help="Path to input data CSV"
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=str,
-        default="artifacts/experiments_holdout",
-        help="Directory to save results"
-    )
-    parser.add_argument(
-        "--plots-dir",
-        type=str,
-        default="output/model_comp",
-        help="Directory to save plots"
-    )
-    parser.add_argument(
-        "--random-state",
-        type=int,
-        default=42,
-        help="Random seed"
-    )
-    parser.add_argument(
-        "--n-iter",
-        type=int,
-        default=25,
-        help="Hyperparameter search iterations per run (matches train_final_model.py)"
-    )
-    parser.add_argument(
-        "--augmentation-samples",
-        type=int,
-        default=5,
-        help="Number of augmented samples per datapoint"
-    )
-    
+    parser.add_argument("--output-dir", type=str,
+                        default="artifacts/experiments_voting",
+                        help="Directory to save result JSON/CSV")
+    parser.add_argument("--plots-dir", type=str,
+                        default="output/voting_sweep",
+                        help="Directory to save plots")
+    parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--n-iter", type=int, default=25,
+                        help="Hyperparameter search iterations per model")
+    parser.add_argument("--augmentation-samples", type=int, default=5)
+    parser.add_argument("--plot-only", action="store_true",
+                        help="Skip training, re-plot from saved results CSV")
     return parser.parse_args()
 
 
-def generate_filter_combinations(search_space: Dict[str, List[bool]]):
+# ---------------------------------------------------------------------------
+# Data loading helpers
+# ---------------------------------------------------------------------------
+def filter_valid_smiles(df):
+    """Remove rows where any SMILES column cannot be parsed by RDKit."""
+    from rdkit import Chem
+    smiles_cols = ['monomer1_smiles', 'monomer2_smiles', 'solvent_smiles']
+    n_before = len(df)
+    mask = pd.Series(True, index=df.index)
+    for col in smiles_cols:
+        if col in df.columns:
+            valid = df[col].apply(
+                lambda s: Chem.MolFromSmiles(str(s)) is not None
+                if pd.notna(s) else False
+            )
+            mask &= valid
+    df_out = df[mask].reset_index(drop=True)
+    n_removed = n_before - len(df_out)
+    if n_removed > 0:
+        print(f"  Filtered {n_removed} rows with invalid SMILES "
+              f"({len(df_out)} remaining)")
+    return df_out
+
+
+def load_base_data():
+    """Load base train/validation split and negative data.
+
+    Returns (df_train, df_val, df_neg | None).
     """
-    Generate all combinations from a boolean search space.
-    
-    Args:
-        search_space: Dictionary mapping filter names to lists of boolean values
-        
-    Yields:
-        Tuple of (combination dict, keys list)
-    """
-    keys = list(search_space.keys())
-    for values in itertools.product(*(search_space[k] for k in keys)):
-        yield dict(zip(keys, values))
+    copol_dir = os.path.join(_PROJECT_ROOT, 'copol_prediction')
+    split_dir = os.path.join(copol_dir, 'artifacts', 'data_splits')
 
+    df_train, df_val, _ = load_data_split.load_train_val_test_split(split_dir=split_dir)
+    load_data_split.print_split_info(split_dir=split_dir)
 
-# Note: This script now uses the global train/test split from experiments/data/
-# for consistency with other experiments (baseline, fingerprint, etc.)
-
-
-def plot_confusion_matrix(cm, labels, title, save_path):
-    """
-    Plot and save a confusion matrix.
-    
-    Args:
-        cm: Confusion matrix array
-        labels: Class labels
-        title: Plot title (not used, kept for compatibility)
-        save_path: Path to save the plot
-    """
-    fig, ax = plt.subplots(figsize=(8, 6))
-    
-    # Plot confusion matrix
-    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
-    plt.colorbar(im, ax=ax)
-    
-    # No grid
-    ax.grid(False)
-    
-    # Set labels with larger font
-    tick_marks = np.arange(len(labels))
-    ax.set_xticks(tick_marks)
-    ax.set_yticks(tick_marks)
-    ax.set_xticklabels(labels, fontsize=16)
-    ax.set_yticklabels(labels, fontsize=16)
-    ax.set_xlabel('Predicted Class', fontsize=16, fontweight='bold')
-    ax.set_ylabel('True Class', fontsize=16, fontweight='bold')
-    
-    # Annotate cells with larger font
-    for i in range(cm.shape[0]):
-        for j in range(cm.shape[1]):
-            ax.text(j, i, int(cm[i, j]),
-                   ha="center", va="center",
-                   color="white" if cm[i, j] > cm.max() / 2 else "black",
-                   fontsize=18, fontweight='bold')
-    
-    # No title
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved confusion matrix to {save_path}")
-
-
-def prepare_filtered_data(df, filters, config, *, random_state=42, debug=True):
-    """
-    Load global train/test split and apply filters.
-    Uses the central train/test split from copol_prediction/artifacts/data_splits/ 
-    for consistency with train_final_model.py and all other training scripts.
-    Returns (train_df, test_df, features).
-    """
-
-    def log(msg):
-        if debug:
-            print(msg)
-
-    # ---------------- 1) Load global train/test split ----------------
-    log("\n[Split] Loading global train/test split...")
-    
-    # Use the same utility function as train_final_model.py
-    # This loads from copol_prediction/artifacts/data_splits/
-    try:
-        # Calculate path to copol_prediction directory
-        script_dir = os.path.dirname(__file__)
-        copol_pred_dir = os.path.join(script_dir, '../../copol_prediction')
-        copol_pred_dir = os.path.abspath(copol_pred_dir)
-        
-        # Change to copol_prediction directory temporarily to use relative paths
-        original_cwd = os.getcwd()
-        os.chdir(copol_pred_dir)
-        
-        try:
-            df_train, df_test = load_data_split.load_train_test_split()
-            load_data_split.print_split_info()
-        finally:
-            os.chdir(original_cwd)
-        
-        log(f"[Split] Loaded train: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
-        log(f"[Split] Loaded test: {len(df_test)} samples ({df_test['reaction_id'].nunique()} groups)")
-    except FileNotFoundError as e:
-        raise FileNotFoundError(
-            f"Global train/test split not found!\n"
-            f"{e}\n"
-            f"Please create the central split first:\n"
-            f"  cd copol_prediction && python create_data_split.py"
-        )
-
-    # ---------------- 2) Apply filters to both train and test ----------------
-    def apply_filters_to_set(df_set, set_name):
-        """Apply filters to a dataset (train or test)."""
-        w = df_set.copy()
-        t0 = len(w)
-        
-        # Basic validation (should already be done, but double-check)
-        w = w[w['r1r2'].notna() & (w['r1r2'] >= 0)]
-        if len(w) < t0:
-            log(f"[{set_name}] r1r2 valid: {t0} → {len(w)}")
-
-        # specialized filter
-        if filters.get('remove_specialized', False):
-            if 'llm_specialized_filter' not in w.columns:
-                for spec_path in [
-                    "../../copol_prediction/filter/llm_specialized_filter/classified_output.csv",
-                    "../copol_prediction/filter/llm_specialized_filter/classified_output.csv",
-                ]:
-                    if os.path.exists(spec_path):
-                        df_spec = pd.read_csv(spec_path)
-                        if {'specialized_filter','reaction_id'}.issubset(df_spec.columns):
-                            df_spec = df_spec[['reaction_id','specialized_filter']].rename(
-                                columns={'specialized_filter':'llm_specialized_filter'}
-                            )
-                            w = w.merge(df_spec, on='reaction_id', how='left')
-                            log(f"[{set_name}] merged specialized filter from {spec_path}")
-                            break
-            if 'llm_specialized_filter' in w.columns:
-                t1 = len(w)
-                w = w[w['llm_specialized_filter'] != 'specialized']
-                log(f"[{set_name}] remove specialized: {t1} → {len(w)}")
-
-        # polymerization filter
-        if filters.get('apply_polymerization_filter', False):
-            if 'polymerization_type' in w.columns:
-                t2 = len(w)
-                w = w[w['polymerization_type'].notna() & (w['polymerization_type'] != "")]
-                log(f"[{set_name}] polymerization filter: {t2} → {len(w)}")
-
-        # Ensure target class exists (should already exist from split creation)
-        if 'r_product_class' not in w.columns:
-            bins = [-np.inf, 1, 25, np.inf]
-            labels = [0, 1, 2]
-            w['r_product_class'] = pd.cut(w['r1r2'], bins=bins, labels=labels, right=False).astype(int)
-            
-            # extreme override
-            if {'constant_1','constant_2'}.issubset(w.columns):
-                mask_ext = (((w['constant_1'] <= 0.1) & (w['constant_2'] > 25)) |
-                            ((w['constant_2'] <= 0.1) & (w['constant_1'] > 25)))
-                w.loc[mask_ext, 'r_product_class'] = 2
-
-        return w
-    
-    df_train = apply_filters_to_set(df_train, "Train")
-    df_test = apply_filters_to_set(df_test, "Test")
-
-    # ---------------- 3) Get features and remove NaN ----------------
-    available_features = [c for c in prediction_utils.feature_columns if c in df_train.columns]
-    if not available_features:
-        raise RuntimeError("No features found from prediction_utils.feature_columns.")
-    
-    log(f"\n[Features] Using {len(available_features)} features")
-
-    # Remove NaN in features/target for both sets
-    for df_set, set_name in [(df_train, "Train"), (df_test, "Test")]:
-        X_set = df_set[available_features]
-        y_set = df_set['r_product_class'].astype(int)
-        mask = ~(X_set.isna().any(axis=1) | y_set.isna())
-        before = len(df_set)
-        if set_name == "Train":
-            df_train = df_set[mask].reset_index(drop=True)
-            after = len(df_train)
-        else:
-            df_test = df_set[mask].reset_index(drop=True)
-            after = len(df_test)
-        if before > after:
-            log(f"[{set_name}] NaN-drop: {before} → {after}")
-
-    # ---------------- 4) Add negative data to TRAIN only ----------------
-    if filters.get('add_negative_data', False):
-        neg_paths = [
-            "../../copol_prediction/filter/artificial_datapoints/processed_combined_augmented.csv",
-            "../copol_prediction/filter/artificial_datapoints/processed_combined_augmented.csv",
-        ]
-        loaded = False
-        for p in neg_paths:
-            if os.path.exists(p):
-                dn = pd.read_csv(p)
-                if 'Class' in dn.columns:
-                    dn = dn.rename(columns={'Class':'r_product_class'})
-                    dn['r_product_class'] = dn['r_product_class'].astype(int)
-                    if 'reaction_id' not in dn.columns:
-                        dn['reaction_id'] = [f"neg_{i}" for i in range(len(dn))]
-                    df_train = pd.concat([df_train, dn], ignore_index=True)
-                    log(f"[Train] add negative: +{len(dn)} from {p}")
-                    loaded = True
-                    break
-        if not loaded:
-            log("[Train] ⚠ negative data not found")
-
-    # Final check
-    if len(df_test) == 0:
-        raise RuntimeError("Test set is empty after filtering")
-
-    log(f"\n[Final] Train={len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
-    log(f"[Final] Test={len(df_test)} samples ({df_test['reaction_id'].nunique()} groups)")
-    
-    return df_train, df_test, available_features
-
-
-
-def run_single_configuration(df, filters, config):
-    """
-    Train and evaluate model with specific filter configuration.
-    Uses global train/test split for consistency.
-    
-    Args:
-        df: Input dataframe (not used, kept for compatibility)
-        filters: Dictionary of filter settings
-        config: Configuration dictionary
-        
-    Returns:
-        Dictionary with results
-    """
-    print("\n" + "="*60)
-    run_name = f"spec{int(filters['remove_specialized'])}_poly{int(filters.get('apply_polymerization_filter', False))}_neg{int(filters['add_negative_data'])}_aug{int(filters['use_augmentation'])}"
-    print(f"Running: {run_name}")
-    print(f"  Filters requested:")
-    print(f"    remove_specialized: {filters['remove_specialized']}")
-    print(f"    apply_polymerization_filter: {filters.get('apply_polymerization_filter', False)}")
-    print(f"    add_negative_data: {filters['add_negative_data']}")
-    print(f"    use_augmentation: {filters['use_augmentation']}")
-    print(f"  Hyperparameter search iterations: {config['n_iter']}")
-    print("="*60)
-    
-    # Prepare data (loads global split and applies filters)
-    df_train, df_test, features = prepare_filtered_data(df, filters, config)
-    
-    print(f"\n  Data sizes after filtering:")
-    print(f"    Training set: {len(df_train)} samples")
-    print(f"    Test set: {len(df_test)} samples")
-    print(f"    Number of features: {len(features)}")
-    
-    # Apply augmentation if configured (TRAIN ONLY)
-    if filters['use_augmentation']:
-        original_train_len = len(df_train)
-        df_train_aug = data_augmentation.augment_with_gaussian_samples(
-            df_train,
-            num_samples=config['augmentation_samples'],
-            std_factor=0.3,
-            random_state=config['random_state']
-        )
-        added = len(df_train_aug) - original_train_len
-        print(f"  [+] Augmentation: added {added} samples (total: {len(df_train_aug)})")
+    neg_path = os.path.join(copol_dir, 'filter', 'artificial_datapoints',
+                            'processed_combined_augmented.csv')
+    df_neg = None
+    if os.path.exists(neg_path):
+        df_neg = pd.read_csv(neg_path)
+        if 'Class' in df_neg.columns:
+            df_neg = df_neg.rename(columns={'Class': 'r_product_class'})
+        df_neg['r_product_class'] = df_neg['r_product_class'].astype(int)
+        if 'reaction_id' not in df_neg.columns:
+            df_neg['reaction_id'] = [f"neg_{i}" for i in range(len(df_neg))]
+        print(f"Negative data loaded: {len(df_neg)} samples")
     else:
-        df_train_aug = df_train
-        print(f"  [-] No augmentation applied (training with {len(df_train)} samples)")
-    
-    # Prepare training data
-    X_train = df_train_aug[features]
-    y_train = df_train_aug['r_product_class'].astype(int).values
-    groups = df_train_aug['reaction_id'].astype(str).values
-    
-    # Calculate class weights
+        print(f"WARNING: Negative data not found at {neg_path}")
+
+    # Filter out rows with unparseable SMILES to prevent RDKit segfaults
+    print("Validating SMILES …")
+    df_train = filter_valid_smiles(df_train)
+    df_val = filter_valid_smiles(df_val)
+    if df_neg is not None:
+        df_neg = filter_valid_smiles(df_neg)
+
+    return df_train, df_val, df_neg
+
+
+def apply_cleaning_filters(df, remove_specialized, apply_poly_filter,
+                           set_name="Data"):
+    """Apply data-quality filters (specialized removal, poly-type filter)."""
+    w = df.copy()
+    t0 = len(w)
+
+    w = w[w['r1r2'].notna() & (w['r1r2'] >= 0)]
+    if len(w) < t0:
+        print(f"    [{set_name}] r1r2 valid: {t0} -> {len(w)}")
+
+    if remove_specialized:
+        for spec_path in [
+            os.path.join(_PROJECT_ROOT,
+                         "copol_prediction/filter/llm_specialized_filter/classified_output.csv"),
+        ]:
+            if 'llm_specialized_filter' not in w.columns and os.path.exists(spec_path):
+                df_spec = pd.read_csv(spec_path)
+                if {'specialized_filter', 'reaction_id'}.issubset(df_spec.columns):
+                    df_spec = df_spec[['reaction_id', 'specialized_filter']].rename(
+                        columns={'specialized_filter': 'llm_specialized_filter'})
+                    w = w.merge(df_spec, on='reaction_id', how='left')
+                    break
+        if 'llm_specialized_filter' in w.columns:
+            t1 = len(w)
+            w = w[w['llm_specialized_filter'] != 'specialized']
+            if len(w) < t1:
+                print(f"    [{set_name}] specialized: {t1} -> {len(w)}")
+
+    if apply_poly_filter and 'polymerization_type' in w.columns:
+        t2 = len(w)
+        w = w[w['polymerization_type'].notna() & (w['polymerization_type'] != "")]
+        if len(w) < t2:
+            print(f"    [{set_name}] poly filter: {t2} -> {len(w)}")
+
+    if 'r_product_class' not in w.columns:
+        bins = [-np.inf, 1, 25, np.inf]
+        labels_cls = [0, 1, 2]
+        w['r_product_class'] = pd.cut(
+            w['r1r2'], bins=bins, labels=labels_cls, right=False
+        ).astype(int)
+        if {'constant_1', 'constant_2'}.issubset(w.columns):
+            mask_ext = (
+                ((w['constant_1'] <= 0.1) & (w['constant_2'] > 25)) |
+                ((w['constant_2'] <= 0.1) & (w['constant_1'] > 25))
+            )
+            w.loc[mask_ext, 'r_product_class'] = 2
+
+    return w
+
+
+def remove_nan_rows(df, features):
+    """Drop rows with NaN in features or target."""
+    X = df[features]
+    y = df['r_product_class'].astype(int)
+    mask = ~(X.isna().any(axis=1) | y.isna())
+    return df[mask].reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Training helper
+# ---------------------------------------------------------------------------
+PARAM_GRID = {
+    'n_estimators': [500, 600, 700],
+    'max_depth': [4, 5, 6],
+    'learning_rate': [0.04, 0.05, 0.06],
+    'subsample': [0.85, 0.9, 0.95],
+    'colsample_bytree': [0.85, 0.9, 1.0],
+    'reg_alpha': [0.0, 0.1, 0.3],
+    'reg_lambda': [1.0, 1.5, 2.0],
+    'min_child_weight': [2, 3, 5],
+    'gamma': [0.3, 0.5, 0.7],
+}
+
+
+def train_xgboost_model(df_train, features, config):
+    """Train an XGBoost model on the given data.
+
+    Returns (model, cv_score, best_params).
+    """
+    X_train = df_train[features]
+    y_train = df_train['r_product_class'].astype(int).values
+    groups = df_train['reaction_id'].astype(str).values
+
     class_weights = model_training.calculate_class_weights(y_train)
-    
-    # Print class distribution
-    class_counts = pd.Series(y_train).value_counts().sort_index()
-    print(f"\n  Class distribution in training set:")
-    for cls, count in class_counts.items():
-        pct = 100 * count / len(y_train)
-        print(f"    Class {cls}: {count:4d} samples ({pct:5.1f}%) | weight: {class_weights.get(cls, 1.0):.3f}")
-    
-    # Hyperparameter grid (matching train_final_model.py for consistency)
-    param_grid = {
-        'n_estimators': [500, 600, 700],
-        'max_depth': [4, 5, 6],
-        'learning_rate': [0.04, 0.05, 0.06],
-        'subsample': [0.85, 0.9, 0.95],
-        'colsample_bytree': [0.85, 0.9, 1.0],
-        'reg_alpha': [0.0, 0.1, 0.3],
-        'reg_lambda': [1.0, 1.5, 2.0],
-        'min_child_weight': [2, 3, 5],
-        'gamma': [0.3, 0.5, 0.7],
-    }
-    
-    # Train with CV
-    print("  Training with cross-validation...")
+
     train_result = model_training.train_xgboost_with_cv(
-        X_train=X_train,
-        y_train=y_train,
-        groups=groups,
-        param_grid=param_grid,
-        n_iter=config['n_iter'],
-        cv=5,
-        random_state=config['random_state'],
-        class_weights=class_weights,
-        n_jobs=-1
+        X_train=X_train, y_train=y_train, groups=groups,
+        param_grid=PARAM_GRID, n_iter=config['n_iter'],
+        cv=5, random_state=config['random_state'],
+        class_weights=class_weights, n_jobs=-1,
     )
-    
-    print(f"  Best CV score: {train_result['best_score']:.4f}")
-    
-    # Train final model
+
     final_model = model_training.train_final_model(
-        X_train=X_train,
-        y_train=y_train,
+        X_train=X_train, y_train=y_train,
         params=train_result['best_params'],
         class_weights=class_weights,
-        random_state=config['random_state']
+        random_state=config['random_state'],
     )
-    
-    # Evaluate on test set
-    if len(df_test) > 0:
-        X_test = df_test[features]
-        y_test = df_test['r_product_class'].astype(int).values
-        
-        # Print test class distribution
-        test_class_counts = pd.Series(y_test).value_counts().sort_index()
-        print(f"\n  Class distribution in test set:")
-        for cls, count in test_class_counts.items():
-            pct = 100 * count / len(y_test)
-            print(f"    Class {cls}: {count:4d} samples ({pct:5.1f}%)")
-        
-        test_results = evaluation.evaluate_model(
-            model=final_model,
-            X_test=X_test,
-            y_test=y_test,
-            labels=[0, 1, 2]
-        )
-        
-        # Print macro metrics
-        print("\n" + "-"*60)
-        print("TEST SET EVALUATION RESULTS")
-        print("-"*60)
-        print(f"  Accuracy:          {test_results['accuracy']:.4f}")
-        print(f"  F1 (macro):        {test_results['f1_macro']:.4f}")
-        print(f"  Precision (macro): {test_results['precision_macro']:.4f}")
-        print(f"  Recall (macro):    {test_results['recall_macro']:.4f}")
-        print(f"  F1 (weighted):     {test_results['f1_weighted']:.4f} (for comparison)")
-        
-        # Print confusion matrix
-        print("\nConfusion Matrix:")
-        cm = test_results['confusion_matrix']
-        print("     Predicted")
-        print("        0    1    2")
-        for i, row in enumerate(cm):
-            if i == 0:
-                print(f"True 0 [{row[0]:4d} {row[1]:4d} {row[2]:4d}]")
-            else:
-                print(f"     {i} [{row[0]:4d} {row[1]:4d} {row[2]:4d}]")
-        
-        # Print per-class metrics from classification report
-        print("\nPer-Class Metrics:")
-        report = test_results['classification_report']
-        print(report)
-        
-        print("-"*60 + "\n")
-        
-        # Save confusion matrix as individual plot
-        cm_filename = f"confusion_matrix_{run_name}.png"
-        plot_confusion_matrix(
-            cm=test_results['confusion_matrix'],
-            labels=[0, 1, 2],
-            title=f"Confusion Matrix: {run_name}",
-            save_path=os.path.join(config['plots_dir'], cm_filename)
-        )
-        
-        # Save test results
-        test_filename = f"test_{run_name}.json"
-        evaluation.save_holdout_metrics_json(
-            y_true=y_test,
-            y_pred=test_results['predictions'],
-            labels=[0, 1, 2],
-            out_dir=config['output_dir'],
-            filename=test_filename
-        )
-        
-        return {
-            'run_name': run_name,
-            'filters': filters,
-            'best_params': train_result['best_params'],
-            'cv_score': train_result['best_score'],
-            'holdout_accuracy': test_results['accuracy'],
-            'holdout_f1_macro': test_results['f1_macro'],
-            'holdout_f1_weighted': test_results['f1_weighted'],
-            'holdout_precision_macro': test_results['precision_macro'],
-            'holdout_recall_macro': test_results['recall_macro'],
-            'confusion_matrix': test_results['confusion_matrix'].tolist(),
-            'cm_plot': cm_filename,
-            'n_train': len(df_train),
-            'n_holdout': len(df_test)
-        }
-    else:
-        print("  Warning: Empty test set!")
-        return None
+
+    return final_model, train_result['best_score'], train_result['best_params']
 
 
-# Plot functions moved to plot_sweep_results.py
-# Define local version with updated style (no grid, larger font, no title)
-def plot_confusion_matrix(cm, labels, title, save_path):
-    """
-    Plot and save a confusion matrix.
-    Updated style: no grid, larger font, no title.
-    
-    Args:
-        cm: Confusion matrix array
-        labels: Class labels
-        title: Plot title (not used, kept for compatibility)
-        save_path: Path to save the plot
-    """
-    fig, ax = plt.subplots(figsize=(8, 6))
-    
-    # Plot confusion matrix
-    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
-    plt.colorbar(im, ax=ax)
-    
-    # No grid
-    ax.grid(False)
-    
-    # Set labels with larger font
-    tick_marks = np.arange(len(labels))
-    ax.set_xticks(tick_marks)
-    ax.set_yticks(tick_marks)
-    ax.set_xticklabels(labels, fontsize=16)
-    ax.set_yticklabels(labels, fontsize=16)
-    ax.set_xlabel('Predicted Class', fontsize=16, fontweight='bold')
-    ax.set_ylabel('True Class', fontsize=16, fontweight='bold')
-    
-    # Annotate cells with larger font
-    for i in range(cm.shape[0]):
-        for j in range(cm.shape[1]):
-            ax.text(j, i, int(cm[i, j]),
-                   ha="center", va="center",
-                   color="white" if cm[i, j] > cm.max() / 2 else "black",
-                   fontsize=18, fontweight='bold')
-    
-    # No title
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.close()
-    print(f"  Saved confusion matrix to {save_path}")
-
-
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 def main():
-    """Main sweep pipeline."""
     args = parse_args()
-    
     config = {
-        'data_path': args.data_path,
         'output_dir': args.output_dir,
         'plots_dir': args.plots_dir,
         'random_state': args.random_state,
         'n_iter': args.n_iter,
         'augmentation_samples': args.augmentation_samples,
     }
-    
-    print("="*60)
-    print("FILTER SWEEP - COPOLYMERIZATION PREDICTION")
-    print("="*60)
-    print(f"\nConfiguration:")
-    print(f"  Data path: {config['data_path']}")
-    print(f"  Output dir: {config['output_dir']}")
-    print(f"  Plots dir: {config['plots_dir']}")
-    print(f"  Random state: {config['random_state']}")
-    print(f"  Hyperparam iterations: {config['n_iter']}")
-    
-    # Define search space (all 4x4 = 16 combinations)
-    search_space = {
-        "remove_specialized": [False, True],
-        "apply_polymerization_filter": [False, True],  # Now enabled for 4x4 matrix
-        "add_negative_data": [False, True],
-        "use_augmentation": [False, True],
-    }
-    
-    print(f"\nSearch space:")
-    for key, values in search_space.items():
-        print(f"  {key}: {values}")
-    
-    total_combinations = np.prod([len(v) for v in search_space.values()])
-    print(f"\nTotal combinations: {total_combinations}")
-    
-    # Check for global train/test split
-    print("\n" + "="*60)
-    print("CHECKING GLOBAL TRAIN/TEST SPLIT")
-    print("="*60)
-    
-    # Use the same utility function as train_final_model.py
-    script_dir = os.path.dirname(__file__)
-    copol_pred_dir = os.path.join(script_dir, '../../copol_prediction')
-    copol_pred_dir = os.path.abspath(copol_pred_dir)
-    
-    original_cwd = os.getcwd()
-    os.chdir(copol_pred_dir)
-    
-    try:
-        df_train_check, df_test_check = load_data_split.load_train_test_split()
-        load_data_split.print_split_info()
-        print(f"\n✓ Using central train/test split from: {os.path.join(copol_pred_dir, 'artifacts/data_splits/')}")
-    except FileNotFoundError as e:
-        print("\nError: Global train/test split not found!")
-        print(f"{e}")
-        print("\nPlease run the following command to create the split:")
-        print("  cd copol_prediction")
-        print("  python create_data_split.py")
-        sys.exit(1)
-    finally:
-        os.chdir(original_cwd)
-    
-    # Create output directories
+
     os.makedirs(config['output_dir'], exist_ok=True)
     os.makedirs(config['plots_dir'], exist_ok=True)
-    
-    # Run sweep
-    print("\n" + "="*60)
-    print("RUNNING SWEEP")
-    print("="*60)
-    
-    results = []
-    for i, filters in enumerate(generate_filter_combinations(search_space), 1):
-        print(f"\n[{i}/{total_combinations}] Configuration: {filters}")
-        
+
+    # ------------------------------------------------------------------
+    # Plot-only mode
+    # ------------------------------------------------------------------
+    if args.plot_only:
+        csv_path = os.path.join(config['output_dir'], 'sweep_results.csv')
+        if not os.path.exists(csv_path):
+            print(f"Error: {csv_path} not found. Run without --plot-only first.")
+            sys.exit(1)
+        print("=" * 60)
+        print("PLOT-ONLY MODE")
+        print("=" * 60)
+        results_df = pd.read_csv(csv_path)
+        print(f"  Loaded {len(results_df)} configurations from {csv_path}")
         try:
-            # Note: df=None is passed but not used (data loaded from global split)
-            result = run_single_configuration(df=None, filters=filters, config=config)
-            if result:
-                results.append(result)
-        except Exception as e:
-            print(f"  ERROR: {e}")
-            import traceback
-            traceback.print_exc()
-    
-    # Save results
-    print("\n" + "="*60)
-    print("RESULTS")
-    print("="*60)
-    
+            from plot_sweep_results import plot_sweep_results
+            plot_sweep_results(results_df, config['plots_dir'])
+        except ImportError:
+            print("  Error: Could not import plot_sweep_results.")
+        print("\nDone.")
+        return
+
+    print("=" * 60)
+    print("FILTER SWEEP — VOTING MODEL (XGBoost + Lookup)")
+    print("=" * 60)
+    print(f"  Output dir:  {config['output_dir']}")
+    print(f"  Plots dir:   {config['plots_dir']}")
+    print(f"  HP iters:    {config['n_iter']}")
+    print(f"  Random seed: {config['random_state']}")
+
+    # ------------------------------------------------------------------
+    # 1. Load base data
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
+    print("LOADING DATA")
+    print("=" * 60)
+
+    df_train_base, df_val_base, df_neg = load_base_data()
+
+    # ------------------------------------------------------------------
+    # 2. Pre-compute fingerprints for all SMILES (used by Lookup)
+    # ------------------------------------------------------------------
+    print("\nPre-computing fingerprint cache …")
+    smiles_cols = ['monomer1_smiles', 'monomer2_smiles', 'solvent_smiles']
+    all_smiles = set()
+    for data in [df_train_base, df_val_base] + ([df_neg] if df_neg is not None else []):
+        for col in smiles_cols:
+            if col in data.columns:
+                all_smiles.update(data[col].dropna().unique())
+    fp_dict = compute_fingerprints_for_smiles(list(all_smiles))
+    n_valid = sum(1 for v in fp_dict.values() if v is not None)
+    print(f"  Cached fingerprints for {n_valid}/{len(all_smiles)} unique SMILES")
+
+    # ------------------------------------------------------------------
+    # 3. Prepare cleaned data for each (spec, poly) combo
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
+    print("PREPARING CLEANED DATA VARIANTS")
+    print("=" * 60)
+
+    features_map = {}      # (spec, poly) -> features list
+    cleaned_cache = {}      # (spec, poly) -> (df_train_clean, df_test_clean)
+
+    for spec in [False, True]:
+        for poly in [False, True]:
+            key = (spec, poly)
+            print(f"\n  Cleaning variant spec={spec} poly={poly} …")
+            df_tr = apply_cleaning_filters(df_train_base, spec, poly, "Train")
+            df_te = apply_cleaning_filters(df_val_base, spec, poly, "Validation")
+
+            feats = [c for c in prediction_utils.feature_columns if c in df_tr.columns]
+            df_tr = remove_nan_rows(df_tr, feats)
+            df_te = remove_nan_rows(df_te, feats)
+
+            print(f"    Train: {len(df_tr)} | Validation: {len(df_te)} | Features: {len(feats)}")
+
+            features_map[key] = feats
+            cleaned_cache[key] = (df_tr, df_te)
+
+    # ------------------------------------------------------------------
+    # 4. Train all unique XGBoost models
+    #    Unique key: (spec, poly, aug, neg_in_xgb)  -> 16 models
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
+    print("TRAINING XGBOOST MODELS (cached)")
+    print("=" * 60)
+
+    xgb_cache = {}   # key -> (model, cv_score, n_train)
+    xgb_keys = set()
+    for spec, poly, aug, neg_data in itertools.product(
+        [False, True], [False, True], [False, True], [False, True]
+    ):
+        xgb_keys.add((spec, poly, aug, neg_data))
+
+    xgb_keys = sorted(xgb_keys)
+    for i, (spec, poly, aug, neg_data) in enumerate(xgb_keys, 1):
+        key_str = f"spec={int(spec)} poly={int(poly)} aug={int(aug)} neg={int(neg_data)}"
+        print(f"\n[XGBoost {i}/{len(xgb_keys)}] {key_str}")
+
+        df_tr, _ = cleaned_cache[(spec, poly)]
+        feats = features_map[(spec, poly)]
+
+        df_train_xgb = df_tr.copy()
+        if neg_data and df_neg is not None:
+            df_train_xgb = pd.concat([df_train_xgb, df_neg], ignore_index=True)
+            df_train_xgb = remove_nan_rows(df_train_xgb, feats)
+
+        if aug:
+            original_len = len(df_train_xgb)
+            df_train_xgb = data_augmentation.augment_with_gaussian_samples(
+                df_train_xgb,
+                num_samples=config['augmentation_samples'],
+                std_factor=0.3,
+                random_state=config['random_state'],
+            )
+            print(f"  Augmentation: {original_len} -> {len(df_train_xgb)}")
+
+        class_counts = pd.Series(
+            df_train_xgb['r_product_class'].astype(int).values
+        ).value_counts().sort_index()
+        print(f"  Train size: {len(df_train_xgb)}  |  Classes: {dict(class_counts)}")
+
+        model, cv_score, best_params = train_xgboost_model(df_train_xgb, feats, config)
+        print(f"  CV score: {cv_score:.4f}")
+
+        xgb_cache[(spec, poly, aug, neg_data)] = (model, cv_score, len(df_train_xgb))
+
+    # ------------------------------------------------------------------
+    # 5. Compute all unique Lookup prediction sets
+    #    Unique key: (spec, poly, neg_in_lookup)  -> 8 sets
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
+    print("COMPUTING LOOKUP PREDICTIONS (cached)")
+    print("=" * 60)
+
+    lookup_cache = {}  # key -> (lookup_pred, n_train_lookup)
+    # Note: Negative data is NOT added to Lookup pool (only to XGBoost training)
+    lookup_keys = []
+    for spec, poly in itertools.product([False, True], [False, True]):
+        lookup_keys.append((spec, poly))
+
+    lookup_keys = sorted(lookup_keys)
+    for i, (spec, poly) in enumerate(lookup_keys, 1):
+        key_str = f"spec={int(spec)} poly={int(poly)}"
+        print(f"\n[Lookup {i}/{len(lookup_keys)}] {key_str}")
+
+        df_tr, df_te = cleaned_cache[(spec, poly)]
+        feats = features_map[(spec, poly)]
+
+        # Lookup pool: NO negative data (only original training data)
+        df_train_lookup = df_tr.copy()
+
+        y_train_lu = df_train_lookup['r_product_class'].astype(int).values
+        print(f"  Lookup pool: {len(df_train_lookup)} samples (no negative data)")
+
+        lu_pred, _ = compute_naive_baseline_predictions_with_similarity(
+            df_te, df_train_lookup, y_train_lu, feats, fp_dict=fp_dict
+        )
+        lookup_cache[(spec, poly)] = (lu_pred, len(df_train_lookup))
+
+    # ------------------------------------------------------------------
+    # 6. Evaluate all 16 voting combinations
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
+    print("EVALUATING VOTING COMBINATIONS")
+    print("=" * 60)
+
+    search_space = list(itertools.product(
+        [False, True],      # remove_specialized
+        [False, True],      # apply_polymerization_filter
+        [False, True],      # use_augmentation
+        [False, True],      # add_negative_data (XGBoost only, NOT for Lookup)
+    ))
+
+    results = []
+    for idx, (spec, poly, aug, neg_data) in enumerate(search_space, 1):
+        run_name = (f"spec{int(spec)}_poly{int(poly)}"
+                    f"_aug{int(aug)}_neg{int(neg_data)}")
+        print(f"\n[{idx}/{len(search_space)}] {run_name}")
+
+        # Retrieve cached data
+        _, df_te = cleaned_cache[(spec, poly)]
+        feats = features_map[(spec, poly)]
+        model, cv_score, n_train_xgb = xgb_cache[(spec, poly, aug, neg_data)]
+        # Lookup pool: NO negative data (only spec/poly filters)
+        lu_pred, n_train_lookup = lookup_cache[(spec, poly)]
+
+        # XGBoost predictions
+        X_test = df_te[feats]
+        y_test = df_te['r_product_class'].astype(int).values
+        xgb_pred = model.predict(X_test)
+
+        # Voting
+        models_agree = (xgb_pred == lu_pred)
+        n_agree = int(models_agree.sum())
+        n_total = len(y_test)
+        coverage = n_agree / n_total
+
+        y_true_v = y_test[models_agree]
+        y_pred_v = xgb_pred[models_agree]
+
+        if len(y_true_v) == 0:
+            print(f"  WARNING: No samples where models agree — skipping")
+            continue
+
+        macro_acc = balanced_accuracy_score(y_true_v, y_pred_v)
+        macro_prec = precision_score(y_true_v, y_pred_v, average='macro',
+                                     zero_division=0)
+        per_cls_acc = recall_score(y_true_v, y_pred_v, labels=[0, 1, 2],
+                                   average=None, zero_division=0)
+        cm = sk_confusion_matrix(y_true_v, y_pred_v, labels=[0, 1, 2])
+
+        print(f"  Macro Acc: {macro_acc:.4f}  |  Macro Prec: {macro_prec:.4f}  "
+              f"|  Coverage: {coverage:.1%}  |  Voting: {n_agree}/{n_total}")
+
+        results.append({
+            'run_name': run_name,
+            'remove_specialized': spec,
+            'apply_polymerization_filter': poly,
+            'use_augmentation': aug,
+            'add_negative_data': neg_data,
+            'cv_score': cv_score,
+            'macro_accuracy': macro_acc,
+            'macro_precision': macro_prec,
+            'coverage': coverage,
+            'per_class_acc_0': float(per_cls_acc[0]),
+            'per_class_acc_1': float(per_cls_acc[1]),
+            'per_class_acc_2': float(per_cls_acc[2]),
+            'confusion_matrix': cm.tolist(),
+            'n_train_xgb': n_train_xgb,
+            'n_train_lookup': n_train_lookup,
+            'n_test': n_total,
+            'n_voting': n_agree,
+        })
+
+    # ------------------------------------------------------------------
+    # 7. Save results
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
+    print("SAVING RESULTS")
+    print("=" * 60)
+
     if not results:
         print("No successful runs!")
         sys.exit(1)
-    
+
     results_df = pd.DataFrame(results)
-    
-    # Save to CSV
+
     csv_path = os.path.join(config['output_dir'], 'sweep_results.csv')
     results_df.to_csv(csv_path, index=False)
-    print(f"\nResults saved to: {csv_path}")
-    
-    # Save to JSON
+    print(f"  CSV: {csv_path}")
+
     json_path = os.path.join(config['output_dir'], 'sweep_results.json')
     with open(json_path, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"Results saved to: {json_path}")
-    
-    # Print summary
-    print("\n" + "="*60)
+    print(f"  JSON: {json_path}")
+
+    # ------------------------------------------------------------------
+    # 8. Print summary
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
     print("SUMMARY")
-    print("="*60)
-    
-    results_sorted = results_df.sort_values('holdout_f1_macro', ascending=False)
-    
-    print("\nTop 5 configurations by F1 (macro) score:")
-    print(results_sorted[['run_name', 'holdout_accuracy', 'holdout_f1_macro', 'holdout_precision_macro', 'holdout_recall_macro']].head())
-    
-    best_config = results_sorted.iloc[0]
-    print(f"\n🏆 Best configuration: {best_config['run_name']}")
-    print(f"   Accuracy: {best_config['holdout_accuracy']:.4f}")
-    print(f"   F1 (macro): {best_config['holdout_f1_macro']:.4f}")
-    print(f"   Precision (macro): {best_config['holdout_precision_macro']:.4f}")
-    print(f"   Recall (macro): {best_config['holdout_recall_macro']:.4f}")
-    print(f"   Filters: {best_config['filters']}")
-    
-    # Create plots
-    print("\n" + "="*60)
+    print("=" * 60)
+
+    results_sorted = results_df.sort_values('macro_accuracy', ascending=False)
+
+    print(f"\n{'Run':<40} {'Macro Acc':>10} {'Macro Prec':>11} "
+          f"{'Coverage':>9} {'Voting':>7}")
+    print("-" * 82)
+    for _, r in results_sorted.head(10).iterrows():
+        print(f"{r['run_name']:<40} {r['macro_accuracy']:>10.4f} "
+              f"{r['macro_precision']:>11.4f} {r['coverage']:>9.1%} "
+              f"{r['n_voting']:>7d}")
+
+    best = results_sorted.iloc[0]
+    print(f"\nBest: {best['run_name']}")
+    print(f"  Macro Accuracy:  {best['macro_accuracy']:.4f}")
+    print(f"  Macro Precision: {best['macro_precision']:.4f}")
+    print(f"  Coverage:        {best['coverage']:.1%}")
+
+    # ------------------------------------------------------------------
+    # 9. Generate plots
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 60)
     print("CREATING PLOTS")
-    print("="*60)
-    
-    # Use the plot_sweep_results module
+    print("=" * 60)
+
     try:
         from plot_sweep_results import plot_sweep_results
         plot_sweep_results(results_df, config['plots_dir'])
     except ImportError:
-        print("  Warning: Could not import plot_sweep_results module.")
-        print("  Plots will be generated during training only.")
-        print("  To regenerate plots later, run: python plot_sweep_results.py")
-    
-    print("\n" + "="*60)
+        print("  Warning: Could not import plot_sweep_results.")
+        print("  Run plot_sweep_results.py separately to generate plots.")
+
+    print("\n" + "=" * 60)
     print("SWEEP COMPLETE!")
-    print("="*60)
-    print(f"\nResults: {csv_path}")
-    print(f"Plots: {config['plots_dir']}/")
-    print(f"\nTo train final model with best config, use:")
-    print(f"  python train_final_model.py")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
     main()
-

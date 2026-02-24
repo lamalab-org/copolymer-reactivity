@@ -1,0 +1,35 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "http://dx.doi.org/10.1080/00222338408056545"
+        },
+        "monomers": [
+            {
+                "name": "Ic"
+            },
+            {
+                "name": "chloroprene"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 313.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.2,
+                    "reaction_constant_confi": -0.02
+                },
+                {
+                    "reaction_constant": 1.0,
+                    "reaction_constant_confi": 0.18
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

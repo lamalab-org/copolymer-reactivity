@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-02-19T13:30:10.094444Z",
+  "feature_columns": [
+    "fukui_radical_max_1",
+    "global_electrophilicity_1",
+    "global_nucleophilicity_1",
+    "dipole_x_1",
+    "dipole_y_1",
+    "dipole_z_1",
+    "fukui_radical_max_2",
+    "global_electrophilicity_2",
+    "global_nucleophilicity_2",
+    "dipole_x_2",
+    "dipole_y_2",
+    "dipole_z_2",
+    "delta_HOMO_LUMO_AA",
+    "delta_HOMO_LUMO_AB",
+    "delta_HOMO_LUMO_BB",
+    "delta_HOMO_LUMO_BA",
+    "temperature",
+    "polytype_emb_1",
+    "polytype_emb_2",
+    "method_emb_1",
+    "method_emb_2",
+    "solvent_logP",
+    "solvent_TPSA",
+    "solvent_HBD",
+    "solvent_FractionCSP3",
+    "baseline_class_0",
+    "baseline_class_1",
+    "baseline_class_2",
+    "baseline_distance"
+  ],
+  "class_labels": [
+    0,
+    1,
+    2
+  ],
+  "task": "multiclass_r_product_class",
+  "n_features": 29,
+  "n_classes": 3,
+  "best_params": {
+    "subsample": 0.95,
+    "reg_lambda": 1.5,
+    "reg_alpha": 0.3,
+    "n_estimators": 500,
+    "min_child_weight": 5,
+    "max_depth": 5,
+    "learning_rate": 0.04,
+    "gamma": 0.7,
+    "colsample_bytree": 0.9
+  },
+  "cv_score": 0.8673394582280981,
+  "holdout_accuracy": 0.7133431085043989,
+  "holdout_f1_weighted": 0.7251091324654906,
+  "holdout_f1_macro": 0.5644487152664515,
+  "class_weights": {
+    "0": 0.4342,
+    "1": 1.7538,
+    "2": 7.8915
+  },
+  "training_config": {
+    "augmentation_used": true,
+    "augmentation_samples": 5,
+    "negative_data_used": false,
+    "specialized_removed_from_training": true,
+    "specialized_removed_from_test": false,
+    "used_central_split": true,
+    "random_state": 42,
+    "feature_type": "baseline_predictions_only"
+  }
+}

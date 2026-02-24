@@ -1,0 +1,37 @@
+group_label,features,n_features,importance_mean,importance_std
+temperature,temperature,1,0.21049885,0.16642375
+solvent_logp,solvent_logp,1,0.17875661,0.0943657
+polytype_emb_1,polytype_emb_1,1,0.12600182,0.08138797
+delta_HOMO_LUMO_AB (+3),delta_HOMO_LUMO_AB|delta_HOMO_LUMO_BB|ea_2|lumo_2,4,0.12529704,0.055121135
+charges_min_2,charges_min_2,1,0.12432244,0.09985884
+delta_HOMO_LUMO_AA (+3),delta_HOMO_LUMO_AA|delta_HOMO_LUMO_BA|ea_1|lumo_1,4,0.12155469,0.055337965
+polytype_emb_2,polytype_emb_2,1,0.1061655,0.10920673
+method_emb_1,method_emb_1,1,0.10553331,0.11434265
+charges_min_1,charges_min_1,1,0.1051657,0.08730008
+solvent_FractionCSP3,solvent_FractionCSP3,1,0.09675333,0.07591847
+dipole_x_1,dipole_x_1,1,0.0963251,0.10182112
+dipole_x_2,dipole_x_2,1,0.09287987,0.1006098
+charges_mean_2,charges_mean_2,1,0.08892604,0.039721094
+charges_mean_1,charges_mean_1,1,0.0832309,0.039438896
+dipole_y_1,dipole_y_1,1,0.08139757,0.07702241
+charges_max_1,charges_max_1,1,0.077465564,0.048452128
+charges_max_2,charges_max_2,1,0.07397151,0.046070818
+dipole_z_1,dipole_z_1,1,0.07102243,0.041728713
+dipole_y_2,dipole_y_2,1,0.06452014,0.06201295
+homo_2,homo_2,1,0.06401717,0.050758526
+homo_1,homo_1,1,0.06105578,0.05174484
+dipole_z_2,dipole_z_2,1,0.061021797,0.03666245
+best_conformer_energy_2,best_conformer_energy_2,1,0.05216037,0.034768824
+fukui_electrophilicity_min_1 (+2),fukui_electrophilicity_min_1|fukui_nucleophilicity_min_1|fukui_radical_min_1,3,0.0500625,0.028569413
+fukui_electrophilicity_min_2 (+2),fukui_electrophilicity_min_2|fukui_nucleophilicity_min_2|fukui_radical_min_2,3,0.048956092,0.031391345
+best_conformer_energy_1,best_conformer_energy_1,1,0.04840909,0.034934506
+method_emb_2,method_emb_2,1,0.044594932,0.068510614
+fukui_electrophilicity_max_1 (+2),fukui_electrophilicity_max_1|fukui_nucleophilicity_max_1|fukui_radical_max_1,3,0.04167952,0.026090693
+fukui_electrophilicity_max_2 (+2),fukui_electrophilicity_max_2|fukui_nucleophilicity_max_2|fukui_radical_max_2,3,0.039119367,0.023594996
+global_electrophilicity_1,global_electrophilicity_1,1,0.036216456,0.020935295
+solvent_HBD (+1),solvent_HBD|solvent_TPSA,2,0.035497986,0.032101575
+global_electrophilicity_2,global_electrophilicity_2,1,0.035270363,0.029294662
+global_nucleophilicity_2 (+2),global_nucleophilicity_2|ip_2|ip_corrected_2,3,0.017481666,0.01166351
+global_nucleophilicity_1 (+2),global_nucleophilicity_1|ip_1|ip_corrected_1,3,0.014617319,0.012151519
+fukui_electrophilicity_mean_2 (+2),fukui_electrophilicity_mean_2|fukui_nucleophilicity_mean_2|fukui_radical_mean_2,3,0.007019759,0.004252786
+fukui_electrophilicity_mean_1 (+2),fukui_electrophilicity_mean_1|fukui_nucleophilicity_mean_1|fukui_radical_mean_1,3,0.006935999,0.0039435895

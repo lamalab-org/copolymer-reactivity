@@ -13,7 +13,8 @@ import os
 import sys
 import json
 import hashlib
-from typing import List, Dict, Optional
+import math
+from typing import List, Dict, Optional, Any
 from datetime import datetime
 from pathlib import Path
 
@@ -43,6 +44,30 @@ try:
 except ImportError:
     SIMILARITY_AVAILABLE = False
     print("Warning: paper_similarity module not available. Similar papers feature disabled.")
+
+# Import baseline lookup module
+try:
+    from baseline_lookup import find_top_k_nearest_neighbors
+    BASELINE_LOOKUP_AVAILABLE = True
+except ImportError:
+    BASELINE_LOOKUP_AVAILABLE = False
+    print("Warning: baseline_lookup module not available. Nearest neighbors feature disabled.")
+
+# Import reaction optimization module
+try:
+    from reaction_optimization import create_optimization_grid
+    REACTION_OPTIMIZATION_AVAILABLE = True
+except ImportError:
+    REACTION_OPTIMIZATION_AVAILABLE = False
+    print("Warning: reaction_optimization module not available. Reaction optimization feature disabled.")
+
+# Import solubility check module
+try:
+    from solubility_check import load_solubility_model, get_solubility_issue_flag
+    SOLUBILITY_CHECK_AVAILABLE = True
+except ImportError:
+    SOLUBILITY_CHECK_AVAILABLE = False
+    print("Warning: solubility_check module not available. Solubility check feature disabled.")
 
 # Import monomer feature calculation functions
 try:
@@ -82,6 +107,40 @@ except ImportError:
 
 
 # ============================================================================
+# Helper Functions
+# ============================================================================
+
+def clean_json_values(obj: Any, replace_with_zero: bool = False) -> Any:
+    """
+    Recursively clean NaN, Inf, and -Inf values from dictionaries/lists
+    to make them JSON-serializable. 
+    
+    Args:
+        obj: Object to clean
+        replace_with_zero: If True, replace NaN/Inf with 0.0 instead of None
+    """
+    if isinstance(obj, dict):
+        return {k: clean_json_values(v, replace_with_zero) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [clean_json_values(item, replace_with_zero) for item in obj]
+    elif isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return 0.0 if replace_with_zero else None
+        return obj
+    elif isinstance(obj, (int, str, bool, type(None))):
+        return obj
+    else:
+        # Try to convert to float and check
+        try:
+            float_val = float(obj)
+            if math.isnan(float_val) or math.isinf(float_val):
+                return 0.0 if replace_with_zero else None
+            return float_val
+        except (ValueError, TypeError):
+            return obj
+
+
+# ============================================================================
 # API Models (Request/Response schemas)
 # ============================================================================
 
@@ -108,6 +167,9 @@ class PredictionInput(BaseModel):
             "solvent_FractionCSP3": 0.67
         }
     )
+    monomer1_smiles: Optional[str] = Field(None, description="Optional: SMILES of monomer 1 (for solubility check)")
+    monomer2_smiles: Optional[str] = Field(None, description="Optional: SMILES of monomer 2 (for solubility check)")
+    solvent_smiles: Optional[str] = Field(None, description="Optional: SMILES of solvent (for solubility check)")
 
 
 class BatchPredictionInput(BaseModel):
@@ -129,6 +191,28 @@ class SimilarPaper(BaseModel):
     reaction_info: Dict = Field(..., description="Reaction information from paper")
 
 
+class NearestNeighbor(BaseModel):
+    """Nearest neighbor data point from training database."""
+    rank: int = Field(..., description="Ranking (1-10)")
+    similarity: float = Field(..., description="Similarity score (0-1), higher is more similar")
+    predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)", alias="class")
+    predicted_class_name: str = Field(..., description="Predicted class name: 'alternating', 'random to block like', or 'homopolymer'")
+    monomer1_name: str = Field(..., description="First monomer name")
+    monomer2_name: str = Field(..., description="Second monomer name")
+    monomer1_smiles: str = Field(..., description="First monomer SMILES")
+    monomer2_smiles: str = Field(..., description="Second monomer SMILES")
+    solvent_name: str = Field(..., description="Solvent name")
+    solvent_smiles: str = Field(..., description="Solvent SMILES")
+    temperature: Optional[float] = Field(None, description="Temperature in Celsius")
+    method: Optional[str] = Field(None, description="Polymerization method")
+    polytype: Optional[str] = Field(None, description="Polymerization type")
+    source: Optional[str] = Field(None, description="DOI or original source")
+    reaction_id: Optional[str] = Field(None, description="Reaction ID")
+    
+    class Config:
+        populate_by_name = True
+
+
 class PredictionOutput(BaseModel):
     """Output schema for prediction."""
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
@@ -136,7 +220,12 @@ class PredictionOutput(BaseModel):
     confidence: float = Field(..., description="Prediction confidence (0-1)")
     r_product_range: str = Field(..., description="Human-readable r-product range")
     class_descriptions: Dict[str, str] = Field(..., description="Description for each class label")
+    models_agree: Optional[bool] = Field(None, description="Whether XGBoost and Lookup models agree on the prediction")
+    below_threshold: bool = Field(False, description="Whether confidence is below the 0.7 threshold")
+    lookup_class: Optional[int] = Field(None, description="Predicted class from the Lookup (nearest-neighbor) model")
     similar_papers: Optional[List[SimilarPaper]] = Field(None, description="Most similar papers from dataset")
+    nearest_neighbors: Optional[List[NearestNeighbor]] = Field(None, description="Top 10 nearest data points from training database (baseline lookup)")
+    solubility_issue: Optional[int] = Field(None, description="Solubility issue flag: 0 = no issues, 1 = has issues, -1 = unknown")
     timestamp: str = Field(..., description="Prediction timestamp")
 
 
@@ -191,12 +280,51 @@ class PreprocessAllInput(BaseModel):
     temperature: float = Field(default=60.0, description="Temperature in Celsius")
 
 
+class OptimizeReactionInput(BaseModel):
+    """Input schema for reaction optimization."""
+    monomer1_smiles: str = Field(..., description="SMILES string of monomer 1")
+    monomer2_smiles: str = Field(..., description="SMILES string of monomer 2")
+    solvent_smiles: str = Field(..., description="SMILES string of base solvent")
+    method: str = Field(default='solvent', description="Polymerisation method")
+    polytype: str = Field(default='free radical', description="Polymerisation type")
+    temperature: float = Field(default=60.0, description="Base temperature in Celsius")
+    temperature_step: float = Field(default=20.0, description="Temperature step size in Celsius (default: 20.0)")
+    n_solvents: int = Field(default=3, description="Number of solvents to use (default: 3)")
+
+
 class PreprocessAllOutput(BaseModel):
     """Output schema for combined preprocessing."""
     features: Dict[str, float] = Field(..., description="All calculated features ready for prediction")
     success: bool = Field(..., description="Whether preprocessing was successful")
     error: Optional[str] = Field(None, description="Error message if preprocessing failed")
     similar_papers: Optional[List[SimilarPaper]] = Field(None, description="Most similar papers from dataset")
+    nearest_neighbors: Optional[List[NearestNeighbor]] = Field(None, description="Top 10 nearest data points from training database (baseline lookup)")
+    lookup_class: Optional[int] = Field(None, description="Predicted class from the Lookup (nearest-neighbor) model (top-1 neighbor)")
+    solubility_issue: Optional[int] = Field(None, description="Solubility issue flag: 0 = no issues, 1 = has issues, -1 = unknown")
+
+
+class OptimizationPrediction(BaseModel):
+    """Single prediction result in optimization grid."""
+    temperature: float = Field(..., description="Temperature in Celsius")
+    solvent_smiles: str = Field(..., description="Solvent SMILES")
+    solvent_name: str = Field(..., description="Solvent name")
+    solvent_logp: float = Field(..., description="Solvent logP value")
+    predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
+    predicted_class_name: str = Field(..., description="Predicted class name: 'alternating', 'random to block like', or 'homopolymer'")
+    class_probabilities: Dict[str, float] = Field(..., description="Probability for each class")
+    confidence: float = Field(..., description="Prediction confidence (0-1)")
+    solubility_issue: Optional[int] = Field(None, description="Solubility issue flag: 0 = no issues, 1 = has issues, -1 = unknown")
+
+
+class OptimizeReactionOutput(BaseModel):
+    """Output schema for reaction optimization."""
+    success: bool = Field(..., description="Whether optimization was successful")
+    error: Optional[str] = Field(None, description="Error message if optimization failed")
+    predictions: List[OptimizationPrediction] = Field(..., description="3x3 grid of predictions (3 temperatures × 3 solvents)")
+    base_temperature: float = Field(..., description="Base temperature used")
+    temperature_step: float = Field(..., description="Temperature step size used")
+    base_solvent_logp: float = Field(..., description="Base solvent logP value")
+    timestamp: str = Field(..., description="Optimization timestamp")
 
 
 class DOICheckInput(BaseModel):
@@ -250,6 +378,15 @@ polytype_embeddings: Dict[str, Dict[str, float]] = {}
 # Global dataset cache
 dataset_df: Optional[pd.DataFrame] = None
 
+# Global training data cache for baseline lookup
+train_df: Optional[pd.DataFrame] = None
+
+# Global fingerprint cache for baseline lookup
+fingerprint_cache: Optional[Dict] = None
+
+# Global solubility model
+solubility_model = None
+
 
 # ============================================================================
 # Startup/Shutdown Events
@@ -258,7 +395,7 @@ dataset_df: Optional[pd.DataFrame] = None
 @app.on_event("startup")
 async def startup_event():
     """Load model, embeddings, and dataset on startup."""
-    global predictor, method_embeddings, polytype_embeddings, dataset_df
+    global predictor, method_embeddings, polytype_embeddings, dataset_df, train_df, fingerprint_cache, solubility_model
 
     # Load embeddings
     try:
@@ -327,6 +464,89 @@ async def startup_event():
         print(f"✗ Error loading dataset: {e}")
         print("DOI checking will not be available")
         dataset_df = None
+
+    # Load training data for baseline lookup
+    if BASELINE_LOOKUP_AVAILABLE:
+        try:
+            # Try to load from data splits
+            api_dir = Path(__file__).parent
+            split_dir = api_dir.parent / "artifacts" / "data_splits"
+            train_path = split_dir / "train.csv"
+            
+            if train_path.exists():
+                print(f"Loading training data from {train_path}...")
+                train_df = pd.read_csv(train_path)
+                print(f"✓ Training data loaded successfully ({len(train_df)} rows)")
+
+                # Add negative data to lookup pool
+                neg_path = api_dir.parent / "filter" / "artificial_datapoints" / "processed_combined_augmented.csv"
+                if neg_path.exists():
+                    df_neg = pd.read_csv(neg_path)
+                    if 'Class' in df_neg.columns:
+                        df_neg = df_neg.rename(columns={'Class': 'r_product_class'})
+                    df_neg['r_product_class'] = df_neg['r_product_class'].astype(int)
+                    train_df = pd.concat([train_df, df_neg], ignore_index=True)
+                    print(f"✓ Added {len(df_neg)} negative data points to lookup pool ({len(train_df)} total)")
+                else:
+                    print(f"⚠ Warning: Negative data not found at {neg_path}")
+                
+                # Precompute fingerprints for all unique SMILES in training data
+                if BASELINE_LOOKUP_AVAILABLE:
+                    try:
+                        from baseline_lookup import load_fingerprint_cache, save_fingerprint_cache, compute_fingerprints_for_smiles
+                        
+                        print("Loading fingerprint cache...")
+                        fingerprint_cache = load_fingerprint_cache()
+                        
+                        # Get all unique SMILES from training data
+                        unique_monomer1 = set(train_df['monomer1_smiles'].dropna().unique())
+                        unique_monomer2 = set(train_df['monomer2_smiles'].dropna().unique())
+                        unique_solvents = set(train_df['solvent_smiles'].dropna().unique())
+                        all_unique_smiles = list(unique_monomer1 | unique_monomer2 | unique_solvents)
+                        
+                        # Compute fingerprints for any missing SMILES
+                        if fingerprint_cache is None:
+                            print("Fingerprint cache not found. Computing fingerprints for all SMILES...")
+                            fingerprint_cache = compute_fingerprints_for_smiles(all_unique_smiles)
+                            save_fingerprint_cache(fingerprint_cache)
+                            print(f"✓ Computed and cached fingerprints for {len(fingerprint_cache)} SMILES")
+                        else:
+                            # Check if we need to compute any missing fingerprints
+                            missing_smiles = [s for s in all_unique_smiles if s not in fingerprint_cache]
+                            if missing_smiles:
+                                print(f"Computing fingerprints for {len(missing_smiles)} missing SMILES...")
+                                new_fps = compute_fingerprints_for_smiles(missing_smiles, cache_dict=fingerprint_cache)
+                                fingerprint_cache.update(new_fps)
+                                save_fingerprint_cache(fingerprint_cache)
+                                print(f"✓ Updated cache with {len(missing_smiles)} new fingerprints")
+                            else:
+                                print(f"✓ Fingerprint cache loaded ({len(fingerprint_cache)} entries)")
+                    except Exception as e:
+                        print(f"⚠ Warning: Failed to load/precompute fingerprint cache: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        fingerprint_cache = None
+            else:
+                print(f"⚠ Warning: Training data not found at {train_path}")
+                print("Baseline lookup will not be available")
+                train_df = None
+        except Exception as e:
+            print(f"✗ Error loading training data: {e}")
+            print("Baseline lookup will not be available")
+            train_df = None
+    else:
+        train_df = None
+
+    # Load solubility model
+    if SOLUBILITY_CHECK_AVAILABLE:
+        try:
+            solubility_model = load_solubility_model()
+        except Exception as e:
+            print(f"✗ Error loading solubility model: {e}")
+            print("Solubility check will not be available")
+            solubility_model = None
+    else:
+        solubility_model = None
 
 
 @app.on_event("shutdown")
@@ -404,13 +624,62 @@ async def predict(input_data: PredictionInput):
             2: "homopolymer",
         }
 
-        # Make prediction
+        # Make XGBoost prediction
         results = predictor.predict_with_confidence(input_data.features)
 
         # Format output
         pred_class = int(results['predictions'][0])
         proba = results['probabilities'][0]
         confidence = float(results['confidence'][0])
+
+        # Voting: Lookup prediction via nearest-neighbor
+        nearest_neighbors_list = None
+        lookup_class_value = None
+        models_agree_flag = None
+
+        smiles_available = (
+            input_data.monomer1_smiles
+            and input_data.monomer2_smiles
+            and input_data.solvent_smiles
+        )
+
+        if smiles_available and BASELINE_LOOKUP_AVAILABLE and train_df is not None:
+            try:
+                global fingerprint_cache
+                fp_dict_to_use = fingerprint_cache if fingerprint_cache is not None else None
+                neighbors = find_top_k_nearest_neighbors(
+                    test_monomer1_smiles=input_data.monomer1_smiles,
+                    test_monomer2_smiles=input_data.monomer2_smiles,
+                    test_solvent_smiles=input_data.solvent_smiles,
+                    df_train=train_df,
+                    k=10,
+                    fp_dict=fp_dict_to_use
+                )
+                if neighbors:
+                    nearest_neighbors_list = [
+                        NearestNeighbor(**neighbor) for neighbor in neighbors
+                    ]
+                    lookup_class_value = int(neighbors[0]['predicted_class'])
+                    models_agree_flag = (pred_class == lookup_class_value)
+            except Exception as e:
+                print(f"Warning: Lookup prediction failed: {e}")
+
+        below_threshold_flag = confidence < 0.7
+
+        # Solubility check: Only if SMILES are provided
+        solubility_issue_flag = None
+        if SOLUBILITY_CHECK_AVAILABLE and solubility_model is not None:
+            if smiles_available:
+                try:
+                    solubility_issue_flag = get_solubility_issue_flag(
+                        monomer1_smiles=input_data.monomer1_smiles,
+                        monomer2_smiles=input_data.monomer2_smiles,
+                        solvent_smiles=input_data.solvent_smiles,
+                        model=solubility_model
+                    )
+                except Exception as e:
+                    print(f"Warning: Solubility check failed: {e}")
+                    solubility_issue_flag = None
 
         return PredictionOutput(
             predicted_class=pred_class,
@@ -424,6 +693,11 @@ async def predict(input_data: PredictionInput):
                 f"class_{i}": desc
                 for i, desc in class_descriptions_map.items()
             },
+            models_agree=models_agree_flag,
+            below_threshold=below_threshold_flag,
+            lookup_class=lookup_class_value,
+            nearest_neighbors=nearest_neighbors_list,
+            solubility_issue=solubility_issue_flag,
             timestamp=datetime.now().isoformat()
         )
     except Exception as e:
@@ -451,6 +725,13 @@ async def predict_batch(input_data: BatchPredictionInput):
         )
 
     try:
+        # Static mapping from classes to English text descriptions
+        class_descriptions_map = {
+            0: "alternating",
+            1: "random to block like",
+            2: "homopolymer",
+        }
+        
         predictions = []
 
         for sample in input_data.samples:
@@ -459,6 +740,9 @@ async def predict_batch(input_data: BatchPredictionInput):
             pred_class = int(results['predictions'][0])
             proba = results['probabilities'][0]
             confidence = float(results['confidence'][0])
+            
+            # Solubility check not available for batch predictions (no SMILES)
+            solubility_issue_flag = None
 
             predictions.append(PredictionOutput(
                 predicted_class=pred_class,
@@ -472,6 +756,8 @@ async def predict_batch(input_data: BatchPredictionInput):
                     f"class_{i}": desc
                     for i, desc in class_descriptions_map.items()
                 },
+                nearest_neighbors=None,
+                solubility_issue=solubility_issue_flag,
                 timestamp=datetime.now().isoformat()
             ))
 
@@ -564,14 +850,40 @@ async def preprocess_all(input_data: PreprocessAllInput):
             )
         polytype_emb = polytype_embeddings[input_data.polytype]
 
-        # Combine all features
+        # Combine all features - include all features that the model might need
+        # Always include all features, even if None (model will handle NaN filling)
         features = {
-            "fukui_radical_max_1": m1_features["fukui_radical_max"],
-            "fukui_radical_max_2": m2_features["fukui_radical_max"],
-            "delta_HOMO_LUMO_AA": m1_features["homo"] - m1_features["lumo"],
-            "delta_HOMO_LUMO_AB": m1_features["homo"] - m2_features["lumo"],
-            "delta_HOMO_LUMO_BB": m2_features["homo"] - m2_features["lumo"],
-            "delta_HOMO_LUMO_BA": m2_features["homo"] - m1_features["lumo"],
+            # Monomer 1 features
+            "fukui_radical_max_1": m1_features.get("fukui_radical_max"),
+            "global_electrophilicity_1": m1_features.get("global_electrophilicity"),
+            "global_nucleophilicity_1": m1_features.get("global_nucleophilicity"),
+            "dipole_x_1": m1_features.get("dipole_x"),
+            "dipole_y_1": m1_features.get("dipole_y"),
+            "dipole_z_1": m1_features.get("dipole_z"),
+            
+            # Monomer 2 features
+            "fukui_radical_max_2": m2_features.get("fukui_radical_max"),
+            "global_electrophilicity_2": m2_features.get("global_electrophilicity"),
+            "global_nucleophilicity_2": m2_features.get("global_nucleophilicity"),
+            "dipole_x_2": m2_features.get("dipole_x"),
+            "dipole_y_2": m2_features.get("dipole_y"),
+            "dipole_z_2": m2_features.get("dipole_z"),
+            
+            # HOMO-LUMO differences
+            "delta_HOMO_LUMO_AA": (m1_features.get("homo") - m1_features.get("lumo")) 
+                                   if (m1_features.get("homo") is not None and m1_features.get("lumo") is not None) 
+                                   else None,
+            "delta_HOMO_LUMO_AB": (m1_features.get("homo") - m2_features.get("lumo")) 
+                                   if (m1_features.get("homo") is not None and m2_features.get("lumo") is not None) 
+                                   else None,
+            "delta_HOMO_LUMO_BB": (m2_features.get("homo") - m2_features.get("lumo")) 
+                                   if (m2_features.get("homo") is not None and m2_features.get("lumo") is not None) 
+                                   else None,
+            "delta_HOMO_LUMO_BA": (m2_features.get("homo") - m1_features.get("lumo")) 
+                                   if (m2_features.get("homo") is not None and m1_features.get("lumo") is not None) 
+                                   else None,
+            
+            # Other features
             "temperature": input_data.temperature,
             "polytype_emb_1": polytype_emb["pca_1"],
             "polytype_emb_2": polytype_emb["pca_2"],
@@ -582,6 +894,13 @@ async def preprocess_all(input_data: PreprocessAllInput):
             "solvent_HBD": solvent_features["solvent_HBD"],
             "solvent_FractionCSP3": solvent_features["solvent_FractionCSP3"]
         }
+        
+        # If model is loaded, ensure all required features are present
+        # Fill missing features with None if model requires them
+        if predictor and predictor.features:
+            for required_feature in predictor.features:
+                if required_feature not in features:
+                    features[required_feature] = None
 
         # Find similar papers if dataset is available
         similar_papers_list = None
@@ -606,17 +925,81 @@ async def preprocess_all(input_data: PreprocessAllInput):
                 print(f"Warning: Failed to find similar papers: {e}")
                 similar_papers_list = None
 
+        # Find nearest neighbors using baseline lookup
+        nearest_neighbors_list = None
+        lookup_class_value = None
+        if BASELINE_LOOKUP_AVAILABLE and train_df is not None:
+            try:
+                # Use precomputed fingerprint cache if available
+                global fingerprint_cache
+                fp_dict_to_use = fingerprint_cache if fingerprint_cache is not None else None
+                neighbors = find_top_k_nearest_neighbors(
+                    test_monomer1_smiles=input_data.monomer1_smiles,
+                    test_monomer2_smiles=input_data.monomer2_smiles,
+                    test_solvent_smiles=input_data.solvent_smiles,
+                    df_train=train_df,
+                    k=10,
+                    fp_dict=fp_dict_to_use
+                )
+                
+                # Convert to Pydantic models
+                if neighbors:
+                    print(f"✓ Found {len(neighbors)} nearest neighbors")
+                    nearest_neighbors_list = [
+                        NearestNeighbor(**neighbor) for neighbor in neighbors
+                    ]
+                    lookup_class_value = int(neighbors[0]['predicted_class'])
+                else:
+                    nearest_neighbors_list = []
+                    print(f"⚠ Warning: find_top_k_nearest_neighbors returned empty list")
+                    print(f"  train_df size: {len(train_df) if train_df is not None else 'None'}")
+                    print(f"  fingerprint_cache size: {len(fingerprint_cache) if fingerprint_cache is not None else 'None'}")
+                    print(f"  test SMILES: m1={input_data.monomer1_smiles[:50]}, m2={input_data.monomer2_smiles[:50]}, s={input_data.solvent_smiles[:50]}")
+            except Exception as e:
+                print(f"✗ Error: Failed to find nearest neighbors: {e}")
+                import traceback
+                traceback.print_exc()
+                nearest_neighbors_list = None
+
+        # Check solubility
+        solubility_issue_flag = None
+        if SOLUBILITY_CHECK_AVAILABLE and solubility_model is not None:
+            try:
+                solubility_issue_flag = get_solubility_issue_flag(
+                    monomer1_smiles=input_data.monomer1_smiles,
+                    monomer2_smiles=input_data.monomer2_smiles,
+                    solvent_smiles=input_data.solvent_smiles,
+                    model=solubility_model
+                )
+            except Exception as e:
+                print(f"Warning: Solubility check failed: {e}")
+                solubility_issue_flag = None
+
+        # Clean all data to remove NaN/Inf values before JSON serialization
+        # For features dict, replace NaN/Inf with 0.0 (model expects float, not None)
+        # For similar_papers, also replace with 0.0 since schema expects float
+        cleaned_features = clean_json_values(features, replace_with_zero=True)
+        cleaned_similar_papers = clean_json_values(similar_papers_list, replace_with_zero=True) if similar_papers_list else None
+        cleaned_nearest_neighbors = clean_json_values(nearest_neighbors_list) if nearest_neighbors_list else None
+        
         return PreprocessAllOutput(
-            features=features,
+            features=cleaned_features,
             success=True,
             error=None,
-            similar_papers=similar_papers_list
+            similar_papers=cleaned_similar_papers,
+            nearest_neighbors=cleaned_nearest_neighbors,
+            lookup_class=lookup_class_value,
+            solubility_issue=solubility_issue_flag
         )
 
     except Exception as e:
+        import traceback
+        error_detail = f"Preprocessing failed: {str(e)}"
+        print(f"Error in preprocess_all: {error_detail}")
+        traceback.print_exc()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Preprocessing failed: {str(e)}"
+            detail=error_detail
         )
 
 
@@ -838,11 +1221,23 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
 
 def extract_monomer_features_for_model(data: Dict) -> Dict[str, Optional[float]]:
     """
-    Extract only the features needed for the model from the full molecular data.
-    Returns: fukui_radical_max, homo, lumo
+    Extract all features needed for the model from the full molecular data.
+    Returns: fukui_radical_max, global_electrophilicity, global_nucleophilicity, 
+             dipole (x, y, z), homo, lumo
     """
+    # Extract dipole components (dipole is a list [x, y, z])
+    dipole = data.get("dipole")
+    dipole_x = dipole[0] if isinstance(dipole, list) and len(dipole) > 0 else None
+    dipole_y = dipole[1] if isinstance(dipole, list) and len(dipole) > 1 else None
+    dipole_z = dipole[2] if isinstance(dipole, list) and len(dipole) > 2 else None
+    
     features = {
         "fukui_radical_max": data.get("fukui_radical_max"),
+        "global_electrophilicity": data.get("global_electrophilicity"),
+        "global_nucleophilicity": data.get("global_nucleophilicity"),
+        "dipole_x": dipole_x,
+        "dipole_y": dipole_y,
+        "dipole_z": dipole_z,
         "homo": data.get("homo"),
         "lumo": data.get("lumo")
     }
@@ -963,9 +1358,15 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
         if existing_data is not None:
             # Features found in cache
             features = extract_monomer_features_for_model(existing_data)
+            # Return only the minimal features for backward compatibility
+            minimal_features = {
+                "fukui_radical_max": features.get("fukui_radical_max"),
+                "homo": features.get("homo"),
+                "lumo": features.get("lumo")
+            }
             return MonomerPreprocessOutput(
                 monomer_smiles=monomer_smiles,
-                features=features,
+                features=minimal_features,
                 success=True,
                 error=None,
                 from_cache=True
@@ -988,11 +1389,17 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
         # Calculate features (this is a long-running operation)
         # Note: In production, you might want to run this in a background task
         calculated_data = calculate_monomer_features(monomer_smiles, base_path)
-        features = extract_monomer_features_for_model(calculated_data)
+        all_features = extract_monomer_features_for_model(calculated_data)
+        # Return only the minimal features for backward compatibility
+        minimal_features = {
+            "fukui_radical_max": all_features.get("fukui_radical_max"),
+            "homo": all_features.get("homo"),
+            "lumo": all_features.get("lumo")
+        }
 
         return MonomerPreprocessOutput(
             monomer_smiles=monomer_smiles,
-            features=features,
+            features=minimal_features,
             success=True,
             error=None,
             from_cache=False
@@ -1061,6 +1468,116 @@ async def check_doi(input_data: DOICheckInput):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"DOI check failed: {str(e)}"
+        )
+
+
+@app.post("/optimize_reaction", response_model=OptimizeReactionOutput)
+async def optimize_reaction(input_data: OptimizeReactionInput):
+    """
+    Perform reaction optimization by exploring different solvent and temperature combinations.
+    
+    Creates a 3x3 grid of predictions:
+    - 3 temperatures: base_temp - step, base_temp, base_temp + step
+    - 3 solvents: similar solvents based on logP from the dataset
+    
+    Args:
+        input_data: OptimizeReactionInput with monomers, base solvent, temperature, etc.
+        
+    Returns:
+        OptimizeReactionOutput with 3x3 grid of predictions
+    """
+    if not predictor:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Model not loaded"
+        )
+    
+    if not REACTION_OPTIMIZATION_AVAILABLE:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Reaction optimization module not available"
+        )
+    
+    if dataset_df is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Dataset not loaded. Reaction optimization requires dataset for finding similar solvents."
+        )
+    
+    try:
+        # Get base solvent logP
+        base_solvent_features = calculate_solvent_features(input_data.solvent_smiles)
+        base_logp = base_solvent_features.get('solvent_logP')
+        
+        if base_logp is None:
+            raise ValueError(f"Could not determine logP for solvent: {input_data.solvent_smiles}")
+        
+        # Prepare solubility check function
+        solubility_check_func = None
+        if SOLUBILITY_CHECK_AVAILABLE and solubility_model is not None:
+            def check_solubility(monomer1_smiles, monomer2_smiles, solvent_smiles):
+                return get_solubility_issue_flag(
+                    monomer1_smiles=monomer1_smiles,
+                    monomer2_smiles=monomer2_smiles,
+                    solvent_smiles=solvent_smiles,
+                    model=solubility_model
+                )
+            solubility_check_func = check_solubility
+        
+        # Create optimization grid
+        predictions = create_optimization_grid(
+            monomer1_smiles=input_data.monomer1_smiles,
+            monomer2_smiles=input_data.monomer2_smiles,
+            base_solvent_smiles=input_data.solvent_smiles,
+            base_temperature=input_data.temperature,
+            method=input_data.method,
+            polytype=input_data.polytype,
+            dataset_df=dataset_df,
+            method_embeddings=method_embeddings,
+            polytype_embeddings=polytype_embeddings,
+            predictor=predictor,
+            load_monomer_features_func=load_monomer_features,
+            extract_monomer_features_func=extract_monomer_features_for_model,
+            calculate_solvent_features_func=calculate_solvent_features,
+            temperature_step=input_data.temperature_step,
+            n_solvents=input_data.n_solvents,
+            solubility_check_func=solubility_check_func
+        )
+        
+        if not predictions:
+            return OptimizeReactionOutput(
+                success=False,
+                error="No valid predictions could be generated",
+                predictions=[],
+                base_temperature=input_data.temperature,
+                temperature_step=input_data.temperature_step,
+                base_solvent_logp=float(base_logp),
+                timestamp=datetime.now().isoformat()
+            )
+        
+        # Clean predictions to remove NaN/Inf values before JSON serialization
+        # Replace NaN/Inf with 0.0 for numeric fields
+        cleaned_predictions = clean_json_values(predictions, replace_with_zero=True)
+        
+        # Convert to Pydantic models
+        prediction_models = [
+            OptimizationPrediction(**pred) for pred in cleaned_predictions
+        ]
+        
+        return OptimizeReactionOutput(
+            success=True,
+            error=None,
+            predictions=prediction_models,
+            base_temperature=input_data.temperature,
+            temperature_step=input_data.temperature_step,
+            base_solvent_logp=float(base_logp),
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Reaction optimization failed: {str(e)}"
         )
 
 

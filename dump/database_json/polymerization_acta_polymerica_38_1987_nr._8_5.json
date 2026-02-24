@@ -1,0 +1,37 @@
+{
+  "monomer1": "Di(tri-n-butyltin) itaconate",
+  "monomer2": "2-Chloroethyl acrylate",
+  "r_values": {
+    "constant_1": 0.391,
+    "constant_2": 0.683
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.021,
+    "constant_conf_2": 0.012
+  },
+  "temperature": 70.0,
+  "temperature_unit": "°C",
+  "solvent": "Cc1ccccc1",
+  "method": "solvent",
+  "r-product": null,
+  "source": "Acta Polymerica 38 (1987) Nr. 8",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "logP": 1.99502,
+  "monomer1_smiles": "C=C(CC(=O)[O-])C(=O)[O-].CCCC[Sn+](CCCC)CCCC.CCCC[Sn+](CCCC)CCCC",
+  "monomer2_smiles": "C=CC(=O)OCCCl",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": 1.99502,
+  "solvent_TPSA": 0.0,
+  "solvent_HBA": 0.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.14285714285714285,
+  "solvent_MolMR": 31.17899999999999,
+  "solvent_LabuteASA": 43.79634523389357,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 1.0,
+  "solvent_HeavyAtomCount": 7.0
+}

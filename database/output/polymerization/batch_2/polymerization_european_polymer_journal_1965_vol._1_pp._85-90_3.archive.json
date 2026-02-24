@@ -1,0 +1,49 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "European Polymer Journal, 1965, Vol. 1, pp. 85-90"
+        },
+        "monomers": [
+            {
+                "name": "methyl methacrylate"
+            },
+            {
+                "name": "phenyl methacrylate"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 303.15,
+            "solvent": {
+                "smile": "c1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.6866,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 26.441999999999993,
+                "labute_ASA": 37.43140311949697,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.53
+                },
+                {
+                    "reaction_constant": 1.67
+                }
+            ],
+            "polytype_emb_1": 2.232015378422759,
+            "polytype_emb_2": 4.6151798364176715,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

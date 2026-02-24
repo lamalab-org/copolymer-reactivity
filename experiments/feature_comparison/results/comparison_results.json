@@ -1,0 +1,110 @@
+{
+  "timestamp": "2026-02-17T10:08:53.360171",
+  "config": {
+    "n_iter": 25,
+    "n_bits": 2048,
+    "radius": 2,
+    "random_state": 42
+  },
+  "quantum_descriptors": {
+    "label": "Quantum Descriptors",
+    "macro_accuracy": 0.7265438515438515,
+    "macro_precision": 0.7120942054069562,
+    "coverage": 0.8321114369501467,
+    "n_voting": 1135,
+    "n_total": 1364,
+    "per_class_acc": [
+      0.9027777777777778,
+      0.6282051282051282,
+      0.6486486486486487
+    ],
+    "per_class_prec": [
+      0.8975834292289988,
+      0.6533333333333333,
+      0.5853658536585366
+    ],
+    "confusion_matrix": [
+      [
+        780,
+        74,
+        10
+      ],
+      [
+        80,
+        147,
+        7
+      ],
+      [
+        9,
+        4,
+        24
+      ]
+    ],
+    "cv_score": 0.8054238012927174,
+    "n_features": 25,
+    "features": [
+      "fukui_radical_max_1",
+      "global_electrophilicity_1",
+      "global_nucleophilicity_1",
+      "dipole_x_1",
+      "dipole_y_1",
+      "dipole_z_1",
+      "fukui_radical_max_2",
+      "global_electrophilicity_2",
+      "global_nucleophilicity_2",
+      "dipole_x_2",
+      "dipole_y_2",
+      "dipole_z_2",
+      "delta_HOMO_LUMO_AA",
+      "delta_HOMO_LUMO_AB",
+      "delta_HOMO_LUMO_BB",
+      "delta_HOMO_LUMO_BA",
+      "temperature",
+      "polytype_emb_1",
+      "polytype_emb_2",
+      "method_emb_1",
+      "method_emb_2",
+      "solvent_logP",
+      "solvent_TPSA",
+      "solvent_HBD",
+      "solvent_FractionCSP3"
+    ]
+  },
+  "morgan_fingerprints": {
+    "label": "Morgan Fingerprints",
+    "macro_accuracy": 0.7477804681194512,
+    "macro_precision": 0.7078249336870025,
+    "coverage": 0.8093841642228738,
+    "n_voting": 1104,
+    "n_total": 1364,
+    "per_class_acc": [
+      0.8934624697336562,
+      0.635593220338983,
+      0.7142857142857143
+    ],
+    "per_class_prec": [
+      0.9,
+      0.646551724137931,
+      0.5769230769230769
+    ],
+    "confusion_matrix": [
+      [
+        738,
+        78,
+        10
+      ],
+      [
+        74,
+        150,
+        12
+      ],
+      [
+        8,
+        4,
+        30
+      ]
+    ],
+    "cv_score": 0.77837952723236,
+    "n_features": 4105
+  }
+}

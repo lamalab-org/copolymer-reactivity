@@ -1,0 +1,37 @@
+{
+  "monomer1": "vinyl acetate",
+  "monomer2": "N-4-hydroxyphenyl maleimide",
+  "r_values": {
+    "constant_1": 0.03,
+    "constant_2": 0.69
+  },
+  "conf_intervals": {
+    "constant_conf_1": null,
+    "constant_conf_2": null
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": "CCO.O",
+  "method": "solvent",
+  "r-product": null,
+  "source": "https://doi.org/10.1002/pol.1969.160260292",
+  "calculation_method": null,
+  "polymerization_type": "free radical",
+  "logP": -0.8261000000000001,
+  "monomer1_smiles": "C=COC(C)=O",
+  "monomer2_smiles": "O=C1C=CC(=O)N1c1ccc(O)cc1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": 6.958462891419976,
+  "method_emb_2": 6.651678436014861,
+  "solvent_logP": -0.8261000000000001,
+  "solvent_TPSA": 51.730000000000004,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 1.0,
+  "solvent_FractionCSP3": 1.0,
+  "solvent_MolMR": 16.373600000000003,
+  "solvent_LabuteASA": 25.379180322836543,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 4.0
+}

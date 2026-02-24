@@ -1,0 +1,134 @@
+{
+  "timestamp": "2026-02-20T15:02:23.365826",
+  "config": {
+    "n_iter": 25,
+    "random_state": 42,
+    "remove_specialized": true,
+    "use_augmentation": true,
+    "add_negative_data": false,
+    "augmentation_samples": 5
+  },
+  "with_conditions": {
+    "label": "With Conditions",
+    "macro_accuracy": 0.6583054626532887,
+    "macro_precision": 0.7320006922810661,
+    "coverage": 0.7580645161290323,
+    "n_agree": 517,
+    "n_abstain": 0,
+    "n_voted": 517,
+    "n_total": 682,
+    "per_class_acc": [
+      0.9492753623188406,
+      0.6923076923076923,
+      0.3333333333333333
+    ],
+    "per_class_prec": [
+      0.9182242990654206,
+      0.7777777777777778,
+      0.5
+    ],
+    "confusion_matrix": [
+      [
+        393,
+        17,
+        4
+      ],
+      [
+        28,
+        63,
+        0
+      ],
+      [
+        7,
+        1,
+        4
+      ]
+    ],
+    "cv_score": 0.7827036193994139,
+    "n_features": 25,
+    "features": [
+      "fukui_radical_max_1",
+      "global_electrophilicity_1",
+      "global_nucleophilicity_1",
+      "dipole_x_1",
+      "dipole_y_1",
+      "dipole_z_1",
+      "fukui_radical_max_2",
+      "global_electrophilicity_2",
+      "global_nucleophilicity_2",
+      "dipole_x_2",
+      "dipole_y_2",
+      "dipole_z_2",
+      "delta_HOMO_LUMO_AA",
+      "delta_HOMO_LUMO_AB",
+      "delta_HOMO_LUMO_BB",
+      "delta_HOMO_LUMO_BA",
+      "temperature",
+      "polytype_emb_1",
+      "polytype_emb_2",
+      "method_emb_1",
+      "method_emb_2",
+      "solvent_logP",
+      "solvent_TPSA",
+      "solvent_HBD",
+      "solvent_FractionCSP3"
+    ]
+  },
+  "without_conditions": {
+    "label": "Without Conditions",
+    "macro_accuracy": 0.6814747866896234,
+    "macro_precision": 0.7145909173426587,
+    "coverage": 0.7302052785923754,
+    "n_agree": 498,
+    "n_abstain": 0,
+    "n_voted": 498,
+    "n_total": 682,
+    "per_class_acc": [
+      0.9562982005141388,
+      0.7244897959183674,
+      0.36363636363636365
+    ],
+    "per_class_prec": [
+      0.9276807980049875,
+      0.8160919540229885,
+      0.4
+    ],
+    "confusion_matrix": [
+      [
+        372,
+        15,
+        2
+      ],
+      [
+        23,
+        71,
+        4
+      ],
+      [
+        6,
+        1,
+        4
+      ]
+    ],
+    "cv_score": 0.7588706344598407,
+    "n_features": 16,
+    "features": [
+      "fukui_radical_max_1",
+      "global_electrophilicity_1",
+      "global_nucleophilicity_1",
+      "dipole_x_1",
+      "dipole_y_1",
+      "dipole_z_1",
+      "fukui_radical_max_2",
+      "global_electrophilicity_2",
+      "global_nucleophilicity_2",
+      "dipole_x_2",
+      "dipole_y_2",
+      "dipole_z_2",
+      "delta_HOMO_LUMO_AA",
+      "delta_HOMO_LUMO_AB",
+      "delta_HOMO_LUMO_BB",
+      "delta_HOMO_LUMO_BA"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "Journal of Polymer Science, Vol. XLIII, Pages 413-421 (1960)"
+        },
+        "monomers": [
+            {
+                "name": "Vinyl Chloride"
+            },
+            {
+                "name": "N-Vinyloxazolidone"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 323.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.84,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.35,
+                    "reaction_constant_confi": 0.02
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "Journal of Polymer Science Vol. XXXIX, Pages 203-209 (1959)"
+        },
+        "monomers": [
+            {
+                "name": "Acrylonitrile"
+            },
+            {
+                "name": "2-Vinyl pyridine"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "CC(=O)O"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.09089999999999993,
+                "TPSA": 37.3,
+                "HBA": 1.0,
+                "HBD": 1.0,
+                "fraction_CSP3": 0.5,
+                "mol_MR": 13.309800000000001,
+                "labute_ASA": 24.059948994465934,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.113,
+                    "reaction_constant_confi": 0.002
+                },
+                {
+                    "reaction_constant": 0.47,
+                    "reaction_constant_confi": 0.03
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

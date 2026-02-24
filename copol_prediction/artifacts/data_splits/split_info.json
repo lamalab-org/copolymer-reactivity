@@ -1,21 +1,30 @@
 {
   "total_samples": 6812,
-  "train_samples": 5448,
+  "train_samples": 4766,
+  "val_samples": 682,
   "test_samples": 1364,
-  "train_groups": 2724,
+  "train_groups": 2383,
+  "val_groups": 341,
   "test_groups": 682,
   "train_class_counts": {
-    "0": 4126,
-    "1": 1094,
-    "2": 228
+    "0": 3628,
+    "1": 934,
+    "2": 204
+  },
+  "val_class_counts": {
+    "0": 498,
+    "1": 160,
+    "2": 24
   },
   "test_class_counts": {
     "0": 1004,
     "1": 296,
     "2": 64
   },
-  "test_ids_path": "artifacts/test_ids.csv",
+  "test_ids_path": "artifacts/data_splits/test.csv",
+  "val_ids_path": "artifacts/data_splits/val.csv",
   "test_size_ratio": 0.2002348796241926,
+  "val_size_ratio": 0.1001174398120963,
   "filters_applied": [
     "r1r2 >= 0",
     "r1r2 not null",

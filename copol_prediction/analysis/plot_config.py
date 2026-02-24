@@ -39,17 +39,17 @@ COMPARISON_COLORS = {
 }
 
 # Sequential colors for multi-element plots
+# Custom palette for monomer/network and comparison plots
 SEQUENTIAL_COLORS = [
-    '#2266ac',  # Blue
-    '#e27f07',  # Orange
-    '#92c4de',  # Green
-    '#d62728',  # Red
-    '#9467bd',  # Purple
-    '#8c564b',  # Brown
-    '#e377c2',  # Pink
-    '#7f7f7f',  # Gray
-    '#bcbd22',  # Yellow-green
-    '#17becf',  # Cyan
+    '#0a0e38',
+    '#3e3888',
+    '#1e8db9',
+    '#9ed5f2',
+    '#6a040f',
+    '#bb1818',
+    '#fe5318',
+    '#e27f07',
+    '#ffbc57',
 ]
 
 # Categorical colors (for heatmaps, etc.)
@@ -199,6 +199,8 @@ CALIBRATION_CONFIG = {
     'marker': 'o',
     'linewidth': 2,
     'markersize': 6,
+    'n_bins': 7,
+    'strategy': 'quantile',  # 'quantile': same number of samples per bin; 'uniform': equal width
 }
 
 ERROR_ANALYSIS_CONFIG = {

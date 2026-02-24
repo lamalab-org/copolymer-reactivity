@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1021/ja01151a030"
+        },
+        "monomers": [
+            {
+                "name": "Butadiene"
+            },
+            {
+                "name": "Vinylidene chloride"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 278.15,
+            "solvent": {
+                "smile": "O"
+            },
+            "solvent_descriptors": {
+                "log_P": -0.8247,
+                "TPSA": 31.5,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 3.6138,
+                "labute_ASA": 6.84923118831809,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_method": "emulsion",
+            "polymerization_type": "Emulsion",
+            "calculation_method": "graphical solution of the copolymerization equation",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.9,
+                    "reaction_constant_confi": 0.2
+                },
+                {
+                    "reaction_constant": 0.2,
+                    "reaction_constant_confi": 0.05
+                }
+            ],
+            "polytype_emb_1": -4.4650010403241405,
+            "polytype_emb_2": 8.78892899799139,
+            "method_emb_1": -4.911729965574156,
+            "method_emb_2": 0.07905181466983252
+        }
+    }
+}

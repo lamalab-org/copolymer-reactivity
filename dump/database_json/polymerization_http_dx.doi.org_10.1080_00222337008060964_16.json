@@ -1,0 +1,26 @@
+{
+  "monomer1": "t-butyl vinyl sulfide",
+  "monomer2": "styrene",
+  "r_values": {
+    "constant_1": 4.7,
+    "constant_2": 0.2
+  },
+  "conf_intervals": {
+    "constant_conf_1": null,
+    "constant_conf_2": null
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": null,
+  "method": "bulk",
+  "r-product": null,
+  "source": "http://dx.doi.org/10.1080/00222337008060964",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "monomer1_smiles": "C=CSC(C)(C)C",
+  "monomer2_smiles": "C=Cc1ccccc1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -7.23088245290138,
+  "method_emb_2": -0.5848044902383194
+}

@@ -1,0 +1,37 @@
+{
+  "monomer1": "Methylmethacrylate",
+  "monomer2": "Maleic Anhydride",
+  "r_values": {
+    "constant_1": 4.63,
+    "constant_2": -0.18
+  },
+  "conf_intervals": {
+    "constant_conf_1": 1.14,
+    "constant_conf_2": 0.28
+  },
+  "temperature": 30.0,
+  "temperature_unit": "°C",
+  "solvent": "CCOC(C)=O",
+  "method": "solution",
+  "r-product": null,
+  "source": "https://doi.org/10.1016/0014-3057(63)90001-2",
+  "calculation_method": "graphical extrapolation",
+  "polymerization_type": "free radical",
+  "logP": 0.5694,
+  "monomer1_smiles": "C=C(C)C(=O)OC",
+  "monomer2_smiles": "O=C1C=CC(=O)O1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -3.4032362061893435,
+  "method_emb_2": 2.568907970220068,
+  "solvent_logP": 0.5694,
+  "solvent_TPSA": 26.3,
+  "solvent_HBA": 2.0,
+  "solvent_HBD": 0.0,
+  "solvent_FractionCSP3": 0.75,
+  "solvent_MolMR": 22.30699999999999,
+  "solvent_LabuteASA": 37.10914470057002,
+  "solvent_NumRotatableBonds": 1.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 6.0
+}

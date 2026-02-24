@@ -1,0 +1,37 @@
+{
+  "monomer1": "Acrylonitrile",
+  "monomer2": "5-Ethyl-2-vinyl pyridine",
+  "r_values": {
+    "constant_1": 0.02,
+    "constant_2": 0.43
+  },
+  "conf_intervals": {
+    "constant_conf_1": 0.02,
+    "constant_conf_2": 0.05
+  },
+  "temperature": 60.0,
+  "temperature_unit": "°C",
+  "solvent": "CC(=O)O",
+  "method": "bulk",
+  "r-product": null,
+  "source": "Journal of Polymer Science Vol. XXXIX, Pages 203-209 (1959)",
+  "calculation_method": "Fineman-Ross",
+  "polymerization_type": "free radical",
+  "logP": 0.09089999999999993,
+  "monomer1_smiles": "C=CC#N",
+  "monomer2_smiles": "C=Cc1ccc(CC)cn1",
+  "polytype_emb_1": 7.496725795633088,
+  "polytype_emb_2": -0.4631906941937577,
+  "method_emb_1": -7.23088245290138,
+  "method_emb_2": -0.5848044902383194,
+  "solvent_logP": 0.09089999999999993,
+  "solvent_TPSA": 37.3,
+  "solvent_HBA": 1.0,
+  "solvent_HBD": 1.0,
+  "solvent_FractionCSP3": 0.5,
+  "solvent_MolMR": 13.309800000000001,
+  "solvent_LabuteASA": 24.059948994465934,
+  "solvent_NumRotatableBonds": 0.0,
+  "solvent_RingCount": 0.0,
+  "solvent_HeavyAtomCount": 4.0
+}

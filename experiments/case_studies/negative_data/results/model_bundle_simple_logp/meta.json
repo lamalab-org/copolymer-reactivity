@@ -1,0 +1,52 @@
+{
+  "created_at": "2026-02-05T12:41:22.652879Z",
+  "feature_columns": [
+    "monomer1_logP",
+    "monomer2_logP",
+    "solvent_logP"
+  ],
+  "class_labels": [
+    0,
+    1
+  ],
+  "task": "multiclass_r_product_class",
+  "n_features": 3,
+  "n_classes": 2,
+  "best_params": {
+    "subsample": 0.85,
+    "reg_lambda": 2.0,
+    "reg_alpha": 0.3,
+    "n_estimators": 500,
+    "min_child_weight": 2,
+    "max_depth": 5,
+    "learning_rate": 0.07,
+    "gamma": 0.7,
+    "colsample_bytree": 0.85
+  },
+  "cv_score": 0.9001680842753258,
+  "train_normal_accuracy": 0.9111111111111111,
+  "train_normal_f1_weighted": 0.9164082687338502,
+  "train_normal_f1_macro": 0.47674418604651164,
+  "train_neg_accuracy": 0.9611111111111111,
+  "train_neg_f1_weighted": 0.9801699716713881,
+  "train_neg_f1_macro": 0.49008498583569404,
+  "test_accuracy": 0.8849557522123894,
+  "test_f1_weighted": 0.9050585927697944,
+  "test_f1_macro": 0.5178927746271792,
+  "test_neg_accuracy": 0.0,
+  "test_neg_f1_weighted": 0.0,
+  "test_neg_f1_macro": 0.0,
+  "class_weights": {
+    "0": 1.0405,
+    "1": 0.9626
+  },
+  "training_config": {
+    "binary_classification": true,
+    "class_mapping": "0/1 → 0, 2 → 1",
+    "features": "ONLY logP (monomer1_logP, monomer2_logP, solvent_logP)",
+    "trained_with_negative_data": true,
+    "negative_data_source": "/Users/maraw/PycharmProjects/test/experiments/case_studies/negative_data/processed_combined_augmented.csv",
+    "random_state": 42,
+    "hyperparam_iter": 25
+  }
+}

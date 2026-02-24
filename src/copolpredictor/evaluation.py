@@ -15,6 +15,7 @@ from sklearn.metrics import (
     classification_report,
     confusion_matrix,
     accuracy_score,
+    balanced_accuracy_score,
     precision_score,
     recall_score,
     f1_score
@@ -219,6 +220,7 @@ def evaluate_model(model, X_test, y_test, labels=None):
     
     results = {
         'accuracy': accuracy_score(y_test, y_pred),
+        'balanced_accuracy': balanced_accuracy_score(y_test, y_pred),  # Macro accuracy
         # Weighted metrics (für Vergleich)
         'precision': precision_score(y_test, y_pred, average='weighted', zero_division=0),
         'recall': recall_score(y_test, y_pred, average='weighted', zero_division=0),
@@ -247,11 +249,12 @@ def print_evaluation_results(results, title="Evaluation Results"):
     print(f"\n{'='*60}")
     print(f"{title}")
     print(f"{'='*60}")
-    print(f"Accuracy:  {results['accuracy']:.4f}")
-    print(f"Precision: {results['precision']:.4f}")
-    print(f"Recall:    {results['recall']:.4f}")
-    print(f"F1 (weighted): {results['f1_weighted']:.4f}")
-    print(f"F1 (macro):    {results['f1_macro']:.4f}")
+    print(f"Accuracy:         {results['accuracy']:.4f}")
+    print(f"Balanced Acc:     {results.get('balanced_accuracy', 'N/A'):.4f}")
+    print(f"Precision:        {results['precision']:.4f}")
+    print(f"Recall:           {results['recall']:.4f}")
+    print(f"F1 (weighted):   {results['f1_weighted']:.4f}")
+    print(f"F1 (macro):      {results['f1_macro']:.4f}")
     print("\nClassification Report:")
     print(results['classification_report'])
     print("\nConfusion Matrix:")
