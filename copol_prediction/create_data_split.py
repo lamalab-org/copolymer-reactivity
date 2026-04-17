@@ -19,6 +19,13 @@ import numpy as np
 
 from copolpredictor import data_processing, holdout_utils
 
+try:
+    # When run as a package module: python -m copol_prediction.create_data_split
+    from .mayo_lewis_classification import classify_reactivity_curve
+except ImportError:
+    # When run as a script from within copol_prediction/: python create_data_split.py
+    from mayo_lewis_classification import classify_reactivity_curve
+
 # Feature columns for NaN checking (same as in prediction_utils)
 FEATURE_COLUMNS = [
     'fukui_radical_max_1', 'fukui_radical_max_2',
@@ -132,21 +139,18 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
     df_filtered = df_filtered[df_filtered['r1r2'] >= 0]
     print(f"After basic filtering: {len(df_filtered)} samples")
     
-    # Create target classes
-    bins = [-np.inf, 1, 25, np.inf]
-    labels = [0, 1, 2]
-    df_filtered['r_product_class'] = pd.cut(
-        df_filtered['r1r2'], bins=bins, labels=labels, right=False
-    ).astype(int)
-    
-    # Override extremes
+    # Create target classes based on individual reactivity ratios (r1 = constant_1, r2 = constant_2)
+    # using the Mayo–Lewis curve-based classification (alternating / gradient / random-to-blocky).
     if {'constant_1', 'constant_2'}.issubset(df_filtered.columns):
-        extreme_mask = (
-            ((df_filtered['constant_1'] <= 0.1) & (df_filtered['constant_2'] > 25)) |
-            ((df_filtered['constant_2'] <= 0.1) & (df_filtered['constant_1'] > 25))
+        def _class_from_row(row):
+            res = classify_reactivity_curve(float(row['constant_1']), float(row['constant_2']))
+            return res['class_id']
+
+        df_filtered['r_product_class'] = df_filtered.apply(_class_from_row, axis=1).astype(int)
+    else:
+        raise ValueError(
+            "Required columns 'constant_1' and 'constant_2' not found for class definition."
         )
-        df_filtered.loc[extreme_mask, 'r_product_class'] = 2
-        print(f"Marked {extreme_mask.sum()} extreme cases as class 2")
     
     print("\nClass distribution:")
     class_counts = df_filtered['r_product_class'].value_counts().sort_index()
@@ -284,8 +288,6 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
         'val_size_ratio': len(df_val) / len(df_clean),
         'filters_applied': filters_applied,
         'remove_specialized_from_test': False,  # Never applied to test/validation
-        'bins': bins,
-        'labels': labels
     }
     
     info_path = os.path.join(output_dir, 'split_info.json')

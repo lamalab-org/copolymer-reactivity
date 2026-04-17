@@ -9,7 +9,7 @@
                 "name": "acrylonitrile"
             },
             {
-                "name": "glycidyl methacrylate"
+                "name": "glycidyl acrylate"
             }
         ],
         "reaction_conditions": {
@@ -31,13 +31,13 @@
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
-            "calculation_method": "previous paper",
+            "calculation_method": "Fineman and Ross",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.14
+                    "reaction_constant": 1.01
                 },
                 {
-                    "reaction_constant": 1.32
+                    "reaction_constant": 1.02
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

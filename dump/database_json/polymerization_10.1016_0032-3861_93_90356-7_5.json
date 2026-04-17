@@ -2,12 +2,12 @@
   "monomer1": "N-[4-(4-methoxyphenylacetoxy)phenyl]methacrylamide",
   "monomer2": "2-hydroxyethyl methacrylate",
   "r_values": {
-    "constant_1": 0.29,
-    "constant_2": 1.47
+    "constant_1": 0.31,
+    "constant_2": 1.52
   },
   "conf_intervals": {
     "constant_conf_1": 0.07,
-    "constant_conf_2": 0.04
+    "constant_conf_2": 0.05
   },
   "temperature": 50.0,
   "temperature_unit": "°C",
@@ -15,7 +15,7 @@
   "method": "solvent",
   "r-product": null,
   "source": "https://doi.org/10.1016/0032-3861(93)90356-7",
-  "calculation_method": "Fineman-Ross",
+  "calculation_method": "Kelen-Tudos",
   "polymerization_type": "free radical",
   "logP": -0.2956000000000001,
   "monomer1_smiles": "C=C(C)C(=O)Nc1ccc(OC(=O)Cc2ccc(OC)cc2)cc1",
@@ -30,7 +30,7 @@
   "solvent_HBD": 0.0,
   "solvent_FractionCSP3": 0.6666666666666666,
   "solvent_MolMR": 19.750999999999998,
-  "solvent_LabuteASA": 31.390491026869903,
+  "solvent_LabuteASA": 31.390491026869896,
   "solvent_NumRotatableBonds": 1.0,
   "solvent_RingCount": 0.0,
   "solvent_HeavyAtomCount": 5.0

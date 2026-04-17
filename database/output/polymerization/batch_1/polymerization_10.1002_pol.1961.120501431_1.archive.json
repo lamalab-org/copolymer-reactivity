@@ -6,7 +6,7 @@
         },
         "monomers": [
             {
-                "name": "methyl acrylate"
+                "name": "methyl methacrylate"
             },
             {
                 "name": "N-vinylcarbazole"
@@ -31,13 +31,13 @@
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
-            "calculation_method": "Schwan and Price",
+            "calculation_method": "Mayo and Lewis",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.5
+                    "reaction_constant": 2.0
                 },
                 {
-                    "reaction_constant": 0.05
+                    "reaction_constant": 0.04
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

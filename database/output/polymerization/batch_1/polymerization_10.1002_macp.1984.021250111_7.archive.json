@@ -6,27 +6,27 @@
         },
         "monomers": [
             {
-                "name": "N-benzyl maleimide"
+                "name": "acrylonitrile"
             },
             {
                 "name": "styrene"
             }
         ],
         "reaction_conditions": {
-            "temperature": 333.15,
+            "temperature": 323.15,
             "solvent": {
-                "smile": "C1CCOC1"
+                "smile": "CN(C)C=O"
             },
             "solvent_descriptors": {
-                "log_P": 0.7968,
-                "TPSA": 9.23,
+                "log_P": -0.2956000000000001,
+                "TPSA": 20.310000000000002,
                 "HBA": 1.0,
                 "HBD": 0.0,
-                "fraction_CSP3": 1.0,
-                "mol_MR": 20.052999999999997,
-                "labute_ASA": 31.941791446997026,
-                "num_rotatable_bonds": 0.0,
-                "ring_count": 1.0,
+                "fraction_CSP3": 0.6666666666666666,
+                "mol_MR": 19.750999999999998,
+                "labute_ASA": 31.390491026869896,
+                "num_rotatable_bonds": 1.0,
+                "ring_count": 0.0,
                 "heavy_atom_count": 5.0
             },
             "polymerization_method": "solvent",
@@ -34,12 +34,12 @@
             "calculation_method": "Kelen-Tudor",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.04,
-                    "reaction_constant_confi": 0.02
+                    "reaction_constant": 0.3,
+                    "reaction_constant_confi": 0.05
                 },
                 {
-                    "reaction_constant": 0.02,
-                    "reaction_constant_confi": 0.01
+                    "reaction_constant": 0.13,
+                    "reaction_constant_confi": 0.02
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

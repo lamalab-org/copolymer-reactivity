@@ -15,6 +15,9 @@ import re
 from pathlib import Path
 from typing import Optional, Dict, Any
 
+# Track manual fixes so `--list-failed` can recognize them.
+FIX_LOG_FILENAME = "monomer_fix_log.json"
+
 # Import copolextractor utils for IUPAC name conversion
 try:
     # Add project root to path
@@ -333,6 +336,20 @@ def convert_with_custom_name(
                 if archive_file != final_archive:
                     shutil.move(str(archive_file), str(final_archive))
                 target_file.unlink()
+                # Persist a small log so `--list-failed` knows about manual fixes
+                try:
+                    log_path = target_dir / FIX_LOG_FILENAME
+                    log = {}
+                    if log_path.exists():
+                        log = json.loads(log_path.read_text())
+                    log[str(source_file.name)] = {
+                        "custom_name": custom_name,
+                        "archive_file": final_archive.name,
+                        "smiles": data.get("smiles"),
+                    }
+                    log_path.write_text(json.dumps(log, indent=2, ensure_ascii=False))
+                except Exception:
+                    pass
                 return True
             else:
                 print(f"Warning: Archive not created")
@@ -353,6 +370,15 @@ def find_failed_files(source_dir: Path, target_dir: Path) -> list[tuple[Path, st
     """Find files that failed to convert."""
     failed = []
     json_files = list(source_dir.glob("*.json"))
+
+    # Load fix log if present
+    fix_log = {}
+    try:
+        log_path = target_dir / FIX_LOG_FILENAME
+        if log_path.exists():
+            fix_log = json.loads(log_path.read_text())
+    except Exception:
+        fix_log = {}
     
     for json_file in json_files:
         # Skip non-monomer files
@@ -378,6 +404,11 @@ def find_failed_files(source_dir: Path, target_dir: Path) -> list[tuple[Path, st
         try:
             smiles = data.get('smiles')
             if smiles:
+                # If manually fixed, accept the logged archive
+                if json_file.name in fix_log:
+                    af = fix_log.get(json_file.name, {}).get("archive_file")
+                    if af and (target_dir / af).exists():
+                        continue
                 iupac_name = get_iupac_name(smiles)
                 if iupac_name:
                     sanitized = sanitize_filename(iupac_name)
@@ -453,6 +484,7 @@ def main():
             sys.exit(1)
         print(f"Converting {source_file.name} with custom name: {custom_name}")
         success = convert_with_custom_name(source_file, target_dir, custom_name, args.smiles)
+        print("✓" if success else "✗")
         sys.exit(0 if success else 1)
     
     # Handle --list-failed option

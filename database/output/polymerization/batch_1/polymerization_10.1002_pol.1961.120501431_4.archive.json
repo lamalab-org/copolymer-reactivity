@@ -6,7 +6,7 @@
         },
         "monomers": [
             {
-                "name": "styrene"
+                "name": "methyl acrylate"
             },
             {
                 "name": "N-vinylcarbazole"
@@ -31,13 +31,13 @@
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
-            "calculation_method": "Mayo and Lewis",
+            "calculation_method": "Schwan and Price",
             "reaction_constants": [
                 {
-                    "reaction_constant": 5.7
+                    "reaction_constant": 0.5
                 },
                 {
-                    "reaction_constant": 0.035
+                    "reaction_constant": 0.05
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

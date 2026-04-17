@@ -1,9 +1,9 @@
 {
   "monomer1": "1-vinylimidazole",
-  "monomer2": "gamma-methacryloxypropyltrimethoxysilane",
+  "monomer2": "p-trimethoxysilylstyrene",
   "r_values": {
-    "constant_1": 0.079,
-    "constant_2": 1.39
+    "constant_1": 0.002,
+    "constant_2": 6.9
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -19,7 +19,7 @@
   "polymerization_type": "radical",
   "logP": 1.6866,
   "monomer1_smiles": "C=Cn1ccnc1",
-  "monomer2_smiles": "C=C(C)C(=O)OCCC[Si](OC)(OC)OC",
+  "monomer2_smiles": "C=Cc1ccc([Si](OC)(OC)OC)cc1",
   "polytype_emb_1": 2.232015378422759,
   "polytype_emb_2": 4.6151798364176715,
   "method_emb_1": 6.958462891419976,

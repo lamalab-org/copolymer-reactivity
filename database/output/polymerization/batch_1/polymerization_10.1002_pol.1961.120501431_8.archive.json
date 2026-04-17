@@ -6,14 +6,14 @@
         },
         "monomers": [
             {
-                "name": "2,5-dichlorostyrene"
+                "name": "vinylidene chloride"
             },
             {
                 "name": "N-vinylcarbazole"
             }
         ],
         "reaction_conditions": {
-            "temperature": 343.15,
+            "temperature": 348.15,
             "solvent": {
                 "smile": "c1ccccc1"
             },
@@ -31,13 +31,13 @@
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
-            "calculation_method": "Mayo and Lewis",
+            "calculation_method": "Schwan and Price",
             "reaction_constants": [
                 {
-                    "reaction_constant": 8.0
+                    "reaction_constant": 0.02
                 },
                 {
-                    "reaction_constant": 0.016
+                    "reaction_constant": 3.7
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

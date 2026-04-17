@@ -1,9 +1,9 @@
 {
-  "monomer1": "styrene",
+  "monomer1": "methyl acrylate",
   "monomer2": "N-vinylcarbazole",
   "r_values": {
-    "constant_1": 5.7,
-    "constant_2": 0.035
+    "constant_1": 0.5,
+    "constant_2": 0.05
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -15,10 +15,10 @@
   "method": "solvent",
   "r-product": null,
   "source": "https://doi.org/10.1002/pol.1961.120501431",
-  "calculation_method": "Mayo and Lewis",
+  "calculation_method": "Schwan and Price",
   "polymerization_type": "free radical",
   "logP": 1.6866,
-  "monomer1_smiles": "C=Cc1ccccc1",
+  "monomer1_smiles": "C=CC(=O)OC",
   "monomer2_smiles": "C=Cn1c2ccccc2c2ccccc21",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

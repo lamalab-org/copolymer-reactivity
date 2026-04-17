@@ -4,41 +4,40 @@
         "publication_reference": {
             "DOI_number": "https://doi.org/10.1002/pol.1959.120351215"
         },
-        "r_product": 0.84,
         "monomers": [
             {
-                "name": "N-Vinylethylurethane"
+                "name": "vinylidene chloride"
             },
             {
-                "name": "N-Vinylpyrrolidone"
+                "name": "vinyl oxazolidinone"
             }
         ],
         "reaction_conditions": {
-            "temperature": 338.15,
+            "temperature": 348.15,
             "solvent": {
-                "smile": "CO"
+                "smile": "O=C1CCCCC1"
             },
             "solvent_descriptors": {
-                "log_P": -0.3915,
-                "TPSA": 20.23,
+                "log_P": 1.5196,
+                "TPSA": 17.07,
                 "HBA": 1.0,
-                "HBD": 1.0,
-                "fraction_CSP3": 1.0,
-                "mol_MR": 8.1428,
-                "labute_ASA": 13.533484780025564,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.8333333333333334,
+                "mol_MR": 28.091999999999985,
+                "labute_ASA": 43.719652546327126,
                 "num_rotatable_bonds": 0.0,
-                "ring_count": 0.0,
-                "heavy_atom_count": 2.0
+                "ring_count": 1.0,
+                "heavy_atom_count": 7.0
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
-            "calculation_method": "Alfrey-Price",
+            "calculation_method": "Kelen-Tudor",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.42
+                    "reaction_constant": 1.35
                 },
                 {
-                    "reaction_constant": 2.0
+                    "reaction_constant": 0.08
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

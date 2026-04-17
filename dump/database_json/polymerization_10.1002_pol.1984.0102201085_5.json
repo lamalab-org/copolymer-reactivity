@@ -1,9 +1,9 @@
 {
-  "monomer1": "p-Nitrostyrene",
+  "monomer1": "p-Methoxystyrene",
   "monomer2": "Methacryloyl fluoride",
   "r_values": {
-    "constant_1": 0.091,
-    "constant_2": 0.15
+    "constant_1": 0.017,
+    "constant_2": 0.11
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -13,12 +13,12 @@
   "temperature_unit": "°C",
   "solvent": "CCC(C)=O",
   "method": "solvent",
-  "r-product": 0.091,
+  "r-product": 0.0018,
   "source": "https://doi.org/10.1002/pol.1984.0102201085",
   "calculation_method": "nonlinear least-squares",
   "polymerization_type": "free radical",
   "logP": 0.9854,
-  "monomer1_smiles": "C=Cc1ccc([N+](=O)[O-])cc1",
+  "monomer1_smiles": "C=Cc1ccc(OC)cc1",
   "monomer2_smiles": "C=C(C)C(=O)F",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

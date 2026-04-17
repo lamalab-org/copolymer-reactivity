@@ -1,12 +1,12 @@
 {
   "monomer1": "Methacrylic Anhydride",
-  "monomer2": "Allyl Chloroacetate",
+  "monomer2": "2-Chloroethyl Vinyl Ether",
   "r_values": {
-    "constant_1": 42.0,
-    "constant_2": 2.0
+    "constant_1": 6.1,
+    "constant_2": 0.3
   },
   "conf_intervals": {
-    "constant_conf_1": 2.0,
+    "constant_conf_1": 0.3,
     "constant_conf_2": null
   },
   "temperature": 60.0,
@@ -19,7 +19,7 @@
   "polymerization_type": "free radical",
   "logP": 1.6866,
   "monomer1_smiles": "C=C(C)C(=O)OC(=O)C(=C)C",
-  "monomer2_smiles": "C=CCOC(=O)CCl",
+  "monomer2_smiles": "C=COCCCl",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,
   "method_emb_1": 6.958462891419976,

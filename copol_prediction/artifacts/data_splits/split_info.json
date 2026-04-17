@@ -1,45 +1,34 @@
 {
-  "total_samples": 6812,
-  "train_samples": 4766,
-  "val_samples": 682,
-  "test_samples": 1364,
-  "train_groups": 2383,
-  "val_groups": 341,
-  "test_groups": 682,
+  "total_samples": 6774,
+  "train_samples": 4738,
+  "val_samples": 678,
+  "test_samples": 1358,
+  "train_groups": 2369,
+  "val_groups": 339,
+  "test_groups": 679,
   "train_class_counts": {
-    "0": 3628,
-    "1": 934,
-    "2": 204
+    "0": 230,
+    "1": 2044,
+    "2": 2464
   },
   "val_class_counts": {
-    "0": 498,
-    "1": 160,
-    "2": 24
+    "0": 46,
+    "1": 240,
+    "2": 392
   },
   "test_class_counts": {
-    "0": 1004,
-    "1": 296,
-    "2": 64
+    "0": 68,
+    "1": 620,
+    "2": 670
   },
   "test_ids_path": "artifacts/data_splits/test.csv",
   "val_ids_path": "artifacts/data_splits/val.csv",
-  "test_size_ratio": 0.2002348796241926,
-  "val_size_ratio": 0.1001174398120963,
+  "test_size_ratio": 0.2004723944493652,
+  "val_size_ratio": 0.10008857395925598,
   "filters_applied": [
     "r1r2 >= 0",
     "r1r2 not null",
     "removed rows with NaN features"
   ],
-  "remove_specialized_from_test": false,
-  "bins": [
-    -Infinity,
-    1,
-    25,
-    Infinity
-  ],
-  "labels": [
-    0,
-    1,
-    2
-  ]
+  "remove_specialized_from_test": false
 }

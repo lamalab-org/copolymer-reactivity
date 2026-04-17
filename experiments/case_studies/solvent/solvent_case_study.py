@@ -23,14 +23,15 @@ import random
 import sys
 from pathlib import Path
 
-# Add paths to import copolpredictor modules
+# Add paths to import copolpredictor and copol_prediction as package
 # PROJECT_ROOT: go up 4 levels from experiments/case_studies/solvent/solvent_case_study.py
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+# So that `import copolpredictor` and `import copol_prediction` work
+sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(Path(PROJECT_ROOT) / "src"))
-sys.path.insert(0, str(Path(PROJECT_ROOT) / "copol_prediction"))
 
 from copolpredictor.inference import CopolymerPredictor
-from copol_prediction.analysis.analyze_model import compute_naive_baseline_predictions
 
 # Paths (use final model bundle = newest model)
 # Training data: use the same split as the main model bundle
@@ -191,6 +192,13 @@ def main():
     
     # Extract case study info
     case_minsk_classes = df_case['minsk_class'].tolist()
+    # Optional: whether Final Model agrees with Lookup (voting definition)
+    # If missing, treat all as agreement=True.
+    case_agreement = (
+        df_case["agreement"].tolist()
+        if "agreement" in df_case.columns
+        else [True] * len(df_case)
+    )
     
     # Load model and make predictions
     print(f"\nLoading model from {args.model_path}...")
@@ -235,42 +243,6 @@ def main():
         case_model_classes = df_case['model_class'].tolist()
     
     print(f"\nCase study solvents: {original_case_solvents}")
-    
-    # Compute baseline predictions for case study points
-    print("\nComputing baseline predictions for case study points...")
-    case_baseline_classes = None
-    try:
-        # Check if case study data has required SMILES columns, if not create them
-        required_smiles_cols = ['monomer1_smiles', 'monomer2_smiles', 'solvent_smiles']
-        df_case_for_baseline = df_case.copy()
-        
-        # Add SMILES columns if missing
-        if 'monomer1_smiles' not in df_case_for_baseline.columns:
-            df_case_for_baseline['monomer1_smiles'] = MONOMER1_SMILES
-        if 'monomer2_smiles' not in df_case_for_baseline.columns:
-            df_case_for_baseline['monomer2_smiles'] = MONOMER2_SMILES
-        if 'solvent_smiles' not in df_case_for_baseline.columns:
-            # Map solvent names to SMILES
-            df_case_for_baseline['solvent_smiles'] = df_case_for_baseline['solvent_name'].map(SOLVENT_SMILES)
-        
-        # Check if all required columns are now available
-        if all(col in df_case_for_baseline.columns for col in required_smiles_cols):
-            # Prepare training labels
-            y_train = df_train['r_product_class'].astype(int).values
-            
-            # Compute baseline predictions
-            case_baseline_classes = compute_naive_baseline_predictions(
-                df_case_for_baseline, df_train, y_train, feature_cols=predictor.features if 'predictor' in locals() else None
-            )
-            print(f"  ✓ Baseline predictions computed: {case_baseline_classes.tolist()}")
-        else:
-            print(f"  ⚠️  Warning: Could not create SMILES columns. Skipping baseline.")
-            print(f"     Required: {required_smiles_cols}")
-            print(f"     Available: {df_case_for_baseline.columns.tolist()}")
-    except Exception as e:
-        print(f"  ⚠️  Warning: Could not compute baseline predictions: {e}")
-        import traceback
-        traceback.print_exc()
     
     # Filter training data
     print(f"\nPreparing training data...")
@@ -396,16 +368,13 @@ def main():
     # Reorder case study data to match new solvent order (by matching names)
     reordered_minsk_classes = [0] * len(original_case_solvents)
     reordered_model_classes = [0] * len(original_case_solvents)
-    reordered_baseline_classes = None
-    if case_baseline_classes is not None:
-        reordered_baseline_classes = [0] * len(original_case_solvents)
+    reordered_agreement = [True] * len(original_case_solvents)
     
     for old_idx, old_name in enumerate(original_case_solvents):
         new_idx = reordered_solvents.index(old_name)
         reordered_minsk_classes[new_idx] = case_minsk_classes[old_idx]
         reordered_model_classes[new_idx] = case_model_classes[old_idx]
-        if reordered_baseline_classes is not None:
-            reordered_baseline_classes[new_idx] = int(case_baseline_classes[old_idx])
+        reordered_agreement[new_idx] = bool(case_agreement[old_idx])
     
     # Use reordered solvents for the rest of the code
     case_solvents_ordered = reordered_solvents
@@ -436,20 +405,8 @@ def main():
     print("\nCreating grid plot...")
     fig, ax = plt.subplots(figsize=(15, 7))
     
-    # Agreement mask: only plot one point per case study when model and baseline agree
-    if reordered_baseline_classes is not None:
-        agree_mask = [
-            reordered_model_classes[i] == reordered_baseline_classes[i]
-            for i in range(len(case_solvents_ordered))
-        ]
-    else:
-        agree_mask = [True] * len(case_solvents_ordered)  # no baseline: show all model points
-    
-    # Only keep solvents where models agree for the plot
-    visible_indices = [i for i in range(len(case_solvents_ordered)) if agree_mask[i]]
-    if len(visible_indices) == 0:
-        print("  ⚠️  No solvents where model and baseline agree; plot will be empty for case study row.")
-    
+    # All solvents are shown; we no longer filter by agreement with Lookup
+    visible_indices = list(range(len(case_solvents_ordered)))
     # Map old solvent indices to compact x-positions 0..(n_visible-1)
     old_to_new_pos = {old_idx: new_idx for new_idx, old_idx in enumerate(visible_indices)}
     
@@ -488,12 +445,13 @@ def main():
             zorder=1
         )
     
-    # Plot single case study row: one point per solvent only when both models agree
+    # Plot single case study row: one point per solvent (final model only)
     y_pos = 1.1
     for old_idx in visible_indices:
         new_x = old_to_new_pos[old_idx]
         pred_class = reordered_model_classes[old_idx]  # same as baseline when agree
         is_correct = (reordered_minsk_classes[old_idx] == pred_class)
+        agrees_with_lookup = bool(reordered_agreement[old_idx])
         color = CLASS_COLORS[0] if is_correct else CLASS_COLORS[2]
         marker = CLASS_MARKERS[pred_class]
         ax.scatter(
@@ -501,9 +459,9 @@ def main():
             y_pos,
             c=color,
             s=200,
-            alpha=0.8,
+            alpha=0.85 if agrees_with_lookup else 0.28,
             edgecolors='black',
-            linewidth=2.5,
+            linewidth=2.5 if agrees_with_lookup else 1.5,
             marker=marker,
             zorder=3
         )
@@ -579,15 +537,23 @@ def main():
                markersize=12, markeredgecolor='black', markeredgewidth=1.5,
                label='Incorrect', linestyle='None', alpha=0.8)
     )
+
+    # Agreement cue (opacity)
+    legend_elements.append(
+        Line2D([0], [0], marker='o', color='w',
+               markerfacecolor='gray',
+               markersize=10, markeredgecolor='black', markeredgewidth=1.2,
+               label='No model/lookup agreement (faded)', linestyle='None', alpha=0.28)
+    )
     
     # Add separator
     legend_elements.append(Line2D([0], [0], color='none', label=''))
     
-    # Shapes: Class markers with new labels
+    # Shapes: Class markers with new labels (new class semantics)
     class_labels = {
         0: 'Alternating',
-        1: 'Random to block-like',
-        2: 'Homopolymer'
+        1: 'Random / block-like',
+        2: 'Gradient'
     }
     for cls in sorted(CLASS_COLORS.keys()):
         legend_elements.append(
@@ -756,33 +722,17 @@ def main():
     print("="*60)
     print(f"Case study solvents: {len(case_solvents_ordered)}")
     
-    # Agreement: only plotted points where model and baseline agree
-    if reordered_baseline_classes is not None:
-        n_agree = sum(agree_mask)
-        n_disagree = len(case_solvents_ordered) - n_agree
-        print(f"\nModel vs Baseline (Lookup):")
-        print(f"  Agreed (plotted): {n_agree}")
-        print(f"  Disagreed (not in plot): {n_disagree}")
-        if n_disagree > 0:
-            print("\nDisagreements (Model pred vs Baseline pred):")
-            class_names = {0: "Alternating", 1: "Random/block", 2: "Homopolymer"}
-            for i in range(len(case_solvents_ordered)):
-                if not agree_mask[i]:
-                    s = case_solvents_ordered[i]
-                    m = reordered_model_classes[i]
-                    b = reordered_baseline_classes[i]
-                    print(f"  {s}: Model={class_names.get(m, m)}, Baseline={class_names.get(b, b)}")
-    else:
-        print("\nBaseline not available; all model predictions shown.")
-    
-    # Of the agreed points, how many correct
-    agreed_correct = sum(
-        1 for i in range(len(case_solvents_ordered))
-        if agree_mask[i] and reordered_minsk_classes[i] == reordered_model_classes[i]
+    # Performance (final model only, no Lookup)
+    n_total = len(case_solvents_ordered)
+    model_correct = sum(
+        1 for i in range(n_total)
+        if reordered_minsk_classes[i] == reordered_model_classes[i]
     )
-    agreed_total = sum(agree_mask)
-    if agreed_total > 0:
-        print(f"\nOf agreed points: {agreed_correct}/{agreed_total} correct")
+
+    print(f"\nPerformance of final model on all {n_total} case-study solvents:")
+    print(f"  Correct: {model_correct}/{n_total} "
+          f"({model_correct / n_total * 100:.1f}%)")
+    
     print(f"\nNearest neighbor samples: {len(neighbor_indices)}")
     
     neighbor_classes = [all_classes[i] for i in neighbor_indices]

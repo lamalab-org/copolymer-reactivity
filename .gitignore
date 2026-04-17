@@ -434,3 +434,13 @@ data_extraction/artifacts/**
 # Evaluation archives raw caches/images
 data_extraction/archive/evaluations/llm_comparison/artifacts/**
 
+### Project-specific large/reproducible artifacts ###
+# Local virtualenv variants (e.g. .venv311/)
+.venv*/
+
+# Local cache database
+cache/cache.db
+
+# Trained model pickles can exceed GitHub limits
+copol_prediction/artifacts/**/*.pkl
+

@@ -1,13 +1,13 @@
 {
-  "monomer1": "Styrene",
-  "monomer2": "Methacrylic Acid",
+  "monomer1": "Vinyl Pyridine",
+  "monomer2": "Vinyl Acetate",
   "r_values": {
-    "constant_1": 0.16,
-    "constant_2": 0.62
+    "constant_1": 0.32,
+    "constant_2": 4.8
   },
   "conf_intervals": {
-    "constant_conf_1": 0.02,
-    "constant_conf_2": 0.03
+    "constant_conf_1": 0.11,
+    "constant_conf_2": 0.1
   },
   "temperature": 59.85000000000002,
   "temperature_unit": "°C",
@@ -18,8 +18,8 @@
   "calculation_method": null,
   "polymerization_type": "Homogeneous Radical",
   "logP": 0.03320000000000001,
-  "monomer1_smiles": "C=Cc1ccccc1",
-  "monomer2_smiles": "C=C(C)C(=O)O",
+  "monomer1_smiles": "C=Cc1ccccn1",
+  "monomer2_smiles": "C=COC(C)=O",
   "polytype_emb_1": -2.4396278967175387,
   "polytype_emb_2": 5.11014537328129,
   "method_emb_1": 15.331750999090334,

@@ -36,6 +36,7 @@ class CopolymerPredictor:
         self.features = None
         self.class_labels = None
         self.metadata = None
+        self.calibration = None
         
         self._load_model()
     
@@ -49,11 +50,41 @@ class CopolymerPredictor:
         self.features = self.bundle['features']
         self.class_labels = self.bundle['class_labels']
         self.metadata = self.bundle['metadata']
+        self.calibration = self.bundle.get("calibration")
         
         print(f"✓ Loaded model from {self.bundle_path}")
         print(f"  - Features: {len(self.features)}")
         print(f"  - Classes: {self.class_labels}")
         print(f"  - Created: {self.metadata.get('created_at', 'unknown')}")
+        if self.calibration:
+            method = self.calibration.get("method", "unknown")
+            fitted_on = self.calibration.get("fitted_on", "unknown")
+            print(f"  - Calibration: {method} (fitted_on={fitted_on})")
+
+    def _apply_ovr_calibration(self, y_proba: np.ndarray) -> np.ndarray:
+        """
+        Apply one-vs-rest calibrators (per class) and renormalize rows.
+        Calibration payload is stored in the model bundle under `calibration`.
+        """
+        if not self.calibration:
+            return y_proba
+        calibrators = self.calibration.get("calibrators")
+        if not calibrators:
+            return y_proba
+
+        calibrated_cols = []
+        for cls, cal in enumerate(calibrators):
+            p_cls = y_proba[:, cls]
+            if hasattr(cal, "predict_proba"):
+                p_cal = cal.predict_proba(p_cls.reshape(-1, 1))[:, 1]
+            else:
+                p_cal = cal.predict(p_cls)
+            calibrated_cols.append(np.clip(p_cal, 1e-9, 1.0))
+
+        p_mat = np.vstack(calibrated_cols).T
+        row_sums = p_mat.sum(axis=1, keepdims=True)
+        row_sums[row_sums == 0] = 1.0
+        return p_mat / row_sums
     
     def predict(self, X: Union[pd.DataFrame, dict, np.ndarray]) -> np.ndarray:
         """
@@ -79,7 +110,8 @@ class CopolymerPredictor:
             Array of shape (n_samples, n_classes) with class probabilities
         """
         X_processed = self._prepare_input(X)
-        return self.model.predict_proba(X_processed)
+        y_proba = self.model.predict_proba(X_processed)
+        return self._apply_ovr_calibration(y_proba)
     
     def predict_with_confidence(
         self,
@@ -98,17 +130,11 @@ class CopolymerPredictor:
         
         # Get predictions
         y_pred = self.model.predict(X_processed)
-        y_proba = self.model.predict_proba(X_processed)
-        
-        # Calculate confidence (weighted: max probability + margin)
-        # This is less strict than entropy-based confidence
-        max_proba = np.max(y_proba, axis=1)
-        sorted_proba = np.sort(y_proba, axis=1)[:, ::-1]
-        margin = sorted_proba[:, 0] - sorted_proba[:, 1]
-        
-        # Weighted combination: 70% max probability, 30% margin
-        # This gives more meaningful differentiation between predictions
-        confidence = 0.7 * max_proba + 0.3 * margin
+        y_proba_raw = self.model.predict_proba(X_processed)
+        y_proba = self._apply_ovr_calibration(y_proba_raw)
+
+        # Confidence for calibrated probabilities: use predicted-class probability (= max proba)
+        confidence = np.max(y_proba, axis=1)
         
         return {
             'predictions': y_pred,

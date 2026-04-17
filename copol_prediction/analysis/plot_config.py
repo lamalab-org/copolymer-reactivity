@@ -52,6 +52,20 @@ SEQUENTIAL_COLORS = [
     '#ffbc57',
 ]
 
+# Consistent two-line palette for lab time-series panels
+LAB_SERIES_COLORS = {
+    "series_1": SEQUENTIAL_COLORS[2],  # cool
+    "series_2": SEQUENTIAL_COLORS[5],  # warm
+}
+
+# Monomer-specific colors used in lab/case-study plots
+MONOMER_COLORS = {
+    "AN": SEQUENTIAL_COLORS[5],  # acrylonitrile
+    "VP": SEQUENTIAL_COLORS[2],  # N-vinyl-5-pyrrolidone
+    "VA": SEQUENTIAL_COLORS[7],  # vinyl acetate
+    "BA": SEQUENTIAL_COLORS[3],  # butyl acrylate
+}
+
 # Categorical colors (for heatmaps, etc.)
 HEATMAP_CMAP = 'Blues'
 DIVERGING_CMAP = 'RdYlGn'
@@ -162,6 +176,19 @@ def get_comparison_colors():
     return COMPARISON_COLORS['original'], COMPARISON_COLORS['filtered']
 
 
+def get_monomer_color(monomer_key: str) -> str:
+    """
+    Get color for a monomer key used in plots.
+
+    Args:
+        monomer_key: e.g. 'AN', 'VP'
+    """
+    key = monomer_key.strip().upper()
+    if key in MONOMER_COLORS:
+        return MONOMER_COLORS[key]
+    return SEQUENTIAL_COLORS[hash(key) % len(SEQUENTIAL_COLORS)]
+
+
 def setup_plot_style():
     """
     Setup complete plot style for analysis.
@@ -216,20 +243,20 @@ ERROR_ANALYSIS_CONFIG = {
 
 CLASS_LABELS = {
     0: "Class 0:\nAlternating",
-    1: "Class 1:\nBlock-like",
-    2: "Class 2:\nHomopolymer",
+    1: "Class 1:\nRandom / block-like",
+    2: "Class 2:\nGradient",
 }
 
 CLASS_LABELS_SHORT = {
     0: "Alternating",
-    1: "Block-like",
-    2: "Homopolymer",
+    1: "Random / block-like",
+    2: "Gradient",
 }
 
 CLASS_LABELS_LONG = {
     0: "Class 0: Alternating",
-    1: "Class 1: Block-like",
-    2: "Class 2: Homopolymer",
+    1: "Class 1: Random / block-like",
+    2: "Class 2: Gradient",
 }
 
 

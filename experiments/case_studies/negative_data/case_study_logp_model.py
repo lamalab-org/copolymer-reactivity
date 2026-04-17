@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Case study: Train logP model on all training data (normal + negative) 
-and evaluate on train (normal), train (negative), and test (negative).
+Case study: Train logP model on all training data (normal + negative)
+and evaluate on train (normal), train (negative), and a test split
+of the same negative data.
 """
 
 import os
@@ -39,7 +40,8 @@ from train_simple_logp_model import (
     train_model,
     print_detailed_predictions,
     load_logp_cache,
-    save_logp_cache
+    save_logp_cache,
+    reorder_monomers_by_logp,
 )
 
 
@@ -166,7 +168,7 @@ def evaluate_model_on_dataset(model, df_test, features, dataset_name):
     }
 
 
-def plot_case_study_performance(results_train_normal, results_train_neg, results_test_neg_split, results_test_neg, output_dir):
+def plot_case_study_performance(results_train_normal, results_train_neg, results_test_neg_split, output_dir):
     """Create case study performance plot comparing train vs test performance."""
     os.makedirs(output_dir, exist_ok=True)
     
@@ -174,21 +176,18 @@ def plot_case_study_performance(results_train_normal, results_train_neg, results
         'Train\n(Normal)',
         'Train\n(Negative)',
         'Test\n(Neg Split)',
-        'Test\n(Neg File)'
     ]
     
     accuracies = [
         results_train_normal['accuracy_macro'],
         results_train_neg['accuracy_macro'],
         results_test_neg_split['accuracy_macro'],
-        results_test_neg['accuracy_macro']
     ]
     
     precisions = [
         results_train_normal['precision_macro'],
         results_train_neg['precision_macro'],
         results_test_neg_split['precision_macro'],
-        results_test_neg['precision_macro']
     ]
     
     # Create plot
@@ -235,7 +234,6 @@ def main():
     
     # Paths
     negative_data_path = script_dir / "processed_combined_augmented.csv"
-    negative_test_data_path = script_dir / "negative_data_test_raw_2.csv"
     output_dir = script_dir / "results" / "case_study_logp"
     
     os.makedirs(output_dir, exist_ok=True)
@@ -249,7 +247,6 @@ def main():
         'random_state': 42,
         'hyperparam_iter': 25,
         'negative_data_path': str(negative_data_path),
-        'negative_test_data_path': str(negative_test_data_path),
     }
     
     print("="*60)
@@ -273,6 +270,10 @@ def main():
     print("="*60)
     df_original = add_logp_features(df_original)
     df_neg_all = add_logp_features(df_neg_all)
+    
+    # Reorder monomers so that monomer1_logP <= monomer2_logP
+    df_original = reorder_monomers_by_logp(df_original)
+    df_neg_all = reorder_monomers_by_logp(df_neg_all)
     
     # Save cache
     save_logp_cache()
@@ -303,26 +304,6 @@ def main():
     # Train model
     model_info = train_model(df_train_combined, config)
     
-    # Prepare negative test data
-    print("\n" + "="*60)
-    print("PREPARING NEGATIVE TEST DATA")
-    print("="*60)
-    df_test_neg = prepare_negative_test_data(negative_test_data_path)
-    
-    if df_test_neg is None or len(df_test_neg) == 0:
-        print("❌ Error: Could not prepare negative test data")
-        sys.exit(1)
-    
-    # Add logP features to test data
-    df_test_neg = add_logp_features(df_test_neg)
-    save_logp_cache()  # Save updated cache
-    
-    # Remove duplicates based on logP features
-    df_test_neg = remove_duplicates_by_logp_features(df_test_neg)
-    
-    # Convert to binary
-    df_test_neg = convert_to_binary_classification(df_test_neg)
-    
     # Evaluate on three datasets
     print("\n" + "="*60)
     print("EVALUATION")
@@ -352,7 +333,7 @@ def main():
         dataset_name="Training Data (Negative)"
     )
     
-    # Evaluate on negative test data (the held-out 20% split)
+    # Evaluate on negative test data (the held-out 20% split from processed_combined_augmented.csv)
     results_test_neg_split = evaluate_model_on_dataset(
         model_info['model'],
         df_neg_test,
@@ -368,22 +349,6 @@ def main():
         dataset_name="Negative Test Data (Split)"
     )
     
-    # Evaluate on negative test data (from separate file)
-    results_test_neg = evaluate_model_on_dataset(
-        model_info['model'],
-        df_test_neg,
-        model_info['features'],
-        "Test Data (Negative - Separate File)"
-    )
-    
-    # Print detailed predictions for separate negative test file
-    print_detailed_predictions(
-        model_info['model'],
-        df_test_neg,
-        model_info['features'],
-        dataset_name="Negative Test Data (Separate File)"
-    )
-    
     # Create plot
     print("\n" + "="*60)
     print("CREATING CASE STUDY PERFORMANCE PLOT")
@@ -392,7 +357,6 @@ def main():
         results_train_normal,
         results_train_neg,
         results_test_neg_split,
-        results_test_neg,
         output_dir
     )
     

@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-02-19T12:21:39.911735Z",
+  "created_at": "2026-04-08T06:52:43.174048Z",
   "feature_columns": [
     "fukui_radical_max_1",
     "global_electrophilicity_1",
@@ -36,31 +36,32 @@
   "n_features": 25,
   "n_classes": 3,
   "best_params": {
-    "subsample": 0.95,
+    "subsample": 0.85,
     "reg_lambda": 2.0,
-    "reg_alpha": 0.3,
+    "reg_alpha": 0.0,
     "n_estimators": 700,
-    "min_child_weight": 3,
-    "max_depth": 6,
+    "min_child_weight": 2,
+    "max_depth": 5,
     "learning_rate": 0.06,
     "gamma": 0.3,
     "colsample_bytree": 0.9
   },
-  "cv_score": 0.7827036193994139,
-  "holdout_accuracy": 0.7565982404692082,
-  "holdout_f1_weighted": 0.7635763171255104,
-  "holdout_f1_macro": 0.6234577083745255,
+  "cv_score": 0.7222564932803925,
+  "holdout_accuracy": 0.7525773195876289,
+  "holdout_f1_weighted": 0.7525944007608316,
+  "holdout_f1_macro": 0.7237109355549173,
   "class_weights": {
-    "0": 0.4256,
-    "1": 1.8603,
-    "2": 8.8751
+    "0": 6.8667,
+    "1": 0.7727,
+    "2": 0.641
   },
   "training_config": {
-    "augmentation_used": true,
+    "augmentation_used": false,
     "augmentation_samples": 5,
     "negative_data_used": false,
-    "specialized_removed_from_training": true,
+    "specialized_removed_from_training": false,
     "specialized_removed_from_test": false,
+    "cv_prune_100_path": "",
     "used_central_split": true,
     "random_state": 42
   }

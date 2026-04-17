@@ -6,14 +6,14 @@
         },
         "monomers": [
             {
-                "name": "vinyl acetate"
+                "name": "methyl acrylate"
             },
             {
                 "name": "N-vinylcarbazole"
             }
         ],
         "reaction_conditions": {
-            "temperature": 338.15,
+            "temperature": 348.15,
             "solvent": {
                 "smile": "c1ccccc1"
             },
@@ -34,10 +34,10 @@
             "calculation_method": "Mayo and Lewis",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.126
+                    "reaction_constant": 0.5
                 },
                 {
-                    "reaction_constant": 2.68
+                    "reaction_constant": 0.05
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

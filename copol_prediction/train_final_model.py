@@ -6,18 +6,23 @@ This script trains the production model with optimized settings and saves
 it as a bundle for deployment.
 
 Usage:
-    python train_final_model.py [--data-path PATH] [--output-dir DIR]
+    python train_final_model.py [--output-dir DIR] [--analysis-output-dir DIR]
+
+Paths are resolved under copol_prediction/ when relative (works from repo root).
 """
 
 import os
 import sys
+import json
 import argparse
 import pandas as pd
 import numpy as np
 from pathlib import Path
 
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Add parent directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(_SCRIPT_DIR, '..'))
 
 from copolpredictor import (
     data_processing,
@@ -30,6 +35,15 @@ from copolpredictor import (
 from utils import load_data_split
 
 
+def _resolve_under_script(path: str) -> str:
+    """Relative paths are resolved under copol_prediction/ (this script's directory)."""
+    if not path:
+        return path
+    if os.path.isabs(path):
+        return os.path.normpath(path)
+    return os.path.normpath(os.path.join(_SCRIPT_DIR, path))
+
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -38,8 +52,8 @@ def parse_args():
     parser.add_argument(
         "--output-dir",
         type=str,
-        default="artifacts/model_bundle",
-        help="Directory to save model bundle"
+        default=os.path.join(_SCRIPT_DIR, "artifacts", "model_bundle"),
+        help="Directory to save model bundle (default: copol_prediction/artifacts/model_bundle)"
     )
     parser.add_argument(
         "--random-state",
@@ -48,10 +62,15 @@ def parse_args():
         help="Random seed for reproducibility"
     )
     parser.add_argument(
+        "--use-augmentation",
+        action="store_true",
+        help="Enable Gaussian training augmentation (default: off)",
+    )
+    parser.add_argument(
         "--augmentation-samples",
         type=int,
         default=5,
-        help="Number of augmented samples per datapoint"
+        help="Number of augmented samples per datapoint (only if --use-augmentation)",
     )
     parser.add_argument(
         "--hyperparam-iter",
@@ -68,6 +87,38 @@ def parse_args():
         "--remove-specialized",
         action="store_true",
         help="Remove specialized datapoints from training set (only affects training, not validation/test)"
+    )
+
+    parser.add_argument(
+        "--analysis-output-dir",
+        type=str,
+        default=os.path.join(_SCRIPT_DIR, "output", "analysis"),
+        help="Where to write analysis plots (default: copol_prediction/output/analysis)",
+    )
+    parser.add_argument(
+        "--calibration-method",
+        type=str,
+        choices=["none", "platt", "isotonic"],
+        default="isotonic",
+        help="Post-hoc probability calibration fit on validation voting subset (default: isotonic).",
+    )
+    parser.add_argument(
+        "--cv-prune-100-path",
+        type=str,
+        default=os.path.normpath(
+            os.path.join(
+                _SCRIPT_DIR,
+                "..",
+                "experiments",
+                "cv_pruning",
+                "results_val_full",
+                "ids_error_ge_100pct_enriched.csv",
+            )
+        ),
+        help=(
+            "Optional path to ids_error_ge_100pct_enriched.csv from CV-pruning. "
+            "If present, those reaction_ids are removed from TRAIN before fitting."
+        ),
     )
     
     return parser.parse_args()
@@ -90,8 +141,9 @@ def prepare_data(config):
     # Load central train/validation/test split
     print("Loading central train/validation/test split...")
     try:
-        df_train, df_val, df_test = load_data_split.load_train_val_test_split()
-        load_data_split.print_split_info()
+        split_dir = os.path.join(_SCRIPT_DIR, "artifacts", "data_splits")
+        df_train, df_val, df_test = load_data_split.load_train_val_test_split(split_dir=split_dir)
+        load_data_split.print_split_info(split_dir=split_dir)
         print(f"\nNote: Using Train for training, Validation for hyperparameter tuning (optional), Test for final evaluation")
     except FileNotFoundError as e:
         print(f"\nError: {e}")
@@ -117,10 +169,34 @@ def prepare_data(config):
             print(f"  Training set: {len(df_train)} samples ({df_train['reaction_id'].nunique()} groups)")
         else:
             print("Warning: 'specialized_filter' column not found in training data")
+
+    # Apply CV-pruning: remove 100% error-rate reaction_ids from TRAIN only
+    prune_path = config.get("cv_prune_100_path")
+    if prune_path and os.path.exists(prune_path):
+        try:
+            df_prune = pd.read_csv(prune_path)
+            if "reaction_id" in df_prune.columns:
+                prune_ids = set(df_prune["reaction_id"].astype(str).tolist())
+                before_rows = len(df_train)
+                before_groups = df_train["reaction_id"].astype(str).nunique()
+                df_train = df_train[~df_train["reaction_id"].astype(str).isin(prune_ids)].reset_index(drop=True)
+                after_rows = len(df_train)
+                after_groups = df_train["reaction_id"].astype(str).nunique()
+                print(
+                    f"Applied CV-pruning (100% error-rate): removed "
+                    f"{before_rows - after_rows} rows / {before_groups - after_groups} groups "
+                    f"from training set"
+                )
+            else:
+                print(f"Warning: 'reaction_id' column not found in prune list: {prune_path}")
+        except Exception as e:
+            print(f"Warning: Failed to apply CV-pruning from {prune_path}: {e}")
+    elif prune_path:
+        print(f"Warning: CV-pruning file not found at {prune_path}. Proceeding without pruning.")
     
     # Add negative data if configured
     if config['add_negative_data']:
-        neg_path = "filter/artificial_datapoints/processed_combined_augmented.csv"
+        neg_path = os.path.join(_SCRIPT_DIR, "filter", "artificial_datapoints", "processed_combined_augmented.csv")
         if os.path.exists(neg_path):
             df_neg = pd.read_csv(neg_path)
             if 'Class' in df_neg.columns:
@@ -140,7 +216,95 @@ def prepare_data(config):
     # It can be used for hyperparameter tuning if needed
     # For now, we train on Train and evaluate on Test
     
-    return df_train, df_test, available_features
+    return df_train, df_val, df_test, available_features
+
+
+def fit_and_save_validation_calibration(
+    *,
+    model,
+    df_train_lookup_pool: pd.DataFrame,
+    df_val: pd.DataFrame,
+    features: list[str],
+    out_dir: str,
+    method: str,
+) -> str | None:
+    """
+    Fit per-class OVR calibrators on the VALIDATION set (voting subset),
+    save to <out_dir>/calibration.joblib, and return the path.
+    """
+    if method == "none":
+        print("\nCalibration disabled (--calibration-method none).")
+        return None
+
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.isotonic import IsotonicRegression
+    import joblib
+    from analysis.analyze_model import (
+        compute_fingerprints_for_smiles,
+        compute_naive_baseline_predictions_with_similarity,
+    )
+
+    print("\n" + "=" * 60)
+    print("FITTING PROBABILITY CALIBRATION (validation voting subset)")
+    print("=" * 60)
+
+    df_train_lookup_pool = df_train_lookup_pool.dropna(subset=features + ["r_product_class"]).reset_index(drop=True)
+    df_val = df_val.dropna(subset=features + ["r_product_class"]).reset_index(drop=True)
+
+    X_val = df_val[features]
+    y_val = df_val["r_product_class"].astype(int).values
+
+    # Base model probabilities on validation
+    y_proba_raw = model.predict_proba(X_val)
+
+    # Voting subset (Lookup + XGB agree)
+    smiles_cols = ["monomer1_smiles", "monomer2_smiles", "solvent_smiles"]
+    all_smiles = set()
+    for data in [df_train_lookup_pool, df_val]:
+        for c in smiles_cols:
+            if c in data.columns:
+                all_smiles.update(data[c].dropna().unique())
+    fp_dict = compute_fingerprints_for_smiles(list(all_smiles))
+    y_train_lookup = df_train_lookup_pool["r_product_class"].astype(int).values
+    lookup_pred, _sim = compute_naive_baseline_predictions_with_similarity(
+        df_val, df_train_lookup_pool, y_train_lookup, features, fp_dict=fp_dict
+    )
+    lookup_pred = np.asarray(lookup_pred).astype(int)
+    xgb_pred = model.predict(X_val)
+    agree = (xgb_pred == lookup_pred)
+
+    y_val_v = y_val[agree]
+    y_proba_v = y_proba_raw[agree]
+    print(f"  Validation voting subset: {int(agree.sum())}/{len(agree)} ({agree.mean()*100:.1f}%)")
+
+    # Fit per-class calibrators on voting subset
+    calibrators = []
+    for cls in range(3):
+        y_binary = (y_val_v == cls).astype(int)
+        p_cls = y_proba_v[:, cls]
+        if method == "platt":
+            cal = LogisticRegression(max_iter=1000)
+            cal.fit(p_cls.reshape(-1, 1), y_binary)
+        elif method == "isotonic":
+            cal = IsotonicRegression(out_of_bounds="clip")
+            cal.fit(p_cls, y_binary)
+        else:
+            raise ValueError(f"Unknown calibration method: {method}")
+        calibrators.append(cal)
+
+    payload = {
+        "method": method,
+        "fitted_on": "validation_voting_subset",
+        "n_val_total": int(len(y_val)),
+        "n_val_voting": int(len(y_val_v)),
+        "calibrators": calibrators,
+    }
+
+    os.makedirs(out_dir, exist_ok=True)
+    cal_path = os.path.join(out_dir, "calibration.joblib")
+    joblib.dump(payload, cal_path)
+    print(f"  ✓ Saved calibration payload to {cal_path}")
+    return cal_path
 
 
 def train_model(df_train, features, config):
@@ -253,6 +417,7 @@ def evaluate_on_holdout(model, df_holdout, features):
     y_holdout = df_holdout['r_product_class'].astype(int).values
     
     results = evaluation.evaluate_model(model, X_holdout, y_holdout, labels=[0, 1, 2])
+    results["y_true"] = y_holdout
     evaluation.print_evaluation_results(results, title="Holdout Set Performance")
     
     return results
@@ -272,7 +437,9 @@ def save_model(model_info, holdout_results, config):
     print("="*60)
     
     # Get split info to know if specialized were removed
-    split_info = load_data_split.get_split_info()
+    split_info = load_data_split.get_split_info(
+        split_dir=os.path.join(_SCRIPT_DIR, "artifacts", "data_splits")
+    )
     specialized_removed = split_info.get('remove_specialized_from_test', False) if split_info else False
     
     # Prepare metadata
@@ -289,6 +456,7 @@ def save_model(model_info, holdout_results, config):
             'negative_data_used': config['add_negative_data'],
             'specialized_removed_from_training': config.get('remove_specialized', False),
             'specialized_removed_from_test': specialized_removed,  # This is always False (test/val never filtered)
+            'cv_prune_100_path': config.get("cv_prune_100_path"),
             'used_central_split': True,
             'random_state': config['random_state']
         }
@@ -305,8 +473,8 @@ def save_model(model_info, holdout_results, config):
     
     # Save holdout metrics
     evaluation.save_holdout_metrics_json(
-        y_true=holdout_results['predictions'],  # This should be y_true
-        y_pred=holdout_results['predictions'],
+        y_true=holdout_results.get("y_true"),
+        y_pred=holdout_results.get("predictions"),
         labels=[0, 1, 2],
         out_dir=os.path.join(config['output_dir'], "holdout_results"),
         filename="final_model_holdout.json"
@@ -483,6 +651,100 @@ def save_all_metrics_to_file(model, df_train, df_test, features, output_dir, con
     return metrics_file
 
 
+def evaluate_voting_on_test_set(model, df_train_lookup_pool, df_test, features, output_dir):
+    """
+    Evaluate XGB-only vs Voting (XGB + Lookup) on the TEST set.
+
+    Voting definition matches the analysis scripts: keep only samples where
+    XGBoost and Lookup agree; metrics are computed on that retained subset.
+    """
+    import json
+    from sklearn.metrics import (
+        balanced_accuracy_score,
+        precision_score,
+        recall_score,
+        f1_score,
+        confusion_matrix,
+    )
+
+    print("\n" + "=" * 60)
+    print("TEST SET EVALUATION (Voting: XGB + Lookup)")
+    print("=" * 60)
+
+    # Local imports (RDKit-heavy)
+    from analysis.analyze_model import (
+        compute_fingerprints_for_smiles,
+        compute_naive_baseline_predictions_with_similarity,
+    )
+
+    # Drop NaNs for fair comparison
+    df_train_lookup_pool = df_train_lookup_pool.dropna(subset=features + ["r_product_class"]).reset_index(drop=True)
+    df_test = df_test.dropna(subset=features + ["r_product_class"]).reset_index(drop=True)
+
+    X_test = df_test[features]
+    y_test = df_test["r_product_class"].astype(int).values
+
+    # XGBoost predictions (used only to define the voting subset)
+    xgb_pred = model.predict(X_test)
+
+    # Lookup predictions (with cached fingerprints)
+    smiles_cols = ["monomer1_smiles", "monomer2_smiles", "solvent_smiles"]
+    all_smiles = set()
+    for data in [df_train_lookup_pool, df_test]:
+        for c in smiles_cols:
+            if c in data.columns:
+                all_smiles.update(data[c].dropna().unique())
+    fp_dict = compute_fingerprints_for_smiles(list(all_smiles))
+
+    y_train_lookup = df_train_lookup_pool["r_product_class"].astype(int).values
+    lookup_pred, _sim = compute_naive_baseline_predictions_with_similarity(
+        df_test, df_train_lookup_pool, y_train_lookup, features, fp_dict=fp_dict
+    )
+    lookup_pred = np.asarray(lookup_pred).astype(int)
+
+    agree = (xgb_pred == lookup_pred)
+    y_test_v = y_test[agree]
+    xgb_pred_v = xgb_pred[agree]
+
+    def _metrics(yt, yp):
+        if len(yt) == 0:
+            return {
+                "n": 0,
+                "balanced_accuracy": None,
+                "precision_macro": None,
+                "recall_macro": None,
+                "f1_macro": None,
+                "confusion_matrix": None,
+            }
+        return {
+            "n": int(len(yt)),
+            "balanced_accuracy": float(balanced_accuracy_score(yt, yp)),
+            "precision_macro": float(precision_score(yt, yp, average="macro", zero_division=0)),
+            "recall_macro": float(recall_score(yt, yp, average="macro", zero_division=0)),
+            "f1_macro": float(f1_score(yt, yp, average="macro", zero_division=0)),
+            "confusion_matrix": confusion_matrix(yt, yp, labels=[0, 1, 2]).tolist(),
+        }
+
+    payload = {
+        "test_total": int(len(y_test)),
+        "voting": {
+            "coverage": float(agree.mean()) if len(agree) else 0.0,
+            "agree_n": int(agree.sum()),
+            **_metrics(y_test_v, xgb_pred_v),
+        }
+    }
+
+    os.makedirs(output_dir, exist_ok=True)
+    out_path = os.path.join(output_dir, "voting_test_metrics.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+
+    print(f"Test total: {payload['test_total']}")
+    print(f"Voting coverage: {payload['voting']['coverage']:.3f} ({payload['voting']['agree_n']} retained)")
+    print(f"✓ Voting test metrics saved to: {out_path}")
+    return out_path
+
+
 def run_analysis(model_path, data_path, output_dir):
     """
     Run model analysis after training.
@@ -502,6 +764,7 @@ def run_analysis(model_path, data_path, output_dir):
     try:
         from analysis import analyze_model
         from utils.load_data_split import load_train_val_test_split
+        from analysis.plot_class_curves import plot_class_curves
 
         class AnalysisArgs:
             def __init__(self):
@@ -512,7 +775,7 @@ def run_analysis(model_path, data_path, output_dir):
                 self.confusion = False
                 self.confidence = False
                 self.features = False
-                self.calibration = False
+                self.calibration = True  # explicit: multiclass reliability / calibration_curves.* on voting test subset
                 self.errors = False
                 self.confidence_vs_r1r2 = False
                 self.filtering = False
@@ -528,9 +791,8 @@ def run_analysis(model_path, data_path, output_dir):
         print(f"  ✓ Model loaded ({len(predictor.features)} features)")
 
         # Load test set from the global train/validation/test split
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        split_dir = os.path.join(script_dir, "artifacts", "data_splits")
-        _, _, df_test = load_train_val_test_split(split_dir=split_dir)
+        split_dir = os.path.join(_SCRIPT_DIR, "artifacts", "data_splits")
+        df_train, df_val, df_test = load_train_val_test_split(split_dir=split_dir)
         print(f"  ✓ Test set loaded ({len(df_test)} samples)")
 
         args = AnalysisArgs()
@@ -548,6 +810,24 @@ def run_analysis(model_path, data_path, output_dir):
 
         analyze_model.generate_plots_for_dataset(df_test, predictor, args, suffix='')
 
+        # Also generate Mayo–Lewis "class curves" figure (uses constants from split)
+        try:
+            df_all = pd.concat([df_train, df_val, df_test], ignore_index=True)
+            out_class_curves = plot_class_curves(df_all=df_all, output_dir=output_dir)
+            print(f"  ✓ Class curves written to: {out_class_curves}")
+        except Exception as e:
+            print(f"  ⚠ Failed to generate class curves: {e}")
+
+        cal_base = os.path.join(output_dir, "calibration_curves")
+        cal_ok = os.path.isfile(cal_base + ".png") or os.path.isfile(cal_base + ".pdf")
+        if cal_ok:
+            print(f"  ✓ Calibration curves written under: {output_dir}/ (calibration_curves.png/pdf)")
+        else:
+            print(
+                f"  ⚠ Calibration curves not found at {cal_base}.png/pdf — "
+                "check console for errors during plot_calibration_curve_multiclass"
+            )
+
         print(f"\n  ✓ Analysis complete! Plots saved to: {output_dir}/")
 
     except Exception as e:
@@ -561,17 +841,26 @@ def run_analysis(model_path, data_path, output_dir):
 def main():
     """Main training pipeline."""
     args = parse_args()
-    
+    args.output_dir = _resolve_under_script(args.output_dir)
+    args.analysis_output_dir = _resolve_under_script(args.analysis_output_dir)
+    if args.cv_prune_100_path:
+        args.cv_prune_100_path = _resolve_under_script(args.cv_prune_100_path)
+
     # Configuration
     config = {
         'output_dir': args.output_dir,
+        'analysis_output_dir': args.analysis_output_dir,
         'random_state': args.random_state,
         'augmentation_samples': args.augmentation_samples,
         'hyperparam_iter': args.hyperparam_iter,
-        # Training settings (can be adjusted)
-        'add_negative_data': not args.no_negative_data,  # Use negative data unless --no-negative-data flag is set
-        'use_augmentation': True,  # Enable augmentation by default
+        # Training settings
+        # Negative data is now disabled by default for final model training
+        'add_negative_data': False,
+        'use_augmentation': bool(args.use_augmentation),
         'remove_specialized': args.remove_specialized,  # Remove specialized datapoints if flag is set
+        # CV-pruning (data error analysis filter @ 100%)
+        'cv_prune_100_path': args.cv_prune_100_path,
+        'calibration_method': args.calibration_method,
     }
     
     print("="*60)
@@ -585,7 +874,7 @@ def main():
     print("   To recreate split: python create_data_split.py")
     
     # Prepare data (loads central split)
-    df_train, df_holdout, features = prepare_data(config)
+    df_train, df_val, df_holdout, features = prepare_data(config)
     
     # Train model
     model_info = train_model(df_train, features, config)
@@ -605,6 +894,55 @@ def main():
         output_dir=config['output_dir'],
         config=config
     )
+
+    # Evaluate voting on TEST set (XGBoost + Lookup)
+    # Lookup pool is TRAIN (+ optional negative data, if available)
+    df_lookup_pool = df_train.copy()
+    neg_path = os.path.join(_SCRIPT_DIR, "filter", "artificial_datapoints", "processed_combined_augmented.csv")
+    if os.path.exists(neg_path):
+        try:
+            df_neg = pd.read_csv(neg_path)
+            if "Class" in df_neg.columns and "r_product_class" not in df_neg.columns:
+                df_neg = df_neg.rename(columns={"Class": "r_product_class"})
+            if "r_product_class" in df_neg.columns:
+                df_neg["r_product_class"] = df_neg["r_product_class"].astype(int)
+                df_lookup_pool = pd.concat([df_lookup_pool, df_neg], ignore_index=True)
+                print(f"\n✓ Added {len(df_neg)} negative datapoints to lookup pool ({len(df_lookup_pool)} total)")
+        except Exception as e:
+            print(f"\nWarning: Failed to add negative data to lookup pool: {e}")
+
+    evaluate_voting_on_test_set(
+        model=model_info["model"],
+        df_train_lookup_pool=df_lookup_pool,
+        df_test=df_holdout,
+        features=features,
+        output_dir=config["output_dir"],
+    )
+
+    # Fit calibration on VALIDATION voting subset and save into model bundle directory
+    cal_path = fit_and_save_validation_calibration(
+        model=model_info["model"],
+        df_train_lookup_pool=df_lookup_pool,
+        df_val=df_val,
+        features=features,
+        out_dir=config["output_dir"],
+        method=config["calibration_method"],
+    )
+    if cal_path:
+        # Update meta.json to reflect that calibration exists
+        try:
+            meta_path = os.path.join(config["output_dir"], "meta.json")
+            with open(meta_path, "r", encoding="utf-8") as f:
+                meta = json.load(f)
+            meta.setdefault("training_config", {})
+            meta["training_config"]["calibration_method"] = config["calibration_method"]
+            meta["training_config"]["calibration_fitted_on"] = "validation_voting_subset"
+            meta["training_config"]["calibration_file"] = "calibration.joblib"
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False, indent=2)
+            print(f"\n✓ Updated bundle metadata with calibration info: {meta_path}")
+        except Exception as e:
+            print(f"\nWarning: Failed to update meta.json with calibration info: {e}")
     
     print("\n" + "="*60)
     print("TRAINING COMPLETE!")
@@ -615,11 +953,11 @@ def main():
     print(f"  predictor = CopolymerPredictor('{config['output_dir']}')")
     print("  predictions = predictor.predict(X)")
     
-    # Run automatic analysis
+    # Run automatic analysis (always under copol_prediction/output/analysis by default)
     run_analysis(
         model_path=config['output_dir'],
-        data_path="output/processed_data.csv",
-        output_dir="output/analysis"
+        data_path=os.path.join(_SCRIPT_DIR, "output", "processed_data.csv"),
+        output_dir=config['analysis_output_dir'],
     )
 
 

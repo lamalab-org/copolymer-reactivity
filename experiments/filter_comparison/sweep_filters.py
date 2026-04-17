@@ -10,12 +10,14 @@ Search space (16 combinations = 2 x 2 x 2 x 2):
   - remove_specialized:          [False, True]
   - apply_polymerization_filter: [False, True]
   - use_augmentation:            [False, True]  (XGBoost training only)
-  - add_negative_data:            [False, True]  (XGBoost training only, NOT for Lookup)
+  
+Note: The previous "negative data" training toggle has been removed. We now
+only sweep the three filters above (8 combinations total).
 
 Caching strategy (avoids redundant training):
-  - 16 unique XGBoost models  (spec x poly x aug x neg_data)
-  - 4  unique Lookup pred sets (spec x poly, NO negative data)
-  - 16 voting evaluations using cached predictions
+  - 8 unique XGBoost models  (spec x poly x aug)
+  - 4 unique Lookup pred sets (spec x poly)
+  - 8 voting evaluations using cached predictions
 
 Uses the central train/test split from copol_prediction/artifacts/data_splits/.
 
@@ -32,6 +34,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import shutil
 from sklearn.metrics import (
     balanced_accuracy_score,
     precision_score,
@@ -59,6 +62,7 @@ from copol_prediction.analysis.analyze_model import (
     compute_naive_baseline_predictions_with_similarity,
     compute_fingerprints_for_smiles,
 )
+from copol_prediction.mayo_lewis_classification import classify_reactivity_curve
 
 try:
     from copol_prediction.analysis.plot_config import setup_plot_style, HEATMAP_CMAP
@@ -82,10 +86,10 @@ def parse_args():
         description="Sweep filter combinations for the voting model"
     )
     parser.add_argument("--output-dir", type=str,
-                        default="artifacts/experiments_voting",
+                        default="experiments/filter_comparison/output/voting_sweep",
                         help="Directory to save result JSON/CSV")
     parser.add_argument("--plots-dir", type=str,
-                        default="output/voting_sweep",
+                        default="experiments/filter_comparison/output/voting_sweep",
                         help="Directory to save plots")
     parser.add_argument("--random-state", type=int, default=42)
     parser.add_argument("--n-iter", type=int, default=25,
@@ -94,6 +98,40 @@ def parse_args():
     parser.add_argument("--plot-only", action="store_true",
                         help="Skip training, re-plot from saved results CSV")
     return parser.parse_args()
+
+
+def _safe_move_tree(src_dir: str, dst_dir: str):
+    """Move all files from src_dir into dst_dir, then delete src_dir if empty."""
+    if not os.path.isdir(src_dir):
+        return
+    os.makedirs(dst_dir, exist_ok=True)
+    for root, _, files in os.walk(src_dir):
+        rel_root = os.path.relpath(root, src_dir)
+        out_root = dst_dir if rel_root == '.' else os.path.join(dst_dir, rel_root)
+        os.makedirs(out_root, exist_ok=True)
+        for fn in files:
+            src_path = os.path.join(root, fn)
+            dst_path = os.path.join(out_root, fn)
+            if os.path.exists(dst_path):
+                os.remove(dst_path)
+            shutil.move(src_path, dst_path)
+    # Remove empty directories
+    for root, dirs, files in os.walk(src_dir, topdown=False):
+        if not dirs and not files:
+            try:
+                os.rmdir(root)
+            except OSError:
+                pass
+
+
+def migrate_legacy_outputs(output_dir: str, plots_dir: str):
+    """Ensure all sweep outputs live under experiments/filter_comparison/output/."""
+    # Legacy locations used previously in this repo
+    legacy_results_dir = os.path.join(_PROJECT_ROOT, 'artifacts', 'experiments_voting')
+    legacy_plots_dir = os.path.join(_PROJECT_ROOT, 'output', 'voting_sweep')
+
+    _safe_move_tree(legacy_results_dir, output_dir)
+    _safe_move_tree(legacy_plots_dir, plots_dir)
 
 
 # ---------------------------------------------------------------------------
@@ -121,38 +159,18 @@ def filter_valid_smiles(df):
 
 
 def load_base_data():
-    """Load base train/validation split and negative data.
-
-    Returns (df_train, df_val, df_neg | None).
-    """
+    """Load base train/validation split."""
     copol_dir = os.path.join(_PROJECT_ROOT, 'copol_prediction')
     split_dir = os.path.join(copol_dir, 'artifacts', 'data_splits')
 
     df_train, df_val, _ = load_data_split.load_train_val_test_split(split_dir=split_dir)
     load_data_split.print_split_info(split_dir=split_dir)
 
-    neg_path = os.path.join(copol_dir, 'filter', 'artificial_datapoints',
-                            'processed_combined_augmented.csv')
-    df_neg = None
-    if os.path.exists(neg_path):
-        df_neg = pd.read_csv(neg_path)
-        if 'Class' in df_neg.columns:
-            df_neg = df_neg.rename(columns={'Class': 'r_product_class'})
-        df_neg['r_product_class'] = df_neg['r_product_class'].astype(int)
-        if 'reaction_id' not in df_neg.columns:
-            df_neg['reaction_id'] = [f"neg_{i}" for i in range(len(df_neg))]
-        print(f"Negative data loaded: {len(df_neg)} samples")
-    else:
-        print(f"WARNING: Negative data not found at {neg_path}")
-
     # Filter out rows with unparseable SMILES to prevent RDKit segfaults
     print("Validating SMILES …")
     df_train = filter_valid_smiles(df_train)
     df_val = filter_valid_smiles(df_val)
-    if df_neg is not None:
-        df_neg = filter_valid_smiles(df_neg)
-
-    return df_train, df_val, df_neg
+    return df_train, df_val
 
 
 def apply_cleaning_filters(df, remove_specialized, apply_poly_filter,
@@ -190,17 +208,14 @@ def apply_cleaning_filters(df, remove_specialized, apply_poly_filter,
             print(f"    [{set_name}] poly filter: {t2} -> {len(w)}")
 
     if 'r_product_class' not in w.columns:
-        bins = [-np.inf, 1, 25, np.inf]
-        labels_cls = [0, 1, 2]
-        w['r_product_class'] = pd.cut(
-            w['r1r2'], bins=bins, labels=labels_cls, right=False
-        ).astype(int)
         if {'constant_1', 'constant_2'}.issubset(w.columns):
-            mask_ext = (
-                ((w['constant_1'] <= 0.1) & (w['constant_2'] > 25)) |
-                ((w['constant_2'] <= 0.1) & (w['constant_1'] > 25))
-            )
-            w.loc[mask_ext, 'r_product_class'] = 2
+            def _class_from_row(row):
+                res = classify_reactivity_curve(float(row['constant_1']), float(row['constant_2']))
+                return res['class_id']
+
+            w['r_product_class'] = w.apply(_class_from_row, axis=1).astype(int)
+        else:
+            raise ValueError("Required columns 'constant_1' and 'constant_2' not found for class definition.")
 
     return w
 
@@ -272,6 +287,7 @@ def main():
 
     os.makedirs(config['output_dir'], exist_ok=True)
     os.makedirs(config['plots_dir'], exist_ok=True)
+    migrate_legacy_outputs(config['output_dir'], config['plots_dir'])
 
     # ------------------------------------------------------------------
     # Plot-only mode
@@ -279,8 +295,14 @@ def main():
     if args.plot_only:
         csv_path = os.path.join(config['output_dir'], 'sweep_results.csv')
         if not os.path.exists(csv_path):
-            print(f"Error: {csv_path} not found. Run without --plot-only first.")
-            sys.exit(1)
+            # Backward compatibility: some runs wrote to legacy locations.
+            legacy_csv = os.path.join(_PROJECT_ROOT, 'artifacts', 'experiments_voting', 'sweep_results.csv')
+            if os.path.exists(legacy_csv):
+                os.makedirs(config['output_dir'], exist_ok=True)
+                shutil.copy2(legacy_csv, csv_path)
+            else:
+                print(f"Error: {csv_path} not found. Run without --plot-only first.")
+                sys.exit(1)
         print("=" * 60)
         print("PLOT-ONLY MODE")
         print("=" * 60)
@@ -309,7 +331,7 @@ def main():
     print("LOADING DATA")
     print("=" * 60)
 
-    df_train_base, df_val_base, df_neg = load_base_data()
+    df_train_base, df_val_base = load_base_data()
 
     # ------------------------------------------------------------------
     # 2. Pre-compute fingerprints for all SMILES (used by Lookup)
@@ -317,7 +339,7 @@ def main():
     print("\nPre-computing fingerprint cache …")
     smiles_cols = ['monomer1_smiles', 'monomer2_smiles', 'solvent_smiles']
     all_smiles = set()
-    for data in [df_train_base, df_val_base] + ([df_neg] if df_neg is not None else []):
+    for data in [df_train_base, df_val_base]:
         for col in smiles_cols:
             if col in data.columns:
                 all_smiles.update(data[col].dropna().unique())
@@ -353,7 +375,7 @@ def main():
 
     # ------------------------------------------------------------------
     # 4. Train all unique XGBoost models
-    #    Unique key: (spec, poly, aug, neg_in_xgb)  -> 16 models
+    #    Unique key: (spec, poly, aug)  -> 8 models
     # ------------------------------------------------------------------
     print("\n" + "=" * 60)
     print("TRAINING XGBOOST MODELS (cached)")
@@ -361,23 +383,18 @@ def main():
 
     xgb_cache = {}   # key -> (model, cv_score, n_train)
     xgb_keys = set()
-    for spec, poly, aug, neg_data in itertools.product(
-        [False, True], [False, True], [False, True], [False, True]
-    ):
-        xgb_keys.add((spec, poly, aug, neg_data))
+    for spec, poly, aug in itertools.product([False, True], [False, True], [False, True]):
+        xgb_keys.add((spec, poly, aug))
 
     xgb_keys = sorted(xgb_keys)
-    for i, (spec, poly, aug, neg_data) in enumerate(xgb_keys, 1):
-        key_str = f"spec={int(spec)} poly={int(poly)} aug={int(aug)} neg={int(neg_data)}"
+    for i, (spec, poly, aug) in enumerate(xgb_keys, 1):
+        key_str = f"spec={int(spec)} poly={int(poly)} aug={int(aug)}"
         print(f"\n[XGBoost {i}/{len(xgb_keys)}] {key_str}")
 
         df_tr, _ = cleaned_cache[(spec, poly)]
         feats = features_map[(spec, poly)]
 
         df_train_xgb = df_tr.copy()
-        if neg_data and df_neg is not None:
-            df_train_xgb = pd.concat([df_train_xgb, df_neg], ignore_index=True)
-            df_train_xgb = remove_nan_rows(df_train_xgb, feats)
 
         if aug:
             original_len = len(df_train_xgb)
@@ -397,7 +414,7 @@ def main():
         model, cv_score, best_params = train_xgboost_model(df_train_xgb, feats, config)
         print(f"  CV score: {cv_score:.4f}")
 
-        xgb_cache[(spec, poly, aug, neg_data)] = (model, cv_score, len(df_train_xgb))
+        xgb_cache[(spec, poly, aug)] = (model, cv_score, len(df_train_xgb))
 
     # ------------------------------------------------------------------
     # 5. Compute all unique Lookup prediction sets
@@ -433,7 +450,7 @@ def main():
         lookup_cache[(spec, poly)] = (lu_pred, len(df_train_lookup))
 
     # ------------------------------------------------------------------
-    # 6. Evaluate all 16 voting combinations
+    # 6. Evaluate all voting combinations (8)
     # ------------------------------------------------------------------
     print("\n" + "=" * 60)
     print("EVALUATING VOTING COMBINATIONS")
@@ -443,19 +460,18 @@ def main():
         [False, True],      # remove_specialized
         [False, True],      # apply_polymerization_filter
         [False, True],      # use_augmentation
-        [False, True],      # add_negative_data (XGBoost only, NOT for Lookup)
     ))
 
     results = []
-    for idx, (spec, poly, aug, neg_data) in enumerate(search_space, 1):
+    for idx, (spec, poly, aug) in enumerate(search_space, 1):
         run_name = (f"spec{int(spec)}_poly{int(poly)}"
-                    f"_aug{int(aug)}_neg{int(neg_data)}")
+                    f"_aug{int(aug)}")
         print(f"\n[{idx}/{len(search_space)}] {run_name}")
 
         # Retrieve cached data
         _, df_te = cleaned_cache[(spec, poly)]
         feats = features_map[(spec, poly)]
-        model, cv_score, n_train_xgb = xgb_cache[(spec, poly, aug, neg_data)]
+        model, cv_score, n_train_xgb = xgb_cache[(spec, poly, aug)]
         # Lookup pool: NO negative data (only spec/poly filters)
         lu_pred, n_train_lookup = lookup_cache[(spec, poly)]
 
@@ -492,7 +508,6 @@ def main():
             'remove_specialized': spec,
             'apply_polymerization_filter': poly,
             'use_augmentation': aug,
-            'add_negative_data': neg_data,
             'cv_score': cv_score,
             'macro_accuracy': macro_acc,
             'macro_precision': macro_prec,

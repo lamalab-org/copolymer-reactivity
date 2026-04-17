@@ -4,7 +4,7 @@
         "publication_reference": {
             "DOI_number": "https://doi.org/10.1002/pol.1984.0102201085"
         },
-        "r_product": 0.34,
+        "r_product": 0.13,
         "monomers": [
             {
                 "name": "Methyl methacrylate"
@@ -16,17 +16,17 @@
         "reaction_conditions": {
             "temperature": 333.15,
             "solvent": {
-                "smile": "N#Cc1ccccc1"
+                "smile": "COc1ccccc1"
             },
             "solvent_descriptors": {
-                "log_P": 1.5582799999999999,
-                "TPSA": 23.79,
+                "log_P": 1.6952,
+                "TPSA": 9.23,
                 "HBA": 1.0,
                 "HBD": 0.0,
-                "fraction_CSP3": 0.0,
-                "mol_MR": 31.156999999999996,
-                "labute_ASA": 48.188924915362286,
-                "num_rotatable_bonds": 0.0,
+                "fraction_CSP3": 0.14285714285714285,
+                "mol_MR": 32.99399999999999,
+                "labute_ASA": 48.90989046340045,
+                "num_rotatable_bonds": 1.0,
                 "ring_count": 1.0,
                 "heavy_atom_count": 8.0
             },
@@ -35,10 +35,10 @@
             "calculation_method": "nonlinear least-squares",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.39
+                    "reaction_constant": 0.48
                 },
                 {
-                    "reaction_constant": 0.87
+                    "reaction_constant": 0.28
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

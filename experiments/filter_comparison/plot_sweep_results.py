@@ -61,16 +61,9 @@ try:
 except Exception:
     pass
 
-# Note: Negative data is now only a boolean (XGBoost only, NOT for Lookup)
-# The old NEG_TARGETS and NEG_LABELS are kept for backward compatibility
-# but should not be used in new code
-NEG_TARGETS = ['none', 'xgb_only', 'lookup_only', 'both']
-NEG_LABELS = {
-    'none': 'Neg: neither',
-    'xgb_only': 'Neg: XGB only',
-    'lookup_only': 'Neg: Lookup only',
-    'both': 'Neg: both',
-}
+#
+# Note: The previous "negative data" sweep dimension was removed.
+# Plotting assumes results contain only (spec, poly, aug) combinations.
 
 
 # ---------------------------------------------------------------------------
@@ -100,114 +93,67 @@ def parse_args():
         description="Generate plots from voting-model filter sweep results"
     )
     parser.add_argument("--results-path", type=str,
-                        default="artifacts/experiments_voting/sweep_results.csv")
+                        default="experiments/filter_comparison/output/voting_sweep/sweep_results.csv")
     parser.add_argument("--plots-dir", type=str,
-                        default="output/voting_sweep")
+                        default="experiments/filter_comparison/output/voting_sweep")
     return parser.parse_args()
 
 
 # ---------------------------------------------------------------------------
-# Heatmap: per neg_data_target (2×2 grid of heatmaps)
+# Heatmap (single): rows=(spec×poly), cols=(aug)
 # ---------------------------------------------------------------------------
 def plot_heatmap_grid(results_df, plots_dir, metric='macro_accuracy',
                       metric_label='Macro Accuracy'):
-    """Create a 2×2 grid of heatmaps — one per neg_data setting.
+    """Create a single 4×2 heatmap.
 
-    Within each heatmap:
-      rows = (spec × poly)  → 4
-      cols = aug on/off      → 2
+    - Rows: (spec × poly) → 4
+    - Cols: augmentation  → 2
     """
     setup_plot_style()
 
-    fig, axes = plt.subplots(2, 2, figsize=(TWO_COL_WIDTH_INCH, TWO_COL_WIDTH_INCH * 0.85))
-    axes_flat = axes.flatten()
+    fig, ax = plt.subplots(1, 1, figsize=(ONE_COL_WIDTH_INCH * 1.15, ONE_COL_WIDTH_INCH * 1.10))
 
     row_labels = []
     for spec in [False, True]:
         for poly in [False, True]:
-            s = "Spec+" if spec else "Spec-"
-            p = "Poly+" if poly else "Poly-"
-            row_labels.append(f"{s}\n{p}")
+            row_labels.append(
+                "Specialized reaction: " + ("on" if spec else "off")
+                + "\nPolymerization type: " + ("on" if poly else "off")
+            )
 
-    col_labels = ["Aug-", "Aug+"]
+    col_labels = ["off", "on"]
 
     # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
     vmin = round_up_half(results_df[metric].min(), decimals=2)
     vmax = round_up_half(results_df[metric].max(), decimals=2)
 
-    # Check if using new format (add_negative_data) or old format (neg_data_target)
-    if 'add_negative_data' in results_df.columns:
-        # New format: 2x2 grid for (aug, neg) combinations
-        for ax_idx, neg_data in enumerate([False, True]):
-            for aug_idx, aug in enumerate([False, True]):
-                ax = axes_flat[ax_idx * 2 + aug_idx]
-                subset = results_df[
-                    (results_df['add_negative_data'] == neg_data) &
-                    (results_df['use_augmentation'] == aug)
-                ]
-                
-                matrix = np.full((4, 2), np.nan)
-                annot_matrix = np.empty((4, 2), dtype=object)
-                annot_matrix.fill('')
-                for _, row in subset.iterrows():
-                    r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
-                    c_idx = int(row['use_augmentation'])
-                    val = row[metric]
-                    rounded_val = round_up_half(val, decimals=2)
-                    matrix[r_idx, c_idx] = rounded_val
-                    if not np.isnan(rounded_val):
-                        annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
-                
-                neg_label = "Neg+" if neg_data else "Neg-"
-                aug_label = "Aug+" if aug else "Aug-"
-                title = f"{neg_label} / {aug_label}"
-                
-                sns.heatmap(
-                    matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
-                    xticklabels=col_labels, yticklabels=row_labels if aug_idx == 0 else [],
-                    ax=ax, vmin=vmin, vmax=vmax,
-                    linewidths=0.5, linecolor='gray',
-                    annot_kws={'fontsize': 10},
-                    cbar=ax_idx == 1 and aug_idx == 1,
-                    cbar_kws={'label': metric_label} if (ax_idx == 1 and aug_idx == 1) else {},
-                )
-                ax.set_title(title, fontsize=11, fontweight='bold')
-                ax.tick_params(labelsize=9)
-                ax.grid(False)
-    else:
-        # Old format: use neg_data_target
-        for ax_idx, neg_target in enumerate(NEG_TARGETS):
-            ax = axes_flat[ax_idx]
-            subset = results_df[results_df['neg_data_target'] == neg_target]
+    matrix = np.full((4, 2), np.nan)
+    annot_matrix = np.empty((4, 2), dtype=object)
+    annot_matrix.fill('')
 
-        matrix = np.full((4, 2), np.nan)
-        annot_matrix = np.empty((4, 2), dtype=object)
-        annot_matrix.fill('')
-        for _, row in subset.iterrows():
-            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
-            c_idx = int(row['use_augmentation'])
-            val = row[metric]
-            # Round to exactly 2 decimal places (0.5 always rounds up)
-            rounded_val = round_up_half(val, decimals=2)
-            if ax_idx == 0 and r_idx == 0 and c_idx == 0:  # Print first value as example
-                print(f"      Example rounding: {val} -> {rounded_val}")
-            matrix[r_idx, c_idx] = rounded_val
-            if not np.isnan(rounded_val):
-                # Format as string with exactly 2 decimal places
-                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
+    for _, row in results_df.iterrows():
+        r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+        c_idx = int(row['use_augmentation'])
+        val = row[metric]
+        rounded_val = round_up_half(val, decimals=2)
+        matrix[r_idx, c_idx] = rounded_val
+        if not np.isnan(rounded_val):
+            annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
 
-        sns.heatmap(
-            matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
-            xticklabels=col_labels, yticklabels=row_labels,
-            ax=ax, vmin=vmin, vmax=vmax,
-            linewidths=0.5, linecolor='gray',
-            annot_kws={'fontsize': 10},
-            cbar=ax_idx in [1, 3],
-            cbar_kws={'label': metric_label} if ax_idx in [1, 3] else {},
-        )
-        ax.set_title(NEG_LABELS[neg_target], fontsize=11, fontweight='bold')
-        ax.tick_params(labelsize=9)
-        ax.grid(False)
+    sns.heatmap(
+        matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
+        xticklabels=col_labels, yticklabels=row_labels,
+        ax=ax, vmin=vmin, vmax=vmax,
+        linewidths=0.5, linecolor='gray',
+        annot_kws={'fontsize': 11},
+        cbar=True,
+        cbar_kws={'label': metric_label, 'shrink': 0.8},
+    )
+    ax.set_title(metric_label, fontsize=11, fontweight='bold')
+    ax.set_xlabel("Augmentation", fontsize=10, fontweight='bold')
+    ax.set_ylabel("Filters", fontsize=10, fontweight='bold')
+    ax.tick_params(labelsize=8)
+    ax.grid(False)
 
     plt.tight_layout()
 
@@ -219,112 +165,54 @@ def plot_heatmap_grid(results_df, plots_dir, metric='macro_accuracy',
 
 
 # ---------------------------------------------------------------------------
-# Combined wide heatmap: rows=(spec×poly), cols=(neg_target×aug)
+# Combined heatmap: rows=(spec×poly), cols=(aug)
 # ---------------------------------------------------------------------------
 def plot_combined_heatmap(results_df, plots_dir, metric='macro_accuracy',
                           metric_label='Macro Accuracy'):
-    """Create a single 4×4 heatmap showing all 16 combinations."""
+    """Create a single 4×2 heatmap showing all combinations."""
     setup_plot_style()
 
     row_labels = []
     for spec in [False, True]:
         for poly in [False, True]:
-            s = "Spec+" if spec else "Spec-"
-            p = "Poly+" if poly else "Poly-"
-            row_labels.append(f"{s} / {p}")
+            row_labels.append(
+                "Specialized reaction: " + ("on" if spec else "off")
+                + "\nPolymerization type: " + ("on" if poly else "off")
+            )
 
-    # Check if using new format (add_negative_data) or old format (neg_data_target)
-    if 'add_negative_data' in results_df.columns:
-        # New format: 4 columns for (aug, neg) combinations
-        col_labels = []
-        for aug in [False, True]:
-            for neg in [False, True]:
-                a = "Aug+" if aug else "Aug-"
-                n = "Neg+" if neg else "Neg-"
-                col_labels.append(f"{a} / {n}")
-        
-        matrix = np.full((4, 4), np.nan)
-        annot_matrix = np.empty((4, 4), dtype=object)
-        annot_matrix.fill('')
-        
-        for _, row in results_df.iterrows():
-            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
-            c_idx = int(row['use_augmentation']) * 2 + int(row['add_negative_data'])
-            val = row[metric]
-            rounded_val = round_up_half(val, decimals=2)
-            matrix[r_idx, c_idx] = rounded_val
-            if not np.isnan(rounded_val):
-                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
-        
-        # Make plot square (4x4 grid)
-        fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH * 0.9,
-                                     TWO_COL_WIDTH_INCH * 0.9))
-        
-        # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
-        vmin = round_up_half(results_df[metric].min(), decimals=2)
-        vmax = round_up_half(results_df[metric].max(), decimals=2)
-        
-        sns.heatmap(
-            matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
-            xticklabels=col_labels, yticklabels=row_labels,
-            ax=ax, vmin=vmin, vmax=vmax, linewidths=0.5, linecolor='gray',
-            annot_kws={'fontsize': 14},  # Larger text in cells
-            cbar_kws={'label': metric_label, 'shrink': 0.6},  # Smaller colorbar
-            square=True,  # Make each cell square
-        )
-        ax.tick_params(labelsize=12)  # Larger tick labels
-        ax.grid(False)
-        
-        # Adjust colorbar font size
-        cbar = ax.collections[0].colorbar
-        if cbar is not None:
-            cbar.ax.tick_params(labelsize=11)
-            cbar.set_label(metric_label, fontsize=12)
-        
-        # Separator lines between aug groups
-        ax.axvline(x=2, color='black', linewidth=2)
-    else:
-        # Old format: 4×8 heatmap
-        col_labels = []
-        for neg_target in NEG_TARGETS:
-            for aug in [False, True]:
-                a = "Aug+" if aug else "Aug-"
-                col_labels.append(f"{NEG_LABELS[neg_target]}\n{a}")
+    col_labels = ["off", "on"]
 
-        # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
-        vmin = round_up_half(results_df[metric].min(), decimals=2)
-        vmax = round_up_half(results_df[metric].max(), decimals=2)
-        
-        matrix = np.full((4, 8), np.nan)
-        annot_matrix = np.empty((4, 8), dtype=object)
-        annot_matrix.fill('')
+    # Round vmin/vmax to 2 decimal places (0.5 always rounds up)
+    vmin = round_up_half(results_df[metric].min(), decimals=2)
+    vmax = round_up_half(results_df[metric].max(), decimals=2)
 
-        for _, row in results_df.iterrows():
-            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
-            neg_idx = NEG_TARGETS.index(row['neg_data_target'])
-            c_idx = neg_idx * 2 + int(row['use_augmentation'])
-            val = row[metric]
-            rounded_val = round_up_half(val, decimals=2)
-            matrix[r_idx, c_idx] = rounded_val
-            if not np.isnan(rounded_val):
-                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
+    matrix = np.full((4, 2), np.nan)
+    annot_matrix = np.empty((4, 2), dtype=object)
+    annot_matrix.fill('')
 
-        fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH * 1.5,
-                                         TWO_COL_WIDTH_INCH * 0.45))
+    for _, row in results_df.iterrows():
+        r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+        c_idx = int(row['use_augmentation'])
+        val = row[metric]
+        rounded_val = round_up_half(val, decimals=2)
+        matrix[r_idx, c_idx] = rounded_val
+        if not np.isnan(rounded_val):
+            annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
 
-        sns.heatmap(
-            matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
-            xticklabels=col_labels, yticklabels=row_labels,
-            ax=ax, vmin=vmin, vmax=vmax, linewidths=0.5, linecolor='gray',
-            annot_kws={'fontsize': 9},
-            cbar_kws={'label': metric_label},
-        )
-        ax.tick_params(labelsize=8)
-        ax.grid(False)
+    fig, ax = plt.subplots(figsize=(ONE_COL_WIDTH_INCH * 1.30,
+                                    ONE_COL_WIDTH_INCH * 1.10))
 
-        # Separator lines between neg_target groups
-        for k in range(1, 4):
-            ax.axvline(x=k * 2, color='black', linewidth=2)
+    sns.heatmap(
+        matrix, annot=annot_matrix, fmt='', cmap=HEATMAP_CMAP,
+        xticklabels=col_labels, yticklabels=row_labels,
+        ax=ax, vmin=vmin, vmax=vmax, linewidths=0.5, linecolor='gray',
+        annot_kws={'fontsize': 11},
+        cbar_kws={'label': metric_label, 'shrink': 0.8},
+    )
+    ax.set_xlabel("Augmentation", fontsize=10, fontweight='bold')
+    ax.set_ylabel("Filters", fontsize=10, fontweight='bold')
+    ax.tick_params(labelsize=8)
+    ax.grid(False)
 
     plt.tight_layout()
     for ext in ['png', 'pdf']:
@@ -335,107 +223,6 @@ def plot_combined_heatmap(results_df, plots_dir, metric='macro_accuracy',
 
 
 # ---------------------------------------------------------------------------
-# Bar plot: grouped by neg_data_target
-# ---------------------------------------------------------------------------
-def plot_neg_target_comparison(results_df, plots_dir):
-    """Bar plot comparing negative data variants (averaged over other filters)."""
-    setup_plot_style()
-
-    # Check if using new format (add_negative_data) or old format (neg_data_target)
-    if 'add_negative_data' in results_df.columns:
-        # New format: compare neg_data=True vs False
-        grouped = results_df.groupby('add_negative_data').agg({
-            'macro_accuracy': ['mean', 'std'],
-            'macro_precision': ['mean', 'std'],
-            'coverage': ['mean', 'std'],
-        })
-        
-        metrics = [
-            ('macro_accuracy', 'Macro Accuracy'),
-            ('macro_precision', 'Macro Precision'),
-            ('coverage', 'Coverage'),
-        ]
-        
-        fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH * 1.2,
-                                                 TWO_COL_WIDTH_INCH * 0.35))
-        
-        colors = ['#3A3B73', '#e27f07']
-        labels = ['Neg-', 'Neg+']
-        
-        for ax, (metric, label) in zip(axes, metrics):
-            means = [grouped.loc[False, (metric, 'mean')] if False in grouped.index else 0,
-                     grouped.loc[True, (metric, 'mean')] if True in grouped.index else 0]
-            stds = [grouped.loc[False, (metric, 'std')] if False in grouped.index else 0,
-                    grouped.loc[True, (metric, 'std')] if True in grouped.index else 0]
-            
-            means_rounded = [round_up_half(m, decimals=2) for m in means]
-            stds_rounded = [round_up_half(s, decimals=2) for s in stds]
-            
-            bars = ax.bar(range(2), means_rounded, yerr=stds_rounded, color=colors, alpha=0.85,
-                          capsize=3)
-            for bar in bars:
-                h = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width() / 2, h + 0.005,
-                        f'{h:.2f}', ha='center', va='bottom', fontsize=7)
-            
-            ax.set_ylabel(label, fontsize=9)
-            ax.set_xticks(range(2))
-            ax.set_xticklabels(labels, fontsize=7, rotation=0, ha='center')
-            ax.spines['top'].set_visible(False)
-            ax.spines['right'].set_visible(False)
-            ax.grid(False)
-    else:
-        # Old format: use neg_data_target
-        grouped = results_df.groupby('neg_data_target').agg({
-            'macro_accuracy': ['mean', 'std'],
-            'macro_precision': ['mean', 'std'],
-            'coverage': ['mean', 'std'],
-        })
-
-        metrics = [
-            ('macro_accuracy', 'Macro Accuracy'),
-            ('macro_precision', 'Macro Precision'),
-            ('coverage', 'Coverage'),
-        ]
-
-        fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH * 1.2,
-                                                 TWO_COL_WIDTH_INCH * 0.35))
-
-        colors = ['#3A3B73', '#e27f07', '#1e8db9', '#6a040f']
-
-        for ax, (metric, label) in zip(axes, metrics):
-            means = [grouped.loc[nt, (metric, 'mean')] if nt in grouped.index else 0
-                     for nt in NEG_TARGETS]
-            stds = [grouped.loc[nt, (metric, 'std')] if nt in grouped.index else 0
-                    for nt in NEG_TARGETS]
-
-            # Round means to 2 decimal places (0.5 always rounds up)
-            means_rounded = [round_up_half(m, decimals=2) for m in means]
-            stds_rounded = [round_up_half(s, decimals=2) for s in stds]
-            
-            bars = ax.bar(range(4), means_rounded, yerr=stds_rounded, color=colors, alpha=0.85,
-                          capsize=3)
-            for bar in bars:
-                h = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width() / 2, h + 0.005,
-                        f'{h:.2f}', ha='center', va='bottom', fontsize=7)
-
-            ax.set_ylabel(label, fontsize=9)
-            ax.set_xticks(range(4))
-            ax.set_xticklabels([NEG_LABELS[nt] for nt in NEG_TARGETS],
-                               fontsize=7, rotation=20, ha='right')
-            ax.spines['top'].set_visible(False)
-            ax.spines['right'].set_visible(False)
-            ax.grid(False)
-
-    plt.tight_layout()
-    for ext in ['png', 'pdf']:
-        path = os.path.join(plots_dir, f'neg_target_comparison.{ext}')
-        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
-        print(f"  ✓ Saved {path}")
-    plt.close()
-
-
 # ---------------------------------------------------------------------------
 # Sorted bar chart
 # ---------------------------------------------------------------------------
@@ -474,21 +261,103 @@ def plot_coverage_heatmap(results_df, plots_dir):
                       metric_label='Coverage (models agree)')
 
 
+def plot_accuracy_and_coverage_side_by_side(results_df, plots_dir):
+    """Create a single figure: Macro Accuracy and Coverage heatmaps side-by-side."""
+    setup_plot_style()
+
+    row_labels = []
+    for spec in [False, True]:
+        for poly in [False, True]:
+            row_labels.append(
+                "Specialized reaction: " + ("on" if spec else "off")
+                + "\nPolymerization type: " + ("on" if poly else "off")
+            )
+    col_labels = ["off", "on"]
+
+    def _build(metric: str):
+        vmin = round_up_half(results_df[metric].min(), decimals=2)
+        vmax = round_up_half(results_df[metric].max(), decimals=2)
+        matrix = np.full((4, 2), np.nan)
+        annot_matrix = np.empty((4, 2), dtype=object)
+        annot_matrix.fill('')
+        for _, row in results_df.iterrows():
+            r_idx = int(row['remove_specialized']) * 2 + int(row['apply_polymerization_filter'])
+            c_idx = int(row['use_augmentation'])
+            val = row[metric]
+            rounded_val = round_up_half(val, decimals=2)
+            matrix[r_idx, c_idx] = rounded_val
+            if not np.isnan(rounded_val):
+                annot_matrix[r_idx, c_idx] = f'{rounded_val:.2f}'
+        return matrix, annot_matrix, vmin, vmax
+
+    acc_m, acc_a, acc_vmin, acc_vmax = _build('macro_accuracy')
+    cov_m, cov_a, cov_vmin, cov_vmax = _build('coverage')
+
+    fig, axes = plt.subplots(
+        1, 2,
+        figsize=(TWO_COL_WIDTH_INCH * 1.10, ONE_COL_WIDTH_INCH * 1.10),
+    )
+
+    sns.heatmap(
+        acc_m, annot=acc_a, fmt='', cmap=HEATMAP_CMAP,
+        xticklabels=col_labels, yticklabels=row_labels,
+        ax=axes[0], vmin=acc_vmin, vmax=acc_vmax,
+        linewidths=0.5, linecolor='gray',
+        annot_kws={'fontsize': 11},
+        cbar=True,
+        cbar_kws={'label': 'Macro Accuracy', 'shrink': 0.8},
+    )
+    axes[0].set_yticklabels(row_labels, rotation=0)
+    axes[0].set_title("Macro Accuracy", fontsize=11, fontweight='bold')
+    axes[0].set_xlabel("Augmentation", fontsize=10, fontweight='bold')
+    axes[0].set_ylabel("Filters", fontsize=10, fontweight='bold')
+    axes[0].tick_params(labelsize=8)
+    axes[0].tick_params(axis='y', pad=10)
+    axes[0].grid(False)
+
+    sns.heatmap(
+        cov_m, annot=cov_a, fmt='', cmap=HEATMAP_CMAP,
+        xticklabels=col_labels, yticklabels=False,
+        ax=axes[1], vmin=cov_vmin, vmax=cov_vmax,
+        linewidths=0.5, linecolor='gray',
+        annot_kws={'fontsize': 11},
+        cbar=True,
+        cbar_kws={'label': 'Coverage', 'shrink': 0.8},
+    )
+    axes[1].set_title("Coverage", fontsize=11, fontweight='bold')
+    axes[1].set_xlabel("Augmentation", fontsize=10, fontweight='bold')
+    axes[1].set_ylabel("")
+    axes[1].tick_params(labelleft=False)
+    axes[1].tick_params(labelsize=8)
+    axes[1].grid(False)
+
+    # Ensure both heatmaps align vertically
+    axes[1].set_ylim(axes[0].get_ylim())
+
+    # Make room for multi-line y tick labels on the left.
+    fig.subplots_adjust(left=0.42, wspace=0.35)
+    for ext in ['png', 'pdf']:
+        path = os.path.join(plots_dir, f'heatmap_macro_accuracy_and_coverage.{ext}')
+        plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
+        print(f"  ✓ Saved {path}")
+    plt.close()
+
+
 # ---------------------------------------------------------------------------
 # 4x4 Grid of Confusion Matrices
 # ---------------------------------------------------------------------------
 def plot_confusion_matrix_grid(results_df, plots_dir):
-    """Create a SINGLE 4×4 grid showing confusion matrices for all 16 filter combinations.
+    """Create a SINGLE 4×2 grid showing confusion matrices for all filter combinations.
     
     Grid structure:
     - Rows: (spec, poly) combinations (4 rows)
-    - Columns: (aug, neg) combinations (4 columns)
+    - Columns: augmentation on/off (2 columns)
     Each cell contains a 3×3 confusion matrix for the voting model.
     """
     setup_plot_style()
     
-    # Create 4x4 grid with larger figure size for better visibility
-    fig, axes = plt.subplots(4, 4, figsize=(TWO_COL_WIDTH_INCH * 2.5, TWO_COL_WIDTH_INCH * 2.5))
+    # Create 4x2 grid with larger figure size for better visibility
+    fig, axes = plt.subplots(4, 2, figsize=(TWO_COL_WIDTH_INCH * 1.6, TWO_COL_WIDTH_INCH * 2.2))
     
     # Row labels: (spec, poly) combinations
     row_labels = []
@@ -498,13 +367,8 @@ def plot_confusion_matrix_grid(results_df, plots_dir):
             p = "Poly+" if poly else "Poly-"
             row_labels.append(f"{s} / {p}")
     
-    # Column labels: (aug, neg) combinations
-    col_labels = []
-    for aug in [False, True]:
-        for neg in [False, True]:
-            a = "Aug+" if aug else "Aug-"
-            n = "Neg+" if neg else "Neg-"
-            col_labels.append(f"{a} / {n}")
+    # Column labels: augmentation combinations
+    col_labels = ["Aug-", "Aug+"]
     
     # Initialize a dictionary to store matrices by position
     matrix_dict = {}
@@ -512,11 +376,10 @@ def plot_confusion_matrix_grid(results_df, plots_dir):
         spec = result_row['remove_specialized']
         poly = result_row['apply_polymerization_filter']
         aug = result_row['use_augmentation']
-        neg = result_row['add_negative_data']
         
         # Calculate grid position
         row_idx = int(spec) * 2 + int(poly)
-        col_idx = int(aug) * 2 + int(neg)
+        col_idx = int(aug)
         
         # Convert confusion matrix to numpy array (handle string format from CSV)
         cm_raw = result_row['confusion_matrix']
@@ -529,7 +392,7 @@ def plot_confusion_matrix_grid(results_df, plots_dir):
     
     # Plot each combination
     for row_idx in range(4):
-        for col_idx in range(4):
+        for col_idx in range(2):
             ax = axes[row_idx, col_idx]
             
             if (row_idx, col_idx) not in matrix_dict:
@@ -585,7 +448,7 @@ def plot_confusion_matrix_grid(results_df, plots_dir):
             ax.grid(False)
     
     # Add overall title
-    fig.suptitle('Confusion Matrices: Voting Model (All 16 Filter Combinations)', 
+    fig.suptitle('Confusion Matrices: Voting Model (All Filter Combinations)', 
                  fontsize=14, fontweight='bold', y=0.995)
     
     # Add colorbar for the whole figure (shared across all subplots)
@@ -593,7 +456,7 @@ def plot_confusion_matrix_grid(results_df, plots_dir):
         # Use the first subplot's image for colorbar
         first_ax = None
         for row_idx in range(4):
-            for col_idx in range(4):
+            for col_idx in range(2):
                 if (row_idx, col_idx) in matrix_dict and len(axes[row_idx, col_idx].images) > 0:
                     first_ax = axes[row_idx, col_idx]
                     break
@@ -609,7 +472,7 @@ def plot_confusion_matrix_grid(results_df, plots_dir):
     plt.tight_layout(rect=[0, 0, 1, 0.97])
     
     for ext in ['png', 'pdf']:
-        path = os.path.join(plots_dir, f'confusion_matrix_grid_4x4.{ext}')
+        path = os.path.join(plots_dir, f'confusion_matrix_grid_4x2.{ext}')
         plt.savefig(path, dpi=300 if ext == 'png' else None, bbox_inches='tight')
         print(f"  ✓ Saved {path}")
     plt.close()
@@ -622,6 +485,25 @@ def plot_sweep_results(results_df, plots_dir):
     """Generate all plots from sweep results."""
     setup_plot_style()
     os.makedirs(plots_dir, exist_ok=True)
+
+    # Backward compatibility: older sweeps may contain extra dimensions
+    # (e.g., negative-data variants). Collapse to (spec, poly, aug).
+    key_cols = ['remove_specialized', 'apply_polymerization_filter', 'use_augmentation']
+    extra_cols = [c for c in results_df.columns if c not in key_cols]
+    if results_df.duplicated(subset=key_cols).any():
+        agg_map = {}
+        for c in results_df.columns:
+            if c in key_cols:
+                continue
+            if c == 'confusion_matrix':
+                agg_map[c] = 'first'
+            elif c == 'run_name':
+                agg_map[c] = 'first'
+            elif pd.api.types.is_numeric_dtype(results_df[c]):
+                agg_map[c] = 'mean'
+            else:
+                agg_map[c] = 'first'
+        results_df = results_df.groupby(key_cols, as_index=False).agg(agg_map)
 
     # Round all numeric metrics to 2 decimal places BEFORE plotting (0.5 always rounds up)
     results_df = results_df.copy()
@@ -648,14 +530,14 @@ def plot_sweep_results(results_df, plots_dir):
     print("\n  Generating coverage heatmaps …")
     plot_coverage_heatmap(results_df, plots_dir)
 
-    print("\n  Generating neg-target comparison …")
-    plot_neg_target_comparison(results_df, plots_dir)
+    print("\n  Generating combined accuracy+coverage heatmap …")
+    plot_accuracy_and_coverage_side_by_side(results_df, plots_dir)
 
     print("\n  Generating sorted bar charts …")
     plot_sorted_bar(results_df, plots_dir, 'macro_accuracy', 'Macro Accuracy')
     plot_sorted_bar(results_df, plots_dir, 'macro_precision', 'Macro Precision')
     
-    print("\n  Generating 4x4 confusion matrix grid …")
+    print("\n  Generating 4x2 confusion matrix grid …")
     plot_confusion_matrix_grid(results_df, plots_dir)
 
 

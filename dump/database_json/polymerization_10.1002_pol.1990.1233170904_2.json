@@ -1,9 +1,9 @@
 {
-  "monomer1": "Allyl acetate",
+  "monomer1": "Allyl propionate",
   "monomer2": "Vinyl acetate",
   "r_values": {
-    "constant_1": 0.7,
-    "constant_2": 1.0
+    "constant_1": 0.42,
+    "constant_2": 1.29
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -13,11 +13,11 @@
   "temperature_unit": "°C",
   "solvent": null,
   "method": "bulk",
-  "r-product": 0.7,
+  "r-product": 0.54,
   "source": "https://doi.org/10.1002/pol.1990.1233170904",
   "calculation_method": "Kelen-Tudos",
   "polymerization_type": "free radical",
-  "monomer1_smiles": "C=CCOC(C)=O",
+  "monomer1_smiles": "C=CCOC(=O)CC",
   "monomer2_smiles": "C=COC(C)=O",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

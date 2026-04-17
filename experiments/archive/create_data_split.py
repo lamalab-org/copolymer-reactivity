@@ -134,21 +134,24 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
     df_filtered = df_filtered[df_filtered['r1r2'] >= 0]
     print(f"After basic filtering: {len(df_filtered)} samples")
     
-    # Create target classes
-    bins = [-np.inf, 1, 25, np.inf]
-    labels = [0, 1, 2]
-    df_filtered['r_product_class'] = pd.cut(
-        df_filtered['r1r2'], bins=bins, labels=labels, right=False
-    ).astype(int)
-    
-    # Override extremes
+    # Create target classes based on individual reactivity ratios (r1 = constant_1, r2 = constant_2)
+    # 0: alternating         (r1 < 1 and r2 < 1)
+    # 1: gradient            (rest)
+    # 2: symmetric_blocky    (r1 > 1 and r2 > 1 and 0.5 < r1/r2 < 2)
     if {'constant_1', 'constant_2'}.issubset(df_filtered.columns):
-        extreme_mask = (
-            ((df_filtered['constant_1'] <= 0.1) & (df_filtered['constant_2'] > 25)) |
-            ((df_filtered['constant_2'] <= 0.1) & (df_filtered['constant_1'] > 25))
-        )
-        df_filtered.loc[extreme_mask, 'r_product_class'] = 2
-        print(f"Marked {extreme_mask.sum()} extreme cases as class 2")
+        r1 = df_filtered['constant_1']
+        r2 = df_filtered['constant_2']
+
+        mask_alt = (r1 < 1) & (r2 < 1)
+        ratio = r1 / r2
+        mask_sym = (r1 > 1) & (r2 > 1) & (ratio > 0.5) & (ratio < 2)
+
+        # Default: gradient (1)
+        df_filtered['r_product_class'] = 1
+        df_filtered.loc[mask_sym, 'r_product_class'] = 2
+        df_filtered.loc[mask_alt, 'r_product_class'] = 0
+    else:
+        raise ValueError("Required columns 'constant_1' and 'constant_2' not found for class definition.")
     
     print("\nClass distribution:")
     class_counts = df_filtered['r_product_class'].value_counts().sort_index()
@@ -270,8 +273,6 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
         'val_size_ratio': len(df_val) / len(df_clean),
         'filters_applied': filters_applied,
         'remove_specialized_from_test': remove_specialized,
-        'bins': bins,
-        'labels': labels
     }
     
     info_path = os.path.join(output_dir, 'split_info.json')

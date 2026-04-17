@@ -2,6 +2,29 @@
 
 This folder contains all scripts for preparing and converting data for NOMAD upload.
 
+## Quickstart (clean rebuild)
+
+From the repository root:
+
+```bash
+# Remove previous outputs (optional but recommended for a clean rebuild)
+rm -rf dump/database_json
+rm -rf database/output/polymerization database/output/monomers
+mkdir -p database/output/polymerization database/output/monomers
+
+# 1) Create reaction + monomer JSON files
+python database/create_database_json.py
+
+# 2) Convert reaction JSONs to NOMAD archives
+python database/convert_to_archives.py
+
+# 3) Convert monomer *property files* to monomer archives
+python database/convert_monomers.py --source copol_prediction/api/molecule_properties
+
+# 4) Split archives into upload batches
+python database/split_archives.py --both
+```
+
 ## Scripts
 
 ### `create_database_json.py`
@@ -81,7 +104,7 @@ python database/convert_to_archives.py --same-dir
 - Without `--mode`, the mode is automatically detected from the filename
 
 ### `convert_monomers.py`
-Converts monomer JSON files to NOMAD archive files.
+Converts monomer *property files* (molecule properties) to NOMAD monomer archive files.
 
 **Usage:**
 
@@ -186,3 +209,33 @@ Each batch can then be uploaded separately to NOMAD.
    ```
 
 The archive files can then be uploaded directly to NOMAD.
+
+## Analysis (plots + dataset statistics)
+
+### `analysis/plot_combined_database_figure.py` (dataset analysis)
+
+Creates the combined multi-panel figure and prints basic dataset statistics (counts + ranges).
+
+```bash
+python database/analysis/plot_combined_database_figure.py
+```
+
+**Output:**
+- `database/analysis/figures/dataset_analysis.pdf`
+- `database/analysis/figures/dataset_analysis.png`
+
+**Boiling points input:**
+- `database/analysis/solvent_boiling_points_c.json` (curated solvent boiling points in °C; `null` means “exclude”)
+
+### `analysis/plot_polymerization_trends.py`
+
+Creates stacked-area temporal trend plots for polymerization types and methods.
+Uses the local `publication_year` column (no Crossref calls).
+
+```bash
+python database/analysis/plot_polymerization_trends.py
+```
+
+**Output:**
+- `database/analysis/figures/polymerization_trends.pdf`
+- `database/analysis/figures/polymerization_trends.png`

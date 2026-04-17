@@ -1,15 +1,15 @@
 {
-  "monomer1": "vinyl acetate",
+  "monomer1": "methyl acrylate",
   "monomer2": "N-vinylcarbazole",
   "r_values": {
-    "constant_1": 0.126,
-    "constant_2": 2.68
+    "constant_1": 0.5,
+    "constant_2": 0.05
   },
   "conf_intervals": {
     "constant_conf_1": null,
     "constant_conf_2": null
   },
-  "temperature": 65.0,
+  "temperature": 75.0,
   "temperature_unit": "°C",
   "solvent": "c1ccccc1",
   "method": "solvent",
@@ -18,7 +18,7 @@
   "calculation_method": "Mayo and Lewis",
   "polymerization_type": "free radical",
   "logP": 1.6866,
-  "monomer1_smiles": "C=COC(C)=O",
+  "monomer1_smiles": "C=CC(=O)OC",
   "monomer2_smiles": "C=Cn1c2ccccc2c2ccccc21",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

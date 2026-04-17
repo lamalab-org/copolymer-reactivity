@@ -1,24 +1,24 @@
 {
-  "monomer1": "Methyl methacrylate",
+  "monomer1": "Ethyl acrylate",
   "monomer2": "Ethyl alpha-Acetoxyacrylate",
   "r_values": {
-    "constant_1": 1.65,
-    "constant_2": 0.65
+    "constant_1": 1.0,
+    "constant_2": 1.0
   },
   "conf_intervals": {
-    "constant_conf_1": 0.07,
+    "constant_conf_1": 0.1,
     "constant_conf_2": 0.05
   },
   "temperature": 60.0,
   "temperature_unit": "°C",
   "solvent": "CCCCCC",
   "method": "bulk",
-  "r-product": 1.07,
+  "r-product": 1.0,
   "source": "https://doi.org/10.1002/pol.1958.1203312707",
   "calculation_method": "graphical method of intersections",
   "polymerization_type": "free radical",
   "logP": 2.5866000000000007,
-  "monomer1_smiles": "C=C(C)C(=O)OC",
+  "monomer1_smiles": "C=CC(=O)OCC",
   "monomer2_smiles": "C=C(OC(C)=O)C(=O)OCC",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

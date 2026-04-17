@@ -13,10 +13,21 @@ import sys
 import argparse
 from pathlib import Path
 
+# Ensure copol_prediction/ is on sys.path when run as a script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+WORKSPACE_ROOT = os.path.dirname(PROJECT_ROOT)
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+if WORKSPACE_ROOT not in sys.path:
+    sys.path.insert(0, WORKSPACE_ROOT)
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.linear_model import LogisticRegression
+from sklearn.isotonic import IsotonicRegression
 from sklearn.metrics import (
     confusion_matrix, classification_report, ConfusionMatrixDisplay,
     accuracy_score, precision_score, recall_score, f1_score,
@@ -29,8 +40,15 @@ from rdkit import Chem
 from rdkit.Chem import AllChem, DataStructs
 from copolpredictor.prediction_utils import create_grouped_kfold_splits
 
-# Add parent directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+try:
+    # When imported as package: copol_prediction.analysis.analyze_model
+    from ..mayo_lewis_classification import classify_reactivity_curve
+except ImportError:
+    # When run as a script directly
+    try:
+        from mayo_lewis_classification import classify_reactivity_curve
+    except ImportError:
+        from copol_prediction.mayo_lewis_classification import classify_reactivity_curve
 
 from copolpredictor.inference import CopolymerPredictor
 from utils.load_data_split import load_train_val_test_split
@@ -91,6 +109,11 @@ def parse_args():
     parser.add_argument("--confidence", action="store_true", help="Confidence distribution")
     parser.add_argument("--features", action="store_true", help="Feature importance")
     parser.add_argument("--calibration", action="store_true", help="Calibration curve")
+    parser.add_argument(
+        "--calibration-compare",
+        action="store_true",
+        help="Compare uncalibrated vs Platt vs Isotonic calibration on validation set"
+    )
     parser.add_argument("--errors", action="store_true", help="Error analysis by class")
     parser.add_argument("--confidence-vs-r1r2", action="store_true", help="Confidence vs r1r2 plot")
     parser.add_argument("--filtering", action="store_true", help="Confidence filtering analysis")
@@ -894,6 +917,243 @@ def plot_calibration_curve_multiclass(y_true, y_proba, output_dir, suffix=''):
     plt.close()
 
 
+def _fit_ovr_calibrators(y_true, y_proba, method="sigmoid"):
+    """
+    Fit one-vs-rest calibrators for each class.
+
+    Args:
+        y_true: True multiclass labels
+        y_proba: Uncalibrated probability matrix (n_samples, n_classes)
+        method: "sigmoid" (Platt scaling) or "isotonic"
+
+    Returns:
+        List of fitted per-class calibrators
+    """
+    n_classes = y_proba.shape[1]
+    calibrators = []
+    for cls in range(n_classes):
+        y_binary = (y_true == cls).astype(int)
+        p_cls = y_proba[:, cls]
+
+        if method == "sigmoid":
+            cal = LogisticRegression(max_iter=1000)
+            cal.fit(p_cls.reshape(-1, 1), y_binary)
+        elif method == "isotonic":
+            cal = IsotonicRegression(out_of_bounds="clip")
+            cal.fit(p_cls, y_binary)
+        else:
+            raise ValueError(f"Unknown method '{method}'")
+        calibrators.append(cal)
+    return calibrators
+
+
+def _apply_ovr_calibrators(y_proba, calibrators):
+    """
+    Apply one-vs-rest calibrators and renormalize probabilities per sample.
+    """
+    calibrated_cols = []
+    for cls, cal in enumerate(calibrators):
+        p_cls = y_proba[:, cls]
+        if hasattr(cal, "predict_proba"):
+            p_cal = cal.predict_proba(p_cls.reshape(-1, 1))[:, 1]
+        else:
+            p_cal = cal.predict(p_cls)
+        calibrated_cols.append(np.clip(p_cal, 1e-9, 1.0))
+
+    p_mat = np.vstack(calibrated_cols).T
+    row_sums = p_mat.sum(axis=1, keepdims=True)
+    row_sums[row_sums == 0] = 1.0
+    return p_mat / row_sums
+
+
+def _brier_per_class(y_true, y_proba):
+    """
+    Compute per-class Brier score for multiclass probabilities.
+    """
+    n_classes = y_proba.shape[1]
+    scores = []
+    for cls in range(n_classes):
+        y_binary = (y_true == cls).astype(float)
+        p_cls = y_proba[:, cls]
+        scores.append(float(np.mean((p_cls - y_binary) ** 2)))
+    return np.array(scores)
+
+
+def _classification_error_per_class(y_true, y_pred, n_classes=3):
+    """
+    Per-class classification error = 1 - recall(class).
+    """
+    errors = []
+    for cls in range(n_classes):
+        mask = y_true == cls
+        if np.sum(mask) == 0:
+            errors.append(np.nan)
+        else:
+            cls_acc = np.mean(y_pred[mask] == y_true[mask])
+            errors.append(float(1.0 - cls_acc))
+    return np.array(errors)
+
+
+def _confidence_from_proba(y_proba):
+    """
+    Confidence from calibrated probabilities:
+    use predicted-class probability (equivalent to max probability).
+    """
+    return np.max(y_proba, axis=1)
+
+
+def compare_calibration_methods_on_validation(df_val, predictor, output_dir, suffix="val"):
+    """
+    Compare uncalibrated probabilities vs Platt vs Isotonic on validation set.
+
+    Generates:
+    - calibration comparison curves per class
+    - per-class Brier error bar chart
+    """
+    print("\n" + "=" * 60)
+    print("CALIBRATION COMPARISON (validation set)")
+    print("=" * 60)
+
+    X_val = df_val[predictor.features]
+    if 'r_product_class' not in df_val.columns:
+        raise ValueError("Validation set must contain 'r_product_class'")
+    y_val = df_val['r_product_class'].astype(int).values
+
+    # Base model probabilities
+    y_proba_raw = predictor.predict_proba(X_val)
+
+    # Fit OVR calibrators on validation set (quick first-pass comparison)
+    platt_cals = _fit_ovr_calibrators(y_val, y_proba_raw, method="sigmoid")
+    iso_cals = _fit_ovr_calibrators(y_val, y_proba_raw, method="isotonic")
+
+    y_proba_platt = _apply_ovr_calibrators(y_proba_raw, platt_cals)
+    y_proba_iso = _apply_ovr_calibrators(y_proba_raw, iso_cals)
+
+    methods = [
+        ("Uncalibrated", y_proba_raw, "#5A5A5A"),
+        ("Platt", y_proba_platt, "#661124"),
+        ("Isotonic", y_proba_iso, "#143D60"),
+    ]
+
+    # --- Calibration curves (3 subplots, one per class) ---
+    fig, axes = plt.subplots(1, 3, figsize=(TWO_COL_WIDTH_INCH, 3))
+    n_bins = CALIBRATION_CONFIG.get('n_bins', 5)
+    strategy = CALIBRATION_CONFIG.get('strategy', 'quantile')
+
+    for cls, ax in enumerate(axes):
+        y_binary = (y_val == cls).astype(int)
+        for name, proba, color in methods:
+            prob_true, prob_pred = calibration_curve(
+                y_binary, proba[:, cls], n_bins=n_bins, strategy=strategy
+            )
+            ax.plot(prob_pred, prob_true, marker='o', linewidth=1.4, markersize=3.5,
+                    color=color, label=name)
+
+        ax.plot([0, 1], [0, 1], linestyle='--', color='gray', linewidth=1.0)
+        ax.set_title(get_class_label(cls, style='long'), fontsize=9)
+        ax.set_xlabel("Mean Predicted Probability", fontsize=8)
+        ax.set_ylabel("Fraction of Positives", fontsize=8)
+        ax.tick_params(labelsize=6)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.grid(False)
+
+    handles, labels = axes[-1].get_legend_handles_labels()
+    fig.legend(handles, labels, frameon=False, loc='lower center', ncol=3, fontsize=7,
+               bbox_to_anchor=(0.5, -0.02))
+    plt.tight_layout(rect=[0, 0.06, 1, 1])
+    curves_path = os.path.join(output_dir, f"calibration_comparison_{suffix}.png")
+    plt.savefig(curves_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"  ✓ Saved calibration comparison curves: {curves_path}")
+
+    # --- Per-class Brier error comparison ---
+    brier_raw = _brier_per_class(y_val, y_proba_raw)
+    brier_platt = _brier_per_class(y_val, y_proba_platt)
+    brier_iso = _brier_per_class(y_val, y_proba_iso)
+
+    x = np.arange(3)
+    width = 0.26
+    fig, ax = plt.subplots(figsize=(ONE_COL_WIDTH_INCH, ONE_COL_GOLDEN_RATIO_HEIGHT_INCH))
+    ax.bar(x - width, brier_raw, width, label="Uncalibrated", color="#5A5A5A")
+    ax.bar(x, brier_platt, width, label="Platt", color="#661124")
+    ax.bar(x + width, brier_iso, width, label="Isotonic", color="#143D60")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([get_class_label(i, style='short') for i in range(3)], fontsize=8)
+    ax.set_ylabel("Brier Score (lower is better)", fontsize=8)
+    ax.set_title("Per-class calibration error (validation)", fontsize=9)
+    ax.tick_params(labelsize=7)
+    ax.legend(frameon=False, fontsize=7)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.grid(False)
+    plt.tight_layout()
+    brier_path = os.path.join(output_dir, f"calibration_brier_per_class_{suffix}.png")
+    plt.savefig(brier_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"  ✓ Saved per-class Brier plot: {brier_path}")
+
+    # --- Per-class classification error comparison ---
+    y_pred_raw = np.argmax(y_proba_raw, axis=1)
+    y_pred_platt = np.argmax(y_proba_platt, axis=1)
+    y_pred_iso = np.argmax(y_proba_iso, axis=1)
+
+    err_raw = _classification_error_per_class(y_val, y_pred_raw, n_classes=3)
+    err_platt = _classification_error_per_class(y_val, y_pred_platt, n_classes=3)
+    err_iso = _classification_error_per_class(y_val, y_pred_iso, n_classes=3)
+
+    fig, ax = plt.subplots(figsize=(ONE_COL_WIDTH_INCH, ONE_COL_GOLDEN_RATIO_HEIGHT_INCH))
+    ax.bar(x - width, err_raw, width, label="Uncalibrated", color="#5A5A5A")
+    ax.bar(x, err_platt, width, label="Platt", color="#661124")
+    ax.bar(x + width, err_iso, width, label="Isotonic", color="#143D60")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([get_class_label(i, style='short') for i in range(3)], fontsize=8)
+    ax.set_ylabel("Classification Error (1 - recall)", fontsize=8)
+    ax.set_title("Per-class prediction error (validation)", fontsize=9)
+    ax.tick_params(labelsize=7)
+    ax.legend(frameon=False, fontsize=7)
+    ax.set_ylim(0, 1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.grid(False)
+    plt.tight_layout()
+    class_err_path = os.path.join(output_dir, f"calibration_class_error_per_class_{suffix}.png")
+    plt.savefig(class_err_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"  ✓ Saved per-class classification error plot: {class_err_path}")
+
+    # --- Error-analysis-by-class histograms (correct vs incorrect) ---
+    conf_raw = _confidence_from_proba(y_proba_raw)
+    conf_platt = _confidence_from_proba(y_proba_platt)
+    conf_iso = _confidence_from_proba(y_proba_iso)
+
+    plot_error_analysis_by_class(
+        y_val, y_pred_raw, conf_raw, output_dir, suffix=f"{suffix}_uncalibrated"
+    )
+    plot_error_analysis_by_class(
+        y_val, y_pred_platt, conf_platt, output_dir, suffix=f"{suffix}_platt"
+    )
+    plot_error_analysis_by_class(
+        y_val, y_pred_iso, conf_iso, output_dir, suffix=f"{suffix}_isotonic"
+    )
+
+    # Print compact numeric summary
+    print("\nPer-class Brier scores (validation):")
+    for cls in range(3):
+        print(
+            f"  Class {cls}: uncal={brier_raw[cls]:.4f}, "
+            f"platt={brier_platt[cls]:.4f}, isotonic={brier_iso[cls]:.4f}"
+        )
+    print("\nPer-class classification error (validation):")
+    for cls in range(3):
+        print(
+            f"  Class {cls}: uncal={err_raw[cls]:.4f}, "
+            f"platt={err_platt[cls]:.4f}, isotonic={err_iso[cls]:.4f}"
+        )
+
+
 def plot_baseline_comparison(y_true, y_pred_model, baseline_pred, output_dir, suffix=''):
     """
     Create a separate plot comparing model and baseline performance.
@@ -1490,6 +1750,206 @@ def find_optimal_threshold_per_class(y_true, y_pred, confidence_scores, min_rete
     return thresholds, np.array(filtered_indices)
 
 
+def _sweep_confidence_thresholds(y_true, y_pred, confidence_scores, n_points: int = 101) -> pd.DataFrame:
+    """
+    Sweep a *global* confidence threshold t in [0,1] and compute:
+      - coverage: fraction retained
+      - balanced_accuracy (macro acc) on retained
+      - per-class accuracy on retained (equals recall per class on retained set)
+      - retained counts per class (by true label)
+    """
+    from sklearn.metrics import balanced_accuracy_score
+
+    y_true = np.asarray(y_true).astype(int)
+    y_pred = np.asarray(y_pred).astype(int)
+    conf = np.asarray(confidence_scores).astype(float)
+
+    thresholds = np.linspace(0.0, 1.0, max(2, int(n_points)))
+    rows = []
+    n_total = len(y_true)
+
+    for t in thresholds:
+        keep = conf >= t
+        n_keep = int(keep.sum())
+        if n_keep == 0:
+            rows.append(
+                {
+                    "threshold": float(t),
+                    "coverage": 0.0,
+                    "n_retained": 0,
+                    "balanced_accuracy": np.nan,
+                    "acc_class_0": np.nan,
+                    "acc_class_1": np.nan,
+                    "acc_class_2": np.nan,
+                    "n_true_0": 0,
+                    "n_true_1": 0,
+                    "n_true_2": 0,
+                }
+            )
+            continue
+
+        yt = y_true[keep]
+        yp = y_pred[keep]
+        bal_acc = float(balanced_accuracy_score(yt, yp))
+
+        per_cls_acc = {}
+        per_cls_n = {}
+        for cls in [0, 1, 2]:
+            m = yt == cls
+            per_cls_n[cls] = int(m.sum())
+            per_cls_acc[cls] = float(np.mean(yp[m] == yt[m])) if m.sum() else np.nan
+
+        rows.append(
+            {
+                "threshold": float(t),
+                "coverage": float(n_keep / n_total) if n_total else 0.0,
+                "n_retained": int(n_keep),
+                "balanced_accuracy": bal_acc,
+                "acc_class_0": per_cls_acc[0],
+                "acc_class_1": per_cls_acc[1],
+                "acc_class_2": per_cls_acc[2],
+                "n_true_0": per_cls_n[0],
+                "n_true_1": per_cls_n[1],
+                "n_true_2": per_cls_n[2],
+            }
+        )
+
+    return pd.DataFrame(rows)
+
+
+def _plot_threshold_sweep_metrics(df_sweep: pd.DataFrame, output_dir: str):
+    """
+    Plot macro/balanced accuracy and per-class accuracy vs global threshold.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, ONE_COL_GOLDEN_RATIO_HEIGHT_INCH))
+    ax.plot(df_sweep["threshold"], df_sweep["balanced_accuracy"], label="Macro acc (balanced)", color="#000000", linewidth=1.8)
+    ax.plot(df_sweep["threshold"], df_sweep["acc_class_0"], label=get_class_label(0, style="short"), color=get_class_color(0), linewidth=1.4)
+    ax.plot(df_sweep["threshold"], df_sweep["acc_class_1"], label=get_class_label(1, style="short"), color=get_class_color(1), linewidth=1.4)
+    ax.plot(df_sweep["threshold"], df_sweep["acc_class_2"], label=get_class_label(2, style="short"), color=get_class_color(2), linewidth=1.4)
+
+    ax.set_xlabel("Confidence threshold (keep if conf ≥ t)", fontsize=8)
+    ax.set_ylabel("Accuracy on retained subset", fontsize=8)
+    ax.set_title("Accuracy vs confidence threshold", fontsize=9)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.tick_params(labelsize=7)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.grid(True, axis="y", alpha=0.25, linestyle="--")
+    ax.legend(frameon=False, fontsize=7, ncol=2)
+    plt.tight_layout()
+
+    for ext in ["png", "pdf"]:
+        path = os.path.join(output_dir, f"confidence_threshold_sweep_metrics.{ext}")
+        plt.savefig(path, dpi=300 if ext == "png" else None, bbox_inches="tight")
+    plt.close()
+    print(f"  ✓ Saved threshold sweep metrics plot to {os.path.join(output_dir, 'confidence_threshold_sweep_metrics.png')}")
+
+
+def _plot_threshold_sweep_coverage(df_sweep: pd.DataFrame, output_dir: str):
+    """
+    Plot coverage (retained fraction) vs global threshold.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, ONE_COL_GOLDEN_RATIO_HEIGHT_INCH))
+    ax.plot(df_sweep["threshold"], df_sweep["coverage"], color="#143D60", linewidth=1.8)
+
+    ax.set_xlabel("Confidence threshold (keep if conf ≥ t)", fontsize=8)
+    ax.set_ylabel("Coverage (retained fraction)", fontsize=8)
+    ax.set_title("Coverage vs confidence threshold", fontsize=9)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.tick_params(labelsize=7)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.grid(True, axis="y", alpha=0.25, linestyle="--")
+    plt.tight_layout()
+
+    for ext in ["png", "pdf"]:
+        path = os.path.join(output_dir, f"confidence_threshold_sweep_coverage.{ext}")
+        plt.savefig(path, dpi=300 if ext == "png" else None, bbox_inches="tight")
+    plt.close()
+    print(f"  ✓ Saved threshold sweep coverage plot to {os.path.join(output_dir, 'confidence_threshold_sweep_coverage.png')}")
+
+
+def _plot_threshold_sweep_combined(df_sweep: pd.DataFrame, output_dir: str):
+    """
+    Single figure with two subplots:
+      - Left: coverage vs threshold
+      - Right: macro & per-class accuracy vs threshold
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    fig, (ax_cov, ax_met) = plt.subplots(
+        1, 2, figsize=(TWO_COL_WIDTH_INCH, ONE_COL_GOLDEN_RATIO_HEIGHT_INCH)
+    )
+
+    # Left: coverage
+    ax_cov.plot(df_sweep["threshold"], df_sweep["coverage"], color="#143D60", linewidth=1.8)
+    ax_cov.set_xlabel("Confidence threshold (keep if conf ≥ t)", fontsize=8)
+    ax_cov.set_ylabel("Coverage", fontsize=8)
+    ax_cov.set_title("Coverage", fontsize=9)
+    ax_cov.set_xlim(0, 1)
+    ax_cov.set_ylim(0, 1)
+    ax_cov.tick_params(labelsize=7)
+    ax_cov.spines["top"].set_visible(False)
+    ax_cov.spines["right"].set_visible(False)
+    ax_cov.grid(True, axis="y", alpha=0.25, linestyle="--")
+
+    # Right: accuracies
+    ax_met.plot(
+        df_sweep["threshold"],
+        df_sweep["balanced_accuracy"],
+        label="Macro acc (balanced)",
+        color="#000000",
+        linewidth=1.8,
+    )
+    ax_met.plot(
+        df_sweep["threshold"],
+        df_sweep["acc_class_0"],
+        label=get_class_label(0, style="short"),
+        color=get_class_color(0),
+        linewidth=1.4,
+    )
+    ax_met.plot(
+        df_sweep["threshold"],
+        df_sweep["acc_class_1"],
+        label=get_class_label(1, style="short"),
+        color=get_class_color(1),
+        linewidth=1.4,
+    )
+    ax_met.plot(
+        df_sweep["threshold"],
+        df_sweep["acc_class_2"],
+        label=get_class_label(2, style="short"),
+        color=get_class_color(2),
+        linewidth=1.4,
+    )
+    ax_met.set_xlabel("Confidence threshold (keep if conf ≥ t)", fontsize=8)
+    ax_met.set_ylabel("Accuracy on retained subset", fontsize=8)
+    ax_met.set_title("Accuracy", fontsize=9)
+    ax_met.set_xlim(0, 1)
+    ax_met.set_ylim(0, 1)
+    ax_met.tick_params(labelsize=7)
+    ax_met.spines["top"].set_visible(False)
+    ax_met.spines["right"].set_visible(False)
+    ax_met.grid(True, axis="y", alpha=0.25, linestyle="--")
+    ax_met.legend(frameon=False, fontsize=7, ncol=1, loc="lower left")
+
+    plt.tight_layout()
+
+    for ext in ["png", "pdf"]:
+        path = os.path.join(output_dir, f"confidence_threshold_sweep_combined.{ext}")
+        plt.savefig(path, dpi=300 if ext == "png" else None, bbox_inches="tight")
+    plt.close()
+    print(
+        f"  ✓ Saved threshold sweep combined plot to {os.path.join(output_dir, 'confidence_threshold_sweep_combined.png')}"
+    )
+
+
 def analyze_confidence_filtering(y_true, y_pred, confidence_scores, output_dir, min_retention=0.7):
     """
     Perform dynamic confidence filtering analysis.
@@ -1502,6 +1962,18 @@ def analyze_confidence_filtering(y_true, y_pred, confidence_scores, output_dir, 
         min_retention: Minimum retention rate per class
     """
     print("Generating confidence filtering analysis...")
+
+    # -------------------------
+    # Global threshold sweep (diagnostic)
+    # -------------------------
+    try:
+        sweep_df = _sweep_confidence_thresholds(y_true, y_pred, confidence_scores)
+        _plot_threshold_sweep_combined(sweep_df, output_dir)
+        sweep_csv = os.path.join(output_dir, "confidence_threshold_sweep.csv")
+        sweep_df.to_csv(sweep_csv, index=False)
+        print(f"  ✓ Saved threshold sweep CSV to {sweep_csv}")
+    except Exception as e:
+        print(f"  ⚠ Threshold sweep failed: {e}")
     
     # Find optimal thresholds
     thresholds, filtered_indices = find_optimal_threshold_per_class(
@@ -1951,7 +2423,7 @@ def create_latex_per_class_table(predictor, output_dir, confidence_threshold=0.7
         ]
 
         # --- Compute per-class metrics: macro accuracy (= recall) and precision ---
-        class_names = {0: '0 (Alternating)', 1: '1 (Block-like)', 2: '2 (Homopolymer)'}
+        class_names = {0: '0 (Alternating)', 1: '1 (Random / block-like)', 2: '2 (Gradient)'}
         per_class_prec = {}
         per_class_acc = {}
         for name, yt, yp in datasets:
@@ -2016,11 +2488,18 @@ def generate_plots_for_dataset(df, predictor, args, suffix=''):
         X = df[predictor.features]
 
         if 'r_product_class' in df.columns:
-            y_true = df['r_product_class'].values
+            y_true = df['r_product_class'].astype(int).values
         else:
-            bins = [-np.inf, 1, 25, np.inf]
-            labels = [0, 1, 2]
-            y_true = pd.cut(df['r1r2'], bins=bins, labels=labels, right=False).astype(int).values
+            if {'constant_1', 'constant_2'}.issubset(df.columns):
+                def _class_from_row(row):
+                    res = classify_reactivity_curve(float(row['constant_1']), float(row['constant_2']))
+                    return res['class_id']
+
+                y_true = df.apply(_class_from_row, axis=1).astype(int).values
+            else:
+                bins = [-np.inf, 1, 25, np.inf]
+                labels = [0, 1, 2]
+                y_true = pd.cut(df['r1r2'], bins=bins, labels=labels, right=False).astype(int).values
     except Exception as e:
         print(f"  ✗ Error preparing features: {e}")
         return
@@ -2163,11 +2642,19 @@ def main():
         script_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(script_dir)
         split_dir = os.path.join(project_root, "artifacts", "data_splits")
-        _, _, df_test = load_train_val_test_split(split_dir=split_dir)
+        _, df_val, df_test = load_train_val_test_split(split_dir=split_dir)
+        print(f"  ✓ Validation set loaded ({len(df_val)} samples)")
         print(f"  ✓ Test set loaded ({len(df_test)} samples)")
     except Exception as e:
         print(f"  ✗ Error loading test set: {e}")
         sys.exit(1)
+
+    # Optional: calibration method comparison on validation set
+    if args.calibration_compare:
+        try:
+            compare_calibration_methods_on_validation(df_val, predictor, args.output_dir, suffix="validation")
+        except Exception as e:
+            print(f"  ✗ Calibration comparison failed: {e}")
 
     # Generate plots
     print("\n" + "=" * 60)

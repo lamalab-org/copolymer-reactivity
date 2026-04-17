@@ -529,11 +529,15 @@ def calculate_metrics(y_true, y_pred, name):
 
 
 def print_comparison_table(all_metrics, all_predictions, n_total):
-    """Print comparison table of macro accuracy and macro precision."""
+    """Print comparison table of macro accuracy and macro precision.
+    
+    Note: Voting models are evaluated on the *agreed* subset only (abstention elsewhere),
+    so we also print coverage (= n / n_total) to make comparisons explicit.
+    """
     print("\n" + "=" * 70)
     print("MODEL COMPARISON TABLE")
     print("=" * 70)
-    header = f"{'Model':<38} {'n':>5} {'Macro Acc':>10} {'Macro Prec':>11}"
+    header = f"{'Model':<38} {'n':>5} {'Cover%':>7} {'Macro Acc':>10} {'Macro Prec':>11}"
     print(header)
     print("-" * 70)
 
@@ -543,8 +547,9 @@ def print_comparison_table(all_metrics, all_predictions, n_total):
             n = int((~np.isnan(pred)).sum())
         else:
             n = n_total
+        cover = (n / n_total * 100.0) if n_total else 0.0
         print(
-            f"{name:<38} {n:>5} "
+            f"{name:<38} {n:>5} {cover:>6.1f}% "
             f"{m['balanced_accuracy']:>10.4f} "
             f"{m['precision_macro']:>11.4f}"
         )
@@ -1289,6 +1294,11 @@ def main():
     print("MODEL COMPARISON FOR FINAL MODEL SELECTION")
     print("=" * 60)
 
+    # Resolve output directory relative to this script (stable regardless of cwd)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    if not os.path.isabs(args.output_dir):
+        args.output_dir = os.path.join(script_dir, args.output_dir)
+
     # --- Load model metadata to get training filters ---
     print("\nReading model training configuration...")
     try:
@@ -1414,6 +1424,15 @@ def main():
             all_metrics['Voting (Lookup + XGBoost)'] = calculate_metrics(
                 y_t_v, y_p_v, 'Voting (Lookup + XGBoost)'
             )
+            # Fairness check: compare both base models on the SAME agreed subset
+            try:
+                xgb_acc_agree = balanced_accuracy_score(y_t_v, xgb_pred[v_mask].astype(int))
+                lu_acc_agree = balanced_accuracy_score(y_t_v, lookup_pred[v_mask].astype(int))
+                print("\n  Agreement-subset check (same samples as voting evaluation):")
+                print(f"    XGBoost balanced acc on agree subset: {xgb_acc_agree:.4f}")
+                print(f"    Lookup  balanced acc on agree subset: {lu_acc_agree:.4f}")
+            except Exception as e:
+                print(f"  Warning: could not compute agreement-subset check: {e}")
             # Use XGBoost confidence for agreed predictions
             voting_conf = xgb_conf.copy()
             voting_conf[~v_mask] = np.nan
@@ -1436,6 +1455,15 @@ def main():
             all_metrics['Voting (Lookup + XGBoost+Features)'] = calculate_metrics(
                 y_t_v2, y_p_v2, 'Voting (Lookup + XGBoost+Features)'
             )
+            # Fairness check: compare both base models on the SAME agreed subset
+            try:
+                xgb_lf_acc_agree = balanced_accuracy_score(y_t_v2, xgb_lf_pred[v_mask2].astype(int))
+                lu_acc_agree = balanced_accuracy_score(y_t_v2, lookup_pred[v_mask2].astype(int))
+                print("\n  Agreement-subset check (same samples as voting evaluation):")
+                print(f"    XGBoost+Features balanced acc on agree subset: {xgb_lf_acc_agree:.4f}")
+                print(f"    Lookup          balanced acc on agree subset: {lu_acc_agree:.4f}")
+            except Exception as e:
+                print(f"  Warning: could not compute agreement-subset check: {e}")
             # Use XGBoost+Features confidence for agreed predictions
             voting_conf2 = xgb_lf_conf.copy()
             voting_conf2[~v_mask2] = np.nan
@@ -1458,6 +1486,7 @@ def main():
     # =================================================================
     output_dir = args.output_dir
     os.makedirs(output_dir, exist_ok=True)
+    print(f"\nSaving plots to: {os.path.abspath(output_dir)}")
 
     # Confusion matrices
     plot_confusion_matrices(all_predictions, y_true, output_dir)

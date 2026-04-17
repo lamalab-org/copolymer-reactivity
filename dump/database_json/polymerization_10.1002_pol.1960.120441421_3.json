@@ -1,9 +1,9 @@
 {
-  "monomer1": "styrene",
+  "monomer1": "acrylonitrile",
   "monomer2": "glycidyl methacrylate",
   "r_values": {
-    "constant_1": 0.44,
-    "constant_2": 0.53
+    "constant_1": 0.14,
+    "constant_2": 1.32
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -18,7 +18,7 @@
   "calculation_method": "previous paper",
   "polymerization_type": "free radical",
   "logP": 0.7968,
-  "monomer1_smiles": "C=Cc1ccccc1",
+  "monomer1_smiles": "C=CC#N",
   "monomer2_smiles": "C=C(C)C(=O)OCC1CO1",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

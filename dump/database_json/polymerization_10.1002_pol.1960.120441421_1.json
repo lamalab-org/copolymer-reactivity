@@ -1,9 +1,9 @@
 {
   "monomer1": "acrylonitrile",
-  "monomer2": "glycidyl methacrylate",
+  "monomer2": "glycidyl acrylate",
   "r_values": {
-    "constant_1": 0.14,
-    "constant_2": 1.32
+    "constant_1": 1.01,
+    "constant_2": 1.02
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -15,11 +15,11 @@
   "method": "solvent",
   "r-product": null,
   "source": "https://doi.org/10.1002/pol.1960.120441421",
-  "calculation_method": "previous paper",
+  "calculation_method": "Fineman and Ross",
   "polymerization_type": "free radical",
   "logP": 0.7968,
   "monomer1_smiles": "C=CC#N",
-  "monomer2_smiles": "C=C(C)C(=O)OCC1CO1",
+  "monomer2_smiles": "C=CC(=O)OCC1CO1",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,
   "method_emb_1": 6.958462891419976,

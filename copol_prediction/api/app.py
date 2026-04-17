@@ -80,7 +80,7 @@ try:
         class_descriptions_map = {
             0: "alternating",
             1: "random to block like",
-            2: "homopolymer",
+            2: "gradient",
         }
         from morfeus_patch import XTB
 
@@ -621,7 +621,7 @@ async def predict(input_data: PredictionInput):
         class_descriptions_map = {
             0: "alternating",
             1: "random to block like",
-            2: "homopolymer",
+            2: "gradient",
         }
 
         # Make XGBoost prediction
@@ -902,15 +902,18 @@ async def preprocess_all(input_data: PreprocessAllInput):
                 if required_feature not in features:
                     features[required_feature] = None
 
-        # Find similar papers if dataset is available
+        # Find similar papers using same similarity metric as nearest_neighbors
         similar_papers_list = None
-        if SIMILARITY_AVAILABLE and dataset_df is not None:
+        if SIMILARITY_AVAILABLE and (train_df is not None or dataset_df is not None):
             try:
                 method_emb_tuple = (method_emb["pca_1"], method_emb["pca_2"])
                 polytype_emb_tuple = (polytype_emb["pca_1"], polytype_emb["pca_2"])
+                # Prefer training data (gleiche Basis wie nearest_neighbors),
+                # falle sonst auf das vollständige Dataset zurück.
+                similarity_dataset = train_df if train_df is not None else dataset_df
                 
                 similar_papers = find_similar_papers(
-                    dataset_df,
+                    similarity_dataset,
                     input_data.monomer1_smiles,
                     input_data.monomer2_smiles,
                     input_data.solvent_smiles,

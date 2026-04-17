@@ -4,10 +4,10 @@
         "publication_reference": {
             "DOI_number": "https://doi.org/10.1002/pol.1984.0102201085"
         },
-        "r_product": 0.0018,
+        "r_product": 0.34,
         "monomers": [
             {
-                "name": "p-Methoxystyrene"
+                "name": "Methyl methacrylate"
             },
             {
                 "name": "Methacryloyl fluoride"
@@ -16,29 +16,29 @@
         "reaction_conditions": {
             "temperature": 333.15,
             "solvent": {
-                "smile": "CCC(C)=O"
+                "smile": "N#Cc1ccccc1"
             },
             "solvent_descriptors": {
-                "log_P": 0.9854,
-                "TPSA": 17.07,
+                "log_P": 1.5582799999999999,
+                "TPSA": 23.79,
                 "HBA": 1.0,
                 "HBD": 0.0,
-                "fraction_CSP3": 0.75,
-                "mol_MR": 20.971999999999994,
-                "labute_ASA": 31.995599471063137,
-                "num_rotatable_bonds": 1.0,
-                "ring_count": 0.0,
-                "heavy_atom_count": 5.0
+                "fraction_CSP3": 0.0,
+                "mol_MR": 31.156999999999996,
+                "labute_ASA": 48.188924915362286,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 8.0
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
             "calculation_method": "nonlinear least-squares",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.017
+                    "reaction_constant": 0.39
                 },
                 {
-                    "reaction_constant": 0.11
+                    "reaction_constant": 0.87
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

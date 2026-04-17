@@ -3,8 +3,11 @@
 SHAP feature importance (voting model, validation set, group-based).
 
 - Loads the final model bundle (same as compare_models / train_final_model).
+- Does **not** re-train the classifier and does **not** apply Gaussian augmentation here;
+  SHAP explains the XGBoost weights exactly as stored in the bundle. Use a bundle trained
+  with `train_final_model.py` without `--use-augmentation` for alignment with the no-augmentation pipeline.
 - Uses the voting model: only validation samples where XGBoost and Lookup agree.
-- Applies same training filters for Lookup as the final model (e.g. specialized removed).
+- Applies same training filters for Lookup as the final model (e.g. specialized removed, CV-prune list on lookup pool when present in bundle metadata).
 - SHAP importance by feature groups: highly correlated features are grouped together
   (mean absolute SHAP per group).
 
@@ -36,7 +39,43 @@ sys.path.insert(0, _script_dir)
 from permutation_analysis import (
     build_feature_groups,
     calculate_shap_importance_by_groups,
+    calculate_shap_pairwise_importance_by_groups,
+    calculate_shap_average_strong_groups,
 )
+
+
+def maybe_apply_cv_prune_100(df_train: pd.DataFrame, predictor: CopolymerPredictor) -> pd.DataFrame:
+    """
+    If the loaded model bundle was trained with CV-pruning (100% error-rate IDs),
+    apply the same reaction_id removal to the TRAIN split used as lookup pool and
+    for SHAP grouping.
+    """
+    meta_cfg = (predictor.metadata or {}).get("training_config", {}) or {}
+    prune_path = meta_cfg.get("cv_prune_100_path")
+    if not prune_path:
+        return df_train
+    if not os.path.exists(prune_path):
+        print(f"  Warning: cv_prune_100_path not found: {prune_path}. Proceeding without pruning in this experiment.")
+        return df_train
+    try:
+        df_prune = pd.read_csv(prune_path)
+        if "reaction_id" not in df_prune.columns:
+            print(f"  Warning: 'reaction_id' missing in prune list: {prune_path}. Proceeding without pruning.")
+            return df_train
+        prune_ids = set(df_prune["reaction_id"].astype(str).tolist())
+        before_rows = len(df_train)
+        before_groups = df_train["reaction_id"].astype(str).nunique()
+        df_train_pruned = df_train[~df_train["reaction_id"].astype(str).isin(prune_ids)].copy().reset_index(drop=True)
+        after_rows = len(df_train_pruned)
+        after_groups = df_train_pruned["reaction_id"].astype(str).nunique()
+        print(
+            f"  Applied CV-pruning (100% error-rate): removed "
+            f"{before_rows - after_rows} rows / {before_groups - after_groups} groups from TRAIN lookup pool"
+        )
+        return df_train_pruned
+    except Exception as e:
+        print(f"  Warning: Failed to apply CV-pruning from {prune_path}: {e}. Proceeding without pruning.")
+        return df_train
 
 
 def parse_args():
@@ -49,7 +88,8 @@ def parse_args():
         default=os.path.join(_script_dir, "../../copol_prediction/artifacts/model_bundle"),
         help="Path to final model bundle",
     )
-    parser.add_argument("--output-dir", type=str, default="results")
+    # Default to a stable path inside this experiment folder, regardless of CWD
+    parser.add_argument("--output-dir", type=str, default=os.path.join(_script_dir, "results"))
     parser.add_argument("--random-state", type=int, default=42)
     parser.add_argument("--top-n", type=int, default=50, help="Number of top feature groups to plot")
     parser.add_argument(
@@ -63,6 +103,33 @@ def parse_args():
         type=int,
         default=500,
         help="Maximum samples for SHAP computation (default: 500, use more for accuracy but slower)",
+    )
+    parser.add_argument(
+        "--pairwise-shap",
+        action="store_true",
+        help="Compute pairwise SHAP (0vs1, 0vs2, 1vs2) on TRAIN split and save plots/CSVs.",
+    )
+    parser.add_argument(
+        "--pairwise-top-n",
+        type=int,
+        default=20,
+        help="Top N groups to plot for each pairwise SHAP plot (default: 20).",
+    )
+    parser.add_argument(
+        "--per-class-shap",
+        action="store_true",
+        help="Compute per-class SHAP (one plot per class) on TRAIN split and save plots/CSVs.",
+    )
+    parser.add_argument(
+        "--avg-shap-strong-groups",
+        action="store_true",
+        help="Compute average |SHAP| across classes with strong semantic grouping (no error bars) on validation voting subset.",
+    )
+    parser.add_argument(
+        "--avg-shap-top-n",
+        type=int,
+        default=10,
+        help="Top N groups to plot for the strongly-grouped average SHAP plot (default: 10).",
     )
     parser.add_argument(
         "--split-dir",
@@ -82,6 +149,171 @@ def parse_args():
         help="Hyperparameter search iterations when using --train-full-features-model (default: 15)",
     )
     return parser.parse_args()
+
+
+def plot_group_importance_barplot_to_file(results_df, output_dir, *, filename_base: str, top_n: int = 10):
+    """
+    Same as plot_group_importance_barplot, but lets us control the output filenames.
+    """
+    n_groups = len(results_df)
+    n_plot = min(top_n, n_groups)
+    top = results_df.head(top_n).copy()
+    top["display_label"] = top["group_label"].apply(format_feature_name)
+
+    TWO_COL_WIDTH_INCH = 7
+    height = max(3.2, len(top) * 0.22)
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
+
+    y_pos = np.arange(len(top))
+    # Prefer quantiles/IQR if available; else fall back to mean±std
+    if {"q25", "q50", "q75"}.issubset(set(top.columns)):
+        center = top["q50"].astype(float).values
+        q25 = top["q25"].astype(float).values
+        q75 = top["q75"].astype(float).values
+        xerr = np.vstack([center - q25, q75 - center])
+        xlabel = "SHAP importance (median |SHAP|, IQR)"
+    else:
+        center = top["importance_mean"].astype(float).values
+        xerr = top["importance_std"].astype(float).values
+        xlabel = "SHAP importance (mean |SHAP| ± std)"
+    ax.barh(
+        y_pos,
+        center,
+        xerr=xerr,
+        capsize=4,
+        alpha=0.85,
+        color=plt.cm.RdBu(np.linspace(0, 1, len(top))),
+    )
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(top["display_label"], fontsize=7)
+    ax.set_xlabel(xlabel, fontsize=9)
+    ax.tick_params(axis="x", labelsize=7)
+    ax.invert_yaxis()
+    ax.grid(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+
+    for ext in ["png", "pdf"]:
+        path = os.path.join(output_dir, f"{filename_base}.{ext}")
+        plt.savefig(path, dpi=300 if ext == "png" else None, bbox_inches="tight")
+    plt.close()
+    return os.path.join(output_dir, f"{filename_base}.png")
+
+
+def plot_group_importance_beeswarm_to_file(
+    results_df,
+    shap_values_per_group,
+    feature_values_per_group,
+    output_dir,
+    *,
+    filename_base: str,
+    top_n: int = 10,
+):
+    """
+    Beeswarm plot with controlled output filename.
+    Uses the same visual style as plot_group_importance_beeswarm.
+    """
+    from matplotlib.colors import Normalize
+
+    n_groups = len(results_df)
+    n_plot = min(top_n, n_groups)
+    top = results_df.head(top_n).copy()
+    top["display_label"] = top["group_label"].apply(format_feature_name)
+
+    TWO_COL_WIDTH_INCH = 7
+    height = max(3.2, len(top) * 0.22)
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
+
+    y_pos = np.arange(len(top))
+    np.random.seed(42)  # reproducible jitter
+
+    for i, (_, row) in enumerate(top.iterrows()):
+        group_label = row["group_label"]
+        if group_label not in shap_values_per_group:
+            continue
+        if group_label not in feature_values_per_group:
+            continue
+
+        shap_vals = np.asarray(shap_values_per_group[group_label]).flatten()
+        feature_vals = np.asarray(feature_values_per_group[group_label]).flatten()
+        if len(shap_vals) == 0 or len(feature_vals) == 0 or len(shap_vals) != len(feature_vals):
+            continue
+
+        f_min, f_max = float(np.min(feature_vals)), float(np.max(feature_vals))
+        if f_max > f_min:
+            feature_vals_norm = (feature_vals - f_min) / (f_max - f_min)
+        else:
+            feature_vals_norm = np.ones_like(feature_vals) * 0.5
+
+        y_jitter = np.random.normal(y_pos[i], 0.05, size=len(shap_vals))
+        colors = plt.cm.RdYlBu_r(feature_vals_norm)
+
+        ax.scatter(
+            shap_vals,
+            y_jitter,
+            alpha=0.5,
+            s=12,
+            c=colors,
+            edgecolors="none",
+        )
+
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(top["display_label"], fontsize=7)
+    ax.set_xlabel("SHAP value (|SHAP| per sample)", fontsize=9)
+    ax.tick_params(axis="x", labelsize=7)
+    ax.invert_yaxis()
+    ax.grid(False, axis="y")
+    ax.grid(True, axis="x", alpha=0.3, linestyle="--")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    sm = plt.cm.ScalarMappable(cmap=plt.cm.RdYlBu_r, norm=Normalize(vmin=0, vmax=1))
+    sm.set_array([])
+    cbar = plt.colorbar(sm, ax=ax, pad=0.02)
+    cbar.set_label("Feature value\n(high → low)", fontsize=7, rotation=0, labelpad=15)
+    cbar.ax.tick_params(labelsize=6)
+
+    plt.tight_layout()
+
+    for ext in ["png", "pdf"]:
+        path = os.path.join(output_dir, f"{filename_base}.{ext}")
+        plt.savefig(path, dpi=300, bbox_inches="tight")
+    plt.close()
+    return os.path.join(output_dir, f"{filename_base}.png")
+
+
+def plot_group_importance_barplot_no_errorbars(
+    results_df,
+    output_dir,
+    *,
+    filename_base: str,
+    top_n: int = 20,
+):
+    top = results_df.head(int(top_n)).copy()
+    top = top.iloc[::-1]  # barh: top item at top
+    TWO_COL_WIDTH_INCH = 7
+    height = max(3.2, len(top) * 0.22)
+    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
+    ax.barh(
+        top["group_label"].astype(str),
+        top["importance_mean"].astype(float),
+        color="#661124",
+        alpha=0.9,
+    )
+    ax.set_xlabel("mean |SHAP| (avg over 3 classes)", fontsize=9)
+    ax.tick_params(axis="x", labelsize=7)
+    ax.tick_params(axis="y", labelsize=7)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.grid(False)
+    plt.tight_layout()
+
+    for ext in ["png", "pdf"]:
+        path = os.path.join(output_dir, f"{filename_base}.{ext}")
+        plt.savefig(path, dpi=300, bbox_inches="tight")
+    plt.close()
+    return os.path.join(output_dir, f"{filename_base}.png")
 
 
 def get_split_dir(split_dir_arg=None):
@@ -141,7 +373,7 @@ def train_full_features_model(df_train, output_dir, random_state=42, hyperparam_
         class_weights=class_weights,
         n_jobs=-1,
     )
-    print("  Training final model on full training set...")
+    print("  Training final model on full training set (no augmentation; raw train rows only)...")
     final_model = model_training.train_final_model(
         X_train=X_train,
         y_train=y_train,
@@ -470,8 +702,22 @@ def main():
     predictor = CopolymerPredictor(model_path)
     meta = predictor.metadata.get("training_config", {})
     remove_specialized = meta.get("specialized_removed_from_training", False)
+    aug_used = meta.get("augmentation_used")
+    print("  SHAP: no re-training and no Gaussian augmentation in this script; explaining bundle weights as-is.")
+    if aug_used is True:
+        print(
+            "  ⚠ Bundle reports augmentation_used=True. For consistency with final "
+            "training (augmentation off by default), retrain the bundle without --use-augmentation."
+        )
+    elif aug_used is False:
+        print("  ✓ Bundle reports augmentation_used=False.")
+    else:
+        print("  ℹ Bundle has no augmentation_used in metadata (legacy bundle).")
     print(f"  Specialized removed from training (for Lookup): {remove_specialized}")
     print(f"  Train: {len(df_train)}  Val: {len(df_val)}  Test: {len(df_test)}")
+
+    # Match final training setup: apply CV-pruning (100% list) to TRAIN lookup pool if present
+    df_train = maybe_apply_cv_prune_100(df_train, predictor)
 
     # Voting subset on validation
     print("\nApplying voting filter (XGBoost + Lookup agree) on validation...")
@@ -488,11 +734,225 @@ def main():
         predictor, df_train, X_val_voting, y_val_voting, config
     )
 
+    # ------------------------------------------------------------------
+    # Strongly-grouped average SHAP (validation voting subset)
+    # ------------------------------------------------------------------
+    if args.avg_shap_strong_groups:
+        print("\n" + "=" * 60)
+        print("AVERAGE SHAP (STRONG GROUPS, validation voting subset)")
+        print("=" * 60)
+
+        xgb_model = predictor.model
+        df_strong, _Xsample = calculate_shap_average_strong_groups(
+            model=xgb_model,
+            X_df=X_val_voting,
+            max_samples=config["max_samples"],
+        )
+
+        out_csv = os.path.join(config["output_dir"], "shap_average_strong_groups.csv")
+        save_df = df_strong.copy()
+        save_df["features"] = save_df["features"].apply(lambda t: "|".join(t))
+        save_df.to_csv(out_csv, index=False)
+        print(f"  ✓ Saved {out_csv}")
+
+        plot_group_importance_barplot_no_errorbars(
+            df_strong,
+            config["output_dir"],
+            filename_base=f"shap_average_strong_groups_top{int(args.avg_shap_top_n)}",
+            top_n=int(args.avg_shap_top_n),
+        )
+        print(
+            f"  ✓ Saved plot {os.path.join(config['output_dir'], f'shap_average_strong_groups_top{int(args.avg_shap_top_n)}.png')}"
+        )
+
+    # ------------------------------------------------------------------
+    # Pairwise SHAP on TRAIN (binary per pair)
+    # ------------------------------------------------------------------
+    if args.pairwise_shap:
+        print("\n" + "=" * 60)
+        print("PAIRWISE SHAP (TRAIN)")
+        print("=" * 60)
+
+        # Target dataset for SHAP: TRAIN (model features)
+        X_train_model = df_train[predictor.features]
+        y_train = df_train["r_product_class"].astype(int).values
+
+        # Use same feature_names/grouping logic as run_shap_analysis (but based on TRAIN)
+        model_features = set(predictor.features)
+        in_data = set(df_train.columns)
+        wanted = prediction_utils.feature_columns_all
+        feature_names = [c for c in wanted if c in in_data and c in model_features]
+        if not feature_names:
+            feature_names = [c for c in predictor.features if c in in_data]
+        X_train_for_groups = df_train[feature_names]
+        feature_groups = build_feature_groups(
+            X_train_for_groups,
+            feature_names,
+            correlation_threshold=config["correlation_threshold"],
+        )
+
+        pairs = [(0, 1), (0, 2), (1, 2)]
+        xgb_model = predictor.model
+
+        for a, b in pairs:
+            print(f"\n  Pair: {a} vs {b}")
+            results_df, _sv, _fv, _Xsample = calculate_shap_pairwise_importance_by_groups(
+                model=xgb_model,
+                X_df=X_train_model,
+                y_true=y_train,
+                feature_groups=feature_groups,
+                class_a=a,
+                class_b=b,
+                max_samples=config["max_samples"],
+            )
+
+            # Save CSV
+            out_csv = os.path.join(config["output_dir"], f"shap_pairwise_{a}_vs_{b}.csv")
+            save_df = results_df.copy()
+            save_df["features"] = save_df["features"].apply(lambda t: "|".join(t))
+            save_df.to_csv(out_csv, index=False)
+            print(f"  ✓ Saved {out_csv}")
+
+            # Plot top N
+            plot_group_importance_barplot_to_file(
+                results_df,
+                config["output_dir"],
+                filename_base=f"shap_pairwise_{a}_vs_{b}_top{int(args.pairwise_top_n)}",
+                top_n=int(args.pairwise_top_n),
+            )
+            print(
+                f"  ✓ Saved plot {os.path.join(config['output_dir'], f'shap_pairwise_{a}_vs_{b}_top{int(args.pairwise_top_n)}.png')}"
+            )
+
+    # ------------------------------------------------------------------
+    # Per-class SHAP on TRAIN (one plot per class)
+    # ------------------------------------------------------------------
+    if args.per_class_shap:
+        print("\n" + "=" * 60)
+        print("PER-CLASS SHAP (TRAIN)")
+        print("=" * 60)
+
+        from permutation_analysis import SHAP_AVAILABLE
+        if not SHAP_AVAILABLE:
+            raise ImportError("SHAP not installed. Install with: pip install shap")
+
+        import shap
+
+        # Dataset: TRAIN (model features)
+        X_train_model = df_train[predictor.features]
+        y_train = df_train["r_product_class"].astype(int).values
+
+        # Feature grouping (same logic as above)
+        model_features = set(predictor.features)
+        in_data = set(df_train.columns)
+        wanted = prediction_utils.feature_columns_all
+        feature_names = [c for c in wanted if c in in_data and c in model_features]
+        if not feature_names:
+            feature_names = [c for c in predictor.features if c in in_data]
+        X_train_for_groups = df_train[feature_names]
+        feature_groups = build_feature_groups(
+            X_train_for_groups,
+            feature_names,
+            correlation_threshold=config["correlation_threshold"],
+        )
+
+        # Sample for SHAP (speed)
+        if len(X_train_model) > config["max_samples"]:
+            X_sample = X_train_model.sample(n=config["max_samples"], random_state=42).reset_index(drop=True)
+            print(f"  Computing SHAP on {config['max_samples']} samples (of {len(X_train_model)} total)")
+        else:
+            X_sample = X_train_model.reset_index(drop=True)
+
+        xgb_model = predictor.model
+        booster = xgb_model.get_booster() if hasattr(xgb_model, "get_booster") else xgb_model
+        explainer = shap.TreeExplainer(booster)
+        shap_values = explainer.shap_values(X_sample)
+
+        # Extract per-class SHAP arrays
+        if isinstance(shap_values, list):
+            per_class = [np.asarray(sv) for sv in shap_values]  # each (n, f)
+        elif len(np.asarray(shap_values).shape) == 3:
+            sv3 = np.asarray(shap_values)  # (n, f, c)
+            per_class = [sv3[:, :, i] for i in range(sv3.shape[2])]
+        else:
+            raise ValueError("Expected multi-class SHAP output for per-class SHAP plots.")
+
+        feature_to_idx = {f: i for i, f in enumerate(X_sample.columns)}
+
+        for cls in [0, 1, 2]:
+            sv_signed = np.asarray(per_class[int(cls)])  # (n, f)
+            sv_abs = np.abs(sv_signed)  # (n, f) for importance stats
+            rows = []
+            shap_values_per_group = {}
+            feature_values_per_group = {}
+            for group in feature_groups:
+                idxs = [feature_to_idx[f] for f in group if f in feature_to_idx]
+                if not idxs:
+                    continue
+                # Beeswarm should show signed SHAP; barplots should summarize |SHAP|
+                group_shap_signed = sv_signed[:, idxs].mean(axis=1).flatten()
+                group_shap_abs = sv_abs[:, idxs].mean(axis=1).flatten()
+                group_label = group[0] if len(group) == 1 else f"{group[0]} (+{len(group)-1})"
+
+                # Feature values used for beeswarm coloring (mean for groups)
+                cols = [X_sample.columns[i] for i in idxs]
+                if len(cols) == 1:
+                    group_vals = X_sample[cols[0]].values
+                else:
+                    group_vals = X_sample[cols].mean(axis=1).values
+                group_vals = np.asarray(group_vals).flatten()
+
+                rows.append(
+                    {
+                        "group_label": group_label,
+                        "features": tuple(group),
+                        "n_features": len(group),
+                        "importance_mean": float(np.mean(group_shap_abs)),
+                        "importance_std": float(np.std(group_shap_abs)),
+                        "q25": float(np.percentile(group_shap_abs, 25)),
+                        "q50": float(np.percentile(group_shap_abs, 50)),
+                        "q75": float(np.percentile(group_shap_abs, 75)),
+                    }
+                )
+                shap_values_per_group[group_label] = group_shap_signed
+                feature_values_per_group[group_label] = group_vals
+            results_df = pd.DataFrame(rows).sort_values("importance_mean", ascending=False).reset_index(drop=True)
+
+            out_csv = os.path.join(config["output_dir"], f"shap_per_class_{cls}.csv")
+            save_df = results_df.copy()
+            save_df["features"] = save_df["features"].apply(lambda t: "|".join(t))
+            save_df.to_csv(out_csv, index=False)
+            print(f"  ✓ Saved {out_csv}")
+
+            plot_group_importance_barplot_to_file(
+                results_df,
+                config["output_dir"],
+                filename_base=f"shap_per_class_{cls}_top{int(args.pairwise_top_n)}",
+                top_n=int(args.pairwise_top_n),
+            )
+            print(
+                f"  ✓ Saved plot {os.path.join(config['output_dir'], f'shap_per_class_{cls}_top{int(args.pairwise_top_n)}.png')}"
+            )
+
+            plot_group_importance_beeswarm_to_file(
+                results_df,
+                shap_values_per_group,
+                feature_values_per_group,
+                config["output_dir"],
+                filename_base=f"shap_per_class_{cls}_beeswarm_top{int(args.pairwise_top_n)}",
+                top_n=int(args.pairwise_top_n),
+            )
+            print(
+                f"  ✓ Saved beeswarm {os.path.join(config['output_dir'], f'shap_per_class_{cls}_beeswarm_top{int(args.pairwise_top_n)}.png')}"
+            )
+
     # Metadata
     metadata = {
         "experiment": "permutation_importance",
         "timestamp": datetime.now().isoformat(),
         "model_path": os.path.abspath(model_path),
+        "note": "SHAP uses frozen XGBoost from bundle; this experiment does not apply training-time augmentation.",
+        "bundle_augmentation_used": aug_used,
         "dataset": "validation (voting subset)",
         "n_validation_total": int(n_total),
         "n_validation_voting": int(n_agree),

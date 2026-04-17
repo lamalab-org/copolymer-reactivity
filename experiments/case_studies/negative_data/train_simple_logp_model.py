@@ -394,6 +394,38 @@ def remove_duplicates_by_logp_features(df, logp_features=['monomer1_logP', 'mono
     return df_dedup
 
 
+def reorder_monomers_by_logp(df):
+    """
+    Ensure monomer1 has the lower (or equal) logP compared to monomer2.
+    Swaps all columns that come in monomer1_*/monomer2_* pairs for affected rows.
+    """
+    if 'monomer1_logP' not in df.columns or 'monomer2_logP' not in df.columns:
+        return df
+    
+    df = df.copy()
+    
+    # Rows, bei denen monomer1_logP > monomer2_logP: hier tauschen wir
+    mask = df['monomer1_logP'] > df['monomer2_logP']
+    if not mask.any():
+        return df
+    
+    print(f"\nReordering monomers by logP for {mask.sum()} rows (monomer1_logP > monomer2_logP).")
+    
+    # Alle Paare monomer1_*/monomer2_* finden
+    mono1_cols = [c for c in df.columns if c.startswith('monomer1_')]
+    for c1 in mono1_cols:
+        suffix = c1[len('monomer1_'):]
+        c2 = 'monomer2_' + suffix
+        if c2 not in df.columns:
+            continue
+        
+        tmp = df.loc[mask, c1].copy()
+        df.loc[mask, c1] = df.loc[mask, c2]
+        df.loc[mask, c2] = tmp
+    
+    return df
+
+
 def sample_normal_data_to_match_negative(df_normal, df_negative, random_state=42):
     """
     Randomly sample normal training data to match the size of negative data.
@@ -431,90 +463,181 @@ def sample_normal_data_to_match_negative(df_normal, df_negative, random_state=42
     return df_sampled
 
 
-def split_negative_data(df_negative, test_size=0.2, random_state=42):
+def split_negative_data(
+    df_negative,
+    test_size=0.2,
+    random_state=42,
+    test_only_solvents=None,
+    train_only_solvents=None,
+    solvent_id_column=None,
+):
     """
     Split negative data into train and test sets (80/20).
     Uses monomer+solvent combination-based splitting to ensure fair split:
     - No identical monomer1+monomer2+solvent combinations in both train and test
     - Splits based on unique combinations, not reaction_id
-    
+
+    Optional solvent-level control:
+    - test_only_solvents: iterable of solvent identifiers that should go *only* into the test set
+    - train_only_solvents: iterable of solvent identifiers that should go *only* into the train set
+    - solvent_id_column: name of the column to use for solvent IDs
+      (e.g. 'solvent', 'Solvent' oder 'solvent_smiles'). If None, the
+      solvent-level control is disabled and the behavior is identical to before.
+
     Args:
         df_negative: DataFrame with negative data (must have logP features already)
         test_size: Fraction of data to use for test (default 0.2)
         random_state: Random seed for reproducibility
-        
+        test_only_solvents: Optional iterable of solvent IDs for test-only
+        train_only_solvents: Optional iterable of solvent IDs for train-only
+        solvent_id_column: Optional column name used to match solvent IDs
+
     Returns:
         Tuple of (df_neg_train, df_neg_test)
     """
     from sklearn.model_selection import train_test_split
-    
+
     print("\n" + "="*60)
     print("SPLITTING NEGATIVE DATA (80/20) - BY MONOMER+SOLVENT COMBINATIONS")
     print("="*60)
-    
+
+    df_negative = df_negative.copy()
+
+    # ------------------------------------------------------------------
+    # 1) Optional: solvent-level forcing (some solvents only in train/test)
+    # ------------------------------------------------------------------
+    forced_train_mask = pd.Series(False, index=df_negative.index)
+    forced_test_mask = pd.Series(False, index=df_negative.index)
+
+    has_forced_solvents = (
+        (test_only_solvents is not None or train_only_solvents is not None)
+        and solvent_id_column is not None
+        and solvent_id_column in df_negative.columns
+    )
+
+    if has_forced_solvents:
+        # Normalize to sets of strings for matching
+        test_only_set = set(str(s) for s in (test_only_solvents or []))
+        train_only_set = set(str(s) for s in (train_only_solvents or []))
+
+        solvent_series = df_negative[solvent_id_column].astype(str)
+
+        forced_test_mask = solvent_series.isin(test_only_set)
+        forced_train_mask = solvent_series.isin(train_only_set) & ~forced_test_mask
+
+        # Detect conflicting specifications
+        conflict_mask = forced_test_mask & forced_train_mask
+        if conflict_mask.any():
+            conflict_vals = solvent_series[conflict_mask].unique().tolist()
+            print(
+                f"  ⚠️ Warning: Some solvents are in BOTH test_only_solvents and "
+                f"train_only_solvents. They will be treated as test-only. "
+                f"Solvents: {conflict_vals}"
+            )
+            # Give priority to test-only (already ensured by & ~forced_test_mask above)
+
+        print(
+            f"\nSolvent-level forcing active (column='{solvent_id_column}'):\n"
+            f"  Forced to TRAIN only: {forced_train_mask.sum()} rows\n"
+            f"  Forced to TEST only:  {forced_test_mask.sum()} rows"
+        )
+    elif (test_only_solvents is not None or train_only_solvents is not None):
+        print(
+            "  ⚠️ Solvent-level forcing requested but 'solvent_id_column' is missing "
+            "or not found in dataframe. Ignoring test_only_solvents/train_only_solvents."
+        )
+
+    # Rows that will still be split according to combinations
+    remaining_mask = ~(forced_train_mask | forced_test_mask)
+    df_remaining = df_negative[remaining_mask].copy()
+
+    # ------------------------------------------------------------------
+    # 2) Original combination-based split on the remaining pool
+    # ------------------------------------------------------------------
     # Check if logP features exist (needed for fair splitting)
     logp_features = ['monomer1_logP', 'monomer2_logP', 'solvent_logP']
-    available_logp = [f for f in logp_features if f in df_negative.columns]
-    
-    if len(available_logp) == len(logp_features):
-        # Use logP features to create unique combinations
-        # Create a combination key based on logP values (rounded to avoid float precision issues)
-        df_negative = df_negative.copy()
-        df_negative['_combo_key'] = (
-            df_negative['monomer1_logP'].round(4).astype(str) + "_" +
-            df_negative['monomer2_logP'].round(4).astype(str) + "_" +
-            df_negative['solvent_logP'].round(4).astype(str)
+    available_logp = [f for f in logp_features if f in df_remaining.columns]
+
+    if len(df_remaining) == 0:
+        print("\nAll rows are forced by solvent; skipping combination-based split.")
+        df_split_train = df_remaining.copy()
+        df_split_test = df_remaining.copy()
+        combo_col = None
+    else:
+        if len(available_logp) == len(logp_features):
+            # Use logP features to create unique combinations
+            # Create a combination key based on logP values (rounded to avoid float precision issues)
+            df_remaining['_combo_key'] = (
+                df_remaining['monomer1_logP'].round(4).astype(str) + "_" +
+                df_remaining['monomer2_logP'].round(4).astype(str) + "_" +
+                df_remaining['solvent_logP'].round(4).astype(str)
+            )
+            combo_col = '_combo_key'
+            print("  Using logP-based combinations for splitting")
+        else:
+            # Fallback: Use monomer names + solvent
+            print("  ⚠️ logP features not available, using monomer names + solvent")
+            # Normalize names (handle case differences)
+            m1 = df_remaining.get('monomer1_name', df_remaining.get('monomer_1', '')).astype(str).str.lower().str.strip()
+            m2 = df_remaining.get('monomer2_name', df_remaining.get('monomer_2', '')).astype(str).str.lower().str.strip()
+            solv = df_remaining.get('solvent', df_remaining.get('Solvent', '')).astype(str).str.lower().str.strip()
+            df_remaining['_combo_key'] = m1 + "_" + m2 + "_" + solv
+            combo_col = '_combo_key'
+
+        # Get unique combinations
+        unique_combos = df_remaining[combo_col].unique()
+
+        print(f"\nFound {len(unique_combos)} unique monomer+solvent combinations (remaining pool)")
+        print(f"Total samples in remaining pool: {len(df_remaining)}")
+
+        # Split unique combinations (not individual rows)
+        combo_train, combo_test = train_test_split(
+            unique_combos,
+            test_size=test_size,
+            random_state=random_state
         )
-        combo_col = '_combo_key'
-        print("  Using logP-based combinations for splitting")
-    else:
-        # Fallback: Use monomer names + solvent
-        print("  ⚠️ logP features not available, using monomer names + solvent")
-        df_negative = df_negative.copy()
-        # Normalize names (handle case differences)
-        m1 = df_negative.get('monomer1_name', df_negative.get('monomer_1', '')).astype(str).str.lower().str.strip()
-        m2 = df_negative.get('monomer2_name', df_negative.get('monomer_2', '')).astype(str).str.lower().str.strip()
-        solv = df_negative.get('solvent', df_negative.get('Solvent', '')).astype(str).str.lower().str.strip()
-        df_negative['_combo_key'] = m1 + "_" + m2 + "_" + solv
-        combo_col = '_combo_key'
-    
-    # Get unique combinations
-    unique_combos = df_negative[combo_col].unique()
-    
-    print(f"\nFound {len(unique_combos)} unique monomer+solvent combinations")
-    print(f"Total samples: {len(df_negative)}")
-    
-    # Split unique combinations (not individual rows)
-    combo_train, combo_test = train_test_split(
-        unique_combos,
-        test_size=test_size,
-        random_state=random_state
-    )
-    
-    # Split data based on combinations
-    df_neg_train = df_negative[df_negative[combo_col].isin(combo_train)].copy()
-    df_neg_test = df_negative[df_negative[combo_col].isin(combo_test)].copy()
-    
-    print(f"\nNegative data split:")
-    print(f"  Train: {len(df_neg_train)} samples ({len(combo_train)} unique combinations)")
-    print(f"  Test:  {len(df_neg_test)} samples ({len(combo_test)} unique combinations)")
-    print(f"  Split ratio: {len(df_neg_train)}/{len(df_negative)} = {len(df_neg_train)/len(df_negative):.1%} train")
-    
-    # Verify no overlap BEFORE removing temporary column
-    train_combos_set = set(combo_train)
-    test_combos_set = set(combo_test)
-    overlap = train_combos_set & test_combos_set
-    
-    if overlap:
-        print(f"  ⚠️ Warning: {len(overlap)} combinations appear in both train and test!")
-        print(f"     Overlapping combinations: {list(overlap)[:5]}...")
-    else:
-        print(f"  ✅ Verified: No overlap between train and test combinations")
-    
-    # Remove temporary column AFTER verification
-    df_neg_train = df_neg_train.drop(columns=[combo_col], errors='ignore')
-    df_neg_test = df_neg_test.drop(columns=[combo_col], errors='ignore')
-    
+
+        # Split data based on combinations
+        df_split_train = df_remaining[df_remaining[combo_col].isin(combo_train)].copy()
+        df_split_test = df_remaining[df_remaining[combo_col].isin(combo_test)].copy()
+
+        print(f"\nNegative data split (remaining pool):")
+        print(f"  Train: {len(df_split_train)} samples ({len(combo_train)} unique combinations)")
+        print(f"  Test:  {len(df_split_test)} samples ({len(combo_test)} unique combinations)")
+        if len(df_remaining) > 0:
+            print(
+                f"  Split ratio (remaining pool): {len(df_split_train)}/{len(df_remaining)} "
+                f"= {len(df_split_train)/len(df_remaining):.1%} train"
+            )
+
+        # Verify no overlap BEFORE removing temporary column
+        train_combos_set = set(combo_train)
+        test_combos_set = set(combo_test)
+        overlap = train_combos_set & test_combos_set
+
+        if overlap:
+            print(f"  ⚠️ Warning: {len(overlap)} combinations appear in both train and test!")
+            print(f"     Overlapping combinations: {list(overlap)[:5]}...")
+        else:
+            print(f"  ✅ Verified: No overlap between train and test combinations")
+
+    # ------------------------------------------------------------------
+    # 3) Combine forced rows with split rows and clean up
+    # ------------------------------------------------------------------
+    df_forced_train = df_negative[forced_train_mask].copy()
+    df_forced_test = df_negative[forced_test_mask].copy()
+
+    df_neg_train = pd.concat([df_forced_train, df_split_train], ignore_index=True)
+    df_neg_test = pd.concat([df_forced_test, df_split_test], ignore_index=True)
+
+    if combo_col is not None:
+        df_neg_train = df_neg_train.drop(columns=[combo_col], errors='ignore')
+        df_neg_test = df_neg_test.drop(columns=[combo_col], errors='ignore')
+
+    print("\nFinal negative data split (including forced solvents):")
+    print(f"  Train: {len(df_neg_train)} samples")
+    print(f"  Test:  {len(df_neg_test)} samples")
+
     return df_neg_train, df_neg_test
 
 
@@ -965,6 +1088,235 @@ def plot_case_study_performance(results_train_normal, results_train_neg, results
     plt.close()
 
 
+def plot_logp_grid_and_performance(
+    df_original,
+    df_neg_train,
+    df_neg_test,
+    train_normal_results,
+    train_neg_results,
+    test_results,
+    test_neg_results,
+    output_dir,
+):
+    """
+    Create a two-panel plot:
+    - Left: logP-space scatter of monomer1_logP vs monomer2_logP, colored by source (normal/negative)
+      and marked by split (train/test).
+    - Right: bar plot with macro accuracy for train/test (normal/negative).
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Prepare combined dataframe with source/split flags
+    df_orig_train = df_original.copy()
+    df_orig_train["source"] = "normal"
+    df_orig_train["split"] = "train"
+
+    df_neg_train_plot = df_neg_train.copy()
+    df_neg_train_plot["source"] = "negative"
+    df_neg_train_plot["split"] = "train"
+
+    df_neg_test_plot = df_neg_test.copy()
+    df_neg_test_plot["source"] = "negative"
+    df_neg_test_plot["split"] = "test"
+
+    df_plot = pd.concat(
+        [df_orig_train, df_neg_train_plot, df_neg_test_plot],
+        ignore_index=True,
+    )
+
+    fig, (ax_grid, ax_bar) = plt.subplots(1, 2, figsize=(12, 5))
+
+    # Panel 1: logP-grid
+    color_map = {"normal": "#1f77b4", "negative": "#d62728"}
+    marker_map = {"train": "o", "test": "s"}
+    alpha_map = {"train": 0.5, "test": 0.9}
+
+    for source in ["normal", "negative"]:
+        for split in ["train", "test"]:
+            mask = (df_plot["source"] == source) & (df_plot["split"] == split)
+            if not mask.any():
+                continue
+            ax_grid.scatter(
+                df_plot.loc[mask, "monomer1_logP"],
+                df_plot.loc[mask, "monomer2_logP"],
+                c=color_map[source],
+                marker=marker_map[split],
+                alpha=alpha_map[split],
+                label=f"{source.capitalize()} ({split})",
+                edgecolors="none",
+                s=20,
+            )
+
+    ax_grid.set_xlabel("monomer1_logP")
+    ax_grid.set_ylabel("monomer2_logP")
+    ax_grid.set_title("Verteilung der Daten im logP-Raum")
+    ax_grid.legend(fontsize=8, loc="best")
+    ax_grid.grid(alpha=0.3)
+
+    # Panel 2: performance bars
+    labels = [
+        "Train\nNormal",
+        "Train\nNegativ",
+        "Test\nNormal",
+        "Test\nNegativ",
+    ]
+    accuracies = [
+        train_normal_results.get("accuracy_macro", train_normal_results.get("accuracy", 0.0)),
+        train_neg_results.get("accuracy_macro", train_neg_results.get("accuracy", 0.0)),
+        test_results.get("accuracy_macro", test_results.get("accuracy", 0.0)),
+        test_neg_results.get("accuracy_macro", test_neg_results.get("accuracy", 0.0)),
+    ]
+
+    x = np.arange(len(labels))
+    width = 0.6
+
+    bars = ax_bar.bar(x, accuracies, width, color="#3A3B73", alpha=0.8)
+    ax_bar.set_xticks(x)
+    ax_bar.set_xticklabels(labels)
+    ax_bar.set_ylim(0, 1)
+    ax_bar.set_ylabel("Macro Accuracy")
+    ax_bar.set_title("Modell-Performance (Train/Test)")
+    ax_bar.grid(axis="y", alpha=0.3)
+
+    for bar, val in zip(bars, accuracies):
+        height = bar.get_height()
+        ax_bar.text(
+            bar.get_x() + bar.get_width() / 2.0,
+            height,
+            f"{val:.3f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+            fontweight="bold",
+        )
+
+    plt.tight_layout()
+    out_path = os.path.join(output_dir, "logp_grid_and_performance.png")
+    plt.savefig(out_path, dpi=300, bbox_inches="tight")
+    print(f"✅ Saved: {out_path}")
+    plt.close()
+
+
+def plot_logp_ternary(
+    df_original,
+    df_test_normal,
+    df_neg_train,
+    df_neg_test,
+    output_dir,
+):
+    """
+    Ternary-style plot für (monomer1_logP, monomer2_logP, solvent_logP).
+    Jeder Punkt wird auf ein Dreieck projiziert (relative Anteile der drei logP-Werte).
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Daten vorbereiten: nur Zeilen mit allen drei logP-Werten
+    cols = ["monomer1_logP", "monomer2_logP", "solvent_logP"]
+
+    def _prepare(df, source):
+        d = df.copy()
+        d = d.dropna(subset=cols)
+        d["source"] = source
+        return d
+    
+    # Alle normalen Daten (Train + Test) in eine Gruppe
+    df_norm_all = pd.concat(
+        [
+            _prepare(df_original, "normal"),
+            _prepare(df_test_normal, "normal"),
+        ],
+        ignore_index=True,
+    )
+    
+    # Alle negativen Daten (Train + Test) in eine Gruppe
+    df_neg_all = pd.concat(
+        [
+            _prepare(df_neg_train, "negative"),
+            _prepare(df_neg_test, "negative"),
+        ],
+        ignore_index=True,
+    )
+
+    df_plot = pd.concat(
+        [df_norm_all, df_neg_all],
+        ignore_index=True,
+    )
+
+    if df_plot.empty:
+        print("⚠️ No data with valid logP values for ternary plot; skipping.")
+        return
+
+    # logP-Werte pro Achse auf [0, 1] normalisieren (min/max pro Achse),
+    # danach auf Anteile (baryzentrisch) normieren.
+    vals_raw = df_plot[cols]
+    mins = vals_raw.min()
+    maxs = vals_raw.max()
+    ranges = maxs - mins
+    # Schutz gegen Division durch 0 (falls alle Werte auf einer Achse identisch sind)
+    ranges[ranges == 0] = 1.0
+
+    vals_scaled = (vals_raw - mins) / ranges
+    vals_scaled = vals_scaled.clip(lower=0.0, upper=1.0)
+
+    vals = vals_scaled.values
+    sums = vals.sum(axis=1, keepdims=True)
+    sums[sums == 0] = 1.0  # Schutz gegen Division durch 0
+    fracs = vals / sums  # f1, f2, f3; Summe = 1
+
+    f1 = fracs[:, 0]  # monomer1
+    f2 = fracs[:, 1]  # monomer2
+    f3 = fracs[:, 2]  # solvent
+
+    # Baryzentrische Koordinaten -> 2D
+    # Ecken: A(0,0)=monomer1, B(1,0)=monomer2, C(0.5, sqrt(3)/2)=solvent
+    x = f2 + 0.5 * f3
+    y = (np.sqrt(3) / 2.0) * f3
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    # Dreiecksrahmen zeichnen
+    tri_x = [0.0, 1.0, 0.5, 0.0]
+    tri_y = [0.0, 0.0, np.sqrt(3) / 2.0, 0.0]
+    ax.plot(tri_x, tri_y, "k-", linewidth=1)
+
+    color_map = {"normal": "#1f77b4", "negative": "#d62728"}
+    # Niedrigere Opazität, damit sich dichte Bereiche nicht komplett überdecken
+    alpha_map = {"normal": 0.25, "negative": 0.4}
+
+    for source in ["normal", "negative"]:
+        mask = df_plot["source"] == source
+        if not mask.any():
+            continue
+        ax.scatter(
+            x[mask],
+            y[mask],
+            c=color_map[source],
+            marker="o",
+            alpha=alpha_map[source],
+            label=source.capitalize(),
+            edgecolors="none",
+            s=25,
+        )
+
+    # Achsenticks ausblenden, komplettes Dreieck anzeigen
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_xlim(-0.05, 1.05)
+    ax.set_ylim(-0.05, (np.sqrt(3) / 2.0) + 0.05)
+
+    ax.text(0.0, -0.05, "monomer1_logP", ha="center", va="top")
+    ax.text(1.0, -0.05, "monomer2_logP", ha="center", va="top")
+    ax.text(0.5, (np.sqrt(3) / 2.0) + 0.03, "solvent_logP", ha="center", va="bottom")
+
+    ax.set_title("Ternary-Plot der logP-Werte")
+    ax.legend(fontsize=8, loc="upper right")
+
+    plt.tight_layout()
+    out_path = os.path.join(output_dir, "logp_ternary.png")
+    plt.savefig(out_path, dpi=300, bbox_inches="tight")
+    print(f"✅ Saved: {out_path}")
+    plt.close()
+
 def main():
     """Main training pipeline."""
     args = parse_args()
@@ -981,9 +1333,6 @@ def main():
         else:
             args.negative_data = project_root / "copol_prediction" / "filter" / "artificial_datapoints" / "processed_combined_augmented.csv"
     
-    if args.negative_test_data is None:
-        args.negative_test_data = script_dir / "negative_data_test_raw_2.csv"
-    
     if args.output_dir is None:
         args.output_dir = script_dir / "results" / "model_bundle_simple_logp"
     
@@ -996,7 +1345,6 @@ def main():
         'random_state': args.random_state,
         'hyperparam_iter': args.hyperparam_iter,
         'negative_data_path': str(args.negative_data),
-        'negative_test_data_path': str(args.negative_test_data),
     }
     
     print("="*60)
@@ -1021,6 +1369,11 @@ def main():
     df_original = add_logp_features(df_original)
     df_neg_all = add_logp_features(df_neg_all)
     df_test_normal = add_logp_features(df_test_normal)
+    
+    # Reorder monomers so that monomer1_logP <= monomer2_logP
+    df_original = reorder_monomers_by_logp(df_original)
+    df_neg_all = reorder_monomers_by_logp(df_neg_all)
+    df_test_normal = reorder_monomers_by_logp(df_test_normal)
     
     # Save cache
     save_logp_cache()
@@ -1101,6 +1454,10 @@ def main():
         dataset_name="Negative Test Data (Split)"
     )
     
+    # For this experiment, we treat the held-out split from
+    # processed_combined_augmented.csv as the negative test set.
+    test_neg_results = test_neg_split_results
+    
     # Evaluate on normal test set
     test_results = evaluate_on_test(
         model_info['model'], 
@@ -1110,71 +1467,46 @@ def main():
         dataset_name="Normal Test Set"
     )
     
-    # Evaluate on negative test data
-    print("\n" + "="*60)
-    print("EVALUATING ON NEGATIVE TEST DATA")
-    print("="*60)
-    
-    if not Path(args.negative_test_data).exists():
-        print(f"⚠️ Warning: Test negative data not found: {args.negative_test_data}")
-        print("   Skipping test evaluation.")
-        test_neg_results = {
-            'accuracy': 0.0,
-            'f1_weighted': 0.0,
-            'f1_macro': 0.0
-        }
-    else:
-        # Prepare raw test data (convert to standard format with SMILES)
-        df_test_neg = prepare_negative_test_data(args.negative_test_data)
-        
-        if df_test_neg is None or len(df_test_neg) == 0:
-            print("⚠️ Warning: Could not prepare negative test data")
-            test_neg_results = {
-                'accuracy': 0.0,
-                'f1_weighted': 0.0,
-                'f1_macro': 0.0
-            }
-        else:
-            # Add logP features
-            df_test_neg = add_logp_features(df_test_neg)
-            save_logp_cache()  # Save updated cache
-            
-            # Remove duplicates based on logP features
-            df_test_neg = remove_duplicates_by_logp_features(df_test_neg)
-            
-            # Convert to binary
-            df_test_neg = convert_to_binary_classification(df_test_neg)
-            
-            test_neg_results = evaluate_on_test(
-                model_info['model'], 
-                df_test_neg, 
-                model_info['features'], 
-                is_binary=True,
-                dataset_name="Negative Test Data"
-            )
-            
-            # Print detailed predictions for separate negative test file
-            print_detailed_predictions(
-                model_info['model'],
-                df_test_neg,
-                model_info['features'],
-                dataset_name="Negative Test Data (Separate File)"
-            )
-    
     # Save model
     save_model(model_info, train_normal_results, train_neg_results, test_results, test_neg_results, config)
     
     # Create case study performance plot
-    if Path(args.negative_test_data).exists() and test_neg_results['accuracy'] > 0:
-        print("\n" + "="*60)
-        print("CREATING CASE STUDY PERFORMANCE PLOT")
-        print("="*60)
-        plot_case_study_performance(
-            train_normal_results,
-            train_neg_results,
-            test_neg_results,
-            config['output_dir']
-        )
+    print("\n" + "="*60)
+    print("CREATING CASE STUDY PERFORMANCE PLOT")
+    print("="*60)
+    plot_case_study_performance(
+        train_normal_results,
+        train_neg_results,
+        test_neg_results,
+        config['output_dir']
+    )
+    
+    # Create combined logP-grid + performance plot
+    print("\n" + "="*60)
+    print("CREATING LOGP GRID + PERFORMANCE PLOT")
+    print("="*60)
+    plot_logp_grid_and_performance(
+        df_original,
+        df_neg_train,
+        df_neg_test,
+        train_normal_results,
+        train_neg_results,
+        test_results,
+        test_neg_results,
+        config["output_dir"],
+    )
+    
+    # Create ternary logP plot
+    print("\n" + "="*60)
+    print("CREATING LOGP TERNARY PLOT")
+    print("="*60)
+    plot_logp_ternary(
+        df_original,
+        df_test_normal,
+        df_neg_train,
+        df_neg_test,
+        config["output_dir"],
+    )
     
     print("\n" + "="*60)
     print("TRAINING COMPLETE!")
@@ -1193,10 +1525,9 @@ def main():
     print(f"  Accuracy (macro): {test_results.get('accuracy_macro', test_results['accuracy']):.4f}")
     print(f"  F1 (macro): {test_results['f1_macro']:.4f}")
     
-    if Path(args.negative_test_data).exists() and test_neg_results['accuracy'] > 0:
-        print(f"\nNegative Test Data:")
-        print(f"  Accuracy (macro): {test_neg_results.get('accuracy_macro', test_neg_results['accuracy']):.4f}")
-        print(f"  F1 (macro): {test_neg_results['f1_macro']:.4f}")
+    print(f"\nNegative Test Data (held-out split):")
+    print(f"  Accuracy (macro): {test_neg_results.get('accuracy_macro', test_neg_results['accuracy']):.4f}")
+    print(f"  F1 (macro): {test_neg_results['f1_macro']:.4f}")
 
 
 if __name__ == "__main__":

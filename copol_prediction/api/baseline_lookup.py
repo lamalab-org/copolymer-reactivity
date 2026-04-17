@@ -159,6 +159,9 @@ def find_top_k_nearest_neighbors(
             - monomer2_name: Second monomer name (falls back to SMILES if name not available)
             - solvent_name: Solvent name (falls back to SMILES if name not available)
             - temperature: Temperature in Celsius
+            - r1: Reactivity ratio r1 (constant_1), if available
+            - r2: Reactivity ratio r2 (constant_2), if available
+            - r1r2: Product r1*r2, if available
             - method: Polymerization method
             - polytype: Polymerization type
             - source: DOI or original source
@@ -311,6 +314,14 @@ def find_top_k_nearest_neighbors(
         monomer1_smiles = str(train_row.get('monomer1_smiles', ''))
         monomer2_smiles = str(train_row.get('monomer2_smiles', ''))
         solvent_smiles = str(train_row.get('solvent_smiles', ''))
+
+        # Reactivity ratios (if present in the split CSV)
+        r1_val = train_row.get("constant_1", np.nan)
+        r2_val = train_row.get("constant_2", np.nan)
+        r1r2_val = train_row.get("r1r2", np.nan)
+        r1_out = float(r1_val) if pd.notna(r1_val) else None
+        r2_out = float(r2_val) if pd.notna(r2_val) else None
+        r1r2_out = float(r1r2_val) if pd.notna(r1r2_val) else None
         
         result = {
             'rank': rank,
@@ -324,6 +335,9 @@ def find_top_k_nearest_neighbors(
             'solvent_name': str(solvent_name),
             'solvent_smiles': solvent_smiles,
             'temperature': float(train_row.get('temperature', np.nan)) if pd.notna(train_row.get('temperature')) else None,
+            'r1': r1_out,
+            'r2': r2_out,
+            'r1r2': r1r2_out,
             'method': str(train_row.get('method', '')) if pd.notna(train_row.get('method')) else None,
             'polytype': str(train_row.get('polymerization_type', '')) if pd.notna(train_row.get('polymerization_type')) else None,
             'source': str(train_row.get('original_source', train_row.get('doi', ''))) if pd.notna(train_row.get('original_source', train_row.get('doi', ''))) else None,

@@ -1,9 +1,9 @@
 {
-  "monomer1": "methyl methacrylate",
+  "monomer1": "vinylidene chloride",
   "monomer2": "N-vinylcarbazole",
   "r_values": {
-    "constant_1": 2.0,
-    "constant_2": 0.04
+    "constant_1": 0.02,
+    "constant_2": 3.7
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -18,7 +18,7 @@
   "calculation_method": "Mayo and Lewis",
   "polymerization_type": "free radical",
   "logP": 1.6866,
-  "monomer1_smiles": "C=C(C)C(=O)OC",
+  "monomer1_smiles": "C=C(Cl)Cl",
   "monomer2_smiles": "C=Cn1c2ccccc2c2ccccc21",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

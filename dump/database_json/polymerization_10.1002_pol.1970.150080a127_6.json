@@ -1,13 +1,13 @@
 {
-  "monomer1": "N-n-Octadecylacrylamide",
+  "monomer1": "n-Octadecyl acrylate",
   "monomer2": "Methyl methacrylate",
   "r_values": {
-    "constant_1": 3.85,
-    "constant_2": 0.44
+    "constant_1": 2.23,
+    "constant_2": 0.3
   },
   "conf_intervals": {
-    "constant_conf_1": 0.17,
-    "constant_conf_2": 0.04
+    "constant_conf_1": 0.01,
+    "constant_conf_2": 0.03
   },
   "temperature": 60.0,
   "temperature_unit": "°C",
@@ -18,7 +18,7 @@
   "calculation_method": "EVM Program",
   "polymerization_type": "free radical",
   "logP": 1.6866,
-  "monomer1_smiles": "C=CC(=O)NCCCCCCCCCCCCCCCCCC",
+  "monomer1_smiles": "C=CC(=O)OCCCCCCCCCCCCCCCCCC",
   "monomer2_smiles": "C=C(C)C(=O)OC",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

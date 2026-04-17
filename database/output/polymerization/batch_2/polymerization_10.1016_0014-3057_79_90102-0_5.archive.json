@@ -4,7 +4,7 @@
         "publication_reference": {
             "DOI_number": "https://doi.org/10.1016/0014-3057(79)90102-0"
         },
-        "r_product": 0.61,
+        "r_product": 1.11,
         "monomers": [
             {
                 "name": "2-Naphthyl Methacrylate"
@@ -14,33 +14,33 @@
             }
         ],
         "reaction_conditions": {
-            "temperature": 333.15,
+            "temperature": 328.15,
             "solvent": {
-                "smile": "ClC(Cl)(Cl)Cl"
+                "smile": "CC#N"
             },
             "solvent_descriptors": {
-                "log_P": 2.5529,
-                "TPSA": 0.0,
-                "HBA": 0.0,
+                "log_P": 0.52988,
+                "TPSA": 23.79,
+                "HBA": 1.0,
                 "HBD": 0.0,
-                "fraction_CSP3": 1.0,
-                "mol_MR": 26.143,
-                "labute_ASA": 49.952315935356246,
+                "fraction_CSP3": 0.5,
+                "mol_MR": 11.287,
+                "labute_ASA": 19.496772823694872,
                 "num_rotatable_bonds": 0.0,
                 "ring_count": 0.0,
-                "heavy_atom_count": 5.0
+                "heavy_atom_count": 3.0
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
             "calculation_method": "Kelen-Tudos",
             "reaction_constants": [
                 {
-                    "reaction_constant": 2.46,
-                    "reaction_constant_confi": 0.25
+                    "reaction_constant": 3.7,
+                    "reaction_constant_confi": 0.3
                 },
                 {
-                    "reaction_constant": 0.25,
-                    "reaction_constant_confi": 0.06
+                    "reaction_constant": 0.3,
+                    "reaction_constant_confi": 0.05
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

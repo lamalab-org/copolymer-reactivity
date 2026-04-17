@@ -265,11 +265,21 @@ def load_model_bundle(bundle_dir="artifacts/model_bundle"):
     with open(f"{bundle_dir}/meta.json", "r", encoding="utf-8") as f:
         meta = json.load(f)
     
-    return {
+    bundle = {
         'model': model,
         'features': meta['feature_columns'],
         'class_labels': meta['class_labels'],
         'metadata': meta
     }
+
+    # Optional: probability calibration payload (fit on validation set)
+    cal_path = os.path.join(bundle_dir, "calibration.joblib")
+    if os.path.exists(cal_path):
+        try:
+            bundle["calibration"] = joblib.load(cal_path)
+        except Exception as e:
+            print(f"[WARN] Failed to load calibration from {cal_path}: {e}")
+
+    return bundle
 
 

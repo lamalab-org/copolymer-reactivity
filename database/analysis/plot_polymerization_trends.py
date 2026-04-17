@@ -10,8 +10,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import sys
 from collections import Counter, defaultdict
-import requests
-import time
 import json
 import re
 import numpy as np
@@ -20,22 +18,23 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'copol_prediction' / 'analysis'))
 from plot_config import (
     SEQUENTIAL_COLORS, 
-    TWO_COL_WIDTH_INCH
+    TWO_COL_WIDTH_INCH,
+    setup_plot_style,
 )
 
 # Load data
 data_path = Path(__file__).parent.parent.parent / 'copol_prediction' / 'processed_data.csv'
 print(f"Loading data from: {data_path}")
 
+setup_plot_style()
+
 df = pd.read_csv(data_path)
 
-# Cache file for publication years
-cache_file = Path(__file__).parent / 'publication_years_cache.json'
-publication_years_cache = {}
-if cache_file.exists():
-    with open(cache_file, 'r') as f:
-        publication_years_cache = json.load(f)
-    print(f"  Loaded {len(publication_years_cache)} cached publication years")
+def _get_publication_year_series(df: pd.DataFrame) -> pd.Series:
+    """Use local `publication_year` column (no network)."""
+    if "publication_year" not in df.columns:
+        return pd.Series([], dtype="float64")
+    return pd.to_numeric(df["publication_year"], errors="coerce")
 
 # Grouping config: load from JSON files
 _script_dir = Path(__file__).parent
@@ -123,54 +122,7 @@ def extract_doi_from_source(source_value):
     return None
 
 def get_publication_year_from_crossref(doi):
-    """Get publication year from Crossref API. Results are cached."""
-    # Check cache first (including None values for 404s)
-    if doi in publication_years_cache:
-        cached_value = publication_years_cache[doi]
-        # Return None if cached as None (404), otherwise return the year
-        return cached_value if cached_value is not None else None
-    
-    # Skip if DOI is None or empty
-    if not doi:
-        return None
-    
-    try:
-        url = f"https://api.crossref.org/works/{doi}"
-        response = requests.get(url, timeout=10)
-        if response.status_code == 200:
-            data = response.json().get("message", {})
-            issued = data.get("issued", {})
-            if issued:
-                date_parts = issued.get("date-parts", [])
-                if date_parts and len(date_parts[0]) > 0:
-                    year = date_parts[0][0]
-                    publication_years_cache[doi] = year
-                    # Save cache after each successful fetch
-                    cache_file.parent.mkdir(parents=True, exist_ok=True)
-                    with open(cache_file, 'w') as f:
-                        json.dump(publication_years_cache, f, indent=2)
-                    time.sleep(0.1)  # Be nice to Crossref API
-                    return year
-        elif response.status_code == 404:
-            # DOI not found - cache as None to avoid repeated requests
-            publication_years_cache[doi] = None
-            cache_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(cache_file, 'w') as f:
-                json.dump(publication_years_cache, f, indent=2)
-            # Only print warning for first few 404s to avoid spam
-            none_count = sum(1 for v in publication_years_cache.values() if v is None)
-            if none_count <= 10:
-                print(f"  Warning: DOI not found (404): {doi}")
-            elif none_count == 11:
-                print(f"  ... (suppressing further 404 warnings - many DOIs may not be in Crossref)")
-        else:
-            # Other errors - don't cache, might be temporary
-            if response.status_code != 429:  # Rate limiting
-                print(f"  Warning: Crossref returned status {response.status_code} for DOI {doi}")
-    except Exception as e:
-        print(f"  Warning: Error fetching year for DOI {doi}: {e}")
-    
-    return None
+    raise RuntimeError("Crossref lookup disabled: use local `publication_year` column instead.")
 
 
 def normalize_value(value):
@@ -238,27 +190,10 @@ def create_year_bin(year, bin_size=1):
 print(f"\nLoaded {len(df)} entries")
 print("Extracting publication years...")
 
-# First pass: extract DOIs and fetch years
-print("  Fetching publication years from Crossref...")
-unique_dois = set()
-for idx, row in df.iterrows():
-    source_val = _first_nonempty(row.get("source"), row.get("original_source"))
-    doi = extract_doi_from_source(source_val)
-    if doi:
-        unique_dois.add(doi)
-
-print(f"  Found {len(unique_dois)} unique DOIs")
-print(f"  Fetching years (this may take a while, using cache when available)...")
-print(f"    Note: Some DOIs may return 404 (not found in Crossref) - this is normal")
-for i, doi in enumerate(unique_dois, 1):
-    if i % 50 == 0:
-        print(f"    Progress: {i}/{len(unique_dois)}")
-    get_publication_year_from_crossref(doi)
-
-# Print summary of fetched years
-successful_years = sum(1 for v in publication_years_cache.values() if v is not None and v is not False)
-failed_years = sum(1 for v in publication_years_cache.values() if v is None)
-print(f"\n  Summary: {successful_years} DOIs with years found, {failed_years} DOIs not found (404)")
+print("  Using local publication_year column (no Crossref calls).")
+pub_year_series = _get_publication_year_series(df)
+if pub_year_series.empty:
+    raise RuntimeError("Missing `publication_year` column in processed_data.csv (required for polymerization trends).")
 
 # Second pass: collect data with years, polymerization types, and methods
 print("\n  Collecting polymerization types and methods with years...")
@@ -276,31 +211,8 @@ for idx, row in df.iterrows():
     if method_raw:
         all_methods[method_raw] += 1
 
-# Print all unique values with counts
-output_lines = []
-output_lines.append(f"\n{'='*80}")
-output_lines.append("ALL UNIQUE POLYMERIZATION TYPES (before grouping):")
-output_lines.append(f"{'='*80}")
-for poly_type, count in sorted(all_poly_types.items(), key=lambda x: x[1], reverse=True):
-    line = f"  '{poly_type}': {count} occurrences"
-    output_lines.append(line)
-    print(line)
-
-output_lines.append(f"\n{'='*80}")
-output_lines.append("ALL UNIQUE METHODS (before grouping):")
-output_lines.append(f"{'='*80}")
-for method, count in sorted(all_methods.items(), key=lambda x: x[1], reverse=True):
-    line = f"  '{method}': {count} occurrences"
-    output_lines.append(line)
-    print(line)
-output_lines.append(f"{'='*80}\n")
-print(f"{'='*80}\n")
-
-# Also save to file
-output_file = Path(__file__).parent / 'polymerization_types_and_methods_list.txt'
-with open(output_file, 'w', encoding='utf-8') as f:
-    f.write('\n'.join(output_lines))
-print(f"  ✓ Full list saved to: {output_file}")
+# (Removed) Dumping all raw types/methods to a txt file.
+# Keep console output focused on the final grouped trends + summary stats.
 
 # Now collect data with years and apply grouping
 data_with_years = []
@@ -317,12 +229,11 @@ known_poly_type_groups = set(poly_type_to_group.values())
 known_method_groups = set(method_to_group.values())
 
 for idx, row in df.iterrows():
-    source_val = _first_nonempty(row.get("source"), row.get("original_source"))
-    doi = extract_doi_from_source(source_val)
-    year = None
-    if doi and doi in publication_years_cache:
-        year = publication_years_cache[doi]
-    
+    try:
+        yv = pub_year_series.iloc[int(idx)]
+        year = int(yv) if np.isfinite(yv) else None
+    except Exception:
+        year = None
     if year is None:
         continue
     
@@ -452,6 +363,18 @@ method_counts_filtered = filter_plot_data(method_counts, unique_bins)
 print(f"\n  Filtered to {len(poly_type_counts_filtered)} polymerization types (from {len(poly_type_counts)})")
 print(f"  Filtered to {len(method_counts_filtered)} methods (from {len(method_counts)})")
 
+# Smooth temporal trends using a rolling mean (same approach as monomer temporal evolution plot)
+rolling_window_years = 10
+window_bins = int(max(1, round(rolling_window_years / bin_size)))
+
+poly_type_df = prepare_plot_data(poly_type_counts_filtered, unique_bins)
+method_df = prepare_plot_data(method_counts_filtered, unique_bins)
+
+if window_bins > 1 and not poly_type_df.empty:
+    poly_type_df = poly_type_df.rolling(window=window_bins, min_periods=max(1, window_bins // 2), center=True).mean()
+if window_bins > 1 and not method_df.empty:
+    method_df = method_df.rolling(window=window_bins, min_periods=max(1, window_bins // 2), center=True).mean()
+
 # Create plots
 print("\nCreating plots...")
 
@@ -466,22 +389,11 @@ def bin_to_numeric(bin_label):
 numeric_bins = [bin_to_numeric(bin_label) for bin_label in unique_bins]
 
 # Compute total per bin (for normalization)
-total_per_bin_type = {}
-for bin_label in unique_bins:
-    total_per_bin_type[bin_label] = sum(
-        poly_type_counts_filtered[cat].get(bin_label, 0)
-        for cat in poly_type_counts_filtered
-    )
-
-total_per_bin_method = {}
-for bin_label in unique_bins:
-    total_per_bin_method[bin_label] = sum(
-        method_counts_filtered[cat].get(bin_label, 0)
-        for cat in method_counts_filtered
-    )
+total_per_bin_type = poly_type_df.sum(axis=1).to_dict() if not poly_type_df.empty else {}
+total_per_bin_method = method_df.sum(axis=1).to_dict() if not method_df.empty else {}
 
 # Create figure with two subplots side by side (stacked area = proportional share per year)
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(TWO_COL_WIDTH_INCH * 2, TWO_COL_WIDTH_INCH * 0.9))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(TWO_COL_WIDTH_INCH * 2, TWO_COL_WIDTH_INCH * 0.9), layout="constrained")
 
 # Sort by total count for consistent order (largest at bottom in stack)
 poly_type_sorted = sorted(poly_type_counts_filtered.items(),
@@ -490,8 +402,7 @@ method_sorted = sorted(method_counts_filtered.items(),
                        key=lambda x: sum(x[1].values()), reverse=True)
 
 # Plot 1: Polymerization Types (stacked area, 100% per bin)
-ax1.text(0.0, 1.02, 'a', transform=ax1.transAxes, fontsize=12, 
-         verticalalignment='bottom', horizontalalignment='left')
+ax1.set_title("A  Polymerization types temporal evolution", loc="left", fontsize=14, pad=6)
 ax1.set_xlabel('Year', fontsize=12)
 ax1.set_ylabel('Share', fontsize=12)
 ax1.set_ylim(0, 1)
@@ -501,7 +412,10 @@ labels_type = []
 colors_type = []
 for i, (poly_type, bin_counts) in enumerate(poly_type_sorted):
     total_per_bin = [total_per_bin_type.get(bin_label, 0) for bin_label in unique_bins]
-    counts = [bin_counts.get(bin_label, 0) for bin_label in unique_bins]
+    if not poly_type_df.empty and poly_type in poly_type_df.columns:
+        counts = poly_type_df[poly_type].reindex(unique_bins).fillna(0).to_numpy().tolist()
+    else:
+        counts = [bin_counts.get(bin_label, 0) for bin_label in unique_bins]
     prop = [c / t if t > 0 else 0 for c, t in zip(counts, total_per_bin)]
     proportions_type.append(prop)
     labels_type.append(poly_type if poly_type else "Unknown")
@@ -513,8 +427,7 @@ ax1.grid(False)
 ax1.set_xlim(min(numeric_bins) - 2, max(numeric_bins) + 2)
 
 # Plot 2: Methods (stacked area, 100% per bin)
-ax2.text(0.0, 1.02, 'b', transform=ax2.transAxes, fontsize=12, 
-         verticalalignment='bottom', horizontalalignment='left')
+ax2.set_title("B  Polymerization methods temporal evolution", loc="left", fontsize=14, pad=6)
 ax2.set_xlabel('Year', fontsize=12)
 ax2.set_ylabel('Share', fontsize=12)
 ax2.set_ylim(0, 1)
@@ -524,7 +437,10 @@ labels_method = []
 colors_method = []
 for i, (method, bin_counts) in enumerate(method_sorted):
     total_per_bin = [total_per_bin_method.get(bin_label, 0) for bin_label in unique_bins]
-    counts = [bin_counts.get(bin_label, 0) for bin_label in unique_bins]
+    if not method_df.empty and method in method_df.columns:
+        counts = method_df[method].reindex(unique_bins).fillna(0).to_numpy().tolist()
+    else:
+        counts = [bin_counts.get(bin_label, 0) for bin_label in unique_bins]
     prop = [c / t if t > 0 else 0 for c, t in zip(counts, total_per_bin)]
     proportions_method.append(prop)
     labels_method.append(method if method else "Unknown")
@@ -534,8 +450,6 @@ ax2.stackplot(numeric_bins, *proportions_method, labels=labels_method, colors=co
 ax2.legend(loc='lower left', fontsize=9, frameon=True, ncol=1)
 ax2.grid(False)
 ax2.set_xlim(min(numeric_bins) - 2, max(numeric_bins) + 2)
-
-plt.tight_layout()
 
 # Create output directory if it doesn't exist
 output_dir = Path(__file__).parent / 'figures'

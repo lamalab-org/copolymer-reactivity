@@ -9,36 +9,34 @@
                 "name": "Acrolein"
             },
             {
-                "name": "Methacrylnitril"
+                "name": "2-Vinylpyridin"
             }
         ],
         "reaction_conditions": {
             "temperature": 323.15,
             "solvent": {
-                "smile": "C1COCCO1"
+                "smile": "CNC(C)=O"
             },
             "solvent_descriptors": {
-                "log_P": 0.03320000000000001,
-                "TPSA": 18.46,
-                "HBA": 2.0,
-                "HBD": 0.0,
-                "fraction_CSP3": 1.0,
-                "mol_MR": 21.637999999999995,
-                "labute_ASA": 37.055336676503906,
+                "log_P": -0.24770000000000003,
+                "TPSA": 29.1,
+                "HBA": 1.0,
+                "HBD": 1.0,
+                "fraction_CSP3": 0.6666666666666666,
+                "mol_MR": 19.740699999999997,
+                "labute_ASA": 31.18051954027457,
                 "num_rotatable_bonds": 0.0,
-                "ring_count": 1.0,
-                "heavy_atom_count": 6.0
+                "ring_count": 0.0,
+                "heavy_atom_count": 5.0
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.72,
-                    "reaction_constant_confi": 0.06
+                    "reaction_constant": 4.0
                 },
                 {
-                    "reaction_constant": 1.2,
-                    "reaction_constant_confi": 0.08
+                    "reaction_constant": 0.0
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

@@ -1,25 +1,27 @@
 {
   "experiment": "permutation_importance",
-  "timestamp": "2026-02-20T10:15:10.323942",
-  "model_path": "/Users/maraw/PycharmProjects/test/experiments/permutation_importance/results/full_features_model_bundle",
+  "timestamp": "2026-04-16T09:33:08.327995",
+  "model_path": "/Users/maraw/PycharmProjects/test/copol_prediction/artifacts/model_bundle",
+  "note": "SHAP uses frozen XGBoost from bundle; this experiment does not apply training-time augmentation.",
+  "bundle_augmentation_used": false,
   "dataset": "validation (voting subset)",
-  "n_validation_total": 682,
-  "n_validation_voting": 555,
+  "n_validation_total": 678,
+  "n_validation_voting": 545,
   "remove_specialized_lookup": false,
-  "num_feature_groups": 36,
+  "num_feature_groups": 23,
   "correlation_threshold": 0.85,
   "max_samples": 500,
   "top_groups": [
+    "delta_HOMO_LUMO_BA",
+    "delta_HOMO_LUMO_AB",
     "temperature",
-    "solvent_logp",
-    "polytype_emb_1",
-    "delta_HOMO_LUMO_AB (+3)",
-    "charges_min_2",
-    "delta_HOMO_LUMO_AA (+3)",
-    "polytype_emb_2",
-    "method_emb_1",
-    "charges_min_1",
-    "solvent_FractionCSP3"
+    "solvent_FractionCSP3",
+    "dipole_x_2",
+    "dipole_x_1",
+    "global_electrophilicity_2",
+    "global_electrophilicity_1",
+    "dipole_y_2",
+    "dipole_y_1"
   ],
-  "trained_full_features_model": true
+  "trained_full_features_model": false
 }

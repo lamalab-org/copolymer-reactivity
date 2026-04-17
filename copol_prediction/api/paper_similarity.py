@@ -90,6 +90,10 @@ def calculate_overall_similarity(
     """
     Calculate overall similarity between query and a dataset row.
     
+    Standardmäßig wird – analog zum Baseline-Nearest-Neighbor-Ansatz –
+    nur Monomer- und Lösungsmittelähnlichkeit berücksichtigt
+    (Temperatur/Method/Polytype erhalten Gewicht 0).
+    
     Args:
         query_mon1: Query monomer 1 SMILES
         query_mon2: Query monomer 2 SMILES
@@ -105,11 +109,12 @@ def calculate_overall_similarity(
     """
     if weights is None:
         weights = {
-            'monomer': 0.40,  # 40% weight on monomers (most important)
-            'solvent': 0.25,  # 25% weight on solvent
-            'temperature': 0.15,  # 15% weight on temperature
-            'method': 0.10,  # 10% weight on method
-            'polytype': 0.10  # 10% weight on polytype
+            # align with baseline_lookup: combined_similarity = 0.5 * monomer + 0.5 * solvent
+            'monomer': 0.50,      # 50% weight on monomers
+            'solvent': 0.50,      # 50% weight on solvent
+            'temperature': 0.0,   # no contribution from temperature
+            'method': 0.0,        # no contribution from method embedding
+            'polytype': 0.0       # no contribution from polytype embedding
         }
     
     # Calculate monomer similarity (both combinations: 1-1,2-2 and 1-2,2-1)

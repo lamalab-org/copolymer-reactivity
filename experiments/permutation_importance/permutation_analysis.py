@@ -240,8 +240,9 @@ def calculate_shap_importance_by_groups(
             # Skip this group if lengths don't match
             continue
         
-        importance_mean = group_shap.mean()
-        importance_std = group_shap.std()
+        importance_mean = float(group_shap.mean())
+        importance_std = float(group_shap.std())
+        q25, q50, q75 = [float(x) for x in np.percentile(group_shap, [25, 50, 75])]
         
         group_label = group[0] if len(group) == 1 else f"{group[0]} (+{len(group)-1})"
         rows.append({
@@ -250,6 +251,9 @@ def calculate_shap_importance_by_groups(
             'n_features': len(group),
             'importance_mean': importance_mean,
             'importance_std': importance_std,
+            'q25': q25,
+            'q50': q50,
+            'q75': q75,
         })
         shap_values_per_group[group_label] = group_shap
         feature_values_per_group[group_label] = group_feature_vals
@@ -257,6 +261,240 @@ def calculate_shap_importance_by_groups(
     results_df = pd.DataFrame(rows)
     results_df = results_df.sort_values('importance_mean', ascending=False).reset_index(drop=True)
     return results_df, shap_values_per_group, feature_values_per_group, X_sample
+
+
+def calculate_shap_pairwise_importance_by_groups(
+    model,
+    X_df: pd.DataFrame,
+    y_true: np.ndarray,
+    feature_groups,
+    *,
+    class_a: int,
+    class_b: int,
+    max_samples: int = 500,
+):
+    """
+    Pairwise SHAP importance for multi-class models.
+
+    Motivation:
+      For 3-class problems, averaging |SHAP| across classes can blur signal.
+      For a given decision "class_a vs class_b", the relevant quantity is the
+      difference of the class scores/logits. For tree models, SHAP is additive
+      per class score, so we approximate the pairwise explanation by:
+
+        SHAP_pair = SHAP(class_a) - SHAP(class_b)
+
+      and then summarize importance as mean absolute SHAP_pair.
+
+    This function:
+      - filters X_df/y_true to only samples with y_true in {class_a, class_b}
+      - computes SHAP values via TreeExplainer
+      - builds pairwise SHAP contributions and returns group-based importances,
+        analogous to calculate_shap_importance_by_groups.
+
+    Parameters:
+        model: XGBoost model (must have .get_booster())
+        X_df: DataFrame of features
+        y_true: true multiclass labels (used only for filtering)
+        feature_groups: list[list[str]] feature groups
+        class_a, class_b: the class pair to compare
+        max_samples: max samples for SHAP computation (speed)
+    """
+    if not SHAP_AVAILABLE:
+        raise ImportError("SHAP not installed. Install with: pip install shap")
+
+    y_true = np.asarray(y_true).astype(int)
+    mask = (y_true == int(class_a)) | (y_true == int(class_b))
+    X_pair = X_df.loc[mask].reset_index(drop=True)
+    if len(X_pair) == 0:
+        raise ValueError(f"No samples found for classes {class_a} vs {class_b}")
+
+    # Limit samples for speed
+    if len(X_pair) > max_samples:
+        X_sample = X_pair.sample(n=max_samples, random_state=42).reset_index(drop=True)
+        print(f"  Computing pairwise SHAP ({class_a} vs {class_b}) on {max_samples} samples (of {len(X_pair)} total)")
+    else:
+        X_sample = X_pair
+
+    # Get XGBoost booster
+    if hasattr(model, 'get_booster'):
+        booster = model.get_booster()
+    elif hasattr(model, 'model') and hasattr(model.model, 'get_booster'):
+        booster = model.model.get_booster()
+    else:
+        raise ValueError("Model must be XGBoost with .get_booster() method")
+
+    # Compute SHAP values
+    print(f"  Computing SHAP values for pairwise comparison: {class_a} vs {class_b} ...")
+    explainer = shap.TreeExplainer(booster)
+    shap_values = explainer.shap_values(X_sample)
+
+    # Extract per-class SHAP arrays (n_samples, n_features)
+    if isinstance(shap_values, list):
+        if max(class_a, class_b) >= len(shap_values):
+            raise ValueError(f"SHAP returned {len(shap_values)} classes; cannot index {class_a},{class_b}")
+        shap_a = np.asarray(shap_values[int(class_a)])
+        shap_b = np.asarray(shap_values[int(class_b)])
+        print(f"  Multi-class (list): using SHAP[{class_a}] - SHAP[{class_b}] with shape {shap_a.shape}")
+    elif len(shap_values.shape) == 3:
+        # (n_samples, n_features, n_classes)
+        if max(class_a, class_b) >= shap_values.shape[2]:
+            raise ValueError(f"SHAP returned {shap_values.shape[2]} classes; cannot index {class_a},{class_b}")
+        shap_a = np.asarray(shap_values[:, :, int(class_a)])
+        shap_b = np.asarray(shap_values[:, :, int(class_b)])
+        print(f"  Multi-class (3D): using SHAP[:,:,{class_a}] - SHAP[:,:,{class_b}] with shape {shap_a.shape}")
+    else:
+        raise ValueError("Pairwise SHAP requires multi-class SHAP output (list or 3D array).")
+
+    shap_pair = shap_a - shap_b
+    shap_abs = np.abs(shap_pair)  # (n_samples, n_features)
+
+    # Map feature names to indices
+    feature_to_idx = {f: i for i, f in enumerate(X_sample.columns)}
+
+    rows = []
+    shap_values_per_group = {}
+    feature_values_per_group = {}
+
+    for group in feature_groups:
+        group_indices = [feature_to_idx[f] for f in group if f in feature_to_idx]
+        if not group_indices:
+            continue
+
+        group_shap = shap_abs[:, group_indices].mean(axis=1)
+        group_shap = np.asarray(group_shap).flatten()
+
+        group_feature_cols = [X_sample.columns[i] for i in group_indices]
+        if len(group_feature_cols) == 1:
+            group_feature_vals = X_sample[group_feature_cols[0]].values
+        else:
+            group_feature_vals = X_sample[group_feature_cols].mean(axis=1).values
+        group_feature_vals = np.asarray(group_feature_vals).flatten()
+
+        if len(group_shap) != len(group_feature_vals):
+            print(f"    Warning: Length mismatch for {group[0]} (pairwise). Skipping.")
+            continue
+
+        importance_mean = float(group_shap.mean())
+        importance_std = float(group_shap.std())
+        q25, q50, q75 = [float(x) for x in np.percentile(group_shap, [25, 50, 75])]
+
+        group_label = group[0] if len(group) == 1 else f"{group[0]} (+{len(group)-1})"
+        rows.append({
+            'group_label': group_label,
+            'features': tuple(group),
+            'n_features': len(group),
+            'importance_mean': importance_mean,
+            'importance_std': importance_std,
+            'q25': q25,
+            'q50': q50,
+            'q75': q75,
+        })
+        shap_values_per_group[group_label] = group_shap
+        feature_values_per_group[group_label] = group_feature_vals
+
+    results_df = pd.DataFrame(rows).sort_values('importance_mean', ascending=False).reset_index(drop=True)
+    return results_df, shap_values_per_group, feature_values_per_group, X_sample
+
+
+def _strong_group_label(feature_name: str) -> str:
+    """
+    Manual/semantic grouping for "strongly grouped" average SHAP plots.
+
+    - Combine monomer1/monomer2 feature pairs: *_1 and *_2 -> "<base> (1&2)"
+      e.g. dipole_x_1 + dipole_x_2
+    - Combine Δ HOMO–LUMO pairs:
+        AA + BB -> "Δ HOMO-LUMO (1-1 & 2-2)"
+        AB + BA -> "Δ HOMO-LUMO (1-2 & 2-1)"
+    """
+    f = str(feature_name)
+
+    if f in ("delta_HOMO_LUMO_AA", "delta_HOMO_LUMO_BB"):
+        return "Δ HOMO-LUMO (1-1 & 2-2)"
+    if f in ("delta_HOMO_LUMO_AB", "delta_HOMO_LUMO_BA"):
+        return "Δ HOMO-LUMO (1-2 & 2-1)"
+
+    # generic monomer-pair grouping
+    if f.endswith("_1") or f.endswith("_2"):
+        base = f[:-2]
+        return f"{base} (1&2)"
+
+    return f
+
+
+def calculate_shap_average_strong_groups(
+    model,
+    X_df: pd.DataFrame,
+    *,
+    max_samples: int = 500,
+):
+    """
+    Average absolute SHAP across all classes, with manual/semantic strong grouping.
+
+    Output has NO error bars by design (just importance_mean), and groups
+    are merged by naming rules in _strong_group_label.
+    """
+    if not SHAP_AVAILABLE:
+        raise ImportError("SHAP not installed. Install with: pip install shap")
+
+    # Limit samples for speed
+    if len(X_df) > max_samples:
+        X_sample = X_df.sample(n=max_samples, random_state=42).reset_index(drop=True)
+        print(f"  Computing strongly-grouped SHAP on {max_samples} samples (of {len(X_df)} total)")
+    else:
+        X_sample = X_df.reset_index(drop=True)
+
+    # Get XGBoost booster
+    if hasattr(model, "get_booster"):
+        booster = model.get_booster()
+    elif hasattr(model, "model") and hasattr(model.model, "get_booster"):
+        booster = model.model.get_booster()
+    else:
+        raise ValueError("Model must be XGBoost with .get_booster() method")
+
+    # Compute SHAP values
+    import shap
+
+    print("  Computing SHAP values (strong groups)...")
+    explainer = shap.TreeExplainer(booster)
+    shap_values = explainer.shap_values(X_sample)
+
+    # Convert to per-feature mean(|SHAP|) across classes:
+    if isinstance(shap_values, list):
+        shap_abs = np.stack([np.abs(sv) for sv in shap_values], axis=0).mean(axis=0)  # (n, f)
+    else:
+        sv = np.asarray(shap_values)
+        if sv.ndim == 3:
+            shap_abs = np.abs(sv).mean(axis=2)  # (n, f)
+        else:
+            shap_abs = np.abs(sv)  # (n, f)
+
+    feature_names = list(X_sample.columns)
+    feature_to_idx = {f: i for i, f in enumerate(feature_names)}
+
+    # Build mapping strong_group -> feature indices
+    group_to_features = {}
+    for f in feature_names:
+        g = _strong_group_label(f)
+        group_to_features.setdefault(g, []).append(f)
+
+    rows = []
+    for g, feats in group_to_features.items():
+        idxs = [feature_to_idx[f] for f in feats if f in feature_to_idx]
+        if not idxs:
+            continue
+        group_shap = shap_abs[:, idxs].mean(axis=1)  # (n,)
+        rows.append(
+            {
+                "group_label": g,
+                "features": tuple(sorted(feats)),
+                "n_features": int(len(feats)),
+                "importance_mean": float(np.mean(group_shap)),
+            }
+        )
+
+    df = pd.DataFrame(rows).sort_values("importance_mean", ascending=False).reset_index(drop=True)
+    return df, X_sample
 
 
 def calculate_permutation_importance(model, X_test, y_test, feature_names,

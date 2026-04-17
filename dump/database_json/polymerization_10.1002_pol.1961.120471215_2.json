@@ -1,9 +1,9 @@
 {
-  "monomer1": "Vinyl acetate",
+  "monomer1": "Methylmethacrylate",
   "monomer2": "N-Vinylsuccinimide",
   "r_values": {
-    "constant_1": 6.1,
-    "constant_2": 0.14
+    "constant_1": 0.064,
+    "constant_2": 9.5
   },
   "conf_intervals": {
     "constant_conf_1": null,
@@ -17,7 +17,7 @@
   "source": "https://doi.org/10.1002/pol.1961.120471215",
   "calculation_method": "Fineman-Ross",
   "polymerization_type": "free radical",
-  "monomer1_smiles": "C=COC(C)=O",
+  "monomer1_smiles": "C=C(C)C(=O)OC",
   "monomer2_smiles": "C=CN1C(=O)CCC1=O",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

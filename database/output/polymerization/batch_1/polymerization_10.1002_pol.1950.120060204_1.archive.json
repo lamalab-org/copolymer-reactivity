@@ -4,42 +4,42 @@
         "publication_reference": {
             "DOI_number": "https://doi.org/10.1002/pol.1950.120060204"
         },
-        "r_product": 0.03,
+        "r_product": 0.23,
         "monomers": [
             {
-                "name": "Alpha-Methylstyrene"
+                "name": "Styrene"
             },
             {
-                "name": "Maleic Anhydride"
+                "name": "Methyl Methacrylate"
             }
         ],
         "reaction_conditions": {
             "temperature": 333.15,
             "solvent": {
-                "smile": "CC#N"
+                "smile": "c1ccccc1"
             },
             "solvent_descriptors": {
-                "log_P": 0.52988,
-                "TPSA": 23.79,
-                "HBA": 1.0,
+                "log_P": 1.6866,
+                "TPSA": 0.0,
+                "HBA": 0.0,
                 "HBD": 0.0,
-                "fraction_CSP3": 0.5,
-                "mol_MR": 11.287,
-                "labute_ASA": 19.496772823694872,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 26.441999999999993,
+                "labute_ASA": 37.43140311949697,
                 "num_rotatable_bonds": 0.0,
-                "ring_count": 0.0,
-                "heavy_atom_count": 3.0
+                "ring_count": 1.0,
+                "heavy_atom_count": 6.0
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.038,
-                    "reaction_constant_confi": 0.003
+                    "reaction_constant": 0.54,
+                    "reaction_constant_confi": 0.04
                 },
                 {
-                    "reaction_constant": 0.08,
-                    "reaction_constant_confi": 0.03
+                    "reaction_constant": 0.42,
+                    "reaction_constant_confi": 0.1
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

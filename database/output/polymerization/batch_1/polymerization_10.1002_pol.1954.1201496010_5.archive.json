@@ -9,7 +9,7 @@
                 "name": "vinyl acetate"
             },
             {
-                "name": "crotonic acid"
+                "name": "acrylonitrile"
             }
         ],
         "reaction_conditions": {
@@ -18,10 +18,12 @@
             "calculation_method": "Barb",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.33
+                    "reaction_constant": 0.02,
+                    "reaction_constant_confi": 0.02
                 },
                 {
-                    "reaction_constant": 0
+                    "reaction_constant": 6,
+                    "reaction_constant_confi": 2
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

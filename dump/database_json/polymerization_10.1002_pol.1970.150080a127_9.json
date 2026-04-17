@@ -1,13 +1,13 @@
 {
-  "monomer1": "n-Octadecyl acrylate",
+  "monomer1": "N-n-Octadecylacrylamide",
   "monomer2": "Styrene",
   "r_values": {
-    "constant_1": 0.79,
-    "constant_2": 0.31
+    "constant_1": 1.41,
+    "constant_2": 0.2
   },
   "conf_intervals": {
-    "constant_conf_1": 0.09,
-    "constant_conf_2": 0.31
+    "constant_conf_1": 0.1,
+    "constant_conf_2": 0.05
   },
   "temperature": 60.0,
   "temperature_unit": "°C",
@@ -18,7 +18,7 @@
   "calculation_method": "EVM Program",
   "polymerization_type": "free radical",
   "logP": 1.6866,
-  "monomer1_smiles": "C=CC(=O)OCCCCCCCCCCCCCCCCCC",
+  "monomer1_smiles": "C=CC(=O)NCCCCCCCCCCCCCCCCCC",
   "monomer2_smiles": "C=Cc1ccccc1",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,

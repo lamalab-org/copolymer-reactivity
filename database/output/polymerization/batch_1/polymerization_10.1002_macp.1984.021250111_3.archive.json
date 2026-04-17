@@ -6,40 +6,40 @@
         },
         "monomers": [
             {
-                "name": "acetoxymethyl vinyl ketone"
+                "name": "N-(p-acetoxyphenyl)maleimide"
             },
             {
                 "name": "styrene"
             }
         ],
         "reaction_conditions": {
-            "temperature": 323.15,
+            "temperature": 333.15,
             "solvent": {
-                "smile": "CCC(C)=O"
+                "smile": "O=C1CCCCC1"
             },
             "solvent_descriptors": {
-                "log_P": 0.9854,
+                "log_P": 1.5196,
                 "TPSA": 17.07,
                 "HBA": 1.0,
                 "HBD": 0.0,
-                "fraction_CSP3": 0.75,
-                "mol_MR": 20.971999999999994,
-                "labute_ASA": 31.995599471063137,
-                "num_rotatable_bonds": 1.0,
-                "ring_count": 0.0,
-                "heavy_atom_count": 5.0
+                "fraction_CSP3": 0.8333333333333334,
+                "mol_MR": 28.091999999999985,
+                "labute_ASA": 43.719652546327126,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 7.0
             },
             "polymerization_method": "solvent",
             "polymerization_type": "free radical",
             "calculation_method": "Kelen-Tudor",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.103,
-                    "reaction_constant_confi": 0.011
+                    "reaction_constant": 0.04,
+                    "reaction_constant_confi": 0.02
                 },
                 {
-                    "reaction_constant": 0.368,
-                    "reaction_constant_confi": 0.018
+                    "reaction_constant": 0.0,
+                    "reaction_constant_confi": 0.01
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

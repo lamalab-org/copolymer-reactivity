@@ -1,13 +1,13 @@
 {
   "monomer1": "2-Hydroxyethylmethacrylate",
-  "monomer2": "4-Vinylpyridine",
+  "monomer2": "3-Vinylpyridine",
   "r_values": {
-    "constant_1": 0.95,
-    "constant_2": 0.04
+    "constant_1": 0.75,
+    "constant_2": 0.01
   },
   "conf_intervals": {
-    "constant_conf_1": 0.04,
-    "constant_conf_2": 0.04
+    "constant_conf_1": 0.01,
+    "constant_conf_2": 0.01
   },
   "temperature": 60.0,
   "temperature_unit": "°C",
@@ -15,11 +15,11 @@
   "method": "bulk",
   "r-product": null,
   "source": "https://doi.org/10.1016/0014-3057(74)90012-7",
-  "calculation_method": "Fineman-Ross",
+  "calculation_method": "Joshi-Joshi",
   "polymerization_type": "free radical",
   "logP": -0.2956000000000001,
   "monomer1_smiles": "C=C(C)C(=O)OCCO",
-  "monomer2_smiles": "C=Cc1ccncc1",
+  "monomer2_smiles": "C=Cc1cccnc1",
   "polytype_emb_1": 7.496725795633088,
   "polytype_emb_2": -0.4631906941937577,
   "method_emb_1": -7.23088245290138,
@@ -30,7 +30,7 @@
   "solvent_HBD": 0.0,
   "solvent_FractionCSP3": 0.6666666666666666,
   "solvent_MolMR": 19.750999999999998,
-  "solvent_LabuteASA": 31.390491026869903,
+  "solvent_LabuteASA": 31.390491026869896,
   "solvent_NumRotatableBonds": 1.0,
   "solvent_RingCount": 0.0,
   "solvent_HeavyAtomCount": 5.0

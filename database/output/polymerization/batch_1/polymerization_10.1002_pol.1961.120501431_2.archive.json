@@ -6,14 +6,14 @@
         },
         "monomers": [
             {
-                "name": "vinylidene chloride"
+                "name": "methyl methacrylate"
             },
             {
                 "name": "N-vinylcarbazole"
             }
         ],
         "reaction_conditions": {
-            "temperature": 348.15,
+            "temperature": 343.15,
             "solvent": {
                 "smile": "c1ccccc1"
             },
@@ -34,10 +34,10 @@
             "calculation_method": "Schwan and Price",
             "reaction_constants": [
                 {
-                    "reaction_constant": 0.02
+                    "reaction_constant": 2.0
                 },
                 {
-                    "reaction_constant": 3.7
+                    "reaction_constant": 0.2
                 }
             ],
             "polytype_emb_1": 7.496725795633088,

@@ -80,18 +80,24 @@ def make_base_dataset_for_holdout(df):
 
     # DO NOT drop 'specialized' here – that’s a train-only filter.
 
-    # Create 3-class target for consistency (harmless; not a filter)
-    bins = [-np.inf, 1, 25, np.inf]
-    labels = [0, 1, 2]
-    base['r_product_class'] = pd.cut(base['r1r2'], bins=bins, labels=labels, right=False).astype(int)
-
-    # Extreme override (same as train/holdout target logic; not a filter)
+    # Create 3-class target based on individual reactivity ratios (r1 = constant_1, r2 = constant_2)
+    # 0: alternating         (r1 < 1 and r2 < 1)
+    # 1: gradient            (rest)
+    # 2: symmetric_blocky    (r1 > 1 and r2 > 1 and 0.5 < r1/r2 < 2)
     if {'constant_1', 'constant_2'}.issubset(base.columns):
-        extreme_mask = (
-            ((base['constant_1'] <= 0.1) & (base['constant_2'] > 25)) |
-            ((base['constant_2'] <= 0.1) & (base['constant_1'] > 25))
-        )
-        base.loc[extreme_mask, 'r_product_class'] = 2
+        r1 = base['constant_1']
+        r2 = base['constant_2']
+
+        mask_alt = (r1 < 1) & (r2 < 1)
+        ratio = r1 / r2
+        mask_sym = (r1 > 1) & (r2 > 1) & (ratio > 0.5) & (ratio < 2)
+
+        # Default: gradient (1)
+        base['r_product_class'] = 1
+        base.loc[mask_sym, 'r_product_class'] = 2
+        base.loc[mask_alt, 'r_product_class'] = 0
+    else:
+        raise ValueError("Required columns 'constant_1' and 'constant_2' not found for class definition.")
 
     if 'reaction_id' not in base.columns:
         raise ValueError("reaction_id is required for grouped hold-out")
