@@ -122,4 +122,4 @@ Make sure your API is running on localhost:8000 before starting ngrok.
 
 ## Example Integration
 
-See `integration_code.js` and `integration_with_similar_papers.js` for examples of how to use the ngrok URL in JavaScript.
+Use the ngrok URL as the base URL in any HTTP client.

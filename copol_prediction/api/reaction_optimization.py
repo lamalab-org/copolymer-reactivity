@@ -138,7 +138,6 @@ def create_optimization_grid(
     calculate_solvent_features_func,
     temperature_step: float = 20.0,
     n_solvents: int = 3,
-    solubility_check_func=None
 ) -> List[Dict]:
     """
     Create a 3x3 grid of predictions by varying temperature and solvent.
@@ -313,28 +312,10 @@ def create_optimization_grid(
                 pred_class = int(pred_results['predictions'][0])
                 proba = pred_results['probabilities'][0]
                 confidence = float(pred_results['confidence'][0])
-                
-                # Check solubility if function provided
-                solubility_issue_flag = None
-                if solubility_check_func is not None:
-                    try:
-                        solubility_issue_flag = solubility_check_func(
-                            monomer1_smiles=monomer1_smiles,
-                            monomer2_smiles=monomer2_smiles,
-                            solvent_smiles=solvent_smiles
-                        )
-                    except Exception as e:
-                        print(f"Warning: Solubility check failed for {solvent_smiles}: {e}")
-                        solubility_issue_flag = None
-                
-                # Class name mapping
-                class_names = {
-                    0: "alternating",
-                    1: "random to block like",
-                    2: "homopolymer"
-                }
-                predicted_class_name = class_names.get(pred_class, "unknown")
-                
+
+                from app import CLASS_LABELS
+                predicted_class_name = CLASS_LABELS.get(pred_class, "unknown")
+
                 results.append({
                     'temperature': float(temp),
                     'solvent_smiles': solvent_smiles,
@@ -347,7 +328,6 @@ def create_optimization_grid(
                         for i in range(len(proba))
                     },
                     'confidence': confidence,
-                    'solubility_issue': solubility_issue_flag
                 })
             except Exception as e:
                 # Skip this combination if prediction fails

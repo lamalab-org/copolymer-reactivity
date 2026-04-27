@@ -7,33 +7,46 @@ build-backend = "setuptools.build_meta"
 name = "copolymer-reactivity"
 version = "0.1.0"
 requires-python = ">=3.8"
+# Core deps needed for inference-only use of `copolpredictor` (i.e. the API).
+# Heavier training/visualization/extraction stacks live in optional extras.
 dependencies = [
-    "requests",
-    "crossrefapi",
-    "pdf2image",
-    "openai",
-    "backoff",
-    "pubchempy",
-    "diskcache",
-    "pyyaml",
+    "numpy",
     "pandas",
     "scikit-learn",
     "xgboost",
-    "beautifulsoup4",
-    "selenium",
-    "pytesseract",
-    "opencv-python",
-    "Pillow",
-    "thefuzz",
-    "pint",
-    "anthropic",
-    "numpy",
-    "imutils",
+    "joblib",
     "rdkit",
-    "doi2pdf",
+    "requests",
 ]
 
 [project.optional-dependencies]
+# Plotting / evaluation stack: only needed for training notebooks and
+# experiment scripts, not for inference.
+training = [
+    "matplotlib",
+    "pyyaml",
+]
+# Heavy data-extraction / LLM stack: only needed for the offline pipelines
+# under data_extraction/ and src/copolextractor/, NOT for the API.
+extraction = [
+    "openai",
+    "anthropic",
+    "crossrefapi",
+    "doi2pdf",
+    "pdf2image",
+    "pytesseract",
+    "opencv-python",
+    "Pillow",
+    "imutils",
+    "selenium",
+    "beautifulsoup4",
+    "thefuzz",
+    "pint",
+    "pubchempy",
+    "diskcache",
+    "backoff",
+    "pyyaml",
+]
 testing = [
     "pytest>=7.0",
     "pytest-cov",

@@ -1,0 +1,45 @@
+# Keep the build context small. Build context is the repo root.
+# Only files explicitly COPYied in copol_prediction/api/Dockerfile are needed.
+
+.git/
+.github/
+
+# Local virtualenvs / caches
+nomad_env/
+.venv/
+venv/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# Heavy data / pipeline outputs not needed by the API image
+data_extraction/
+database/
+dump/
+experiments/
+legacy/
+plots_and_figures/
+tests/
+xtb/
+
+# copol_prediction/: keep only what the API image needs
+copol_prediction/output/
+copol_prediction/error_analysis/
+copol_prediction/all_data_filtered.json
+copol_prediction/processed_data.csv.bak
+copol_prediction/*.ipynb
+copol_prediction/api/cache/
+copol_prediction/api/tests/__pycache__/
+
+# inside copol_prediction/filter only the augmented negatives are needed
+copol_prediction/filter/*
+!copol_prediction/filter/artificial_datapoints
+copol_prediction/filter/artificial_datapoints/*
+!copol_prediction/filter/artificial_datapoints/processed_combined_augmented.csv
+
+# Markdown / docs (Dockerfile does not COPY them)
+*.md
+!README.md

@@ -12,6 +12,9 @@ services:
       - MODEL_PATH=/app/artifacts/model_bundle
       # Dataset configuration (for DOI checking)
       - DATASET_PATH=/app/processed_data.csv
+      # Baseline-lookup pool
+      - TRAIN_DATA_PATH=/app/artifacts/data_splits/train.csv
+      - NEGATIVE_DATA_PATH=/app/artificial_datapoints.csv
       # Python settings
       - PYTHONUNBUFFERED=1
       - LOG_LEVEL=info

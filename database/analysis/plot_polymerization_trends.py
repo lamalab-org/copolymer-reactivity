@@ -422,7 +422,7 @@ for i, (poly_type, bin_counts) in enumerate(poly_type_sorted):
     colors_type.append(SEQUENTIAL_COLORS[i % len(SEQUENTIAL_COLORS)])
 
 ax1.stackplot(numeric_bins, *proportions_type, labels=labels_type, colors=colors_type, alpha=0.85)
-ax1.legend(loc='lower left', fontsize=9, frameon=True, ncol=1)
+ax1.legend(loc='lower left', fontsize=12, frameon=True, ncol=1)
 ax1.grid(False)
 ax1.set_xlim(min(numeric_bins) - 2, max(numeric_bins) + 2)
 
@@ -447,7 +447,7 @@ for i, (method, bin_counts) in enumerate(method_sorted):
     colors_method.append(SEQUENTIAL_COLORS[i % len(SEQUENTIAL_COLORS)])
 
 ax2.stackplot(numeric_bins, *proportions_method, labels=labels_method, colors=colors_method, alpha=0.85)
-ax2.legend(loc='lower left', fontsize=9, frameon=True, ncol=1)
+ax2.legend(loc='lower left', fontsize=12, frameon=True, ncol=1)
 ax2.grid(False)
 ax2.set_xlim(min(numeric_bins) - 2, max(numeric_bins) + 2)
 

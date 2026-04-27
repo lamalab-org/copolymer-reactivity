@@ -2606,6 +2606,20 @@ def main():
     setup_style()
     os.makedirs(args.output_dir, exist_ok=True)
 
+    # Resolve relative paths robustly (works whether called from repo root or from within `copol_prediction/analysis/`).
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    if args.model_path and not os.path.isabs(args.model_path):
+        # First interpret relative to this script (copol_prediction/analysis).
+        candidate = os.path.normpath(os.path.join(script_dir, args.model_path))
+        if os.path.exists(candidate):
+            args.model_path = candidate
+        else:
+            # Then interpret relative to project root (copol_prediction/).
+            candidate2 = os.path.normpath(os.path.join(project_root, args.model_path))
+            if os.path.exists(candidate2):
+                args.model_path = candidate2
+
     print("=" * 60)
     print("MODEL ANALYSIS  (test set, voting model)")
     print("=" * 60)
@@ -2639,8 +2653,6 @@ def main():
     # Load test set from the global train/validation/test split
     print("\nLoading test set from train/validation/test split...")
     try:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.dirname(script_dir)
         split_dir = os.path.join(project_root, "artifacts", "data_splits")
         _, df_val, df_test = load_train_val_test_split(split_dir=split_dir)
         print(f"  ✓ Validation set loaded ({len(df_val)} samples)")

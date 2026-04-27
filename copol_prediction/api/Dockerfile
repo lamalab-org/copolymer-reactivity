@@ -58,13 +58,22 @@ ENV PYTHONUNBUFFERED=1 \
     OMP_MAX_ACTIVE_LEVELS=1 \
     PATH=/opt/conda/envs/copol/bin:$PATH
 
-# Install runtime system dependencies
+# Install runtime system dependencies. `patchelf` is used below to clear the
+# executable-stack flag on the xtb shared libraries, which is rejected by
+# modern Linux kernels (ImportError: cannot enable executable stack).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
+    patchelf \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy conda environment from builder
 COPY --from=builder /opt/conda/envs/copol /opt/conda/envs/copol
+
+# Clear the executable-stack flag on xtb's native libs.
+RUN find /opt/conda/envs/copol/lib \
+        \( -name 'libxtb*.so*' -o -name 'libmctc*.so*' \
+           -o -name 'libmstore*.so*' -o -name 'libcontainer*.so*' \) \
+        -exec patchelf --clear-execstack {} \;
 
 # Create non-root user for security
 RUN useradd -m -u 1000 apiuser && \
@@ -77,11 +86,8 @@ WORKDIR /app
 # Copy application code and config
 COPY --chown=apiuser:apiuser copol_prediction/api/app.py /app/
 COPY --chown=apiuser:apiuser copol_prediction/api/morfeus_patch.py /app/
-COPY --chown=apiuser:apiuser copol_prediction/api/paper_similarity.py /app/
-COPY --chown=apiuser:apiuser copol_prediction/api/requirements.txt /app/
-
-# Copy tests
-COPY --chown=apiuser:apiuser copol_prediction/api/tests /app/tests
+COPY --chown=apiuser:apiuser copol_prediction/api/baseline_lookup.py /app/
+COPY --chown=apiuser:apiuser copol_prediction/api/reaction_optimization.py /app/
 
 # Copy data files
 COPY --chown=apiuser:apiuser copol_prediction/api/data /app/data
@@ -94,6 +100,9 @@ COPY --chown=apiuser:apiuser copol_prediction/api/molecule_properties /app/molec
 
 # Copy model artifacts
 COPY --chown=apiuser:apiuser copol_prediction/artifacts /app/artifacts
+
+# Copy augmented negative data points used by the baseline-lookup pool
+COPY --chown=apiuser:apiuser copol_prediction/filter/artificial_datapoints/processed_combined_augmented.csv /app/artificial_datapoints.csv
 
 # Copy source packages (needed for imports)
 COPY --chown=apiuser:apiuser src /app/src
