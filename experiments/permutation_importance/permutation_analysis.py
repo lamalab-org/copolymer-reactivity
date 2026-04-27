@@ -73,6 +73,112 @@ def build_feature_groups(X_df, feature_names, correlation_threshold=0.9):
     return [sorted(g) for g in root_to_features.values()]
 
 
+def build_semantic_feature_groups(
+    feature_names: list[str],
+    *,
+    include_monomer_1_2_pairs: bool = True,
+    include_delta_homo_lumo_pairs: bool = True,
+) -> list[list[str]]:
+    """
+    Build "semantic" feature groups that should be permuted together.
+
+    Motivation (requested):
+      - Permute Δ HOMO–LUMO pairs together:
+          AA + BB  (1-1 & 2-2)
+          AB + BA  (1-2 & 2-1)
+      - Optionally permute monomer1/monomer2 counterparts together:
+          *_1 + *_2 (e.g. dipole_x_1 with dipole_x_2)
+
+    Notes:
+      - This is NOT correlation-based; it's naming-rule based.
+      - Only returns groups for features that exist in `feature_names`.
+      - Any feature not captured by a multi-feature group is returned as a singleton.
+    """
+    names = [str(f) for f in feature_names]
+    present = set(names)
+    used: set[str] = set()
+    groups: list[list[str]] = []
+
+    # Dipole moments: group all x/y/z for monomer 1&2 together
+    dipole_feats = [
+        "dipole_x_1", "dipole_y_1", "dipole_z_1",
+        "dipole_x_2", "dipole_y_2", "dipole_z_2",
+    ]
+    dip_present = [f for f in dipole_feats if f in present]
+    if len(dip_present) >= 2:
+        groups.append(sorted(dip_present))
+        used.update(dip_present)
+
+    # Δ HOMO–LUMO explicit pairing (AA+BB and AB+BA)
+    if include_delta_homo_lumo_pairs:
+        pair_groups = [
+            ("delta_HOMO_LUMO_AA", "delta_HOMO_LUMO_BB"),
+            ("delta_HOMO_LUMO_AB", "delta_HOMO_LUMO_BA"),
+        ]
+        for a, b in pair_groups:
+            feats = [f for f in (a, b) if f in present]
+            if len(feats) >= 2:
+                groups.append(sorted(feats))
+                used.update(feats)
+
+    # Generic monomer 1/2 pairing by suffix
+    if include_monomer_1_2_pairs:
+        # map base -> (f1, f2)
+        base_to_pair: dict[str, list[str]] = {}
+        for f in names:
+            if f.endswith("_1") and f[:-2] in (x[:-2] for x in names if x.endswith("_2")):
+                base_to_pair.setdefault(f[:-2], []).append(f)
+            elif f.endswith("_2") and f[:-2] in (x[:-2] for x in names if x.endswith("_1")):
+                base_to_pair.setdefault(f[:-2], []).append(f)
+        for base, feats in base_to_pair.items():
+            feats = sorted({ff for ff in feats if ff in present})
+            if len(feats) == 2 and not any(ff in used for ff in feats):
+                groups.append(feats)
+                used.update(feats)
+
+    # Remaining features as singletons (preserve original order as much as possible)
+    for f in names:
+        if f in used:
+            continue
+        groups.append([f])
+
+    # De-dup safety (shouldn't be needed but keep it robust)
+    seen = set()
+    unique_groups = []
+    for g in groups:
+        key = tuple(g)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_groups.append(g)
+    return unique_groups
+
+
+def build_hybrid_feature_groups(
+    X_df: pd.DataFrame,
+    feature_names: list[str],
+    *,
+    correlation_threshold: float = 0.9,
+    include_monomer_1_2_pairs: bool = True,
+    include_delta_homo_lumo_pairs: bool = True,
+) -> list[list[str]]:
+    """
+    Hybrid grouping: enforce semantic groups first, then correlation-group the remainder.
+
+    This yields stable, interpretable groupings while still collapsing highly correlated
+    leftovers.
+    """
+    semantic = build_semantic_feature_groups(
+        feature_names,
+        include_monomer_1_2_pairs=include_monomer_1_2_pairs,
+        include_delta_homo_lumo_pairs=include_delta_homo_lumo_pairs,
+    )
+    used = {f for g in semantic for f in g}
+    remaining = [f for f in feature_names if f not in used]
+    corr_groups = build_feature_groups(X_df, remaining, correlation_threshold=correlation_threshold)
+    return [g for g in semantic if g] + [g for g in corr_groups if g]
+
+
 def _scorer_from_string(scoring, y_true, y_pred):
     """Return score for (y_true, y_pred) given scoring name."""
     if scoring in ('f1_macro', 'f1'):

@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-04-08T06:52:43.174048Z",
+  "created_at": "2026-04-27T12:04:22.585788Z",
   "feature_columns": [
     "fukui_radical_max_1",
     "global_electrophilicity_1",
@@ -7,13 +7,15 @@
     "dipole_x_1",
     "dipole_y_1",
     "dipole_z_1",
+    "charges_min_1",
+    "fukui_nucleophilicity_max_1",
     "fukui_radical_max_2",
     "global_electrophilicity_2",
     "global_nucleophilicity_2",
     "dipole_x_2",
     "dipole_y_2",
     "dipole_z_2",
-    "delta_HOMO_LUMO_AA",
+    "charges_min_2",
     "delta_HOMO_LUMO_AB",
     "delta_HOMO_LUMO_BB",
     "delta_HOMO_LUMO_BA",
@@ -23,8 +25,6 @@
     "method_emb_1",
     "method_emb_2",
     "solvent_logP",
-    "solvent_TPSA",
-    "solvent_HBD",
     "solvent_FractionCSP3"
   ],
   "class_labels": [
@@ -46,10 +46,10 @@
     "gamma": 0.3,
     "colsample_bytree": 0.9
   },
-  "cv_score": 0.7222564932803925,
-  "holdout_accuracy": 0.7525773195876289,
-  "holdout_f1_weighted": 0.7525944007608316,
-  "holdout_f1_macro": 0.7237109355549173,
+  "cv_score": 0.7207090649023253,
+  "holdout_accuracy": 0.7584683357879234,
+  "holdout_f1_weighted": 0.758423755803066,
+  "holdout_f1_macro": 0.7375902779132303,
   "class_weights": {
     "0": 6.8667,
     "1": 0.7727,
@@ -61,8 +61,11 @@
     "negative_data_used": false,
     "specialized_removed_from_training": false,
     "specialized_removed_from_test": false,
-    "cv_prune_100_path": "",
+    "cv_prune_100_path": "/Users/maraw/PycharmProjects/test/experiments/cv_pruning/results_val_full/ids_error_ge_100pct_enriched.csv",
     "used_central_split": true,
-    "random_state": 42
+    "random_state": 42,
+    "calibration_method": "isotonic",
+    "calibration_fitted_on": "validation_voting_subset",
+    "calibration_file": "calibration.joblib"
   }
 }

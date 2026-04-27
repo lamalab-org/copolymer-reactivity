@@ -1,27 +1,34 @@
 {
   "experiment": "permutation_importance",
-  "timestamp": "2026-04-16T09:33:08.327995",
+  "timestamp": "2026-04-27T13:58:33.860320",
   "model_path": "/Users/maraw/PycharmProjects/test/copol_prediction/artifacts/model_bundle",
-  "note": "SHAP uses frozen XGBoost from bundle; this experiment does not apply training-time augmentation.",
+  "note": "Permutation/SHAP use frozen model from bundle; this experiment does not apply training-time augmentation.",
   "bundle_augmentation_used": false,
-  "dataset": "validation (voting subset)",
+  "ran": {
+    "permutation": true,
+    "shap": false,
+    "avg_shap_strong_groups": false,
+    "pairwise_shap": false,
+    "per_class_shap": false
+  },
   "n_validation_total": 678,
-  "n_validation_voting": 545,
+  "n_validation_voting": 88,
   "remove_specialized_lookup": false,
-  "num_feature_groups": 23,
+  "grouping": "hybrid",
   "correlation_threshold": 0.85,
   "max_samples": 500,
-  "top_groups": [
-    "delta_HOMO_LUMO_BA",
-    "delta_HOMO_LUMO_AB",
-    "temperature",
-    "solvent_FractionCSP3",
-    "dipole_x_2",
-    "dipole_x_1",
-    "global_electrophilicity_2",
-    "global_electrophilicity_1",
-    "dipole_y_2",
-    "dipole_y_1"
-  ],
+  "permutation": {
+    "scoring": "balanced_accuracy",
+    "n_repeats": 25,
+    "use_voting_subset": false,
+    "dataset": "validation (full)",
+    "n_eval": 678,
+    "num_groups": 30
+  },
+  "shap": {
+    "dataset": null,
+    "num_feature_groups": null,
+    "top_groups": null
+  },
   "trained_full_features_model": false
 }
