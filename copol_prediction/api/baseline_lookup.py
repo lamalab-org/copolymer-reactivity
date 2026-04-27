@@ -16,17 +16,6 @@ import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem, DataStructs
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-try:
-    from copol_prediction.utils.load_data_split import load_train_test_split
-except ImportError:
-    # Fallback if running from different location
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from utils.load_data_split import load_train_test_split
-
-
 def get_fingerprint_cache_path(cache_dir: Optional[Path] = None) -> Path:
     """Get the path to the fingerprint cache file."""
     if cache_dir is None:

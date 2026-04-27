@@ -8,8 +8,11 @@ import json
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
-from copolextractor import utils
 import re
+
+# `copolextractor.utils` is only needed by `process_embeddings` and pulls heavy
+# extraction-pipeline deps (openai, pubchempy, ...). Imported lazily so that
+# inference-only deployments don't need them.
 
 
 def _normalize_doi_for_key(s: str) -> str:
@@ -297,6 +300,8 @@ def process_embeddings(df, column_name, prefix):
     """
     Processes a specified column into embeddings and applies PCA
     """
+    from copolextractor import utils
+
     if column_name not in df.columns:
         print(f"Column {column_name} not found in DataFrame")
         return df

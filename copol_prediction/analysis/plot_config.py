@@ -101,6 +101,11 @@ TWO_COL_WIDTH_INCH = 7
 ONE_COL_GOLDEN_RATIO_HEIGHT_INCH = ONE_COL_WIDTH_INCH / golden
 TWO_COL_GOLDEN_RATIO_HEIGHT_INCH = TWO_COL_WIDTH_INCH / golden
 
+# Figure size for the Mayo–Lewis "class curves" 1x4 panel figure
+# (3 class panels + 1 explanatory panel).
+# Kept slightly shorter so each panel is closer to square.
+CLASS_CURVES_FIGSIZE_INCH = (TWO_COL_WIDTH_INCH * 2.1, 4.0)
+
 
 # ============================================================================
 # STYLE SETTINGS

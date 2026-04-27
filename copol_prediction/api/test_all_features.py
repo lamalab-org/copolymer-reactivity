@@ -9,9 +9,8 @@ This script tests:
 4. Predictions (single and batch)
 5. Nearest neighbors (baseline lookup)
 6. Reaction optimization (3x3 grid)
-7. Solubility check
-8. DOI checking
-9. Embeddings
+7. DOI checking
+8. Embeddings
 
 Usage:
     python test_all_features.py [--url URL]
@@ -95,7 +94,7 @@ def test_preprocess_solvent(base_url: str) -> bool:
 def test_preprocess_all(base_url: str) -> Dict[str, Any]:
     """Test combined preprocessing with all features."""
     print("\n" + "="*60)
-    print("4. PREPROCESS ALL (with nearest neighbors & solubility)")
+    print("4. PREPROCESS ALL (with nearest neighbors)")
     print("="*60)
     
     data = {
@@ -123,19 +122,7 @@ def test_preprocess_all(base_url: str) -> Dict[str, Any]:
                           f"(similarity: {nn['similarity']:.3f})")
             else:
                 print("⚠ Nearest neighbors: Not available")
-            
-            # Check solubility
-            solubility = result.get('solubility_issue')
-            if solubility is not None:
-                if solubility == 0:
-                    print("✓ Solubility: No issues")
-                elif solubility == 1:
-                    print("⚠ Solubility: Issues detected")
-                else:
-                    print("? Solubility: Check failed")
-            else:
-                print("⚠ Solubility: Not checked")
-            
+
             return result
         else:
             print(f"✗ Error: {response.status_code}")
@@ -159,9 +146,8 @@ def test_predict(base_url: str, features: Dict[str, float]) -> bool:
         )
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Predicted class: {result['predicted_class']}")
+            print(f"✓ Predicted class: {result['predicted_class']} ({result['predicted_class_name']})")
             print(f"✓ Confidence: {result['confidence']:.4f}")
-            print(f"✓ Range: {result['r_product_range']}")
             return True
         else:
             print(f"✗ Error: {response.status_code}")
@@ -172,50 +158,10 @@ def test_predict(base_url: str, features: Dict[str, float]) -> bool:
         return False
 
 
-def test_predict_with_solubility(base_url: str, features: Dict[str, float]) -> bool:
-    """Test prediction with solubility check."""
-    print("\n" + "="*60)
-    print("6. PREDICT (with solubility check)")
-    print("="*60)
-    
-    try:
-        response = requests.post(
-            f"{base_url}/predict",
-            json={
-                "features": features,
-                "monomer1_smiles": "C=CC1=CC=CC=C1",
-                "monomer2_smiles": "C=C(C)C(=O)OCCO",
-                "solvent_smiles": "CCO"
-            }
-        )
-        if response.status_code == 200:
-            result = response.json()
-            print(f"✓ Predicted class: {result['predicted_class']}")
-            
-            solubility = result.get('solubility_issue')
-            if solubility is not None:
-                if solubility == 0:
-                    print("✓ Solubility: No issues")
-                elif solubility == 1:
-                    print("⚠ Solubility: Issues detected")
-                else:
-                    print("? Solubility: Check failed")
-            else:
-                print("⚠ Solubility: Not checked")
-            
-            return True
-        else:
-            print(f"✗ Error: {response.status_code}")
-            return False
-    except Exception as e:
-        print(f"✗ Error: {e}")
-        return False
-
-
 def test_predict_batch(base_url: str, features: Dict[str, float]) -> bool:
     """Test batch prediction."""
     print("\n" + "="*60)
-    print("7. PREDICT BATCH")
+    print("6. PREDICT BATCH")
     print("="*60)
     
     try:
@@ -241,7 +187,7 @@ def test_predict_batch(base_url: str, features: Dict[str, float]) -> bool:
 def test_optimize_reaction(base_url: str) -> bool:
     """Test reaction optimization."""
     print("\n" + "="*60)
-    print("8. OPTIMIZE REACTION (3x3 Grid)")
+    print("7. OPTIMIZE REACTION (3x3 Grid)")
     print("="*60)
     
     data = {
@@ -263,12 +209,7 @@ def test_optimize_reaction(base_url: str) -> bool:
             print(f"✓ Predictions: {len(result['predictions'])}")
             print(f"✓ Base temperature: {result['base_temperature']}°C")
             print(f"✓ Temperature step: {result['temperature_step']}°C")
-            
-            # Check solubility in predictions
-            with_solubility = sum(1 for p in result['predictions'] if p.get('solubility_issue') is not None)
-            print(f"✓ Predictions with solubility check: {with_solubility}/{len(result['predictions'])}")
-            
-            # Show best prediction
+
             if result['predictions']:
                 best = max(result['predictions'], key=lambda x: x['confidence'])
                 print(f"\n  Best prediction:")
@@ -276,9 +217,7 @@ def test_optimize_reaction(base_url: str) -> bool:
                 print(f"    Solvent: {best['solvent_name']}")
                 print(f"    Class: {best['predicted_class']}")
                 print(f"    Confidence: {best['confidence']:.4f}")
-                if best.get('solubility_issue') is not None:
-                    print(f"    Solubility: {'Issues' if best['solubility_issue'] == 1 else 'OK'}")
-            
+
             return True
         else:
             print(f"✗ Error: {response.status_code}")
@@ -292,7 +231,7 @@ def test_optimize_reaction(base_url: str) -> bool:
 def test_check_doi(base_url: str) -> bool:
     """Test DOI checking."""
     print("\n" + "="*60)
-    print("9. CHECK DOI")
+    print("8. CHECK DOI")
     print("="*60)
     
     try:
@@ -316,7 +255,7 @@ def test_check_doi(base_url: str) -> bool:
 def test_embeddings(base_url: str) -> bool:
     """Test embeddings endpoints."""
     print("\n" + "="*60)
-    print("10. EMBEDDINGS")
+    print("9. EMBEDDINGS")
     print("="*60)
     
     try:
@@ -381,21 +320,19 @@ def main():
     # Test 5: Predict
     if features:
         results['predict'] = test_predict(base_url, features)
-        results['predict_solubility'] = test_predict_with_solubility(base_url, features)
         results['predict_batch'] = test_predict_batch(base_url, features)
     else:
         print("\n⚠ Skipping prediction tests (no features available)")
         results['predict'] = False
-        results['predict_solubility'] = False
         results['predict_batch'] = False
-    
-    # Test 8: Optimize reaction
+
+    # Test 7: Optimize reaction
     results['optimize_reaction'] = test_optimize_reaction(base_url)
-    
-    # Test 9: Check DOI
+
+    # Test 8: Check DOI
     results['check_doi'] = test_check_doi(base_url)
-    
-    # Test 10: Embeddings
+
+    # Test 9: Embeddings
     results['embeddings'] = test_embeddings(base_url)
     
     # Summary

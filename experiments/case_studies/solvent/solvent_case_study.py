@@ -30,8 +30,10 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(_
 # So that `import copolpredictor` and `import copol_prediction` work
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(Path(PROJECT_ROOT) / "src"))
+sys.path.insert(0, str(Path(PROJECT_ROOT) / "copol_prediction" / "analysis"))
 
 from copolpredictor.inference import CopolymerPredictor
+from plot_config import setup_plot_style
 
 # Paths (use final model bundle = newest model)
 # Training data: use the same split as the main model bundle
@@ -178,6 +180,19 @@ def main():
         help=f"Path to model bundle (default: {MODEL_PATH})"
     )
     args = parser.parse_args()
+
+    setup_plot_style()
+    # Enforce larger fonts for this specific figure only.
+    plt.rcParams.update(
+        {
+            "font.size": 12,
+            "axes.labelsize": 14,
+            "axes.titlesize": 16,
+            "xtick.labelsize": 12,
+            "ytick.labelsize": 12,
+            "legend.fontsize": 12,
+        }
+    )
     
     # Store original solvent list (before reordering)
     original_case_solvents = CASE_SOLVENTS.copy()
@@ -484,17 +499,41 @@ def main():
     
     # Only label solvents that are actually predicted (agreement), in compact order
     x_labels_visible = [x_labels_all[old_idx] for old_idx in visible_indices]
-    ax.set_xticklabels(x_labels_visible, rotation=45, ha='right', fontsize=10)
+    ax.set_xticklabels(x_labels_visible, rotation=45, ha='right', fontsize=12)
     
     # Remove tick marks on x-axis (we have the vertical lines)
     ax.tick_params(axis='x', length=0)
     
     # Y-axis: continuous monomer similarity (0.0 to 1.0) + case study row at 1.1 (agreed only)
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.1])
-    ax.set_yticklabels(['0.0', '0.2', '0.4', '0.6', '0.8', '1.0', 'Case Study'], fontsize=11)
+    ax.set_yticklabels(['0.0', '0.2', '0.4', '0.6', '0.8', '1.0', 'Case Study'], fontsize=12)
     
-    ax.set_xlabel('Solvent', fontsize=14, fontweight='bold')
-    ax.set_ylabel('Monomer Tanimoto Similarity\n(to Acrylamide + Styrene)', fontsize=14, fontweight='bold')
+    ax.set_xlabel('Solvent', fontsize=16, fontweight='bold')
+    ax.set_ylabel('Monomer Tanimoto Similarity\n(to Acrylamide + Styrene)', fontsize=16, fontweight='bold')
+
+    # Panel labels:
+    # A = upper model prediction row (case study points)
+    # B = monomer similarity region (nearest-neighbor cloud)
+    ax.text(
+        0.01,
+        0.95,
+        "A",
+        transform=ax.transAxes,
+        fontsize=16,
+        fontweight="bold",
+        ha="left",
+        va="top",
+    )
+    ax.text(
+        0.01,
+        0.82,
+        "B",
+        transform=ax.transAxes,
+        fontsize=16,
+        fontweight="bold",
+        ha="left",
+        va="top",
+    )
     
     # Add gridlines - main plot area
     # X-limits: from a bit left of first column to just before molecule boxes
@@ -548,11 +587,12 @@ def main():
     
     # Add separator
     legend_elements.append(Line2D([0], [0], color='none', label=''))
+    legend_elements.append(Line2D([0], [0], color='none', label='Predicted class:'))
     
     # Shapes: Class markers with new labels (new class semantics)
     class_labels = {
         0: 'Alternating',
-        1: 'Random / block-like',
+        1: 'Random',
         2: 'Gradient'
     }
     for cls in sorted(CLASS_COLORS.keys()):
@@ -563,9 +603,20 @@ def main():
                    label=class_labels[cls], linestyle='None', alpha=0.7)
         )
     
-    ax.legend(handles=legend_elements, loc='lower left', fontsize=11, 
-              frameon=True, framealpha=0.95, edgecolor='gray',
-              bbox_to_anchor=(0.02, 0.0))  # Position in left lower corner, at similarity 0.0
+    leg = ax.legend(
+        handles=legend_elements,
+        loc='lower left',
+        fontsize=12,
+        frameon=True,
+        framealpha=0.95,
+        edgecolor='gray',
+        bbox_to_anchor=(0.02, 0.0),  # Position in left lower corner, at similarity 0.0
+    )
+    # Left-align legend text within the legend box (incl. section header).
+    try:
+        leg._legend_box.align = "left"
+    except Exception:
+        pass
     
     # Remove box around plot
     for spine in ax.spines.values():
@@ -632,8 +683,15 @@ def main():
                                          linewidth=2.0, alpha=0.95))
         ax.add_artist(ab)
         # Add label just below the box
-        ax.text(box_center_x, box1_y - 0.14, 'Similarity: 1.0', 
-                ha='center', va='top', fontsize=10, fontweight='bold')
+        ax.text(
+            box_center_x,
+            box1_y - 0.14,
+            'Similarity: 1.0',
+            ha='center',
+            va='top',
+            fontsize=12,
+            fontweight='bold',
+        )
     
     # Box 2: Middle point
     if middle_point is not None:
@@ -658,8 +716,15 @@ def main():
                                              linewidth=2.0, alpha=0.95))
             ax.add_artist(ab)
             # Add label just below the box
-            ax.text(box_center_x, box2_y - 0.14, f'Similarity: {middle_sim:.2f}', 
-                    ha='center', va='top', fontsize=10, fontweight='bold')
+            ax.text(
+                box_center_x,
+                box2_y - 0.14,
+                f'Similarity: {middle_sim:.2f}',
+                ha='center',
+                va='top',
+                fontsize=12,
+                fontweight='bold',
+            )
     
     # Box 3: Most deviating point (at its actual y-position)
     if most_deviating_point is not None:
@@ -685,8 +750,15 @@ def main():
             ax.add_artist(ab)
             # Add label just below the box (slightly closer)
             label_y = box3_y - 0.14
-            ax.text(box_center_x, label_y, f'Similarity: {deviating_sim:.2f}', 
-                    ha='center', va='top', fontsize=10, fontweight='bold')
+            ax.text(
+                box_center_x,
+                label_y,
+                f'Similarity: {deviating_sim:.2f}',
+                ha='center',
+                va='top',
+                fontsize=12,
+                fontweight='bold',
+            )
     
     # Add dashed horizontal lines to show y-positions of molecule boxes
     # Lines should go up to the molecule boxes (on the right side)
