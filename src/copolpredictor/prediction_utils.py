@@ -27,19 +27,20 @@ feature_columns_ = [
 
 feature_columns = [
         # Molecular descriptors for Monomer 1
-         'fukui_radical_max_1', 'global_electrophilicity_1', 'global_nucleophilicity_1', 'dipole_x_1', 'dipole_y_1', 'dipole_z_1',
+         'fukui_radical_max_1', 'global_electrophilicity_1', 'global_nucleophilicity_1', 'dipole_x_1', 'dipole_y_1',
+        'dipole_z_1', 'charges_min_1', 'fukui_nucleophilicity_max_1',
 
         # Molecular descriptors for Monomer 2
-          'fukui_radical_max_2', 'global_electrophilicity_2', 'global_nucleophilicity_2', 'dipole_x_2', 'dipole_y_2', 'dipole_z_2',
+          'fukui_radical_max_2', 'global_electrophilicity_2', 'global_nucleophilicity_2', 'dipole_x_2', 'dipole_y_2',
+        'dipole_z_2', 'charges_min_2', 'fukui_nucleophilicity_max_2'
 
         # HOMO-LUMO differences
         'delta_HOMO_LUMO_AA', 'delta_HOMO_LUMO_AB', 'delta_HOMO_LUMO_BB', 'delta_HOMO_LUMO_BA',
 
-        # Other features
+        # Reaction conditions
         'temperature',
-        'polytype_emb_1', 'polytype_emb_2', 'method_emb_1', 'method_emb_2', 'solvent_logP',
-        'solvent_TPSA',
-        'solvent_HBD',
+        'polytype_emb_1', 'polytype_emb_2', 'method_emb_1', 'method_emb_2',
+        'solvent_logP',
         'solvent_FractionCSP3'
     ]
 
