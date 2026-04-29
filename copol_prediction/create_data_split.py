@@ -17,7 +17,7 @@ import argparse
 import pandas as pd
 import numpy as np
 
-from copolpredictor import data_processing, holdout_utils
+from copolpredictor import data_processing, holdout_utils, prediction_utils
 
 try:
     # When run as a package module: python -m copol_prediction.create_data_split
@@ -26,14 +26,9 @@ except ImportError:
     # When run as a script from within copol_prediction/: python create_data_split.py
     from mayo_lewis_classification import classify_reactivity_curve
 
-# Feature columns for NaN checking (same as in prediction_utils)
-FEATURE_COLUMNS = [
-    'fukui_radical_max_1', 'fukui_radical_max_2',
-    'delta_HOMO_LUMO_AA', 'delta_HOMO_LUMO_AB', 'delta_HOMO_LUMO_BB', 'delta_HOMO_LUMO_BA',
-    'temperature',
-    'polytype_emb_1', 'polytype_emb_2', 'method_emb_1', 'method_emb_2', 'solvent_logP',
-    'solvent_TPSA', 'solvent_HBD', 'solvent_FractionCSP3'
-]
+# Feature columns for NaN checking — must stay in sync with the trained model.
+# Always derived from prediction_utils.feature_columns so there's a single source of truth.
+FEATURE_COLUMNS = prediction_utils.feature_columns
 
 
 def parse_args():

@@ -1,0 +1,66 @@
+[
+  {
+    "split": "Train",
+    "model": "Lookup",
+    "macro_acc": 0.9642087674584697,
+    "coverage": 1.0,
+    "n_predicted": 4738,
+    "n_total": 4738
+  },
+  {
+    "split": "Train",
+    "model": "XGBoost",
+    "macro_acc": 0.9457799620470854,
+    "coverage": 1.0,
+    "n_predicted": 4738,
+    "n_total": 4738
+  },
+  {
+    "split": "Train",
+    "model": "Voting (Lookup / XGBoost)",
+    "macro_acc": 0.988894298644083,
+    "coverage": 0.9197973828619671,
+    "n_predicted": 4358,
+    "n_total": 4738
+  },
+  {
+    "split": "Train",
+    "model": "XGBoost + Lookup Features",
+    "macro_acc": 0.9785736523750223,
+    "coverage": 1.0,
+    "n_predicted": 4738,
+    "n_total": 4738
+  },
+  {
+    "split": "Validation",
+    "model": "Lookup",
+    "macro_acc": 0.6763593118406783,
+    "coverage": 1.0,
+    "n_predicted": 678,
+    "n_total": 678
+  },
+  {
+    "split": "Validation",
+    "model": "XGBoost",
+    "macro_acc": 0.6907202011239278,
+    "coverage": 1.0,
+    "n_predicted": 678,
+    "n_total": 678
+  },
+  {
+    "split": "Validation",
+    "model": "Voting (Lookup / XGBoost)",
+    "macro_acc": 0.7697636934058659,
+    "coverage": 0.7787610619469026,
+    "n_predicted": 528,
+    "n_total": 678
+  },
+  {
+    "split": "Validation",
+    "model": "XGBoost + Lookup Features",
+    "macro_acc": 0.6763593118406783,
+    "coverage": 1.0,
+    "n_predicted": 678,
+    "n_total": 678
+  }
+]

@@ -1,0 +1,9 @@
+split,model,macro_acc,coverage,n_predicted,n_total
+Train,Lookup,0.9642087674584697,1.0,4738,4738
+Train,XGBoost,0.9457799620470854,1.0,4738,4738
+Train,Voting (Lookup / XGBoost),0.988894298644083,0.9197973828619671,4358,4738
+Train,XGBoost + Lookup Features,0.9785736523750223,1.0,4738,4738
+Validation,Lookup,0.6763593118406783,1.0,678,678
+Validation,XGBoost,0.6907202011239278,1.0,678,678
+Validation,Voting (Lookup / XGBoost),0.7697636934058659,0.7787610619469026,528,678
+Validation,XGBoost + Lookup Features,0.6763593118406783,1.0,678,678

@@ -1,0 +1,50 @@
+[
+  {
+    "split": "Validation",
+    "model": "Nearest Neighbor",
+    "class_0_acc": 0.5652173913043478,
+    "class_1_acc": 0.7291666666666666,
+    "class_2_acc": 0.7346938775510204,
+    "macro_acc": 0.6763593118406783,
+    "macro_f1": 0.7039850921410536,
+    "coverage": 1.0,
+    "n_predicted": 678,
+    "n_total": 678
+  },
+  {
+    "split": "Validation",
+    "model": "XGBoost",
+    "class_0_acc": 0.5869565217391305,
+    "class_1_acc": 0.725,
+    "class_2_acc": 0.7602040816326531,
+    "macro_acc": 0.6907202011239278,
+    "macro_f1": 0.7041131254149343,
+    "coverage": 1.0,
+    "n_predicted": 678,
+    "n_total": 678
+  },
+  {
+    "split": "Validation",
+    "model": "Voting (NN and XGBoost)",
+    "class_0_acc": 0.7,
+    "class_1_acc": 0.7945945945945946,
+    "class_2_acc": 0.8146964856230032,
+    "macro_acc": 0.7697636934058659,
+    "macro_f1": 0.7915303815919351,
+    "coverage": 0.7787610619469026,
+    "n_predicted": 528,
+    "n_total": 678
+  },
+  {
+    "split": "Validation",
+    "model": "XGBoost with NN Features",
+    "class_0_acc": 0.5652173913043478,
+    "class_1_acc": 0.7291666666666666,
+    "class_2_acc": 0.7346938775510204,
+    "macro_acc": 0.6763593118406783,
+    "macro_f1": 0.6988271472802493,
+    "coverage": 1.0,
+    "n_predicted": 678,
+    "n_total": 678
+  }
+]

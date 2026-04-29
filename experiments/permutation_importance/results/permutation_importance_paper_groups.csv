@@ -1,0 +1,31 @@
+group_label,features,n_features,importance_mean,importance_std
+Charges min,charges_min_1|charges_min_2,2,0.03635768106162849,0.01628904123081865
+HOMO-LUMO (1-2),delta_HOMO_LUMO_AB|delta_HOMO_LUMO_BA,2,0.01426577260458845,0.010145253516575548
+Polymerization type embedding,polytype_emb_1|polytype_emb_2,2,0.00904113247863254,0.004561549961205987
+Fukui index (electrophilicity) max,fukui_electrophilicity_max_1|fukui_electrophilicity_max_2,2,0.008292847503373868,0.004478079021124624
+Solvent Fraction of sp3 C,solvent_FractionCSP3,1,0.007614709851552015,0.0020605129263120145
+Solvent LogP,solvent_logp,1,0.00733636977058032,0.004524598112649694
+HOMO,homo_1|homo_2,2,0.004718286099865121,0.00336454359221239
+Ionization potential,ip_1|ip_2,2,0.0038174763832659166,0.004116683626696639
+Global nucleophilicity,global_nucleophilicity_1|global_nucleophilicity_2,2,0.0029605263157895245,0.001668194941212886
+"Dipole moment (x, y, z; monomer 1&2)",dipole_x_1|dipole_x_2|dipole_y_1|dipole_y_2|dipole_z_1|dipole_z_2,6,0.0029504048582996343,0.003655522619156525
+Charges max,charges_max_1|charges_max_2,2,0.0028598740440846206,0.008317827568443766
+LUMO,lumo_1|lumo_2,2,0.002406376518218656,0.0033195385695765395
+Charges mean,charges_mean_1|charges_mean_2,2,0.002030195681511515,0.003917678264010213
+Fukui index (nucleophilicity) min,fukui_nucleophilicity_min_1|fukui_nucleophilicity_min_2,2,0.001693657219973066,0.0019107250347711704
+Fukui index (nucleophilicity) max,fukui_nucleophilicity_max_1|fukui_nucleophilicity_max_2,2,0.0011007085020243502,0.004945041358684837
+Ionization potential (corrected),ip_corrected_1|ip_corrected_2,2,0.0,0.0
+Fukui index (nucleophilicity) mean,fukui_nucleophilicity_mean_1|fukui_nucleophilicity_mean_2,2,0.0,0.0
+Fukui index (radical) mean,fukui_radical_mean_1|fukui_radical_mean_2,2,0.0,0.0
+Fukui index (electrophilicity) min,fukui_electrophilicity_min_1|fukui_electrophilicity_min_2,2,-0.0006739203778676872,0.0036422531368013817
+Polymerization method embedding,method_emb_1|method_emb_2,2,-0.001139929149797503,0.001694771763547723
+Fukui index (radical) max,fukui_radical_max_1|fukui_radical_max_2,2,-0.001728238866396703,0.0031507218430814428
+Electron affinity,ea_1|ea_2,2,-0.0021946693657219464,0.0031031108691716176
+Fukui index (electrophilicity) mean,fukui_electrophilicity_mean_1|fukui_electrophilicity_mean_2,2,-0.00257591093117403,0.002508773154852717
+Fukui index (radical) min,fukui_radical_min_1|fukui_radical_min_2,2,-0.0029310053981106087,0.0029799420099918443
+Solvent number of hydrogen bond donors,solvent_HBD,1,-0.0039760458839405485,0.0015219309090295802
+Solvent Topological Polar Surface Area,solvent_TPSA,1,-0.0040021929824560765,0.0031717988159654527
+HOMO-LUMO (1-1),delta_HOMO_LUMO_AA|delta_HOMO_LUMO_BB,2,-0.004204622132253654,0.0016623605943648055
+Global electrophilicity,global_electrophilicity_1|global_electrophilicity_2,2,-0.004920715249662555,0.0030031496538280205
+Temperature,temperature,1,-0.005195681511470973,0.010727747747825913
+Best conformer energy,best_conformer_energy_1|best_conformer_energy_2,2,-0.007437584345479009,0.003601032019282575

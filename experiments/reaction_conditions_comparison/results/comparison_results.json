@@ -1,10 +1,13 @@
 {
-  "timestamp": "2026-04-16T09:49:17.209371",
+  "timestamp": "2026-04-29T09:41:20.193565",
   "config": {
     "n_iter": 25,
     "random_state": 42,
     "eval_split": "test",
     "subset": "condition_variation",
+    "solvent_logp_tol": 0.2,
+    "remove_per_multisolvent_group": 0,
+    "keep_per_multisolvent_group": 2,
     "remove_specialized": false,
     "use_augmentation": false,
     "add_negative_data": false,
@@ -12,214 +15,216 @@
   },
   "with_conditions": {
     "label": "With Conditions (special)",
-    "macro_accuracy": 0.8072937387515392,
-    "macro_precision": 0.7796296296296297,
-    "coverage": 0.9008264462809917,
-    "n_agree": 218,
+    "macro_accuracy": 0.7667989417989419,
+    "macro_precision": 0.7388027562446166,
+    "coverage": 0.946236559139785,
+    "n_agree": 88,
     "n_abstain": 0,
-    "n_voted": 218,
-    "n_total": 242,
+    "n_voted": 88,
+    "n_total": 93,
     "per_class_acc": [
-      0.8888888888888888,
-      0.7565217391304347,
-      0.7764705882352941
+      0.875,
+      0.7111111111111111,
+      0.7142857142857143
     ],
     "per_class_prec": [
-      0.8,
-      0.8055555555555556,
-      0.7333333333333333
+      0.7777777777777778,
+      0.7441860465116279,
+      0.6944444444444444
     ],
     "confusion_matrix": [
       [
-        16,
-        2,
+        7,
+        1,
         0
       ],
       [
-        4,
-        87,
-        24
+        2,
+        32,
+        11
       ],
       [
         0,
-        19,
-        66
+        10,
+        25
       ]
     ],
-    "pair_balanced_accuracy": 0.6733333333333333,
-    "n_pairs": 25,
-    "pair_balanced_accuracy_std": 0.23678400846904057,
-    "cv_score": 0.7222564932803925,
-    "n_features": 25,
+    "pair_balanced_accuracy": 0.6346153846153846,
+    "n_pairs": 26,
+    "pair_balanced_accuracy_std": 0.22536404911855057,
+    "cv_score": 0.7222352366663488,
+    "n_features": 19,
     "features": [
-      "fukui_radical_max_1",
-      "global_electrophilicity_1",
-      "global_nucleophilicity_1",
-      "dipole_x_1",
-      "dipole_y_1",
-      "dipole_z_1",
-      "fukui_radical_max_2",
-      "global_electrophilicity_2",
-      "global_nucleophilicity_2",
-      "dipole_x_2",
-      "dipole_y_2",
-      "dipole_z_2",
-      "delta_HOMO_LUMO_AA",
+      "charges_min_1",
+      "fukui_electrophilicity_min_1",
+      "fukui_electrophilicity_max_1",
+      "fukui_nucleophilicity_min_1",
+      "fukui_radical_min_1",
+      "homo_1",
+      "charges_min_2",
+      "fukui_electrophilicity_min_2",
+      "fukui_electrophilicity_max_2",
+      "fukui_nucleophilicity_min_2",
+      "fukui_radical_min_2",
+      "homo_2",
       "delta_HOMO_LUMO_AB",
-      "delta_HOMO_LUMO_BB",
       "delta_HOMO_LUMO_BA",
       "temperature",
       "polytype_emb_1",
       "polytype_emb_2",
-      "method_emb_1",
-      "method_emb_2",
-      "solvent_logP",
-      "solvent_TPSA",
-      "solvent_HBD",
+      "solvent_logp",
       "solvent_FractionCSP3"
     ]
   },
   "without_conditions": {
     "label": "Without Conditions (special)",
-    "macro_accuracy": 0.7642450142450142,
-    "macro_precision": 0.7191249226963512,
-    "coverage": 0.8264462809917356,
-    "n_agree": 200,
+    "macro_accuracy": 0.689149560117302,
+    "macro_precision": 0.6907407407407407,
+    "coverage": 0.8924731182795699,
+    "n_agree": 83,
     "n_abstain": 0,
-    "n_voted": 200,
-    "n_total": 242,
+    "n_voted": 83,
+    "n_total": 93,
     "per_class_acc": [
-      0.8888888888888888,
-      0.7115384615384616,
-      0.6923076923076923
+      0.75,
+      0.7045454545454546,
+      0.6129032258064516
     ],
     "per_class_prec": [
-      0.7272727272727273,
-      0.7551020408163265,
-      0.675
+      0.75,
+      0.6888888888888889,
+      0.6333333333333333
     ],
     "confusion_matrix": [
       [
-        16,
+        6,
         2,
         0
       ],
       [
-        4,
-        74,
-        26
+        2,
+        31,
+        11
       ],
       [
-        2,
-        22,
-        54
+        0,
+        12,
+        19
       ]
     ],
-    "pair_balanced_accuracy": 0.5158730158730158,
-    "n_pairs": 21,
-    "pair_balanced_accuracy_std": 0.19179438053324716,
-    "cv_score": 0.702430161986854,
-    "n_features": 16,
+    "pair_balanced_accuracy": 0.5512820512820512,
+    "n_pairs": 26,
+    "pair_balanced_accuracy_std": 0.25641025641025644,
+    "cv_score": 0.7078827115332909,
+    "n_features": 15,
     "features": [
-      "fukui_radical_max_1",
-      "global_electrophilicity_1",
-      "global_nucleophilicity_1",
-      "dipole_x_1",
-      "dipole_y_1",
-      "dipole_z_1",
-      "fukui_radical_max_2",
-      "global_electrophilicity_2",
-      "global_nucleophilicity_2",
-      "dipole_x_2",
-      "dipole_y_2",
-      "dipole_z_2",
-      "delta_HOMO_LUMO_AA",
+      "charges_min_1",
+      "fukui_electrophilicity_min_1",
+      "fukui_electrophilicity_max_1",
+      "fukui_nucleophilicity_min_1",
+      "fukui_radical_min_1",
+      "homo_1",
+      "charges_min_2",
+      "fukui_electrophilicity_min_2",
+      "fukui_electrophilicity_max_2",
+      "fukui_nucleophilicity_min_2",
+      "fukui_radical_min_2",
+      "homo_2",
       "delta_HOMO_LUMO_AB",
-      "delta_HOMO_LUMO_BB",
-      "delta_HOMO_LUMO_BA"
+      "delta_HOMO_LUMO_BA",
+      "solvent_logp"
     ]
   },
   "normal_eval": {
     "with_conditions": {
       "label": "With Conditions (normal)",
-      "macro_accuracy": 0.8125461508322219,
-      "macro_precision": 0.774009732016451,
-      "coverage": 0.7827687776141384,
-      "n_agree": 1063,
+      "macro_accuracy": 0.7878669799048706,
+      "macro_precision": 0.7540785672115903,
+      "coverage": 0.7768777614138439,
+      "n_agree": 1055,
       "n_abstain": 0,
-      "n_voted": 1063,
+      "n_voted": 1055,
       "n_total": 1358,
       "per_class_acc": [
-        0.8125,
-        0.7771084337349398,
-        0.8480300187617261
+        0.7647058823529411,
+        0.7602459016393442,
+        0.8386491557223265
       ],
       "per_class_prec": [
-        0.6842105263157895,
-        0.823404255319149,
-        0.8144144144144144
+        0.65,
+        0.8082788671023965,
+        0.8039568345323741
       ],
       "confusion_matrix": [
         [
           26,
-          6,
+          8,
           0
         ],
         [
           8,
-          387,
-          103
+          371,
+          109
         ],
         [
-          4,
-          77,
-          452
+          6,
+          80,
+          447
         ]
       ],
-      "pair_balanced_accuracy": 0.806074074074074,
-      "n_pairs": 375,
-      "pair_balanced_accuracy_std": 0.3743550539891079
+      "pair_balanced_accuracy": 0.7853765619723067,
+      "n_pairs": 376,
+      "pair_balanced_accuracy_std": 0.3874827511820152
     },
     "without_conditions": {
       "label": "Without Conditions (normal)",
-      "macro_accuracy": 0.789980714581128,
-      "macro_precision": 0.7469044386852607,
-      "coverage": 0.7349042709867453,
-      "n_agree": 998,
+      "macro_accuracy": 0.7059406781970452,
+      "macro_precision": 0.7308027917223298,
+      "coverage": 0.8424153166421208,
+      "n_agree": 1144,
       "n_abstain": 0,
-      "n_voted": 998,
+      "n_voted": 1144,
       "n_total": 1358,
       "per_class_acc": [
-        0.7647058823529411,
-        0.7722342733188721,
-        0.8330019880715706
+        0.5714285714285714,
+        0.7379576107899807,
+        0.8084358523725835
       ],
       "per_class_prec": [
-        0.6190476190476191,
-        0.8127853881278538,
-        0.8088803088803089
+        0.6530612244897959,
+        0.7675350701402806,
+        0.7718120805369127
       ],
       "confusion_matrix": [
         [
-          26,
-          6,
-          2
+          32,
+          12,
+          12
         ],
         [
-          8,
-          356,
-          97
+          12,
+          383,
+          124
         ],
         [
-          8,
-          76,
-          419
+          5,
+          104,
+          460
         ]
       ],
-      "pair_balanced_accuracy": 0.798058712121212,
-      "n_pairs": 352,
-      "pair_balanced_accuracy_std": 0.37913151730167816
+      "pair_balanced_accuracy": 0.7497932175351529,
+      "n_pairs": 403,
+      "pair_balanced_accuracy_std": 0.4135115763765205
     },
     "n_rows": 1358
+  },
+  "paired_xgboost_special_subset": {
+    "n_rows": 93,
+    "macro_accuracy_with": 0.7204438481034225,
+    "macro_accuracy_without": 0.7005090196579559,
+    "macro_accuracy_delta_without_minus_with": -0.01993482844546668,
+    "macro_precision_with": 0.7185185185185184,
+    "macro_precision_without": 0.66677807486631,
+    "macro_precision_delta_without_minus_with": -0.05174044365220842
   }
 }

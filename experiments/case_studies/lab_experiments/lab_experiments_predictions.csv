@@ -1,0 +1,7 @@
+system,monomer1_smiles,monomer2_smiles,solvent_smiles,temperature_C,method,polytype,xgb_predicted_class,xgb_predicted_class_name,xgb_confidence,lookup_class,lookup_top_similarity,models_agree,voted_class,voted_class_name,voted_confidence
+Acrylonitrile + N-vinyl-5-pyrrolidone in chloroform,C=CC#N,C=CN1CCCC1=O,ClC(Cl)Cl,70.0,solvent,free radical,2,Gradient,0.9099922776222229,2,0.7666666666666666,True,2.0,Gradient,0.9099922776222229
+Styrene + 1-octene in chloroform,C=CC1=CC=CC=C1,CCCCCCCC=C,ClC(Cl)Cl,70.0,solvent,free radical,2,Gradient,0.9146113395690918,2,0.8035714285714286,True,2.0,Gradient,0.9146113395690918
+Butyl acrylate + Vinyl acetate in toluene,C=CC(=O)OCCCC,C=COC(C)=O,CC1=CC=CC=C1,70.0,solvent,free radical,2,Gradient,0.9146113395690918,2,0.96,True,2.0,Gradient,0.9146113395690918
+Acrylonitrile + Ethyl methacrylate in chloroform,C=CC#N,C=C(C)C(=O)OCC,ClC(Cl)Cl,70.0,solvent,free radical,2,Gradient,0.8153002262115479,2,0.8285714285714285,True,2.0,Gradient,0.8153002262115479
+Vinyl acetate + Ethyl methacrylate in chloroform,C=COC(C)=O,C=C(C)C(=O)OCC,ClC(Cl)Cl,70.0,solvent,free radical,2,Gradient,0.9146113395690918,2,0.8055555555555556,True,2.0,Gradient,0.9146113395690918
+Methacrylate + N-vinyl-2-pyrrolidone in chloroform,C=C(C)C(=O)O,C=CN1CCCC1=O,ClC(Cl)Cl,70.0,solvent,free radical,2,Gradient,0.9099922776222229,1,0.7833333333333333,False,,,

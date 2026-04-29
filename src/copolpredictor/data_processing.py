@@ -228,8 +228,6 @@ def enrich_df_with_molecular_features(df, base_path='./output/molecule_propertie
 
         for c in other:
             val = row.get(c)
-            if val is None and c == 'solvent_logp':
-                val = row.get('solvent_logP')
             new_data[c].append(val)
 
     for c in missing:
@@ -416,7 +414,7 @@ def add_solvent_features(df):
         ]
 
     feature_cols = [
-        'solvent_logP',
+        'solvent_logp',
         'solvent_TPSA',
         'solvent_HBA',
         'solvent_HBD',

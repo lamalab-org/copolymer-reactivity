@@ -1,0 +1,21 @@
+\begin{table}[h!]
+\centering
+\caption{Per-class training and test performance of \sysname{}. Support denotes the number of samples in the full split, and coverage denotes the retained predictions after voting agreement.}
+\begin{tabular}{llccccc}
+\toprule
+\textbf{Split} & \textbf{Class} & \textbf{Acc} & \textbf{Prec} & \textbf{F1} & \textbf{Support} & \textbf{Coverage} \\
+\midrule
+Train & Alternating & 1.000 & 0.957 & 0.978 & 230 & 0.920 \\
+ & Random & 0.984 & 0.982 & 0.983 & 2044 & 0.920 \\
+ & Gradient & 0.983 & 0.989 & 0.986 & 2464 & 0.920 \\
+ & Macro & 0.989 & 0.976 & 0.982 & 4738 & 0.920 \\
+\midrule
+Test & Alternating & 0.788 & 0.667 & 0.722 & 68 & 0.770 \\
+ & Random & 0.781 & 0.812 & 0.796 & 620 & 0.770 \\
+ & Gradient & 0.845 & 0.827 & 0.836 & 670 & 0.770 \\
+ & Macro & 0.805 & 0.768 & 0.785 & 1358 & 0.770 \\
+\midrule
+\bottomrule
+\end{tabular}
+\label{tab:train_test_voting_performance}
+\end{table}

@@ -1,0 +1,28 @@
+group_label,features,n_features,importance_mean,importance_std
+charges_min,charges_min_1|charges_min_2,2,0.029137426900584806,0.015445366873052133
+delta_HOMO_LUMO_AB,delta_HOMO_LUMO_AB,1,0.019315395861448526,0.008716957563238285
+delta_HOMO_LUMO_BA,delta_HOMO_LUMO_BA,1,0.01657697930724249,0.007586841273763355
+polytype_emb_2,polytype_emb_2,1,0.011819894286999578,0.008117781395962408
+solvent_FractionCSP3,solvent_FractionCSP3,1,0.01107962213225373,0.004196465533759
+temperature,temperature,1,0.0104683985605038,0.016540911750086682
+fukui_electrophilicity_min / fukui_nucleophilicity_min / fukui_radical_min,fukui_electrophilicity_min_1|fukui_electrophilicity_min_2|fukui_nucleophilicity_min_1|fukui_nucleophilicity_min_2|fukui_radical_min_1|fukui_radical_min_2,6,0.010141138101664459,0.008030341566422666
+fukui_electrophilicity_max,fukui_electrophilicity_max_1|fukui_electrophilicity_max_2,2,0.009122807017543866,0.004021599518601841
+polytype_emb_1,polytype_emb_1,1,0.007986673414305001,0.0031788566783713295
+solvent_logp,solvent_logp,1,0.0061420377867746675,0.005184835082172219
+homo,homo_1|homo_2,2,0.005632872244714393,0.0069944820885577555
+charges_max,charges_max_1|charges_max_2,2,0.004572368421052642,0.009033999499271778
+dipole_z,dipole_z_1|dipole_z_2,2,0.0045512820512820466,0.0033134597313339556
+global_nucleophilicity / ip / ip_corrected,global_nucleophilicity_1|global_nucleophilicity_2|ip_1|ip_2|ip_corrected_1|ip_corrected_2,6,0.004289811066126881,0.003451326308793422
+charges_mean,charges_mean_1|charges_mean_2,2,0.00379639001349531,0.002516404502685504
+fukui_nucleophilicity_max / fukui_radical_max,fukui_nucleophilicity_max_1|fukui_nucleophilicity_max_2|fukui_radical_max_1|fukui_radical_max_2,4,0.0035829959514170227,0.006503598497356278
+method_emb_1,method_emb_1,1,0.0008299595141700311,0.005020016174700546
+delta_HOMO_LUMO_BB,delta_HOMO_LUMO_BB,1,0.00023448043184882695,0.001307342954104798
+dipole_y,dipole_y_1|dipole_y_2,2,0.00010290148448045544,0.004426387418390258
+delta_HOMO_LUMO_AA,delta_HOMO_LUMO_AA,1,-0.000495951417004048,0.0026681337506534266
+method_emb_2,method_emb_2,1,-0.0005220985155195423,0.0022148469168088995
+fukui_electrophilicity_mean / fukui_nucleophilicity_mean / fukui_radical_mean,fukui_electrophilicity_mean_1|fukui_electrophilicity_mean_2|fukui_nucleophilicity_mean_1|fukui_nucleophilicity_mean_2|fukui_radical_mean_1|fukui_radical_mean_2,6,-0.0009092442645074139,0.001528589559377993
+dipole_x,dipole_x_1|dipole_x_2,2,-0.0014229082321187358,0.003278460164964641
+best_conformer_energy,best_conformer_energy_1|best_conformer_energy_2,2,-0.0014372469635627549,0.0031649705681707483
+global_electrophilicity,global_electrophilicity_1|global_electrophilicity_2,2,-0.0016109986504723283,0.0019280535258867214
+solvent_HBD / solvent_TPSA,solvent_HBD|solvent_TPSA,2,-0.005742240215924422,0.004912486347484684
+ea / lumo,ea_1|ea_2|lumo_1|lumo_2,4,-0.006487010796221338,0.002620486441459595

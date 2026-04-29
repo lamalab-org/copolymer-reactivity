@@ -41,7 +41,17 @@ from permutation_analysis import (
     calculate_shap_importance_by_groups,
     calculate_shap_pairwise_importance_by_groups,
     calculate_shap_average_strong_groups,
+    calculate_permutation_importance_by_named_groups,
+    build_pair12_atomic_groups,
+    build_pair12_with_correlation_groups,
+    plot_group_permutation_importance_barplot,
 )
+
+try:
+    from copol_prediction.analysis.plot_config import setup_plot_style
+except Exception:
+    def setup_plot_style():
+        pass
 
 
 def maybe_apply_cv_prune_100(df_train: pd.DataFrame, predictor: CopolymerPredictor) -> pd.DataFrame:
@@ -130,6 +140,43 @@ def parse_args():
         type=int,
         default=10,
         help="Top N groups to plot for the strongly-grouped average SHAP plot (default: 10).",
+    )
+
+    # ------------------------------------------------------------------
+    # Permutation importance (per-feature), grouped in plot only
+    # ------------------------------------------------------------------
+    parser.add_argument(
+        "--permutation-per-feature",
+        action="store_true",
+        help="Compute permutation importance per feature (no joint permutation).",
+    )
+    parser.add_argument(
+        "--permutation-by-groups",
+        action="store_true",
+        help="Compute permutation importance by permuting the paper groups jointly.",
+    )
+    parser.add_argument(
+        "--permutation-pair12",
+        action="store_true",
+        help="Permute *_1 and *_2 jointly (atomic groups), then aggregate to paper plot groups.",
+    )
+    parser.add_argument(
+        "--no-voting",
+        action="store_true",
+        help="Disable voting filter (no Lookup). Use full validation set and XGBoost predictions only.",
+    )
+    parser.add_argument(
+        "--permutation-n-repeats",
+        type=int,
+        default=10,
+        help="Number of permutation repeats per feature (default: 10).",
+    )
+    parser.add_argument(
+        "--permutation-scoring",
+        type=str,
+        default="balanced_accuracy",
+        choices=["f1_macro", "balanced_accuracy", "accuracy"],
+        help="Scoring metric for permutation importance (default: balanced_accuracy).",
     )
     parser.add_argument(
         "--split-dir",
@@ -350,8 +397,9 @@ def train_full_features_model(df_train, output_dir, random_state=42, hyperparam_
     groups = df_train["reaction_id"].astype(str).values
 
     class_weights = model_training.calculate_class_weights(y_train)
+    # Same param_grid as train_final_model.py to ensure comparable tuning
     param_grid = {
-        "n_estimators": [300, 500, 600],
+        "n_estimators": [500, 600, 700],
         "max_depth": [4, 5, 6],
         "learning_rate": [0.04, 0.05, 0.06],
         "subsample": [0.85, 0.9, 0.95],
@@ -390,6 +438,8 @@ def train_full_features_model(df_train, output_dir, random_state=42, hyperparam_
         metadata={
             "experiment": "permutation_importance_full_features",
             "feature_set": "feature_columns_all",
+            "best_params": train_results["best_params"],
+            "cv_score": train_results.get("cv_score"),
             "training_config": {
                 "specialized_removed_from_training": False,
                 "augmentation_used": False,
@@ -423,23 +473,99 @@ def get_voting_subset(df_val, df_train, predictor, remove_specialized):
 
 
 def format_feature_name(name):
-    """Format feature name for display."""
+    """Format feature name for display.
+
+    Strategy: explicit long replacements first (so substrings like 'ea' in 'mean'
+    or 'ip' in 'dipole' are already gone), then underscores → spaces, then short
+    abbreviations via whole-word regex to avoid false matches.
+    """
+    import re
     name = str(name)
+
+    # 1. Embedding features (specific suffixes before base)
     name = name.replace("polytype_emb_1", "polymerization type emb. 1")
     name = name.replace("polytype_emb_2", "polymerization type emb. 2")
     name = name.replace("method_emb_1", "polymerization method emb. 1")
     name = name.replace("method_emb_2", "polymerization method emb. 2")
     name = name.replace("polytype_emb", "polymerization type emb.")
     name = name.replace("method_emb", "polymerization method emb.")
-    if "delta_HOMO_LUMO" in name or "delta_homo_lumo" in name:
-        name = name.replace("delta_HOMO_LUMO", "Δ HOMO-LUMO").replace("delta_homo_lumo", "Δ HOMO-LUMO")
-        name = name.replace("_AA", " 1-1").replace("_AB", " 1-2").replace("_BA", " 2-1").replace("_BB", " 2-2")
+
+    # 2. HOMO-LUMO differences
+    name = name.replace("delta_HOMO_LUMO", "Δ HOMO-LUMO")
+    name = name.replace("delta_homo_lumo", "Δ HOMO-LUMO")
+    name = name.replace("_AA", " 1-1").replace("_AB", " 1-2").replace("_BA", " 2-1").replace("_BB", " 2-2")
+
+    # 3. Fukui indices (before generic 'ea' / 'ip' substitution)
+    name = name.replace("fukui_electrophilicity_min", "Fukui electrophilicity min")
+    name = name.replace("fukui_electrophilicity_max", "Fukui electrophilicity max")
+    name = name.replace("fukui_electrophilicity_mean", "Fukui electrophilicity mean")
+    name = name.replace("fukui_nucleophilicity_min", "Fukui nucleophilicity min")
+    name = name.replace("fukui_nucleophilicity_max", "Fukui nucleophilicity max")
+    name = name.replace("fukui_nucleophilicity_mean", "Fukui nucleophilicity mean")
+    name = name.replace("fukui_radical_min", "Fukui radical min")
+    name = name.replace("fukui_radical_max", "Fukui radical max")
+    name = name.replace("fukui_radical_mean", "Fukui radical mean")
+
+    # 4. Dipole components (before 'ip' substitution)
+    name = name.replace("dipole_x", "dipole moment x")
+    name = name.replace("dipole_y", "dipole moment y")
+    name = name.replace("dipole_z", "dipole moment z")
+
+    # 5. Other explicit multi-word features
+    name = name.replace("ip_corrected", "ionization potential (corrected)")
+    name = name.replace("best_conformer_energy", "best conformer energy")
+    name = name.replace("global_electrophilicity", "global electrophilicity")
+    name = name.replace("global_nucleophilicity", "global nucleophilicity")
+    name = name.replace("charges_min", "charges min")
+    name = name.replace("charges_max", "charges max")
+    name = name.replace("charges_mean", "charges mean")
+
+    # 6. Solvent descriptors
+    name = name.replace("solvent_logp", "solvent LogP")
+    name = name.replace("solvent_logP", "solvent LogP")
+    name = name.replace("solvent_TPSA", "solvent TPSA")
+    name = name.replace("solvent_HBD", "solvent H-bond donors")
+    name = name.replace("solvent_FractionCSP3", "solvent fraction Csp3")
+
+    # 7. Remaining underscores → spaces (so 'ip_1' becomes 'ip 1')
     name = name.replace("_", " ")
+
+    # 8. Short abbreviations as whole words only (avoids 'ea' in 'mean', 'ip' in 'dipole')
+    name = re.sub(r"\bip\b", "ionization potential", name)
+    name = re.sub(r"\bea\b", "electron affinity", name)
+    name = re.sub(r"\bhomo\b", "HOMO", name)
+    name = re.sub(r"\blumo\b", "LUMO", name)
+
     return name
 
 
+def _shap_bar_colors(group_labels):
+    """
+    Return a list of bar colors, one per group_label.
+    Monomer features (quantum chemistry) → series_1 (blue)
+    Reaction condition features (temperature, solvent, embedding) → series_2 (red)
+    """
+    color_monomer = "#143D60"
+    color_condition = "#661124"
+
+    condition_keywords = {
+        "temperature", "polytype_emb", "method_emb",
+        "polymerization", "solvent_logp", "solvent_logP",
+        "solvent_frac", "solvent_tpsa", "solvent_hbd", "solvent",
+    }
+
+    colors = []
+    for lbl in group_labels:
+        lbl_lower = str(lbl).lower()
+        if any(kw in lbl_lower for kw in condition_keywords):
+            colors.append(color_condition)
+        else:
+            colors.append(color_monomer)
+    return colors
+
+
 def plot_group_importance_barplot(results_df, output_dir, top_n=50):
-    """Bar plot for group-based SHAP importance (group_label on y-axis)."""
+    """Bar plot for group-based SHAP importance, color-coded by feature category."""
     n_groups = len(results_df)
     n_plot = min(top_n, n_groups)
     top = results_df.head(top_n).copy()
@@ -449,29 +575,47 @@ def plot_group_importance_barplot(results_df, output_dir, top_n=50):
         print(f"  Plotting all {n_plot} groups")
     top["display_label"] = top["group_label"].apply(format_feature_name)
 
-    TWO_COL_WIDTH_INCH = 7
+    try:
+        from copol_prediction.analysis.plot_config import TWO_COL_WIDTH_INCH
+        width = float(TWO_COL_WIDTH_INCH)
+    except Exception:
+        width = 7.0
     height = max(4, len(top) * 0.2)
-    fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
+    fig, ax = plt.subplots(figsize=(width, height))
 
     y_pos = np.arange(len(top))
+    bar_colors = _shap_bar_colors(top["group_label"].tolist())
     ax.barh(
         y_pos,
         top["importance_mean"],
         xerr=top["importance_std"],
         capsize=4,
-        alpha=0.8,
-        color=plt.cm.RdBu(np.linspace(0, 1, len(top))),
+        alpha=0.85,
+        color=bar_colors,
     )
     ax.set_yticks(y_pos)
     ax.set_yticklabels(top["display_label"], fontsize=7)
-    ax.set_xlabel("SHAP importance (mean |SHAP value|)", fontsize=9)
+    ax.set_xlabel("SHAP importance (sum |SHAP| across classes, mean ± std)", fontsize=9)
     ax.tick_params(axis="x", labelsize=7)
     ax.invert_yaxis()
     ax.grid(False)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    plt.tight_layout()
 
+    # Legend
+    c_mon, c_cond = "#143D60", "#661124"
+    from matplotlib.patches import Patch
+    ax.legend(
+        handles=[
+            Patch(facecolor=c_mon, alpha=0.85, label="Monomer descriptor"),
+            Patch(facecolor=c_cond, alpha=0.85, label="Reaction condition"),
+        ],
+        fontsize=7,
+        loc="lower right",
+        frameon=False,
+    )
+
+    plt.tight_layout()
     for ext in ["png", "pdf"]:
         path = os.path.join(output_dir, f"shap_importance_barplot.{ext}")
         plt.savefig(path, dpi=300, bbox_inches="tight")
@@ -578,51 +722,39 @@ def plot_group_importance_beeswarm(results_df, shap_values_per_group, feature_va
     return os.path.join(output_dir, "shap_importance_beeswarm.png")
 
 
-def run_shap_analysis(predictor, df_train, X_val_voting, y_val_voting, config):
-    """Build feature groups from training data; run group-based SHAP on validation voting set.
-    Prefers feature_columns_all from prediction_utils; falls back to model features if data were
-    preprocessed with a reduced set and don't contain feature_columns_all."""
-    model_features = set(predictor.features)
-    in_data = set(df_train.columns)
-    # Prefer feature_columns_all; only features that exist in data and are used by the model
-    wanted = prediction_utils.feature_columns_all
-    feature_names = [c for c in wanted if c in in_data and c in model_features]
-    used_fallback = False
-    partial_feature_columns_all = False  # True if some feature_columns_all are missing in data
-    if not feature_names:
-        # Data likely preprocessed with reduced features – use what's there
-        feature_names = [c for c in predictor.features if c in in_data]
-        used_fallback = True
-    else:
-        if len(feature_names) < len(wanted):
-            partial_feature_columns_all = True
-    print(f"  Analyzing {len(feature_names)} features")
-    # Build groups from training data (avoid leakage)
-    X_train = df_train[feature_names]
-    feature_groups = build_feature_groups(
-        X_train,
-        feature_names,
-        correlation_threshold=config["correlation_threshold"],
-    )
-    n_groups = len(feature_groups)
-    n_singles = sum(1 for g in feature_groups if len(g) == 1)
-    print(f"  Feature groups: {n_groups} (singletons: {n_singles}, multi-feature: {n_groups - n_singles})")
-    # Show group membership for features that might be grouped (e.g. temperature)
-    for g in feature_groups:
-        if len(g) > 1 and "temperature" in g:
-            print(f"  Note: 'temperature' is in a group with {len(g)-1} other(s): {g}")
+def run_shap_analysis(predictor, df_val, config):
+    """
+    Group-based SHAP importance on the full validation set using the final model's features.
 
-    print(f"  Calculating group-based SHAP importance (max_samples={config['max_samples']})...")
-    # Get the underlying XGBoost model
-    xgb_model = predictor.model
+    - Uses only predictor.features (the final model's feature set).
+    - Groups features using build_pair12_atomic_groups (same grouping as permutation analysis).
+    - Sums |SHAP| across all three classes.
+    - Applies format_feature_name to group labels for the barplot.
+    """
+    feature_names = [c for c in predictor.features if c in df_val.columns]
+    print(f"  Analyzing {len(feature_names)} features (final model feature set)")
+
+    # Same grouping as permutation analysis: _1/_2 pairs joint, emb. features individual
+    atomic_groups = build_pair12_atomic_groups(feature_names)
+    feature_groups = list(atomic_groups.values())
+    raw_labels = list(atomic_groups.keys())
+    group_labels = [format_feature_name(lbl) for lbl in raw_labels]
+
+    n_pairs = sum(1 for v in feature_groups if len(v) == 2)
+    n_singles = sum(1 for v in feature_groups if len(v) == 1)
+    print(f"  Groups: {len(feature_groups)} ({n_pairs} pairs, {n_singles} singletons)")
+
+    X_val = df_val[feature_names]
+    print(f"  Calculating group-based SHAP importance (max_samples={config['max_samples']}, reduction=sum)...")
     results_df, shap_values_per_group, feature_values_per_group, X_sample = calculate_shap_importance_by_groups(
-        model=xgb_model,
-        X_df=X_val_voting,
+        model=predictor.model,
+        X_df=X_val,
         feature_groups=feature_groups,
         max_samples=config["max_samples"],
+        reduction="sum",
+        group_labels=group_labels,
     )
 
-    # Save CSV (group_label, features as string, importance_mean, importance_std)
     out_csv = os.path.join(config["output_dir"], "shap_importance_detailed.csv")
     save_df = results_df.copy()
     save_df["features"] = save_df["features"].apply(lambda t: "|".join(t))
@@ -632,21 +764,14 @@ def run_shap_analysis(predictor, df_train, X_val_voting, y_val_voting, config):
     plot_path_bar = plot_group_importance_barplot(
         results_df, config["output_dir"], top_n=config["top_n"]
     )
-    
     plot_path_beeswarm = plot_group_importance_beeswarm(
-        results_df, shap_values_per_group, feature_values_per_group, config["output_dir"], top_n=config["top_n"]
+        results_df, shap_values_per_group, feature_values_per_group,
+        config["output_dir"], top_n=config["top_n"]
     )
 
     print(f"\n  Top 10 groups by importance:")
     for i, (_, row) in enumerate(results_df.head(10).iterrows(), 1):
         print(f"    {i:2d}. {row['group_label']:<45} {row['importance_mean']:.6f} ± {row['importance_std']:.6f}")
-
-    if used_fallback:
-        print("\n  Note: No feature_columns_all in data (preprocessed with reduced set?). Used model features present in data.")
-    elif partial_feature_columns_all:
-        n_in_data = len(feature_names)
-        n_total = len(wanted)
-        print(f"\n  Note: Only {n_in_data} of {n_total} feature_columns_all are present in data (and in model). Analysis and plot use this subset. Missing features may be due to reduced preprocessing.")
 
     return {
         "shap_results": results_df,
@@ -655,8 +780,154 @@ def run_shap_analysis(predictor, df_train, X_val_voting, y_val_voting, config):
     }
 
 
+def run_shap_per_class_analysis(predictor, df_val, config):
+    """
+    Per-class signed SHAP beeswarm — all 3 classes side by side in one figure.
+
+    - X-axis per subplot: signed SHAP for that class
+      (positive = pushes towards class, negative = away)
+    - Y-axis: feature groups (shared, labeled only on leftmost subplot)
+    - Color: normalized feature value (red = high, blue = low)
+    - Single colorbar on the right
+    """
+    from matplotlib.colors import Normalize
+    import shap as shap_lib
+
+    feature_names = [c for c in predictor.features if c in df_val.columns]
+    X_val = df_val[feature_names]
+    print(f"  Features: {len(feature_names)}")
+
+    atomic_groups = build_pair12_atomic_groups(feature_names)
+    feature_groups = list(atomic_groups.values())
+    raw_labels = list(atomic_groups.keys())
+    group_labels = [format_feature_name(lbl) for lbl in raw_labels]
+
+    max_samples = config["max_samples"]
+    if len(X_val) > max_samples:
+        X_sample = X_val.sample(n=max_samples, random_state=42).reset_index(drop=True)
+        print(f"  Computing SHAP on {max_samples} of {len(X_val)} samples")
+    else:
+        X_sample = X_val.reset_index(drop=True)
+
+    booster = predictor.model.get_booster()
+    explainer = shap_lib.TreeExplainer(booster)
+    shap_values = explainer.shap_values(X_sample)
+
+    if isinstance(shap_values, list):
+        per_class_shap = [np.asarray(sv) for sv in shap_values]
+    elif np.asarray(shap_values).ndim == 3:
+        sv3 = np.asarray(shap_values)
+        per_class_shap = [sv3[:, :, c] for c in range(sv3.shape[2])]
+    else:
+        raise ValueError("Expected multi-class SHAP (list or 3D array).")
+
+    feature_to_idx = {f: i for i, f in enumerate(X_sample.columns)}
+    class_names = {0: "alternating", 1: "gradient", 2: "random"}
+    top_n = config["top_n"]
+
+    # Build per-group data for each class; use class-0 order for consistent y-axis
+    all_class_data = []
+    for sv_signed in per_class_shap:
+        shap_list, feat_list, labels = [], [], []
+        for group, lbl in zip(feature_groups, group_labels):
+            idxs = [feature_to_idx[f] for f in group if f in feature_to_idx]
+            if not idxs:
+                continue
+            cols = [X_sample.columns[i] for i in idxs]
+            g_shap = sv_signed[:, idxs].mean(axis=1)
+            g_feat = X_sample[cols].mean(axis=1).values if len(cols) > 1 else X_sample[cols[0]].values
+            shap_list.append(np.asarray(g_shap).flatten())
+            feat_list.append(np.asarray(g_feat).flatten())
+            labels.append(lbl)
+        all_class_data.append((shap_list, feat_list, labels))
+
+    # Sort order by mean |SHAP| of class 0, apply to all classes
+    shap0, _, labels0 = all_class_data[0]
+    order = np.argsort([-np.mean(np.abs(s)) for s in shap0])[:top_n]
+
+    # Apply order to all classes
+    sorted_data = []
+    for shap_list, feat_list, labels in all_class_data:
+        sorted_data.append((
+            [shap_list[i] for i in order],
+            [feat_list[i] for i in order],
+            [labels[i] for i in order],
+        ))
+    y_labels = sorted_data[0][2]  # shared y-axis labels
+    n_groups = len(y_labels)
+    y_pos = np.arange(n_groups)
+
+    try:
+        from copol_prediction.analysis.plot_config import TWO_COL_WIDTH_INCH
+        total_width = float(TWO_COL_WIDTH_INCH)
+    except Exception:
+        total_width = 7.0
+
+    plot_height = max(3.2, n_groups * 0.28)
+    cbar_height = 0.22   # height of the colorbar strip in inches
+    gap = 1.0            # gap between plots and colorbar in inches
+    fig_height = plot_height + gap + cbar_height
+
+    fig = plt.figure(figsize=(total_width, fig_height))
+    gs = fig.add_gridspec(
+        2, 3,
+        height_ratios=[plot_height, cbar_height],
+        hspace=gap / fig_height,  # proportional gap
+        wspace=0.08,
+    )
+    axes = [fig.add_subplot(gs[0, c]) for c in range(3)]
+
+    np.random.seed(42)
+    for col_idx, (ax, (shap_list, feat_list, _)) in enumerate(zip(axes, sorted_data)):
+        for i, (shap_vals, feat_vals) in enumerate(zip(shap_list, feat_list)):
+            f_min, f_max = float(np.min(feat_vals)), float(np.max(feat_vals))
+            feat_norm = (
+                (feat_vals - f_min) / (f_max - f_min)
+                if f_max > f_min else np.full_like(feat_vals, 0.5)
+            )
+            y_jitter = np.random.normal(y_pos[i], 0.05, size=len(shap_vals))
+            ax.scatter(shap_vals, y_jitter, alpha=0.5, s=8,
+                       c=plt.cm.RdYlBu_r(feat_norm), edgecolors="none")
+
+        ax.axvline(0, color="black", linewidth=0.7, linestyle="--", alpha=0.4)
+        ax.set_xlabel(
+            f"SHAP ({class_names.get(col_idx, str(col_idx))})",
+            fontsize=8,
+        )
+        ax.tick_params(axis="x", labelsize=7)
+        ax.set_yticks(y_pos)
+        ax.set_ylim(n_groups - 0.5, -0.5)   # inverted, same range on all axes
+        ax.grid(False, axis="y")
+        ax.grid(True, axis="x", alpha=0.3, linestyle="--")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+        if col_idx == 0:
+            ax.set_yticklabels(y_labels, fontsize=7)
+        else:
+            ax.set_yticklabels([])
+            ax.tick_params(axis="y", length=0)
+
+    # Horizontal colorbar in the reserved bottom strip
+    cbar_ax = fig.add_subplot(gs[1, :])
+    sm = plt.cm.ScalarMappable(cmap=plt.cm.RdYlBu_r, norm=Normalize(vmin=0, vmax=1))
+    sm.set_array([])
+    cbar = fig.colorbar(sm, cax=cbar_ax, orientation="horizontal")
+    cbar.set_ticks([0, 1])
+    cbar.set_ticklabels(["low", "high"], fontsize=7)
+    cbar.set_label("Feature value", fontsize=7, labelpad=3)
+    cbar.ax.tick_params(labelsize=7)
+
+    for ext in ("pdf", "png"):
+        out = os.path.join(config["output_dir"], f"shap_per_class_beeswarm.{ext}")
+        plt.savefig(out, dpi=300 if ext == "png" else None, bbox_inches="tight")
+    plt.close()
+    print(f"  ✓ Saved shap_per_class_beeswarm.pdf/png")
+
+
 def main():
     args = parse_args()
+    setup_plot_style()
     config = {
         "output_dir": args.output_dir,
         "random_state": args.random_state,
@@ -719,20 +990,108 @@ def main():
     # Match final training setup: apply CV-pruning (100% list) to TRAIN lookup pool if present
     df_train = maybe_apply_cv_prune_100(df_train, predictor)
 
-    # Voting subset on validation
-    print("\nApplying voting filter (XGBoost + Lookup agree) on validation...")
-    X_val_voting, y_val_voting, df_val_voting, n_agree, n_total = get_voting_subset(
-        df_val, df_train, predictor, remove_specialized
-    )
-    print(f"  Validation: {n_agree}/{n_total} samples ({100 * n_agree / n_total:.1f}%) after voting")
+    # Validation set selection: full validation (no voting) vs voting subset
+    if args.no_voting:
+        print("\nUsing full validation set (no voting / no Lookup)...")
+        df_val_selected = df_val.reset_index(drop=True)
+        X_val_selected = df_val_selected[predictor.features]
+        y_val_selected = df_val_selected["r_product_class"].astype(int).values
+        n_total = int(len(df_val_selected))
+        n_agree = int(len(df_val_selected))
+        print(f"  Validation: {n_agree}/{n_total} samples (100.0%)")
+        # Keep legacy variable names for downstream SHAP section
+        X_val_voting, y_val_voting, df_val_voting = X_val_selected, y_val_selected, df_val_selected
+    else:
+        # Voting subset on validation
+        print("\nApplying voting filter (XGBoost + Lookup agree) on validation...")
+        X_val_selected, y_val_selected, df_val_selected, n_agree, n_total = get_voting_subset(
+            df_val, df_train, predictor, remove_specialized
+        )
+        print(f"  Validation: {n_agree}/{n_total} samples ({100 * n_agree / n_total:.1f}%) after voting")
+        # Keep legacy variable names for downstream SHAP section
+        X_val_voting, y_val_voting, df_val_voting = X_val_selected, y_val_selected, df_val_selected
+
+    # ------------------------------------------------------------------
+    # Permutation importance: _1/_2 pairs permuted jointly (XGBoost, full validation)
+    # polytype_emb_* and method_emb_* are permuted individually (not paired)
+    # ------------------------------------------------------------------
+    if args.permutation_per_feature or args.permutation_by_groups or args.permutation_pair12:
+        print("\n" + "=" * 60)
+        print("PERMUTATION IMPORTANCE (PAIR _1/_2 JOINT; FULL VALIDATION; XGBOOST)")
+        print("=" * 60)
+
+        # Always use full validation set with XGBoost only (no voting filter).
+        # Target: feature_columns_all — intersected with model features and data columns.
+        # Use --train-full-features-model (or point --model-path to full_features_model_bundle)
+        # to cover all of feature_columns_all.
+        model_feature_set = set(predictor.features)
+        features = [
+            c for c in prediction_utils.feature_columns_all
+            if c in df_val.columns and c in model_feature_set
+        ]
+        missing_from_model = [
+            c for c in prediction_utils.feature_columns_all if c not in model_feature_set
+        ]
+        if missing_from_model:
+            print(
+                f"  ⚠  {len(missing_from_model)} feature_columns_all not in current model "
+                f"(use --train-full-features-model or point --model-path to "
+                f"results/full_features_model_bundle to include them):\n"
+                f"     {missing_from_model}"
+            )
+        Xp = df_val[features].copy()
+        yp = df_val["r_product_class"].astype(int).values
+        print(f"  Samples: {len(yp)}, Features: {len(features)} / {len(prediction_utils.feature_columns_all)} feature_columns_all")
+
+        # Build permutation groups:
+        #   - _1/_2 feature pairs are permuted jointly
+        #   - polytype_emb_1/2 and method_emb_1/2 remain individual singletons
+        #   - if --correlation-threshold < 1.0, additionally merge groups whose
+        #     representative values are highly correlated (e.g. correlated RDKit features)
+        corr_thresh = float(config["correlation_threshold"])
+        if corr_thresh < 1.0:
+            atomic_groups = build_pair12_with_correlation_groups(
+                Xp, features, correlation_threshold=corr_thresh
+            )
+            print(f"  Correlation threshold: {corr_thresh} (correlated groups merged)")
+        else:
+            atomic_groups = build_pair12_atomic_groups(features)
+        n_pairs = sum(1 for v in atomic_groups.values() if len(v) == 2)
+        n_multi = sum(1 for v in atomic_groups.values() if len(v) > 2)
+        n_singles = sum(1 for v in atomic_groups.values() if len(v) == 1)
+        print(f"  Groups: {len(atomic_groups)} ({n_pairs} pairs, {n_multi} multi-feature, {n_singles} singletons)")
+
+        atomic_df = calculate_permutation_importance_by_named_groups(
+            predictor.model,
+            Xp,
+            yp,
+            atomic_groups,
+            scoring="balanced_accuracy",
+            n_repeats=int(args.permutation_n_repeats),
+            random_state=int(args.random_state),
+        )
+
+        out_atomic_csv = os.path.join(args.output_dir, "permutation_importance_pair12_atomic_groups.csv")
+        save_atomic = atomic_df.copy()
+        save_atomic["features"] = save_atomic["features"].apply(lambda t: "|".join(t))
+        save_atomic.to_csv(out_atomic_csv, index=False)
+        print(f"  ✓ Saved {out_atomic_csv}")
+
+        # Barplot directly from atomic groups with readable labels
+        plot_df = atomic_df.copy()
+        plot_df["group_label"] = plot_df["group_label"].apply(format_feature_name)
+        xlabel = "Permutation importance (Macro Accuracy, mean ± std)"
+        for ext in ("pdf", "png"):
+            out_path = os.path.join(args.output_dir, f"permutation_importance_barplot.{ext}")
+            plot_group_permutation_importance_barplot(
+                plot_df, top_n=50, save_path=out_path, xlabel=xlabel,
+            )
 
     # Group-based SHAP importance
     print("\n" + "=" * 60)
     print("SHAP IMPORTANCE BY FEATURE GROUPS")
     print("=" * 60)
-    shap_results = run_shap_analysis(
-        predictor, df_train, X_val_voting, y_val_voting, config
-    )
+    shap_results = run_shap_analysis(predictor, df_val, config)
 
     # ------------------------------------------------------------------
     # Strongly-grouped average SHAP (validation voting subset)
@@ -825,126 +1184,14 @@ def main():
             )
 
     # ------------------------------------------------------------------
-    # Per-class SHAP on TRAIN (one plot per class)
+    # Per-class SHAP beeswarm (validation set, final model features)
     # ------------------------------------------------------------------
     if args.per_class_shap:
         print("\n" + "=" * 60)
-        print("PER-CLASS SHAP (TRAIN)")
+        print("PER-CLASS SHAP BEESWARM (VALIDATION SET)")
         print("=" * 60)
+        run_shap_per_class_analysis(predictor, df_val, config)
 
-        from permutation_analysis import SHAP_AVAILABLE
-        if not SHAP_AVAILABLE:
-            raise ImportError("SHAP not installed. Install with: pip install shap")
-
-        import shap
-
-        # Dataset: TRAIN (model features)
-        X_train_model = df_train[predictor.features]
-        y_train = df_train["r_product_class"].astype(int).values
-
-        # Feature grouping (same logic as above)
-        model_features = set(predictor.features)
-        in_data = set(df_train.columns)
-        wanted = prediction_utils.feature_columns_all
-        feature_names = [c for c in wanted if c in in_data and c in model_features]
-        if not feature_names:
-            feature_names = [c for c in predictor.features if c in in_data]
-        X_train_for_groups = df_train[feature_names]
-        feature_groups = build_feature_groups(
-            X_train_for_groups,
-            feature_names,
-            correlation_threshold=config["correlation_threshold"],
-        )
-
-        # Sample for SHAP (speed)
-        if len(X_train_model) > config["max_samples"]:
-            X_sample = X_train_model.sample(n=config["max_samples"], random_state=42).reset_index(drop=True)
-            print(f"  Computing SHAP on {config['max_samples']} samples (of {len(X_train_model)} total)")
-        else:
-            X_sample = X_train_model.reset_index(drop=True)
-
-        xgb_model = predictor.model
-        booster = xgb_model.get_booster() if hasattr(xgb_model, "get_booster") else xgb_model
-        explainer = shap.TreeExplainer(booster)
-        shap_values = explainer.shap_values(X_sample)
-
-        # Extract per-class SHAP arrays
-        if isinstance(shap_values, list):
-            per_class = [np.asarray(sv) for sv in shap_values]  # each (n, f)
-        elif len(np.asarray(shap_values).shape) == 3:
-            sv3 = np.asarray(shap_values)  # (n, f, c)
-            per_class = [sv3[:, :, i] for i in range(sv3.shape[2])]
-        else:
-            raise ValueError("Expected multi-class SHAP output for per-class SHAP plots.")
-
-        feature_to_idx = {f: i for i, f in enumerate(X_sample.columns)}
-
-        for cls in [0, 1, 2]:
-            sv_signed = np.asarray(per_class[int(cls)])  # (n, f)
-            sv_abs = np.abs(sv_signed)  # (n, f) for importance stats
-            rows = []
-            shap_values_per_group = {}
-            feature_values_per_group = {}
-            for group in feature_groups:
-                idxs = [feature_to_idx[f] for f in group if f in feature_to_idx]
-                if not idxs:
-                    continue
-                # Beeswarm should show signed SHAP; barplots should summarize |SHAP|
-                group_shap_signed = sv_signed[:, idxs].mean(axis=1).flatten()
-                group_shap_abs = sv_abs[:, idxs].mean(axis=1).flatten()
-                group_label = group[0] if len(group) == 1 else f"{group[0]} (+{len(group)-1})"
-
-                # Feature values used for beeswarm coloring (mean for groups)
-                cols = [X_sample.columns[i] for i in idxs]
-                if len(cols) == 1:
-                    group_vals = X_sample[cols[0]].values
-                else:
-                    group_vals = X_sample[cols].mean(axis=1).values
-                group_vals = np.asarray(group_vals).flatten()
-
-                rows.append(
-                    {
-                        "group_label": group_label,
-                        "features": tuple(group),
-                        "n_features": len(group),
-                        "importance_mean": float(np.mean(group_shap_abs)),
-                        "importance_std": float(np.std(group_shap_abs)),
-                        "q25": float(np.percentile(group_shap_abs, 25)),
-                        "q50": float(np.percentile(group_shap_abs, 50)),
-                        "q75": float(np.percentile(group_shap_abs, 75)),
-                    }
-                )
-                shap_values_per_group[group_label] = group_shap_signed
-                feature_values_per_group[group_label] = group_vals
-            results_df = pd.DataFrame(rows).sort_values("importance_mean", ascending=False).reset_index(drop=True)
-
-            out_csv = os.path.join(config["output_dir"], f"shap_per_class_{cls}.csv")
-            save_df = results_df.copy()
-            save_df["features"] = save_df["features"].apply(lambda t: "|".join(t))
-            save_df.to_csv(out_csv, index=False)
-            print(f"  ✓ Saved {out_csv}")
-
-            plot_group_importance_barplot_to_file(
-                results_df,
-                config["output_dir"],
-                filename_base=f"shap_per_class_{cls}_top{int(args.pairwise_top_n)}",
-                top_n=int(args.pairwise_top_n),
-            )
-            print(
-                f"  ✓ Saved plot {os.path.join(config['output_dir'], f'shap_per_class_{cls}_top{int(args.pairwise_top_n)}.png')}"
-            )
-
-            plot_group_importance_beeswarm_to_file(
-                results_df,
-                shap_values_per_group,
-                feature_values_per_group,
-                config["output_dir"],
-                filename_base=f"shap_per_class_{cls}_beeswarm_top{int(args.pairwise_top_n)}",
-                top_n=int(args.pairwise_top_n),
-            )
-            print(
-                f"  ✓ Saved beeswarm {os.path.join(config['output_dir'], f'shap_per_class_{cls}_beeswarm_top{int(args.pairwise_top_n)}.png')}"
-            )
 
     # Metadata
     metadata = {

@@ -18,6 +18,12 @@ import argparse
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from sklearn.metrics import (
+    balanced_accuracy_score,
+    precision_recall_fscore_support,
+    precision_score,
+    f1_score,
+)
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -75,7 +81,7 @@ def parse_args():
     parser.add_argument(
         "--hyperparam-iter",
         type=int,
-        default=25,
+        default=100,
         help="Number of hyperparameter search iterations"
     )
     parser.add_argument(
@@ -118,6 +124,23 @@ def parse_args():
         help=(
             "Optional path to ids_error_ge_100pct_enriched.csv from CV-pruning. "
             "If present, those reaction_ids are removed from TRAIN before fitting."
+        ),
+    )
+    parser.add_argument(
+        "--only-train-test-table",
+        action="store_true",
+        help=(
+            "Skip training and generate only performance_train_test_table.tex "
+            "from an existing model bundle."
+        ),
+    )
+    parser.add_argument(
+        "--model-path",
+        type=str,
+        default=None,
+        help=(
+            "Path to an existing model bundle (used with --only-train-test-table). "
+            "Default: --output-dir"
         ),
     )
     
@@ -745,6 +768,204 @@ def evaluate_voting_on_test_set(model, df_train_lookup_pool, df_test, features, 
     return out_path
 
 
+def save_train_test_performance_latex_table(
+    model,
+    df_train_lookup_pool,
+    df_train_eval,
+    df_test_eval,
+    features,
+    output_dir,
+):
+    """
+    Save a LaTeX table with per-class Train/Test performance for voting predictions.
+
+    Coverage is computed as retained voting predictions / full split size.
+    Support is reported as retained/full counts per class.
+    """
+    from analysis.analyze_model import compute_naive_baseline_predictions_with_similarity
+
+    print("\n" + "=" * 60)
+    print("CREATING TRAIN/TEST LATEX PERFORMANCE TABLE")
+    print("=" * 60)
+
+    os.makedirs(output_dir, exist_ok=True)
+    lookup_required_cols = features + ["r_product_class"]
+    df_train_lookup_pool = df_train_lookup_pool.dropna(subset=lookup_required_cols).reset_index(drop=True)
+
+    def _evaluate_split(df_split, split_name: str):
+        required_cols = features + ["r_product_class"]
+        df_split = df_split.dropna(subset=required_cols).reset_index(drop=True)
+        if len(df_split) == 0:
+            raise ValueError(f"{split_name}: no valid rows after NaN filtering")
+
+        X = df_split[features]
+        y_true_full = df_split["r_product_class"].astype(int).values
+        y_pred_xgb = model.predict(X).astype(int)
+
+        y_lookup_train = df_train_lookup_pool["r_product_class"].astype(int).values
+        y_pred_lookup, _ = compute_naive_baseline_predictions_with_similarity(
+            df_split, df_train_lookup_pool, y_lookup_train, features
+        )
+        y_pred_lookup = np.asarray(y_pred_lookup).astype(int)
+
+        voting_mask = y_pred_xgb == y_pred_lookup
+        y_true = y_true_full[voting_mask]
+        y_pred = y_pred_xgb[voting_mask]
+
+        coverage = float(voting_mask.mean()) if len(voting_mask) else 0.0
+        retained_n = int(voting_mask.sum())
+        full_n = int(len(y_true_full))
+
+        support_full = np.array([(y_true_full == cls).sum() for cls in [0, 1, 2]], dtype=int)
+        support_retained = np.array([(y_true == cls).sum() for cls in [0, 1, 2]], dtype=int)
+
+        precision_c, recall_c, f1_c, _ = precision_recall_fscore_support(
+            y_true,
+            y_pred,
+            labels=[0, 1, 2],
+            zero_division=0,
+        )
+
+        if retained_n == 0:
+            macro_acc = float("nan")
+            macro_prec = float("nan")
+            macro_f1 = float("nan")
+        else:
+            macro_acc = float(balanced_accuracy_score(y_true, y_pred))
+            macro_prec = float(precision_score(y_true, y_pred, average="macro", zero_division=0))
+            macro_f1 = float(f1_score(y_true, y_pred, average="macro", zero_division=0))
+
+        return {
+            "split": split_name,
+            "coverage": coverage,
+            "retained_n": retained_n,
+            "full_n": full_n,
+            "precision_c": precision_c,
+            "recall_c": recall_c,
+            "f1_c": f1_c,
+            "support_full": support_full,
+            "support_retained": support_retained,
+            "macro_acc": macro_acc,
+            "macro_prec": macro_prec,
+            "macro_f1": macro_f1,
+        }
+
+    train_stats = _evaluate_split(df_train_eval, "Train")
+    test_stats = _evaluate_split(df_test_eval, "Test")
+
+    class_names = {
+        0: "Alternating",
+        1: "Random",
+        2: "Gradient",
+    }
+
+    def fmt(v):
+        if isinstance(v, float) and np.isnan(v):
+            return "--"
+        return f"{v:.3f}"
+
+    latex_path = os.path.join(output_dir, "performance_train_test_table.tex")
+    with open(latex_path, "w", encoding="utf-8") as f:
+        f.write("\\begin{table}[h!]\n")
+        f.write("\\centering\n")
+        f.write(
+            "\\caption{Per-class training and test performance of the voting model "
+            "(XGBoost + nearest-neighbor lookup). Support denotes the number of "
+            "samples in the full split, and coverage denotes the retained prediction "
+            "fraction after voting agreement.}\n"
+        )
+        f.write("\\begin{tabular}{llccccc}\n")
+        f.write("\\toprule\n")
+        f.write(
+            "\\textbf{Split} & \\textbf{Class} & \\textbf{Acc} & \\textbf{Prec} & \\textbf{F1} & "
+            "\\textbf{Support} & \\textbf{Coverage} \\\\\n"
+        )
+        f.write("\\midrule\n")
+
+        for split_stats in [train_stats, test_stats]:
+            split = split_stats["split"]
+            cov_str = f"{split_stats['coverage']:.3f}"
+            split_label = split
+
+            for cls in [0, 1, 2]:
+                support = f"{int(split_stats['support_full'][cls])}"
+                f.write(
+                    f"{split_label} & {class_names[cls]} & "
+                    f"{fmt(float(split_stats['recall_c'][cls]))} & "
+                    f"{fmt(float(split_stats['precision_c'][cls]))} & "
+                    f"{fmt(float(split_stats['f1_c'][cls]))} & "
+                    f"{support} & {cov_str} \\\\\n"
+                )
+                split_label = ""
+
+            total_support = f"{split_stats['full_n']}"
+            f.write(
+                f"{split_label} & Macro & {fmt(split_stats['macro_acc'])} & "
+                f"{fmt(split_stats['macro_prec'])} & {fmt(split_stats['macro_f1'])} & "
+                f"{total_support} & {cov_str} \\\\\n"
+            )
+            f.write("\\midrule\n")
+
+        f.write("\\bottomrule\n")
+        f.write("\\end{tabular}\n")
+        f.write("\\label{tab:train_test_voting_performance}\n")
+        f.write("\\end{table}\n")
+
+    print(f"✓ Train/Test LaTeX performance table saved to: {latex_path}")
+    return latex_path
+
+
+def build_lookup_pool_with_negative_data(df_train: pd.DataFrame) -> pd.DataFrame:
+    """Build lookup pool from train split and optional negative data."""
+    df_lookup_pool = df_train.copy()
+    neg_path = os.path.join(_SCRIPT_DIR, "filter", "artificial_datapoints", "processed_combined_augmented.csv")
+    if os.path.exists(neg_path):
+        try:
+            df_neg = pd.read_csv(neg_path)
+            if "Class" in df_neg.columns and "r_product_class" not in df_neg.columns:
+                df_neg = df_neg.rename(columns={"Class": "r_product_class"})
+            if "r_product_class" in df_neg.columns:
+                df_neg["r_product_class"] = df_neg["r_product_class"].astype(int)
+                df_lookup_pool = pd.concat([df_lookup_pool, df_neg], ignore_index=True)
+                print(f"\n✓ Added {len(df_neg)} negative datapoints to lookup pool ({len(df_lookup_pool)} total)")
+        except Exception as e:
+            print(f"\nWarning: Failed to add negative data to lookup pool: {e}")
+    return df_lookup_pool
+
+
+def generate_train_test_table_only(config, model_path):
+    """Generate Train/Test LaTeX performance table from an existing model bundle."""
+    print("\n" + "=" * 60)
+    print("TABLE-ONLY MODE (NO TRAINING)")
+    print("=" * 60)
+
+    from analysis.analyze_model import CopolymerPredictor
+
+    predictor = CopolymerPredictor(model_path)
+    print(f"✓ Loaded model bundle from: {model_path}")
+
+    df_train, df_val, df_holdout, _available_features = prepare_data(config)
+    del df_val  # Validation is not used for this table
+
+    model_features = list(predictor.features)
+    missing_features = [c for c in model_features if c not in df_train.columns]
+    if missing_features:
+        raise ValueError(
+            f"Missing {len(missing_features)} model feature(s) in split data, e.g.: {missing_features[:5]}"
+        )
+
+    df_lookup_pool = build_lookup_pool_with_negative_data(df_train)
+
+    return save_train_test_performance_latex_table(
+        model=predictor.model,
+        df_train_lookup_pool=df_lookup_pool,
+        df_train_eval=df_train,
+        df_test_eval=df_holdout,
+        features=model_features,
+        output_dir=config["analysis_output_dir"],
+    )
+
+
 def run_analysis(model_path, data_path, output_dir):
     """
     Run model analysis after training.
@@ -843,6 +1064,8 @@ def main():
     args = parse_args()
     args.output_dir = _resolve_under_script(args.output_dir)
     args.analysis_output_dir = _resolve_under_script(args.analysis_output_dir)
+    if args.model_path:
+        args.model_path = _resolve_under_script(args.model_path)
     if args.cv_prune_100_path:
         args.cv_prune_100_path = _resolve_under_script(args.cv_prune_100_path)
 
@@ -872,6 +1095,15 @@ def main():
     
     print("\nℹ️  Note: Using central train/validation/test split from artifacts/data_splits/")
     print("   To recreate split: python create_data_split.py")
+
+    if args.only_train_test_table:
+        model_path = args.model_path or config["output_dir"]
+        table_path = generate_train_test_table_only(config, model_path=model_path)
+        print("\n" + "=" * 60)
+        print("TABLE GENERATION COMPLETE!")
+        print("=" * 60)
+        print(f"\nLaTeX table saved to: {table_path}")
+        return
     
     # Prepare data (loads central split)
     df_train, df_val, df_holdout, features = prepare_data(config)
@@ -897,19 +1129,7 @@ def main():
 
     # Evaluate voting on TEST set (XGBoost + Lookup)
     # Lookup pool is TRAIN (+ optional negative data, if available)
-    df_lookup_pool = df_train.copy()
-    neg_path = os.path.join(_SCRIPT_DIR, "filter", "artificial_datapoints", "processed_combined_augmented.csv")
-    if os.path.exists(neg_path):
-        try:
-            df_neg = pd.read_csv(neg_path)
-            if "Class" in df_neg.columns and "r_product_class" not in df_neg.columns:
-                df_neg = df_neg.rename(columns={"Class": "r_product_class"})
-            if "r_product_class" in df_neg.columns:
-                df_neg["r_product_class"] = df_neg["r_product_class"].astype(int)
-                df_lookup_pool = pd.concat([df_lookup_pool, df_neg], ignore_index=True)
-                print(f"\n✓ Added {len(df_neg)} negative datapoints to lookup pool ({len(df_lookup_pool)} total)")
-        except Exception as e:
-            print(f"\nWarning: Failed to add negative data to lookup pool: {e}")
+    df_lookup_pool = build_lookup_pool_with_negative_data(df_train)
 
     evaluate_voting_on_test_set(
         model=model_info["model"],
@@ -917,6 +1137,16 @@ def main():
         df_test=df_holdout,
         features=features,
         output_dir=config["output_dir"],
+    )
+
+    # Save combined Train/Test LaTeX performance table
+    save_train_test_performance_latex_table(
+        model=model_info["model"],
+        df_train_lookup_pool=df_lookup_pool,
+        df_train_eval=df_train,
+        df_test_eval=df_holdout,
+        features=features,
+        output_dir=config["analysis_output_dir"],
     )
 
     # Fit calibration on VALIDATION voting subset and save into model bundle directory
