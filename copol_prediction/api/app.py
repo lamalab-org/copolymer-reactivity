@@ -327,13 +327,15 @@ app.add_middleware(
 # Global predictor instance
 predictor: Optional[CopolymerPredictor] = None
 
-# Configurable paths (env vars override the dev-layout defaults).
-MODEL_PATH = os.environ.get("MODEL_PATH", "../artifacts/model_bundle")
-DATASET_PATH = os.environ.get("DATASET_PATH", "../processed_data.csv")
-TRAIN_DATA_PATH = os.environ.get("TRAIN_DATA_PATH", "../artifacts/data_splits/train.csv")
+# Configurable paths.
+# Defaults point to the baked-in locations inside the Docker image (/app/…).
+# Override via env vars for local development (e.g. MODEL_PATH=../artifacts/model_bundle).
+MODEL_PATH = os.environ.get("MODEL_PATH", "/app/artifacts/model_bundle")
+DATASET_PATH = os.environ.get("DATASET_PATH", "/app/processed_data.csv")
+TRAIN_DATA_PATH = os.environ.get("TRAIN_DATA_PATH", "/app/artifacts/data_splits/train.csv")
 NEGATIVE_DATA_PATH = os.environ.get(
     "NEGATIVE_DATA_PATH",
-    "../filter/artificial_datapoints/processed_combined_augmented.csv",
+    "/app/artificial_datapoints.csv",
 )
 
 # Global embedding dictionaries
