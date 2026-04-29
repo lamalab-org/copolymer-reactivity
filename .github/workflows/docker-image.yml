@@ -1,26 +1,61 @@
-name: Docker Image CI
+name: Publish Docker Image
 
 on:
-  workflow_dispatch:
-    inputs:
-      ref:
-        description: 'GitHub ref to checkout'
-        required: true
-        default: main
-      tag:
-        description: 'Docker tag to push (do NOT use "latest" or version numbers)'
-        required: true
-        default: 'HEAD'
   push:
     tags:
-      - v*
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker tag to push (e.g. "1.0.0" or "HEAD")'
+        required: true
+        default: 'HEAD'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  docker-image:
-    # Documentation: https://github.com/zakodium/workflows#docker-image
-    uses: zakodium/workflows/.github/workflows/docker-image.yml@docker-image-v1
-    with:
-      ref: ${{ inputs.ref }}
-      tag: ${{ inputs.tag }}
-      tag-version: ${{ github.event_name == 'push' && github.ref_name || '' }}
+  build-and-push:
+    runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: copol_prediction/api/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
