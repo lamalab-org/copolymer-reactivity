@@ -1,10 +1,12 @@
 services:
   copol-prediction-api:
-    build:
-      context: ../..
-      dockerfile: copol_prediction/api/Dockerfile
+    # Use the pre-built image from GitHub Container Registry.
+    # To build locally instead, comment out 'image' and uncomment 'build'.
+    image: ghcr.io/marawilhelmi/polymer-reactivity:latest
+    # build:
+    #   context: ../..
+    #   dockerfile: copol_prediction/api/Dockerfile
     container_name: copol-prediction-api
-    image: copol-prediction-api:latest
     ports:
       - "8000:8000"
     environment:
@@ -24,11 +26,14 @@ services:
       - OMP_STACKSIZE=1G
       - OMP_MAX_ACTIVE_LEVELS=1
     volumes:
-      # Mount cache directory for persistence
+      # Mount cache directory for persistence across container restarts
       - ./cache:/app/cache
-      # Mount molecule properties cache for faster lookups
-      - ./molecule_properties:/app/molecule_properties
-      # Mount dataset for DOI checking
+      # -------------------------------------------------------------------------
+      # REQUIRED: processed_data.csv must be provided by the user.
+      # All other data (model artifacts, embeddings, molecule properties cache)
+      # are already baked into the Docker image.
+      # Adjust the host path below to point to your local copy of the file.
+      # -------------------------------------------------------------------------
       - ../processed_data.csv:/app/processed_data.csv:ro
     restart: unless-stopped
     healthcheck:
