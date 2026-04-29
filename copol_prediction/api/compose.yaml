@@ -2,7 +2,7 @@ services:
   copol-prediction-api:
     # Use the pre-built image from GitHub Container Registry.
     # To build locally instead, comment out 'image' and uncomment 'build'.
-    image: ghcr.io/marawilhelmi/polymer-reactivity:latest
+    image: ghcr.io/lamalab-org/copolymer-reactivity:latest
     # build:
     #   context: ../..
     #   dockerfile: copol_prediction/api/Dockerfile
