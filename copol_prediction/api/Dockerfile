@@ -101,6 +101,9 @@ COPY --chown=apiuser:apiuser copol_prediction/api/molecule_properties /app/molec
 # Copy model artifacts
 COPY --chown=apiuser:apiuser copol_prediction/artifacts /app/artifacts
 
+# Copy dataset (used for DOI checking)
+COPY --chown=apiuser:apiuser copol_prediction/processed_data.csv /app/processed_data.csv
+
 # Copy augmented negative data points used by the baseline-lookup pool
 COPY --chown=apiuser:apiuser copol_prediction/filter/artificial_datapoints/processed_combined_augmented.csv /app/artificial_datapoints.csv
 
