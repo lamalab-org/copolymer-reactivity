@@ -244,7 +244,7 @@ copol_prediction/
 │   ├── example_client.py       # Usage examples
 │   ├── Dockerfile              # Docker deployment
 │   ├── docker-compose.yml      # Docker Compose
-│   └── start.sh                # Quick start script
+│   └── compose.yaml            # Docker Compose config
 ├── analysis/                   # Analysis tools
 │   ├── analyze_model.py       # Main analysis script
 │   ├── plot_config.py          # Plot styling

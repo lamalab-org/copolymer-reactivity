@@ -41,7 +41,6 @@ See `NGROK_SETUP.md` for detailed instructions.
 ```bash
 pip install -r requirements.txt
 python app.py
-# Or: ./start.sh
 ```
 
 **Note:** Requires XTB installation (`conda install -c conda-forge xtb-python`)
@@ -129,8 +128,6 @@ The `/preprocess_all` endpoint now automatically returns:
    - Based on Tanimoto similarity of monomer and solvent SMILES fingerprints
    - Returns: class, monomer names, solvent name, conditions, source (DOI), similarity score
    - Uses the same approach as `experiments/baseline` database lookup model
-
-See `SIMILAR_PAPERS_GUIDE.md` for details on similar papers.
 
 ## 💻 Usage Example
 
@@ -295,10 +292,6 @@ result = requests.post(
 print(f"Exists: {'YES' if result['exists'] else 'NO'}")
 ```
 
-**Example files:**
-- Python: `doi_check_example.py`
-- JavaScript: `doi_check_example.js`
-
 ## 📊 Confidence Score
 
 The API returns a confidence score (0-1) for each prediction. The confidence is calculated using a **weighted metric**:
@@ -352,18 +345,18 @@ docker compose down -v
 
 ```
 api/
-├── app.py                    # Main application
+├── app.py                    # FastAPI application
+├── baseline_lookup.py        # Nearest-neighbor lookup
+├── reaction_optimization.py  # Solvent / temperature grid search
 ├── morfeus_patch.py          # XTB compatibility patch
-├── requirements.txt          # Dependencies
+├── requirements.txt
 ├── Dockerfile
-├── docker-compose.yml
-├── start.sh
+├── compose.yaml
 ├── README.md
-├── data/                     # Embeddings
-├── config/                   # Configuration
-├── tests/                    # Test scripts
-├── cache/                    # Runtime cache
-└── molecule_properties/      # Monomer cache (1147 files)
+├── data/                     # PCA embeddings (method / polytype)
+├── config/                   # qcengine config
+├── cache/                    # Runtime cache (gitignored)
+└── molecule_properties/      # Precomputed monomer features
 ```
 
 ## 📖 Resources

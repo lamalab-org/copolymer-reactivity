@@ -24,19 +24,19 @@ Production-ready REST API for predictions.
 
 ```
 api/
-├── app.py                  # FastAPI application
-├── requirements.txt        # Dependencies
-├── README.md               # Complete API documentation
-├── SETUP_COMPLETE.md       # Setup summary
-├── start.sh                # Quick-start script
-├── test_api.py             # API tests
-├── example_client.py       # Usage examples
-├── Dockerfile              # Docker deployment
-├── docker-compose.yml      # Docker Compose config
-└── nginx.conf              # Nginx reverse proxy
+├── app.py                    # FastAPI application
+├── baseline_lookup.py        # Nearest-neighbor lookup
+├── reaction_optimization.py  # Solvent / temperature grid search
+├── morfeus_patch.py          # XTB compatibility patch
+├── requirements.txt
+├── Dockerfile
+├── compose.yaml
+├── README.md
+├── data/                     # PCA embeddings
+└── molecule_properties/      # Precomputed monomer features
 ```
 
-**Start API**: `cd api && ./start.sh`
+**Start API**: `cd api && docker compose up -d`
 
 ### analysis/ - Analysis Tools
 
@@ -115,7 +115,7 @@ utils/
 **Make predictions**:
 ```bash
 cd api
-./start.sh
+docker compose up -d
 # Open http://localhost:8000/docs
 ```
 

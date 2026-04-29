@@ -32,18 +32,16 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from copolpredictor.inference import CopolymerPredictor
-from copolpredictor.data_processing import load_molecular_data
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
 import pandas as pd
 
-# Import paper similarity module
-try:
-    from paper_similarity import find_similar_papers, format_similarity_output
-    SIMILARITY_AVAILABLE = True
-except ImportError:
-    SIMILARITY_AVAILABLE = False
-    print("Warning: paper_similarity module not available. Similar papers feature disabled.")
+# Canonical class -> human-readable label mapping used across all endpoints.
+CLASS_LABELS: Dict[int, str] = {
+    0: "alternating",
+    1: "random to block like",
+    2: "gradient",
+}
 
 # Import baseline lookup module
 try:
@@ -61,14 +59,6 @@ except ImportError:
     REACTION_OPTIMIZATION_AVAILABLE = False
     print("Warning: reaction_optimization module not available. Reaction optimization feature disabled.")
 
-# Import solubility check module
-try:
-    from solubility_check import load_solubility_model, get_solubility_issue_flag
-    SOLUBILITY_CHECK_AVAILABLE = True
-except ImportError:
-    SOLUBILITY_CHECK_AVAILABLE = False
-    print("Warning: solubility_check module not available. Solubility check feature disabled.")
-
 # Import monomer feature calculation functions
 try:
     from morfeus.conformer import ConformerEnsemble
@@ -76,12 +66,6 @@ try:
 
     # Try to import patched XTB class, fall back to original if not available
     try:
-        # Static mapping from classes to English text descriptions
-        class_descriptions_map = {
-            0: "alternating",
-            1: "random to block like",
-            2: "gradient",
-        }
         from morfeus_patch import XTB
 
         print("✓ Using patched XTB class for better compatibility")
@@ -167,9 +151,6 @@ class PredictionInput(BaseModel):
             "solvent_FractionCSP3": 0.67
         }
     )
-    monomer1_smiles: Optional[str] = Field(None, description="Optional: SMILES of monomer 1 (for solubility check)")
-    monomer2_smiles: Optional[str] = Field(None, description="Optional: SMILES of monomer 2 (for solubility check)")
-    solvent_smiles: Optional[str] = Field(None, description="Optional: SMILES of solvent (for solubility check)")
 
 
 class BatchPredictionInput(BaseModel):
@@ -180,23 +161,12 @@ class BatchPredictionInput(BaseModel):
     )
 
 
-class SimilarPaper(BaseModel):
-    """Similar paper information."""
-    rank: int = Field(..., description="Ranking (1-10)")
-    doi: str = Field(..., description="DOI of the paper")
-    paper_name: str = Field(..., description="Paper filename/name")
-    similarity_score: float = Field(..., description="Overall similarity score (0-1)")
-    match_quality: str = Field(..., description="Match quality label")
-    details: Dict[str, float] = Field(..., description="Component similarity scores")
-    reaction_info: Dict = Field(..., description="Reaction information from paper")
-
-
 class NearestNeighbor(BaseModel):
     """Nearest neighbor data point from training database."""
     rank: int = Field(..., description="Ranking (1-10)")
     similarity: float = Field(..., description="Similarity score (0-1), higher is more similar")
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)", alias="class")
-    predicted_class_name: str = Field(..., description="Predicted class name: 'alternating', 'random to block like', or 'homopolymer'")
+    predicted_class_name: str = Field(..., description="Human-readable class label")
     monomer1_name: str = Field(..., description="First monomer name")
     monomer2_name: str = Field(..., description="Second monomer name")
     monomer1_smiles: str = Field(..., description="First monomer SMILES")
@@ -216,16 +186,10 @@ class NearestNeighbor(BaseModel):
 class PredictionOutput(BaseModel):
     """Output schema for prediction."""
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
+    predicted_class_name: str = Field(..., description="Human-readable class label")
     class_probabilities: Dict[str, float] = Field(..., description="Probability for each class")
     confidence: float = Field(..., description="Prediction confidence (0-1)")
-    r_product_range: str = Field(..., description="Human-readable r-product range")
-    class_descriptions: Dict[str, str] = Field(..., description="Description for each class label")
-    models_agree: Optional[bool] = Field(None, description="Whether XGBoost and Lookup models agree on the prediction")
     below_threshold: bool = Field(False, description="Whether confidence is below the 0.7 threshold")
-    lookup_class: Optional[int] = Field(None, description="Predicted class from the Lookup (nearest-neighbor) model")
-    similar_papers: Optional[List[SimilarPaper]] = Field(None, description="Most similar papers from dataset")
-    nearest_neighbors: Optional[List[NearestNeighbor]] = Field(None, description="Top 10 nearest data points from training database (baseline lookup)")
-    solubility_issue: Optional[int] = Field(None, description="Solubility issue flag: 0 = no issues, 1 = has issues, -1 = unknown")
     timestamp: str = Field(..., description="Prediction timestamp")
 
 
@@ -242,6 +206,7 @@ class ModelInfo(BaseModel):
     n_features: int
     feature_names: List[str]
     class_labels: List[int]
+    class_descriptions: Dict[str, str] = Field(..., description="Human-readable label for each class")
     created_at: str
     model_path: str
 
@@ -294,13 +259,11 @@ class OptimizeReactionInput(BaseModel):
 
 class PreprocessAllOutput(BaseModel):
     """Output schema for combined preprocessing."""
-    features: Dict[str, float] = Field(..., description="All calculated features ready for prediction")
+    features: Dict[str, Optional[float]] = Field(..., description="All calculated features ready for prediction. Individual values may be null when the underlying XTB descriptor could not be computed for a given monomer.")
     success: bool = Field(..., description="Whether preprocessing was successful")
     error: Optional[str] = Field(None, description="Error message if preprocessing failed")
-    similar_papers: Optional[List[SimilarPaper]] = Field(None, description="Most similar papers from dataset")
     nearest_neighbors: Optional[List[NearestNeighbor]] = Field(None, description="Top 10 nearest data points from training database (baseline lookup)")
     lookup_class: Optional[int] = Field(None, description="Predicted class from the Lookup (nearest-neighbor) model (top-1 neighbor)")
-    solubility_issue: Optional[int] = Field(None, description="Solubility issue flag: 0 = no issues, 1 = has issues, -1 = unknown")
 
 
 class OptimizationPrediction(BaseModel):
@@ -310,10 +273,9 @@ class OptimizationPrediction(BaseModel):
     solvent_name: str = Field(..., description="Solvent name")
     solvent_logp: float = Field(..., description="Solvent logP value")
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
-    predicted_class_name: str = Field(..., description="Predicted class name: 'alternating', 'random to block like', or 'homopolymer'")
+    predicted_class_name: str = Field(..., description="Human-readable class label")
     class_probabilities: Dict[str, float] = Field(..., description="Probability for each class")
     confidence: float = Field(..., description="Prediction confidence (0-1)")
-    solubility_issue: Optional[int] = Field(None, description="Solubility issue flag: 0 = no issues, 1 = has issues, -1 = unknown")
 
 
 class OptimizeReactionOutput(BaseModel):
@@ -365,11 +327,14 @@ app.add_middleware(
 # Global predictor instance
 predictor: Optional[CopolymerPredictor] = None
 
-# Model path (can be configured via environment variable)
+# Configurable paths (env vars override the dev-layout defaults).
 MODEL_PATH = os.environ.get("MODEL_PATH", "../artifacts/model_bundle")
-
-# Dataset path for DOI checking (can be configured via environment variable)
 DATASET_PATH = os.environ.get("DATASET_PATH", "../processed_data.csv")
+TRAIN_DATA_PATH = os.environ.get("TRAIN_DATA_PATH", "../artifacts/data_splits/train.csv")
+NEGATIVE_DATA_PATH = os.environ.get(
+    "NEGATIVE_DATA_PATH",
+    "../filter/artificial_datapoints/processed_combined_augmented.csv",
+)
 
 # Global embedding dictionaries
 method_embeddings: Dict[str, Dict[str, float]] = {}
@@ -384,9 +349,6 @@ train_df: Optional[pd.DataFrame] = None
 # Global fingerprint cache for baseline lookup
 fingerprint_cache: Optional[Dict] = None
 
-# Global solubility model
-solubility_model = None
-
 
 # ============================================================================
 # Startup/Shutdown Events
@@ -395,7 +357,7 @@ solubility_model = None
 @app.on_event("startup")
 async def startup_event():
     """Load model, embeddings, and dataset on startup."""
-    global predictor, method_embeddings, polytype_embeddings, dataset_df, train_df, fingerprint_cache, solubility_model
+    global predictor, method_embeddings, polytype_embeddings, dataset_df, train_df, fingerprint_cache
 
     # Load embeddings
     try:
@@ -468,18 +430,19 @@ async def startup_event():
     # Load training data for baseline lookup
     if BASELINE_LOOKUP_AVAILABLE:
         try:
-            # Try to load from data splits
             api_dir = Path(__file__).parent
-            split_dir = api_dir.parent / "artifacts" / "data_splits"
-            train_path = split_dir / "train.csv"
-            
+            train_path = Path(TRAIN_DATA_PATH)
+            if not train_path.is_absolute():
+                train_path = api_dir / train_path
+
             if train_path.exists():
                 print(f"Loading training data from {train_path}...")
                 train_df = pd.read_csv(train_path)
                 print(f"✓ Training data loaded successfully ({len(train_df)} rows)")
 
-                # Add negative data to lookup pool
-                neg_path = api_dir.parent / "filter" / "artificial_datapoints" / "processed_combined_augmented.csv"
+                neg_path = Path(NEGATIVE_DATA_PATH)
+                if not neg_path.is_absolute():
+                    neg_path = api_dir / neg_path
                 if neg_path.exists():
                     df_neg = pd.read_csv(neg_path)
                     if 'Class' in df_neg.columns:
@@ -537,17 +500,6 @@ async def startup_event():
     else:
         train_df = None
 
-    # Load solubility model
-    if SOLUBILITY_CHECK_AVAILABLE:
-        try:
-            solubility_model = load_solubility_model()
-        except Exception as e:
-            print(f"✗ Error loading solubility model: {e}")
-            print("Solubility check will not be available")
-            solubility_model = None
-    else:
-        solubility_model = None
-
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -594,6 +546,7 @@ async def get_model_info():
         n_features=len(predictor.features),
         feature_names=predictor.features,
         class_labels=predictor.class_labels,
+        class_descriptions={f"class_{k}": v for k, v in CLASS_LABELS.items()},
         created_at=predictor.metadata.get('created_at', 'unknown'),
         model_path=MODEL_PATH
     )
@@ -617,87 +570,21 @@ async def predict(input_data: PredictionInput):
         )
 
     try:
-        # Static mapping from classes to English text descriptions
-        class_descriptions_map = {
-            0: "alternating",
-            1: "random to block like",
-            2: "gradient",
-        }
-
-        # Make XGBoost prediction
         results = predictor.predict_with_confidence(input_data.features)
 
-        # Format output
         pred_class = int(results['predictions'][0])
         proba = results['probabilities'][0]
         confidence = float(results['confidence'][0])
 
-        # Voting: Lookup prediction via nearest-neighbor
-        nearest_neighbors_list = None
-        lookup_class_value = None
-        models_agree_flag = None
-
-        smiles_available = (
-            input_data.monomer1_smiles
-            and input_data.monomer2_smiles
-            and input_data.solvent_smiles
-        )
-
-        if smiles_available and BASELINE_LOOKUP_AVAILABLE and train_df is not None:
-            try:
-                global fingerprint_cache
-                fp_dict_to_use = fingerprint_cache if fingerprint_cache is not None else None
-                neighbors = find_top_k_nearest_neighbors(
-                    test_monomer1_smiles=input_data.monomer1_smiles,
-                    test_monomer2_smiles=input_data.monomer2_smiles,
-                    test_solvent_smiles=input_data.solvent_smiles,
-                    df_train=train_df,
-                    k=10,
-                    fp_dict=fp_dict_to_use
-                )
-                if neighbors:
-                    nearest_neighbors_list = [
-                        NearestNeighbor(**neighbor) for neighbor in neighbors
-                    ]
-                    lookup_class_value = int(neighbors[0]['predicted_class'])
-                    models_agree_flag = (pred_class == lookup_class_value)
-            except Exception as e:
-                print(f"Warning: Lookup prediction failed: {e}")
-
-        below_threshold_flag = confidence < 0.7
-
-        # Solubility check: Only if SMILES are provided
-        solubility_issue_flag = None
-        if SOLUBILITY_CHECK_AVAILABLE and solubility_model is not None:
-            if smiles_available:
-                try:
-                    solubility_issue_flag = get_solubility_issue_flag(
-                        monomer1_smiles=input_data.monomer1_smiles,
-                        monomer2_smiles=input_data.monomer2_smiles,
-                        solvent_smiles=input_data.solvent_smiles,
-                        model=solubility_model
-                    )
-                except Exception as e:
-                    print(f"Warning: Solubility check failed: {e}")
-                    solubility_issue_flag = None
-
         return PredictionOutput(
             predicted_class=pred_class,
+            predicted_class_name=CLASS_LABELS[pred_class],
             class_probabilities={
                 f"class_{i}": float(proba[i])
                 for i in range(len(proba))
             },
             confidence=confidence,
-            r_product_range=class_descriptions_map[pred_class],
-            class_descriptions={
-                f"class_{i}": desc
-                for i, desc in class_descriptions_map.items()
-            },
-            models_agree=models_agree_flag,
-            below_threshold=below_threshold_flag,
-            lookup_class=lookup_class_value,
-            nearest_neighbors=nearest_neighbors_list,
-            solubility_issue=solubility_issue_flag,
+            below_threshold=confidence < 0.7,
             timestamp=datetime.now().isoformat()
         )
     except Exception as e:
@@ -725,13 +612,6 @@ async def predict_batch(input_data: BatchPredictionInput):
         )
 
     try:
-        # Static mapping from classes to English text descriptions
-        class_descriptions_map = {
-            0: "alternating",
-            1: "random to block like",
-            2: "homopolymer",
-        }
-        
         predictions = []
 
         for sample in input_data.samples:
@@ -740,24 +620,16 @@ async def predict_batch(input_data: BatchPredictionInput):
             pred_class = int(results['predictions'][0])
             proba = results['probabilities'][0]
             confidence = float(results['confidence'][0])
-            
-            # Solubility check not available for batch predictions (no SMILES)
-            solubility_issue_flag = None
 
             predictions.append(PredictionOutput(
                 predicted_class=pred_class,
+                predicted_class_name=CLASS_LABELS[pred_class],
                 class_probabilities={
                     f"class_{i}": float(proba[i])
                     for i in range(len(proba))
                 },
                 confidence=confidence,
-                r_product_range=class_descriptions_map[pred_class],
-                class_descriptions={
-                    f"class_{i}": desc
-                    for i, desc in class_descriptions_map.items()
-                },
-                nearest_neighbors=None,
-                solubility_issue=solubility_issue_flag,
+                below_threshold=confidence < 0.7,
                 timestamp=datetime.now().isoformat()
             ))
 
@@ -803,24 +675,69 @@ async def preprocess_all(input_data: PreprocessAllInput):
     Combines monomer preprocessing, solvent preprocessing, and embeddings.
     """
     try:
-        # Preprocess monomers
         base_path = Path(__file__).parent / "molecule_properties"
 
-        m1_data = load_monomer_features(input_data.monomer1_smiles, base_path)
-        if not m1_data:
+        # Compute nearest neighbors early so the lookup remains available even
+        # when live XTB feature calculation fails for one of the monomers.
+        nearest_neighbors_list = None
+        lookup_class_value = None
+        if BASELINE_LOOKUP_AVAILABLE and train_df is not None:
+            try:
+                global fingerprint_cache
+                fp_dict_to_use = fingerprint_cache if fingerprint_cache is not None else None
+                neighbors = find_top_k_nearest_neighbors(
+                    test_monomer1_smiles=input_data.monomer1_smiles,
+                    test_monomer2_smiles=input_data.monomer2_smiles,
+                    test_solvent_smiles=input_data.solvent_smiles,
+                    df_train=train_df,
+                    k=10,
+                    fp_dict=fp_dict_to_use,
+                )
+
+                if neighbors:
+                    print(f"✓ Found {len(neighbors)} nearest neighbors")
+                    nearest_neighbors_list = [
+                        NearestNeighbor(**neighbor) for neighbor in neighbors
+                    ]
+                    lookup_class_value = int(neighbors[0]["predicted_class"])
+                else:
+                    nearest_neighbors_list = []
+                    print("⚠ Warning: find_top_k_nearest_neighbors returned empty list")
+            except Exception as e:
+                print(f"✗ Error: Failed to find nearest neighbors: {e}")
+                import traceback
+                traceback.print_exc()
+                nearest_neighbors_list = None
+
+        m1_data, err = get_or_compute_monomer_data(input_data.monomer1_smiles, base_path, "Monomer 1")
+        if err:
+            cleaned_nearest_neighbors = (
+                clean_json_values(nearest_neighbors_list)
+                if nearest_neighbors_list is not None
+                else None
+            )
             return PreprocessAllOutput(
                 features={},
                 success=False,
-                error="Monomer 1 features not found in cache"
+                error=err,
+                nearest_neighbors=cleaned_nearest_neighbors,
+                lookup_class=lookup_class_value,
             )
         m1_features = extract_monomer_features_for_model(m1_data)
 
-        m2_data = load_monomer_features(input_data.monomer2_smiles, base_path)
-        if not m2_data:
+        m2_data, err = get_or_compute_monomer_data(input_data.monomer2_smiles, base_path, "Monomer 2")
+        if err:
+            cleaned_nearest_neighbors = (
+                clean_json_values(nearest_neighbors_list)
+                if nearest_neighbors_list is not None
+                else None
+            )
             return PreprocessAllOutput(
                 features={},
                 success=False,
-                error="Monomer 2 features not found in cache"
+                error=err,
+                nearest_neighbors=cleaned_nearest_neighbors,
+                lookup_class=lookup_class_value,
             )
         m2_features = extract_monomer_features_for_model(m2_data)
 
@@ -902,97 +819,19 @@ async def preprocess_all(input_data: PreprocessAllInput):
                 if required_feature not in features:
                     features[required_feature] = None
 
-        # Find similar papers using same similarity metric as nearest_neighbors
-        similar_papers_list = None
-        if SIMILARITY_AVAILABLE and (train_df is not None or dataset_df is not None):
-            try:
-                method_emb_tuple = (method_emb["pca_1"], method_emb["pca_2"])
-                polytype_emb_tuple = (polytype_emb["pca_1"], polytype_emb["pca_2"])
-                # Prefer training data (gleiche Basis wie nearest_neighbors),
-                # falle sonst auf das vollständige Dataset zurück.
-                similarity_dataset = train_df if train_df is not None else dataset_df
-                
-                similar_papers = find_similar_papers(
-                    similarity_dataset,
-                    input_data.monomer1_smiles,
-                    input_data.monomer2_smiles,
-                    input_data.solvent_smiles,
-                    input_data.temperature,
-                    method_emb_tuple,
-                    polytype_emb_tuple,
-                    top_n=10
-                )
-                
-                similar_papers_list = format_similarity_output(similar_papers)
-            except Exception as e:
-                print(f"Warning: Failed to find similar papers: {e}")
-                similar_papers_list = None
-
-        # Find nearest neighbors using baseline lookup
-        nearest_neighbors_list = None
-        lookup_class_value = None
-        if BASELINE_LOOKUP_AVAILABLE and train_df is not None:
-            try:
-                # Use precomputed fingerprint cache if available
-                global fingerprint_cache
-                fp_dict_to_use = fingerprint_cache if fingerprint_cache is not None else None
-                neighbors = find_top_k_nearest_neighbors(
-                    test_monomer1_smiles=input_data.monomer1_smiles,
-                    test_monomer2_smiles=input_data.monomer2_smiles,
-                    test_solvent_smiles=input_data.solvent_smiles,
-                    df_train=train_df,
-                    k=10,
-                    fp_dict=fp_dict_to_use
-                )
-                
-                # Convert to Pydantic models
-                if neighbors:
-                    print(f"✓ Found {len(neighbors)} nearest neighbors")
-                    nearest_neighbors_list = [
-                        NearestNeighbor(**neighbor) for neighbor in neighbors
-                    ]
-                    lookup_class_value = int(neighbors[0]['predicted_class'])
-                else:
-                    nearest_neighbors_list = []
-                    print(f"⚠ Warning: find_top_k_nearest_neighbors returned empty list")
-                    print(f"  train_df size: {len(train_df) if train_df is not None else 'None'}")
-                    print(f"  fingerprint_cache size: {len(fingerprint_cache) if fingerprint_cache is not None else 'None'}")
-                    print(f"  test SMILES: m1={input_data.monomer1_smiles[:50]}, m2={input_data.monomer2_smiles[:50]}, s={input_data.solvent_smiles[:50]}")
-            except Exception as e:
-                print(f"✗ Error: Failed to find nearest neighbors: {e}")
-                import traceback
-                traceback.print_exc()
-                nearest_neighbors_list = None
-
-        # Check solubility
-        solubility_issue_flag = None
-        if SOLUBILITY_CHECK_AVAILABLE and solubility_model is not None:
-            try:
-                solubility_issue_flag = get_solubility_issue_flag(
-                    monomer1_smiles=input_data.monomer1_smiles,
-                    monomer2_smiles=input_data.monomer2_smiles,
-                    solvent_smiles=input_data.solvent_smiles,
-                    model=solubility_model
-                )
-            except Exception as e:
-                print(f"Warning: Solubility check failed: {e}")
-                solubility_issue_flag = None
-
-        # Clean all data to remove NaN/Inf values before JSON serialization
-        # For features dict, replace NaN/Inf with 0.0 (model expects float, not None)
-        # For similar_papers, also replace with 0.0 since schema expects float
         cleaned_features = clean_json_values(features, replace_with_zero=True)
-        cleaned_similar_papers = clean_json_values(similar_papers_list, replace_with_zero=True) if similar_papers_list else None
-        cleaned_nearest_neighbors = clean_json_values(nearest_neighbors_list) if nearest_neighbors_list else None
-        
+        cleaned_nearest_neighbors = (
+            clean_json_values(nearest_neighbors_list)
+            if nearest_neighbors_list is not None
+            else None
+        )
+
         return PreprocessAllOutput(
             features=cleaned_features,
             success=True,
             error=None,
-            similar_papers=cleaned_similar_papers,
             nearest_neighbors=cleaned_nearest_neighbors,
             lookup_class=lookup_class_value,
-            solubility_issue=solubility_issue_flag
         )
 
     except Exception as e:
@@ -1291,26 +1130,43 @@ def calculate_monomer_features(smiles: str, base_path: Optional[Path] = None) ->
     coordinates = best_conformer.coordinates.tolist()
     energy = best_conformer.energy
 
-    # Calculate properties
+    # Calculate properties. Each XTB call is guarded individually because some
+    # descriptors (e.g. dipole, fukui) occasionally come back as None for
+    # specific molecules, and we don't want a single missing field to nuke the
+    # whole cache entry.
     xtb = XTB(elements, coordinates)
 
+    def _safe(name, fn):
+        try:
+            return fn()
+        except Exception as e:
+            print(f"⚠ {name} failed for {smiles}: {e}")
+            return None
+
+    dipole = _safe("dipole", xtb.get_dipole)
     properties = {
         "smiles": smiles,
         "best_conformer_coordinates": coordinates,
         "best_conformer_elements": elements,
         "best_conformer_energy": energy,
-        "ip": xtb.get_ip(),
-        "ip_corrected": xtb.get_ip(corrected=True),
-        "ea": xtb.get_ea(),
-        "homo": xtb.get_homo(),
-        "lumo": xtb.get_lumo(),
-        "charges": xtb.get_charges(),
-        "dipole": xtb.get_dipole().tolist(),
-        "global_electrophilicity": xtb.get_global_descriptor("electrophilicity", corrected=True),
-        "global_nucleophilicity": xtb.get_global_descriptor("nucleophilicity", corrected=True),
-        "fukui_electrophilicity": xtb.get_fukui("electrophilicity"),
-        "fukui_nucleophilicity": xtb.get_fukui("nucleophilicity"),
-        "fukui_radical": xtb.get_fukui("radical"),
+        "ip": _safe("ip", xtb.get_ip),
+        "ip_corrected": _safe("ip_corrected", lambda: xtb.get_ip(corrected=True)),
+        "ea": _safe("ea", xtb.get_ea),
+        "homo": _safe("homo", xtb.get_homo),
+        "lumo": _safe("lumo", xtb.get_lumo),
+        "charges": _safe("charges", xtb.get_charges),
+        "dipole": dipole.tolist() if dipole is not None else None,
+        "global_electrophilicity": _safe(
+            "global_electrophilicity",
+            lambda: xtb.get_global_descriptor("electrophilicity", corrected=True),
+        ),
+        "global_nucleophilicity": _safe(
+            "global_nucleophilicity",
+            lambda: xtb.get_global_descriptor("nucleophilicity", corrected=True),
+        ),
+        "fukui_electrophilicity": _safe("fukui_electrophilicity", lambda: xtb.get_fukui("electrophilicity")),
+        "fukui_nucleophilicity": _safe("fukui_nucleophilicity", lambda: xtb.get_fukui("nucleophilicity")),
+        "fukui_radical": _safe("fukui_radical", lambda: xtb.get_fukui("radical")),
     }
 
     # Process dict fields
@@ -1332,6 +1188,29 @@ def calculate_monomer_features(smiles: str, base_path: Optional[Path] = None) ->
         json.dump(properties, f, indent=4)
 
     return properties
+
+
+def get_or_compute_monomer_data(
+    smiles: str,
+    base_path: Path,
+    label: str = "Monomer",
+) -> tuple[Optional[Dict], Optional[str]]:
+    """
+    Return cached monomer features for `smiles`, falling back to a live XTB
+    calculation on cache miss when `morfeus` / `xtb-python` are available.
+
+    Returns (data, error). On success error is None; on failure data is None.
+    """
+    data = load_monomer_features(smiles, base_path)
+    if data is not None:
+        return data, None
+    if not MORFEUS_AVAILABLE:
+        return None, f"{label} not in cache and live XTB unavailable"
+    try:
+        print(f"⚙ Cache miss for {label}; computing features via XTB ({smiles})")
+        return calculate_monomer_features(smiles, base_path), None
+    except Exception as e:
+        return None, f"{label} feature computation failed: {e}"
 
 
 class MonomerPreprocessInput(BaseModel):
@@ -1514,20 +1393,16 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
         
         if base_logp is None:
             raise ValueError(f"Could not determine logP for solvent: {input_data.solvent_smiles}")
-        
-        # Prepare solubility check function
-        solubility_check_func = None
-        if SOLUBILITY_CHECK_AVAILABLE and solubility_model is not None:
-            def check_solubility(monomer1_smiles, monomer2_smiles, solvent_smiles):
-                return get_solubility_issue_flag(
-                    monomer1_smiles=monomer1_smiles,
-                    monomer2_smiles=monomer2_smiles,
-                    solvent_smiles=solvent_smiles,
-                    model=solubility_model
-                )
-            solubility_check_func = check_solubility
-        
-        # Create optimization grid
+
+        # Warm the monomer-feature cache (live XTB on miss) so the inner
+        # optimization loop can rely on cached lookups across the grid.
+        base_path = Path(__file__).parent / "molecule_properties"
+        for label, smi in (("Monomer 1", input_data.monomer1_smiles),
+                           ("Monomer 2", input_data.monomer2_smiles)):
+            _, err = get_or_compute_monomer_data(smi, base_path, label)
+            if err:
+                raise HTTPException(status_code=400, detail=err)
+
         predictions = create_optimization_grid(
             monomer1_smiles=input_data.monomer1_smiles,
             monomer2_smiles=input_data.monomer2_smiles,
@@ -1544,7 +1419,6 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
             calculate_solvent_features_func=calculate_solvent_features,
             temperature_step=input_data.temperature_step,
             n_solvents=input_data.n_solvents,
-            solubility_check_func=solubility_check_func
         )
         
         if not predictions:
