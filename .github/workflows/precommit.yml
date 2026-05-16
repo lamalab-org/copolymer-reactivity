@@ -1,0 +1,20 @@
+name: pre-commit
+
+# Run the same hooks devs run locally (.pre-commit-config.yaml). Catches
+# style drift before review — no relying on humans to remember `black .`.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: pre-commit/action@v3.0.1
