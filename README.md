@@ -47,7 +47,7 @@ pip install -e .            # core deps; add [extraction]/[training]/[testing] a
 
 ## Model facts
 
-The model artifact is the source of truth for class definitions, feature schema, and metrics — query it instead of trusting prose:
+The model artifact is the source of truth for class definitions, feature schema, and metrics — query it using:
 
 ```bash
 curl http://localhost:8000/model/info                  # while the API is running
@@ -68,7 +68,6 @@ cat copol_prediction/artifacts/model_bundle/all_metrics.txt
 ```
 
 
-```bibtex
 
 ## License
 
