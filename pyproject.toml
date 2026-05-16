@@ -53,6 +53,17 @@ testing = [
     # Needed by tests/test_api_parity.py — TestClient uses httpx.
     "fastapi>=0.104.0",
     "httpx>=0.25",
+    # The legacy tests under tests/ import copolextractor.utils and
+    # copolextractor.analyzer, which pull in backoff/pubchempy/openai/
+    # thefuzz/pint at module load time. Without these, pytest can't even
+    # collect those modules and the run fails with ModuleNotFoundError.
+    "backoff",
+    "pubchempy",
+    "diskcache",
+    "pyyaml",
+    "openai",
+    "thefuzz",
+    "pint",
 ]
 
 [tool.setuptools.packages.find]

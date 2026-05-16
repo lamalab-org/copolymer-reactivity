@@ -14,7 +14,7 @@ import sys
 import json
 import hashlib
 import math
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Any, Tuple
 from datetime import datetime
 from pathlib import Path
 
@@ -1239,7 +1239,7 @@ def get_or_compute_monomer_data(
     smiles: str,
     base_path: Path,
     label: str = "Monomer",
-) -> tuple[Optional[Dict], Optional[str]]:
+) -> Tuple[Optional[Dict], Optional[str]]:
     """
     Return cached monomer features for `smiles`, falling back to a live XTB
     calculation on cache miss when `morfeus` / `xtb-python` are available.
