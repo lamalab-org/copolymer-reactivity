@@ -1,10 +1,11 @@
 import os
-import yaml
-import copolextractor.prompter as prompter
-import copolextractor.analyzer as az
 import time
+
+import yaml
 from openai import OpenAI
 
+import copolextractor.analyzer as az
+import copolextractor.prompter as prompter
 
 start = time.time()
 
@@ -27,7 +28,7 @@ the PDF. Ignore these. In each paper there could be multiple different reaction 
 reaction conditions. The reaction constants for the copolymerization with the monomer pair is the most
 important information. Be careful with numbers and do not miss the decimal points.
 If there are polymerizations without these constants, ignore these.
-From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
+From the PDF, extract the polymerization information from each polymerization and report it in valid json format.
 Don't use any abbreviations, always use the whole word.
 Try to keep the string short. Exclude comments out of the json output_2. Return one json object. Stick to the
 given output_2 datatype (string, or float).
@@ -81,13 +82,11 @@ for i, filename in enumerate(input_files):
         file_path = os.path.join(input_folder, filename)
         with open(file_path, "r", encoding="utf-8") as file:
             file_content = file.read()
-        output, input_token, output_token, number_of_call = (
-            prompter.repeated_call_model(
-                file_content,
-                prompt_template,
-                max_section_length,
-                prompter.call_openai_chucked,
-            )
+        output, input_token, output_token, number_of_call = prompter.repeated_call_model(
+            file_content,
+            prompt_template,
+            max_section_length,
+            prompter.call_openai_chucked,
         )
         total_input_tokens += input_token
         total_output_tokens += output_token
@@ -105,13 +104,11 @@ for i, filename in enumerate(input_files):
             if rate > 0.3 or output is None:
                 print(f"model call number {a + 2} of {filename}")
                 updated_prompt = prompter.update_prompt_chucked(prompt_template, output)
-                output, input_token, output_token, number_of_call = (
-                    prompter.repeated_call_model(
-                        file_content,
-                        prompt_template,
-                        max_section_length,
-                        prompter.call_openai_chucked,
-                    )
+                output, input_token, output_token, number_of_call = prompter.repeated_call_model(
+                    file_content,
+                    prompt_template,
+                    max_section_length,
+                    prompter.call_openai_chucked,
                 )
                 print("Output: ", output)
                 output_name = os.path.join(output_folder, f"output_data{i + 1}.yaml")

@@ -10,8 +10,13 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
+      # Whitespace / EOF on source files only — the repo has ~7k JSON data
+      # files under data_extraction/output and artifacts/, all of which
+      # are generated, none of which should be rewritten by a formatter.
       - id: trailing-whitespace
+        types_or: [python, yaml, toml, markdown]
       - id: end-of-file-fixer
+        types_or: [python, yaml, toml, markdown]
       - id: check-yaml
       - id: check-toml
       - id: check-merge-conflict

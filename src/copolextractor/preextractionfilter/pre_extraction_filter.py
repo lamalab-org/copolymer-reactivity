@@ -5,12 +5,8 @@ from __future__ import annotations
 import os
 from typing import Union
 
-from copolextractor.preextractionfilter.extract_PDF_quality_GPT4 import (
-    main as pdf_main,
-)
-from copolextractor.preextractionfilter.precision_prediction_randomforest import (
-    main as rf_main,
-)
+from copolextractor.preextractionfilter.extract_PDF_quality_GPT4 import main as pdf_main
+from copolextractor.preextractionfilter.precision_prediction_randomforest import main as rf_main
 
 
 def run_combined_pipeline(
@@ -47,10 +43,7 @@ def run_combined_pipeline(
             selected_entries_path=input_file_xgboost_filter,
             output_file=output_file,
         )
-        print(
-            "PDF processing and scoring completed. Results saved to "
-            f"{output_file}"
-        )
+        print("PDF processing and scoring completed. Results saved to " f"{output_file}")
     else:
         print("Skipping PDF quality scoring (disabled via configuration).")
 
@@ -106,4 +99,3 @@ def main(
         threshold_xgboost_model,
         enable_pdf_processing,
     )
-

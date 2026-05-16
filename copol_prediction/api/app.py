@@ -9,21 +9,21 @@ Usage:
     uvicorn app:app --reload --host 0.0.0.0 --port 8000
 """
 
+import hashlib
+import json
+import math
 import os
 import sys
-import json
-import hashlib
-import math
 from contextlib import asynccontextmanager
-from typing import List, Dict, Optional, Any, Tuple
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # FastAPI dependencies
 try:
     from fastapi import FastAPI, HTTPException, status
-    from fastapi.responses import JSONResponse
     from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import JSONResponse
     from pydantic import BaseModel, ConfigDict, Field
 except ImportError:
     print("Error: FastAPI not installed. Install with: pip install fastapi uvicorn")
@@ -32,10 +32,11 @@ except ImportError:
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from copolpredictor.inference import CopolymerPredictor
+import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
-import pandas as pd
+
+from copolpredictor.inference import CopolymerPredictor
 
 # Canonical class -> human-readable label mapping used across all endpoints.
 CLASS_LABELS: Dict[int, str] = {
@@ -47,6 +48,7 @@ CLASS_LABELS: Dict[int, str] = {
 # Import baseline lookup module
 try:
     from baseline_lookup import find_top_k_nearest_neighbors
+
     BASELINE_LOOKUP_AVAILABLE = True
 except ImportError:
     BASELINE_LOOKUP_AVAILABLE = False
@@ -55,15 +57,18 @@ except ImportError:
 # Import reaction optimization module
 try:
     from reaction_optimization import create_optimization_grid
+
     REACTION_OPTIMIZATION_AVAILABLE = True
 except ImportError:
     REACTION_OPTIMIZATION_AVAILABLE = False
-    print("Warning: reaction_optimization module not available. Reaction optimization feature disabled.")
+    print(
+        "Warning: reaction_optimization module not available. Reaction optimization feature disabled."
+    )
 
 # Import monomer feature calculation functions
 try:
-    from morfeus.conformer import ConformerEnsemble
     import qcengine
+    from morfeus.conformer import ConformerEnsemble
 
     # Try to import patched XTB class, fall back to original if not available
     try:
@@ -95,11 +100,12 @@ except ImportError:
 # Helper Functions
 # ============================================================================
 
+
 def clean_json_values(obj: Any, replace_with_zero: bool = False) -> Any:
     """
     Recursively clean NaN, Inf, and -Inf values from dictionaries/lists
-    to make them JSON-serializable. 
-    
+    to make them JSON-serializable.
+
     Args:
         obj: Object to clean
         replace_with_zero: If True, replace NaN/Inf with 0.0 instead of None
@@ -129,8 +135,10 @@ def clean_json_values(obj: Any, replace_with_zero: bool = False) -> Any:
 # API Models (Request/Response schemas)
 # ============================================================================
 
+
 class PredictionInput(BaseModel):
     """Input schema for single prediction."""
+
     features: Dict[str, Optional[float]] = Field(
         ...,
         description="Dictionary of feature values (null is allowed; the model treats missing features as NaN/0)",
@@ -158,20 +166,21 @@ class PredictionInput(BaseModel):
                 "solvent_logp": -0.0014,
                 "solvent_FractionCSP3": 1.0,
             }
-        }
+        },
     )
 
 
 class BatchPredictionInput(BaseModel):
     """Input schema for batch prediction."""
+
     samples: List[Dict[str, Optional[float]]] = Field(
-        ...,
-        description="List of feature dictionaries (null values are allowed)"
+        ..., description="List of feature dictionaries (null values are allowed)"
     )
 
 
 class NearestNeighbor(BaseModel):
     """Nearest neighbor data point from training database."""
+
     rank: int = Field(..., description="Ranking (1-10)")
     similarity: float = Field(..., description="Similarity score (0-1), higher is more similar")
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)", alias="class")
@@ -193,16 +202,20 @@ class NearestNeighbor(BaseModel):
 
 class PredictionOutput(BaseModel):
     """Output schema for prediction."""
+
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
     predicted_class_name: str = Field(..., description="Human-readable class label")
     class_probabilities: Dict[str, float] = Field(..., description="Probability for each class")
     confidence: float = Field(..., description="Prediction confidence (0-1)")
-    below_threshold: bool = Field(False, description="Whether confidence is below the 0.7 threshold")
+    below_threshold: bool = Field(
+        False, description="Whether confidence is below the 0.7 threshold"
+    )
     timestamp: str = Field(..., description="Prediction timestamp")
 
 
 class BatchPredictionOutput(BaseModel):
     """Output schema for batch prediction."""
+
     predictions: List[PredictionOutput]
     total_samples: int
     timestamp: str
@@ -210,17 +223,21 @@ class BatchPredictionOutput(BaseModel):
 
 class ModelInfo(BaseModel):
     """Model information schema."""
+
     model_version: str
     n_features: int
     feature_names: List[str]
     class_labels: List[int]
-    class_descriptions: Dict[str, str] = Field(..., description="Human-readable label for each class")
+    class_descriptions: Dict[str, str] = Field(
+        ..., description="Human-readable label for each class"
+    )
     created_at: str
     model_path: str
 
 
 class HealthCheck(BaseModel):
     """Health check response schema."""
+
     status: str
     timestamp: str
     model_loaded: bool
@@ -228,6 +245,7 @@ class HealthCheck(BaseModel):
 
 class SolventPreprocessOutput(BaseModel):
     """Output schema for solvent preprocessing."""
+
     solvent_smiles: Optional[str] = Field(None, description="SMILES representation of the solvent")
     features: Dict[str, Optional[float]] = Field(..., description="Calculated solvent features")
     success: bool = Field(..., description="Whether preprocessing was successful")
@@ -236,6 +254,7 @@ class SolventPreprocessOutput(BaseModel):
 
 class MonomerPreprocessOutput(BaseModel):
     """Output schema for monomer preprocessing."""
+
     monomer_smiles: Optional[str] = Field(None, description="SMILES representation of the monomer")
     features: Dict[str, Optional[float]] = Field(..., description="Calculated monomer features")
     success: bool = Field(..., description="Whether preprocessing was successful")
@@ -245,37 +264,51 @@ class MonomerPreprocessOutput(BaseModel):
 
 class PreprocessAllInput(BaseModel):
     """Input schema for combined preprocessing."""
+
     monomer1_smiles: str = Field(..., description="SMILES string of monomer 1")
     monomer2_smiles: str = Field(..., description="SMILES string of monomer 2")
     solvent_smiles: str = Field(..., description="SMILES string of solvent")
-    method: str = Field(default='solvent', description="Polymerisation method")
-    polytype: str = Field(default='free radical', description="Polymerisation type")
+    method: str = Field(default="solvent", description="Polymerisation method")
+    polytype: str = Field(default="free radical", description="Polymerisation type")
     temperature: float = Field(default=60.0, description="Temperature in Celsius")
 
 
 class OptimizeReactionInput(BaseModel):
     """Input schema for reaction optimization."""
+
     monomer1_smiles: str = Field(..., description="SMILES string of monomer 1")
     monomer2_smiles: str = Field(..., description="SMILES string of monomer 2")
     solvent_smiles: str = Field(..., description="SMILES string of base solvent")
-    method: str = Field(default='solvent', description="Polymerisation method")
-    polytype: str = Field(default='free radical', description="Polymerisation type")
+    method: str = Field(default="solvent", description="Polymerisation method")
+    polytype: str = Field(default="free radical", description="Polymerisation type")
     temperature: float = Field(default=60.0, description="Base temperature in Celsius")
-    temperature_step: float = Field(default=20.0, description="Temperature step size in Celsius (default: 20.0)")
+    temperature_step: float = Field(
+        default=20.0, description="Temperature step size in Celsius (default: 20.0)"
+    )
     n_solvents: int = Field(default=3, description="Number of solvents to use (default: 3)")
 
 
 class PreprocessAllOutput(BaseModel):
     """Output schema for combined preprocessing."""
-    features: Dict[str, Optional[float]] = Field(..., description="All calculated features ready for prediction. Individual values may be null when the underlying XTB descriptor could not be computed for a given monomer.")
+
+    features: Dict[str, Optional[float]] = Field(
+        ...,
+        description="All calculated features ready for prediction. Individual values may be null when the underlying XTB descriptor could not be computed for a given monomer.",
+    )
     success: bool = Field(..., description="Whether preprocessing was successful")
     error: Optional[str] = Field(None, description="Error message if preprocessing failed")
-    nearest_neighbors: Optional[List[NearestNeighbor]] = Field(None, description="Top 10 nearest data points from training database (baseline lookup)")
-    lookup_class: Optional[int] = Field(None, description="Predicted class from the Lookup (nearest-neighbor) model (top-1 neighbor)")
+    nearest_neighbors: Optional[List[NearestNeighbor]] = Field(
+        None, description="Top 10 nearest data points from training database (baseline lookup)"
+    )
+    lookup_class: Optional[int] = Field(
+        None,
+        description="Predicted class from the Lookup (nearest-neighbor) model (top-1 neighbor)",
+    )
 
 
 class OptimizationPrediction(BaseModel):
     """Single prediction result in optimization grid."""
+
     temperature: float = Field(..., description="Temperature in Celsius")
     solvent_smiles: str = Field(..., description="Solvent SMILES")
     solvent_name: str = Field(..., description="Solvent name")
@@ -288,9 +321,12 @@ class OptimizationPrediction(BaseModel):
 
 class OptimizeReactionOutput(BaseModel):
     """Output schema for reaction optimization."""
+
     success: bool = Field(..., description="Whether optimization was successful")
     error: Optional[str] = Field(None, description="Error message if optimization failed")
-    predictions: List[OptimizationPrediction] = Field(..., description="3x3 grid of predictions (3 temperatures × 3 solvents)")
+    predictions: List[OptimizationPrediction] = Field(
+        ..., description="3x3 grid of predictions (3 temperatures × 3 solvents)"
+    )
     base_temperature: float = Field(..., description="Base temperature used")
     temperature_step: float = Field(..., description="Temperature step size used")
     base_solvent_logp: float = Field(..., description="Base solvent logP value")
@@ -299,11 +335,16 @@ class OptimizeReactionOutput(BaseModel):
 
 class DOICheckInput(BaseModel):
     """Input schema for DOI check."""
-    doi: str = Field(..., description="DOI to check (e.g., '10.1016/0014-3057(84)90010-7' or 'https://doi.org/10.1016/0014-3057(84)90010-7')")
+
+    doi: str = Field(
+        ...,
+        description="DOI to check (e.g., '10.1016/0014-3057(84)90010-7' or 'https://doi.org/10.1016/0014-3057(84)90010-7')",
+    )
 
 
 class DOICheckOutput(BaseModel):
     """Output schema for DOI check."""
+
     doi: str = Field(..., description="The queried DOI")
     exists: bool = Field(..., description="Whether the DOI exists in the dataset")
     normalized_doi: str = Field(..., description="The normalized DOI used for matching")
@@ -351,6 +392,7 @@ fingerprint_cache: Optional[Dict] = None
 # Lifespan (startup / shutdown)
 # ============================================================================
 
+
 @asynccontextmanager
 async def lifespan(app):
     """Load model, embeddings, and dataset on startup; cleanup on shutdown."""
@@ -364,7 +406,7 @@ async def lifespan(app):
 
         if method_emb_path.exists():
             try:
-                with open(method_emb_path, 'r') as f:
+                with open(method_emb_path, "r") as f:
                     method_embeddings = json.load(f)
                 print(f"✓ Loaded {len(method_embeddings)} method embeddings")
             except json.JSONDecodeError as e:
@@ -379,7 +421,7 @@ async def lifespan(app):
 
         if polytype_emb_path.exists():
             try:
-                with open(polytype_emb_path, 'r') as f:
+                with open(polytype_emb_path, "r") as f:
                     polytype_embeddings = json.load(f)
                 print(f"✓ Loaded {len(polytype_embeddings)} polytype embeddings")
             except json.JSONDecodeError as e:
@@ -442,48 +484,71 @@ async def lifespan(app):
                     neg_path = api_dir / neg_path
                 if neg_path.exists():
                     df_neg = pd.read_csv(neg_path)
-                    if 'Class' in df_neg.columns:
-                        df_neg = df_neg.rename(columns={'Class': 'r_product_class'})
-                    df_neg['r_product_class'] = df_neg['r_product_class'].astype(int)
+                    if "Class" in df_neg.columns:
+                        df_neg = df_neg.rename(columns={"Class": "r_product_class"})
+                    df_neg["r_product_class"] = df_neg["r_product_class"].astype(int)
                     train_df = pd.concat([train_df, df_neg], ignore_index=True)
-                    print(f"✓ Added {len(df_neg)} negative data points to lookup pool ({len(train_df)} total)")
+                    print(
+                        f"✓ Added {len(df_neg)} negative data points to lookup pool ({len(train_df)} total)"
+                    )
                 else:
                     print(f"⚠ Warning: Negative data not found at {neg_path}")
-                
+
                 # Precompute fingerprints for all unique SMILES in training data
                 if BASELINE_LOOKUP_AVAILABLE:
                     try:
-                        from baseline_lookup import load_fingerprint_cache, save_fingerprint_cache, compute_fingerprints_for_smiles
-                        
+                        from baseline_lookup import (
+                            compute_fingerprints_for_smiles,
+                            load_fingerprint_cache,
+                            save_fingerprint_cache,
+                        )
+
                         print("Loading fingerprint cache...")
                         fingerprint_cache = load_fingerprint_cache()
-                        
+
                         # Get all unique SMILES from training data
-                        unique_monomer1 = set(train_df['monomer1_smiles'].dropna().unique())
-                        unique_monomer2 = set(train_df['monomer2_smiles'].dropna().unique())
-                        unique_solvents = set(train_df['solvent_smiles'].dropna().unique())
-                        all_unique_smiles = list(unique_monomer1 | unique_monomer2 | unique_solvents)
-                        
+                        unique_monomer1 = set(train_df["monomer1_smiles"].dropna().unique())
+                        unique_monomer2 = set(train_df["monomer2_smiles"].dropna().unique())
+                        unique_solvents = set(train_df["solvent_smiles"].dropna().unique())
+                        all_unique_smiles = list(
+                            unique_monomer1 | unique_monomer2 | unique_solvents
+                        )
+
                         # Compute fingerprints for any missing SMILES
                         if fingerprint_cache is None:
-                            print("Fingerprint cache not found. Computing fingerprints for all SMILES...")
+                            print(
+                                "Fingerprint cache not found. Computing fingerprints for all SMILES..."
+                            )
                             fingerprint_cache = compute_fingerprints_for_smiles(all_unique_smiles)
                             save_fingerprint_cache(fingerprint_cache)
-                            print(f"✓ Computed and cached fingerprints for {len(fingerprint_cache)} SMILES")
+                            print(
+                                f"✓ Computed and cached fingerprints for {len(fingerprint_cache)} SMILES"
+                            )
                         else:
                             # Check if we need to compute any missing fingerprints
-                            missing_smiles = [s for s in all_unique_smiles if s not in fingerprint_cache]
+                            missing_smiles = [
+                                s for s in all_unique_smiles if s not in fingerprint_cache
+                            ]
                             if missing_smiles:
-                                print(f"Computing fingerprints for {len(missing_smiles)} missing SMILES...")
-                                new_fps = compute_fingerprints_for_smiles(missing_smiles, cache_dict=fingerprint_cache)
+                                print(
+                                    f"Computing fingerprints for {len(missing_smiles)} missing SMILES..."
+                                )
+                                new_fps = compute_fingerprints_for_smiles(
+                                    missing_smiles, cache_dict=fingerprint_cache
+                                )
                                 fingerprint_cache.update(new_fps)
                                 save_fingerprint_cache(fingerprint_cache)
-                                print(f"✓ Updated cache with {len(missing_smiles)} new fingerprints")
+                                print(
+                                    f"✓ Updated cache with {len(missing_smiles)} new fingerprints"
+                                )
                             else:
-                                print(f"✓ Fingerprint cache loaded ({len(fingerprint_cache)} entries)")
+                                print(
+                                    f"✓ Fingerprint cache loaded ({len(fingerprint_cache)} entries)"
+                                )
                     except Exception as e:
                         print(f"⚠ Warning: Failed to load/precompute fingerprint cache: {e}")
                         import traceback
+
                         traceback.print_exc()
                         fingerprint_cache = None
             else:
@@ -496,7 +561,6 @@ async def lifespan(app):
             train_df = None
     else:
         train_df = None
-
 
     yield
 
@@ -531,6 +595,7 @@ app.add_middleware(
 # API Endpoints
 # ============================================================================
 
+
 @app.get("/", response_model=Dict[str, str])
 async def root():
     """Root endpoint with API information."""
@@ -538,7 +603,7 @@ async def root():
         "message": "Copolymerization Prediction API",
         "version": "1.0.0",
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
     }
 
 
@@ -548,7 +613,7 @@ async def health_check():
     return HealthCheck(
         status="healthy" if predictor else "model_not_loaded",
         timestamp=datetime.now().isoformat(),
-        model_loaded=predictor is not None
+        model_loaded=predictor is not None,
     )
 
 
@@ -557,8 +622,7 @@ async def get_model_info():
     """Get information about the loaded model."""
     if not predictor:
         raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Model not loaded"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Model not loaded"
         )
 
     return ModelInfo(
@@ -567,8 +631,8 @@ async def get_model_info():
         feature_names=predictor.features,
         class_labels=predictor.class_labels,
         class_descriptions={f"class_{k}": v for k, v in CLASS_LABELS.items()},
-        created_at=predictor.metadata.get('created_at', 'unknown'),
-        model_path=MODEL_PATH
+        created_at=predictor.metadata.get("created_at", "unknown"),
+        model_path=MODEL_PATH,
     )
 
 
@@ -585,32 +649,27 @@ async def predict(input_data: PredictionInput):
     """
     if not predictor:
         raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Model not loaded"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Model not loaded"
         )
 
     try:
         results = predictor.predict_with_confidence(input_data.features)
 
-        pred_class = int(results['predictions'][0])
-        proba = results['probabilities'][0]
-        confidence = float(results['confidence'][0])
+        pred_class = int(results["predictions"][0])
+        proba = results["probabilities"][0]
+        confidence = float(results["confidence"][0])
 
         return PredictionOutput(
             predicted_class=pred_class,
             predicted_class_name=CLASS_LABELS[pred_class],
-            class_probabilities={
-                f"class_{i}": float(proba[i])
-                for i in range(len(proba))
-            },
+            class_probabilities={f"class_{i}": float(proba[i]) for i in range(len(proba))},
             confidence=confidence,
             below_threshold=confidence < 0.7,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Prediction failed: {str(e)}"
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Prediction failed: {str(e)}"
         )
 
 
@@ -627,8 +686,7 @@ async def predict_batch(input_data: BatchPredictionInput):
     """
     if not predictor:
         raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Model not loaded"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Model not loaded"
         )
 
     try:
@@ -637,32 +695,30 @@ async def predict_batch(input_data: BatchPredictionInput):
         for sample in input_data.samples:
             results = predictor.predict_with_confidence(sample)
 
-            pred_class = int(results['predictions'][0])
-            proba = results['probabilities'][0]
-            confidence = float(results['confidence'][0])
+            pred_class = int(results["predictions"][0])
+            proba = results["probabilities"][0]
+            confidence = float(results["confidence"][0])
 
-            predictions.append(PredictionOutput(
-                predicted_class=pred_class,
-                predicted_class_name=CLASS_LABELS[pred_class],
-                class_probabilities={
-                    f"class_{i}": float(proba[i])
-                    for i in range(len(proba))
-                },
-                confidence=confidence,
-                below_threshold=confidence < 0.7,
-                timestamp=datetime.now().isoformat()
-            ))
+            predictions.append(
+                PredictionOutput(
+                    predicted_class=pred_class,
+                    predicted_class_name=CLASS_LABELS[pred_class],
+                    class_probabilities={f"class_{i}": float(proba[i]) for i in range(len(proba))},
+                    confidence=confidence,
+                    below_threshold=confidence < 0.7,
+                    timestamp=datetime.now().isoformat(),
+                )
+            )
 
         return BatchPredictionOutput(
             predictions=predictions,
             total_samples=len(predictions),
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Batch prediction failed: {str(e)}"
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Batch prediction failed: {str(e)}"
         )
 
 
@@ -671,20 +727,16 @@ async def get_required_features():
     """Get list of required features for prediction."""
     if not predictor:
         raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Model not loaded"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Model not loaded"
         )
 
     try:
         features = predictor.features if predictor.features else []
-        return {
-            "required_features": features,
-            "n_features": len(features) if features else 0
-        }
+        return {"required_features": features, "n_features": len(features) if features else 0}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving features: {str(e)}"
+            detail=f"Error retrieving features: {str(e)}",
         )
 
 
@@ -716,9 +768,7 @@ async def preprocess_all(input_data: PreprocessAllInput):
 
                 if neighbors:
                     print(f"✓ Found {len(neighbors)} nearest neighbors")
-                    nearest_neighbors_list = [
-                        NearestNeighbor(**neighbor) for neighbor in neighbors
-                    ]
+                    nearest_neighbors_list = [NearestNeighbor(**neighbor) for neighbor in neighbors]
                     lookup_class_value = int(neighbors[0]["predicted_class"])
                 else:
                     nearest_neighbors_list = []
@@ -726,10 +776,13 @@ async def preprocess_all(input_data: PreprocessAllInput):
             except Exception as e:
                 print(f"✗ Error: Failed to find nearest neighbors: {e}")
                 import traceback
+
                 traceback.print_exc()
                 nearest_neighbors_list = None
 
-        m1_data, err = get_or_compute_monomer_data(input_data.monomer1_smiles, base_path, "Monomer 1")
+        m1_data, err = get_or_compute_monomer_data(
+            input_data.monomer1_smiles, base_path, "Monomer 1"
+        )
         if err:
             cleaned_nearest_neighbors = (
                 clean_json_values(nearest_neighbors_list)
@@ -745,7 +798,9 @@ async def preprocess_all(input_data: PreprocessAllInput):
             )
         m1_features = extract_monomer_features_for_model(m1_data)
 
-        m2_data, err = get_or_compute_monomer_data(input_data.monomer2_smiles, base_path, "Monomer 2")
+        m2_data, err = get_or_compute_monomer_data(
+            input_data.monomer2_smiles, base_path, "Monomer 2"
+        )
         if err:
             cleaned_nearest_neighbors = (
                 clean_json_values(nearest_neighbors_list)
@@ -765,9 +820,7 @@ async def preprocess_all(input_data: PreprocessAllInput):
         solvent_features = calculate_solvent_features(input_data.solvent_smiles)
         if any(v is None for v in solvent_features.values()):
             return PreprocessAllOutput(
-                features={},
-                success=False,
-                error="Failed to calculate solvent features"
+                features={}, success=False, error="Failed to calculate solvent features"
             )
 
         # Get embeddings
@@ -775,7 +828,7 @@ async def preprocess_all(input_data: PreprocessAllInput):
             return PreprocessAllOutput(
                 features={},
                 success=False,
-                error=f"Method '{input_data.method}' not found in embeddings"
+                error=f"Method '{input_data.method}' not found in embeddings",
             )
         method_emb = method_embeddings[input_data.method]
 
@@ -783,7 +836,7 @@ async def preprocess_all(input_data: PreprocessAllInput):
             return PreprocessAllOutput(
                 features={},
                 success=False,
-                error=f"Polytype '{input_data.polytype}' not found in embeddings"
+                error=f"Polytype '{input_data.polytype}' not found in embeddings",
             )
         polytype_emb = polytype_embeddings[input_data.polytype]
 
@@ -795,7 +848,7 @@ async def preprocess_all(input_data: PreprocessAllInput):
             method_emb=method_emb,
             temperature=input_data.temperature,
         )
-        
+
         # If model is loaded, ensure all required features are present
         # Fill missing features with None if model requires them
         if predictor and predictor.features:
@@ -820,13 +873,11 @@ async def preprocess_all(input_data: PreprocessAllInput):
 
     except Exception as e:
         import traceback
+
         error_detail = f"Preprocessing failed: {str(e)}"
         print(f"Error in preprocess_all: {error_detail}")
         traceback.print_exc()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=error_detail
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_detail)
 
 
 def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
@@ -850,7 +901,7 @@ def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
             "solvent_logP": None,
             "solvent_TPSA": None,
             "solvent_HBD": None,
-            "solvent_FractionCSP3": None
+            "solvent_FractionCSP3": None,
         }
 
     try:
@@ -860,21 +911,21 @@ def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
                 "solvent_logP": None,
                 "solvent_TPSA": None,
                 "solvent_HBD": None,
-                "solvent_FractionCSP3": None
+                "solvent_FractionCSP3": None,
             }
 
         return {
             "solvent_logP": float(Descriptors.MolLogP(mol)),
             "solvent_TPSA": float(rdMolDescriptors.CalcTPSA(mol)),
             "solvent_HBD": float(rdMolDescriptors.CalcNumHBD(mol)),
-            "solvent_FractionCSP3": float(Descriptors.FractionCSP3(mol))
+            "solvent_FractionCSP3": float(Descriptors.FractionCSP3(mol)),
         }
     except Exception as e:
         return {
             "solvent_logP": None,
             "solvent_TPSA": None,
             "solvent_HBD": None,
-            "solvent_FractionCSP3": None
+            "solvent_FractionCSP3": None,
         }
 
 
@@ -888,6 +939,7 @@ def canonicalize_smiles(smiles: str) -> str:
 
 class SolventPreprocessInput(BaseModel):
     """Input schema for solvent preprocessing."""
+
     solvent_smiles: str = Field(..., description="SMILES string of the solvent")
 
 
@@ -914,20 +966,17 @@ async def preprocess_solvent(input_data: SolventPreprocessInput):
                 solvent_smiles=solvent_smiles,
                 features=features,
                 success=False,
-                error="Failed to calculate some features from SMILES"
+                error="Failed to calculate some features from SMILES",
             )
 
         return SolventPreprocessOutput(
-            solvent_smiles=solvent_smiles,
-            features=features,
-            success=True,
-            error=None
+            solvent_smiles=solvent_smiles, features=features, success=True, error=None
         )
 
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Solvent preprocessing failed: {str(e)}"
+            detail=f"Solvent preprocessing failed: {str(e)}",
         )
 
 
@@ -944,8 +993,7 @@ async def get_method_embeddings(method_name: str):
     """
     if method_name not in method_embeddings:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Method '{method_name}' not found."
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Method '{method_name}' not found."
         )
 
     return method_embeddings[method_name]
@@ -964,8 +1012,7 @@ async def get_polytype_embeddings(polytype_name: str):
     """
     if polytype_name not in polytype_embeddings:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Polytype '{polytype_name}' not found."
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Polytype '{polytype_name}' not found."
         )
 
     return polytype_embeddings[polytype_name]
@@ -973,7 +1020,7 @@ async def get_polytype_embeddings(polytype_name: str):
 
 def get_smiles_md5(smiles: str) -> str:
     """Create MD5 hash from SMILES string for consistent filename."""
-    return hashlib.md5(smiles.encode('utf-8')).hexdigest()
+    return hashlib.md5(smiles.encode("utf-8")).hexdigest()
 
 
 def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Optional[Dict]:
@@ -994,14 +1041,19 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
 
     if file_path.exists():
         try:
-            with open(file_path, 'r') as f:
+            with open(file_path, "r") as f:
                 data = json.load(f)
 
-            for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
+            for key in [
+                "charges",
+                "fukui_electrophilicity",
+                "fukui_nucleophilicity",
+                "fukui_radical",
+            ]:
                 if key in data and isinstance(data[key], dict) and data[key]:
-                    data[key + '_min'] = min(data[key].values())
-                    data[key + '_max'] = max(data[key].values())
-                    data[key + '_mean'] = sum(data[key].values()) / len(data[key].values())
+                    data[key + "_min"] = min(data[key].values())
+                    data[key + "_max"] = max(data[key].values())
+                    data[key + "_mean"] = sum(data[key].values()) / len(data[key].values())
 
             return data
         except Exception as e:
@@ -1018,7 +1070,7 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
     try:
         for candidate_path in base_path.glob("*.json"):
             try:
-                with open(candidate_path, 'r') as f:
+                with open(candidate_path, "r") as f:
                     candidate_data = json.load(f)
             except Exception:
                 continue
@@ -1030,12 +1082,22 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
             try:
                 if canonicalize_smiles(stored_smiles) == target_canonical:
                     # Found a match; post-process fields as above
-                    for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
-                        if key in candidate_data and isinstance(candidate_data[key], dict) and candidate_data[key]:
-                            candidate_data[key + '_min'] = min(candidate_data[key].values())
-                            candidate_data[key + '_max'] = max(candidate_data[key].values())
-                            candidate_data[key + '_mean'] = sum(candidate_data[key].values()) / len(
-                                candidate_data[key].values())
+                    for key in [
+                        "charges",
+                        "fukui_electrophilicity",
+                        "fukui_nucleophilicity",
+                        "fukui_radical",
+                    ]:
+                        if (
+                            key in candidate_data
+                            and isinstance(candidate_data[key], dict)
+                            and candidate_data[key]
+                        ):
+                            candidate_data[key + "_min"] = min(candidate_data[key].values())
+                            candidate_data[key + "_max"] = max(candidate_data[key].values())
+                            candidate_data[key + "_mean"] = sum(candidate_data[key].values()) / len(
+                                candidate_data[key].values()
+                            )
                     return candidate_data
             except Exception:
                 continue
@@ -1102,6 +1164,7 @@ def assemble_model_features(
     producing meaningless predictions. This helper is the single source of
     truth so the same vector is built from /preprocess_all and /optimize_reaction.
     """
+
     def _delta_hl(homo: Optional[float], lumo: Optional[float]) -> Optional[float]:
         if homo is None or lumo is None:
             return None
@@ -1165,19 +1228,17 @@ def calculate_monomer_features(smiles: str, base_path: Optional[Path] = None) ->
     ce.sort()
 
     try:
-        ce.optimize_qc_engine(
-            program="xtb", model={"method": "GFN-FF"}, procedure="geometric"
-        )
+        ce.optimize_qc_engine(program="xtb", model={"method": "GFN-FF"}, procedure="geometric")
     except Exception as e:
         print(f"GFN-FF optimization failed for {smiles}: {e}")
-        ce = ConformerEnsemble.from_rdkit(smiles, optimize="MMFF94", random_seed=CONFORMER_RANDOM_SEED)
+        ce = ConformerEnsemble.from_rdkit(
+            smiles, optimize="MMFF94", random_seed=CONFORMER_RANDOM_SEED
+        )
         ce.prune_rmsd()
         ce.sort()
 
     try:
-        ce.optimize_qc_engine(
-            program="xtb", model={"method": "GFN2-xTB"}, procedure="geometric"
-        )
+        ce.optimize_qc_engine(program="xtb", model={"method": "GFN2-xTB"}, procedure="geometric")
     except Exception as e:
         print(f"GFN2-xTB optimization failed for {smiles}: {e}")
 
@@ -1222,17 +1283,23 @@ def calculate_monomer_features(smiles: str, base_path: Optional[Path] = None) ->
             "global_nucleophilicity",
             lambda: xtb.get_global_descriptor("nucleophilicity", corrected=True),
         ),
-        "fukui_electrophilicity": _safe("fukui_electrophilicity", lambda: xtb.get_fukui("electrophilicity")),
-        "fukui_nucleophilicity": _safe("fukui_nucleophilicity", lambda: xtb.get_fukui("nucleophilicity")),
+        "fukui_electrophilicity": _safe(
+            "fukui_electrophilicity", lambda: xtb.get_fukui("electrophilicity")
+        ),
+        "fukui_nucleophilicity": _safe(
+            "fukui_nucleophilicity", lambda: xtb.get_fukui("nucleophilicity")
+        ),
         "fukui_radical": _safe("fukui_radical", lambda: xtb.get_fukui("radical")),
     }
 
     # Process dict fields
-    for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
+    for key in ["charges", "fukui_electrophilicity", "fukui_nucleophilicity", "fukui_radical"]:
         if key in properties and isinstance(properties[key], dict) and properties[key]:
-            properties[key + '_min'] = min(properties[key].values())
-            properties[key + '_max'] = max(properties[key].values())
-            properties[key + '_mean'] = sum(properties[key].values()) / len(properties[key].values())
+            properties[key + "_min"] = min(properties[key].values())
+            properties[key + "_max"] = max(properties[key].values())
+            properties[key + "_mean"] = sum(properties[key].values()) / len(
+                properties[key].values()
+            )
 
     # Save to file
     if base_path is None:
@@ -1242,7 +1309,7 @@ def calculate_monomer_features(smiles: str, base_path: Optional[Path] = None) ->
     md5_hash = get_smiles_md5(smiles)
     file_path = base_path / f"{md5_hash}.json"
 
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         json.dump(properties, f, indent=4)
 
     return properties
@@ -1273,6 +1340,7 @@ def get_or_compute_monomer_data(
 
 class MonomerPreprocessInput(BaseModel):
     """Input schema for monomer preprocessing."""
+
     monomer_smiles: str = Field(..., description="SMILES string of the monomer")
 
 
@@ -1302,28 +1370,24 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
             minimal_features = {
                 "fukui_radical_max": features.get("fukui_radical_max"),
                 "homo": features.get("homo"),
-                "lumo": features.get("lumo")
+                "lumo": features.get("lumo"),
             }
             return MonomerPreprocessOutput(
                 monomer_smiles=monomer_smiles,
                 features=minimal_features,
                 success=True,
                 error=None,
-                from_cache=True
+                from_cache=True,
             )
 
         # Features not found, need to calculate
         if not MORFEUS_AVAILABLE:
             return MonomerPreprocessOutput(
                 monomer_smiles=monomer_smiles,
-                features={
-                    "fukui_radical_max": None,
-                    "homo": None,
-                    "lumo": None
-                },
+                features={"fukui_radical_max": None, "homo": None, "lumo": None},
                 success=False,
                 error="morfeus is not available. Cannot calculate monomer features.",
-                from_cache=False
+                from_cache=False,
             )
 
         # Calculate features (this is a long-running operation)
@@ -1334,7 +1398,7 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
         minimal_features = {
             "fukui_radical_max": all_features.get("fukui_radical_max"),
             "homo": all_features.get("homo"),
-            "lumo": all_features.get("lumo")
+            "lumo": all_features.get("lumo"),
         }
 
         return MonomerPreprocessOutput(
@@ -1342,13 +1406,13 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
             features=minimal_features,
             success=True,
             error=None,
-            from_cache=False
+            from_cache=False,
         )
 
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Monomer preprocessing failed: {str(e)}"
+            detail=f"Monomer preprocessing failed: {str(e)}",
         )
 
 
@@ -1356,23 +1420,23 @@ async def preprocess_monomer(input_data: MonomerPreprocessInput):
 async def check_doi(input_data: DOICheckInput):
     """
     Check if a given DOI exists in the dataset.
-    
+
     Args:
         input_data: DOICheckInput containing the DOI to check
-        
+
     Returns:
         DOICheckOutput with existence status and normalized DOI
     """
     if dataset_df is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Dataset not loaded. DOI checking is not available."
+            detail="Dataset not loaded. DOI checking is not available.",
         )
-    
+
     try:
         # Normalize the DOI for comparison
         doi_input = input_data.doi.strip()
-        
+
         # Remove common prefixes if present
         if doi_input.startswith("https://doi.org/"):
             normalized_doi = doi_input.replace("https://doi.org/", "")
@@ -1382,32 +1446,31 @@ async def check_doi(input_data: DOICheckInput):
             normalized_doi = doi_input.replace("doi.org/", "")
         else:
             normalized_doi = doi_input
-            
+
         # Check if the DOI exists in the dataset
         # The dataset stores DOIs in the 'original_source' column
         # They can be in various formats, so we check for multiple formats
         exists = False
-        
-        if 'original_source' in dataset_df.columns:
+
+        if "original_source" in dataset_df.columns:
             # Check for exact match with normalized DOI
-            exists = dataset_df['original_source'].astype(str).str.contains(
-                normalized_doi, 
-                case=False, 
-                na=False,
-                regex=False
-            ).any()
-        
+            exists = (
+                dataset_df["original_source"]
+                .astype(str)
+                .str.contains(normalized_doi, case=False, na=False, regex=False)
+                .any()
+            )
+
         return DOICheckOutput(
             doi=doi_input,
             exists=exists,
             normalized_doi=normalized_doi,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
-        
+
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"DOI check failed: {str(e)}"
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"DOI check failed: {str(e)}"
         )
 
 
@@ -1415,48 +1478,49 @@ async def check_doi(input_data: DOICheckInput):
 async def optimize_reaction(input_data: OptimizeReactionInput):
     """
     Perform reaction optimization by exploring different solvent and temperature combinations.
-    
+
     Creates a 3x3 grid of predictions:
     - 3 temperatures: base_temp - step, base_temp, base_temp + step
     - 3 solvents: similar solvents based on logP from the dataset
-    
+
     Args:
         input_data: OptimizeReactionInput with monomers, base solvent, temperature, etc.
-        
+
     Returns:
         OptimizeReactionOutput with 3x3 grid of predictions
     """
     if not predictor:
         raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Model not loaded"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Model not loaded"
         )
-    
+
     if not REACTION_OPTIMIZATION_AVAILABLE:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Reaction optimization module not available"
+            detail="Reaction optimization module not available",
         )
-    
+
     if dataset_df is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Dataset not loaded. Reaction optimization requires dataset for finding similar solvents."
+            detail="Dataset not loaded. Reaction optimization requires dataset for finding similar solvents.",
         )
-    
+
     try:
         # Get base solvent logP
         base_solvent_features = calculate_solvent_features(input_data.solvent_smiles)
-        base_logp = base_solvent_features.get('solvent_logP')
-        
+        base_logp = base_solvent_features.get("solvent_logP")
+
         if base_logp is None:
             raise ValueError(f"Could not determine logP for solvent: {input_data.solvent_smiles}")
 
         # Warm the monomer-feature cache (live XTB on miss) so the inner
         # optimization loop can rely on cached lookups across the grid.
         base_path = Path(__file__).parent / "molecule_properties"
-        for label, smi in (("Monomer 1", input_data.monomer1_smiles),
-                           ("Monomer 2", input_data.monomer2_smiles)):
+        for label, smi in (
+            ("Monomer 1", input_data.monomer1_smiles),
+            ("Monomer 2", input_data.monomer2_smiles),
+        ):
             _, err = get_or_compute_monomer_data(smi, base_path, label)
             if err:
                 raise HTTPException(status_code=400, detail=err)
@@ -1478,7 +1542,7 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
             temperature_step=input_data.temperature_step,
             n_solvents=input_data.n_solvents,
         )
-        
+
         if not predictions:
             return OptimizeReactionOutput(
                 success=False,
@@ -1487,18 +1551,16 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
                 base_temperature=input_data.temperature,
                 temperature_step=input_data.temperature_step,
                 base_solvent_logp=float(base_logp),
-                timestamp=datetime.now().isoformat()
+                timestamp=datetime.now().isoformat(),
             )
-        
+
         # Clean predictions to remove NaN/Inf values before JSON serialization
         # Replace NaN/Inf with 0.0 for numeric fields
         cleaned_predictions = clean_json_values(predictions, replace_with_zero=True)
-        
+
         # Convert to Pydantic models
-        prediction_models = [
-            OptimizationPrediction(**pred) for pred in cleaned_predictions
-        ]
-        
+        prediction_models = [OptimizationPrediction(**pred) for pred in cleaned_predictions]
+
         return OptimizeReactionOutput(
             success=True,
             error=None,
@@ -1506,13 +1568,13 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
             base_temperature=input_data.temperature,
             temperature_step=input_data.temperature_step,
             base_solvent_logp=float(base_logp),
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
-        
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Reaction optimization failed: {str(e)}"
+            detail=f"Reaction optimization failed: {str(e)}",
         )
 
 
@@ -1520,15 +1582,13 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
 # Error Handlers
 # ============================================================================
 
+
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
     """Handle any unhandled exceptions."""
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={
-            "detail": "Internal server error",
-            "error": str(exc)
-        }
+        content={"detail": "Internal server error", "error": str(exc)},
     )
 
 
@@ -1546,10 +1606,4 @@ if __name__ == "__main__":
     print("  - Documentation: http://localhost:8000/docs")
     print("  - ReDoc: http://localhost:8000/redoc")
 
-    uvicorn.run(
-        "app:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
-    )
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True, log_level="info")

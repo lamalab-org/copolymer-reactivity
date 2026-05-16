@@ -10,7 +10,9 @@ import requests
 from crossref.restful import Works
 
 
-def add_to_database(doi: str, source: str, format_type: str | None, extracted_data: MutableSequence[dict]) -> None:
+def add_to_database(
+    doi: str, source: str, format_type: str | None, extracted_data: MutableSequence[dict]
+) -> None:
     """Add a DOI entry to the in-memory database if it is not present yet."""
 
     if not any(item["doi"] == doi for item in extracted_data):
@@ -68,15 +70,15 @@ def get_crossref_data(doi: str, source: str, format_type: str | None) -> dict:
     if response.status_code == 200:
         data = response.json()
         item = data.get("message", {})
-        
+
         # Safely extract title
         title_list = item.get("title", [])
         title = title_list[0] if title_list else "No title"
-        
+
         # Safely extract journal
         journal_list = item.get("container-title", [])
         journal = journal_list[0] if journal_list else "No journal title"
-        
+
         abstract = item.get("abstract", "No abstract available")
         keywords = item.get("subject", "No keywords available")
 
@@ -163,7 +165,7 @@ def main(
     fetch_metadata: bool = True,
 ) -> None:
     """Top-level helper that aggregates DOIs and metadata from various sources.
-    
+
     Args:
         crossref_query: Query string for Crossref API search.
         output_file_crossref_search: Path to save raw Crossref search results.
@@ -196,11 +198,11 @@ def main(
     # Step 1: Process copol database (optional)
     if process_copol:
         process_copol_database(copol_path, extracted_data)
-    
+
     # Step 2: Process Crossref search (optional)
     if process_crossref_search:
         process_crossref(crossref_query, output_crossref_path, extracted_data)
-    
+
     # If we need to fetch metadata but haven't collected DOIs yet, load existing DOI file
     if fetch_metadata and not (process_copol or process_crossref_search):
         if all_doi_output_path.exists():
@@ -208,13 +210,15 @@ def main(
             with all_doi_output_path.open("r", encoding="utf-8") as f:
                 extracted_data = json.load(f)
         else:
-            print(f"Warning: No DOI data available. Run with process_copol=True or process_crossref_search=True first.")
+            print(
+                f"Warning: No DOI data available. Run with process_copol=True or process_crossref_search=True first."
+            )
             return
-    
+
     # Save aggregated DOI list if we collected any
     if extracted_data and (process_copol or process_crossref_search):
         save_extracted_data(all_doi_output_path, extracted_data)
-    
+
     # Step 3: Fetch detailed metadata (optional)
     if fetch_metadata:
         fetch_and_save_metadata(all_doi_output_path, metadata_output_path, extracted_data)

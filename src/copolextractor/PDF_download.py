@@ -1,7 +1,8 @@
 import json
 import os
-from copolextractor.doi2pdf import doi2pdf
+
 import copolextractor.utils as utils
+from copolextractor.doi2pdf import doi2pdf
 
 
 def is_valid_pdf(file_path):
@@ -98,8 +99,8 @@ def download_papers(input_file, output_folder):
         output_path = os.path.join(output_folder, pdf_name)
 
         # Extract just the DOI part if it's a full URL
-        if doi.startswith('https://doi.org/'):
-            doi = doi.replace('https://doi.org/', '')
+        if doi.startswith("https://doi.org/"):
+            doi = doi.replace("https://doi.org/", "")
 
         try:
             # Download using doi2pdf
@@ -160,7 +161,9 @@ def main(input_file_paper, output_folder):
 
     print(f"There are {len(pdf_files)} PDFs in the folder:")
     print(f"  - {valid_pdf_count} valid PDFs")
-    print(f"  - {corrupted_pdf_count} corrupted PDFs (if any, these will be re-downloaded on next run)")
+    print(
+        f"  - {corrupted_pdf_count} corrupted PDFs (if any, these will be re-downloaded on next run)"
+    )
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ WITHOUT applying train-only filters.
 """
 
 import os
+
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import GroupShuffleSplit
@@ -46,7 +47,9 @@ def get_or_create_holdout_groups(
             if len(inter) > 0:
                 return inter.reset_index(drop=True)
             else:
-                print("  [holdout_utils] Saved test IDs had no overlap with current data → regenerating.")
+                print(
+                    "  [holdout_utils] Saved test IDs had no overlap with current data → regenerating."
+                )
 
     # 2) Create a fresh grouped split hitting ~test_size
     splitter = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=random_state)
@@ -75,8 +78,8 @@ def make_base_dataset_for_holdout(df):
 
     # Minimal, non-controversial checks (not "filters" by business logic):
     # - r1r2 must exist and be non-negative so we can derive targets uniformly later.
-    base = base[base['r1r2'].notna()]
-    base = base[base['r1r2'] >= 0]
+    base = base[base["r1r2"].notna()]
+    base = base[base["r1r2"] >= 0]
 
     # DO NOT drop 'specialized' here – that’s a train-only filter.
 
@@ -84,28 +87,30 @@ def make_base_dataset_for_holdout(df):
     # 0: alternating         (r1 < 1 and r2 < 1)
     # 1: gradient            (rest)
     # 2: symmetric_blocky    (r1 > 1 and r2 > 1 and 0.5 < r1/r2 < 2)
-    if {'constant_1', 'constant_2'}.issubset(base.columns):
-        r1 = base['constant_1']
-        r2 = base['constant_2']
+    if {"constant_1", "constant_2"}.issubset(base.columns):
+        r1 = base["constant_1"]
+        r2 = base["constant_2"]
 
         mask_alt = (r1 < 1) & (r2 < 1)
         ratio = r1 / r2
         mask_sym = (r1 > 1) & (r2 > 1) & (ratio > 0.5) & (ratio < 2)
 
         # Default: gradient (1)
-        base['r_product_class'] = 1
-        base.loc[mask_sym, 'r_product_class'] = 2
-        base.loc[mask_alt, 'r_product_class'] = 0
+        base["r_product_class"] = 1
+        base.loc[mask_sym, "r_product_class"] = 2
+        base.loc[mask_alt, "r_product_class"] = 0
     else:
-        raise ValueError("Required columns 'constant_1' and 'constant_2' not found for class definition.")
+        raise ValueError(
+            "Required columns 'constant_1' and 'constant_2' not found for class definition."
+        )
 
-    if 'reaction_id' not in base.columns:
+    if "reaction_id" not in base.columns:
         raise ValueError("reaction_id is required for grouped hold-out")
 
     return base
 
 
-def split_train_holdout(df, holdout_groups, group_col='reaction_id'):
+def split_train_holdout(df, holdout_groups, group_col="reaction_id"):
     """
     Split dataframe into train and holdout sets based on group IDs.
     No additional filtering; this just partitions by group membership.
@@ -127,33 +132,33 @@ def get_or_create_train_val_test_groups(
 ):
     """
     Create or load persistent train/validation/test splits at the GROUP level.
-    
+
     This creates three splits:
     - Train: ~(1 - test_size - val_size) of groups
     - Validation: ~val_size of groups
     - Test: ~test_size of groups
-    
+
     Behavior:
     - If saved lists exist, load and intersect with current groups.
     - Otherwise, create new grouped splits and save them.
-    
+
     Returns:
         tuple: (train_groups, val_groups, test_groups) as pd.Series
     """
     if group_col not in base_df.columns:
         raise ValueError(f"'{group_col}' not found in base_df; cannot build grouped splits.")
-    
+
     os.makedirs(os.path.dirname(test_groups_path), exist_ok=True)
     if val_groups_path != test_groups_path:
         os.makedirs(os.path.dirname(val_groups_path), exist_ok=True)
-    
+
     # Current groups as strings (robust to type changes across runs)
     current_groups = pd.Series(base_df[group_col].astype(str).unique())
-    
+
     # 1) Try to load persisted IDs
     test_groups = None
     val_groups = None
-    
+
     if os.path.exists(test_groups_path):
         saved_test = pd.read_csv(test_groups_path)
         if group_col in saved_test.columns:
@@ -161,7 +166,7 @@ def get_or_create_train_val_test_groups(
             inter_test = saved_test_ids[saved_test_ids.isin(current_groups)]
             if len(inter_test) > 0:
                 test_groups = inter_test.reset_index(drop=True)
-    
+
     if os.path.exists(val_groups_path):
         saved_val = pd.read_csv(val_groups_path)
         if group_col in saved_val.columns:
@@ -169,7 +174,7 @@ def get_or_create_train_val_test_groups(
             inter_val = saved_val_ids[saved_val_ids.isin(current_groups)]
             if len(inter_val) > 0:
                 val_groups = inter_val.reset_index(drop=True)
-    
+
     # If both exist and don't overlap, use them
     if test_groups is not None and val_groups is not None:
         # Check for overlap
@@ -182,45 +187,51 @@ def get_or_create_train_val_test_groups(
             return train_groups, val_groups, test_groups
         else:
             print("  [holdout_utils] Saved val/test IDs overlap → regenerating.")
-    
+
     # 2) Create fresh splits
     # First split: separate test from rest
     splitter1 = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=random_state)
     idx_rest, idx_test = next(splitter1.split(base_df, groups=base_df[group_col].astype(str)))
-    
+
     # Second split: separate val from train (from the rest)
     df_rest = base_df.iloc[idx_rest].reset_index(drop=True)
     # Calculate val_size relative to the rest (not the full dataset)
     val_size_relative = val_size / (1 - test_size)
-    splitter2 = GroupShuffleSplit(n_splits=1, test_size=val_size_relative, random_state=random_state + 1)
+    splitter2 = GroupShuffleSplit(
+        n_splits=1, test_size=val_size_relative, random_state=random_state + 1
+    )
     idx_train, idx_val = next(splitter2.split(df_rest, groups=df_rest[group_col].astype(str)))
-    
+
     # Extract group IDs
     test_groups = pd.Series(base_df.iloc[idx_test][group_col].astype(str).unique())
     val_groups = pd.Series(df_rest.iloc[idx_val][group_col].astype(str).unique())
     train_groups = pd.Series(df_rest.iloc[idx_train][group_col].astype(str).unique())
-    
+
     # 3) Persist for reproducibility
     pd.DataFrame({group_col: test_groups}).to_csv(test_groups_path, index=False)
     pd.DataFrame({group_col: val_groups}).to_csv(val_groups_path, index=False)
-    
-    return train_groups.reset_index(drop=True), val_groups.reset_index(drop=True), test_groups.reset_index(drop=True)
+
+    return (
+        train_groups.reset_index(drop=True),
+        val_groups.reset_index(drop=True),
+        test_groups.reset_index(drop=True),
+    )
 
 
-def split_train_val_test(df, train_groups, val_groups, test_groups, group_col='reaction_id'):
+def split_train_val_test(df, train_groups, val_groups, test_groups, group_col="reaction_id"):
     """
     Split dataframe into train, validation, and test sets based on group IDs.
     No additional filtering; this just partitions by group membership.
-    
+
     Returns:
         tuple: (df_train, df_val, df_test)
     """
     train_set = set(pd.Series(train_groups).astype(str))
     val_set = set(pd.Series(val_groups).astype(str))
     test_set = set(pd.Series(test_groups).astype(str))
-    
+
     df_train = df[df[group_col].astype(str).isin(train_set)].reset_index(drop=True)
     df_val = df[df[group_col].astype(str).isin(val_set)].reset_index(drop=True)
     df_test = df[df[group_col].astype(str).isin(test_set)].reset_index(drop=True)
-    
+
     return df_train, df_val, df_test

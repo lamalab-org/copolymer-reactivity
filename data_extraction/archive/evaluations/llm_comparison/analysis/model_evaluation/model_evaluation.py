@@ -1,12 +1,14 @@
+import json
 import os
-import src.copolextractor.analyzer as az
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+import traceback
+
+import matplotlib.pyplot as plt
 import wandb
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+
+import src.copolextractor.analyzer as az
 import src.copolextractor.prompter as prompter
 import src.copolextractor.utils as utils
-import traceback
-import json
-import matplotlib.pyplot as plt
 
 
 def count_reaction_conditions(file_path):
@@ -180,16 +182,12 @@ for test_file, model_file in zip(test_files, model_files):
                     test_monomers,
                 )
                 # iteration over each reaction condition of the test monomer pair with found index
-                for j, reaction_conditions in enumerate(
-                    reaction["reaction_conditions"]
-                ):
+                for j, reaction_conditions in enumerate(reaction["reaction_conditions"]):
                     reaction_condition_count += 1
                     print("matching_monomer_error: ", matching_monomer_error)
                     # model data: specific reaction condition
                     specific_reaction = model_data["reactions"][model_monomer_index]
-                    specific_reaction_conditions = specific_reaction[
-                        "reaction_conditions"
-                    ]
+                    specific_reaction_conditions = specific_reaction["reaction_conditions"]
                     model_reaction_conditions = az.extract_reaction_conditions(
                         specific_reaction_conditions
                     )
@@ -224,9 +222,7 @@ for test_file, model_file in zip(test_files, model_files):
                     )
                     if temperature_model is not None and temp_unit_model is not None:
                         temperature = az.convert_unit(temperature, temp_unit)
-                        temperature_model = az.convert_unit(
-                            temperature_model, temp_unit_model
-                        )
+                        temperature_model = az.convert_unit(temperature_model, temp_unit_model)
                     if temperature_model is not None:
                         temperature_model_list = [temperature_model]
                         temperature_list = [temperature]
@@ -234,9 +230,7 @@ for test_file, model_file in zip(test_files, model_files):
                         all_test_data_temp.append({"temperature": temperature})
                         all_model_data_temp.append({"temperature": temperature_model})
 
-                        mse_temp_individual = calculate_mse(
-                            temperature_model, temperature
-                        )
+                        mse_temp_individual = calculate_mse(temperature_model, temperature)
                         mse_temp.append(mse_temp_individual)
                         mae_temp_current_rxn = mean_absolute_error(
                             temperature_list, temperature_model_list
@@ -253,33 +247,24 @@ for test_file, model_file in zip(test_files, model_files):
                     solvent_model, smiles_solvent_model = az.get_solvent(
                         model_reaction_conditions, index
                     )
-                    print(
-                        "solvent model: ", solvent_model, " vs. solvent test: ", solvent
-                    )
+                    print("solvent model: ", solvent_model, " vs. solvent test: ", solvent)
                     smiles_solvent_test = utils.name_to_smiles(solvent)
                     solvent_missmatch = False
-                    solvent_error += az.compare_smiles(
-                        smiles_solvent_test, smiles_solvent_model
-                    )
-                    if (
-                        az.compare_smiles(smiles_solvent_test, smiles_solvent_model)
-                        == 1
-                    ):
+                    solvent_error += az.compare_smiles(smiles_solvent_test, smiles_solvent_model)
+                    if az.compare_smiles(smiles_solvent_test, smiles_solvent_model) == 1:
                         solvent_error += 1
                         solvent_missmatch = True
 
                     # comparison of reactivity constant and confidence of reactivity constant
                     test_reaction_constants, test_reaction_constant_confidence = (
-                        az.get_reaction_const_list(
-                            reaction_constants, reaction_constant_confidence
-                        )
+                        az.get_reaction_const_list(reaction_constants, reaction_constant_confidence)
                     )
                     print(
                         f"test reaction_const: {reaction_constants}, test reaction_const_confidence:"
                         f" {test_reaction_constant_confidence}"
                     )
-                    model_reaction_constants, model_reaction_const_conf = (
-                        az.get_reaction_constant(model_reaction_conditions, index)
+                    model_reaction_constants, model_reaction_const_conf = az.get_reaction_constant(
+                        model_reaction_conditions, index
                     )
                     print(
                         "model-reaction-const: ",
@@ -289,10 +274,8 @@ for test_file, model_file in zip(test_files, model_files):
                     )
 
                     if sequence_change == 1:
-                        test_reaction_constants, model_reaction_constants = (
-                            az.change_sequence(
-                                test_reaction_constants, model_reaction_constants
-                            )
+                        test_reaction_constants, model_reaction_constants = az.change_sequence(
+                            test_reaction_constants, model_reaction_constants
                         )
                         test_reaction_constant_confidence, model_reaction_const_conf = (
                             az.change_sequence(
@@ -314,10 +297,7 @@ for test_file, model_file in zip(test_files, model_files):
                         }
                     )
 
-                    if (
-                        model_reaction_constants[0] is None
-                        or model_reaction_constants[1] is None
-                    ):
+                    if model_reaction_constants[0] is None or model_reaction_constants[1] is None:
                         if (
                             test_reaction_constants[0] is not None
                             or test_reaction_constants[1] is not None
@@ -335,31 +315,20 @@ for test_file, model_file in zip(test_files, model_files):
                             test_reaction_constants, model_reaction_constants
                         ):
                             if model_val is not None and test_val is not None:
-                                mse_const_individual = mean_squared_error(
-                                    [test_val], [model_val]
-                                )
-                                mae_const_current_rxn = mean_absolute_error(
-                                    [test_val], [model_val]
-                                )
+                                mse_const_individual = mean_squared_error([test_val], [model_val])
+                                mae_const_current_rxn = mean_absolute_error([test_val], [model_val])
                                 combined_mse_const.append(mse_const_individual)
                                 if deviation_conf is not None:
                                     deviation_const = (
                                         deviation_conf
-                                        + (
-                                            calculate_deviation(
-                                                mae_const_current_rxn, test_val
-                                            )
-                                        )
+                                        + (calculate_deviation(mae_const_current_rxn, test_val))
                                     ) / 2
                                 else:
                                     deviation_const = calculate_deviation(
                                         mae_const_current_rxn, test_val
                                     )
 
-                    if (
-                        model_reaction_const_conf[0] is None
-                        or model_reaction_const_conf[1] is None
-                    ):
+                    if model_reaction_const_conf[0] is None or model_reaction_const_conf[1] is None:
                         if (
                             test_reaction_constant_confidence[0] is not None
                             or test_reaction_constant_confidence[1] is not None
@@ -383,21 +352,13 @@ for test_file, model_file in zip(test_files, model_files):
                                 mse_const_individual = 1
                                 mae_conf_current_rxn = 1
                             elif model_val is not None and test_val is not None:
-                                mse_conf_individual = mean_squared_error(
-                                    [test_val], [model_val]
-                                )
+                                mse_conf_individual = mean_squared_error([test_val], [model_val])
                                 combined_mse_conf.append(mse_conf_individual)
-                                mae_conf_current_rxn = mean_absolute_error(
-                                    [test_val], [model_val]
-                                )
+                                mae_conf_current_rxn = mean_absolute_error([test_val], [model_val])
                                 if deviation_conf is not None:
                                     deviation_conf = (
                                         deviation_conf
-                                        + (
-                                            calculate_deviation(
-                                                mae_conf_current_rxn, test_val
-                                            )
-                                        )
+                                        + (calculate_deviation(mae_conf_current_rxn, test_val))
                                     ) / 2
                                 else:
                                     deviation_conf = calculate_deviation(
@@ -436,8 +397,7 @@ for test_file, model_file in zip(test_files, model_files):
     deviation_const = None
 
 correct_reaction_rate = (
-    calculate_rate(correct_reaction_count, combined_count_reaction_conditions_test)
-    * 100
+    calculate_rate(correct_reaction_count, combined_count_reaction_conditions_test) * 100
 )
 
 # existing_data_const = load_existing_data(const_json_file_path)
@@ -474,23 +434,15 @@ reaction_number_error_rate = (
     calculate_rate(combined_count_reactions_model, combined_count_reactions_test) * 100
 )
 parsing_error_rate = calculate_rate(parsing_error, file_count) * 100
-reaction_constant_NA_rate = (
-    calculate_rate(reaction_const_NA_count, reaction_condition_count) * 100
-)
+reaction_constant_NA_rate = calculate_rate(reaction_const_NA_count, reaction_condition_count) * 100
 reaction_constant_conf_NA_rate = (
     calculate_rate(reaction_const_conf_NA_count, reaction_condition_count) * 100
 )
 na_entry_rate = calculate_rate(na_count, total_entries_count) * 100
-solvent_error_rate = (
-    calculate_rate(solvent_error, combined_count_reaction_conditions_test) * 100
-)
+solvent_error_rate = calculate_rate(solvent_error, combined_count_reaction_conditions_test) * 100
 
-print(
-    f"number of empty entries: {na_count}. rate of empty entries is: {na_entry_rate} %."
-)
-print(
-    f"parsing error is {parsing_error}. The parsing error rate is {parsing_error_rate}."
-)
+print(f"number of empty entries: {na_count}. rate of empty entries is: {na_entry_rate} %.")
+print(f"parsing error is {parsing_error}. The parsing error rate is {parsing_error_rate}.")
 print("matching-monomer-error: ", matching_monomer_error)
 print(
     f"{matching_monomer_error} of {total_monomer_count} Monomer pairs are not found. Error rate: {correct_reaction_rate} %."

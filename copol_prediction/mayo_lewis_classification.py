@@ -25,7 +25,7 @@ def _trapz(y: np.ndarray, x: np.ndarray) -> float:
 # ============================================================
 def mayo_lewis(f1: np.ndarray, r1: float, r2: float) -> np.ndarray:
     f2 = 1.0 - f1
-    denom = (r1 * f1**2 + 2.0 * f1 * f2 + r2 * f2**2)
+    denom = r1 * f1**2 + 2.0 * f1 * f2 + r2 * f2**2
     # Avoid warnings for degenerate parameterizations; callers may filter non-finite curves.
     with np.errstate(divide="ignore", invalid="ignore"):
         return (r1 * f1**2 + f1 * f2) / denom
@@ -129,10 +129,7 @@ def classify_curve(
 
     # 2) true alternating: strong deviation + central crossing
     if has_crossing and crossing_distance is not None:
-        if (
-            I_rand >= alternating_threshold
-            and crossing_distance <= alternating_crossing_window
-        ):
+        if I_rand >= alternating_threshold and crossing_distance <= alternating_crossing_window:
             return "alternating"
 
     # 3) gradient:
@@ -141,10 +138,7 @@ def classify_curve(
     if I_rand >= gradient_integral_threshold:
         if not has_crossing:
             return "gradient"
-        if (
-            crossing_distance is not None
-            and crossing_distance >= gradient_crossing_threshold
-        ):
+        if crossing_distance is not None and crossing_distance >= gradient_crossing_threshold:
             return "gradient"
 
     # 4) fallback
@@ -265,4 +259,3 @@ def plot_analysis(
 
     plt.legend(frameon=False)
     plt.show()
-

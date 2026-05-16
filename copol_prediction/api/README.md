@@ -164,13 +164,13 @@ if preprocessed["success"]:
         for neighbor in preprocessed["nearest_neighbors"][:3]:
             print(f"  Rank {neighbor['rank']}: {neighbor['monomer1_name']} + {neighbor['monomer2_name']} "
                   f"(similarity: {neighbor['similarity']:.3f}, class: {neighbor.get('class', neighbor.get('predicted_class'))})")
-    
+
     # Make prediction directly with preprocessed features
     result = requests.post(
         f"{API_URL}/predict",
         json={"features": preprocessed["features"]}
     ).json()
-    
+
     print(f"\nPredicted class: {result['predicted_class']} ({result['predicted_class_name']})")
     print(f"Confidence: {result['confidence']:.2%}")
 else:
@@ -201,7 +201,7 @@ optimization = requests.post(
 
 if optimization["success"]:
     print(f"Generated {len(optimization['predictions'])} predictions")
-    
+
     # Display results
     for pred in optimization['predictions']:
         print(f"\nTemp: {pred['temperature']:.1f}°C, "

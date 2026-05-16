@@ -1,11 +1,12 @@
-from pdf2image import convert_from_path
 import os
-import anthropic
 import time
-import copolextractor.prompter as prompter
+
+import anthropic
+from pdf2image import convert_from_path
+
 import copolextractor.analyzer as az
 import copolextractor.image_processer as ip
-
+import copolextractor.prompter as prompter
 
 start = time.time()
 
@@ -32,9 +33,7 @@ for i, filename in enumerate(input_files):
     pdf_images = convert_from_path(file_path)
 
     for idx in range(len(pdf_images)):
-        image_path = os.path.join(
-            output_folder_images, f"{filename}_page_{idx + 1}.png"
-        )
+        image_path = os.path.join(output_folder_images, f"{filename}_page_{idx + 1}.png")
         pdf_images[idx].save(image_path, "PNG")
     print("Successfully converted PDF to processed_images")
     for j, image in enumerate(pdf_images):
@@ -52,9 +51,7 @@ for i, filename in enumerate(input_files):
     total_input_token += input_token
     total_output_token += output_token
     number_of_calls += 1
-    output_model = prompter.format_output_claude_as_json_and_yaml(
-        i, output, output_folder
-    )
+    output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
     print("output_model: ", output_model)
 
     for a in range(number_of_model_calls):
@@ -72,9 +69,7 @@ for i, filename in enumerate(input_files):
             total_input_token += input_token
             total_output_token += output_token
             number_of_calls += 1
-            output_model = prompter.format_output_claude_as_json_and_yaml(
-                i, output, output_folder
-            )
+            output_model = prompter.format_output_claude_as_json_and_yaml(i, output, output_folder)
         else:
             print("NA-rate under 30%")
         print("tokens input used: ", input_token)

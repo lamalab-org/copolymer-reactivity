@@ -19,14 +19,14 @@ Usage (from repo root):
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
-import argparse
 from typing import Dict, List
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 # Ensure copol_prediction/ is on sys.path when run as a script
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,13 +37,13 @@ if PROJECT_ROOT not in sys.path:
 if WORKSPACE_ROOT not in sys.path:
     sys.path.insert(0, WORKSPACE_ROOT)
 
-from copol_prediction.utils import load_data_split
 from copol_prediction.analysis.plot_config import CLASS_CURVES_FIGSIZE_INCH, setup_plot_style
 from copol_prediction.mayo_lewis_classification import (
-    mayo_lewis,
     classify_reactivity_curve,
     compute_curve_descriptors,
+    mayo_lewis,
 )
+from copol_prediction.utils import load_data_split
 
 
 def _trapz(y: np.ndarray, x: np.ndarray) -> float:
@@ -350,9 +350,7 @@ def plot_class_curves(
     setup_plot_style()
     os.makedirs(output_dir, exist_ok=True)
     f1 = np.linspace(0, 1, int(n_f1))
-    class_curves = _sample_per_class(
-        df_all, f1=f1, max_curves_per_class=max_curves_per_class
-    )
+    class_curves = _sample_per_class(df_all, f1=f1, max_curves_per_class=max_curves_per_class)
 
     classes = ["alternating", "random (to blocky)", "gradient"]
     fig, axes = plt.subplots(1, 4, figsize=CLASS_CURVES_FIGSIZE_INCH, sharex=True, sharey=True)
@@ -407,4 +405,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

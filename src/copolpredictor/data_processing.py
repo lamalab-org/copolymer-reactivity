@@ -3,12 +3,13 @@ Data processing module for the copolymerization prediction model
 Contains functions for loading, preprocessing, and transforming data
 """
 
-import os
 import json
-import pandas as pd
-import numpy as np
-from sklearn.decomposition import PCA
+import os
 import re
+
+import numpy as np
+import pandas as pd
+from sklearn.decomposition import PCA
 
 # `copolextractor.utils` is only needed by `process_embeddings` and pulls heavy
 # extraction-pipeline deps (openai, pubchempy, ...). Imported lazily so that
@@ -23,13 +24,15 @@ def _normalize_doi_for_key(s: str) -> str:
     lowered = s.lower()
     for p in ("https://doi.org/", "http://doi.org/", "doi:", "doi "):
         if lowered.startswith(p):
-            s = s[len(p):]
+            s = s[len(p) :]
             break
     return s.strip().lower()
+
 
 def _build_cache_key_from_row(original_source: str) -> str:
     doi = _normalize_doi_for_key(original_source)
     return f"doi::{doi}" if doi else ""
+
 
 def _load_specialized_cache(cache_path: str) -> dict:
     try:
@@ -44,28 +47,28 @@ def _load_specialized_cache(cache_path: str) -> dict:
         return {}
 
 
-def load_molecular_data(smiles, base_path='./output/molecule_properties'):
+def load_molecular_data(smiles, base_path="./output/molecule_properties"):
     """Load molecular properties from JSON file"""
     try:
-        file_path = os.path.join(base_path, f'{smiles}.json')
-        with open(file_path, 'r') as handle:
+        file_path = os.path.join(base_path, f"{smiles}.json")
+        with open(file_path, "r") as handle:
             d = json.load(handle)
 
         # Store the JSON filename
-        d['json_filename'] = f'{smiles}.json'
+        d["json_filename"] = f"{smiles}.json"
 
         # Process dict fields: take min, max, mean
-        for key in ['charges', 'fukui_electrophilicity', 'fukui_nucleophilicity', 'fukui_radical']:
+        for key in ["charges", "fukui_electrophilicity", "fukui_nucleophilicity", "fukui_radical"]:
             if key in d and isinstance(d[key], dict) and d[key]:
-                d[key + '_min'] = min(d[key].values())
-                d[key + '_max'] = max(d[key].values())
-                d[key + '_mean'] = sum(d[key].values()) / len(d[key].values())
+                d[key + "_min"] = min(d[key].values())
+                d[key + "_max"] = max(d[key].values())
+                d[key + "_mean"] = sum(d[key].values()) / len(d[key].values())
 
         # Extract dipole components if present
-        if 'dipole' in d and isinstance(d['dipole'], list) and len(d['dipole']) >= 3:
-            d['dipole_x'] = d['dipole'][0]
-            d['dipole_y'] = d['dipole'][1]
-            d['dipole_z'] = d['dipole'][2]
+        if "dipole" in d and isinstance(d["dipole"], list) and len(d["dipole"]) >= 3:
+            d["dipole_x"] = d["dipole"][0]
+            d["dipole_y"] = d["dipole"][1]
+            d["dipole_z"] = d["dipole"][2]
 
         return d
     except FileNotFoundError:
@@ -103,14 +106,14 @@ def molecular_features(smiles):
         return None
 
     # Get the JSON filename before filtering
-    json_filename = d.get('json_filename')
+    json_filename = d.get("json_filename")
 
     # Select only float values
     d = {k: v for k, v in d.items() if isinstance(v, float)}
 
     # Add back the JSON filename
     if json_filename:
-        d['json_filename'] = json_filename
+        d["json_filename"] = json_filename
 
     return d
 
@@ -120,12 +123,16 @@ def add_molecular_features(df):
     new_rows = []
     for index, row in df.iterrows():
         try:
-            monomer1_smiles = row['monomer1_smiles']
-            monomer2_smiles = row['monomer2_smiles']
+            monomer1_smiles = row["monomer1_smiles"]
+            monomer2_smiles = row["monomer2_smiles"]
 
             # Skip entries without SMILES
-            if pd.isna(monomer1_smiles) or pd.isna(
-                    monomer2_smiles) or monomer1_smiles is None or monomer2_smiles is None:
+            if (
+                pd.isna(monomer1_smiles)
+                or pd.isna(monomer2_smiles)
+                or monomer1_smiles is None
+                or monomer2_smiles is None
+            ):
                 print(f"  Skipping row {index}: Missing SMILES")
                 continue
 
@@ -135,39 +142,47 @@ def add_molecular_features(df):
 
             # Skip row if any molecular data is missing
             if monomer1_data is None:
-                print(f"  Skipping row {index}: Missing molecular data for monomer1: {monomer1_smiles}")
+                print(
+                    f"  Skipping row {index}: Missing molecular data for monomer1: {monomer1_smiles}"
+                )
                 continue
 
             if monomer2_data is None:
-                print(f"  Skipping row {index}: Missing molecular data for monomer2: {monomer2_smiles}")
+                print(
+                    f"  Skipping row {index}: Missing molecular data for monomer2: {monomer2_smiles}"
+                )
                 continue
 
             # Extract the JSON filenames before adding prefix
-            json_filename1 = monomer1_data.pop('json_filename', f'{monomer1_smiles}.json')
-            json_filename2 = monomer2_data.pop('json_filename', f'{monomer2_smiles}.json')
+            json_filename1 = monomer1_data.pop("json_filename", f"{monomer1_smiles}.json")
+            json_filename2 = monomer2_data.pop("json_filename", f"{monomer2_smiles}.json")
 
             # Add _1 and _2 to keys
-            monomer1_data = {f'{k}_1': v for k, v in monomer1_data.items()}
-            monomer2_data = {f'{k}_2': v for k, v in monomer2_data.items()}
+            monomer1_data = {f"{k}_1": v for k, v in monomer1_data.items()}
+            monomer2_data = {f"{k}_2": v for k, v in monomer2_data.items()}
 
             # Create new row with all data
             new_row = {
                 **row,
                 **monomer1_data,
                 **monomer2_data,
-                'json_filename_1': json_filename1,
-                'json_filename_2': json_filename2
+                "json_filename_1": json_filename1,
+                "json_filename_2": json_filename2,
             }
 
             # If monomer JSON filenames were already provided from extraction, verify they match
-            if 'monomer1_json' in row and row['monomer1_json'] is not None:
+            if "monomer1_json" in row and row["monomer1_json"] is not None:
                 # If they don't match, log a warning but keep the actual filename from the loaded data
-                if row['monomer1_json'] != json_filename1:
-                    print(f"Warning: Expected JSON filename {row['monomer1_json']} but found {json_filename1}")
+                if row["monomer1_json"] != json_filename1:
+                    print(
+                        f"Warning: Expected JSON filename {row['monomer1_json']} but found {json_filename1}"
+                    )
 
-            if 'monomer2_json' in row and row['monomer2_json'] is not None:
-                if row['monomer2_json'] != json_filename2:
-                    print(f"Warning: Expected JSON filename {row['monomer2_json']} but found {json_filename2}")
+            if "monomer2_json" in row and row["monomer2_json"] is not None:
+                if row["monomer2_json"] != json_filename2:
+                    print(
+                        f"Warning: Expected JSON filename {row['monomer2_json']} but found {json_filename2}"
+                    )
 
             new_rows.append(new_row)
 
@@ -179,29 +194,36 @@ def add_molecular_features(df):
     return result_df
 
 
-def enrich_df_with_molecular_features(df, base_path='./output/molecule_properties', feature_columns=None):
+def enrich_df_with_molecular_features(
+    df, base_path="./output/molecule_properties", feature_columns=None
+):
     """
     Add missing molecular feature columns to an existing DataFrame by loading from monomer JSON files.
     Keeps all rows; fills NaN for missing JSON or missing keys.
     """
     from copolpredictor import prediction_utils
+
     wanted = list(feature_columns or prediction_utils.feature_columns_all)
     missing = [c for c in wanted if c not in df.columns]
     if not missing:
         return df
 
     # Columns that come from monomer 1/2 (suffix _1, _2)
-    mono1 = [c for c in missing if c.endswith('_1')]
-    mono2 = [c for c in missing if c.endswith('_2')]
-    delta_cols = [c for c in missing if c.startswith('delta_HOMO_LUMO')]
+    mono1 = [c for c in missing if c.endswith("_1")]
+    mono2 = [c for c in missing if c.endswith("_2")]
+    delta_cols = [c for c in missing if c.startswith("delta_HOMO_LUMO")]
     other = [c for c in missing if c not in mono1 and c not in mono2 and c not in delta_cols]
 
     new_data = {c: [] for c in missing}
     for _, row in df.iterrows():
-        m1_smiles = row.get('monomer1_smiles')
-        m2_smiles = row.get('monomer2_smiles')
-        d1 = load_molecular_data(m1_smiles, base_path) if pd.notna(m1_smiles) and m1_smiles else None
-        d2 = load_molecular_data(m2_smiles, base_path) if pd.notna(m2_smiles) and m2_smiles else None
+        m1_smiles = row.get("monomer1_smiles")
+        m2_smiles = row.get("monomer2_smiles")
+        d1 = (
+            load_molecular_data(m1_smiles, base_path) if pd.notna(m1_smiles) and m1_smiles else None
+        )
+        d2 = (
+            load_molecular_data(m2_smiles, base_path) if pd.notna(m2_smiles) and m2_smiles else None
+        )
 
         for c in mono1:
             key = c[:-2]
@@ -220,13 +242,24 @@ def enrich_df_with_molecular_features(df, base_path='./output/molecule_propertie
         for c in delta_cols:
             val = None
             if d1 is not None and d2 is not None:
-                homo1 = d1.get('homo'); lumo1 = d1.get('lumo')
-                homo2 = d2.get('homo'); lumo2 = d2.get('lumo')
-                if homo1 is not None and lumo1 is not None and homo2 is not None and lumo2 is not None:
-                    if c == 'delta_HOMO_LUMO_AA': val = homo1 - lumo1
-                    elif c == 'delta_HOMO_LUMO_AB': val = homo1 - lumo2
-                    elif c == 'delta_HOMO_LUMO_BB': val = homo2 - lumo2
-                    elif c == 'delta_HOMO_LUMO_BA': val = homo2 - lumo1
+                homo1 = d1.get("homo")
+                lumo1 = d1.get("lumo")
+                homo2 = d2.get("homo")
+                lumo2 = d2.get("lumo")
+                if (
+                    homo1 is not None
+                    and lumo1 is not None
+                    and homo2 is not None
+                    and lumo2 is not None
+                ):
+                    if c == "delta_HOMO_LUMO_AA":
+                        val = homo1 - lumo1
+                    elif c == "delta_HOMO_LUMO_AB":
+                        val = homo1 - lumo2
+                    elif c == "delta_HOMO_LUMO_BB":
+                        val = homo2 - lumo2
+                    elif c == "delta_HOMO_LUMO_BA":
+                        val = homo2 - lumo1
             new_data[c].append(val)
 
         for c in other:
@@ -245,36 +278,36 @@ def create_flipped_dataset(df):
     for index, row in df.iterrows():
         flipped_row = row.copy()
         # Swap monomer fields
-        if 'constant_1' in row:
-            flipped_row['constant_1'] = row['constant_2']
-            flipped_row['constant_2'] = row['constant_1']
-            flipped_row['constant_conf_1'] = row['constant_conf_2']
-            flipped_row['constant_conf_2'] = row['constant_conf_1']
+        if "constant_1" in row:
+            flipped_row["constant_1"] = row["constant_2"]
+            flipped_row["constant_2"] = row["constant_1"]
+            flipped_row["constant_conf_1"] = row["constant_conf_2"]
+            flipped_row["constant_conf_2"] = row["constant_conf_1"]
 
-        flipped_row['monomer1_smiles'] = row['monomer2_smiles']
-        flipped_row['monomer2_smiles'] = row['monomer1_smiles']
-        flipped_row['monomer1_name'] = row['monomer2_name']
-        flipped_row['monomer2_name'] = row['monomer1_name']
-        flipped_row['delta_HOMO_LUMO_AA'] = row['delta_HOMO_LUMO_BB']
-        flipped_row['delta_HOMO_LUMO_BB'] = row['delta_HOMO_LUMO_AA']
-        flipped_row['delta_HOMO_LUMO_AB'] = row['delta_HOMO_LUMO_BA']
-        flipped_row['delta_HOMO_LUMO_BA'] = row['delta_HOMO_LUMO_AB']
+        flipped_row["monomer1_smiles"] = row["monomer2_smiles"]
+        flipped_row["monomer2_smiles"] = row["monomer1_smiles"]
+        flipped_row["monomer1_name"] = row["monomer2_name"]
+        flipped_row["monomer2_name"] = row["monomer1_name"]
+        flipped_row["delta_HOMO_LUMO_AA"] = row["delta_HOMO_LUMO_BB"]
+        flipped_row["delta_HOMO_LUMO_BB"] = row["delta_HOMO_LUMO_AA"]
+        flipped_row["delta_HOMO_LUMO_AB"] = row["delta_HOMO_LUMO_BA"]
+        flipped_row["delta_HOMO_LUMO_BA"] = row["delta_HOMO_LUMO_AB"]
 
         # Swap JSON filenames
-        if 'json_filename_1' in row and 'json_filename_2' in row:
-            flipped_row['json_filename_1'] = row['json_filename_2']
-            flipped_row['json_filename_2'] = row['json_filename_1']
+        if "json_filename_1" in row and "json_filename_2" in row:
+            flipped_row["json_filename_1"] = row["json_filename_2"]
+            flipped_row["json_filename_2"] = row["json_filename_1"]
 
         # Also swap the expected JSON filenames from extraction if present
-        if 'monomer1_json' in row and 'monomer2_json' in row:
-            flipped_row['monomer1_json'] = row['monomer2_json']
-            flipped_row['monomer2_json'] = row['monomer1_json']
+        if "monomer1_json" in row and "monomer2_json" in row:
+            flipped_row["monomer1_json"] = row["monomer2_json"]
+            flipped_row["monomer2_json"] = row["monomer1_json"]
 
         # Swap other monomer-specific fields if they exist
         for key_pair in [
-            ('constant_conf_1', 'constant_conf_2'),
-            ('e_value_1', 'e_value_2'),
-            ('q_value_1', 'q_value_2')
+            ("constant_conf_1", "constant_conf_2"),
+            ("e_value_1", "e_value_2"),
+            ("q_value_1", "q_value_2"),
         ]:
             key1, key2 = key_pair
             if key1 in row and key2 in row:
@@ -283,11 +316,11 @@ def create_flipped_dataset(df):
 
         # Swap all monomer features that end with _1 and _2
         for key in list(row.keys()):
-            if key.endswith('_1') and key.replace('_1', '_2') in row:
+            if key.endswith("_1") and key.replace("_1", "_2") in row:
                 # Skip json_filename fields as they were handled separately
-                if key not in ['json_filename_1', 'monomer1_json']:
-                    flipped_row[key] = row[key.replace('_1', '_2')]
-                    flipped_row[key.replace('_1', '_2')] = row[key]
+                if key not in ["json_filename_1", "monomer1_json"]:
+                    flipped_row[key] = row[key.replace("_1", "_2")]
+                    flipped_row[key.replace("_1", "_2")] = row[key]
 
         flipped_rows.append(flipped_row)
 
@@ -332,7 +365,9 @@ def process_embeddings(df, column_name, prefix):
         reduced_embeddings = pca.fit_transform(embedding_matrix)
 
         # Map reduced embeddings back to the column values
-        embedding_map = {item["name"]: reduced for item, reduced in zip(embeddings, reduced_embeddings)}
+        embedding_map = {
+            item["name"]: reduced for item, reduced in zip(embeddings, reduced_embeddings)
+        }
 
         # Add PCA components to the DataFrame
         df[f"{prefix}_1"] = df[column_name].apply(
@@ -351,16 +386,18 @@ def process_embeddings(df, column_name, prefix):
             embeddings_and_pca[name] = {
                 "embedding": item["embedding"],
                 "pca_1": float(reduced[0]),  # Convert numpy float to Python float
-                "pca_2": float(reduced[1])  # Convert numpy float to Python float
+                "pca_2": float(reduced[1]),  # Convert numpy float to Python float
             }
 
         # Save both original embeddings and PCA values to file
         utils.save_embeddings(embeddings_and_pca, f"output/{prefix}_embeddings.json")
 
         # Also save a simplified version with just name and PCA values
-        pca_only = {name: {"pca_1": data["pca_1"], "pca_2": data["pca_2"]}
-                    for name, data in embeddings_and_pca.items()}
-        with open(f"output/{prefix}_pca_values.json", 'w') as f:
+        pca_only = {
+            name: {"pca_1": data["pca_1"], "pca_2": data["pca_2"]}
+            for name, data in embeddings_and_pca.items()
+        }
+        with open(f"output/{prefix}_pca_values.json", "w") as f:
             json.dump(pca_only, f, indent=2)
 
         print(f"Saved embeddings and PCA values to output_2/{prefix}_embeddings.json")
@@ -375,7 +412,9 @@ def process_embeddings(df, column_name, prefix):
     after_count = len(df)
 
     if before_count > after_count:
-        print(f"Removed {before_count - after_count} rows with values in {column_name} that couldn't be embedded")
+        print(
+            f"Removed {before_count - after_count} rows with values in {column_name} that couldn't be embedded"
+        )
 
     return df
 
@@ -406,33 +445,33 @@ def add_solvent_features(df):
             return [None] * 10
 
         return [
-            Descriptors.MolLogP(mol),                         # lipophilicity
-            rdMolDescriptors.CalcTPSA(mol),                   # polar surface area
-            rdMolDescriptors.CalcNumHBA(mol),                 # H-bond acceptors
-            rdMolDescriptors.CalcNumHBD(mol),                 # H-bond donors
-            Descriptors.FractionCSP3(mol),                    # saturation
-            Descriptors.MolMR(mol),                           # polarizability
-            rdMolDescriptors.CalcLabuteASA(mol),              # surface area
-            Descriptors.NumRotatableBonds(mol),               # flexibility
-            Descriptors.RingCount(mol),                       # number of rings
-            Descriptors.HeavyAtomCount(mol)                   # heavy atoms
+            Descriptors.MolLogP(mol),  # lipophilicity
+            rdMolDescriptors.CalcTPSA(mol),  # polar surface area
+            rdMolDescriptors.CalcNumHBA(mol),  # H-bond acceptors
+            rdMolDescriptors.CalcNumHBD(mol),  # H-bond donors
+            Descriptors.FractionCSP3(mol),  # saturation
+            Descriptors.MolMR(mol),  # polarizability
+            rdMolDescriptors.CalcLabuteASA(mol),  # surface area
+            Descriptors.NumRotatableBonds(mol),  # flexibility
+            Descriptors.RingCount(mol),  # number of rings
+            Descriptors.HeavyAtomCount(mol),  # heavy atoms
         ]
 
     feature_cols = [
-        'solvent_logp',
-        'solvent_TPSA',
-        'solvent_HBA',
-        'solvent_HBD',
-        'solvent_FractionCSP3',
-        'solvent_MolMR',
-        'solvent_LabuteASA',
-        'solvent_NumRotatableBonds',
-        'solvent_RingCount',
-        'solvent_HeavyAtomCount'
+        "solvent_logp",
+        "solvent_TPSA",
+        "solvent_HBA",
+        "solvent_HBD",
+        "solvent_FractionCSP3",
+        "solvent_MolMR",
+        "solvent_LabuteASA",
+        "solvent_NumRotatableBonds",
+        "solvent_RingCount",
+        "solvent_HeavyAtomCount",
     ]
 
     print("Calculating solvent molecular features...")
-    feature_values = df['solvent_smiles'].apply(calc_features)
+    feature_values = df["solvent_smiles"].apply(calc_features)
 
     feature_df = pd.DataFrame(feature_values.tolist(), columns=feature_cols)
 
@@ -441,8 +480,10 @@ def add_solvent_features(df):
     return df
 
 
-def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.csv",
-                             specialized_cache_path="llm_specialized_filter/classification_cache.json"):
+def load_and_preprocess_data(
+    input_path="../data_extraction/extracted_reactions.csv",
+    specialized_cache_path="llm_specialized_filter/classification_cache.json",
+):
     """
     Main function to load and preprocess data
 
@@ -456,7 +497,7 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
 
     try:
         # Load data as CSV
-        df = pd.read_csv(input_path, decimal='.')
+        df = pd.read_csv(input_path, decimal=".")
         print(f"Initial datapoints: {len(df)}")
     except Exception as e:
         print(f"Error loading data: {e}")
@@ -476,10 +517,20 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
     if "specialized_filter" not in df.columns:
         df["specialized_filter"] = df.apply(_lookup_specialized, axis=1)
     else:
-        mask_empty = ~df["specialized_filter"].astype(str).str.strip().isin(["normal", "specialized", "unclear"])
-        df.loc[mask_empty, "specialized_filter"] = df.loc[mask_empty].apply(_lookup_specialized, axis=1)
+        mask_empty = (
+            ~df["specialized_filter"]
+            .astype(str)
+            .str.strip()
+            .isin(["normal", "specialized", "unclear"])
+        )
+        df.loc[mask_empty, "specialized_filter"] = df.loc[mask_empty].apply(
+            _lookup_specialized, axis=1
+        )
 
-    print("specialized_filter value counts:", df["specialized_filter"].value_counts(dropna=False).to_dict())
+    print(
+        "specialized_filter value counts:",
+        df["specialized_filter"].value_counts(dropna=False).to_dict(),
+    )
 
     # Display columns for debugging
     print("\nAvailable columns:")
@@ -487,53 +538,65 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
         print(f"- {col}")
 
     # Remove rows with missing values
-    df.dropna(subset=['constant_1', 'constant_2', 'monomer1_smiles', 'monomer2_smiles'], inplace=True)
+    df.dropna(
+        subset=["constant_1", "constant_2", "monomer1_smiles", "monomer2_smiles"], inplace=True
+    )
     print(f"DataFrame shape after dropping rows with missing values: {df.shape}")
 
     # convert all numerical values
-    df = convert_numeric_columns(df, ['constant_1', 'constant_2', 'temperature'])
+    df = convert_numeric_columns(df, ["constant_1", "constant_2", "temperature"])
 
-    print(df[['constant_1', 'constant_2']].dtypes)
+    print(df[["constant_1", "constant_2"]].dtypes)
 
-    df['r1r2'] = df['constant_1'] * df['constant_2']
+    df["r1r2"] = df["constant_1"] * df["constant_2"]
 
     # Mask for rows where both confidence intervals are present
-    mask_conf = df[['constant_conf_1', 'constant_conf_2']].notnull().all(axis=1)
+    mask_conf = df[["constant_conf_1", "constant_conf_2"]].notnull().all(axis=1)
 
     # Compute +/- confidence versions of constants
-    df.loc[mask_conf, 'constant_1_plus'] = df.loc[mask_conf, 'constant_1'] + df.loc[mask_conf, 'constant_conf_1']
-    df.loc[mask_conf, 'constant_1_minus'] = df.loc[mask_conf, 'constant_1'] - df.loc[mask_conf, 'constant_conf_1']
-    df.loc[mask_conf, 'constant_2_plus'] = df.loc[mask_conf, 'constant_2'] + df.loc[mask_conf, 'constant_conf_2']
-    df.loc[mask_conf, 'constant_2_minus'] = df.loc[mask_conf, 'constant_2'] - df.loc[mask_conf, 'constant_conf_2']
+    df.loc[mask_conf, "constant_1_plus"] = (
+        df.loc[mask_conf, "constant_1"] + df.loc[mask_conf, "constant_conf_1"]
+    )
+    df.loc[mask_conf, "constant_1_minus"] = (
+        df.loc[mask_conf, "constant_1"] - df.loc[mask_conf, "constant_conf_1"]
+    )
+    df.loc[mask_conf, "constant_2_plus"] = (
+        df.loc[mask_conf, "constant_2"] + df.loc[mask_conf, "constant_conf_2"]
+    )
+    df.loc[mask_conf, "constant_2_minus"] = (
+        df.loc[mask_conf, "constant_2"] - df.loc[mask_conf, "constant_conf_2"]
+    )
 
     # Define all variants
     c1_variants = {
-        'orig': 'constant_1',
-        'plus': 'constant_1_plus',
-        'minus': 'constant_1_minus',
+        "orig": "constant_1",
+        "plus": "constant_1_plus",
+        "minus": "constant_1_minus",
     }
 
     c2_variants = {
-        'orig': 'constant_2',
-        'plus': 'constant_2_plus',
-        'minus': 'constant_2_minus',
+        "orig": "constant_2",
+        "plus": "constant_2_plus",
+        "minus": "constant_2_minus",
     }
 
     # Compute all product combinations except (orig, orig)
     for c1_key, c1_col in c1_variants.items():
         for c2_key, c2_col in c2_variants.items():
-            if c1_key == 'orig' and c2_key == 'orig':
+            if c1_key == "orig" and c2_key == "orig":
                 continue  # skip the base case, already computed as 'r1r2'
-            product_col = f'product_c1{c1_key}_c2{c2_key}'
+            product_col = f"product_c1{c1_key}_c2{c2_key}"
             df.loc[mask_conf, product_col] = df.loc[mask_conf, c1_col] * df.loc[mask_conf, c2_col]
 
     # Print preview of computed product columns
-    product_cols = [col for col in df.columns if col.startswith('product_c1')]
-    print(df[['r1r2'] + product_cols].head())
+    product_cols = [col for col in df.columns if col.startswith("product_c1")]
+    print(df[["r1r2"] + product_cols].head())
 
     # Count how many rows have confidence values for both constants
     num_rows_with_conf = mask_conf.sum()
-    print(f"Number of rows with confidence intervals (and extended product combinations): {num_rows_with_conf}")
+    print(
+        f"Number of rows with confidence intervals (and extended product combinations): {num_rows_with_conf}"
+    )
 
     df = add_solvent_features(df)
     print(f"DataFrame shape after adding solvent features: {df.shape}")
@@ -552,7 +615,7 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
 
     # Create unique reaction ID BEFORE flipping the dataset
     print("Creating unique reaction IDs...")
-    df['reaction_id'] = df.index
+    df["reaction_id"] = df.index
     print(f"Created {df['reaction_id'].nunique()} unique reaction IDs")
 
     # Create flipped dataset
@@ -569,10 +632,12 @@ def load_and_preprocess_data(input_path="../data_extraction/extracted_reactions.
     combined_df = process_embeddings(combined_df, "method", "method_emb")
 
     # Ensure the JSON filename columns are preserved
-    json_cols = ['json_filename_1', 'json_filename_2', 'monomer1_json', 'monomer2_json']
+    json_cols = ["json_filename_1", "json_filename_2", "monomer1_json", "monomer2_json"]
     for col in json_cols:
         if col in combined_df.columns:
-            print(f"JSON filename column found: {col} with {combined_df[col].nunique()} unique values")
+            print(
+                f"JSON filename column found: {col} with {combined_df[col].nunique()} unique values"
+            )
 
     # Save processed data
     combined_df.to_csv("processed_data.csv", index=False)
@@ -595,13 +660,17 @@ def convert_numeric_columns(df, columns):
     """
     for col in columns:
         if col in df.columns:
-            original_non_numeric = df[col][~df[col].apply(
-                lambda x: isinstance(x, (int, float, np.number)) or pd.to_numeric(x,
-                                                                                  errors='coerce') is not pd.NA)].count()
-            df[col] = pd.to_numeric(df[col], errors='coerce')
+            original_non_numeric = df[col][
+                ~df[col].apply(
+                    lambda x: isinstance(x, (int, float, np.number))
+                    or pd.to_numeric(x, errors="coerce") is not pd.NA
+                )
+            ].count()
+            df[col] = pd.to_numeric(df[col], errors="coerce")
             converted_non_numeric = df[col].isna().sum()
             print(
-                f"Column '{col}': {original_non_numeric} non-numeric entries, {converted_non_numeric} converted to NaN")
+                f"Column '{col}': {original_non_numeric} non-numeric entries, {converted_non_numeric} converted to NaN"
+            )
         else:
             print(f"Column '{col}' not found in DataFrame.")
     return df

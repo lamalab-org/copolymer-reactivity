@@ -1,15 +1,17 @@
-import os
-import json
-import re
 import hashlib  # NEW
-import pandas as pd
-from openai import OpenAI
+import json
+import os
+import re
 from time import sleep
-from crossref.restful import Works
+
+import pandas as pd
 import requests
+from crossref.restful import Works
+from openai import OpenAI
 
 works = Works()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 
 # ---------------- Local DB helpers ----------------
 def load_local_db(json_path):
@@ -23,13 +25,16 @@ def load_local_db(json_path):
         print(f"⚠️ Could not load local DB: {e}")
         return []
 
+
 def norm_space(s: str) -> str:
     return re.sub(r"\s+", " ", s.strip()) if isinstance(s, str) else ""
+
 
 def normalize_title(s: str) -> str:
     s = norm_space(s).lower()
     s = s.strip(" .,:;-/\\()[]{}\"'|")
     return s
+
 
 def normalize_doi(s: str) -> str:
     if not isinstance(s, str) or not s.strip():
@@ -39,9 +44,10 @@ def normalize_doi(s: str) -> str:
     prefixes = ("https://doi.org/", "http://doi.org/", "doi:", "doi ")
     for p in prefixes:
         if lowered.startswith(p):
-            s = s[len(p):]
+            s = s[len(p) :]
             break
     return s.strip().lower()
+
 
 def normalize_pdf_name(s: str) -> str:
     if not isinstance(s, str) or not s.strip():
@@ -51,6 +57,7 @@ def normalize_pdf_name(s: str) -> str:
     name = name.replace("_", " ").replace("-", " ")
     name = norm_space(name).lower()
     return name
+
 
 def build_local_index(rows):
     doi_index = {}
@@ -63,6 +70,7 @@ def build_local_index(rows):
         if title and title not in title_index:
             title_index[title] = row
     return {"doi": doi_index, "title": title_index}
+
 
 def lookup_local(original_source, fallback_title, local_index):
     """
@@ -88,11 +96,19 @@ def lookup_local(original_source, fallback_title, local_index):
         for d, row in doi_idx.items():
             d_slashless = d.replace("/", "")
             if pdf_as_doi_try == d_slashless:
-                return row.get("Title", "") or "", row.get("Abstract", "") or "", row.get("Classification")
+                return (
+                    row.get("Title", "") or "",
+                    row.get("Abstract", "") or "",
+                    row.get("Classification"),
+                )
         # 2b) Title match
         if pdf_norm in title_idx:
             row = title_idx[pdf_norm]
-            return row.get("Title", "") or "", row.get("Abstract", "") or "", row.get("Classification")
+            return (
+                row.get("Title", "") or "",
+                row.get("Abstract", "") or "",
+                row.get("Classification"),
+            )
 
     # 3) fallback_title as real title
     norm_fb_title = normalize_title(fallback_title)
@@ -101,6 +117,7 @@ def lookup_local(original_source, fallback_title, local_index):
         return row.get("Title", "") or "", row.get("Abstract", "") or "", row.get("Classification")
 
     return "", "", None
+
 
 # ---------------- Cache helpers (NEW) ----------------
 def load_cache(cache_path):
@@ -116,6 +133,7 @@ def load_cache(cache_path):
         print(f"⚠️ Could not load cache: {e}")
         return {}
 
+
 def save_cache(cache_path, cache):
     if not cache_path:
         return
@@ -124,6 +142,7 @@ def save_cache(cache_path, cache):
             json.dump(cache, f, ensure_ascii=False, indent=2)
     except Exception as e:
         print(f"⚠️ Could not save cache: {e}")
+
 
 def compute_cache_key(original_source, title, abstract):
     """
@@ -137,6 +156,7 @@ def compute_cache_key(original_source, title, abstract):
     h = hashlib.sha1((t + "||" + a).encode("utf-8")).hexdigest()
     return f"ta::{h}"
 
+
 # ---------------- Crossref (with local pre-check) ----------------
 def get_title_abstract(original_source, fallback_title="", local_index=None):
     """
@@ -145,6 +165,7 @@ def get_title_abstract(original_source, fallback_title="", local_index=None):
     1) Crossref DOI
     2) Crossref title search
     """
+
     def is_valid(s):
         return isinstance(s, str) and s.strip() != ""
 
@@ -230,7 +251,7 @@ def classify_paper(title, abstract):
             model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
+                {"role": "user", "content": user_prompt},
             ],
             temperature=0.7,
         )
@@ -245,8 +266,14 @@ def classify_paper(title, abstract):
 
 
 # ---------------- Main loop with incremental save & caching ----------------
-def classify_csv(input_path, output_path, local_json_path=None, cache_path="classification_cache.json",
-                 save_every=1, resume_from_output=True):
+def classify_csv(
+    input_path,
+    output_path,
+    local_json_path=None,
+    cache_path="classification_cache.json",
+    save_every=1,
+    resume_from_output=True,
+):
     """
     - Loads local DB once (optional).
     - Loads cache JSON (optional).
@@ -292,7 +319,12 @@ def classify_csv(input_path, output_path, local_json_path=None, cache_path="clas
     processed = 0
     for idx, row in df.iterrows():
         # Skip if already classified (resumed)
-        if str(df.at[idx, "llm_specialized_filter"]).strip() in ["normal", "specialized", "unclear", "error"]:
+        if str(df.at[idx, "llm_specialized_filter"]).strip() in [
+            "normal",
+            "specialized",
+            "unclear",
+            "error",
+        ]:
             continue
 
         source = str(row.get("original_source", ""))
@@ -349,7 +381,7 @@ def classify_csv(input_path, output_path, local_json_path=None, cache_path="clas
                 "title": title,
                 "abstract": abstract,
                 "classification": classification,
-                "source": source
+                "source": source,
             }
             save_cache(cache_path, cache)  # save after every row
 
@@ -374,12 +406,12 @@ if __name__ == "__main__":
     input_csv = "../output/processed_data.csv"
     output_csv = "classified_output.csv"
     local_json = "../../data_extraction/obtain_data/output/collected_doi_metadata.json"
-    cache_json = "classification_cache.json"     # persistent cache file
+    cache_json = "classification_cache.json"  # persistent cache file
     classify_csv(
         input_csv,
         output_csv,
         local_json_path=local_json,
         cache_path=cache_json,
-        save_every=1,                # save after each row
-        resume_from_output=True      # resume if output already exists
+        save_every=1,  # save after each row
+        resume_from_output=True,  # resume if output already exists
     )

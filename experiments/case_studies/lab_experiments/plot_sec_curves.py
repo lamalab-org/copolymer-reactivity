@@ -27,7 +27,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MaxNLocator
 
-
 # ---------------------------------------------------------------------------
 # Paths & imports
 # ---------------------------------------------------------------------------
@@ -38,7 +37,6 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(_
 sys.path.insert(0, str(Path(PROJECT_ROOT)))
 
 from copol_prediction.analysis import plot_config  # noqa: E402
-
 
 SAMPLE_DISPLAY_NAMES: dict[str, str] = {
     "MWH-017": r"Poly(acrylonitrile-co-$\mathit{N}$-vinyl-2-pyrrolidone)",
@@ -185,7 +183,9 @@ def _inj_variant_label(path: Path) -> str | None:
     return m.group(1).lower()
 
 
-def _parse_mn_d_from_inj_file(path: Path, max_lines: int = 250) -> tuple[float | None, float | None]:
+def _parse_mn_d_from_inj_file(
+    path: Path, max_lines: int = 250
+) -> tuple[float | None, float | None]:
     mn = None
     dispersity = None
     mn_re = re.compile(r"^\s*Mn:\s*([0-9.]+E[+\-]?\d+)", flags=re.IGNORECASE)
@@ -214,7 +214,9 @@ def _parse_mn_d_from_inj_file(path: Path, max_lines: int = 250) -> tuple[float |
     return mn, dispersity
 
 
-def _collect_inj_info(data_dir: Path) -> dict[tuple[str, str | None], tuple[float | None, float | None]]:
+def _collect_inj_info(
+    data_dir: Path,
+) -> dict[tuple[str, str | None], tuple[float | None, float | None]]:
     """
     Map (tag, variant) -> (Mn, D) from injection info files.
     """
@@ -265,7 +267,9 @@ def _parse_args() -> argparse.Namespace:
         default=default_out_dir,
         help="Directory to write outputs into. Default: lab_experiments/output/sec_curves",
     )
-    p.add_argument("--file", type=Path, default=None, help="Optional single-run: path to one SEC *.TXT file.")
+    p.add_argument(
+        "--file", type=Path, default=None, help="Optional single-run: path to one SEC *.TXT file."
+    )
     p.add_argument(
         "--expect-total",
         type=int,
@@ -285,7 +289,10 @@ def _sort_sec_paths(paths: list[Path]) -> list[Path]:
     return sorted(
         paths,
         key=lambda p: (
-            (_infer_mwh_tag(p.name) is None, _tag_number(_infer_mwh_tag(p.name) or "MWH-999") or 999),
+            (
+                _infer_mwh_tag(p.name) is None,
+                _tag_number(_infer_mwh_tag(p.name) or "MWH-999") or 999,
+            ),
             _sec_variant_label(p).lower(),
             p.name.lower(),
         ),
@@ -302,14 +309,19 @@ def _plot_overview(
     paths = _sort_sec_paths(paths)
     if len(paths) != expect_total:
         found = ", ".join(p.name for p in paths) if paths else "<none>"
-        raise SystemExit(f"Expected exactly {expect_total} SEC files total, but found {len(paths)}: {found}")
+        raise SystemExit(
+            f"Expected exactly {expect_total} SEC files total, but found {len(paths)}: {found}"
+        )
     n = len(paths)
 
     fig, axes = plt.subplots(
         nrows=1,
         ncols=n,
         sharey=False,
-        figsize=(plot_config.TWO_COL_WIDTH_INCH, 0.58 * plot_config.TWO_COL_GOLDEN_RATIO_HEIGHT_INCH),
+        figsize=(
+            plot_config.TWO_COL_WIDTH_INCH,
+            0.58 * plot_config.TWO_COL_GOLDEN_RATIO_HEIGHT_INCH,
+        ),
         constrained_layout=False,
     )
     if n == 1:
@@ -328,7 +340,9 @@ def _plot_overview(
         if "-co-" in display:
             display_wrapped = display.replace("-co-", "-co-\n", 1)
         else:
-            display_wrapped = display.replace("Poly(", "Poly(\n", 1) if display.startswith("Poly(") else display
+            display_wrapped = (
+                display.replace("Poly(", "Poly(\n", 1) if display.startswith("Poly(") else display
+            )
         # Title should be only the polymer name (no c/cd/etc.)
         panel = chr(ord("A") + (idx - 1)) if 1 <= idx <= 26 else str(idx)
         label = f"{panel}: {display_wrapped}"
@@ -365,7 +379,9 @@ def _plot_overview(
                     va="top",
                     fontsize=9,
                     clip_on=False,
-                    bbox=dict(boxstyle="round,pad=0.25", facecolor="white", edgecolor="none", alpha=0.85),
+                    bbox=dict(
+                        boxstyle="round,pad=0.25", facecolor="white", edgecolor="none", alpha=0.85
+                    ),
                 )
 
     # Make room for the boxes below the x-axis and long two-line titles.
@@ -396,14 +412,21 @@ def main() -> None:
         all_paths.extend(paths)
 
     # Build output name that includes the sample IDs
-    tags = sorted({(_infer_mwh_tag(p.name) or "MWH") for p in all_paths}, key=lambda t: _tag_number(t) or 999)
+    tags = sorted(
+        {(_infer_mwh_tag(p.name) or "MWH") for p in all_paths}, key=lambda t: _tag_number(t) or 999
+    )
     tag_suffix = "_".join(tags)
     out_name = f"{args.out_base}_{tag_suffix}" if tag_suffix else args.out_base
 
     inj_info = _collect_inj_info(args.data_dir)
-    _plot_overview(all_paths, args.out_dir, out_base_name=out_name, expect_total=args.expect_total, inj_info=inj_info)
+    _plot_overview(
+        all_paths,
+        args.out_dir,
+        out_base_name=out_name,
+        expect_total=args.expect_total,
+        inj_info=inj_info,
+    )
 
 
 if __name__ == "__main__":
     main()
-

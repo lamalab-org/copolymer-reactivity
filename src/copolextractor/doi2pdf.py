@@ -1,9 +1,12 @@
 import argparse
+import os
+import platform
+import subprocess
+import time
 from typing import Optional
-import subprocess, os, platform
+
 import bs4
 import requests
-import time
 
 
 class NotFoundError(Exception):
@@ -21,12 +24,12 @@ SCI_HUB_URLS = [
 
 
 def doi2pdf(
-        doi: Optional[str] = None,
-        *,
-        output: Optional[str] = None,
-        name: Optional[str] = None,
-        url: Optional[str] = None,
-        open_pdf: bool = False,
+    doi: Optional[str] = None,
+    *,
+    output: Optional[str] = None,
+    name: Optional[str] = None,
+    url: Optional[str] = None,
+    open_pdf: bool = False,
 ):
     """Retrieves the pdf file from DOI, name or URL of a research paper.
     Args:
@@ -95,7 +98,7 @@ def get_paper_metadata(doi, name, url):
         metadata = metadata["results"][0]
 
     if metadata.get("doi") is not None:
-        doi = metadata["doi"][len("https://doi.org/"):]
+        doi = metadata["doi"][len("https://doi.org/") :]
     title = metadata["display_name"]
     pdf_url = metadata["open_access"]["oa_url"]
     if pdf_url is None:
@@ -187,11 +190,12 @@ def retrieve_scihub(doi, sci_hub_url):
         pdf_src = iframe["src"]
 
     # Handle relative URLs
-    if pdf_src.startswith('//'):
-        pdf_src = 'https:' + pdf_src
-    elif pdf_src.startswith('/'):
+    if pdf_src.startswith("//"):
+        pdf_src = "https:" + pdf_src
+    elif pdf_src.startswith("/"):
         # Extract the base URL from sci_hub_url
         from urllib.parse import urlparse
+
         parsed_url = urlparse(sci_hub_url)
         base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
         pdf_src = base_url + pdf_src
@@ -206,7 +210,7 @@ def get_pdf_from_url(url):
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
             "Accept": "application/pdf,*/*",
-            "Referer": "https://scholar.google.com/"
+            "Referer": "https://scholar.google.com/",
         }
 
         print(f"[DEBUG] Downloading PDF from {url}")
@@ -216,10 +220,10 @@ def get_pdf_from_url(url):
         res.raise_for_status()
 
         # Check if content is likely a PDF
-        content_type = res.headers.get('Content-Type', '').lower()
-        if 'application/pdf' not in content_type and not url.lower().endswith('.pdf'):
+        content_type = res.headers.get("Content-Type", "").lower()
+        if "application/pdf" not in content_type and not url.lower().endswith(".pdf"):
             # Check first few bytes for PDF signature
-            if not res.content.startswith(b'%PDF'):
+            if not res.content.startswith(b"%PDF"):
                 print(f"[WARNING] Response may not be a PDF. Content-Type: {content_type}")
 
         return res.content
@@ -298,20 +302,18 @@ def main():
         metavar="path",
     )
 
-    parser.add_argument(
-        "--doi", type=str, help="DOI of the research paper.", metavar="DOI"
-    )
+    parser.add_argument("--doi", type=str, help="DOI of the research paper.", metavar="DOI")
 
     parser.add_argument(
         "-n", "--name", type=str, help="Name of the research paper.", metavar="name"
     )
 
-    parser.add_argument(
-        "--url", type=str, help="URL of the research paper.", metavar="url"
-    )
+    parser.add_argument("--url", type=str, help="URL of the research paper.", metavar="url")
 
     parser.add_argument(
-        "--open", action="store_true", help="Open the pdf file after downloading.",
+        "--open",
+        action="store_true",
+        help="Open the pdf file after downloading.",
     )
 
     parser.add_argument(
@@ -332,7 +334,8 @@ def main():
 
         try:
             import json
-            with open(args.batch, 'r') as f:
+
+            with open(args.batch, "r") as f:
                 papers = json.load(f)
 
             successful = download_papers(papers, args.output_dir)
@@ -340,7 +343,7 @@ def main():
 
             # Save successful downloads to a JSON file
             success_file = os.path.join(args.output_dir, "successful_downloads.json")
-            with open(success_file, 'w') as f:
+            with open(success_file, "w") as f:
                 json.dump(successful, f, indent=2)
 
         except Exception as e:
@@ -354,8 +357,7 @@ def main():
         parser.error("Only one of --doi, --name, --url must be specified.")
 
     try:
-        doi2pdf(
-            args.doi, output=args.output, name=args.name, url=args.url, open_pdf=args.open)
+        doi2pdf(args.doi, output=args.output, name=args.name, url=args.url, open_pdf=args.open)
     except NotFoundError as e:
         print(f"Error: {str(e)}")
         exit(1)

@@ -18,6 +18,7 @@ Skips automatically if heavy dependencies (`fastapi`, `rdkit`, the model
 bundle, or `test.csv`) are unavailable, so the existing CI matrix that
 doesn't install API deps stays green.
 """
+
 from __future__ import annotations
 
 import math
@@ -35,7 +36,10 @@ BUNDLE_DIR = ARTIFACTS / "model_bundle"
 TEST_CSV = ARTIFACTS / "data_splits" / "test.csv"
 TRAIN_CSV = ARTIFACTS / "data_splits" / "train.csv"
 NEGATIVE_CSV = (
-    ROOT / "copol_prediction" / "filter" / "artificial_datapoints"
+    ROOT
+    / "copol_prediction"
+    / "filter"
+    / "artificial_datapoints"
     / "combined_augmented_for_processing.csv"
 )
 DATASET_CSV = ROOT / "copol_prediction" / "processed_data.csv"
@@ -61,8 +65,9 @@ if not BUNDLE_DIR.exists():
 if not TEST_CSV.exists():
     pytest.skip(f"Test split not found at {TEST_CSV}", allow_module_level=True)
 
-from copolpredictor.inference import CopolymerPredictor  # noqa: E402
 import app as api_app  # noqa: E402
+
+from copolpredictor.inference import CopolymerPredictor  # noqa: E402
 
 # Observed values at the time of writing (Opus 4.7 fix for feature-name
 # mismatch): direct accuracy 0.7401, API↔direct agreement 96/100, p95

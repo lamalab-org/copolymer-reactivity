@@ -1,11 +1,12 @@
-import time
+import base64
+import json
 import os
+import time
+from typing import List, Tuple
+
+import anthropic
 import yaml
 from openai import OpenAI
-import json
-from typing import List, Tuple
-import anthropic
-import base64
 
 
 class RunTimeExpired(Exception):
@@ -17,11 +18,11 @@ class RunTimeExpired(Exception):
 def get_prompt_pdf_quality():
     prompt = """Question: The content of the pictures is a scientific paper about copolymerization of monomers.
     The main focus here is to find the copolymerizations which have r-values for a pair of two Monomers.
-    Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
+    Its possible, that there is also the beginning of a new paper about polymers in the PDF.
     Ignore these. Rate the quality of the provided paper form 0 (hard to extract data) to 10 (easy to extract data) in terms of readability and easiness of data extraction.
-    In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
+    In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions.
     Count each different reaction with an r-value as one. Ignore copolymerization with reference to previse work.
-    Just count copolymerizations with r-values which are carried out in the article.  
+    Just count copolymerizations with r-values which are carried out in the article.
     Stick to the given output_2 datatype (string, integer or float). json:
     {
         "pdf_quality": the quality of the provided PDF document in terms of e.g. resolution and easiness of data extraction form 0 (hard to extract) to 10 (easy to extract) (FLOAT),
@@ -47,17 +48,17 @@ def get_prompt_pdf_quality():
 
 
 def get_prompt_template():
-    prompt = """The content of the pictures is a scientific paper about copolymerization of monomers. 
-    We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them. 
-    Its possible, that there is also the beginning of a new paper about polymers in the PDF. 
-    Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions. 
+    prompt = """The content of the pictures is a scientific paper about copolymerization of monomers.
+    We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them.
+    Its possible, that there is also the beginning of a new paper about polymers in the PDF.
+    Ignore these. In each paper there could be multiple different reaction with different pairs of monomers and same reactions with different reaction conditions.
     The reaction constants for the copolymerization with the monomer pair is the most important information. Be careful with numbers and do not miss the decimal points.
     If there are polymerization's without these constants, ignore these.
-    From the PDF, extract the polymerization information from each polymerization and report it in valid json format. 
+    From the PDF, extract the polymerization information from each polymerization and report it in valid json format.
     Also pay attention to the caption of figures.
     Don't use any abbreviations, always use the whole word.
     Be careful with the sequenz of the monomers and reaction constants. The monomer 1 should belong to r-value 1. t6zt
-    Try to keep the string short. Exclude comments out of the json output_2. Return one json object. 
+    Try to keep the string short. Exclude comments out of the json output_2. Return one json object.
     Stick to the given output_2 datatype (string, or float).
 
     Extract the following information:
@@ -115,9 +116,9 @@ def get_prompt_template():
 
 
 def get_prompt_addition() -> str:
-    prompt_addition = """Here is the previously collected data from the same Markdowns: {}. 
-Try to fill up the entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point. 
-Combine different reaction if they belong to the same polymerization with the same reaction conditions. 
+    prompt_addition = """Here is the previously collected data from the same Markdowns: {}.
+Try to fill up the entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point.
+Combine different reaction if they belong to the same polymerization with the same reaction conditions.
 Report every different polymerization and every different reaction condition separately. Do this based on this prompt:"""
     return prompt_addition
 
@@ -170,9 +171,7 @@ def call_openai(prompt, model="chatgpt-4o-latest", temperature: float = 0.0, **k
     return message_content, input_tokens, output_token
 
 
-def call_openai_chucked(
-    prompt, model="gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs
-):
+def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs):
     """Call chat openai model
 
     Args:
@@ -210,12 +209,8 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
     print("openai call has started")
     client = OpenAI()
     thread = client.beta.threads.create()
-    message = client.beta.threads.messages.create(
-        thread_id=thread.id, role="user", content=prompt
-    )
-    run = client.beta.threads.runs.create(
-        thread_id=thread.id, assistant_id=assistant.id
-    )
+    message = client.beta.threads.messages.create(thread_id=thread.id, role="user", content=prompt)
+    run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id=assistant.id)
     run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
 
     while run.status != "completed":
@@ -343,8 +338,8 @@ def call_claude3(prompt):
         model="claude-3-opus-20240229",
         max_tokens=1024,
         system="You are a scientific assistant, extracting important information about polymerization conditions"
-                "out of PDFs in valid json format. Extract just data which you are 100% confident about the "
-                "accuracy. Keep the entries short without details. Be careful with numbers.",
+        "out of PDFs in valid json format. Extract just data which you are 100% confident about the "
+        "accuracy. Keep the entries short without details. Be careful with numbers.",
         temperature=0.0,
         messages=prompt,
     )

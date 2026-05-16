@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def fill_missing_confidences(df):
@@ -7,7 +7,7 @@ def fill_missing_confidences(df):
     Fills missing confidence values for constant_1 and constant_2 using the mean relative uncertainty
     from non-missing values.
     """
-    for const, conf in [('constant_1', 'constant_conf_1'), ('constant_2', 'constant_conf_2')]:
+    for const, conf in [("constant_1", "constant_conf_1"), ("constant_2", "constant_conf_2")]:
         valid_mask = df[const].notna() & df[conf].notna()
         rel_conf = df.loc[valid_mask, conf] / df.loc[valid_mask, const]
         mean_rel_conf = rel_conf.mean()
@@ -16,16 +16,15 @@ def fill_missing_confidences(df):
         df.loc[missing_mask, conf] = df.loc[missing_mask, const] * mean_rel_conf
 
         print(
-            f"Filled {missing_mask.sum()} missing values in {conf} using mean relative uncertainty: {mean_rel_conf:.4f}")
+            f"Filled {missing_mask.sum()} missing values in {conf} using mean relative uncertainty: {mean_rel_conf:.4f}"
+        )
 
     return df
 
 
-def augment_with_gaussian_samples(df,
-                                  r1r2_col='r1r2',
-                                  num_samples=3,
-                                  std_factor=0.5,
-                                  random_state=42):
+def augment_with_gaussian_samples(
+    df, r1r2_col="r1r2", num_samples=3, std_factor=0.5, random_state=42
+):
     """
     Augment data using Gaussian sampling for constant_1 and constant_2 with relative stddev only.
 
@@ -45,11 +44,11 @@ def augment_with_gaussian_samples(df,
 
     for _, row in df.iterrows():
         base_row = row.copy()
-        base_row['r1r2_variant_source'] = 'original'
+        base_row["r1r2_variant_source"] = "original"
         rows.append(base_row)
 
-        c1 = row['constant_1']
-        c2 = row['constant_2']
+        c1 = row["constant_1"]
+        c2 = row["constant_2"]
 
         if pd.isna(c1) or pd.isna(c2):
             continue
@@ -64,10 +63,10 @@ def augment_with_gaussian_samples(df,
 
         for i in range(num_samples):
             new_row = row.copy()
-            new_row['constant_1'] = sampled_c1[i]
-            new_row['constant_2'] = sampled_c2[i]
+            new_row["constant_1"] = sampled_c1[i]
+            new_row["constant_2"] = sampled_c2[i]
             new_row[r1r2_col] = sampled_c1[i] * sampled_c2[i]
-            new_row['r1r2_variant_source'] = f'gaussian_sample_{i + 1}'
+            new_row["r1r2_variant_source"] = f"gaussian_sample_{i + 1}"
 
             # Class assignment based on r1r2 binning
             bins = [-np.inf, 1, 25, np.inf]
@@ -75,21 +74,17 @@ def augment_with_gaussian_samples(df,
 
             new_r1r2 = sampled_c1[i] * sampled_c2[i]
 
-            class_from_r1r2 = pd.cut(
-                [new_r1r2],
-                bins=bins,
-                labels=labels,
-                right=False
-            ).astype(int)[0]
+            class_from_r1r2 = pd.cut([new_r1r2], bins=bins, labels=labels, right=False).astype(int)[
+                0
+            ]
 
             # Check if extreme constant condition applies
-            is_extreme = (
-                    ((sampled_c1[i] < 0.5) and (sampled_c2[i] > 25)) or
-                    ((sampled_c2[i] < 0.5) and (sampled_c1[i] > 25))
+            is_extreme = ((sampled_c1[i] < 0.5) and (sampled_c2[i] > 25)) or (
+                (sampled_c2[i] < 0.5) and (sampled_c1[i] > 25)
             )
 
             # Final class: 2 if extreme, else use binning
-            new_row['r_product_class'] = 2 if is_extreme else class_from_r1r2
+            new_row["r_product_class"] = 2 if is_extreme else class_from_r1r2
 
             rows.append(new_row)
             added += 1
@@ -98,11 +93,9 @@ def augment_with_gaussian_samples(df,
     return pd.DataFrame(rows).reset_index(drop=True)
 
 
-def augment_to_balance_classes(df,
-                               r1r2_col='r1r2',
-                               max_samples_per_row=10,
-                               std_factor=0.5,
-                               random_state=42):
+def augment_to_balance_classes(
+    df, r1r2_col="r1r2", max_samples_per_row=10, std_factor=0.5, random_state=42
+):
     """
     Gaussian augment minority classes (1 & 2) to balance dataset up to the size of the largest class,
     with a maximum of N samples per original row.
@@ -122,7 +115,7 @@ def augment_to_balance_classes(df,
     added_counts = {0: 0, 1: 0, 2: 0}
 
     # Determine how many samples are needed per class
-    class_counts = df['r_product_class'].value_counts().to_dict()
+    class_counts = df["r_product_class"].value_counts().to_dict()
     all_classes = [0, 1, 2]
     for cls in all_classes:
         class_counts.setdefault(cls, 0)
@@ -140,11 +133,11 @@ def augment_to_balance_classes(df,
     for _, row in df.iterrows():
         # Always include original
         base_row = row.copy()
-        base_row['r1r2_variant_source'] = 'original'
+        base_row["r1r2_variant_source"] = "original"
         rows.append(base_row)
 
-        c1 = row['constant_1']
-        c2 = row['constant_2']
+        c1 = row["constant_1"]
+        c2 = row["constant_2"]
 
         if pd.isna(c1) or pd.isna(c2):
             continue
@@ -169,26 +162,26 @@ def augment_to_balance_classes(df,
             # Determine class
             bins = [-np.inf, 1, 25, np.inf]
             labels = [0, 1, 2]
-            class_from_bins = pd.cut(
-                [new_r1r2],
-                bins=bins,
-                labels=labels,
-                right=False
-            ).astype(int)[0]
+            class_from_bins = pd.cut([new_r1r2], bins=bins, labels=labels, right=False).astype(int)[
+                0
+            ]
 
-            is_extreme = ((new_c1 < 0.5 and new_c2 > 25) or (new_c2 < 0.5 and new_c1 > 25))
+            is_extreme = (new_c1 < 0.5 and new_c2 > 25) or (new_c2 < 0.5 and new_c1 > 25)
             final_class = 2 if is_extreme else class_from_bins
 
             # Only add sample if:
             # - class is 1 or 2
             # - we still need more samples of that class
-            if final_class in samples_needed and added_counts[final_class] < samples_needed[final_class]:
+            if (
+                final_class in samples_needed
+                and added_counts[final_class] < samples_needed[final_class]
+            ):
                 new_row = row.copy()
-                new_row['constant_1'] = new_c1
-                new_row['constant_2'] = new_c2
+                new_row["constant_1"] = new_c1
+                new_row["constant_2"] = new_c2
                 new_row[r1r2_col] = new_r1r2
-                new_row['r_product_class'] = final_class
-                new_row['r1r2_variant_source'] = f'gaussian_sample_{samples_added_for_this_row + 1}'
+                new_row["r_product_class"] = final_class
+                new_row["r1r2_variant_source"] = f"gaussian_sample_{samples_added_for_this_row + 1}"
 
                 rows.append(new_row)
                 added_counts[final_class] += 1
@@ -198,6 +191,6 @@ def augment_to_balance_classes(df,
 
     print(f"→ Added samples per class: {added_counts}")
     print("→ Final class distribution:")
-    print(df_aug['r_product_class'].value_counts().sort_index())
+    print(df_aug["r_product_class"].value_counts().sort_index())
 
     return df_aug

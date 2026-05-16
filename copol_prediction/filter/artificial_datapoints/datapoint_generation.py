@@ -1,19 +1,20 @@
-import pandas as pd
-import time
 import json
-import numpy as np
 import os
-from tqdm import tqdm
+import time
+
+import numpy as np
+import pandas as pd
 from openai import OpenAI
+from tqdm import tqdm
+
 from copolextractor.utils import name_to_smiles
 from copolpredictor.data_processing import (
-    add_solvent_features,
     add_molecular_features,
     add_orbital_interaction_features,
+    add_solvent_features,
     create_flipped_dataset,
-    process_embeddings
+    process_embeddings,
 )
-
 
 # --- Configuration ---
 TEMP_ONLY_INPUT = "temperature_only.csv"
@@ -47,11 +48,14 @@ def make_cache_key(m1, m2, poly, solvent, vary_solvent):
 
 # --- Prompt Logic ---
 def generate_augmented_conditions(
-    m1, m2, poly_type, fixed_solvent=None,
+    m1,
+    m2,
+    poly_type,
+    fixed_solvent=None,
     vary_solvent=True,
     num_solvents=3,
     num_temps_per_solvent=2,
-    model="gpt-4"
+    model="gpt-4",
 ):
     """
     Generates augmented experimental conditions using OpenAI API.
@@ -88,7 +92,7 @@ def generate_augmented_conditions(
             f"Suggest {num_solvents} similar solvents that could be used.\n"
             f"For each solvent, propose {num_temps_per_solvent} realistic reaction temperatures in Celsius.\n"
             "Format your response as JSON:\n"
-            "[{\"Solvent\": \"...\", \"Temperatures\": [.., ..]}, ...]"
+            '[{"Solvent": "...", "Temperatures": [.., ..]}, ...]'
         )
     else:
         user_prompt = (
@@ -97,7 +101,7 @@ def generate_augmented_conditions(
             f"Solvent: {fixed_solvent}\n"
             f"Polymerization type: {poly_type}\n"
             f"Propose {num_temps_per_solvent} realistic temperatures in Celsius for this reaction.\n"
-            "Format your response as JSON list: [{{\"Temperature\": ...}}, ...]"
+            'Format your response as JSON list: [{{"Temperature": ...}}, ...]'
         )
 
     try:
@@ -105,7 +109,7 @@ def generate_augmented_conditions(
             model=model,
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
+                {"role": "user", "content": user_prompt},
             ],
             temperature=0.7,
         )
@@ -146,11 +150,13 @@ def augment_dataset(df, vary_solvent=True):
             continue
 
         variants = generate_augmented_conditions(
-            m1, m2, poly,
+            m1,
+            m2,
+            poly,
             fixed_solvent=original_solvent,
             vary_solvent=vary_solvent,
             num_solvents=5,
-            num_temps_per_solvent=5
+            num_temps_per_solvent=5,
         )
 
         smiles_m1 = name_to_smiles(m1)
@@ -174,7 +180,7 @@ def augment_dataset(df, vary_solvent=True):
                         "solvent_smiles": name_to_smiles(solv) if pd.notna(solv) else None,
                         "temperature": T,
                         "source": "LLM_generated",
-                        "method": "solvent+temperature"
+                        "method": "solvent+temperature",
                     }
                     augmented.append(new_row)
         else:
@@ -189,10 +195,12 @@ def augment_dataset(df, vary_solvent=True):
                     "monomer2_smiles": smiles_m2,
                     "polymerization_type": poly,
                     "solvent": original_solvent,
-                    "solvent_smiles": name_to_smiles(original_solvent) if pd.notna(original_solvent) else None,
+                    "solvent_smiles": (
+                        name_to_smiles(original_solvent) if pd.notna(original_solvent) else None
+                    ),
                     "temperature": T,
                     "source": "LLM_generated",
-                    "method": "temperature_only"
+                    "method": "temperature_only",
                 }
                 augmented.append(new_row)
 
@@ -205,7 +213,6 @@ def augment_dataset(df, vary_solvent=True):
         if n_missing:
             print(f"⚠️ Warnung: {n_missing} Zeilen ohne Temperatur – prüfe LLM-Ausgabe/Parsing.")
     return df_out
-
 
 
 def preprocess_data(df):
@@ -248,8 +255,12 @@ def preprocess_data(df):
 
     # Function to map a column to its PCA values
     def apply_pca_embeddings(df, source_col, emb_dict, prefix):
-        df[f"{prefix}_pca_1"] = df[source_col].map(lambda x: emb_dict.get(x, {}).get("pca_1", np.nan))
-        df[f"{prefix}_pca_2"] = df[source_col].map(lambda x: emb_dict.get(x, {}).get("pca_2", np.nan))
+        df[f"{prefix}_pca_1"] = df[source_col].map(
+            lambda x: emb_dict.get(x, {}).get("pca_1", np.nan)
+        )
+        df[f"{prefix}_pca_2"] = df[source_col].map(
+            lambda x: emb_dict.get(x, {}).get("pca_2", np.nan)
+        )
         return df
 
     # Replace previous process_embeddings calls
@@ -258,7 +269,7 @@ def preprocess_data(df):
 
     # Create reaction IDs before flipping
     print("🔑 Creating unique reaction IDs...")
-    df['reaction_id'] = df.index
+    df["reaction_id"] = df.index
     print(f"✅ Created {df['reaction_id'].nunique()} unique reaction IDs")
 
     # Create flipped dataset
@@ -272,8 +283,8 @@ def preprocess_data(df):
 # --- Main Execution ---
 def main():
     print("📥 Loading input files...")
-    df_temp_only = pd.read_csv(TEMP_ONLY_INPUT, sep=';', engine='python')
-    df_solv_and_temp = pd.read_csv(SOLV_AND_TEMP_INPUT, sep=';', engine='python')
+    df_temp_only = pd.read_csv(TEMP_ONLY_INPUT, sep=";", engine="python")
+    df_solv_and_temp = pd.read_csv(SOLV_AND_TEMP_INPUT, sep=";", engine="python")
 
     print("🔥 Generating temperature-only variants...")
     df_aug_temp = augment_dataset(df_temp_only, vary_solvent=False)

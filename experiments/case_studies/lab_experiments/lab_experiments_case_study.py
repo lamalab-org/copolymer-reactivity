@@ -23,11 +23,10 @@ The script:
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 import numpy as np
 import pandas as pd
-
 
 # ---------------------------------------------------------------------------
 # Paths & imports
@@ -40,15 +39,15 @@ sys.path.insert(0, str(Path(PROJECT_ROOT) / "src"))
 sys.path.insert(0, str(Path(PROJECT_ROOT) / "copol_prediction"))
 sys.path.insert(0, str(Path(PROJECT_ROOT) / "copol_prediction" / "api"))
 
-from copolpredictor.inference import CopolymerPredictor
-from copolpredictor import prediction_utils
-
 # Reuse preprocessing helpers from API
 from app import (  # type: ignore
-    load_monomer_features,
-    extract_monomer_features_for_model,
     calculate_solvent_features,
+    extract_monomer_features_for_model,
+    load_monomer_features,
 )
+
+from copolpredictor import prediction_utils
+from copolpredictor.inference import CopolymerPredictor
 
 try:
     # Nearest-neighbor lookup (used for "voting": only predict when both agree)
@@ -141,18 +140,26 @@ def build_features_for_reaction(
         "dipole_y_2": m2_feat.get("dipole_y"),
         "dipole_z_2": m2_feat.get("dipole_z"),
         # HOMO-LUMO combinations
-        "delta_HOMO_LUMO_AA": (m1_feat.get("homo") - m1_feat.get("lumo"))
-        if (m1_feat.get("homo") is not None and m1_feat.get("lumo") is not None)
-        else None,
-        "delta_HOMO_LUMO_AB": (m1_feat.get("homo") - m2_feat.get("lumo"))
-        if (m1_feat.get("homo") is not None and m2_feat.get("lumo") is not None)
-        else None,
-        "delta_HOMO_LUMO_BB": (m2_feat.get("homo") - m2_feat.get("lumo"))
-        if (m2_feat.get("homo") is not None and m2_feat.get("lumo") is not None)
-        else None,
-        "delta_HOMO_LUMO_BA": (m2_feat.get("homo") - m1_feat.get("lumo"))
-        if (m2_feat.get("homo") is not None and m1_feat.get("lumo") is not None)
-        else None,
+        "delta_HOMO_LUMO_AA": (
+            (m1_feat.get("homo") - m1_feat.get("lumo"))
+            if (m1_feat.get("homo") is not None and m1_feat.get("lumo") is not None)
+            else None
+        ),
+        "delta_HOMO_LUMO_AB": (
+            (m1_feat.get("homo") - m2_feat.get("lumo"))
+            if (m1_feat.get("homo") is not None and m2_feat.get("lumo") is not None)
+            else None
+        ),
+        "delta_HOMO_LUMO_BB": (
+            (m2_feat.get("homo") - m2_feat.get("lumo"))
+            if (m2_feat.get("homo") is not None and m2_feat.get("lumo") is not None)
+            else None
+        ),
+        "delta_HOMO_LUMO_BA": (
+            (m2_feat.get("homo") - m1_feat.get("lumo"))
+            if (m2_feat.get("homo") is not None and m1_feat.get("lumo") is not None)
+            else None
+        ),
         # Other features
         "temperature": float(temperature),
         "polytype_emb_1": polytype_emb["pca_1"],
@@ -213,39 +220,39 @@ def main():
     systems = [
         {
             "name": "Acrylonitrile + N-vinyl-5-pyrrolidone in chloroform",
-            "monomer1_smiles": "C=CC#N",                 # acrylonitrile
-            "monomer2_smiles": "C=CN1CCCC1=O",           # N-vinyl-2-pyrrolidone
-            "solvent_smiles": "ClC(Cl)Cl",               # chloroform
+            "monomer1_smiles": "C=CC#N",  # acrylonitrile
+            "monomer2_smiles": "C=CN1CCCC1=O",  # N-vinyl-2-pyrrolidone
+            "solvent_smiles": "ClC(Cl)Cl",  # chloroform
         },
         {
             "name": "Styrene + 1-octene in chloroform",
-            "monomer1_smiles": "C=CC1=CC=CC=C1",         # styrene
-            "monomer2_smiles": "CCCCCCCC=C",             # 1-octene
-            "solvent_smiles": "ClC(Cl)Cl",               # chloroform
+            "monomer1_smiles": "C=CC1=CC=CC=C1",  # styrene
+            "monomer2_smiles": "CCCCCCCC=C",  # 1-octene
+            "solvent_smiles": "ClC(Cl)Cl",  # chloroform
         },
         {
             "name": "Butyl acrylate + Vinyl acetate in toluene",
-            "monomer1_smiles": "C=CC(=O)OCCCC",          # butyl acrylate
-            "monomer2_smiles": "C=COC(C)=O",             # vinyl acetate
-            "solvent_smiles": "CC1=CC=CC=C1",            # toluene
+            "monomer1_smiles": "C=CC(=O)OCCCC",  # butyl acrylate
+            "monomer2_smiles": "C=COC(C)=O",  # vinyl acetate
+            "solvent_smiles": "CC1=CC=CC=C1",  # toluene
         },
         {
             "name": "Acrylonitrile + Ethyl methacrylate in chloroform",
-            "monomer1_smiles": "C=CC#N",                 # acrylonitrile
-            "monomer2_smiles": "C=C(C)C(=O)OCC",         # ethyl methacrylate
-            "solvent_smiles": "ClC(Cl)Cl",               # chloroform
+            "monomer1_smiles": "C=CC#N",  # acrylonitrile
+            "monomer2_smiles": "C=C(C)C(=O)OCC",  # ethyl methacrylate
+            "solvent_smiles": "ClC(Cl)Cl",  # chloroform
         },
         {
             "name": "Vinyl acetate + Ethyl methacrylate in chloroform",
-            "monomer1_smiles": "C=COC(C)=O",             # vinyl acetate
-            "monomer2_smiles": "C=C(C)C(=O)OCC",         # ethyl methacrylate
-            "solvent_smiles": "ClC(Cl)Cl",               # chloroform
+            "monomer1_smiles": "C=COC(C)=O",  # vinyl acetate
+            "monomer2_smiles": "C=C(C)C(=O)OCC",  # ethyl methacrylate
+            "solvent_smiles": "ClC(Cl)Cl",  # chloroform
         },
         {
             "name": "Methacrylate + N-vinyl-2-pyrrolidone in chloroform",
-            "monomer1_smiles": "C=C(C)C(=O)O",           # methacrylate (methacrylic acid)
-            "monomer2_smiles": "C=CN1CCCC1=O",           # N-vinyl-2-pyrrolidone
-            "solvent_smiles": "ClC(Cl)Cl",               # chloroform
+            "monomer1_smiles": "C=C(C)C(=O)O",  # methacrylate (methacrylic acid)
+            "monomer2_smiles": "C=CN1CCCC1=O",  # N-vinyl-2-pyrrolidone
+            "solvent_smiles": "ClC(Cl)Cl",  # chloroform
         },
     ]
 
@@ -346,7 +353,9 @@ def main():
                     if voted_class is None:
                         print("  VOTED prediction   : (abstain due to disagreement)")
                     else:
-                        print(f"  VOTED class        : {voted_class} ({class_map.get(voted_class, 'unknown')})")
+                        print(
+                            f"  VOTED class        : {voted_class} ({class_map.get(voted_class, 'unknown')})"
+                        )
 
             rows.append(
                 {
@@ -366,7 +375,9 @@ def main():
                     "lookup_top_similarity": top_neighbor_similarity,
                     "models_agree": models_agree,
                     "voted_class": voted_class,
-                    "voted_class_name": class_map.get(voted_class, "unknown") if voted_class is not None else None,
+                    "voted_class_name": (
+                        class_map.get(voted_class, "unknown") if voted_class is not None else None
+                    ),
                     "voted_confidence": voted_confidence,
                 }
             )
@@ -384,4 +395,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

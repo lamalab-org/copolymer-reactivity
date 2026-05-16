@@ -14,18 +14,17 @@ Layout (2x2):
 
 from __future__ import annotations
 
-from pathlib import Path
-from collections import defaultdict
 import json
 import re
 import sys
+from collections import defaultdict
+from pathlib import Path
 
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
-
 
 # --- Optional deps for chemically meaningful layout ---
 try:
@@ -50,7 +49,6 @@ sys.path.insert(0, str(PROJECT_ROOT / "copol_prediction" / "analysis"))
 
 from plot_config import SEQUENTIAL_COLORS, TWO_COL_WIDTH_INCH, setup_plot_style  # noqa: E402
 
-
 DATA_PATH = PROJECT_ROOT / "copol_prediction" / "processed_data.csv"
 SOLVENT_BOILING_POINTS_FILE = Path(__file__).parent / "solvent_boiling_points_c.json"
 OUTPUT_DIR = Path(__file__).parent / "figures"
@@ -67,7 +65,14 @@ def _count_raw_llm_extractions() -> dict[str, int]:
     Source:
     `data_extraction/artifacts/llm/extractions/model_output_GPT4-o/*.json`
     """
-    base = PROJECT_ROOT / "data_extraction" / "artifacts" / "llm" / "extractions" / "model_output_GPT4-o"
+    base = (
+        PROJECT_ROOT
+        / "data_extraction"
+        / "artifacts"
+        / "llm"
+        / "extractions"
+        / "model_output_GPT4-o"
+    )
     if not base.exists():
         return {"raw_publications": 0, "raw_reactions": 0, "raw_parse_errors": 0}
 
@@ -204,9 +209,16 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
     """
     name = _norm_name(monomer_name)
     smi = _norm_smiles(monomer_smiles)
-    if "acrylonitrile" in name or "methacrylonitrile" in name or _has_any(smi, ["C=CC#N", "C=C(C)C#N"]):
+    if (
+        "acrylonitrile" in name
+        or "methacrylonitrile" in name
+        or _has_any(smi, ["C=CC#N", "C=C(C)C#N"])
+    ):
         return "(Meth)acrylonitriles"
-    if any(k in name for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]):
+    if any(
+        k in name
+        for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]
+    ):
         return "Anhydrides/Diacids"
     if (
         ("methacry" in name)
@@ -225,16 +237,28 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         )
     ):
         return "(Meth)acrylates"
-    if "acrylamide" in name or "methacrylamide" in name or "maleimide" in name or _has_any(
-        smi, ["C=CC(=O)N", "C=C(C)C(=O)N"]
+    if (
+        "acrylamide" in name
+        or "methacrylamide" in name
+        or "maleimide" in name
+        or _has_any(smi, ["C=CC(=O)N", "C=C(C)C(=O)N"])
     ):
         return "(Meth)acrylamides/imides"
-    if "styrene" in name or "methylstyrene" in name or "chlorostyrene" in name or "methoxystyrene" in name or "styrene sulfonate" in name or _has_any(
-        smi, ["C=Cc1ccccc1", "C=CC1=CC=CC=C1"]
+    if (
+        "styrene" in name
+        or "methylstyrene" in name
+        or "chlorostyrene" in name
+        or "methoxystyrene" in name
+        or "styrene sulfonate" in name
+        or _has_any(smi, ["C=Cc1ccccc1", "C=CC1=CC=CC=C1"])
     ):
         return "Styrenics"
-    if "butadiene" in name or "isoprene" in name or "chloroprene" in name or "diene" in name or _has_any(
-        smi, ["C=CC=C", "C=C-C=C"]
+    if (
+        "butadiene" in name
+        or "isoprene" in name
+        or "chloroprene" in name
+        or "diene" in name
+        or _has_any(smi, ["C=CC=C", "C=C-C=C"])
     ):
         return "Conjugated Dienes"
     if "vinyl" in name or re.search(r"\b\d*-?vinyl", name):
@@ -244,7 +268,10 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         or re.search(r"\b\d+-?(hexene|octene)\b", name)
         or "tetrafluoroethylene" in name
         or "chlorotrifluoroethylene" in name
-        or ("ethylene" in name and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"]))
+        or (
+            "ethylene" in name
+            and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"])
+        )
         or (_has_double_bond(smi) and "c1ccccc1" not in smi.lower())
     ):
         return "Olefins"
@@ -354,7 +381,9 @@ def compute_positions(
 
     try:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(json.dumps({"method": method, "random_state": random_state, "pos": pos_2d}))
+        cache_path.write_text(
+            json.dumps({"method": method, "random_state": random_state, "pos": pos_2d})
+        )
     except Exception:
         pass
 
@@ -436,7 +465,14 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     ax.axis("off")
 
     if Gf.number_of_nodes() == 0:
-        ax.text(0.5, 0.5, "No network nodes after filtering", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No network nodes after filtering",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
 
     all_classes = set(Gf.nodes[n].get("class_name", "Other") for n in Gf.nodes())
@@ -448,7 +484,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
 
     edges = list(Gf.edges())
     if edges:
-        deltas = np.array([edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float)
+        deltas = np.array(
+            [edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float
+        )
         finite = np.isfinite(deltas)
         dmax = float(np.max(deltas[finite])) if finite.any() else 0.0
         if dmax <= 0:
@@ -472,7 +510,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     deg = dict(Gf.degree())
     node_list = list(Gf.nodes())
     node_sizes = [deg[n] * 28 for n in node_list]
-    node_fill = [class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list]
+    node_fill = [
+        class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list
+    ]
 
     def _darken_if_too_light(hex_color: str, lum_thresh: float = 0.78, amount: float = 0.12) -> str:
         r, g, b = mcolors.to_rgb(hex_color)
@@ -512,10 +552,19 @@ def plot_panel_b_temporal(
     ax.grid(False)
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No temporal data (missing publication_year)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing publication_year)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
-    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(lambda: defaultdict(float))
+    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(
+        lambda: defaultdict(float)
+    )
 
     for i, row in df.iterrows():
         try:
@@ -541,11 +590,20 @@ def plot_panel_b_temporal(
 
     years = sorted({y for c in class_counts_by_year for y in class_counts_by_year[c].keys()})
     if not years:
-        ax.text(0.5, 0.5, "No temporal data (missing years)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing years)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
     classes_in_data = set(class_counts_by_year.keys())
-    class_sorted = [c for c in PREFERRED_CLASS_ORDER if c in classes_in_data] + sorted(classes_in_data - set(PREFERRED_CLASS_ORDER))
+    class_sorted = [c for c in PREFERRED_CLASS_ORDER if c in classes_in_data] + sorted(
+        classes_in_data - set(PREFERRED_CLASS_ORDER)
+    )
     class_to_color = class_color_mapping(classes_in_data)
 
     counts = pd.DataFrame(index=pd.Index(years, name="year"), columns=class_sorted, data=0.0)
@@ -585,7 +643,14 @@ def plot_panel_publication_years(ax: plt.Axes, df: pd.DataFrame) -> None:
 
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No publication years available", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No publication years available",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
     years = pub_year_series.dropna().astype(int)
     bin_size = 5
@@ -614,7 +679,14 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
     ax_logp.set_title("E  Distribution of solvent boiling points", loc="left", fontsize=14, pad=6)
 
     t = pd.to_numeric(df.get("temperature"), errors="coerce").dropna()
-    ax_temp.hist(t, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4)
+    ax_temp.hist(
+        t,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
+    )
     ax_temp.set_xlabel("Temperature", fontsize=12)
     ax_temp.set_ylabel("Count", fontsize=12)
     ax_temp.grid(False)
@@ -627,7 +699,14 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
             solvent_name_col = cand
             break
     if solvent_name_col is None:
-        ax_logp.text(0.5, 0.5, "No solvent name column (expected solvent_name/solvent)", ha="center", va="center", transform=ax_logp.transAxes)
+        ax_logp.text(
+            0.5,
+            0.5,
+            "No solvent name column (expected solvent_name/solvent)",
+            ha="center",
+            va="center",
+            transform=ax_logp.transAxes,
+        )
         ax_logp.set_axis_off()
         return
 
@@ -672,12 +751,26 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
     bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna().to_numpy(dtype=float).tolist()
 
     if not bp_vals:
-        ax_logp.text(0.5, 0.5, f"No boiling point values found in {SOLVENT_BOILING_POINTS_FILE.name}", ha="center", va="center", transform=ax_logp.transAxes)
+        ax_logp.text(
+            0.5,
+            0.5,
+            f"No boiling point values found in {SOLVENT_BOILING_POINTS_FILE.name}",
+            ha="center",
+            va="center",
+            transform=ax_logp.transAxes,
+        )
         ax_logp.set_axis_off()
         return
 
     bp = pd.Series(bp_vals, dtype="float64")
-    ax_logp.hist(bp, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4)
+    ax_logp.hist(
+        bp,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
+    )
     ax_logp.set_xlabel("Boiling point (°C)", fontsize=12)
     ax_logp.set_ylabel("Count", fontsize=12)
     ax_logp.grid(False)
@@ -796,7 +889,9 @@ def print_basic_dataset_stats(df: pd.DataFrame) -> None:
         bp_series = canon.map(lambda n: bp_by_name.get(n))
         bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna()
         if not bp_vals.empty:
-            print(f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})")
+            print(
+                f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})"
+            )
 
     if "temperature" in df.columns:
         t = pd.to_numeric(df["temperature"], errors="coerce").dropna()
@@ -818,7 +913,9 @@ def main() -> None:
     df = load_data()
     print_basic_dataset_stats(df)
 
-    fig = plt.figure(figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained")
+    fig = plt.figure(
+        figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained"
+    )
     gs = fig.add_gridspec(3, 6, height_ratios=[1.15, 0.26, 0.85])
 
     ax_a = fig.add_subplot(gs[0, 0:3])
@@ -834,7 +931,15 @@ def main() -> None:
 
     if legend_labels and class_to_color:
         handles = [
-            plt.Line2D([0], [0], marker="s", color="w", markerfacecolor=class_to_color[l], markersize=8, label=l)
+            plt.Line2D(
+                [0],
+                [0],
+                marker="s",
+                color="w",
+                markerfacecolor=class_to_color[l],
+                markersize=8,
+                label=l,
+            )
             for l in legend_labels
             if l in class_to_color
         ]
@@ -871,7 +976,6 @@ It has been intentionally removed.
 import numpy as np
 import pandas as pd
 
-
 # --- Optional deps for chemically meaningful layout ---
 try:
     from rdkit import Chem  # type: ignore
@@ -895,7 +999,6 @@ sys.path.insert(0, str(PROJECT_ROOT / "copol_prediction" / "analysis"))
 
 from plot_config import SEQUENTIAL_COLORS, TWO_COL_WIDTH_INCH, setup_plot_style  # noqa: E402
 
-
 DATA_PATH = PROJECT_ROOT / "copol_prediction" / "processed_data.csv"
 SOLVENT_BOILING_POINTS_FILE = Path(__file__).parent / "solvent_boiling_points_c.json"
 OUTPUT_DIR = Path(__file__).parent / "figures"
@@ -913,7 +1016,14 @@ def _count_raw_llm_extractions() -> dict[str, int]:
     Source:
     `data_extraction/artifacts/llm/extractions/model_output_GPT4-o/*.json`
     """
-    base = PROJECT_ROOT / "data_extraction" / "artifacts" / "llm" / "extractions" / "model_output_GPT4-o"
+    base = (
+        PROJECT_ROOT
+        / "data_extraction"
+        / "artifacts"
+        / "llm"
+        / "extractions"
+        / "model_output_GPT4-o"
+    )
     if not base.exists():
         return {"raw_publications": 0, "raw_reactions": 0, "raw_parse_errors": 0}
 
@@ -1050,9 +1160,16 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
     """
     name = _norm_name(monomer_name)
     smi = _norm_smiles(monomer_smiles)
-    if "acrylonitrile" in name or "methacrylonitrile" in name or _has_any(smi, ["C=CC#N", "C=C(C)C#N"]):
+    if (
+        "acrylonitrile" in name
+        or "methacrylonitrile" in name
+        or _has_any(smi, ["C=CC#N", "C=C(C)C#N"])
+    ):
         return "(Meth)acrylonitriles"
-    if any(k in name for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]):
+    if any(
+        k in name
+        for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]
+    ):
         return "Anhydrides/Diacids"
     if (
         ("methacry" in name)
@@ -1087,8 +1204,12 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         or _has_any(smi, ["C=Cc1ccccc1", "C=CC1=CC=CC=C1"])
     ):
         return "Styrenics"
-    if "butadiene" in name or "isoprene" in name or "chloroprene" in name or "diene" in name or _has_any(
-        smi, ["C=CC=C", "C=C-C=C"]
+    if (
+        "butadiene" in name
+        or "isoprene" in name
+        or "chloroprene" in name
+        or "diene" in name
+        or _has_any(smi, ["C=CC=C", "C=C-C=C"])
     ):
         return "Conjugated Dienes"
     if "vinyl" in name or re.search(r"\b\d*-?vinyl", name):
@@ -1098,7 +1219,10 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         or re.search(r"\b\d+-?(hexene|octene)\b", name)
         or "tetrafluoroethylene" in name
         or "chlorotrifluoroethylene" in name
-        or ("ethylene" in name and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"]))
+        or (
+            "ethylene" in name
+            and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"])
+        )
         or (_has_double_bond(smi) and "c1ccccc1" not in smi.lower())
     ):
         return "Olefins"
@@ -1208,7 +1332,9 @@ def compute_positions(
 
     try:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(json.dumps({"method": method, "random_state": random_state, "pos": pos_2d}))
+        cache_path.write_text(
+            json.dumps({"method": method, "random_state": random_state, "pos": pos_2d})
+        )
     except Exception:
         pass
 
@@ -1292,7 +1418,14 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     ax.axis("off")
 
     if Gf.number_of_nodes() == 0:
-        ax.text(0.5, 0.5, "No network nodes after filtering", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No network nodes after filtering",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
 
     # Class -> color mapping (shared across panels)
@@ -1307,7 +1440,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     # Edges: light gray, thickness by Δ(r-product) for that monomer pair
     edges = list(Gf.edges())
     if edges:
-        deltas = np.array([edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float)
+        deltas = np.array(
+            [edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float
+        )
         finite = np.isfinite(deltas)
         dmax = float(np.max(deltas[finite])) if finite.any() else 0.0
         if dmax <= 0:
@@ -1333,7 +1468,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     deg = dict(Gf.degree())
     node_list = list(Gf.nodes())
     node_sizes = [deg[n] * 28 for n in node_list]
-    node_fill = [class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list]
+    node_fill = [
+        class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list
+    ]
 
     # Very light fills can read as "white/transparent" against gray edges; slightly darken locally for panel A.
     def _darken_if_too_light(hex_color: str, lum_thresh: float = 0.78, amount: float = 0.12) -> str:
@@ -1374,11 +1511,20 @@ def plot_panel_b_temporal(
     ax.grid(False)
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No temporal data (missing publication_year)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing publication_year)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
     # Count monomer class occurrences per year (then smooth with a rolling mean).
-    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(lambda: defaultdict(float))
+    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(
+        lambda: defaultdict(float)
+    )
 
     for i, row in df.iterrows():
         try:
@@ -1404,11 +1550,20 @@ def plot_panel_b_temporal(
 
     years = sorted({y for c in class_counts_by_year for y in class_counts_by_year[c].keys()})
     if not years:
-        ax.text(0.5, 0.5, "No temporal data (missing years)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing years)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
     classes_in_data = set(class_counts_by_year.keys())
-    class_sorted = [c for c in PREFERRED_CLASS_ORDER if c in classes_in_data] + sorted(classes_in_data - set(PREFERRED_CLASS_ORDER))
+    class_sorted = [c for c in PREFERRED_CLASS_ORDER if c in classes_in_data] + sorted(
+        classes_in_data - set(PREFERRED_CLASS_ORDER)
+    )
     class_to_color = class_color_mapping(classes_in_data)
 
     # Build counts table (rows = years, cols = classes)
@@ -1450,7 +1605,14 @@ def plot_panel_publication_years(ax: plt.Axes, df: pd.DataFrame) -> None:
 
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No publication years available", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No publication years available",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
     years = pub_year_series.dropna().astype(int)
     # Bin to 5-year periods so the plot isn't one bar per year
@@ -1482,7 +1644,14 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
 
     # Temperature histogram
     t = pd.to_numeric(df.get("temperature"), errors="coerce").dropna()
-    ax_temp.hist(t, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4)
+    ax_temp.hist(
+        t,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
+    )
     ax_temp.set_xlabel("Temperature", fontsize=12)
     ax_temp.set_ylabel("Count", fontsize=12)
     ax_temp.grid(False)
@@ -1496,7 +1665,14 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
             solvent_name_col = cand
             break
     if solvent_name_col is None:
-        ax_logp.text(0.5, 0.5, "No solvent name column (expected solvent_name/solvent)", ha="center", va="center", transform=ax_logp.transAxes)
+        ax_logp.text(
+            0.5,
+            0.5,
+            "No solvent name column (expected solvent_name/solvent)",
+            ha="center",
+            va="center",
+            transform=ax_logp.transAxes,
+        )
         ax_logp.set_axis_off()
         return
 
@@ -1542,12 +1718,26 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
     bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna().to_numpy(dtype=float).tolist()
 
     if not bp_vals:
-        ax_logp.text(0.5, 0.5, f"No boiling point values found in {SOLVENT_BOILING_POINTS_FILE.name}", ha="center", va="center", transform=ax_logp.transAxes)
+        ax_logp.text(
+            0.5,
+            0.5,
+            f"No boiling point values found in {SOLVENT_BOILING_POINTS_FILE.name}",
+            ha="center",
+            va="center",
+            transform=ax_logp.transAxes,
+        )
         ax_logp.set_axis_off()
         return
 
     bp = pd.Series(bp_vals, dtype="float64")
-    ax_logp.hist(bp, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4)
+    ax_logp.hist(
+        bp,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
+    )
     ax_logp.set_xlabel("Boiling point (°C)", fontsize=12)
     ax_logp.set_ylabel("Count", fontsize=12)
     ax_logp.grid(False)
@@ -1671,7 +1861,9 @@ def print_basic_dataset_stats(df: pd.DataFrame) -> None:
         bp_series = canon.map(lambda n: bp_by_name.get(n))
         bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna()
         if not bp_vals.empty:
-            print(f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})")
+            print(
+                f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})"
+            )
 
     # Temperature
     if "temperature" in df.columns:
@@ -1695,7 +1887,9 @@ def main() -> None:
     df = load_data()
     print_basic_dataset_stats(df)
 
-    fig = plt.figure(figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained")
+    fig = plt.figure(
+        figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained"
+    )
     # Add a thin spacer row between top and bottom panels for the shared legend
     gs = fig.add_gridspec(3, 6, height_ratios=[1.15, 0.26, 0.85])
 
@@ -1713,7 +1907,15 @@ def main() -> None:
     # Shared legend for monomer classes: centered above panels A+B
     if legend_labels and class_to_color:
         handles = [
-            plt.Line2D([0], [0], marker="s", color="w", markerfacecolor=class_to_color[l], markersize=8, label=l)
+            plt.Line2D(
+                [0],
+                [0],
+                marker="s",
+                color="w",
+                markerfacecolor=class_to_color[l],
+                markersize=8,
+                label=l,
+            )
             for l in legend_labels
             if l in class_to_color
         ]
@@ -1844,9 +2046,16 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
     """
     name = _norm_name(monomer_name)
     smi = _norm_smiles(monomer_smiles)
-    if "acrylonitrile" in name or "methacrylonitrile" in name or _has_any(smi, ["C=CC#N", "C=C(C)C#N"]):
+    if (
+        "acrylonitrile" in name
+        or "methacrylonitrile" in name
+        or _has_any(smi, ["C=CC#N", "C=C(C)C#N"])
+    ):
         return "(Meth)acrylonitriles"
-    if any(k in name for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]):
+    if any(
+        k in name
+        for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]
+    ):
         return "Anhydrides/Diacids"
     if (
         ("methacry" in name)
@@ -1865,8 +2074,11 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         )
     ):
         return "(Meth)acrylates"
-    if "acrylamide" in name or "methacrylamide" in name or "maleimide" in name or _has_any(
-        smi, ["C=CC(=O)N", "C=C(C)C(=O)N"]
+    if (
+        "acrylamide" in name
+        or "methacrylamide" in name
+        or "maleimide" in name
+        or _has_any(smi, ["C=CC(=O)N", "C=C(C)C(=O)N"])
     ):
         return "(Meth)acrylamides/imides"
     if (
@@ -1878,8 +2090,12 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         or _has_any(smi, ["C=Cc1ccccc1", "C=CC1=CC=CC=C1"])
     ):
         return "Styrenics"
-    if "butadiene" in name or "isoprene" in name or "chloroprene" in name or "diene" in name or _has_any(
-        smi, ["C=CC=C", "C=C-C=C"]
+    if (
+        "butadiene" in name
+        or "isoprene" in name
+        or "chloroprene" in name
+        or "diene" in name
+        or _has_any(smi, ["C=CC=C", "C=C-C=C"])
     ):
         return "Conjugated Dienes"
     if "vinyl" in name or re.search(r"\b\d*-?vinyl", name):
@@ -1889,7 +2105,10 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         or re.search(r"\b\d+-?(hexene|octene)\b", name)
         or "tetrafluoroethylene" in name
         or "chlorotrifluoroethylene" in name
-        or ("ethylene" in name and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"]))
+        or (
+            "ethylene" in name
+            and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"])
+        )
         or (_has_double_bond(smi) and "c1ccccc1" not in smi.lower())
     ):
         return "Olefins"
@@ -1999,7 +2218,9 @@ def compute_positions(
 
     try:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(json.dumps({"method": method, "random_state": random_state, "pos": pos_2d}))
+        cache_path.write_text(
+            json.dumps({"method": method, "random_state": random_state, "pos": pos_2d})
+        )
     except Exception:
         pass
 
@@ -2100,7 +2321,14 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     ax.axis("off")
 
     if Gf.number_of_nodes() == 0:
-        ax.text(0.5, 0.5, "No network nodes after filtering", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No network nodes after filtering",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
 
     # Class -> color mapping (shared across panels)
@@ -2115,7 +2343,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     # Edges: light gray, thickness by Δ(r-product) for that monomer pair
     edges = list(Gf.edges())
     if edges:
-        deltas = np.array([edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float)
+        deltas = np.array(
+            [edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float
+        )
         finite = np.isfinite(deltas)
         dmax = float(np.max(deltas[finite])) if finite.any() else 0.0
         if dmax <= 0:
@@ -2142,7 +2372,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     deg = dict(Gf.degree())
     node_list = list(Gf.nodes())
     node_sizes = [deg[n] * 28 for n in node_list]
-    node_fill = [class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list]
+    node_fill = [
+        class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list
+    ]
 
     # Very light fills can read as "white/transparent" against gray edges; slightly darken locally for panel A.
     def _darken_if_too_light(hex_color: str, lum_thresh: float = 0.78, amount: float = 0.12) -> str:
@@ -2194,7 +2426,9 @@ def plot_panel_b_temporal(
         return ([], {})
 
     # Count monomer class occurrences per year (then smooth with a rolling mean).
-    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(lambda: defaultdict(float))
+    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(
+        lambda: defaultdict(float)
+    )
 
     for i, row in df.iterrows():
         try:
@@ -2220,7 +2454,14 @@ def plot_panel_b_temporal(
 
     years = sorted({y for c in class_counts_by_year for y in class_counts_by_year[c].keys()})
     if not years:
-        ax.text(0.5, 0.5, "No temporal data (missing years)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing years)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
     classes_in_data = set(class_counts_by_year.keys())
@@ -2268,7 +2509,14 @@ def plot_panel_publication_years(ax: plt.Axes, df: pd.DataFrame) -> None:
 
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No publication years available", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No publication years available",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
     years = pub_year_series.dropna().astype(int)
     # Bin to 5-year periods so the plot isn't one bar per year
@@ -2301,7 +2549,12 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
     # Temperature histogram
     t = pd.to_numeric(df.get("temperature"), errors="coerce").dropna()
     ax_temp.hist(
-        t, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4
+        t,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
     )
     ax_temp.set_xlabel("Temperature", fontsize=12)
     ax_temp.set_ylabel("Count", fontsize=12)
@@ -2382,7 +2635,12 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
 
     bp = pd.Series(bp_vals, dtype="float64")
     ax_logp.hist(
-        bp, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4
+        bp,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
     )
     ax_logp.set_xlabel("Boiling point (°C)", fontsize=12)
     ax_logp.set_ylabel("Count", fontsize=12)
@@ -2507,7 +2765,9 @@ def print_basic_dataset_stats(df: pd.DataFrame) -> None:
         bp_series = canon.map(lambda n: bp_by_name.get(n))
         bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna()
         if not bp_vals.empty:
-            print(f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})")
+            print(
+                f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})"
+            )
 
     # Temperature
     if "temperature" in df.columns:
@@ -2531,7 +2791,9 @@ def main() -> None:
     df = load_data()
     print_basic_dataset_stats(df)
 
-    fig = plt.figure(figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained")
+    fig = plt.figure(
+        figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained"
+    )
     # Add a thin spacer row between top and bottom panels for the shared legend
     gs = fig.add_gridspec(3, 6, height_ratios=[1.15, 0.26, 0.85])
 
@@ -2549,7 +2811,15 @@ def main() -> None:
     # Shared legend for monomer classes: centered above panels A+B
     if legend_labels and class_to_color:
         handles = [
-            plt.Line2D([0], [0], marker="s", color="w", markerfacecolor=class_to_color[l], markersize=8, label=l)
+            plt.Line2D(
+                [0],
+                [0],
+                marker="s",
+                color="w",
+                markerfacecolor=class_to_color[l],
+                markersize=8,
+                label=l,
+            )
             for l in legend_labels
             if l in class_to_color
         ]
@@ -2578,6 +2848,7 @@ def main() -> None:
 
 if False and __name__ == "__main__":
     main()
+
 
 def load_solvent_boiling_points() -> dict[str, float | None]:
     """
@@ -2662,9 +2933,16 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
     """
     name = _norm_name(monomer_name)
     smi = _norm_smiles(monomer_smiles)
-    if "acrylonitrile" in name or "methacrylonitrile" in name or _has_any(smi, ["C=CC#N", "C=C(C)C#N"]):
+    if (
+        "acrylonitrile" in name
+        or "methacrylonitrile" in name
+        or _has_any(smi, ["C=CC#N", "C=C(C)C#N"])
+    ):
         return "(Meth)acrylonitriles"
-    if any(k in name for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]):
+    if any(
+        k in name
+        for k in ["maleic", "maleate", "fumar", "fumarate", "itaconic", "itaconate", "aconitate"]
+    ):
         return "Anhydrides/Diacids"
     if (
         ("methacry" in name)
@@ -2683,11 +2961,29 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         )
     ):
         return "(Meth)acrylates"
-    if "acrylamide" in name or "methacrylamide" in name or "maleimide" in name or _has_any(smi, ["C=CC(=O)N", "C=C(C)C(=O)N"]):
+    if (
+        "acrylamide" in name
+        or "methacrylamide" in name
+        or "maleimide" in name
+        or _has_any(smi, ["C=CC(=O)N", "C=C(C)C(=O)N"])
+    ):
         return "(Meth)acrylamides/imides"
-    if "styrene" in name or "methylstyrene" in name or "chlorostyrene" in name or "methoxystyrene" in name or "styrene sulfonate" in name or _has_any(smi, ["C=Cc1ccccc1", "C=CC1=CC=CC=C1"]):
+    if (
+        "styrene" in name
+        or "methylstyrene" in name
+        or "chlorostyrene" in name
+        or "methoxystyrene" in name
+        or "styrene sulfonate" in name
+        or _has_any(smi, ["C=Cc1ccccc1", "C=CC1=CC=CC=C1"])
+    ):
         return "Styrenics"
-    if "butadiene" in name or "isoprene" in name or "chloroprene" in name or "diene" in name or _has_any(smi, ["C=CC=C", "C=C-C=C"]):
+    if (
+        "butadiene" in name
+        or "isoprene" in name
+        or "chloroprene" in name
+        or "diene" in name
+        or _has_any(smi, ["C=CC=C", "C=C-C=C"])
+    ):
         return "Conjugated Dienes"
     if "vinyl" in name or re.search(r"\b\d*-?vinyl", name):
         return "Vinyl Derivatives"
@@ -2696,7 +2992,10 @@ def classify_monomer(monomer_name, monomer_smiles) -> str:
         or re.search(r"\b\d+-?(hexene|octene)\b", name)
         or "tetrafluoroethylene" in name
         or "chlorotrifluoroethylene" in name
-        or ("ethylene" in name and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"]))
+        or (
+            "ethylene" in name
+            and any(k in name for k in ["fluoro", "chloro", "trifluoro", "tetrafluoro"])
+        )
         or (_has_double_bond(smi) and "c1ccccc1" not in smi.lower())
     ):
         return "Olefins"
@@ -2806,7 +3105,9 @@ def compute_positions(
 
     try:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(json.dumps({"method": method, "random_state": random_state, "pos": pos_2d}))
+        cache_path.write_text(
+            json.dumps({"method": method, "random_state": random_state, "pos": pos_2d})
+        )
     except Exception:
         pass
 
@@ -2907,7 +3208,14 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     ax.axis("off")
 
     if Gf.number_of_nodes() == 0:
-        ax.text(0.5, 0.5, "No network nodes after filtering", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No network nodes after filtering",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
 
     # Class -> color mapping (shared across panels)
@@ -2922,7 +3230,9 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     # Edges: light gray, thickness by Δ(r-product) for that monomer pair
     edges = list(Gf.edges())
     if edges:
-        deltas = np.array([edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float)
+        deltas = np.array(
+            [edge_delta.get((u, v), edge_delta.get((v, u), 0.0)) for u, v in edges], dtype=float
+        )
         finite = np.isfinite(deltas)
         dmax = float(np.max(deltas[finite])) if finite.any() else 0.0
         if dmax <= 0:
@@ -2949,7 +3259,10 @@ def plot_panel_a_network(ax: plt.Axes, df: pd.DataFrame) -> None:
     deg = dict(Gf.degree())
     node_list = list(Gf.nodes())
     node_sizes = [deg[n] * 28 for n in node_list]
-    node_fill = [class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list]
+    node_fill = [
+        class_to_color.get(Gf.nodes[n].get("class_name", "Other"), "#CCCCCC") for n in node_list
+    ]
+
     # Very light fills can read as "white/transparent" against gray edges; slightly darken locally for panel A.
     def _darken_if_too_light(hex_color: str, lum_thresh: float = 0.78, amount: float = 0.12) -> str:
         r, g, b = mcolors.to_rgb(hex_color)
@@ -3009,11 +3322,20 @@ def plot_panel_b_temporal(
     ax.grid(False)
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No temporal data (missing publication_year)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing publication_year)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
     # Count monomer class occurrences per year (then smooth with a rolling mean).
-    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(lambda: defaultdict(float))
+    class_counts_by_year: defaultdict[str, defaultdict[int, float]] = defaultdict(
+        lambda: defaultdict(float)
+    )
 
     for i, row in df.iterrows():
         try:
@@ -3039,11 +3361,20 @@ def plot_panel_b_temporal(
 
     years = sorted({y for c in class_counts_by_year for y in class_counts_by_year[c].keys()})
     if not years:
-        ax.text(0.5, 0.5, "No temporal data (missing years)", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No temporal data (missing years)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return ([], {})
 
     classes_in_data = set(class_counts_by_year.keys())
-    class_sorted = [c for c in PREFERRED_CLASS_ORDER if c in classes_in_data] + sorted(classes_in_data - set(PREFERRED_CLASS_ORDER))
+    class_sorted = [c for c in PREFERRED_CLASS_ORDER if c in classes_in_data] + sorted(
+        classes_in_data - set(PREFERRED_CLASS_ORDER)
+    )
     class_to_color = class_color_mapping(classes_in_data)
 
     # Build counts table (rows = years, cols = classes)
@@ -3085,7 +3416,14 @@ def plot_panel_publication_years(ax: plt.Axes, df: pd.DataFrame) -> None:
 
     pub_year_series = _get_publication_year_series(df)
     if pub_year_series.empty:
-        ax.text(0.5, 0.5, "No publication years available", ha="center", va="center", transform=ax.transAxes)
+        ax.text(
+            0.5,
+            0.5,
+            "No publication years available",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+        )
         return
     years = pub_year_series.dropna().astype(int)
     # Bin to 5-year periods so the plot isn't one bar per year
@@ -3117,7 +3455,14 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
 
     # Temperature histogram
     t = pd.to_numeric(df.get("temperature"), errors="coerce").dropna()
-    ax_temp.hist(t, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4)
+    ax_temp.hist(
+        t,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
+    )
     ax_temp.set_xlabel("Temperature", fontsize=12)
     ax_temp.set_ylabel("Count", fontsize=12)
     ax_temp.grid(False)
@@ -3131,7 +3476,14 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
             solvent_name_col = cand
             break
     if solvent_name_col is None:
-        ax_logp.text(0.5, 0.5, "No solvent name column (expected solvent_name/solvent)", ha="center", va="center", transform=ax_logp.transAxes)
+        ax_logp.text(
+            0.5,
+            0.5,
+            "No solvent name column (expected solvent_name/solvent)",
+            ha="center",
+            va="center",
+            transform=ax_logp.transAxes,
+        )
         ax_logp.set_axis_off()
         return
 
@@ -3177,14 +3529,28 @@ def plot_panel_c_distributions(ax_temp: plt.Axes, ax_logp: plt.Axes, df: pd.Data
     bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna().to_numpy(dtype=float).tolist()
 
     if not bp_vals:
-        ax_logp.text(0.5, 0.5, f"No boiling point values found in {SOLVENT_BOILING_POINTS_FILE.name}", ha="center", va="center", transform=ax_logp.transAxes)
+        ax_logp.text(
+            0.5,
+            0.5,
+            f"No boiling point values found in {SOLVENT_BOILING_POINTS_FILE.name}",
+            ha="center",
+            va="center",
+            transform=ax_logp.transAxes,
+        )
         ax_logp.set_axis_off()
         return
 
     # Boiling point stats/coverage are printed once in `print_basic_dataset_stats`.
 
     bp = pd.Series(bp_vals, dtype="float64")
-    ax_logp.hist(bp, bins=30, color=BOTTOM_PANEL_BAR_COLOR, alpha=BOTTOM_PANEL_BAR_ALPHA, edgecolor="black", linewidth=0.4)
+    ax_logp.hist(
+        bp,
+        bins=30,
+        color=BOTTOM_PANEL_BAR_COLOR,
+        alpha=BOTTOM_PANEL_BAR_ALPHA,
+        edgecolor="black",
+        linewidth=0.4,
+    )
     ax_logp.set_xlabel("Boiling point (°C)", fontsize=12)
     ax_logp.set_ylabel("Count", fontsize=12)
     ax_logp.grid(False)
@@ -3263,7 +3629,14 @@ def print_basic_dataset_stats(df: pd.DataFrame) -> None:
         tmp["_c2"] = cc2
 
         # Add condition columns when present to avoid collapsing distinct experiments
-        for col in ("temperature", "solvent", "solvent_name", "Solvent", "publication_year", "reaction_id"):
+        for col in (
+            "temperature",
+            "solvent",
+            "solvent_name",
+            "Solvent",
+            "publication_year",
+            "reaction_id",
+        ):
             if col in tmp.columns:
                 subset.append(col)
 
@@ -3336,7 +3709,9 @@ def print_basic_dataset_stats(df: pd.DataFrame) -> None:
         bp_series = canon.map(lambda n: bp_by_name.get(n))
         bp_vals = pd.to_numeric(bp_series, errors="coerce").dropna()
         if not bp_vals.empty:
-            print(f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})")
+            print(
+                f"Solvent boiling points (°C): {bp_vals.min():.2f} .. {bp_vals.max():.2f} (n={len(bp_vals)})"
+            )
 
     # Temperature
     if "temperature" in df.columns:
@@ -3360,7 +3735,9 @@ def main() -> None:
     df = load_data()
     print_basic_dataset_stats(df)
 
-    fig = plt.figure(figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained")
+    fig = plt.figure(
+        figsize=(TWO_COL_WIDTH_INCH * 1.65, TWO_COL_WIDTH_INCH * 1.05), layout="constrained"
+    )
     # Add a thin spacer row between top and bottom panels for the shared legend
     gs = fig.add_gridspec(3, 6, height_ratios=[1.15, 0.26, 0.85])
 
@@ -3378,7 +3755,15 @@ def main() -> None:
     # Shared legend for monomer classes: centered above panels A+B
     if legend_labels and class_to_color:
         handles = [
-            plt.Line2D([0], [0], marker="s", color="w", markerfacecolor=class_to_color[l], markersize=8, label=l)
+            plt.Line2D(
+                [0],
+                [0],
+                marker="s",
+                color="w",
+                markerfacecolor=class_to_color[l],
+                markersize=8,
+                label=l,
+            )
             for l in legend_labels
             if l in class_to_color
         ]
@@ -3407,4 +3792,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

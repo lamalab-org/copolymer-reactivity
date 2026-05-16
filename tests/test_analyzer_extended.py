@@ -1,11 +1,12 @@
+import pytest
+
 from copolextractor.analyzer import (
-    _extract_monomers,
     _compare_monomers,
+    _extract_monomers,
     average,
     count_na_values,
     extract_reaction_conditions,
 )
-import pytest
 
 
 def test_extract_monomers_from_list():
@@ -130,4 +131,3 @@ def test_extract_reaction_conditions_empty():
     """Test extracting reaction conditions from empty list"""
     result = extract_reaction_conditions([])
     assert len(result) == 0
-

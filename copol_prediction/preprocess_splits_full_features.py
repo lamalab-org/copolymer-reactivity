@@ -14,18 +14,21 @@ Usage:
   python preprocess_splits_full_features.py [--molecule-properties PATH] [--output-dir DIR]
 """
 
+import argparse
 import os
 import sys
-import argparse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from copolpredictor import data_processing, prediction_utils
 from utils.load_data_split import load_train_val_test_split
+
+from copolpredictor import data_processing, prediction_utils
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description="Enrich train/val/test splits with full feature_columns_all from monomer files")
+    p = argparse.ArgumentParser(
+        description="Enrich train/val/test splits with full feature_columns_all from monomer files"
+    )
     p.add_argument(
         "--split-dir",
         default="artifacts/data_splits",

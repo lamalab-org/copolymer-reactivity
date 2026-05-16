@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import transforms
 
-
 # ---------------------------------------------------------------------------
 # Paths & imports
 # ---------------------------------------------------------------------------
@@ -34,7 +33,6 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(_
 sys.path.insert(0, str(Path(PROJECT_ROOT)))
 
 from copol_prediction.analysis import plot_config  # noqa: E402
-
 
 H1_INTEGRALS: dict[str, list[tuple[float, float, float]]] = {
     # (ppm_start, ppm_end, integral_value)
@@ -256,6 +254,7 @@ def _set_ylim_with_padding(ax: plt.Axes, y: np.ndarray, pad_frac: float = 0.06) 
     pad = pad_frac * (y_high - y_low)
     ax.set_ylim(y_low - pad, y_high + pad)
 
+
 def _draw_integral_brackets(
     ax: plt.Axes,
     integrals: list[tuple[float, float, float]],
@@ -406,7 +405,9 @@ def _parse_args() -> argparse.Namespace:
         help="Directory to write outputs into. Default: lab_experiments/output/nmr_spectra",
     )
     p.add_argument("--h1", type=Path, default=None, help="Optional single-run: path to 1H NMR txt.")
-    p.add_argument("--c13", type=Path, default=None, help="Optional single-run: path to 13C NMR txt.")
+    p.add_argument(
+        "--c13", type=Path, default=None, help="Optional single-run: path to 13C NMR txt."
+    )
     p.add_argument(
         "--h1-integrals",
         type=Path,
@@ -485,7 +486,10 @@ def _plot_pair(
         nrows=1,
         ncols=2,
         sharey=False,
-        figsize=(plot_config.TWO_COL_WIDTH_INCH, 0.55 * plot_config.TWO_COL_GOLDEN_RATIO_HEIGHT_INCH),
+        figsize=(
+            plot_config.TWO_COL_WIDTH_INCH,
+            0.55 * plot_config.TWO_COL_GOLDEN_RATIO_HEIGHT_INCH,
+        ),
         constrained_layout=False,
     )
 
@@ -589,7 +593,9 @@ def main() -> None:
     # Batch mode: scan data directory for all MWH-### pairs
     pairs = _collect_nmr_pairs(args.data_dir)
     if not pairs:
-        raise SystemExit(f"No NMR pairs found in {args.data_dir}. Expected *.txt with MWH-### and 1H/13C.")
+        raise SystemExit(
+            f"No NMR pairs found in {args.data_dir}. Expected *.txt with MWH-### and 1H/13C."
+        )
 
     for tag, nuc_map in sorted(pairs.items()):
         if "1H" not in nuc_map or "13C" not in nuc_map:
@@ -618,4 +624,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
