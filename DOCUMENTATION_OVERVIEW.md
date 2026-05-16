@@ -36,7 +36,7 @@ Complete guide to all documentation in this project.
 
 **I want to make predictions:**
 → Read [`copol_prediction/api/README.md`](copol_prediction/api/README.md)
-→ Start: `cd copol_prediction/api && ./start.sh`
+→ Start: `cd copol_prediction/api && docker compose up`
 
 **I want to use the Python library:**
 → Read [Main README](README.md) - "Usage Examples" section

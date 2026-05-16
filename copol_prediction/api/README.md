@@ -59,10 +59,16 @@ python test_all_features.py --url https://your-ngrok-url.ngrok-free.app
 
 ## 📊 Model
 
-- **Features**: 15
-- **Classes**: 3 (r-product ranges: <1, 1-25, >25)
-- **Accuracy**: 78.6% (holdout), 84.6% (CV)
-- **Training Date**: 2025-11-14
+Class definitions, feature schema, metrics, and training date come from the running API or the artifact:
+
+```bash
+# class labels + human-readable descriptions, feature schema, training date
+curl http://localhost:8000/model/info
+
+# headline metrics + feature_columns + class_labels straight from the artifact
+jq '{class_labels, feature_columns, n_features, holdout_accuracy, created_at}' \
+  ../artifacts/model_bundle/meta.json
+```
 
 ## 🔧 API Endpoints
 
@@ -165,7 +171,7 @@ if preprocessed["success"]:
         json={"features": preprocessed["features"]}
     ).json()
     
-    print(f"\nPredicted class: {result['predicted_class']} ({result['r_product_range']})")
+    print(f"\nPredicted class: {result['predicted_class']} ({result['predicted_class_name']})")
     print(f"Confidence: {result['confidence']:.2%}")
 else:
     print(f"Preprocessing failed: {preprocessed.get('error')}")
@@ -204,61 +210,6 @@ if optimization["success"]:
               f"Confidence: {pred['confidence']:.4f}")
 else:
     print(f"Optimization failed: {optimization.get('error')}")
-```
-
-### Step-by-Step Approach
-
-```python
-import requests
-
-API_URL = "http://localhost:8000"
-
-# Preprocess monomers (uses XTB for quantum chemistry, input as SMILES)
-monomer1 = requests.post(
-    f"{API_URL}/preprocess/monomer",
-    json={"monomer_smiles": "C=CC1=CC=CC=C1"}  # styrene SMILES
-).json()
-
-monomer2 = requests.post(
-    f"{API_URL}/preprocess/monomer",
-    json={"monomer_smiles": "CC(=O)OC(C)=C"}  # methyl methacrylate SMILES
-).json()
-
-# Get other features (solvent SMILES)
-solvent = requests.post(
-    f"{API_URL}/preprocess/solvent",
-    json={"solvent_smiles": "CC1=CC=CC=C1"}  # toluene SMILES
-).json()
-
-method_emb = requests.get(f"{API_URL}/embeddings/method/solution").json()
-polytype_emb = requests.get(f"{API_URL}/embeddings/polytype/free radical").json()
-
-# Calculate HOMO-LUMO deltas
-homo_1, lumo_1 = monomer1["features"]["homo"], monomer1["features"]["lumo"]
-homo_2, lumo_2 = monomer2["features"]["homo"], monomer2["features"]["lumo"]
-
-# Make prediction
-features = {
-    "fukui_radical_max_1": monomer1["features"]["fukui_radical_max"],
-    "fukui_radical_max_2": monomer2["features"]["fukui_radical_max"],
-    "delta_HOMO_LUMO_AA": homo_1 - lumo_1,
-    "delta_HOMO_LUMO_AB": homo_1 - lumo_2,
-    "delta_HOMO_LUMO_BB": homo_2 - lumo_2,
-    "delta_HOMO_LUMO_BA": homo_2 - lumo_1,
-    "temperature": 60.0,
-    "polytype_emb_1": polytype_emb["pca_1"],
-    "polytype_emb_2": polytype_emb["pca_2"],
-    "method_emb_1": method_emb["pca_1"],
-    "method_emb_2": method_emb["pca_2"],
-    "solvent_logP": solvent["features"]["solvent_logP"],
-    "solvent_TPSA": solvent["features"]["solvent_TPSA"],
-    "solvent_HBD": solvent["features"]["solvent_HBD"],
-    "solvent_FractionCSP3": solvent["features"]["solvent_FractionCSP3"]
-}
-
-result = requests.post(f"{API_URL}/predict", json={"features": features}).json()
-print(f"Predicted class: {result['predicted_class']} ({result['r_product_range']})")
-print(f"Confidence: {result['confidence']:.2%}")
 ```
 
 ### DOI Check Example
