@@ -1,0 +1,112 @@
+name: Docker Smoke Test
+
+# Build the API image from the current branch, run it, and exercise the
+# end-to-end prediction path. Catches the kind of regression PR #15 fixed
+# (feature-name mismatch silently producing all-zero predictions) inside
+# the actual container, not just in-process via TestClient.
+#
+# Only triggers when something that could change the image's behavior
+# changes — keeps the slow conda/xtb build out of every other PR.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'copol_prediction/api/**'
+      - 'src/**'
+      - 'pyproject.toml'
+      - '.github/workflows/docker-smoke-test.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: copol_prediction/api/Dockerfile
+          tags: copol-api:smoke
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Start container
+        run: |
+          docker run -d --name copol-api -p 8000:8000 copol-api:smoke
+
+      - name: Wait for /health (up to 120s)
+        run: |
+          set -e
+          for i in $(seq 1 24); do
+            if curl -fsS http://localhost:8000/health > /dev/null; then
+              echo "API responded after ${i}*5s"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::API did not become healthy within 120s"
+          exit 1
+
+      - name: Check model loaded
+        run: |
+          set -e
+          body=$(curl -fsS http://localhost:8000/health)
+          echo "$body"
+          echo "$body" | jq -e '.model_loaded == true' > /dev/null \
+            || { echo "::error::/health returned model_loaded=false"; exit 1; }
+
+      - name: End-to-end prediction round-trip
+        # Uses a monomer pair from the published holdout
+        # (Vinyl acetate + Vinyl benzoate in benzene). Both monomers'
+        # features are precomputed in the molecule_properties cache
+        # baked into the image, so no live XTB call is needed.
+        run: |
+          set -e
+          features=$(curl -fsS -X POST http://localhost:8000/preprocess_all \
+            -H "Content-Type: application/json" \
+            -d '{
+              "monomer1_smiles": "C=COC(C)=O",
+              "monomer2_smiles": "C=COC(=O)c1ccccc1",
+              "solvent_smiles": "c1ccccc1",
+              "method": "solvent",
+              "polytype": "free radical",
+              "temperature": 79.6
+            }' | jq -c '.features')
+
+          echo "preprocess_all features: $features" | head -c 400; echo
+
+          prediction=$(curl -fsS -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d "{\"features\": $features}")
+
+          echo "predict response: $prediction"
+
+          # The class must be a real model output (0, 1, or 2), not a
+          # validation error or a stub.
+          echo "$prediction" | jq -e '.predicted_class | IN(0,1,2)' > /dev/null \
+            || { echo "::error::predicted_class not in {0,1,2}"; exit 1; }
+
+          # If the API ever regresses to feeding the model all-zeros (the
+          # PR #15 bug), confidence will be suspiciously identical across
+          # arbitrary inputs. A single >0.0 spot check doesn't catch that
+          # alone, but combined with the in-process parity test in
+          # tests/test_api_parity.py it does.
+          echo "$prediction" | jq -e '.confidence > 0.0' > /dev/null \
+            || { echo "::error::confidence <= 0.0"; exit 1; }
+
+      - name: Container logs (always)
+        if: always()
+        run: docker logs copol-api || true
+
+      - name: Stop container (always)
+        if: always()
+        run: docker rm -f copol-api || true
