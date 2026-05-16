@@ -8,7 +8,7 @@ This module provides functionality to:
 
 import pandas as pd
 import numpy as np
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Any
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 
@@ -33,7 +33,7 @@ def find_similar_solvents(
     dataset_df: pd.DataFrame,
     n_solvents: int = 3,
     tolerance: float = 1.0
-) -> List[Dict[str, any]]:
+) -> List[Dict[str, Any]]:
     """
     Find solvents with similar logP values from the dataset.
     

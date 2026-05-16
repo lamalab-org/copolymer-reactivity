@@ -224,44 +224,6 @@ class CopolymerPredictor:
         return importance_df
 
 
-def predict_from_smiles(
-    monomer1_smiles: str,
-    monomer2_smiles: str,
-    temperature: float,
-    solvent_smiles: str,
-    polymerization_type: str,
-    method: str,
-    model_path: str = "artifacts/model_bundle",
-    features_base_path: str = "copol_prediction/output/molecule_properties"
-) -> Dict:
-    """
-    Make prediction directly from SMILES and reaction conditions.
-    
-    This is a convenience function that handles feature extraction
-    and prediction in one step.
-    
-    Args:
-        monomer1_smiles: SMILES string for first monomer
-        monomer2_smiles: SMILES string for second monomer
-        temperature: Reaction temperature
-        solvent_smiles: SMILES string for solvent
-        polymerization_type: Type of polymerization
-        method: Polymerization method
-        model_path: Path to model bundle
-        features_base_path: Path to molecular properties directory
-        
-    Returns:
-        Dictionary with prediction results
-    """
-    # This would need to be implemented with actual feature calculation
-    # For now, this is a placeholder showing the intended interface
-    raise NotImplementedError(
-        "Feature calculation from SMILES needs to be integrated. "
-        "Please use monomer_feature_calculation.py first, then use "
-        "CopolymerPredictor.predict() with the calculated features."
-    )
-
-
 def batch_predict(
     input_csv: str,
     output_csv: str,
