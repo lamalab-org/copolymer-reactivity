@@ -130,9 +130,9 @@ def clean_json_values(obj: Any, replace_with_zero: bool = False) -> Any:
 
 class PredictionInput(BaseModel):
     """Input schema for single prediction."""
-    features: Dict[str, float] = Field(
+    features: Dict[str, Optional[float]] = Field(
         ...,
-        description="Dictionary of feature values",
+        description="Dictionary of feature values (null is allowed; the model treats missing features as NaN/0)",
         example={
             "fukui_radical_max_1": 0.15,
             "fukui_radical_max_2": 0.18,
@@ -155,9 +155,9 @@ class PredictionInput(BaseModel):
 
 class BatchPredictionInput(BaseModel):
     """Input schema for batch prediction."""
-    samples: List[Dict[str, float]] = Field(
+    samples: List[Dict[str, Optional[float]]] = Field(
         ...,
-        description="List of feature dictionaries"
+        description="List of feature dictionaries (null values are allowed)"
     )
 
 
@@ -769,50 +769,14 @@ async def preprocess_all(input_data: PreprocessAllInput):
             )
         polytype_emb = polytype_embeddings[input_data.polytype]
 
-        # Combine all features - include all features that the model might need
-        # Always include all features, even if None (model will handle NaN filling)
-        features = {
-            # Monomer 1 features
-            "fukui_radical_max_1": m1_features.get("fukui_radical_max"),
-            "global_electrophilicity_1": m1_features.get("global_electrophilicity"),
-            "global_nucleophilicity_1": m1_features.get("global_nucleophilicity"),
-            "dipole_x_1": m1_features.get("dipole_x"),
-            "dipole_y_1": m1_features.get("dipole_y"),
-            "dipole_z_1": m1_features.get("dipole_z"),
-            
-            # Monomer 2 features
-            "fukui_radical_max_2": m2_features.get("fukui_radical_max"),
-            "global_electrophilicity_2": m2_features.get("global_electrophilicity"),
-            "global_nucleophilicity_2": m2_features.get("global_nucleophilicity"),
-            "dipole_x_2": m2_features.get("dipole_x"),
-            "dipole_y_2": m2_features.get("dipole_y"),
-            "dipole_z_2": m2_features.get("dipole_z"),
-            
-            # HOMO-LUMO differences
-            "delta_HOMO_LUMO_AA": (m1_features.get("homo") - m1_features.get("lumo")) 
-                                   if (m1_features.get("homo") is not None and m1_features.get("lumo") is not None) 
-                                   else None,
-            "delta_HOMO_LUMO_AB": (m1_features.get("homo") - m2_features.get("lumo")) 
-                                   if (m1_features.get("homo") is not None and m2_features.get("lumo") is not None) 
-                                   else None,
-            "delta_HOMO_LUMO_BB": (m2_features.get("homo") - m2_features.get("lumo")) 
-                                   if (m2_features.get("homo") is not None and m2_features.get("lumo") is not None) 
-                                   else None,
-            "delta_HOMO_LUMO_BA": (m2_features.get("homo") - m1_features.get("lumo")) 
-                                   if (m2_features.get("homo") is not None and m1_features.get("lumo") is not None) 
-                                   else None,
-            
-            # Other features
-            "temperature": input_data.temperature,
-            "polytype_emb_1": polytype_emb["pca_1"],
-            "polytype_emb_2": polytype_emb["pca_2"],
-            "method_emb_1": method_emb["pca_1"],
-            "method_emb_2": method_emb["pca_2"],
-            "solvent_logP": solvent_features["solvent_logP"],
-            "solvent_TPSA": solvent_features["solvent_TPSA"],
-            "solvent_HBD": solvent_features["solvent_HBD"],
-            "solvent_FractionCSP3": solvent_features["solvent_FractionCSP3"]
-        }
+        features = assemble_model_features(
+            m1_features=m1_features,
+            m2_features=m2_features,
+            solvent_features=solvent_features,
+            polytype_emb=polytype_emb,
+            method_emb=method_emb,
+            temperature=input_data.temperature,
+        )
         
         # If model is loaded, ensure all required features are present
         # Fill missing features with None if model requires them
@@ -1065,26 +1029,94 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
 
 def extract_monomer_features_for_model(data: Dict) -> Dict[str, Optional[float]]:
     """
-    Extract all features needed for the model from the full molecular data.
-    Returns: fukui_radical_max, global_electrophilicity, global_nucleophilicity, 
-             dipole (x, y, z), homo, lumo
+    Extract all per-monomer features the model (or downstream callers) may
+    need from the cached XTB JSON. Keys here are bare descriptor names; the
+    suffix `_1`/`_2` is added later when assembling the model feature vector.
     """
-    # Extract dipole components (dipole is a list [x, y, z])
     dipole = data.get("dipole")
     dipole_x = dipole[0] if isinstance(dipole, list) and len(dipole) > 0 else None
     dipole_y = dipole[1] if isinstance(dipole, list) and len(dipole) > 1 else None
     dipole_z = dipole[2] if isinstance(dipole, list) and len(dipole) > 2 else None
-    
-    features = {
+
+    return {
+        # Aggregates (computed by load_monomer_features from the raw dicts).
+        "charges_min": data.get("charges_min"),
+        "charges_max": data.get("charges_max"),
+        "charges_mean": data.get("charges_mean"),
+        "fukui_electrophilicity_min": data.get("fukui_electrophilicity_min"),
+        "fukui_electrophilicity_max": data.get("fukui_electrophilicity_max"),
+        "fukui_electrophilicity_mean": data.get("fukui_electrophilicity_mean"),
+        "fukui_nucleophilicity_min": data.get("fukui_nucleophilicity_min"),
+        "fukui_nucleophilicity_max": data.get("fukui_nucleophilicity_max"),
+        "fukui_nucleophilicity_mean": data.get("fukui_nucleophilicity_mean"),
+        "fukui_radical_min": data.get("fukui_radical_min"),
         "fukui_radical_max": data.get("fukui_radical_max"),
+        "fukui_radical_mean": data.get("fukui_radical_mean"),
+        # Scalars.
+        "best_conformer_energy": data.get("best_conformer_energy"),
+        "ip": data.get("ip"),
+        "ip_corrected": data.get("ip_corrected"),
+        "ea": data.get("ea"),
+        "homo": data.get("homo"),
+        "lumo": data.get("lumo"),
         "global_electrophilicity": data.get("global_electrophilicity"),
         "global_nucleophilicity": data.get("global_nucleophilicity"),
         "dipole_x": dipole_x,
         "dipole_y": dipole_y,
         "dipole_z": dipole_z,
-        "homo": data.get("homo"),
-        "lumo": data.get("lumo")
     }
+
+
+def assemble_model_features(
+    m1_features: Dict[str, Optional[float]],
+    m2_features: Dict[str, Optional[float]],
+    solvent_features: Dict[str, Optional[float]],
+    polytype_emb: Dict[str, float],
+    method_emb: Dict[str, float],
+    temperature: float,
+) -> Dict[str, Optional[float]]:
+    """
+    Assemble a feature dict keyed by the model's expected column names.
+
+    The trained model expects e.g. `charges_min_1` / `solvent_logp` (lowercase).
+    Earlier versions of this code produced a different (legacy) feature set,
+    which the model silently ignored — all model features fell back to zero,
+    producing meaningless predictions. This helper is the single source of
+    truth so the same vector is built from /preprocess_all and /optimize_reaction.
+    """
+    def _delta_hl(homo: Optional[float], lumo: Optional[float]) -> Optional[float]:
+        if homo is None or lumo is None:
+            return None
+        return homo - lumo
+
+    features: Dict[str, Optional[float]] = {}
+
+    # Per-monomer descriptors: suffix with _1 / _2.
+    for suffix, mf in (("_1", m1_features), ("_2", m2_features)):
+        for key, value in mf.items():
+            features[f"{key}{suffix}"] = value
+
+    # HOMO-LUMO gaps used by the model and downstream callers.
+    features["delta_HOMO_LUMO_AA"] = _delta_hl(m1_features.get("homo"), m1_features.get("lumo"))
+    features["delta_HOMO_LUMO_AB"] = _delta_hl(m1_features.get("homo"), m2_features.get("lumo"))
+    features["delta_HOMO_LUMO_BB"] = _delta_hl(m2_features.get("homo"), m2_features.get("lumo"))
+    features["delta_HOMO_LUMO_BA"] = _delta_hl(m2_features.get("homo"), m1_features.get("lumo"))
+
+    features["temperature"] = temperature
+    features["polytype_emb_1"] = polytype_emb["pca_1"]
+    features["polytype_emb_2"] = polytype_emb["pca_2"]
+    features["method_emb_1"] = method_emb["pca_1"]
+    features["method_emb_2"] = method_emb["pca_2"]
+
+    # Solvent features. The trained model uses the lowercase column name
+    # `solvent_logp`; we also keep `solvent_logP` for backward compatibility
+    # with any consumer that still reads the camelCase version.
+    features["solvent_logp"] = solvent_features["solvent_logP"]
+    features["solvent_logP"] = solvent_features["solvent_logP"]
+    features["solvent_TPSA"] = solvent_features["solvent_TPSA"]
+    features["solvent_HBD"] = solvent_features["solvent_HBD"]
+    features["solvent_FractionCSP3"] = solvent_features["solvent_FractionCSP3"]
+
     return features
 
 
