@@ -50,6 +50,9 @@ extraction = [
 testing = [
     "pytest>=7.0",
     "pytest-cov",
+    # Needed by tests/test_api_parity.py — TestClient uses httpx.
+    "fastapi>=0.104.0",
+    "httpx>=0.25",
 ]
 
 [tool.setuptools.packages.find]
