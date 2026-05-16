@@ -24,7 +24,7 @@ try:
     from fastapi import FastAPI, HTTPException, status
     from fastapi.responses import JSONResponse
     from fastapi.middleware.cors import CORSMiddleware
-    from pydantic import BaseModel, Field
+    from pydantic import BaseModel, ConfigDict, Field
 except ImportError:
     print("Error: FastAPI not installed. Install with: pip install fastapi uvicorn")
     sys.exit(1)
@@ -187,9 +187,8 @@ class NearestNeighbor(BaseModel):
     polytype: Optional[str] = Field(None, description="Polymerization type")
     source: Optional[str] = Field(None, description="DOI or original source")
     reaction_id: Optional[str] = Field(None, description="Reaction ID")
-    
-    class Config:
-        populate_by_name = True
+
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class PredictionOutput(BaseModel):
