@@ -4,16 +4,14 @@ Machine learning system for extracting and predicting copolymerization reactivit
 
 ## 🎯 Overview
 
-This project combines automated literature data extraction with machine learning to predict copolymerization reactivity patterns. The system extracts reactivity ratio data (r₁, r₂) from scientific papers and trains models to predict the r-product (r₁ × r₂) class, which indicates the copolymerization behavior:
+This project combines automated literature data extraction with machine learning to predict copolymerization reactivity patterns. The system extracts reactivity ratio data (r₁, r₂) from scientific papers and trains a classifier on the r-product (r₁ × r₂).
 
-- **Class 0**: r₁·r₂ < 1 → Alternating copolymerization
-- **Class 1**: 1 ≤ r₁·r₂ ≤ 25 → Random to weak block formation
-- **Class 2**: r₁·r₂ > 25 → Strong block formation
+For class definitions and bin edges, see the model artifact (`copol_prediction/artifacts/model_bundle/meta.json`) and the paper (TODO: link).
 
 ### Key Features
 
 ✅ Automated literature data extraction  
-✅ ML-based reactivity prediction (78.6% accuracy)  
+✅ ML-based reactivity prediction  
 ✅ REST API for predictions    
 ✅ Comprehensive analysis tools 
 
@@ -23,24 +21,31 @@ This project combines automated literature data extraction with machine learning
 
 ```bash
 # Clone repository
-git clone https://github.com/marawilhelmi/polymer-reactivity
-cd polymer-reactivity
+git clone https://github.com/lamalab-org/copolymer-reactivity
+cd copolymer-reactivity
 
 # Install package
 pip install -e .
 
 # Or install from GitHub directly
-pip install git+https://github.com/marawilhelmi/polymer-reactivity
+pip install git+https://github.com/lamalab-org/copolymer-reactivity
 ```
 
 ### 2. Use the Prediction API
 
-The fastest way to use the trained model:
+The fastest way to use the trained model is the pre-built container:
+
+```bash
+cd copol_prediction/api
+docker compose up
+```
+
+This pulls `ghcr.io/lamalab-org/copolymer-reactivity:latest` and starts the API on port 8000. To run from source instead:
 
 ```bash
 cd copol_prediction/api
 pip install -r requirements.txt
-./start.sh
+uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
 Then open http://localhost:8000/docs for interactive API documentation.
@@ -56,7 +61,7 @@ from copolpredictor.inference import CopolymerPredictor
 predictor = CopolymerPredictor("copol_prediction/artifacts/model_bundle")
 
 # Make prediction
-features = {...}  # 15 molecular and reaction features
+features = {...}  # 19 molecular and reaction features — see "Required Features" below
 result = predictor.predict_with_confidence(features)
 
 print(f"Predicted class: {result['predictions'][0]}")
@@ -102,7 +107,7 @@ REST API for making predictions:
 
 ```bash
 cd copol_prediction/api
-./start.sh
+docker compose up
 # Open http://localhost:8000/docs
 ```
 
@@ -204,78 +209,77 @@ model = model_training.train_final_model(X, y, params)
 
 ## 📊 Model Performance
 
-Current production model (trained 2025-11-14):
+```bash
+# headline numbers for the currently deployed model
+jq '{holdout_accuracy, holdout_f1_weighted, holdout_f1_macro, cv_score, n_features}' \
+  copol_prediction/artifacts/model_bundle/meta.json
 
-| Metric | Value |
-|--------|-------|
-| Holdout Accuracy | 78.6% |
-| Holdout F1 (weighted) | 79.0% |
-| Holdout F1 (macro) | 67.8% |
-| CV Score | 84.6% |
-| Features | 15 |
-| Classes | 3 |
+# full confusion matrices + per-class breakdown
+cat copol_prediction/artifacts/model_bundle/all_metrics.txt
+
+# voting-ensemble metrics
+jq . copol_prediction/artifacts/model_bundle/voting_test_metrics.json
+```
+
+For methodology and reported numbers see the paper (TODO: add citation/link).
 
 **Model location**: `copol_prediction/artifacts/model_bundle/`
 
 ### Required Features
 
-The model uses 15 molecular and reaction features:
+```bash
+# from a running API
+curl http://localhost:8000/features
 
-**Molecular descriptors** (8):
-- `fukui_radical_max_1/2` - Fukui radical indices
-- `delta_HOMO_LUMO_AA/AB/BB/BA` - Orbital interactions
+# or from the artifact directly
+jq '.feature_columns, .n_features' copol_prediction/artifacts/model_bundle/meta.json
+```
 
-**Reaction conditions** (7):
-- `temperature` - Reaction temperature (°C)
-- `solvent_logP`, `solvent_TPSA`, `solvent_HBD`, `solvent_FractionCSP3` - Solvent properties
-- `polytype_emb_1/2` - Polymerization type embeddings
-- `method_emb_1/2` - Method embeddings
+If you have SMILES + reaction conditions instead of precomputed features, `POST /preprocess_all` builds the model-ready feature dict for you (see the Quick Start example above).
 
 ## 🔧 Usage Examples
 
 ### Python API
 
 ```python
-from copolpredictor.inference import CopolymerPredictor
+# Prediction from SMILES + reaction conditions via the local API.
+# /preprocess_all builds the feature dict the model needs from the
+# cached molecular-property JSONs, so you don't hand-build the schema.
+import requests
 
-# Initialize predictor
-predictor = CopolymerPredictor("copol_prediction/artifacts/model_bundle")
+API = "http://localhost:8000"
+features = requests.post(f"{API}/preprocess_all", json={
+    "monomer1_smiles": "C=COC(C)=O",                # vinyl acetate
+    "monomer2_smiles": "C=COC(=O)c1ccccc1",         # vinyl benzoate
+    "solvent_smiles": "c1ccccc1",                   # benzene
+    "method": "solvent",
+    "polytype": "free radical",
+    "temperature": 79.6,
+}, timeout=120).json()["features"]
 
-# Make prediction
-features = {
-    "fukui_radical_max_1": 0.15,
-    "fukui_radical_max_2": 0.18,
-    "delta_HOMO_LUMO_AA": -5.2,
-    "delta_HOMO_LUMO_AB": -4.8,
-    "delta_HOMO_LUMO_BB": -5.5,
-    "delta_HOMO_LUMO_BA": -4.9,
-    "temperature": 60.0,
-    "polytype_emb_1": 0.23,
-    "polytype_emb_2": -0.15,
-    "method_emb_1": 0.45,
-    "method_emb_2": -0.32,
-    "solvent_logP": 2.1,
-    "solvent_TPSA": 20.5,
-    "solvent_HBD": 0.0,
-    "solvent_FractionCSP3": 0.67
-}
-
-result = predictor.predict_with_confidence(features)
-
-print(f"Class: {result['predictions'][0]}")
-print(f"Confidence: {result['confidence'][0]:.2%}")
+pred = requests.post(f"{API}/predict", json={"features": features}).json()
+print(f"Class {pred['predicted_class']} ({pred['predicted_class_name']}), "
+      f"confidence {pred['confidence']:.2%}")
 ```
+
+If you already have precomputed features and prefer to bypass the API, use the `CopolymerPredictor` class directly (`from copolpredictor.inference import CopolymerPredictor`) — the required feature names are in the artifact, not here.
 
 ### REST API
 
 ```bash
 # Start API
-cd copol_prediction/api && ./start.sh
+cd copol_prediction/api && docker compose up -d
 
-# Make prediction
-curl -X POST "http://localhost:8000/predict" \
+# /preprocess_all takes SMILES + reaction conditions and returns the model-ready feature dict
+FEATURES=$(curl -sS -X POST http://localhost:8000/preprocess_all \
   -H "Content-Type: application/json" \
-  -d '{"features": {...}}'
+  -d '{"monomer1_smiles":"C=COC(C)=O","monomer2_smiles":"C=COC(=O)c1ccccc1",
+       "solvent_smiles":"c1ccccc1","method":"solvent",
+       "polytype":"free radical","temperature":79.6}' | jq -c '.features')
+
+curl -sS -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d "{\"features\": $FEATURES}"
 ```
 
 ### Command Line
@@ -450,7 +454,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 🐛 Issues
 
-If you encounter any problems or have suggestions, please [open an issue](https://github.com/marawilhelmi/polymer-reactivity/issues).
+If you encounter any problems or have suggestions, please [open an issue](https://github.com/lamalab-org/copolymer-reactivity/issues).
 
 ## 📧 Contact
 
