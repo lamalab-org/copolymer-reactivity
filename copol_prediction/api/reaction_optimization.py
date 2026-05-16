@@ -269,41 +269,18 @@ def create_optimization_grid(
                 # Skip if solvent features can't be calculated
                 continue
             
-            # Build feature vector
-            features = {
-                # Monomer 1 features
-                "fukui_radical_max_1": m1_features["fukui_radical_max"],
-                "global_electrophilicity_1": m1_features.get("global_electrophilicity"),
-                "global_nucleophilicity_1": m1_features.get("global_nucleophilicity"),
-                "dipole_x_1": m1_features.get("dipole_x"),
-                "dipole_y_1": m1_features.get("dipole_y"),
-                "dipole_z_1": m1_features.get("dipole_z"),
-                
-                # Monomer 2 features
-                "fukui_radical_max_2": m2_features["fukui_radical_max"],
-                "global_electrophilicity_2": m2_features.get("global_electrophilicity"),
-                "global_nucleophilicity_2": m2_features.get("global_nucleophilicity"),
-                "dipole_x_2": m2_features.get("dipole_x"),
-                "dipole_y_2": m2_features.get("dipole_y"),
-                "dipole_z_2": m2_features.get("dipole_z"),
-                
-                # HOMO-LUMO differences
-                "delta_HOMO_LUMO_AA": m1_features["homo"] - m1_features["lumo"],
-                "delta_HOMO_LUMO_AB": m1_features["homo"] - m2_features["lumo"],
-                "delta_HOMO_LUMO_BB": m2_features["homo"] - m2_features["lumo"],
-                "delta_HOMO_LUMO_BA": m2_features["homo"] - m1_features["lumo"],
-                
-                # Other features
-                "temperature": temp,
-                "polytype_emb_1": polytype_emb["pca_1"],
-                "polytype_emb_2": polytype_emb["pca_2"],
-                "method_emb_1": method_emb["pca_1"],
-                "method_emb_2": method_emb["pca_2"],
-                "solvent_logP": solvent_features["solvent_logP"],
-                "solvent_TPSA": solvent_features["solvent_TPSA"],
-                "solvent_HBD": solvent_features["solvent_HBD"],
-                "solvent_FractionCSP3": solvent_features["solvent_FractionCSP3"]
-            }
+            # Build feature vector using the same model-aware helper as
+            # /preprocess_all so the optimizer feeds the model the columns it
+            # was actually trained on (e.g. `solvent_logp`, `charges_min_1`).
+            from app import assemble_model_features
+            features = assemble_model_features(
+                m1_features=m1_features,
+                m2_features=m2_features,
+                solvent_features=solvent_features,
+                polytype_emb=polytype_emb,
+                method_emb=method_emb,
+                temperature=temp,
+            )
             
             # Make prediction
             try:
