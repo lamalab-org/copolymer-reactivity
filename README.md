@@ -1,6 +1,6 @@
 # Copolymerization Reactivity Prediction
 
-Machine learning system for extracting copolymerization reactivity ratios (r₁, r₂) from scientific literature and predicting the r-product class for new monomer pairs.
+Machine learning system for extracting copolymerization reactivity ratios (r₁, r₂) from scientific literature and predicting the copolymer architecture for new monomer pairs and reaction conditions.
 
 > 📄 **Paper:** _TODO: add citation, DOI and link to the manuscript here when published._ See [Citation](#citation) below for the BibTeX placeholder to fill in.
 
@@ -67,16 +67,8 @@ cat copol_prediction/artifacts/model_bundle/all_metrics.txt
 }
 ```
 
-If you reference the code separately from the paper:
 
 ```bibtex
-@software{copolymer_reactivity_code,
-  author = {Schilling-Wilhelmi, Mara and Jablonka, Kevin M.},
-  title  = {Copolymerization Reactivity Prediction},
-  url    = {https://github.com/lamalab-org/copolymer-reactivity},
-  year   = {2025},
-}
-```
 
 ## License
 
