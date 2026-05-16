@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "copolymer-reactivity"
 version = "0.1.0"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 # Core deps needed for inference-only use of `copolpredictor` (i.e. the API).
 # Heavier training/visualization/extraction stacks live in optional extras.
 dependencies = [
@@ -71,7 +71,7 @@ where = ["src"]
 
 [tool.black]
 line-length = 100
-target-version = ["py38", "py39", "py310", "py311"]
+target-version = ["py311", "py312", "py313"]
 
 [tool.isort]
 profile = "black"

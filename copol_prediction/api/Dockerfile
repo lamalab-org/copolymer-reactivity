@@ -4,7 +4,10 @@
 # ============================================================================
 # Stage 1: Builder - Install dependencies and build the package
 # ============================================================================
-FROM continuumio/miniconda3:latest as builder
+# Pin to a specific tag rather than `:latest` so rebuilds are reproducible
+# across environments. Bump deliberately; do not chase :latest. (See
+# https://pythonspeed.com/articles/dockerizing-python-is-hard/.)
+FROM continuumio/miniconda3:26.3.2-2 as builder
 
 # Set working directory
 WORKDIR /build
@@ -25,23 +28,24 @@ RUN conda create -n copol python=3.11 -y && \
 # Activate environment and install Python dependencies
 SHELL ["conda", "run", "-n", "copol", "/bin/bash", "-c"]
 
-# Copy package definition and source code
-COPY pyproject.toml /build/
-COPY src /build/src
-COPY LICENSE /build/
-
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir -e .
-
-# Copy API requirements and install them
+# Install Python deps BEFORE copying source so source-only changes don't bust
+# the (slow, ~all the dependencies) pip install layer cache.
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 COPY copol_prediction/api/requirements.txt /build/api-requirements.txt
 RUN pip install --no-cache-dir -r /build/api-requirements.txt
+
+# Now copy source and install the local package. --no-deps because every
+# dependency this package declares is already in api-requirements.txt
+# (verified for current pyproject.toml). This step is cheap, so re-running
+# it on every source change is fine.
+COPY pyproject.toml LICENSE /build/
+COPY src /build/src
+RUN pip install --no-cache-dir --no-deps -e .
 
 # ============================================================================
 # Stage 2: Runtime - Create minimal runtime image
 # ============================================================================
-FROM continuumio/miniconda3:latest
+FROM continuumio/miniconda3:26.3.2-2
 
 # Metadata
 LABEL maintainer="Copolymerization Prediction API"
@@ -110,10 +114,12 @@ COPY --chown=apiuser:apiuser copol_prediction/filter/artificial_datapoints/proce
 # Copy source packages (needed for imports)
 COPY --chown=apiuser:apiuser src /app/src
 
-# Install the local package in the runtime stage
+# Install the local package in the runtime stage. --no-deps because every
+# runtime dep is already in the conda env copied from the builder stage;
+# this step just registers the editable `copolpredictor` import path.
 COPY --chown=apiuser:apiuser pyproject.toml /app/
 SHELL ["conda", "run", "-n", "copol", "/bin/bash", "-c"]
-RUN pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir --no-deps -e .
 
 # Create cache directory
 RUN mkdir -p /app/cache && chown apiuser:apiuser /app/cache

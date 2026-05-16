@@ -14,7 +14,7 @@ from typing import List, Dict, Optional, Tuple
 import numpy as np
 import pandas as pd
 from rdkit import Chem
-from rdkit.Chem import AllChem, DataStructs
+from rdkit.Chem import DataStructs, rdFingerprintGenerator
 
 def get_fingerprint_cache_path(cache_dir: Optional[Path] = None) -> Path:
     """Get the path to the fingerprint cache file."""
@@ -93,26 +93,27 @@ def compute_fingerprints_for_smiles(
     """
     if cache_dict is None:
         cache_dict = {}
-    
+
     fp_dict = cache_dict.copy()  # Start with cached fingerprints
-    
+    mfpgen = rdFingerprintGenerator.GetMorganGenerator(radius=radius, fpSize=n_bits)
+
     for smiles in smiles_list:
         if smiles in fp_dict:
             continue  # Already computed or cached
-        
+
         try:
             if pd.isna(smiles) or not smiles:
                 fp_dict[smiles] = None
                 continue
-            
+
             mol = Chem.MolFromSmiles(str(smiles))
             if mol is None:
                 fp_dict[smiles] = None
             else:
-                fp_dict[smiles] = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=n_bits)
+                fp_dict[smiles] = mfpgen.GetFingerprint(mol)
         except Exception:
             fp_dict[smiles] = None
-    
+
     return fp_dict
 
 

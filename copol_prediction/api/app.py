@@ -14,6 +14,7 @@ import sys
 import json
 import hashlib
 import math
+from contextlib import asynccontextmanager
 from typing import List, Dict, Optional, Any, Tuple
 from datetime import datetime
 from pathlib import Path
@@ -23,7 +24,7 @@ try:
     from fastapi import FastAPI, HTTPException, status
     from fastapi.responses import JSONResponse
     from fastapi.middleware.cors import CORSMiddleware
-    from pydantic import BaseModel, Field
+    from pydantic import BaseModel, ConfigDict, Field
 except ImportError:
     print("Error: FastAPI not installed. Install with: pip install fastapi uvicorn")
     sys.exit(1)
@@ -133,22 +134,30 @@ class PredictionInput(BaseModel):
     features: Dict[str, Optional[float]] = Field(
         ...,
         description="Dictionary of feature values (null is allowed; the model treats missing features as NaN/0)",
-        example={
-            "fukui_radical_max_1": 0.15,
-            "fukui_radical_max_2": 0.18,
-            "delta_HOMO_LUMO_AA": -5.2,
-            "delta_HOMO_LUMO_AB": -4.8,
-            "delta_HOMO_LUMO_BB": -5.5,
-            "delta_HOMO_LUMO_BA": -4.9,
-            "temperature": 60.0,
-            "polytype_emb_1": 0.23,
-            "polytype_emb_2": -0.15,
-            "method_emb_1": 0.45,
-            "method_emb_2": -0.32,
-            "solvent_logP": 2.1,
-            "solvent_TPSA": 20.5,
-            "solvent_HBD": 0.0,
-            "solvent_FractionCSP3": 0.67
+        json_schema_extra={
+            # Real values from the published holdout (artifacts/data_splits/test.csv row 0).
+            # Use the exact feature names the trained model expects — see /features.
+            "example": {
+                "charges_min_1": -0.448977,
+                "fukui_electrophilicity_min_1": -0.037725,
+                "fukui_electrophilicity_max_1": 0.187582,
+                "fukui_nucleophilicity_min_1": -0.017029,
+                "fukui_radical_min_1": -0.027106,
+                "homo_1": -0.409195,
+                "charges_min_2": -0.432152,
+                "fukui_electrophilicity_min_2": -0.027193,
+                "fukui_electrophilicity_max_2": 0.149151,
+                "fukui_nucleophilicity_min_2": -0.006415,
+                "fukui_radical_min_2": -0.009479,
+                "homo_2": -0.378648,
+                "delta_HOMO_LUMO_AB": -0.140381,
+                "delta_HOMO_LUMO_BA": -0.097219,
+                "temperature": 60.0,
+                "polytype_emb_1": 7.496726,
+                "polytype_emb_2": -0.463191,
+                "solvent_logp": -0.0014,
+                "solvent_FractionCSP3": 1.0,
+            }
         }
     )
 
@@ -178,9 +187,8 @@ class NearestNeighbor(BaseModel):
     polytype: Optional[str] = Field(None, description="Polymerization type")
     source: Optional[str] = Field(None, description="DOI or original source")
     reaction_id: Optional[str] = Field(None, description="Reaction ID")
-    
-    class Config:
-        populate_by_name = True
+
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class PredictionOutput(BaseModel):
@@ -303,26 +311,8 @@ class DOICheckOutput(BaseModel):
 
 
 # ============================================================================
-# FastAPI Application
+# Application State
 # ============================================================================
-
-# Initialize FastAPI app
-app = FastAPI(
-    title="Copolymerization Prediction API",
-    description="REST API for predicting copolymerization reactivity using machine learning",
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
-)
-
-# Add CORS middleware to allow cross-origin requests
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # Global predictor instance
 predictor: Optional[CopolymerPredictor] = None
@@ -358,12 +348,12 @@ fingerprint_cache: Optional[Dict] = None
 
 
 # ============================================================================
-# Startup/Shutdown Events
+# Lifespan (startup / shutdown)
 # ============================================================================
 
-@app.on_event("startup")
-async def startup_event():
-    """Load model, embeddings, and dataset on startup."""
+@asynccontextmanager
+async def lifespan(app):
+    """Load model, embeddings, and dataset on startup; cleanup on shutdown."""
     global predictor, method_embeddings, polytype_embeddings, dataset_df, train_df, fingerprint_cache
 
     # Load embeddings
@@ -508,10 +498,33 @@ async def startup_event():
         train_df = None
 
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on shutdown."""
+    yield
+
+    # Shutdown
     print("Shutting down API...")
+
+
+# ============================================================================
+# FastAPI Application
+# ============================================================================
+
+app = FastAPI(
+    title="Copolymerization Prediction API",
+    description="REST API for predicting copolymerization reactivity using machine learning",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    lifespan=lifespan,
+)
+
+# Add CORS middleware to allow cross-origin requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # ============================================================================
