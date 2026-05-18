@@ -29,15 +29,14 @@ _PROJECT_ROOT = _SCRIPT_DIR.parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT))
 sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
-from copol_prediction.analysis.analyze_model import (  # noqa: E402
+from copol_prediction.analysis.analyze_model import (
     compute_fingerprints_for_smiles,
     compute_naive_baseline_predictions_with_similarity,
+)
+from copol_prediction.analysis.analyze_model import (  # noqa: E402
     setup_style as analysis_setup_style,
 )
-from copol_prediction.analysis.plot_config import (  # noqa: E402
-    TWO_COL_WIDTH_INCH,
-    get_class_label,
-)
+from copol_prediction.analysis.plot_config import TWO_COL_WIDTH_INCH, get_class_label  # noqa: E402
 from copol_prediction.utils import load_data_split  # noqa: E402
 from copolpredictor import model_training  # noqa: E402
 from copolpredictor.inference import CopolymerPredictor  # noqa: E402
@@ -56,6 +55,7 @@ MODEL_ORDER = [
     "XGBoost with NN Features",
     "Voting (NN and XGBoost)",
 ]
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -104,9 +104,7 @@ def load_train_val():
     project_root = script_dir.parent.parent
     split_dir = project_root / "copol_prediction" / "artifacts" / "data_splits"
 
-    df_train, df_val, _df_test = load_data_split.load_train_val_test_split(
-        split_dir=str(split_dir)
-    )
+    df_train, df_val, _df_test = load_data_split.load_train_val_test_split(split_dir=str(split_dir))
     return df_train.reset_index(drop=True), df_val.reset_index(drop=True)
 
 
@@ -264,9 +262,7 @@ def plot_validation_metric_bars(df_metrics, output_dir):
     plt.close(fig)
 
 
-def fit_xgb_lookup_feature_model(
-    df_train_ext, final_model_best_params, all_features, random_state
-):
+def fit_xgb_lookup_feature_model(df_train_ext, final_model_best_params, all_features, random_state):
     X_train = df_train_ext[all_features]
     y_train = df_train_ext["r_product_class"].astype(int).values
     class_weights = model_training.calculate_class_weights(y_train)
@@ -300,9 +296,7 @@ def main():
     base_features = [c for c in predictor.features if c in df_train.columns]
     missing = [c for c in predictor.features if c not in df_train.columns]
     if missing:
-        raise ValueError(
-            f"Missing {len(missing)} feature(s) from split data, e.g. {missing[:5]}"
-        )
+        raise ValueError(f"Missing {len(missing)} feature(s) from split data, e.g. {missing[:5]}")
 
     # Keep only rows with complete feature + label data for fair split-wise comparisons.
     required_cols = list(base_features) + ["r_product_class"]
@@ -348,12 +342,8 @@ def main():
             "Cannot align XGBoost+Lookup architecture automatically."
         )
 
-    df_train_ext = build_lookup_feature_frame(
-        df_train, lookup_pred_train, lookup_sim_train
-    )
-    df_val_ext = build_lookup_feature_frame(
-        df_val, lookup_pred_val, lookup_sim_val
-    )
+    df_train_ext = build_lookup_feature_frame(df_train, lookup_pred_train, lookup_sim_train)
+    df_val_ext = build_lookup_feature_frame(df_val, lookup_pred_val, lookup_sim_val)
     lookup_feature_cols = [
         "baseline_class_0",
         "baseline_class_1",
@@ -390,17 +380,13 @@ def main():
     rows.append({"split": "Validation", "model": "XGBoost", **m_xgb})
 
     m_voting = compute_validation_metrics(y_val, voting_pred_val, voting_mask=voting_mask_val)
-    rows.append(
-        {"split": "Validation", "model": "Voting (NN and XGBoost)", **m_voting}
-    )
+    rows.append({"split": "Validation", "model": "Voting (NN and XGBoost)", **m_voting})
 
     m_xgb_lf = compute_validation_metrics(y_val, xgb_lf_pred_val)
     rows.append({"split": "Validation", "model": "XGBoost with NN Features", **m_xgb_lf})
 
     df_metrics = pd.DataFrame(rows)
-    df_metrics["model"] = pd.Categorical(
-        df_metrics["model"], categories=MODEL_ORDER, ordered=True
-    )
+    df_metrics["model"] = pd.Categorical(df_metrics["model"], categories=MODEL_ORDER, ordered=True)
     df_metrics = df_metrics.sort_values(["model"]).reset_index(drop=True)
 
     csv_path = output_dir / "validation_performance_no_conf_filter.csv"
@@ -414,10 +400,7 @@ def main():
 
     print("\nPlotting bar chart...")
     plot_validation_metric_bars(df_metrics, output_dir)
-    print(
-        f"  Saved plot: {output_dir / 'validation_performance_no_conf_filter.png'} "
-        f"and .pdf"
-    )
+    print(f"  Saved plot: {output_dir / 'validation_performance_no_conf_filter.png'} " f"and .pdf")
 
     print("\nDone.")
 

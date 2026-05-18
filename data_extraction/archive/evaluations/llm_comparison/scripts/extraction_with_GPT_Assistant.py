@@ -1,14 +1,15 @@
-from openai import OpenAI
-import os
 import json
-import copolextractor.prompter as prompter
-import copolextractor.analyzer as az
-import langchain
-from dotenv import load_dotenv
-from langchain.cache import SQLiteCache
+import os
 import random
 import time
 
+import langchain
+from dotenv import load_dotenv
+from langchain.cache import SQLiteCache
+from openai import OpenAI
+
+import copolextractor.analyzer as az
+import copolextractor.prompter as prompter
 
 start = time.time()
 
@@ -81,15 +82,11 @@ for i, filename in enumerate(input_files):
                 run_time_expired_error += 1
                 continue
 
-            output, input_tokens, output_token = prompter.call_openai_agent(
-                assistant, file, prompt
-            )
+            output, input_tokens, output_token = prompter.call_openai_agent(assistant, file, prompt)
             total_input_tokens += input_token
             total_output_token += output_token
             number_of_calls += 1
-            output_model = prompter.format_output_as_json_and_yaml(
-                i, output, output_folder
-            )
+            output_model = prompter.format_output_as_json_and_yaml(i, output, output_folder)
     print("input tokens used: ", total_input_tokens)
     print("output_2 tokens used: ", total_output_token)
     print("total number of model call: ", number_of_calls)

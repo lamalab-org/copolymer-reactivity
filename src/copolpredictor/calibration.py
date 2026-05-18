@@ -6,21 +6,21 @@ sigmoid (Platt scaling) or isotonic regression methods.
 """
 
 import numpy as np
-from sklearn.linear_model import LogisticRegression
 from sklearn.isotonic import IsotonicRegression
+from sklearn.linear_model import LogisticRegression
 
 
 class CalibratedModel:
     """
     A wrapper for calibrated classification models.
-    
+
     Provides predict_proba and predict methods with calibrated probabilities.
     """
-    
+
     def __init__(self, base_model, calibrator):
         """
         Initialize calibrated model.
-        
+
         Args:
             base_model: Trained classifier with predict_proba method
             calibrator: Fitted calibrator (LogisticRegression or IsotonicRegression)
@@ -31,10 +31,10 @@ class CalibratedModel:
     def predict_proba(self, X):
         """
         Predict calibrated probabilities.
-        
+
         Args:
             X: Feature matrix
-            
+
         Returns:
             Array of shape (n_samples, n_classes) with calibrated probabilities
         """
@@ -53,10 +53,10 @@ class CalibratedModel:
     def predict(self, X):
         """
         Predict class labels.
-        
+
         Args:
             X: Feature matrix
-            
+
         Returns:
             Array of predicted class labels
         """
@@ -64,12 +64,7 @@ class CalibratedModel:
 
 
 def calibrate_model_with_weights(
-    model,
-    X_calib,
-    y_calib,
-    class_weight_dict=None,
-    method="sigmoid",
-    calibrator_kwargs=None
+    model, X_calib, y_calib, class_weight_dict=None, method="sigmoid", calibrator_kwargs=None
 ):
     """
     Calibrate a classifier using sigmoid (Platt scaling) or isotonic regression.

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
-import json
 import argparse
+import json
+import os
+
 from mongodb_storage import CoPolymerDB
 
 
@@ -22,7 +23,7 @@ def process_directory(directory_path, reset_db=False):
         print("Database has been reset.")
 
     # Get all JSON files in the directory
-    json_files = [f for f in os.listdir(directory_path) if f.endswith('.json')]
+    json_files = [f for f in os.listdir(directory_path) if f.endswith(".json")]
     print(f"Found {len(json_files)} JSON files in directory.")
 
     stats = {
@@ -32,7 +33,7 @@ def process_directory(directory_path, reset_db=False):
         "total_entries": 0,
         "saved_entries": 0,
         "duplicate_entries": 0,
-        "failed_entries": 0
+        "failed_entries": 0,
     }
 
     # Process each file
@@ -42,7 +43,7 @@ def process_directory(directory_path, reset_db=False):
 
         try:
             # Load JSON file
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 json_data = json.load(f)
 
             # Add filename to the data
@@ -100,7 +101,7 @@ def process_file(file_path, reset_db=False):
 
     try:
         # Load JSON file
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             json_data = json.load(f)
 
         # Add filename to the data
@@ -117,10 +118,10 @@ def process_file(file_path, reset_db=False):
         print(f"Failed entries: {result.get('failed_entries', 0)}")
 
         # Show details for any failed entries
-        if result.get('failed_entries', 0) > 0:
+        if result.get("failed_entries", 0) > 0:
             print("\nFailed entries details:")
-            for entry_result in result.get('entry_results', []):
-                if not entry_result.get('success'):
+            for entry_result in result.get("entry_results", []):
+                if not entry_result.get("success"):
                     print(f"- {entry_result.get('message')}")
 
         return result
@@ -137,10 +138,14 @@ def main(default_path="../../data_extraction/model_output_GPT4-o"):
     Args:
         default_path: Default path to use if no path is provided via command line
     """
-    parser = argparse.ArgumentParser(description='Process JSON files and import them into MongoDB.')
-    parser.add_argument('path', nargs='?', default=default_path,
-                        help='Path to a JSON file or directory containing JSON files')
-    parser.add_argument('--reset', action='store_true', help='Reset the database before processing')
+    parser = argparse.ArgumentParser(description="Process JSON files and import them into MongoDB.")
+    parser.add_argument(
+        "path",
+        nargs="?",
+        default=default_path,
+        help="Path to a JSON file or directory containing JSON files",
+    )
+    parser.add_argument("--reset", action="store_true", help="Reset the database before processing")
 
     args = parser.parse_args()
 
@@ -148,7 +153,7 @@ def main(default_path="../../data_extraction/model_output_GPT4-o"):
 
     if os.path.isdir(args.path):
         process_directory(args.path, args.reset)
-    elif os.path.isfile(args.path) and args.path.endswith('.json'):
+    elif os.path.isfile(args.path) and args.path.endswith(".json"):
         process_file(args.path, args.reset)
     else:
         print(f"Error: {args.path} is not a valid JSON file or directory")

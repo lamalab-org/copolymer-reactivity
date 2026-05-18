@@ -23,16 +23,16 @@ Outputs (default):
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
-import argparse
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle, PathPatch
+from matplotlib.patches import PathPatch, Rectangle
 from matplotlib.path import Path
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
 # Ensure copol_prediction/ is on sys.path when run as a script
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -43,15 +43,15 @@ if PROJECT_ROOT not in sys.path:
 if WORKSPACE_ROOT not in sys.path:
     sys.path.insert(0, WORKSPACE_ROOT)
 
-from copolpredictor.inference import CopolymerPredictor
-from copol_prediction.utils import load_data_split
-from copol_prediction.analysis.analyze_model import get_class_label
 from copol_prediction.analysis import plot_class_curves as pcc
+from copol_prediction.analysis.analyze_model import get_class_label
 from copol_prediction.analysis.plot_config import (
     CLASS_CURVES_FIGSIZE_INCH,
     CLASS_LABELS_SHORT,
     setup_plot_style,
 )
+from copol_prediction.utils import load_data_split
+from copolpredictor.inference import CopolymerPredictor
 
 _SANKEY_CLASS_ORDER = [0, 1, 2, -1]
 _SANKEY_CLASS_LABELS = [
@@ -133,6 +133,7 @@ def parse_args():
 # Panel helpers
 # ---------------------------------------------------------------------------
 
+
 def _plot_confusion_matrix_unfiltered(ax, predictor: CopolymerPredictor, df_test: pd.DataFrame):
     X = df_test[predictor.features]
     y_true = df_test["r_product_class"].astype(int).values
@@ -151,7 +152,9 @@ def _plot_confusion_matrix_unfiltered(ax, predictor: CopolymerPredictor, df_test
     ax.tick_params(labelsize=12)
 
 
-def _draw_sankey_on_ax(ax, flow: np.ndarray, class_order: list, class_labels: list, class_colors: list) -> None:
+def _draw_sankey_on_ax(
+    ax, flow: np.ndarray, class_order: list, class_labels: list, class_colors: list
+) -> None:
     """Draw a Sankey-style transition diagram on *ax* (no figure creation/saving)."""
     n_classes = len(class_order)
     total = int(flow.sum())
@@ -184,25 +187,47 @@ def _draw_sankey_on_ax(ax, flow: np.ndarray, class_order: list, class_labels: li
         cursor = right_y0[j] - gap
 
     for i in range(n_classes):
-        ax.add_patch(Rectangle(
-            (x_left - node_w / 2, left_y0[i]), node_w, left_heights[i],
-            facecolor=class_colors[i], edgecolor="white", linewidth=1.0, alpha=0.9, zorder=3,
-        ))
+        ax.add_patch(
+            Rectangle(
+                (x_left - node_w / 2, left_y0[i]),
+                node_w,
+                left_heights[i],
+                facecolor=class_colors[i],
+                edgecolor="white",
+                linewidth=1.0,
+                alpha=0.9,
+                zorder=3,
+            )
+        )
         ax.text(
-            x_left - node_w / 2 - 0.02, left_y0[i] + left_heights[i] / 2,
+            x_left - node_w / 2 - 0.02,
+            left_y0[i] + left_heights[i] / 2,
             f"{class_labels[i]}\n(n={int(left_totals[i])})",
-            ha="right", va="center", fontsize=10,
+            ha="right",
+            va="center",
+            fontsize=10,
         )
 
     for j in range(n_classes):
-        ax.add_patch(Rectangle(
-            (x_right - node_w / 2, right_y0[j]), node_w, right_heights[j],
-            facecolor=class_colors[j], edgecolor="white", linewidth=1.0, alpha=0.9, zorder=3,
-        ))
+        ax.add_patch(
+            Rectangle(
+                (x_right - node_w / 2, right_y0[j]),
+                node_w,
+                right_heights[j],
+                facecolor=class_colors[j],
+                edgecolor="white",
+                linewidth=1.0,
+                alpha=0.9,
+                zorder=3,
+            )
+        )
         ax.text(
-            x_right + node_w / 2 + 0.02, right_y0[j] + right_heights[j] / 2,
+            x_right + node_w / 2 + 0.02,
+            right_y0[j] + right_heights[j] / 2,
             f"{class_labels[j]}\n(n={int(right_totals[j])})",
-            ha="left", va="center", fontsize=10,
+            ha="left",
+            va="center",
+            fontsize=10,
         )
 
     left_offsets = left_y0.copy()
@@ -226,17 +251,36 @@ def _draw_sankey_on_ax(ax, flow: np.ndarray, class_order: list, class_labels: li
             right_offsets[j] = y1t
 
             verts = [
-                (x0, y0b), (cx1, y0b), (cx2, y1b), (x1, y1b),
-                (x1, y1t), (cx2, y1t), (cx1, y0t), (x0, y0t), (x0, y0b),
+                (x0, y0b),
+                (cx1, y0b),
+                (cx2, y1b),
+                (x1, y1b),
+                (x1, y1t),
+                (cx2, y1t),
+                (cx1, y0t),
+                (x0, y0t),
+                (x0, y0b),
             ]
             codes = [
-                Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4,
-                Path.LINETO, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CLOSEPOLY,
+                Path.MOVETO,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.LINETO,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.CLOSEPOLY,
             ]
-            ax.add_patch(PathPatch(
-                Path(verts, codes),
-                facecolor=class_colors[i], edgecolor="none", alpha=0.42, zorder=2,
-            ))
+            ax.add_patch(
+                PathPatch(
+                    Path(verts, codes),
+                    facecolor=class_colors[i],
+                    edgecolor="none",
+                    alpha=0.42,
+                    zorder=2,
+                )
+            )
             if n_ij >= 8:
                 xm = 0.5 * (x0 + x1)
                 ym = 0.5 * ((y0b + y0t) / 2 + (y1b + y1t) / 2)
@@ -256,9 +300,13 @@ def _plot_sankey_from_csv(ax, csv_path: str) -> None:
     except FileNotFoundError:
         ax.axis("off")
         ax.text(
-            0.5, 0.5,
+            0.5,
+            0.5,
             "Sankey matrix not found.\nRun run_comparison.py first.",
-            ha="center", va="center", transform=ax.transAxes, fontsize=10,
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=10,
         )
         ax.set_title("B", fontsize=12, loc="left")
         return
@@ -299,14 +347,25 @@ def _plot_shap_topn(ax, csv_path: str, top_n: int):
         df = pd.read_csv(csv_path)
     except FileNotFoundError:
         ax.axis("off")
-        ax.text(0.5, 0.5, "SHAP file not found\n(re-run permutation importance)",
-                ha="center", va="center", transform=ax.transAxes, fontsize=12)
+        ax.text(
+            0.5,
+            0.5,
+            "SHAP file not found\n(re-run permutation importance)",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=12,
+        )
         return
 
     df = df.sort_values("importance_mean", ascending=False).head(int(top_n)).copy()
     labels = df["group_label"].astype(str).tolist()
     means = df["importance_mean"].astype(float).values
-    stds = df["importance_std"].astype(float).values if "importance_std" in df.columns else np.zeros(len(means))
+    stds = (
+        df["importance_std"].astype(float).values
+        if "importance_std" in df.columns
+        else np.zeros(len(means))
+    )
 
     y_pos = np.arange(len(labels))
     bar_colors = [_shap_bar_color(lbl) for lbl in labels]
@@ -323,6 +382,7 @@ def _plot_shap_topn(ax, csv_path: str, top_n: int):
     ax.spines["right"].set_visible(False)
 
     from matplotlib.patches import Patch
+
     ax.legend(
         handles=[
             Patch(facecolor="#143D60", alpha=0.85, label="Monomer descriptor"),
@@ -334,7 +394,9 @@ def _plot_shap_topn(ax, csv_path: str, top_n: int):
     )
 
 
-def _plot_class_curves_row(axes_row, df_all: pd.DataFrame, *, max_curves_per_class: int, band_quantiles):
+def _plot_class_curves_row(
+    axes_row, df_all: pd.DataFrame, *, max_curves_per_class: int, band_quantiles
+):
     f1 = np.linspace(0, 1, 501)
     class_curves = pcc._sample_per_class(
         df_all,
@@ -350,7 +412,8 @@ def _plot_class_curves_row(axes_row, df_all: pd.DataFrame, *, max_curves_per_cla
 
     for ax, (label, title) in zip(axes_row[:3], panels):
         pcc._plot_dual_band(
-            ax, f1,
+            ax,
+            f1,
             class_curves.get(label, np.empty((0, len(f1)))),
             label=title,
             band_quantiles=band_quantiles,
@@ -372,14 +435,16 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
     setup_plot_style()
-    plt.rcParams.update({
-        "font.size": 12,
-        "axes.labelsize": 12,
-        "xtick.labelsize": 12,
-        "ytick.labelsize": 12,
-        "axes.titlesize": 12,
-        "legend.fontsize": 12,
-    })
+    plt.rcParams.update(
+        {
+            "font.size": 12,
+            "axes.labelsize": 12,
+            "xtick.labelsize": 12,
+            "ytick.labelsize": 12,
+            "axes.titlesize": 12,
+            "legend.fontsize": 12,
+        }
+    )
 
     df_train, df_val, df_test = load_data_split.load_train_val_test_split(split_dir=args.split_dir)
     df_all = pd.concat([df_train, df_val, df_test], ignore_index=True)
@@ -388,7 +453,8 @@ def main():
     # Figure 1: class curves (1x4)
     fig1, axes1 = plt.subplots(1, 4, figsize=CLASS_CURVES_FIGSIZE_INCH, sharex=True, sharey=True)
     _plot_class_curves_row(
-        axes1, df_all,
+        axes1,
+        df_all,
         max_curves_per_class=args.max_curves_per_class,
         band_quantiles=tuple(args.band_quantiles),
     )
@@ -401,7 +467,9 @@ def main():
 
     # Figure 2: performance (1x3) — confusion matrix | Sankey | SHAP
     fig2, axes2 = plt.subplots(
-        1, 3, figsize=(15.0, 4.5),
+        1,
+        3,
+        figsize=(15.0, 4.5),
         gridspec_kw={"width_ratios": [1, 1, 1]},
         constrained_layout=True,
     )

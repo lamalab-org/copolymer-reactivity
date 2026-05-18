@@ -1,20 +1,20 @@
-import backoff
-import requests
-import pubchempy as pcp
-import diskcache as dc
+import hashlib
+import json
+import os
+import re
 from pathlib import Path
 from typing import Union
-import yaml
-from rdkit import Chem
-from rdkit.Chem import Descriptors
-import re
-import os
-import json
+
+import backoff
+import diskcache as dc
 import numpy as np
 import pandas as pd
-import hashlib
+import pubchempy as pcp
+import requests
+import yaml
 from openai import OpenAI
-
+from rdkit import Chem
+from rdkit.Chem import Descriptors
 
 # Global embedding cache
 embedding_cache = {}
@@ -195,7 +195,9 @@ def load_embeddings(file_path="embeddings.json"):
 def save_embeddings(embeddings_dict, file_path="output_2/embeddings.json"):
     """Save embeddings to a JSON file."""
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    embeddings_list = [{"name": name, "embedding": embedding} for name, embedding in embeddings_dict.items()]
+    embeddings_list = [
+        {"name": name, "embedding": embedding} for name, embedding in embeddings_dict.items()
+    ]
     with open(file_path, "w") as file:
         json.dump(embeddings_list, file, indent=4)
     print(f"Saved {len(embeddings_list)} embeddings to {file_path}.")
@@ -225,7 +227,7 @@ def get_or_create_embedding(text, model="text-embedding-3-small"):
     if client is None:
         print(f"Using hash-based embedding for: {text_cleaned}")
         hash_val = int(hashlib.md5(text_cleaned.encode()).hexdigest(), 16)
-        np.random.seed(hash_val % 2 ** 32)
+        np.random.seed(hash_val % 2**32)
         hash_embedding = np.random.normal(0, 1, 1536).tolist()
         embedding_cache[text_cleaned] = hash_embedding
         return hash_embedding
@@ -258,35 +260,40 @@ load_embeddings()
 
 # List of radical polymerization types
 RADICAL_TYPES = [
-    'free radical', 'Free radical', 'Free Radical',
-    'atom transfer radical polymerization',
-    'atom transfer radical',
-    'atom-transfer radical polymerization',
-    'nickel-mediated radical', 'bulk',
-    'Radical', 'radical',
-    'radical-anionic',
-    'controlled radical',
-    'radical-cationic',
-    'controlled/living polymerization',
-    'controlled/living radical',
-    'conventional radical polymerization',
-    'reversible deactivation radical polymerization',
-    'RAFT',
-    'reversible addition fragmentation chain transfer',
-    'reversible addition-fragmentation chain transfer polymerization',
-    'reversible addition-fragmentation chain transfer',
-    'Homogeneous Radical',
-    'Radiation-induced', 'radiation-induced',
-    'Radiation-Initiated',
-    'photo-induced polymerization',
-    'photopolymerization',
-    'thermal polymerization',
-    'thermal',
-    'group transfer polymerization',
-    'grafting',
-    'group transfer',
-    'Emulsion',
-    'Homogeneous Radical',
-    'semicontinuous emulsion',
-    'emulsion'
+    "free radical",
+    "Free radical",
+    "Free Radical",
+    "atom transfer radical polymerization",
+    "atom transfer radical",
+    "atom-transfer radical polymerization",
+    "nickel-mediated radical",
+    "bulk",
+    "Radical",
+    "radical",
+    "radical-anionic",
+    "controlled radical",
+    "radical-cationic",
+    "controlled/living polymerization",
+    "controlled/living radical",
+    "conventional radical polymerization",
+    "reversible deactivation radical polymerization",
+    "RAFT",
+    "reversible addition fragmentation chain transfer",
+    "reversible addition-fragmentation chain transfer polymerization",
+    "reversible addition-fragmentation chain transfer",
+    "Homogeneous Radical",
+    "Radiation-induced",
+    "radiation-induced",
+    "Radiation-Initiated",
+    "photo-induced polymerization",
+    "photopolymerization",
+    "thermal polymerization",
+    "thermal",
+    "group transfer polymerization",
+    "grafting",
+    "group transfer",
+    "Emulsion",
+    "Homogeneous Radical",
+    "semicontinuous emulsion",
+    "emulsion",
 ]

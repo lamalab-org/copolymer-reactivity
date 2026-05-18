@@ -15,41 +15,44 @@ Usage:
   python run_permutation_importance.py [--model-path PATH] [--correlation-threshold 0.9]
 """
 
+import argparse
+import json
 import os
 import sys
-import json
-import argparse
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from datetime import datetime
 
-_script_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(_script_dir, '../..'))
-sys.path.insert(0, os.path.join(_script_dir, '../../copol_prediction'))
-sys.path.insert(0, os.path.join(_script_dir, '..'))
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-from copolpredictor.inference import CopolymerPredictor
-from copolpredictor import prediction_utils, model_training
-from utils.load_data_split import load_train_val_test_split
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(_script_dir, "../.."))
+sys.path.insert(0, os.path.join(_script_dir, "../../copol_prediction"))
+sys.path.insert(0, os.path.join(_script_dir, ".."))
+
 from baseline.compare_models import get_lookup_predictions
+from utils.load_data_split import load_train_val_test_split
+
+from copolpredictor import model_training, prediction_utils
+from copolpredictor.inference import CopolymerPredictor
 
 # Local analysis (same experiment folder)
 sys.path.insert(0, _script_dir)
 from permutation_analysis import (
     build_feature_groups,
-    calculate_shap_importance_by_groups,
-    calculate_shap_pairwise_importance_by_groups,
-    calculate_shap_average_strong_groups,
-    calculate_permutation_importance_by_named_groups,
     build_pair12_atomic_groups,
     build_pair12_with_correlation_groups,
+    calculate_permutation_importance_by_named_groups,
+    calculate_shap_average_strong_groups,
+    calculate_shap_importance_by_groups,
+    calculate_shap_pairwise_importance_by_groups,
     plot_group_permutation_importance_barplot,
 )
 
 try:
     from copol_prediction.analysis.plot_config import setup_plot_style
 except Exception:
+
     def setup_plot_style():
         pass
 
@@ -65,17 +68,25 @@ def maybe_apply_cv_prune_100(df_train: pd.DataFrame, predictor: CopolymerPredict
     if not prune_path:
         return df_train
     if not os.path.exists(prune_path):
-        print(f"  Warning: cv_prune_100_path not found: {prune_path}. Proceeding without pruning in this experiment.")
+        print(
+            f"  Warning: cv_prune_100_path not found: {prune_path}. Proceeding without pruning in this experiment."
+        )
         return df_train
     try:
         df_prune = pd.read_csv(prune_path)
         if "reaction_id" not in df_prune.columns:
-            print(f"  Warning: 'reaction_id' missing in prune list: {prune_path}. Proceeding without pruning.")
+            print(
+                f"  Warning: 'reaction_id' missing in prune list: {prune_path}. Proceeding without pruning."
+            )
             return df_train
         prune_ids = set(df_prune["reaction_id"].astype(str).tolist())
         before_rows = len(df_train)
         before_groups = df_train["reaction_id"].astype(str).nunique()
-        df_train_pruned = df_train[~df_train["reaction_id"].astype(str).isin(prune_ids)].copy().reset_index(drop=True)
+        df_train_pruned = (
+            df_train[~df_train["reaction_id"].astype(str).isin(prune_ids)]
+            .copy()
+            .reset_index(drop=True)
+        )
         after_rows = len(df_train_pruned)
         after_groups = df_train_pruned["reaction_id"].astype(str).nunique()
         print(
@@ -84,7 +95,9 @@ def maybe_apply_cv_prune_100(df_train: pd.DataFrame, predictor: CopolymerPredict
         )
         return df_train_pruned
     except Exception as e:
-        print(f"  Warning: Failed to apply CV-pruning from {prune_path}: {e}. Proceeding without pruning.")
+        print(
+            f"  Warning: Failed to apply CV-pruning from {prune_path}: {e}. Proceeding without pruning."
+        )
         return df_train
 
 
@@ -101,7 +114,9 @@ def parse_args():
     # Default to a stable path inside this experiment folder, regardless of CWD
     parser.add_argument("--output-dir", type=str, default=os.path.join(_script_dir, "results"))
     parser.add_argument("--random-state", type=int, default=42)
-    parser.add_argument("--top-n", type=int, default=50, help="Number of top feature groups to plot")
+    parser.add_argument(
+        "--top-n", type=int, default=50, help="Number of top feature groups to plot"
+    )
     parser.add_argument(
         "--correlation-threshold",
         type=float,
@@ -198,7 +213,9 @@ def parse_args():
     return parser.parse_args()
 
 
-def plot_group_importance_barplot_to_file(results_df, output_dir, *, filename_base: str, top_n: int = 10):
+def plot_group_importance_barplot_to_file(
+    results_df, output_dir, *, filename_base: str, top_n: int = 10
+):
     """
     Same as plot_group_importance_barplot, but lets us control the output filenames.
     """
@@ -391,7 +408,9 @@ def train_full_features_model(df_train, output_dir, random_state=42, hyperparam_
     """
     features = [c for c in prediction_utils.feature_columns_all if c in df_train.columns]
     if len(features) < len(prediction_utils.feature_columns_all):
-        print(f"  Using {len(features)} of {len(prediction_utils.feature_columns_all)} feature_columns_all present in data")
+        print(
+            f"  Using {len(features)} of {len(prediction_utils.feature_columns_all)} feature_columns_all present in data"
+        )
     X_train = df_train[features]
     y_train = df_train["r_product_class"].astype(int).values
     groups = df_train["reaction_id"].astype(str).values
@@ -461,7 +480,7 @@ def get_voting_subset(df_val, df_train, predictor, remove_specialized):
 
     xgb_pred = predictor.predict(X_val)
     lookup_pred, _ = get_lookup_predictions(df_val, df_train, remove_specialized=remove_specialized)
-    agree = (xgb_pred == lookup_pred)
+    agree = xgb_pred == lookup_pred
 
     n_total = len(agree)
     n_agree = int(agree.sum())
@@ -480,6 +499,7 @@ def format_feature_name(name):
     abbreviations via whole-word regex to avoid false matches.
     """
     import re
+
     name = str(name)
 
     # 1. Embedding features (specific suffixes before base)
@@ -493,7 +513,12 @@ def format_feature_name(name):
     # 2. HOMO-LUMO differences
     name = name.replace("delta_HOMO_LUMO", "Δ HOMO-LUMO")
     name = name.replace("delta_homo_lumo", "Δ HOMO-LUMO")
-    name = name.replace("_AA", " 1-1").replace("_AB", " 1-2").replace("_BA", " 2-1").replace("_BB", " 2-2")
+    name = (
+        name.replace("_AA", " 1-1")
+        .replace("_AB", " 1-2")
+        .replace("_BA", " 2-1")
+        .replace("_BB", " 2-2")
+    )
 
     # 3. Fukui indices (before generic 'ea' / 'ip' substitution)
     name = name.replace("fukui_electrophilicity_min", "Fukui electrophilicity min")
@@ -549,9 +574,16 @@ def _shap_bar_colors(group_labels):
     color_condition = "#661124"
 
     condition_keywords = {
-        "temperature", "polytype_emb", "method_emb",
-        "polymerization", "solvent_logp", "solvent_logP",
-        "solvent_frac", "solvent_tpsa", "solvent_hbd", "solvent",
+        "temperature",
+        "polytype_emb",
+        "method_emb",
+        "polymerization",
+        "solvent_logp",
+        "solvent_logP",
+        "solvent_frac",
+        "solvent_tpsa",
+        "solvent_hbd",
+        "solvent",
     }
 
     colors = []
@@ -577,6 +609,7 @@ def plot_group_importance_barplot(results_df, output_dir, top_n=50):
 
     try:
         from copol_prediction.analysis.plot_config import TWO_COL_WIDTH_INCH
+
         width = float(TWO_COL_WIDTH_INCH)
     except Exception:
         width = 7.0
@@ -605,6 +638,7 @@ def plot_group_importance_barplot(results_df, output_dir, top_n=50):
     # Legend
     c_mon, c_cond = "#143D60", "#661124"
     from matplotlib.patches import Patch
+
     ax.legend(
         handles=[
             Patch(facecolor=c_mon, alpha=0.85, label="Monomer descriptor"),
@@ -624,7 +658,9 @@ def plot_group_importance_barplot(results_df, output_dir, top_n=50):
     return os.path.join(output_dir, "shap_importance_barplot.png")
 
 
-def plot_group_importance_beeswarm(results_df, shap_values_per_group, feature_values_per_group, output_dir, top_n=50):
+def plot_group_importance_beeswarm(
+    results_df, shap_values_per_group, feature_values_per_group, output_dir, top_n=50
+):
     """Beeswarm plot showing individual SHAP values per sample, colored by feature values."""
     n_groups = len(results_df)
     n_plot = min(top_n, n_groups)
@@ -640,14 +676,14 @@ def plot_group_importance_beeswarm(results_df, shap_values_per_group, feature_va
     fig, ax = plt.subplots(figsize=(TWO_COL_WIDTH_INCH, height))
 
     y_pos = np.arange(len(top))
-    
+
     # Set random seed for reproducible jitter
     np.random.seed(42)
-    
+
     # Normalize feature values for color mapping (per group)
     # We'll use a diverging colormap: red for high values, blue for low values
     from matplotlib.colors import Normalize
-    
+
     # Plot individual points (beeswarm-style)
     for i, (_, row) in enumerate(top.iterrows()):
         group_label = row["group_label"]
@@ -657,61 +693,63 @@ def plot_group_importance_beeswarm(results_df, shap_values_per_group, feature_va
         if group_label not in feature_values_per_group:
             print(f"  Warning: {group_label} not found in feature_values_per_group")
             continue
-            
+
         shap_vals = shap_values_per_group[group_label]
         feature_vals = feature_values_per_group[group_label]
-        
+
         # Ensure arrays are 1D
         shap_vals = np.asarray(shap_vals).flatten()
         feature_vals = np.asarray(feature_vals).flatten()
-        
+
         if len(shap_vals) == 0 or len(feature_vals) == 0:
             print(f"  Warning: {group_label} has empty values")
             continue
         if len(shap_vals) != len(feature_vals):
-            print(f"  Warning: Length mismatch for {group_label}: shap_vals={len(shap_vals)}, feature_vals={len(feature_vals)}")
+            print(
+                f"  Warning: Length mismatch for {group_label}: shap_vals={len(shap_vals)}, feature_vals={len(feature_vals)}"
+            )
             continue
-            
+
         # Normalize feature values for this group (0-1 scale)
         f_min, f_max = feature_vals.min(), feature_vals.max()
         if f_max > f_min:
             feature_vals_norm = (feature_vals - f_min) / (f_max - f_min)
         else:
             feature_vals_norm = np.ones_like(feature_vals) * 0.5
-        
+
         # Add small jitter to y-axis for better visibility
         y_jitter = np.random.normal(y_pos[i], 0.05, size=len(shap_vals))
-        
+
         # Color by feature value: use RdYlBu_r (red=high, blue=low) or similar
         # Map normalized feature values to colors
         colors = plt.cm.RdYlBu_r(feature_vals_norm)
-        
+
         ax.scatter(
             shap_vals,
             y_jitter,
             alpha=0.5,
             s=12,
             c=colors,
-            edgecolors='none',
+            edgecolors="none",
         )
-    
+
     ax.set_yticks(y_pos)
     ax.set_yticklabels(top["display_label"], fontsize=7)
     ax.set_xlabel("SHAP value (|SHAP| per sample)", fontsize=9)
     ax.tick_params(axis="x", labelsize=7)
     ax.invert_yaxis()
-    ax.grid(False, axis='y')
-    ax.grid(True, axis='x', alpha=0.3, linestyle='--')
+    ax.grid(False, axis="y")
+    ax.grid(True, axis="x", alpha=0.3, linestyle="--")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    
+
     # Add colorbar
     sm = plt.cm.ScalarMappable(cmap=plt.cm.RdYlBu_r, norm=Normalize(vmin=0, vmax=1))
     sm.set_array([])
     cbar = plt.colorbar(sm, ax=ax, pad=0.02)
     cbar.set_label("Feature value\n(high → low)", fontsize=7, rotation=0, labelpad=15)
     cbar.ax.tick_params(labelsize=6)
-    
+
     plt.tight_layout()
 
     for ext in ["png", "pdf"]:
@@ -745,14 +783,18 @@ def run_shap_analysis(predictor, df_val, config):
     print(f"  Groups: {len(feature_groups)} ({n_pairs} pairs, {n_singles} singletons)")
 
     X_val = df_val[feature_names]
-    print(f"  Calculating group-based SHAP importance (max_samples={config['max_samples']}, reduction=sum)...")
-    results_df, shap_values_per_group, feature_values_per_group, X_sample = calculate_shap_importance_by_groups(
-        model=predictor.model,
-        X_df=X_val,
-        feature_groups=feature_groups,
-        max_samples=config["max_samples"],
-        reduction="sum",
-        group_labels=group_labels,
+    print(
+        f"  Calculating group-based SHAP importance (max_samples={config['max_samples']}, reduction=sum)..."
+    )
+    results_df, shap_values_per_group, feature_values_per_group, X_sample = (
+        calculate_shap_importance_by_groups(
+            model=predictor.model,
+            X_df=X_val,
+            feature_groups=feature_groups,
+            max_samples=config["max_samples"],
+            reduction="sum",
+            group_labels=group_labels,
+        )
     )
 
     out_csv = os.path.join(config["output_dir"], "shap_importance_detailed.csv")
@@ -765,13 +807,18 @@ def run_shap_analysis(predictor, df_val, config):
         results_df, config["output_dir"], top_n=config["top_n"]
     )
     plot_path_beeswarm = plot_group_importance_beeswarm(
-        results_df, shap_values_per_group, feature_values_per_group,
-        config["output_dir"], top_n=config["top_n"]
+        results_df,
+        shap_values_per_group,
+        feature_values_per_group,
+        config["output_dir"],
+        top_n=config["top_n"],
     )
 
     print(f"\n  Top 10 groups by importance:")
     for i, (_, row) in enumerate(results_df.head(10).iterrows(), 1):
-        print(f"    {i:2d}. {row['group_label']:<45} {row['importance_mean']:.6f} ± {row['importance_std']:.6f}")
+        print(
+            f"    {i:2d}. {row['group_label']:<45} {row['importance_mean']:.6f} ± {row['importance_std']:.6f}"
+        )
 
     return {
         "shap_results": results_df,
@@ -790,8 +837,8 @@ def run_shap_per_class_analysis(predictor, df_val, config):
     - Color: normalized feature value (red = high, blue = low)
     - Single colorbar on the right
     """
-    from matplotlib.colors import Normalize
     import shap as shap_lib
+    from matplotlib.colors import Normalize
 
     feature_names = [c for c in predictor.features if c in df_val.columns]
     X_val = df_val[feature_names]
@@ -835,7 +882,9 @@ def run_shap_per_class_analysis(predictor, df_val, config):
                 continue
             cols = [X_sample.columns[i] for i in idxs]
             g_shap = sv_signed[:, idxs].mean(axis=1)
-            g_feat = X_sample[cols].mean(axis=1).values if len(cols) > 1 else X_sample[cols[0]].values
+            g_feat = (
+                X_sample[cols].mean(axis=1).values if len(cols) > 1 else X_sample[cols[0]].values
+            )
             shap_list.append(np.asarray(g_shap).flatten())
             feat_list.append(np.asarray(g_feat).flatten())
             labels.append(lbl)
@@ -848,29 +897,33 @@ def run_shap_per_class_analysis(predictor, df_val, config):
     # Apply order to all classes
     sorted_data = []
     for shap_list, feat_list, labels in all_class_data:
-        sorted_data.append((
-            [shap_list[i] for i in order],
-            [feat_list[i] for i in order],
-            [labels[i] for i in order],
-        ))
+        sorted_data.append(
+            (
+                [shap_list[i] for i in order],
+                [feat_list[i] for i in order],
+                [labels[i] for i in order],
+            )
+        )
     y_labels = sorted_data[0][2]  # shared y-axis labels
     n_groups = len(y_labels)
     y_pos = np.arange(n_groups)
 
     try:
         from copol_prediction.analysis.plot_config import TWO_COL_WIDTH_INCH
+
         total_width = float(TWO_COL_WIDTH_INCH)
     except Exception:
         total_width = 7.0
 
     plot_height = max(3.2, n_groups * 0.28)
-    cbar_height = 0.22   # height of the colorbar strip in inches
-    gap = 1.0            # gap between plots and colorbar in inches
+    cbar_height = 0.22  # height of the colorbar strip in inches
+    gap = 1.0  # gap between plots and colorbar in inches
     fig_height = plot_height + gap + cbar_height
 
     fig = plt.figure(figsize=(total_width, fig_height))
     gs = fig.add_gridspec(
-        2, 3,
+        2,
+        3,
         height_ratios=[plot_height, cbar_height],
         hspace=gap / fig_height,  # proportional gap
         wspace=0.08,
@@ -883,11 +936,13 @@ def run_shap_per_class_analysis(predictor, df_val, config):
             f_min, f_max = float(np.min(feat_vals)), float(np.max(feat_vals))
             feat_norm = (
                 (feat_vals - f_min) / (f_max - f_min)
-                if f_max > f_min else np.full_like(feat_vals, 0.5)
+                if f_max > f_min
+                else np.full_like(feat_vals, 0.5)
             )
             y_jitter = np.random.normal(y_pos[i], 0.05, size=len(shap_vals))
-            ax.scatter(shap_vals, y_jitter, alpha=0.5, s=8,
-                       c=plt.cm.RdYlBu_r(feat_norm), edgecolors="none")
+            ax.scatter(
+                shap_vals, y_jitter, alpha=0.5, s=8, c=plt.cm.RdYlBu_r(feat_norm), edgecolors="none"
+            )
 
         ax.axvline(0, color="black", linewidth=0.7, linestyle="--", alpha=0.4)
         ax.set_xlabel(
@@ -896,7 +951,7 @@ def run_shap_per_class_analysis(predictor, df_val, config):
         )
         ax.tick_params(axis="x", labelsize=7)
         ax.set_yticks(y_pos)
-        ax.set_ylim(n_groups - 0.5, -0.5)   # inverted, same range on all axes
+        ax.set_ylim(n_groups - 0.5, -0.5)  # inverted, same range on all axes
         ax.grid(False, axis="y")
         ax.grid(True, axis="x", alpha=0.3, linestyle="--")
         ax.spines["top"].set_visible(False)
@@ -938,7 +993,9 @@ def main():
     split_dir_arg = args.split_dir
     if args.train_full_features_model and not split_dir_arg:
         split_dir_arg = "artifacts/data_splits_full_features"
-        print("  (--train-full-features-model: using split-dir artifacts/data_splits_full_features)")
+        print(
+            "  (--train-full-features-model: using split-dir artifacts/data_splits_full_features)"
+        )
 
     print("=" * 60)
     print("SHAP FEATURE IMPORTANCE (VOTING MODEL, VALIDATION)")
@@ -974,7 +1031,9 @@ def main():
     meta = predictor.metadata.get("training_config", {})
     remove_specialized = meta.get("specialized_removed_from_training", False)
     aug_used = meta.get("augmentation_used")
-    print("  SHAP: no re-training and no Gaussian augmentation in this script; explaining bundle weights as-is.")
+    print(
+        "  SHAP: no re-training and no Gaussian augmentation in this script; explaining bundle weights as-is."
+    )
     if aug_used is True:
         print(
             "  ⚠ Bundle reports augmentation_used=True. For consistency with final "
@@ -1007,7 +1066,9 @@ def main():
         X_val_selected, y_val_selected, df_val_selected, n_agree, n_total = get_voting_subset(
             df_val, df_train, predictor, remove_specialized
         )
-        print(f"  Validation: {n_agree}/{n_total} samples ({100 * n_agree / n_total:.1f}%) after voting")
+        print(
+            f"  Validation: {n_agree}/{n_total} samples ({100 * n_agree / n_total:.1f}%) after voting"
+        )
         # Keep legacy variable names for downstream SHAP section
         X_val_voting, y_val_voting, df_val_voting = X_val_selected, y_val_selected, df_val_selected
 
@@ -1026,7 +1087,8 @@ def main():
         # to cover all of feature_columns_all.
         model_feature_set = set(predictor.features)
         features = [
-            c for c in prediction_utils.feature_columns_all
+            c
+            for c in prediction_utils.feature_columns_all
             if c in df_val.columns and c in model_feature_set
         ]
         missing_from_model = [
@@ -1041,7 +1103,9 @@ def main():
             )
         Xp = df_val[features].copy()
         yp = df_val["r_product_class"].astype(int).values
-        print(f"  Samples: {len(yp)}, Features: {len(features)} / {len(prediction_utils.feature_columns_all)} feature_columns_all")
+        print(
+            f"  Samples: {len(yp)}, Features: {len(features)} / {len(prediction_utils.feature_columns_all)} feature_columns_all"
+        )
 
         # Build permutation groups:
         #   - _1/_2 feature pairs are permuted jointly
@@ -1059,7 +1123,9 @@ def main():
         n_pairs = sum(1 for v in atomic_groups.values() if len(v) == 2)
         n_multi = sum(1 for v in atomic_groups.values() if len(v) > 2)
         n_singles = sum(1 for v in atomic_groups.values() if len(v) == 1)
-        print(f"  Groups: {len(atomic_groups)} ({n_pairs} pairs, {n_multi} multi-feature, {n_singles} singletons)")
+        print(
+            f"  Groups: {len(atomic_groups)} ({n_pairs} pairs, {n_multi} multi-feature, {n_singles} singletons)"
+        )
 
         atomic_df = calculate_permutation_importance_by_named_groups(
             predictor.model,
@@ -1071,7 +1137,9 @@ def main():
             random_state=int(args.random_state),
         )
 
-        out_atomic_csv = os.path.join(args.output_dir, "permutation_importance_pair12_atomic_groups.csv")
+        out_atomic_csv = os.path.join(
+            args.output_dir, "permutation_importance_pair12_atomic_groups.csv"
+        )
         save_atomic = atomic_df.copy()
         save_atomic["features"] = save_atomic["features"].apply(lambda t: "|".join(t))
         save_atomic.to_csv(out_atomic_csv, index=False)
@@ -1084,7 +1152,10 @@ def main():
         for ext in ("pdf", "png"):
             out_path = os.path.join(args.output_dir, f"permutation_importance_barplot.{ext}")
             plot_group_permutation_importance_barplot(
-                plot_df, top_n=50, save_path=out_path, xlabel=xlabel,
+                plot_df,
+                top_n=50,
+                save_path=out_path,
+                xlabel=xlabel,
             )
 
     # Group-based SHAP importance
@@ -1191,7 +1262,6 @@ def main():
         print("PER-CLASS SHAP BEESWARM (VALIDATION SET)")
         print("=" * 60)
         run_shap_per_class_analysis(predictor, df_val, config)
-
 
     # Metadata
     metadata = {

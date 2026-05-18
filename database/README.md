@@ -192,7 +192,7 @@ Each batch can then be uploaded separately to NOMAD.
    ```bash
    python database/convert_to_archives.py
    ```
-   
+
    Archive files are saved in `database/output/`:
    - `database/output/polymerization/*.archive.json` - Polymerization reactions
    - `database/output/monomers/*.archive.json` - Monomers

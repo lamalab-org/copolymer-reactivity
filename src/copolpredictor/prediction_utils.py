@@ -1,63 +1,101 @@
-from sklearn.metrics import accuracy_score
-import numpy as np
-from sklearn.model_selection import GroupKFold
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
+import numpy as np
 import xgboost as xgb
-
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.model_selection import GroupKFold
 
 feature_columns = [
-        # Molecular descriptors for Monomer 1
-        'charges_min_1',
-        'fukui_electrophilicity_min_1', 'fukui_electrophilicity_max_1',
-        'fukui_nucleophilicity_min_1',
-        'fukui_radical_min_1',
-        'homo_1',
-
-        # Molecular descriptors for Monomer 2
-        'charges_min_2',
-        'fukui_electrophilicity_min_2', 'fukui_electrophilicity_max_2',
-        'fukui_nucleophilicity_min_2',
-        'fukui_radical_min_2',
-        'homo_2',
-
-        # HOMO-LUMO differences
-        'delta_HOMO_LUMO_AB', 'delta_HOMO_LUMO_BA',
-
-        # Reaction conditions
-        'temperature',
-        'polytype_emb_1', 'polytype_emb_2',
-        'solvent_logp',
-        'solvent_FractionCSP3',
-    ]
+    # Molecular descriptors for Monomer 1
+    "charges_min_1",
+    "fukui_electrophilicity_min_1",
+    "fukui_electrophilicity_max_1",
+    "fukui_nucleophilicity_min_1",
+    "fukui_radical_min_1",
+    "homo_1",
+    # Molecular descriptors for Monomer 2
+    "charges_min_2",
+    "fukui_electrophilicity_min_2",
+    "fukui_electrophilicity_max_2",
+    "fukui_nucleophilicity_min_2",
+    "fukui_radical_min_2",
+    "homo_2",
+    # HOMO-LUMO differences
+    "delta_HOMO_LUMO_AB",
+    "delta_HOMO_LUMO_BA",
+    # Reaction conditions
+    "temperature",
+    "polytype_emb_1",
+    "polytype_emb_2",
+    "solvent_logp",
+    "solvent_FractionCSP3",
+]
 
 
 feature_columns_all = [
-        # Molecular descriptors for Monomer 1
-        'best_conformer_energy_1', 'ip_1', 'ip_corrected_1', 'ea_1', 'homo_1', 'lumo_1',
-        'global_electrophilicity_1', 'global_nucleophilicity_1', 'charges_min_1', 'charges_max_1',
-        'charges_mean_1', 'fukui_electrophilicity_min_1', 'fukui_electrophilicity_max_1',
-        'fukui_electrophilicity_mean_1', 'fukui_nucleophilicity_min_1', 'fukui_nucleophilicity_max_1',
-        'fukui_nucleophilicity_mean_1', 'fukui_radical_min_1', 'fukui_radical_max_1',
-        'fukui_radical_mean_1', 'dipole_x_1', 'dipole_y_1', 'dipole_z_1',
-
-        # Molecular descriptors for Monomer 2
-        'best_conformer_energy_2', 'ip_2', 'ip_corrected_2', 'ea_2', 'homo_2', 'lumo_2',
-        'global_electrophilicity_2', 'global_nucleophilicity_2', 'charges_min_2', 'charges_max_2',
-        'charges_mean_2', 'fukui_electrophilicity_min_2', 'fukui_electrophilicity_max_2',
-        'fukui_electrophilicity_mean_2', 'fukui_nucleophilicity_min_2', 'fukui_nucleophilicity_max_2',
-        'fukui_nucleophilicity_mean_2', 'fukui_radical_min_2', 'fukui_radical_max_2',
-        'fukui_radical_mean_2', 'dipole_x_2', 'dipole_y_2', 'dipole_z_2',
-
-        # HOMO-LUMO differences
-        'delta_HOMO_LUMO_AA', 'delta_HOMO_LUMO_AB', 'delta_HOMO_LUMO_BB', 'delta_HOMO_LUMO_BA',
-
-        # Other features
-        'temperature', 'solvent_logp',
-        'polytype_emb_1', 'polytype_emb_2', 'method_emb_1', 'method_emb_2', 'solvent_TPSA',
-        'solvent_HBD',
-        'solvent_FractionCSP3'
-    ]
+    # Molecular descriptors for Monomer 1
+    "best_conformer_energy_1",
+    "ip_1",
+    "ip_corrected_1",
+    "ea_1",
+    "homo_1",
+    "lumo_1",
+    "global_electrophilicity_1",
+    "global_nucleophilicity_1",
+    "charges_min_1",
+    "charges_max_1",
+    "charges_mean_1",
+    "fukui_electrophilicity_min_1",
+    "fukui_electrophilicity_max_1",
+    "fukui_electrophilicity_mean_1",
+    "fukui_nucleophilicity_min_1",
+    "fukui_nucleophilicity_max_1",
+    "fukui_nucleophilicity_mean_1",
+    "fukui_radical_min_1",
+    "fukui_radical_max_1",
+    "fukui_radical_mean_1",
+    "dipole_x_1",
+    "dipole_y_1",
+    "dipole_z_1",
+    # Molecular descriptors for Monomer 2
+    "best_conformer_energy_2",
+    "ip_2",
+    "ip_corrected_2",
+    "ea_2",
+    "homo_2",
+    "lumo_2",
+    "global_electrophilicity_2",
+    "global_nucleophilicity_2",
+    "charges_min_2",
+    "charges_max_2",
+    "charges_mean_2",
+    "fukui_electrophilicity_min_2",
+    "fukui_electrophilicity_max_2",
+    "fukui_electrophilicity_mean_2",
+    "fukui_nucleophilicity_min_2",
+    "fukui_nucleophilicity_max_2",
+    "fukui_nucleophilicity_mean_2",
+    "fukui_radical_min_2",
+    "fukui_radical_max_2",
+    "fukui_radical_mean_2",
+    "dipole_x_2",
+    "dipole_y_2",
+    "dipole_z_2",
+    # HOMO-LUMO differences
+    "delta_HOMO_LUMO_AA",
+    "delta_HOMO_LUMO_AB",
+    "delta_HOMO_LUMO_BB",
+    "delta_HOMO_LUMO_BA",
+    # Other features
+    "temperature",
+    "solvent_logp",
+    "polytype_emb_1",
+    "polytype_emb_2",
+    "method_emb_1",
+    "method_emb_2",
+    "solvent_TPSA",
+    "solvent_HBD",
+    "solvent_FractionCSP3",
+]
 
 
 def compute_quality_weighted_accuracy(y_true, y_pred, num_classes=4):
@@ -92,7 +130,7 @@ def compute_quality_weighted_accuracy(y_true, y_pred, num_classes=4):
     return quality_weighted_accuracy
 
 
-def create_grouped_kfold_splits(df, n_splits=5, id_column='reaction_id'):
+def create_grouped_kfold_splits(df, n_splits=5, id_column="reaction_id"):
     """
     Create K-Fold splits that ensure no data leakage by keeping all rows
     with the same group ID (e.g., reaction_id) in the same fold.
@@ -127,12 +165,15 @@ def create_grouped_kfold_splits(df, n_splits=5, id_column='reaction_id'):
 
 
 def plot_weighted_accuracy_learning_curve(
-    X_train, y_train, X_val, y_val,
+    X_train,
+    y_train,
+    X_val,
+    y_val,
     class_weights,
     best_params,
     output_path="output/learning_curve_accuracy.png",
     train_sizes=None,
-    random_state=42
+    random_state=42,
 ):
     """
     Train XGBoost models on increasing amounts of training data and plot weighted class accuracy.
@@ -166,10 +207,7 @@ def plot_weighted_accuracy_learning_curve(
 
         # Train new XGBoost model
         model = xgb.XGBClassifier(
-            **best_params,
-            random_state=random_state,
-            use_label_encoder=False,
-            eval_metric='logloss'
+            **best_params, random_state=random_state, use_label_encoder=False, eval_metric="logloss"
         )
         model.fit(X_subset, y_subset, sample_weight=sample_weights_subset)
 
@@ -183,14 +221,14 @@ def plot_weighted_accuracy_learning_curve(
         acc_per_class = cm.diagonal() / cm.sum(axis=1)
 
         # Weighted class accuracy (equal weights)
-        weighted_acc = (acc_per_class * np.array([1/3, 1/3, 1/3])).sum()
+        weighted_acc = (acc_per_class * np.array([1 / 3, 1 / 3, 1 / 3])).sum()
         accuracies.append(weighted_acc)
 
         print(f"✔️ Trained with {size} samples → Weighted Accuracy: {weighted_acc:.4f}")
 
     # Plot learning curve
     plt.figure(figsize=(8, 5))
-    plt.plot(train_sizes, accuracies, marker='o')
+    plt.plot(train_sizes, accuracies, marker="o")
     plt.xlabel("Training Set Size")
     plt.ylabel("Weighted Accuracy (macro-average)")
     plt.title("Learning Curve (fixed validation set)")
@@ -200,4 +238,3 @@ def plot_weighted_accuracy_learning_curve(
     plt.show()
 
     return train_sizes, accuracies
-

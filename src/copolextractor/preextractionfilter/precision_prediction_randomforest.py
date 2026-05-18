@@ -1,17 +1,19 @@
 import json
-import pandas as pd
-from sklearn.model_selection import train_test_split, StratifiedKFold, GridSearchCV
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import make_scorer, accuracy_score
-from xgboost import XGBClassifier
-import copolextractor.utils as utils
-import numpy as np
-import warnings
-import time
-from collections import Counter
 import os
+import time
+import warnings
+from collections import Counter
+
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.metrics import accuracy_score, make_scorer
+from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+from xgboost import XGBClassifier
+
+import copolextractor.utils as utils
 
 # Suppress XGBoost warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="xgboost")
@@ -21,9 +23,7 @@ def preprocess_data(data, features, target, threshold):
     """
     Prepare data for training by converting it into a DataFrame.
     """
-    filtered_data = [
-        entry for entry in data if target in entry and entry[target] is not None
-    ]
+    filtered_data = [entry for entry in data if target in entry and entry[target] is not None]
     df = pd.DataFrame(filtered_data)
     df["precision_class"] = (df[target] > threshold).astype(int)
     return df
@@ -43,11 +43,7 @@ def build_pipeline(numeric_features, categorical_features, seed_rf):
     )
 
     # Remove deprecated parameter use_label_encoder
-    model = XGBClassifier(
-        random_state=seed_rf,
-        eval_metric="logloss",
-        missing=np.nan
-    )
+    model = XGBClassifier(random_state=seed_rf, eval_metric="logloss", missing=np.nan)
     pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
     return pipeline
 
@@ -95,7 +91,7 @@ def train_model(training_data, features, target, seed_rf):
         "hyperparameters": {},  # Will be filled with best parameters later
         "grid_search_params": param_grid,
         "cv_folds": 5,
-        "metrics": {}  # Will be filled with results later
+        "metrics": {},  # Will be filled with results later
     }
 
     print("Starting GridSearchCV...")
@@ -111,10 +107,7 @@ def train_model(training_data, features, target, seed_rf):
 
     # Update statistics
     stats["hyperparameters"] = grid_search.best_params_
-    stats["metrics"] = {
-        "best_cv_score": grid_search.best_score_,
-        "training_time": training_time
-    }
+    stats["metrics"] = {"best_cv_score": grid_search.best_score_, "training_time": training_time}
 
     # Save statistics
     save_training_stats(stats_file_path, stats)
@@ -170,7 +163,8 @@ def prepare_entries_for_scoring(data, features):
 
         # Check for missing features
         missing_features = [
-            feature for feature in features
+            feature
+            for feature in features
             if feature not in entry or entry[feature] is None or pd.isna(entry[feature])
         ]
 
@@ -184,10 +178,14 @@ def prepare_entries_for_scoring(data, features):
     # Log statistics
     print(f"Total entries: {stats['total_entries']}")
     print(
-        f"Complete entries (all features present): {stats['complete_entries']} ({stats['complete_entries'] / stats['total_entries'] * 100:.2f}%)")
+        f"Complete entries (all features present): {stats['complete_entries']} ({stats['complete_entries'] / stats['total_entries'] * 100:.2f}%)"
+    )
     print(
-        f"Entries with missing features: {stats['entries_with_missing_features']} ({stats['entries_with_missing_features'] / stats['total_entries'] * 100:.2f}%)")
-    print(f"Converted 'number_of_reactions' or 'rxn_count' to 'rxn_number': {stats['converted_rxn_count']}")
+        f"Entries with missing features: {stats['entries_with_missing_features']} ({stats['entries_with_missing_features'] / stats['total_entries'] * 100:.2f}%)"
+    )
+    print(
+        f"Converted 'number_of_reactions' or 'rxn_count' to 'rxn_number': {stats['converted_rxn_count']}"
+    )
 
     print("\nMissing feature statistics:")
     for feature, count in stats["missing_feature_counts"].most_common():
@@ -204,18 +202,18 @@ def update_scores(data, model, features):
         "total_entries": len(data),
         "successful_predictions": 0,
         "failed_predictions": 0,
-        "prediction_errors": Counter()
+        "prediction_errors": Counter(),
     }
 
     for entry in data:
         # Check if all required features are present and valid
         missing_features = [
-            feature
-            for feature in features
-            if feature not in entry or pd.isna(entry[feature])
+            feature for feature in features if feature not in entry or pd.isna(entry[feature])
         ]
         if missing_features:
-            print(f"Skipping {entry.get('filename', 'unknown')} due to missing features: {missing_features}")
+            print(
+                f"Skipping {entry.get('filename', 'unknown')} due to missing features: {missing_features}"
+            )
             entry["precision_score"] = None
             prediction_stats["failed_predictions"] += 1
             prediction_stats["prediction_errors"]["missing_features"] += 1
@@ -227,8 +225,8 @@ def update_scores(data, model, features):
         )
 
         # Ensure categorical features are treated as strings
-        if 'language' in feature_values.columns:
-            feature_values['language'] = feature_values['language'].astype(str)
+        if "language" in feature_values.columns:
+            feature_values["language"] = feature_values["language"].astype(str)
 
         try:
             # Perform prediction
@@ -238,7 +236,9 @@ def update_scores(data, model, features):
         except Exception as e:
             # Handle any errors during prediction
             error_type = type(e).__name__
-            print(f"Error during prediction for {entry.get('filename', 'unknown')}: {error_type}: {e}")
+            print(
+                f"Error during prediction for {entry.get('filename', 'unknown')}: {error_type}: {e}"
+            )
             entry["precision_score"] = None
             prediction_stats["failed_predictions"] += 1
             prediction_stats["prediction_errors"][error_type] += 1
@@ -247,9 +247,11 @@ def update_scores(data, model, features):
     print("\nPrediction statistics:")
     print(f"Total entries processed: {prediction_stats['total_entries']}")
     print(
-        f"Successful predictions: {prediction_stats['successful_predictions']} ({prediction_stats['successful_predictions'] / prediction_stats['total_entries'] * 100:.2f}%)")
+        f"Successful predictions: {prediction_stats['successful_predictions']} ({prediction_stats['successful_predictions'] / prediction_stats['total_entries'] * 100:.2f}%)"
+    )
     print(
-        f"Failed predictions: {prediction_stats['failed_predictions']} ({prediction_stats['failed_predictions'] / prediction_stats['total_entries'] * 100:.2f}%)")
+        f"Failed predictions: {prediction_stats['failed_predictions']} ({prediction_stats['failed_predictions'] / prediction_stats['total_entries'] * 100:.2f}%)"
+    )
 
     if prediction_stats["prediction_errors"]:
         print("\nPrediction error types:")
@@ -270,13 +272,13 @@ def check_json_files(scoring_file, output_file, pdf_folder=None, scoring_data=No
         "scoring_file_valid": False,
         "output_file_valid": False,
         "missing_jsons": 0,
-        "missing_json_filenames": []
+        "missing_json_filenames": [],
     }
 
     # Check scoring file
     if file_stats["scoring_file_exists"]:
         try:
-            with open(scoring_file, 'r', encoding='utf-8') as f:
+            with open(scoring_file, "r", encoding="utf-8") as f:
                 json.load(f)
             file_stats["scoring_file_valid"] = True
         except json.JSONDecodeError:
@@ -289,7 +291,7 @@ def check_json_files(scoring_file, output_file, pdf_folder=None, scoring_data=No
     # Check output file
     if file_stats["output_file_exists"]:
         try:
-            with open(output_file, 'r', encoding='utf-8') as f:
+            with open(output_file, "r", encoding="utf-8") as f:
                 json.load(f)
             file_stats["output_file_valid"] = True
         except json.JSONDecodeError:
@@ -300,14 +302,14 @@ def check_json_files(scoring_file, output_file, pdf_folder=None, scoring_data=No
     # Check for missing JSON files if pdf_folder and scoring_data are provided
     if pdf_folder and scoring_data:
         # Get list of PDFs in the folder
-        pdf_files = [f for f in os.listdir(pdf_folder) if f.lower().endswith('.pdf')]
+        pdf_files = [f for f in os.listdir(pdf_folder) if f.lower().endswith(".pdf")]
 
         # Get list of expected JSON filenames from scoring_data
         expected_jsons = []
         for entry in scoring_data:
-            if 'filename' in entry:
+            if "filename" in entry:
                 # Convert PDF filename to expected JSON filename
-                json_filename = entry['filename'].replace('.pdf', '.json')
+                json_filename = entry["filename"].replace(".pdf", ".json")
                 expected_jsons.append(json_filename)
 
         # Check each expected JSON file
@@ -320,13 +322,15 @@ def check_json_files(scoring_file, output_file, pdf_folder=None, scoring_data=No
     # Log file stats
     print("\nFile status:")
     print(
-        f"Scoring file ({scoring_file}): {'Exists and valid' if file_stats['scoring_file_valid'] else 'Invalid or missing'}")
+        f"Scoring file ({scoring_file}): {'Exists and valid' if file_stats['scoring_file_valid'] else 'Invalid or missing'}"
+    )
     print(
-        f"Output file ({output_file}): {'Exists and valid' if file_stats['output_file_valid'] else 'Will be created or overwritten'}")
+        f"Output file ({output_file}): {'Exists and valid' if file_stats['output_file_valid'] else 'Will be created or overwritten'}"
+    )
 
     if "missing_jsons" in file_stats:
         print(f"Missing JSON files: {file_stats['missing_jsons']}")
-        if file_stats['missing_jsons'] > 0 and file_stats['missing_jsons'] <= 10:
+        if file_stats["missing_jsons"] > 0 and file_stats["missing_jsons"] <= 10:
             print(f"First missing JSON files: {file_stats['missing_json_filenames'][:10]}")
 
     return file_stats
@@ -407,14 +411,14 @@ def main(training_file, scoring_file, output_file, seed_rf, threshold, pdf_folde
             "complete_entries": preparation_stats["complete_entries"],
             "entries_with_missing_features": preparation_stats["entries_with_missing_features"],
             "converted_rxn_count": preparation_stats["converted_rxn_count"],
-            "missing_feature_counts": dict(preparation_stats["missing_feature_counts"])
+            "missing_feature_counts": dict(preparation_stats["missing_feature_counts"]),
         },
         "prediction_results": {
             "total_processed": prediction_stats["total_entries"],
             "successful_predictions": prediction_stats["successful_predictions"],
             "failed_predictions": prediction_stats["failed_predictions"],
-            "prediction_errors": dict(prediction_stats["prediction_errors"])
-        }
+            "prediction_errors": dict(prediction_stats["prediction_errors"]),
+        },
     }
 
     # Add missing PDF stats if available
@@ -422,7 +426,7 @@ def main(training_file, scoring_file, output_file, seed_rf, threshold, pdf_folde
         stats_summary["missing_pdf_stats"] = {
             "pdfs_expected": missing_pdf_stats["pdfs_expected"],
             "pdfs_found": missing_pdf_stats["pdfs_found"],
-            "pdfs_missing": missing_pdf_stats["pdfs_missing"]
+            "pdfs_missing": missing_pdf_stats["pdfs_missing"],
         }
 
     # Save overall statistics
@@ -456,8 +460,17 @@ if __name__ == "__main__":
     parser.add_argument("--output-file", required=True, help="Path to save updated scoring data")
     parser.add_argument("--pdf-folder", help="Path to folder containing PDF files")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
-    parser.add_argument("--threshold", type=float, default=0.5, help="Threshold for precision classification")
+    parser.add_argument(
+        "--threshold", type=float, default=0.5, help="Threshold for precision classification"
+    )
 
     args = parser.parse_args()
 
-    main(args.training_file, args.scoring_file, args.output_file, args.seed, args.threshold, args.pdf_folder)
+    main(
+        args.training_file,
+        args.scoring_file,
+        args.output_file,
+        args.seed,
+        args.threshold,
+        args.pdf_folder,
+    )

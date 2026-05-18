@@ -1,11 +1,13 @@
+import datetime
 import json
 import os
 import time
-import datetime
-from pdf2image import convert_from_path
-import copolextractor.prompter as prompter
-import copolextractor.image_processer as ip
 import traceback
+
+from pdf2image import convert_from_path
+
+import copolextractor.image_processer as ip
+import copolextractor.prompter as prompter
 
 
 def is_valid_pdf(file_path):
@@ -45,13 +47,13 @@ def save_token_stats(stats_file_path, stats_data):
 
 
 def process_pdfs(
-        input_folder,
-        output_folder_images,
-        output_folder,
-        selected_entries_path,
-        log_file_path,
-        output_file,
-        stats_file_path,
+    input_folder,
+    output_folder_images,
+    output_folder,
+    selected_entries_path,
+    log_file_path,
+    output_file,
+    stats_file_path,
 ):
     """
     Process PDFs and update the JSON entries with extracted information.
@@ -75,7 +77,7 @@ def process_pdfs(
         "total_input_tokens": 0,
         "total_output_tokens": 0,
         "execution_time": 0,
-        "calls": []
+        "calls": [],
     }
 
     # Generate the base prompt text
@@ -90,9 +92,7 @@ def process_pdfs(
             continue
 
         file_path = os.path.join(input_folder, filename.replace(".json", ".pdf"))
-        output_json_path = os.path.join(
-            output_folder, filename.replace(".pdf", ".json")
-        )
+        output_json_path = os.path.join(output_folder, filename.replace(".pdf", ".json"))
 
         # Check if the result already exists in the output_2 folder
         if os.path.exists(output_json_path):
@@ -159,7 +159,8 @@ def process_pdfs(
                 attempt += 1
                 current_resolution = int(current_resolution * scaling_factor)
                 print(
-                    f"Total size of images ({total_size / (1024 * 1024):.2f} MB) exceeds 50 MB. Downscaling to {current_resolution}px...")
+                    f"Total size of images ({total_size / (1024 * 1024):.2f} MB) exceeds 50 MB. Downscaling to {current_resolution}px..."
+                )
 
                 # Reset and reprocess
                 images_base64 = []
@@ -176,7 +177,8 @@ def process_pdfs(
 
             if total_size > max_size:
                 print(
-                    f"Warning: Even after {max_attempts} downscaling attempts, images for {filename} are still {total_size / (1024 * 1024):.2f} MB (exceeding 50 MB)")
+                    f"Warning: Even after {max_attempts} downscaling attempts, images for {filename} are still {total_size / (1024 * 1024):.2f} MB (exceeding 50 MB)"
+                )
 
         except Exception as e:
             print(f"An error occurred while processing {filename}: {e}")
@@ -200,15 +202,19 @@ def process_pdfs(
         processed_papers += 1
 
         # Log tokens after each call
-        print(f"Call {number_of_calls} for {filename}: Input tokens: {input_token}, Output tokens: {output_token}")
+        print(
+            f"Call {number_of_calls} for {filename}: Input tokens: {input_token}, Output tokens: {output_token}"
+        )
 
         # Add call info to current run
-        current_run["calls"].append({
-            "filename": filename,
-            "input_tokens": input_token,
-            "output_tokens": output_token,
-            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        })
+        current_run["calls"].append(
+            {
+                "filename": filename,
+                "input_tokens": input_token,
+                "output_tokens": output_token,
+                "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        )
 
         print("API response:", output)
 
@@ -263,11 +269,11 @@ def process_pdfs(
 
 
 def main(
-        input_folder,
-        output_folder_images,
-        output_folder,
-        selected_entries_path,
-        output_file,
+    input_folder,
+    output_folder_images,
+    output_folder,
+    selected_entries_path,
+    output_file,
 ):
     """
     Main function to process PDFs and update JSON entries.

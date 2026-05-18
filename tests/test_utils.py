@@ -1,6 +1,7 @@
-from copolextractor.utils import name_to_smiles
 import pytest
 from rdkit import Chem
+
+from copolextractor.utils import name_to_smiles
 
 
 @pytest.mark.parametrize(

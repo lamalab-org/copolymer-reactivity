@@ -1,10 +1,12 @@
-from selenium import webdriver
-from bs4 import BeautifulSoup
 import json
-from collections import Counter
 import os
-import copolextractor.utils as utils
+from collections import Counter
+
 import pandas as pd
+from bs4 import BeautifulSoup
+from selenium import webdriver
+
+import copolextractor.utils as utils
 
 
 def fetch_journals(output_journal_file):
@@ -73,26 +75,26 @@ def process_papers(input_file, journal_file, keywords, output_file, existing_doi
     if existing_doi_csv:
         try:
             df = pd.read_csv(existing_doi_csv)
-            if 'original_source' in df.columns:
-                existing_dois = set(df['original_source'].dropna().tolist())
+            if "original_source" in df.columns:
+                existing_dois = set(df["original_source"].dropna().tolist())
         except Exception as e:
             print(f"Warning: Could not load existing DOIs from CSV: {e}")
 
     # Process DOIs and mark existing entries
     for entry in data:
-        if 'DOI' in entry:
-            processed_doi = utils.sanitize_filename(entry['DOI']).rstrip('.json')
+        if "DOI" in entry:
+            processed_doi = utils.sanitize_filename(entry["DOI"]).rstrip(".json")
             # Check if DOI exists in the list from CSV
             if processed_doi in existing_dois:
-                entry['already_extracted'] = True
+                entry["already_extracted"] = True
             else:
-                entry['already_extracted'] = False
+                entry["already_extracted"] = False
 
     # Process only entries that haven't been extracted yet
     scored_data = [
         calculate_score(entry, journal_list, keywords)
         for entry in data
-        if not entry.get('already_extracted', False)
+        if not entry.get("already_extracted", False)
     ]
 
     # Sort by score and get top 50
@@ -110,8 +112,10 @@ def process_papers(input_file, journal_file, keywords, output_file, existing_doi
         print(f"Score {score}: {count} papers")
 
     print("Total number of papers processed:", len(scored_data))
-    print("Total number of papers skipped (already extracted):",
-          len([e for e in data if e.get('already_extracted', False)]))
+    print(
+        "Total number of papers skipped (already extracted):",
+        len([e for e in data if e.get("already_extracted", False)]),
+    )
 
     # Save the updated data to a new JSON file
     with open(output_file, "w") as f:

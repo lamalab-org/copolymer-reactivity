@@ -1,10 +1,11 @@
-import os
-import json
 import csv
+import json
+import os
+
 import pandas as pd
-from tqdm import tqdm
-from morfeus.conformer import ConformerEnsemble
 from morfeus import XTB
+from morfeus.conformer import ConformerEnsemble
+from tqdm import tqdm
 
 
 def calculate_missing_properties(smiles, existing_properties):
@@ -12,8 +13,8 @@ def calculate_missing_properties(smiles, existing_properties):
     missing_properties = {}
 
     if (
-            "best_conformer_elements" in existing_properties
-            and "best_conformer_coordinates" in existing_properties
+        "best_conformer_elements" in existing_properties
+        and "best_conformer_coordinates" in existing_properties
     ):
         elements = existing_properties["best_conformer_elements"]
         coordinates = existing_properties["best_conformer_coordinates"]
@@ -70,9 +71,7 @@ def conformer_opt(smiles):
 
     try:
         print("Started GFN-FF optimization.")
-        ce.optimize_qc_engine(
-            program="xtb", model={"method": "GFN-FF"}, procedure="geometric"
-        )
+        ce.optimize_qc_engine(program="xtb", model={"method": "GFN-FF"}, procedure="geometric")
     except Exception as e:
         print(f"GFN-FF optimization failed for {smiles}: {e}")
         ce = ConformerEnsemble.from_rdkit(smiles, optimize="MMFF94")
@@ -81,9 +80,7 @@ def conformer_opt(smiles):
 
     try:
         print("Started GFN2-xTB optimization.")
-        ce.optimize_qc_engine(
-            program="xtb", model={"method": "GFN2-xTB"}, procedure="geometric"
-        )
+        ce.optimize_qc_engine(program="xtb", model={"method": "GFN2-xTB"}, procedure="geometric")
     except Exception as e:
         print(f"GFN2-xTB optimization failed for {smiles}: {e}")
 
@@ -114,12 +111,8 @@ def calculate_property(smiles):
         "lumo": xtb.get_lumo(),
         "charges": xtb.get_charges(),
         "dipole": xtb.get_dipole().tolist(),
-        "global_electrophilicity": xtb.get_global_descriptor(
-            "electrophilicity", corrected=True
-        ),
-        "global_nucleophilicity": xtb.get_global_descriptor(
-            "nucleophilicity", corrected=True
-        ),
+        "global_electrophilicity": xtb.get_global_descriptor("electrophilicity", corrected=True),
+        "global_nucleophilicity": xtb.get_global_descriptor("nucleophilicity", corrected=True),
         "fukui_electrophilicity": xtb.get_fukui("electrophilicity"),
         "fukui_nucleophilicity": xtb.get_fukui("nucleophilicity"),
         "fukui_radical": xtb.get_fukui("radical"),
@@ -145,13 +138,13 @@ def load_smiles_from_csv(csv_path):
         df = pd.read_csv(csv_path)
 
         # Check if the expected columns exist
-        if 'monomer1_smiles' in df.columns:
-            monomer1_smiles = df['monomer1_smiles'].dropna().unique()
+        if "monomer1_smiles" in df.columns:
+            monomer1_smiles = df["monomer1_smiles"].dropna().unique()
             unique_smiles.update(monomer1_smiles)
             print(f"Found {len(monomer1_smiles)} unique monomer1 SMILES")
 
-        if 'monomer2_smiles' in df.columns:
-            monomer2_smiles = df['monomer2_smiles'].dropna().unique()
+        if "monomer2_smiles" in df.columns:
+            monomer2_smiles = df["monomer2_smiles"].dropna().unique()
             unique_smiles.update(monomer2_smiles)
             print(f"Found {len(monomer2_smiles)} unique monomer2 SMILES")
 
@@ -163,14 +156,14 @@ def load_smiles_from_csv(csv_path):
 
         # Fallback to standard CSV parsing
         try:
-            with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            with open(csv_path, "r", encoding="utf-8") as csvfile:
                 reader = csv.DictReader(csvfile)
 
                 for row in reader:
-                    if 'monomer1_smiles' in row and row['monomer1_smiles']:
-                        unique_smiles.add(row['monomer1_smiles'])
-                    if 'monomer2_smiles' in row and row['monomer2_smiles']:
-                        unique_smiles.add(row['monomer2_smiles'])
+                    if "monomer1_smiles" in row and row["monomer1_smiles"]:
+                        unique_smiles.add(row["monomer1_smiles"])
+                    if "monomer2_smiles" in row and row["monomer2_smiles"]:
+                        unique_smiles.add(row["monomer2_smiles"])
 
             print(f"Loaded {len(unique_smiles)} unique SMILES with fallback method")
 
@@ -186,7 +179,7 @@ def main():
     Main function that loads SMILES from CSV and calculates properties
     """
     # Fixed parameters
-    #csv_path = "../data_extraction/extracted_reactions.csv"
+    # csv_path = "../data_extraction/extracted_reactions.csv"
     csv_path = "artificial_datapoints/augmented_temperature_only.csv"
     output_folder = "output/molecule_properties"
     smiles_error_path = "output/smiles_error.json"
@@ -220,7 +213,7 @@ def main():
     for smiles in tqdm(sorted(unique_smiles), desc="Processing SMILES"):
         print(f"\nProcessing {smiles}")
         # Create a safe filename by replacing problematic characters
-        safe_smiles = smiles.replace('/', '_').replace('\\', '_').replace(':', '_')
+        safe_smiles = smiles.replace("/", "_").replace("\\", "_").replace(":", "_")
         filename = os.path.join(output_folder, f"{safe_smiles}.json")
 
         if os.path.exists(filename):
@@ -284,7 +277,7 @@ def main():
         "successful_calculations": successful_calculations,
         "skipped_calculations": skipped_calculations,
         "error_calculations": error_calculations,
-        "error_details": smiles_error
+        "error_details": smiles_error,
     }
 
     with open(os.path.join(output_folder, "calculation_summary.json"), "w") as f:

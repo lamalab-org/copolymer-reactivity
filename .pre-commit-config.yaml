@@ -1,0 +1,36 @@
+# Run locally:  pre-commit install   (one-time, hooks into .git/hooks/pre-commit)
+# Run manually: pre-commit run --all-files
+#
+# CI runs the same hooks via .github/workflows/precommit.yml — keeping the
+# config in this file means devs and CI never disagree about formatting.
+
+exclude: '^(dump/|nomad_env/|xtb/|\.mplconfig/|copol_prediction/api/molecule_properties/)'
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # Whitespace / EOF on source files only — the repo has ~7k JSON data
+      # files under data_extraction/output and artifacts/, all of which
+      # are generated, none of which should be rewritten by a formatter.
+      - id: trailing-whitespace
+        types_or: [python, yaml, toml, markdown]
+      - id: end-of-file-fixer
+        types_or: [python, yaml, toml, markdown]
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=2000']
+
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        # Settings come from [tool.black] in pyproject.toml.
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        # Settings come from [tool.isort] in pyproject.toml.

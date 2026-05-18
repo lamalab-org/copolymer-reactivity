@@ -7,4 +7,4 @@ the prediction pipeline.
 
 from . import load_data_split
 
-__all__ = ['load_data_split']
+__all__ = ["load_data_split"]

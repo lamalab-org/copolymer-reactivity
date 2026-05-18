@@ -1,16 +1,15 @@
-import time
 import datetime
-import os
 import json
+import os
+import time
 from pathlib import Path
 
 from pdf2image import convert_from_path
 
-import copolextractor.prompter as prompter
 import copolextractor.analyzer as az
 import copolextractor.image_processer as ip
+import copolextractor.prompter as prompter
 import copolextractor.utils as utils
-
 
 failed_smiles_list = []
 
@@ -40,12 +39,12 @@ def save_token_stats(stats_file_path, stats_data):
 
 
 def process_pdf_files(
-        paper_list_path,
-        output_folder_images,
-        output_folder,
-        number_of_model_calls,
-        pdf_folder,
-        stats_file_path,
+    paper_list_path,
+    output_folder_images,
+    output_folder,
+    number_of_model_calls,
+    pdf_folder,
+    stats_file_path,
 ):
     """
     Process PDF files based on entries from paper_list.json and update the JSON file with extraction results.
@@ -60,7 +59,8 @@ def process_pdf_files(
     selected_papers = [
         entry
         for entry in paper_list
-        if entry.get("precision_score") == 1 and not entry.get("extracted" and entry.get("rxn_number", 0) > 0)
+        if entry.get("precision_score") == 1
+        and not entry.get("extracted" and entry.get("rxn_number", 0) > 0)
     ]
     print(f"Number of PDFs to process: {len(selected_papers)}")
 
@@ -80,7 +80,7 @@ def process_pdf_files(
         "total_input_tokens": 0,
         "total_output_tokens": 0,
         "execution_time": 0,
-        "calls": []
+        "calls": [],
     }
 
     # Load prompt template
@@ -88,7 +88,7 @@ def process_pdf_files(
 
     for i, paper in enumerate(selected_papers):
         filename = paper["filename"]
-        file_path = os.path.join(pdf_folder, filename.replace('.json', '.pdf'))
+        file_path = os.path.join(pdf_folder, filename.replace(".json", ".pdf"))
 
         json_file_path = os.path.join(output_folder, filename.replace(".pdf", ".json"))
         if os.path.exists(json_file_path):
@@ -130,7 +130,8 @@ def process_pdf_files(
                 attempt += 1
                 current_resolution = int(current_resolution * scaling_factor)
                 print(
-                    f"Total size of images ({total_size / (1024 * 1024):.2f} MB) exceeds 50 MB. Downscaling to {current_resolution}px...")
+                    f"Total size of images ({total_size / (1024 * 1024):.2f} MB) exceeds 50 MB. Downscaling to {current_resolution}px..."
+                )
 
                 # Reset and reprocess
                 images_base64 = []
@@ -147,7 +148,8 @@ def process_pdf_files(
 
             if total_size > max_size:
                 print(
-                    f"Warning: Even after {max_attempts} downscaling attempts, images for {filename} are still {total_size / (1024 * 1024):.2f} MB (exceeding 50 MB)")
+                    f"Warning: Even after {max_attempts} downscaling attempts, images for {filename} are still {total_size / (1024 * 1024):.2f} MB (exceeding 50 MB)"
+                )
 
         except Exception as e:
             print(f"An error occurred while processing images for {filename}: {e}")
@@ -166,16 +168,20 @@ def process_pdf_files(
         number_of_calls += 1
 
         # Log tokens after each call
-        print(f"Call {number_of_calls} for {filename}: Input tokens: {input_token}, Output tokens: {output_token}")
+        print(
+            f"Call {number_of_calls} for {filename}: Input tokens: {input_token}, Output tokens: {output_token}"
+        )
 
         # Add call info to current run
-        current_run["calls"].append({
-            "filename": filename,
-            "call_type": "initial",
-            "input_tokens": input_token,
-            "output_tokens": output_token,
-            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        })
+        current_run["calls"].append(
+            {
+                "filename": filename,
+                "call_type": "initial",
+                "input_tokens": input_token,
+                "output_tokens": output_token,
+                "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        )
 
         # Update and save token statistics after each call
         current_run["total_input_tokens"] = total_input_tokens
@@ -187,9 +193,7 @@ def process_pdf_files(
         save_token_stats(stats_file_path, token_stats)
 
         # Save output as JSON
-        output_name_json = os.path.join(
-            output_folder, filename.replace(".pdf", ".json")
-        )
+        output_name_json = os.path.join(output_folder, filename.replace(".pdf", ".json"))
 
         for retry_attempt in range(number_of_model_calls):
             if isinstance(output, str):
@@ -212,9 +216,7 @@ def process_pdf_files(
             if na_rate > 0.4:
                 print(f"Retrying model call {retry_attempt + 2} for {filename}")
                 updated_prompt = prompter.update_prompt(prompt_text, output)
-                content = prompter.get_prompt_vision_model(
-                    images_base64, updated_prompt
-                )
+                content = prompter.get_prompt_vision_model(images_base64, updated_prompt)
                 output, input_token, output_token = prompter.call_openai(content)
 
                 # Track tokens for retry call
@@ -224,17 +226,20 @@ def process_pdf_files(
 
                 # Log tokens after each retry
                 print(
-                    f"Retry {retry_attempt + 1} for {filename}: Input tokens: {input_token}, Output tokens: {output_token}")
+                    f"Retry {retry_attempt + 1} for {filename}: Input tokens: {input_token}, Output tokens: {output_token}"
+                )
 
                 # Add retry call info to current run
-                current_run["calls"].append({
-                    "filename": filename,
-                    "call_type": f"retry_{retry_attempt + 1}",
-                    "input_tokens": input_token,
-                    "output_tokens": output_token,
-                    "na_rate": na_rate,
-                    "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                })
+                current_run["calls"].append(
+                    {
+                        "filename": filename,
+                        "call_type": f"retry_{retry_attempt + 1}",
+                        "input_tokens": input_token,
+                        "output_tokens": output_token,
+                        "na_rate": na_rate,
+                        "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    }
+                )
 
                 # Update and save token statistics after each retry
                 current_run["total_input_tokens"] = total_input_tokens
@@ -306,9 +311,7 @@ def decode_nested_json(data):
     """
     if isinstance(data, str):
         try:
-            return decode_nested_json(
-                json.loads(data)
-            )  # Parse the string and decode further
+            return decode_nested_json(json.loads(data))  # Parse the string and decode further
         except (json.JSONDecodeError, TypeError):
             return data  # Return as-is if not JSON
     elif isinstance(data, dict):
@@ -417,9 +420,7 @@ def process_files(input_folder, output_file):
         print("All SMILES were successfully processed.")
 
 
-def main(
-        input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file
-):
+def main(input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file):
     """
     Main function to process PDFs and extracted JSON files.
     """
@@ -438,7 +439,7 @@ def main(
         "total_input_tokens": 0,
         "total_output_tokens": 0,
         "execution_time": 0,
-        "calls": []
+        "calls": [],
     }
 
     # Add the current run to the token stats
@@ -453,12 +454,7 @@ def main(
 
     # Process PDF files
     process_pdf_files(
-        paper_list_path,
-        input_folder_images,
-        output_folder,
-        2,
-        pdf_folder,
-        stats_file_path
+        paper_list_path, input_folder_images, output_folder, 2, pdf_folder, stats_file_path
     )
 
     # Process extracted JSON files

@@ -21,7 +21,6 @@ import argparse
 import re
 from pathlib import Path
 
-
 SAMPLE_ORDER: list[str] = ["MWH-017", "MWH-018", "MWH-022"]
 
 # Names taken from the lab case study definitions (see lab_experiments_case_study.py)
@@ -118,7 +117,9 @@ def _parse_mn_g_per_mol(mn_latex: str) -> float | None:
         return None
 
 
-def _compute_dp(mn: float | None, mm1: float, mm2: float, r_m2_over_m1: float | None) -> tuple[float | None, float | None]:
+def _compute_dp(
+    mn: float | None, mm1: float, mm2: float, r_m2_over_m1: float | None
+) -> tuple[float | None, float | None]:
     """
     Solve:
       Mn = x*MM1 + (r*x)*MM2   with r = M2/M1
@@ -137,6 +138,7 @@ def _format_dp(dp: float | None) -> str:
     if dp is None or not (dp > 0):
         return ""
     return rf"${dp:.1f}$"
+
 
 def _latex_escape(text: str) -> str:
     # Minimal escaping for typical chemical/common names.
@@ -249,4 +251,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

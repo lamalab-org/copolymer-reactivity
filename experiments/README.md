@@ -45,7 +45,7 @@ python archive/create_train_test_split.py --fingerprints
 
 This creates `feature_comparison/data/train_morgan.csv`, `feature_comparison/data/test_morgan.csv` (derived data only).
 
-**Note:** Normal splits (`train.csv`, `test.csv`) are NOT copied anymore. 
+**Note:** Normal splits (`train.csv`, `test.csv`) are NOT copied anymore.
 All scripts should use the central split directly from `copol_prediction/artifacts/data_splits/`
 
 ### 3. Run Experiments

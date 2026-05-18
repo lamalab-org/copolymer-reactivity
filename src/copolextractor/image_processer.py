@@ -1,13 +1,14 @@
-from pytesseract import Output
-import pytesseract
-import imutils
-import cv2
-import os
 import base64
-from PIL import Image
-import time
 import io
+import os
+import time
+
+import cv2
+import imutils
 import numpy as np
+import pytesseract
+from PIL import Image
+from pytesseract import Output
 
 
 def pil_to_cv2(image):
@@ -27,9 +28,7 @@ def correct_text_orientation(image, save_directory, file_path, i):
 
     base_filename = os.path.basename(file_path)
     name_without_ext, _ = os.path.splitext(base_filename)
-    new_filename = os.path.join(
-        save_directory, f"corrected_{name_without_ext}_page{i+1}.png"
-    )
+    new_filename = os.path.join(save_directory, f"corrected_{name_without_ext}_page{i+1}.png")
 
     cv2.imwrite(new_filename, rotated)
     return rotated

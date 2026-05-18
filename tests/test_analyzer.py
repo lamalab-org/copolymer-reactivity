@@ -1,13 +1,14 @@
+import pytest
+
 from copolextractor.analyzer import (
-    get_total_number_of_reaction_conditions,
+    change_sequence,
+    convert_unit,
     find_matching_reaction,
     find_matching_reaction_conditions,
-    convert_unit,
-    get_sequence_of_monomers,
     get_number_of_reactions,
-    change_sequence,
+    get_sequence_of_monomers,
+    get_total_number_of_reaction_conditions,
 )
-import pytest
 
 
 def test_get_total_number_of_reaction_conditions():
@@ -144,34 +145,32 @@ def test_find_matching_reaction(data, monomers, expected):
             0,
             0.9,
         ),
-            (
-                [
-                    {
-                        "solvent": "water",
-                        "temperature": 10,
-                        "temperature_unit": "°C",
-                        "polymerization_type": "radical (A)",
-                        "method": "A",
-                        "determination_method": "B",
-                    },
-                    {
-                        "solvent": "ethanol",
-                        "temperature": 20,
-                        "temperature_unit": "K",
-                        "polymerization_type": "radical",
-                        "method": "A",
-                        "determination_method": "Tudor",
-                    },
-                ],
-                ("ethanol", 20, "K", "radical", "A", "Tudor"),
-                1,
-                0.9,
-            ),
+        (
+            [
+                {
+                    "solvent": "water",
+                    "temperature": 10,
+                    "temperature_unit": "°C",
+                    "polymerization_type": "radical (A)",
+                    "method": "A",
+                    "determination_method": "B",
+                },
+                {
+                    "solvent": "ethanol",
+                    "temperature": 20,
+                    "temperature_unit": "K",
+                    "polymerization_type": "radical",
+                    "method": "A",
+                    "determination_method": "Tudor",
+                },
+            ],
+            ("ethanol", 20, "K", "radical", "A", "Tudor"),
+            1,
+            0.9,
+        ),
     ],
 )
-def test_find_matching_reaction_conditions(
-    data, ground_truth, expected_index, expected_score
-):
+def test_find_matching_reaction_conditions(data, ground_truth, expected_index, expected_score):
     idx, score = find_matching_reaction_conditions(data, *ground_truth)
     assert idx == expected_index
     if expected_score != 1:

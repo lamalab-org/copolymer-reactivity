@@ -20,7 +20,6 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-
 # ---------------------------------------------------------------------------
 # Paths & imports
 # ---------------------------------------------------------------------------
@@ -41,8 +40,12 @@ def _parse_args() -> argparse.Namespace:
     default_out = Path(__file__).with_name("kinetics_copolymerizations")
 
     p = argparse.ArgumentParser()
-    p.add_argument("--csv-an-vp", type=Path, default=default_csv_an_vp, help="CSV for AN/VP time series.")
-    p.add_argument("--csv-ba-va", type=Path, default=default_csv_ba_va, help="CSV for BA/VA time series.")
+    p.add_argument(
+        "--csv-an-vp", type=Path, default=default_csv_an_vp, help="CSV for AN/VP time series."
+    )
+    p.add_argument(
+        "--csv-ba-va", type=Path, default=default_csv_ba_va, help="CSV for BA/VA time series."
+    )
     p.add_argument(
         "--csv-sty-oct",
         type=Path,
@@ -103,7 +106,10 @@ def main() -> None:
         nrows=1,
         ncols=3,
         sharey=False,
-        figsize=(plot_config.TWO_COL_WIDTH_INCH, 0.75 * plot_config.TWO_COL_GOLDEN_RATIO_HEIGHT_INCH),
+        figsize=(
+            plot_config.TWO_COL_WIDTH_INCH,
+            0.75 * plot_config.TWO_COL_GOLDEN_RATIO_HEIGHT_INCH,
+        ),
         constrained_layout=True,
     )
 
@@ -169,10 +175,14 @@ def main() -> None:
     std_sty = df_sty_oct["std_conversion_ba"]
 
     ax2.plot(t2, mean_oct, label="1-octene", color=color_1, linewidth=2)
-    ax2.fill_between(t2, mean_oct - std_oct, mean_oct + std_oct, color=color_1, alpha=0.2, linewidth=0)
+    ax2.fill_between(
+        t2, mean_oct - std_oct, mean_oct + std_oct, color=color_1, alpha=0.2, linewidth=0
+    )
 
     ax2.plot(t2, mean_sty, label="Styrene", color=color_2, linewidth=2)
-    ax2.fill_between(t2, mean_sty - std_sty, mean_sty + std_sty, color=color_2, alpha=0.2, linewidth=0)
+    ax2.fill_between(
+        t2, mean_sty - std_sty, mean_sty + std_sty, color=color_2, alpha=0.2, linewidth=0
+    )
 
     ax2.set_xlabel("Time (min)")
     ax2.set_ylabel("Conversion")
@@ -193,4 +203,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

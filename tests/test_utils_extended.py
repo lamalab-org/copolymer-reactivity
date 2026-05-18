@@ -1,15 +1,17 @@
+import os
+import tempfile
+from pathlib import Path
+
+import pytest
+
 from copolextractor.utils import (
-    sanitize_filename,
     calculate_logP,
     canonicalize_smiles,
     is_within_deviation,
     load_json,
+    sanitize_filename,
     save_json,
 )
-import pytest
-import tempfile
-import os
-from pathlib import Path
 
 
 @pytest.mark.parametrize(
@@ -90,7 +92,7 @@ def test_save_and_load_json():
     # Create a temporary directory
     with tempfile.TemporaryDirectory() as tmpdir:
         test_file = Path(tmpdir) / "test.json"
-        
+
         # Test data
         test_data = {
             "key1": "value1",
@@ -98,16 +100,16 @@ def test_save_and_load_json():
             "key3": [1, 2, 3],
             "key4": {"nested": "data"},
         }
-        
+
         # Save JSON
         save_json(test_data, test_file)
-        
+
         # Check file exists
         assert test_file.exists()
-        
+
         # Load JSON
         loaded_data = load_json(test_file)
-        
+
         # Verify data matches
         assert loaded_data == test_data
 
@@ -118,17 +120,16 @@ def test_save_json_requires_existing_directory():
         # Create the directory first
         nested_dir = Path(tmpdir) / "subdir1" / "subdir2"
         nested_dir.mkdir(parents=True, exist_ok=True)
-        
+
         nested_path = nested_dir / "test.json"
         test_data = {"test": "data"}
-        
+
         # Save should work with existing directory
         save_json(test_data, nested_path)
-        
+
         # Verify file was created
         assert nested_path.exists()
-        
+
         # Verify data is correct
         loaded_data = load_json(nested_path)
         assert loaded_data == test_data
-

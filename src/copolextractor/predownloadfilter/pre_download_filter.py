@@ -42,7 +42,7 @@ def run_combined_pipeline(
         journal_file=journal_file,
         keywords=keywords,
         output_file=scoring_output_path,
-        existing_doi_csv=existing_doi_csv
+        existing_doi_csv=existing_doi_csv,
     )
 
     print("Scoring completed.")
@@ -57,7 +57,7 @@ def run_combined_pipeline(
         number_of_selected_paper=number_of_selected_papers,
         key=key_embedding_filter,
         values=values_embedding_filter,
-        new_papers_path=scoring_file_embedding_filter
+        new_papers_path=scoring_file_embedding_filter,
     )
 
     print("Embedding generation completed.")

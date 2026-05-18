@@ -72,7 +72,11 @@ def read_chromatogram_ch1(path: Path, *, max_header_lines: int = 2000) -> Chroma
                     in_block = True
                 continue
 
-            if line.startswith("[") and line.endswith("]") and line.strip() != "[Chromatogram (Ch1)]":
+            if (
+                line.startswith("[")
+                and line.endswith("]")
+                and line.strip() != "[Chromatogram (Ch1)]"
+            ):
                 # Another section started without us seeing data; stop.
                 break
 
@@ -200,7 +204,10 @@ def plot_one(
     fig, ax = plt.subplots(
         nrows=1,
         ncols=1,
-        figsize=(plot_config.TWO_COL_WIDTH_INCH, 1.15 * plot_config.ONE_COL_GOLDEN_RATIO_HEIGHT_INCH),
+        figsize=(
+            plot_config.TWO_COL_WIDTH_INCH,
+            1.15 * plot_config.ONE_COL_GOLDEN_RATIO_HEIGHT_INCH,
+        ),
         constrained_layout=True,
     )
 
@@ -294,9 +301,14 @@ def main() -> None:
                 pad = 0.06 * (y_high - y_low)
                 y_lim = (y_low - pad, y_high + pad)
 
-        plot_one(chrom=chrom, title=title, out_base=out_base, y_lim=y_lim, x_lim=(0.0, float(args.x_end_min)))
+        plot_one(
+            chrom=chrom,
+            title=title,
+            out_base=out_base,
+            y_lim=y_lim,
+            x_lim=(0.0, float(args.x_end_min)),
+        )
 
 
 if __name__ == "__main__":
     main()
-

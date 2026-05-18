@@ -13,11 +13,11 @@ Typical usage::
     )
 
     config = ExtractionConfig(...)
-    
+
     # Run full pipeline
     steps = ExtractionSteps(crossref_search=True, extraction=True)
     obtain_data(config, steps)
-    
+
     # Run only metadata fetch (skip copol database and crossref search)
     substeps = CrossrefSteps(process_copol=False, process_crossref_search=False, fetch_metadata=True)
     steps = ExtractionSteps(crossref_search=True, crossref_substeps=substeps, extraction=False)
@@ -34,16 +34,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from copolextractor.PDF_download import main as pdf_download
 from copolextractor.crossref_search import main as crossref_search
 from copolextractor.data_into_csv import main as save_data
 from copolextractor.extraction_with_GPT_PDF import main as extractor
-from copolextractor.predownloadfilter.pre_download_filter import (
-    main as pre_download_filter,
-)
-from copolextractor.preextractionfilter.pre_extraction_filter import (
-    main as pre_extraction_filter,
-)
+from copolextractor.PDF_download import main as pdf_download
+from copolextractor.predownloadfilter.pre_download_filter import main as pre_download_filter
+from copolextractor.preextractionfilter.pre_extraction_filter import main as pre_extraction_filter
 
 
 @dataclass
@@ -81,11 +77,11 @@ class ExtractionConfig:
 @dataclass
 class CrossrefSteps:
     """Select which sub-steps of the Crossref search should be executed.
-    
+
     This allows fine-grained control over the Crossref module, enabling scenarios
     like fetching only metadata for existing DOIs without re-running the search.
     """
-    
+
     process_copol: bool = False
     process_crossref_search: bool = False
     fetch_metadata: bool = True
@@ -146,10 +142,10 @@ def obtain_data(
     if steps.crossref_search:
         _ensure_parent_dir(config.output_file_crossref_search)
         _ensure_parent_dir(config.crossref_metadata_output_file)
-        
+
         # Use substeps if provided, otherwise run all substeps
         substeps = steps.crossref_substeps or CrossrefSteps()
-        
+
         crossref_search(
             config.crossref_keyword,
             str(config.output_file_crossref_search),
@@ -249,9 +245,7 @@ def main() -> None:
         pdf_folder=metadata_dir / "PDF",
         output_folder_images=llm_images_dir,
         output_folder_llm_score=llm_scores_dir,
-        training_file_xgboost_model=metadata_dir
-        / "copol_database"
-        / "copol_paper_list.json",
+        training_file_xgboost_model=metadata_dir / "copol_database" / "copol_paper_list.json",
         output_file_xgboost_filter=metadata_dir / "paper_list.json",
         key_embedding_filter="polymerization_type",
         values_embedding_filter=[

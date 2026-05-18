@@ -17,4 +17,3 @@ inputs and results.
 
 All content is kept read-only for provenance; contemporary pipelines should rely
 on the material in `data_extraction/artifacts` instead.
-

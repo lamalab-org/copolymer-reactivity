@@ -1,9 +1,10 @@
 from pathlib import Path
-from typing import Union, List, Tuple
-from copolextractor.utils import name_to_smiles, load_yaml
-from thefuzz import fuzz
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 from pint import UnitRegistry
-from typing import Tuple, List, Optional, Dict, Any
+from thefuzz import fuzz
+
+from copolextractor.utils import load_yaml, name_to_smiles
 
 
 def get_number_of_reactions(data: dict) -> int:
@@ -182,9 +183,7 @@ def find_matching_reaction_conditions(
     for i, comb in enumerate(reaction_conditions):
         if comb["temperature"] != "NA" and comb["temperature_unit"] != "NA":
             temp = convert_unit(temperature, temp_unit)
-            temperature_model = convert_unit(
-                comb["temperature"], comb["temperature_unit"]
-            )
+            temperature_model = convert_unit(comb["temperature"], comb["temperature_unit"])
         else:
             temperature_model = comb["temperature"]
             temp = temperature
@@ -222,9 +221,7 @@ def compare_smiles(smiles1: str, smiles2: str):
     return int(smiles1 != smiles2)
 
 
-def compare_number_of_reactions(
-    test_file: Union[str, Path], model_file: Union[str, Path]
-) -> dict:
+def compare_number_of_reactions(test_file: Union[str, Path], model_file: Union[str, Path]) -> dict:
     test_data = load_yaml(test_file)
     model_data = load_yaml(model_file)
     test_number_of_reactions = get_number_of_reactions(test_data)
@@ -249,8 +246,7 @@ def get_reaction_constant(data: list, index: int) -> tuple:
 
 
 def get_reaction_const_list(
-    reaction_const: Optional[Dict[str, Any]],
-    reaction_const_conf: Optional[Dict[str, Any]]
+    reaction_const: Optional[Dict[str, Any]], reaction_const_conf: Optional[Dict[str, Any]]
 ) -> Tuple[List[Optional[float]], List[Optional[float]]]:
     """
     Extract reaction constants and their confidence intervals.

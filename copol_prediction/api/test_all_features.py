@@ -17,18 +17,19 @@ Usage:
 """
 
 import argparse
-import requests
 import json
 import sys
-from typing import Dict, Any
+from typing import Any, Dict
+
+import requests
 
 
 def test_health_check(base_url: str) -> bool:
     """Test health check endpoint."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("1. HEALTH CHECK")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         response = requests.get(f"{base_url}/health")
         if response.status_code == 200:
@@ -46,10 +47,10 @@ def test_health_check(base_url: str) -> bool:
 
 def test_model_info(base_url: str) -> bool:
     """Test model info endpoint."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("2. MODEL INFO")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         response = requests.get(f"{base_url}/model/info")
         if response.status_code == 200:
@@ -68,19 +69,20 @@ def test_model_info(base_url: str) -> bool:
 
 def test_preprocess_solvent(base_url: str) -> bool:
     """Test solvent preprocessing."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("3. PREPROCESS SOLVENT")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         response = requests.post(
-            f"{base_url}/preprocess/solvent",
-            json={"solvent_smiles": "CCO"}  # Ethanol
+            f"{base_url}/preprocess/solvent", json={"solvent_smiles": "CCO"}  # Ethanol
         )
         if response.status_code == 200:
             data = response.json()
             print(f"✓ Success: {data['success']}")
-            print(f"✓ Features calculated: {len([k for k, v in data['features'].items() if v is not None])}")
+            print(
+                f"✓ Features calculated: {len([k for k, v in data['features'].items() if v is not None])}"
+            )
             return True
         else:
             print(f"✗ Error: {response.status_code}")
@@ -93,33 +95,35 @@ def test_preprocess_solvent(base_url: str) -> bool:
 
 def test_preprocess_all(base_url: str) -> Dict[str, Any]:
     """Test combined preprocessing with all features."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("4. PREPROCESS ALL (with nearest neighbors)")
-    print("="*60)
-    
+    print("=" * 60)
+
     data = {
         "monomer1_smiles": "C=CC1=CC=CC=C1",  # Styrene
         "monomer2_smiles": "C=C(C)C(=O)OCCO",  # 2-hydroxyethyl methacrylate
         "solvent_smiles": "CCO",  # Ethanol
         "method": "solvent",
         "polytype": "free radical",
-        "temperature": 60.0
+        "temperature": 60.0,
     }
-    
+
     try:
         response = requests.post(f"{base_url}/preprocess_all", json=data)
         if response.status_code == 200:
             result = response.json()
             print(f"✓ Success: {result['success']}")
             print(f"✓ Features: {len(result['features'])}")
-            
+
             # Check nearest neighbors
-            if result.get('nearest_neighbors'):
+            if result.get("nearest_neighbors"):
                 print(f"✓ Nearest neighbors: {len(result['nearest_neighbors'])} found")
-                if len(result['nearest_neighbors']) > 0:
-                    nn = result['nearest_neighbors'][0]
-                    print(f"  Top match: {nn['monomer1_name']} + {nn['monomer2_name']} "
-                          f"(similarity: {nn['similarity']:.3f})")
+                if len(result["nearest_neighbors"]) > 0:
+                    nn = result["nearest_neighbors"][0]
+                    print(
+                        f"  Top match: {nn['monomer1_name']} + {nn['monomer2_name']} "
+                        f"(similarity: {nn['similarity']:.3f})"
+                    )
             else:
                 print("⚠ Nearest neighbors: Not available")
 
@@ -135,18 +139,17 @@ def test_preprocess_all(base_url: str) -> Dict[str, Any]:
 
 def test_predict(base_url: str, features: Dict[str, float]) -> bool:
     """Test single prediction."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("5. PREDICT (Single)")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
-        response = requests.post(
-            f"{base_url}/predict",
-            json={"features": features}
-        )
+        response = requests.post(f"{base_url}/predict", json={"features": features})
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Predicted class: {result['predicted_class']} ({result['predicted_class_name']})")
+            print(
+                f"✓ Predicted class: {result['predicted_class']} ({result['predicted_class_name']})"
+            )
             print(f"✓ Confidence: {result['confidence']:.4f}")
             return True
         else:
@@ -160,16 +163,14 @@ def test_predict(base_url: str, features: Dict[str, float]) -> bool:
 
 def test_predict_batch(base_url: str, features: Dict[str, float]) -> bool:
     """Test batch prediction."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("6. PREDICT BATCH")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         response = requests.post(
             f"{base_url}/predict/batch",
-            json={
-                "samples": [features, features]  # Two identical samples
-            }
+            json={"samples": [features, features]},  # Two identical samples
         )
         if response.status_code == 200:
             result = response.json()
@@ -186,10 +187,10 @@ def test_predict_batch(base_url: str, features: Dict[str, float]) -> bool:
 
 def test_optimize_reaction(base_url: str) -> bool:
     """Test reaction optimization."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("7. OPTIMIZE REACTION (3x3 Grid)")
-    print("="*60)
-    
+    print("=" * 60)
+
     data = {
         "monomer1_smiles": "C=CC1=CC=CC=C1",
         "monomer2_smiles": "C=C(C)C(=O)OCCO",
@@ -198,9 +199,9 @@ def test_optimize_reaction(base_url: str) -> bool:
         "polytype": "free radical",
         "temperature": 60.0,
         "temperature_step": 20.0,
-        "n_solvents": 3
+        "n_solvents": 3,
     }
-    
+
     try:
         response = requests.post(f"{base_url}/optimize_reaction", json=data)
         if response.status_code == 200:
@@ -210,8 +211,8 @@ def test_optimize_reaction(base_url: str) -> bool:
             print(f"✓ Base temperature: {result['base_temperature']}°C")
             print(f"✓ Temperature step: {result['temperature_step']}°C")
 
-            if result['predictions']:
-                best = max(result['predictions'], key=lambda x: x['confidence'])
+            if result["predictions"]:
+                best = max(result["predictions"], key=lambda x: x["confidence"])
                 print(f"\n  Best prediction:")
                 print(f"    Temperature: {best['temperature']}°C")
                 print(f"    Solvent: {best['solvent_name']}")
@@ -230,14 +231,13 @@ def test_optimize_reaction(base_url: str) -> bool:
 
 def test_check_doi(base_url: str) -> bool:
     """Test DOI checking."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("8. CHECK DOI")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         response = requests.post(
-            f"{base_url}/check_doi",
-            json={"doi": "10.1016/0014-3057(84)90010-7"}
+            f"{base_url}/check_doi", json={"doi": "10.1016/0014-3057(84)90010-7"}
         )
         if response.status_code == 200:
             result = response.json()
@@ -254,10 +254,10 @@ def test_check_doi(base_url: str) -> bool:
 
 def test_embeddings(base_url: str) -> bool:
     """Test embeddings endpoints."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("9. EMBEDDINGS")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         # Test method embedding
         response = requests.get(f"{base_url}/embeddings/method/solvent")
@@ -267,7 +267,7 @@ def test_embeddings(base_url: str) -> bool:
         else:
             print(f"✗ Method embedding error: {response.status_code}")
             return False
-        
+
         # Test polytype embedding
         response = requests.get(f"{base_url}/embeddings/polytype/free radical")
         if response.status_code == 200:
@@ -288,67 +288,67 @@ def main():
     parser.add_argument(
         "--url",
         default="http://localhost:8000",
-        help="API base URL (default: http://localhost:8000)"
+        help="API base URL (default: http://localhost:8000)",
     )
     args = parser.parse_args()
-    
+
     base_url = args.url
-    
-    print("="*60)
+
+    print("=" * 60)
     print("COMPREHENSIVE API TEST SUITE")
-    print("="*60)
+    print("=" * 60)
     print(f"\nTesting API at: {base_url}")
     print("\nMake sure the API is running!")
     print("Start with: python app.py")
-    
+
     results = {}
-    
+
     # Test 1: Health check
-    results['health'] = test_health_check(base_url)
-    
+    results["health"] = test_health_check(base_url)
+
     # Test 2: Model info
-    results['model_info'] = test_model_info(base_url)
-    
+    results["model_info"] = test_model_info(base_url)
+
     # Test 3: Preprocess solvent
-    results['preprocess_solvent'] = test_preprocess_solvent(base_url)
-    
+    results["preprocess_solvent"] = test_preprocess_solvent(base_url)
+
     # Test 4: Preprocess all (get features for later tests)
     preprocess_result = test_preprocess_all(base_url)
-    results['preprocess_all'] = bool(preprocess_result.get('success', False))
-    features = preprocess_result.get('features', {})
-    
+    results["preprocess_all"] = bool(preprocess_result.get("success", False))
+    features = preprocess_result.get("features", {})
+
     # Test 5: Predict
     if features:
-        results['predict'] = test_predict(base_url, features)
-        results['predict_batch'] = test_predict_batch(base_url, features)
+        results["predict"] = test_predict(base_url, features)
+        results["predict_batch"] = test_predict_batch(base_url, features)
     else:
         print("\n⚠ Skipping prediction tests (no features available)")
-        results['predict'] = False
-        results['predict_batch'] = False
+        results["predict"] = False
+        results["predict_batch"] = False
 
     # Test 7: Optimize reaction
-    results['optimize_reaction'] = test_optimize_reaction(base_url)
+    results["optimize_reaction"] = test_optimize_reaction(base_url)
 
     # Test 8: Check DOI
-    results['check_doi'] = test_check_doi(base_url)
+    results["check_doi"] = test_check_doi(base_url)
 
     # Test 9: Embeddings
-    results['embeddings'] = test_embeddings(base_url)
-    
+    results["embeddings"] = test_embeddings(base_url)
+
     # Summary
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TEST SUMMARY")
-    print("="*60)
-    
+    print("=" * 60)
+
     total = len(results)
     passed = sum(1 for v in results.values() if v)
-    
+
     for test_name, passed_test in results.items():
         status = "✓ PASS" if passed_test else "✗ FAIL"
         print(f"{status:8} {test_name}")
-    
+
     print(f"\nTotal: {passed}/{total} tests passed")
-    
+
     if passed == total:
         print("\n🎉 All tests passed!")
         return 0
@@ -370,5 +370,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n✗ Unexpected error: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)

@@ -1,10 +1,12 @@
-import numpy as np
-import os
 import json
-import requests
+import os
+
+import numpy as np
 import pandas as pd
-from scipy.spatial.distance import cdist
+import requests
 from openai import OpenAI
+from scipy.spatial.distance import cdist
+
 import copolextractor.utils as utils
 
 
@@ -50,7 +52,6 @@ def save_failed_crossref(failed_dois, failed_path="output/failed_crossref.json")
         json.dump(list(failed_dois), f, indent=2)
 
 
-
 def load_existing_doi_list(doi_list_path):
     """Load the existing DOI list from file."""
     if os.path.exists(doi_list_path):
@@ -86,7 +87,7 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
         return
 
     # Filter out papers that have already been extracted
-    filtered_data = [paper for paper in data if not paper.get('already_extracted', False)]
+    filtered_data = [paper for paper in data if not paper.get("already_extracted", False)]
 
     existing_dois = load_existing_doi_list(doi_list_path)
     total_tokens = 0
@@ -129,7 +130,9 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
     print(f"Total tokens used: {total_tokens}")
 
 
-def embed_filtered_papers(new_papers_path, output_dir, client, key, values, failed_path="failed_crossref.json"):
+def embed_filtered_papers(
+    new_papers_path, output_dir, client, key, values, failed_path="failed_crossref.json"
+):
     print(f"Loading new papers from CSV: {new_papers_path}")
     failed_dois = load_failed_crossref(failed_path)
     try:
@@ -137,7 +140,7 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values, fail
         df = pd.read_csv(new_papers_path)
 
         # Check if required columns exist
-        required_cols = ['original_source']
+        required_cols = ["original_source"]
         missing_cols = [col for col in required_cols if col not in df.columns]
 
         if missing_cols:
@@ -152,7 +155,7 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values, fail
             filtered_df = df
 
         # Convert DataFrame to list of dictionaries
-        new_papers = filtered_df.to_dict('records')
+        new_papers = filtered_df.to_dict("records")
 
     except Exception as e:
         print(f"Error loading CSV file: {new_papers_path}. Details: {e}")
@@ -177,7 +180,9 @@ def embed_filtered_papers(new_papers_path, output_dir, client, key, values, fail
 
         if not title or not abstract:
             print(f"Missing Title or Abstract for paper with DOI: {doi}. Fetching from CrossRef...")
-            crossref_data = get_crossref_data(doi, paper.get("Source", "Unknown"), paper.get("Format", "Unknown"))
+            crossref_data = get_crossref_data(
+                doi, paper.get("Source", "Unknown"), paper.get("Format", "Unknown")
+            )
 
             title = crossref_data.get("Title")
             abstract = crossref_data.get("Abstract")
@@ -249,8 +254,16 @@ def get_crossref_data(doi, source, format_type):
         }
 
 
-def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper,
-                                new_papers_path, client, output_folder=None):
+def find_nearest_paper_with_new(
+    output_dir,
+    selected_papers_path,
+    key,
+    values,
+    number_of_selected_paper,
+    new_papers_path,
+    client,
+    output_folder=None,
+):
     embeddings_path = os.path.join(output_dir, "embeddings/embedded_papers.json")
 
     # Load processed data
@@ -310,20 +323,24 @@ def find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, n
             continue
 
         # Add paper to the selection
-        nearest_papers.append({
-            "Title": processed_data[i]['Title'],
-            "Abstract": processed_data[i]['Abstract'],
-            "Score": processed_data[i].get("Score", 0),
-            "DOI": paper_doi,
-            "Source": processed_data[i].get("Source", "Unknown"),
-            key: processed_data[i].get(key, "Unknown"),
-            "Similarity": 1 - min_distances[i],
-            "filename": filename,
-        })
+        nearest_papers.append(
+            {
+                "Title": processed_data[i]["Title"],
+                "Abstract": processed_data[i]["Abstract"],
+                "Score": processed_data[i].get("Score", 0),
+                "DOI": paper_doi,
+                "Source": processed_data[i].get("Source", "Unknown"),
+                key: processed_data[i].get(key, "Unknown"),
+                "Similarity": 1 - min_distances[i],
+                "filename": filename,
+            }
+        )
         papers_checked += 1
 
         if papers_checked >= len(sorted_indices):
-            print(f"Warning: Checked all {papers_checked} papers but only found {len(nearest_papers)} new papers.")
+            print(
+                f"Warning: Checked all {papers_checked} papers but only found {len(nearest_papers)} new papers."
+            )
             break
 
     # Save the results to the specified JSON file
@@ -344,8 +361,17 @@ def get_embedding(client, text, model="text-embedding-3-small"):
     return embedding, token_usage
 
 
-def main(file_path, output_dir, doi_list_path, selected_papers_path, score_limit, number_of_selected_paper, key, values,
-         new_papers_path):
+def main(
+    file_path,
+    output_dir,
+    doi_list_path,
+    selected_papers_path,
+    score_limit,
+    number_of_selected_paper,
+    key,
+    values,
+    new_papers_path,
+):
     # Ensure output_2 directory exists
     os.makedirs(output_dir, exist_ok=True)
 
@@ -356,5 +382,12 @@ def main(file_path, output_dir, doi_list_path, selected_papers_path, score_limit
     process_embeddings(file_path, output_dir, client, score_limit, doi_list_path)
 
     # Step 2: Find and save the x nearest papers including new papers
-    find_nearest_paper_with_new(output_dir, selected_papers_path, key, values, number_of_selected_paper,
-                                new_papers_path, client)
+    find_nearest_paper_with_new(
+        output_dir,
+        selected_papers_path,
+        key,
+        values,
+        number_of_selected_paper,
+        new_papers_path,
+        client,
+    )

@@ -66,4 +66,3 @@ equally well.
   `extracted_reactions.csv`.
 
 See the respective modules for configuration specifics and advanced usage.
-
