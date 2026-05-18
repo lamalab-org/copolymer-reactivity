@@ -444,3 +444,11 @@ cache/cache.db
 # Trained model pickles can exceed GitHub limits
 copol_prediction/artifacts/**/*.pkl
 
+# Accidentally-committed Python venvs and other generated state we don't
+# want returning to the repo (see "delete cruft" cleanup PR for context).
+nomad_env/
+.mplconfig/
+# `dump/` was a legacy-code archive — keep it out of the working tree
+# entirely so anyone cloning fresh doesn't pull it back as untracked.
+dump/
+
