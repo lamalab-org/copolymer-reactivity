@@ -29,6 +29,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Register QEMU emulators so we can cross-build the arm64 layer on the
+      # amd64 GitHub runner. Without this, build-push-action silently falls
+      # back to a single-arch (amd64) image.
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -59,6 +65,12 @@ jobs:
           context: .
           file: copol_prediction/api/Dockerfile
           push: true
+          # arm64 is built under QEMU emulation on amd64 runners, so this
+          # build takes ~30–45 min vs ~5–7 for amd64-only. The cost is
+          # paid once per main push / tag; ARM users (Apple Silicon, GCP
+          # ARM, Graviton) then pull natively at full speed instead of
+          # emulating amd64 themselves.
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
