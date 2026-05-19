@@ -208,7 +208,13 @@ class PredictionOutput(BaseModel):
 
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
     predicted_class_name: str = Field(..., description="Human-readable class label")
-    class_probabilities: Dict[str, float] = Field(..., description="Probability for each class")
+    class_probabilities: Dict[str, float] = Field(
+        ...,
+        description=(
+            "Mapping from human-readable class name (see `class_descriptions` "
+            "on /model/info, or `predicted_class_name`) to its probability."
+        ),
+    )
     confidence: float = Field(..., description="Prediction confidence (0-1)")
     below_threshold: bool = Field(
         False, description="Whether confidence is below the 0.7 threshold"
@@ -338,7 +344,13 @@ class OptimizationPrediction(BaseModel):
     solvent_logp: float = Field(..., description="Solvent logP value")
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
     predicted_class_name: str = Field(..., description="Human-readable class label")
-    class_probabilities: Dict[str, float] = Field(..., description="Probability for each class")
+    class_probabilities: Dict[str, float] = Field(
+        ...,
+        description=(
+            "Mapping from human-readable class name (see `class_descriptions` "
+            "on /model/info, or `predicted_class_name`) to its probability."
+        ),
+    )
     confidence: float = Field(..., description="Prediction confidence (0-1)")
 
 
@@ -674,7 +686,7 @@ async def get_model_info():
         n_features=len(predictor.features),
         feature_names=predictor.features,
         class_labels=predictor.class_labels,
-        class_descriptions={f"class_{k}": v for k, v in CLASS_LABELS.items()},
+        class_descriptions={str(k): v for k, v in CLASS_LABELS.items()},
         created_at=predictor.metadata.get("created_at", "unknown"),
         model_path=MODEL_PATH,
     )
@@ -706,7 +718,7 @@ async def predict(input_data: PredictionInput):
         return PredictionOutput(
             predicted_class=pred_class,
             predicted_class_name=CLASS_LABELS[pred_class],
-            class_probabilities={f"class_{i}": float(proba[i]) for i in range(len(proba))},
+            class_probabilities={CLASS_LABELS[i]: float(proba[i]) for i in range(len(proba))},
             confidence=confidence,
             below_threshold=confidence < 0.7,
             timestamp=datetime.now().isoformat(),
@@ -747,7 +759,9 @@ async def predict_batch(input_data: BatchPredictionInput):
                 PredictionOutput(
                     predicted_class=pred_class,
                     predicted_class_name=CLASS_LABELS[pred_class],
-                    class_probabilities={f"class_{i}": float(proba[i]) for i in range(len(proba))},
+                    class_probabilities={
+                        CLASS_LABELS[i]: float(proba[i]) for i in range(len(proba))
+                    },
                     confidence=confidence,
                     below_threshold=confidence < 0.7,
                     timestamp=datetime.now().isoformat(),

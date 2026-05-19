@@ -306,7 +306,7 @@ def create_optimization_grid(
                         "predicted_class": pred_class,
                         "predicted_class_name": predicted_class_name,
                         "class_probabilities": {
-                            f"class_{i}": float(proba[i]) for i in range(len(proba))
+                            CLASS_LABELS[i]: float(proba[i]) for i in range(len(proba))
                         },
                         "confidence": confidence,
                     }
