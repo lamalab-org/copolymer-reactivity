@@ -47,10 +47,23 @@ RUN pip install --no-cache-dir --no-deps -e .
 # ============================================================================
 FROM continuumio/miniconda3:26.3.2-2
 
+# Build provenance — surfaced at runtime via /health. CI passes real values
+# via --build-arg in .github/workflows/docker-image.yml; local docker builds
+# without --build-arg get "unknown", which is what /health reports too.
+ARG GIT_SHA=unknown
+ARG GIT_BRANCH=unknown
+ARG BUILD_TIME=unknown
+
 # Metadata
 LABEL maintainer="Copolymerization Prediction API"
 LABEL description="FastAPI REST API for copolymerization reactivity prediction with XTB support"
 LABEL version="1.0.0"
+# Standard OCI labels so `docker inspect` / GHCR UI / image-vuln scanners
+# can see the same provenance without booting the container.
+LABEL org.opencontainers.image.revision="${GIT_SHA}"
+LABEL org.opencontainers.image.ref.name="${GIT_BRANCH}"
+LABEL org.opencontainers.image.created="${BUILD_TIME}"
+LABEL org.opencontainers.image.source="https://github.com/lamalab-org/copolymer-reactivity"
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -60,7 +73,10 @@ ENV PYTHONUNBUFFERED=1 \
     OMP_NUM_THREADS=2 \
     OMP_STACKSIZE=1G \
     OMP_MAX_ACTIVE_LEVELS=1 \
-    PATH=/opt/conda/envs/copol/bin:$PATH
+    PATH=/opt/conda/envs/copol/bin:$PATH \
+    GIT_SHA=${GIT_SHA} \
+    GIT_BRANCH=${GIT_BRANCH} \
+    BUILD_TIME=${BUILD_TIME}
 
 # Install runtime system dependencies. `patchelf` is used below to clear the
 # executable-stack flag on the xtb shared libraries, which is rejected by

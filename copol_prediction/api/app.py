@@ -13,7 +13,10 @@ import hashlib
 import json
 import math
 import os
+import platform
+import socket
 import sys
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
@@ -235,12 +238,32 @@ class ModelInfo(BaseModel):
     model_path: str
 
 
+class BuildInfo(BaseModel):
+    """Build-time provenance baked into the image. All fields are best-effort
+    — they default to "unknown" outside Docker (env vars unset)."""
+
+    git_sha: str = Field(..., description="Commit SHA the image was built from")
+    git_branch: str = Field(..., description="Branch or tag the image was built from")
+    build_time: str = Field(..., description="When the image was built (ISO 8601 UTC)")
+
+
+class RuntimeInfo(BaseModel):
+    """Runtime / process info — handy for debugging restarts and env drift."""
+
+    python_version: str = Field(..., description="Major.minor.patch")
+    started_at: str = Field(..., description="When this process started (ISO 8601 UTC)")
+    uptime_seconds: float = Field(..., description="Seconds since process start")
+    hostname: str = Field(..., description="Container hostname")
+
+
 class HealthCheck(BaseModel):
     """Health check response schema."""
 
     status: str
     timestamp: str
     model_loaded: bool
+    build: BuildInfo
+    runtime: RuntimeInfo
 
 
 class SolventPreprocessOutput(BaseModel):
@@ -373,6 +396,20 @@ NEGATIVE_DATA_PATH = os.environ.get(
 # calculate_monomer_features). Overridable for ablation; in production we
 # always want the same SMILES → same cached features.
 CONFORMER_RANDOM_SEED = int(os.environ.get("CONFORMER_RANDOM_SEED", "42"))
+
+# Build provenance baked in at `docker build` time via --build-arg (see
+# .github/workflows/docker-image.yml). Outside Docker, env vars are unset
+# and we report "unknown" — debugging signal, not a contract.
+BUILD_INFO = BuildInfo(
+    git_sha=os.environ.get("GIT_SHA", "unknown"),
+    git_branch=os.environ.get("GIT_BRANCH", "unknown"),
+    build_time=os.environ.get("BUILD_TIME", "unknown"),
+)
+
+# Process-uptime tracking. _MONOTONIC is for measuring seconds (immune to
+# wall-clock jumps); _AT is the human-readable wall-clock start time.
+PROCESS_STARTED_AT = datetime.utcnow().isoformat() + "Z"
+PROCESS_STARTED_MONOTONIC = time.time()
 
 # Global embedding dictionaries
 method_embeddings: Dict[str, Dict[str, float]] = {}
@@ -614,6 +651,13 @@ async def health_check():
         status="healthy" if predictor else "model_not_loaded",
         timestamp=datetime.now().isoformat(),
         model_loaded=predictor is not None,
+        build=BUILD_INFO,
+        runtime=RuntimeInfo(
+            python_version=platform.python_version(),
+            started_at=PROCESS_STARTED_AT,
+            uptime_seconds=round(time.time() - PROCESS_STARTED_MONOTONIC, 1),
+            hostname=socket.gethostname(),
+        ),
     )
 
 

@@ -59,6 +59,10 @@ jobs:
             type=sha,prefix=sha-
             type=raw,value=${{ inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
 
+      - name: Capture build time
+        id: build_time
+        run: echo "BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -71,6 +75,12 @@ jobs:
           # ARM, Graviton) then pull natively at full speed instead of
           # emulating amd64 themselves.
           platforms: linux/amd64,linux/arm64
+          # Bake build provenance into the image — surfaced at runtime
+          # via /health and via OCI labels (see Dockerfile).
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            GIT_BRANCH=${{ github.ref_name }}
+            BUILD_TIME=${{ steps.build_time.outputs.BUILD_TIME }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
