@@ -98,6 +98,21 @@ def client():
         yield c
 
 
+def test_health_returns_build_and_runtime_info(client):
+    """/health must include build provenance and runtime info — used for
+    debugging "which build am I hitting" in production. Outside Docker the
+    GIT_SHA env var is unset and we expect "unknown"; CI is expected to
+    cover the wired-up case end-to-end via docker-smoke-test.yml."""
+    body = client.get("/health").json()
+    assert body["model_loaded"] is True
+    for field in ("git_sha", "git_branch", "build_time"):
+        assert isinstance(body["build"][field], str) and body["build"][field]
+    runtime = body["runtime"]
+    assert runtime["python_version"].count(".") == 2  # e.g. "3.11.7"
+    assert runtime["uptime_seconds"] >= 0.0
+    assert runtime["hostname"]
+
+
 def test_holdout_accuracy_matches_published(predictor, test_df):
     y_true = test_df["r_product_class"].astype(int).values
     y_pred = predictor.predict(test_df[predictor.features])

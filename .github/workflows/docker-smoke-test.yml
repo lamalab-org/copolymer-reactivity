@@ -29,6 +29,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Capture build time
+        id: build_time
+        run: echo "BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
       - name: Build image
         uses: docker/build-push-action@v6
         with:
@@ -36,6 +40,14 @@ jobs:
           file: copol_prediction/api/Dockerfile
           tags: copol-api:smoke
           load: true
+          # Mirror the publish workflow's build-args so the smoke test
+          # exercises the same image-build code path. Used by the
+          # "Check build info" step below to assert /health reflects
+          # this commit, not a stale layer.
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            GIT_BRANCH=${{ github.ref_name }}
+            BUILD_TIME=${{ steps.build_time.outputs.BUILD_TIME }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -63,6 +75,18 @@ jobs:
           echo "$body"
           echo "$body" | jq -e '.model_loaded == true' > /dev/null \
             || { echo "::error::/health returned model_loaded=false"; exit 1; }
+
+      - name: Check build provenance reaches /health
+        # End-to-end check that build-args → Dockerfile ENV → app reads env
+        # → /health surfaces it. Catches: forgetting to wire a new ARG,
+        # typo in env-var name, stale layer cache serving a previous SHA.
+        run: |
+          set -e
+          body=$(curl -fsS http://localhost:8000/health)
+          echo "$body" | jq -e --arg sha "${{ github.sha }}" '.build.git_sha == $sha' > /dev/null \
+            || { echo "::error::/health build.git_sha mismatch (expected ${{ github.sha }})"; echo "$body" | jq '.build'; exit 1; }
+          echo "$body" | jq -e '.runtime.uptime_seconds >= 0' > /dev/null \
+            || { echo "::error::/health runtime.uptime_seconds not present"; exit 1; }
 
       - name: End-to-end prediction round-trip
         # Uses a monomer pair from the published holdout
