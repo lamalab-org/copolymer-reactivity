@@ -113,6 +113,32 @@ def test_health_returns_build_and_runtime_info(client):
     assert runtime["hostname"]
 
 
+def test_predict_response_uses_human_readable_class_names(client, test_df):
+    """`/predict` (and by extension `/predict/batch` + `/optimize_reaction`)
+    must key `class_probabilities` by the human-readable class name —
+    the same string returned in `predicted_class_name` — not by `class_0`,
+    `class_1`, `class_2`. Guards against accidentally regressing to the
+    indexed-key form which carried no semantic meaning for callers."""
+    row = test_df.iloc[0]
+    payload = {
+        "monomer1_smiles": row["monomer1_smiles"],
+        "monomer2_smiles": row["monomer2_smiles"],
+        "solvent_smiles": row["solvent_smiles"],
+        "method": row["method"],
+        "polytype": row["polymerization_type"],
+        "temperature": float(row["temperature"]),
+    }
+    features = client.post("/preprocess_all", json=payload).json()["features"]
+    pred = client.post("/predict", json={"features": features}).json()
+
+    keys = set(pred["class_probabilities"])
+    assert keys == {"alternating", "random to block like", "gradient"}, keys
+    # The named-class key for the predicted class must reproduce confidence.
+    assert pred["class_probabilities"][pred["predicted_class_name"]] == pytest.approx(
+        pred["confidence"]
+    )
+
+
 def test_holdout_accuracy_matches_published(predictor, test_df):
     y_true = test_df["r_product_class"].astype(int).values
     y_pred = predictor.predict(test_df[predictor.features])
