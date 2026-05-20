@@ -207,3 +207,76 @@ def test_preprocess_all_to_predict_matches_direct_predictor(predictor, test_df, 
             f"for the same feature names — likely a unit / aggregation bug "
             f"in assemble_model_features"
         )
+
+
+def test_resolve_temperatures():
+    """The temperature_mode keys must map to the documented temperature lists."""
+    import reaction_optimization as ro
+
+    assert ro.resolve_temperatures("40-80", base_temperature=60.0) == [40.0, 60.0, 80.0]
+    assert ro.resolve_temperatures("20-100", base_temperature=60.0) == [20.0, 60.0, 100.0]
+    assert ro.resolve_temperatures("fixed60", base_temperature=999.0) == [60.0]
+    # step20 still honours the caller's base + step.
+    assert ro.resolve_temperatures("step20", base_temperature=70.0, temperature_step=10.0) == [
+        60.0,
+        70.0,
+        80.0,
+    ]
+    with pytest.raises(ValueError):
+        ro.resolve_temperatures("nonsense", base_temperature=60.0)
+
+
+_RXN_OPT_PAYLOAD = {
+    "monomer1_smiles": "C=Cc1ccccc1",  # styrene
+    "monomer2_smiles": "C=C(C)C(=O)OC",  # methyl methacrylate
+    "solvent_smiles": "Cc1ccccc1",  # toluene
+    "method": "solvent",
+    "polytype": "free radical",
+    "temperature": 60.0,
+}
+
+
+def test_optimize_reaction_named_solvent_set(client):
+    """A named solvent set + fixed temperature mode must produce one grid cell
+    per (solvent × temperature), with class_probabilities keyed by class name."""
+    r = client.post(
+        "/optimize_reaction",
+        json={**_RXN_OPT_PAYLOAD, "solvent_set": "aromatic", "temperature_mode": "40-80"},
+    )
+    assert r.status_code == 200, r.text
+    preds = r.json()["predictions"]
+    # 5 aromatic solvents × 3 temperatures (40/60/80).
+    assert len(preds) == 15, len(preds)
+    assert {p["temperature"] for p in preds} == {40.0, 60.0, 80.0}
+    for p in preds:
+        assert set(p["class_probabilities"]) == {
+            "alternating",
+            "random to block like",
+            "gradient",
+        }
+
+
+def test_find_architecture_switch(client):
+    """The counterfactual endpoint must return a baseline prediction and a
+    list of condition sets that genuinely flip the predicted architecture,
+    ranked by smallest |delta_logp|."""
+    r = client.post(
+        "/find_architecture_switch",
+        json={**_RXN_OPT_PAYLOAD, "solvent_set": "common", "temperature_mode": "20-100"},
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["success"] is True
+    assert body["baseline"] is not None
+    assert body["n_evaluated"] > 0
+
+    baseline_class = body["baseline"]["predicted_class"]
+    deltas = []
+    for cf in body["counterfactuals"]:
+        # Every counterfactual must actually be a *different* architecture.
+        assert cf["predicted_class"] != baseline_class
+        # delta fields must be present and self-consistent.
+        assert "delta_logp" in cf and "delta_temperature" in cf
+        deltas.append(abs(cf["delta_logp"]))
+    # Ranked by smallest |delta_logp|.
+    assert deltas == sorted(deltas), deltas

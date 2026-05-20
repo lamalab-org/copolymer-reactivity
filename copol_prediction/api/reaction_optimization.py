@@ -123,6 +123,226 @@ def generate_temperature_grid(base_temperature: float, step: float = 20.0) -> Li
     ]
 
 
+# ============================================================================
+# Predefined solvent sets and temperature modes
+#
+# The string keys here map 1:1 to the frontend <select> option values, so a
+# UI dropdown choice can be forwarded to the API verbatim with no translation.
+# ============================================================================
+
+# Curated solvent sets. logP is computed on demand (calculate_solvent_logp),
+# so only SMILES + display name are stored here.
+SOLVENT_SETS: Dict[str, List[Dict[str, str]]] = {
+    "common": [
+        {"smiles": "O", "name": "water"},
+        {"smiles": "CO", "name": "methanol"},
+        {"smiles": "CCO", "name": "ethanol"},
+        {"smiles": "CC(C)=O", "name": "acetone"},
+        {"smiles": "C1CCOC1", "name": "tetrahydrofuran"},
+        {"smiles": "Cc1ccccc1", "name": "toluene"},
+        {"smiles": "CN(C)C=O", "name": "N,N-dimethylformamide"},
+        {"smiles": "CS(C)=O", "name": "dimethyl sulfoxide"},
+    ],
+    "chlorinated": [
+        {"smiles": "ClC(Cl)Cl", "name": "chloroform"},
+        {"smiles": "ClCCl", "name": "dichloromethane"},
+        {"smiles": "ClCCCl", "name": "1,2-dichloroethane"},
+        {"smiles": "ClC(Cl)(Cl)Cl", "name": "carbon tetrachloride"},
+        {"smiles": "Clc1ccccc1", "name": "chlorobenzene"},
+    ],
+    "aromatic": [
+        {"smiles": "c1ccccc1", "name": "benzene"},
+        {"smiles": "Cc1ccccc1", "name": "toluene"},
+        {"smiles": "Cc1ccccc1C", "name": "o-xylene"},
+        {"smiles": "Clc1ccccc1", "name": "chlorobenzene"},
+        {"smiles": "COc1ccccc1", "name": "anisole"},
+    ],
+}
+
+# "top3" is not a static list — it means "the dataset solvents closest in
+# logP to the base solvent" (the original behaviour of this module).
+SOLVENT_SET_CHOICES = ("top3",) + tuple(SOLVENT_SETS)
+
+# Temperature schemes. Each maps to an explicit list of temperatures (°C).
+TEMPERATURE_MODE_CHOICES = ("40-80", "20-100", "fixed60", "step20")
+
+
+def resolve_temperatures(
+    temperature_mode: str, base_temperature: float, temperature_step: float = 20.0
+) -> List[float]:
+    """Translate a temperature_mode key into an explicit list of temperatures.
+
+    `step20` keeps the original base ± step behaviour (so it still honours
+    the caller's `temperature` and `temperature_step`); the others are fixed.
+    """
+    if temperature_mode == "40-80":
+        return [40.0, 60.0, 80.0]
+    if temperature_mode == "20-100":
+        return [20.0, 60.0, 100.0]
+    if temperature_mode == "fixed60":
+        return [60.0]
+    if temperature_mode == "step20":
+        return generate_temperature_grid(base_temperature, temperature_step)
+    raise ValueError(
+        f"Unknown temperature_mode '{temperature_mode}'. "
+        f"Expected one of {TEMPERATURE_MODE_CHOICES}."
+    )
+
+
+def resolve_solvents(
+    solvent_set: str,
+    base_solvent_smiles: str,
+    base_logp: Optional[float],
+    dataset_df: pd.DataFrame,
+    n_solvents: int = 3,
+) -> List[Dict[str, Any]]:
+    """Translate a solvent_set key into a list of solvent dicts.
+
+    Each dict has: smiles, name, logp, logp_diff (|logp - base_logp|).
+    `top3` reproduces the logP-nearest-from-dataset behaviour; the named
+    sets return their curated members (logP computed via RDKit).
+    """
+    if solvent_set == "top3":
+        if base_logp is None:
+            raise ValueError("base solvent logP required for solvent_set='top3'")
+        similar = find_similar_solvents(
+            target_logp=base_logp, dataset_df=dataset_df, n_solvents=n_solvents + 5, tolerance=1.0
+        )
+        similar = [s for s in similar if s["smiles"] != base_solvent_smiles]
+        base_name = base_solvent_smiles
+        for _, row in dataset_df.iterrows():
+            if row.get("solvent_smiles") == base_solvent_smiles:
+                potential = row.get("solvent", "")
+                if pd.notna(potential) and potential:
+                    base_name = str(potential)
+                    break
+        base_info = {
+            "smiles": base_solvent_smiles,
+            "name": base_name,
+            "logp": base_logp,
+            "logp_diff": 0.0,
+        }
+        combined = [base_info] + similar
+        combined.sort(key=lambda s: s["logp_diff"])
+        return combined[:n_solvents]
+
+    if solvent_set in SOLVENT_SETS:
+        out: List[Dict[str, Any]] = []
+        for entry in SOLVENT_SETS[solvent_set]:
+            logp = calculate_solvent_logp(entry["smiles"])
+            if logp is None:
+                continue
+            out.append(
+                {
+                    "smiles": entry["smiles"],
+                    "name": entry["name"],
+                    "logp": logp,
+                    "logp_diff": abs(logp - base_logp) if base_logp is not None else 0.0,
+                }
+            )
+        return out
+
+    raise ValueError(f"Unknown solvent_set '{solvent_set}'. Expected one of {SOLVENT_SET_CHOICES}.")
+
+
+def _run_condition_grid(
+    monomer1_smiles: str,
+    monomer2_smiles: str,
+    solvents: List[Dict[str, Any]],
+    temperatures: List[float],
+    method: str,
+    polytype: str,
+    method_embeddings: Dict[str, Dict[str, float]],
+    polytype_embeddings: Dict[str, Dict[str, float]],
+    predictor,
+    load_monomer_features_func,
+    extract_monomer_features_func,
+    calculate_solvent_features_func,
+) -> List[Dict]:
+    """Predict every (solvent x temperature) combination.
+
+    Monomer features and embeddings are resolved once; the prediction loop
+    is shared by create_optimization_grid and find_architecture_switches.
+    """
+    from pathlib import Path
+
+    base_path = Path(__file__).parent / "molecule_properties"
+    m1_data = load_monomer_features_func(monomer1_smiles, base_path)
+    m2_data = load_monomer_features_func(monomer2_smiles, base_path)
+    if not m1_data or not m2_data:
+        raise ValueError("Could not load monomer features")
+    m1_features = extract_monomer_features_func(m1_data)
+    m2_features = extract_monomer_features_func(m2_data)
+
+    if method not in method_embeddings:
+        raise ValueError(f"Method '{method}' not found in embeddings")
+    method_emb = method_embeddings[method]
+    if polytype not in polytype_embeddings:
+        raise ValueError(f"Polytype '{polytype}' not found in embeddings")
+    polytype_emb = polytype_embeddings[polytype]
+
+    # Imported here (not at module top) to avoid a circular import: app.py
+    # imports this module at startup.
+    from app import CLASS_LABELS, assemble_model_features
+
+    results: List[Dict] = []
+    for temp in temperatures:
+        for solvent_info in solvents:
+            solvent_smiles = solvent_info["smiles"]
+            solvent_features = calculate_solvent_features_func(solvent_smiles)
+            if any(
+                v is None
+                for v in [
+                    solvent_features.get("solvent_logP"),
+                    solvent_features.get("solvent_TPSA"),
+                    solvent_features.get("solvent_HBD"),
+                    solvent_features.get("solvent_FractionCSP3"),
+                ]
+            ):
+                continue
+
+            features = assemble_model_features(
+                m1_features=m1_features,
+                m2_features=m2_features,
+                solvent_features=solvent_features,
+                polytype_emb=polytype_emb,
+                method_emb=method_emb,
+                temperature=temp,
+            )
+            try:
+                pred = predictor.predict_with_confidence(features)
+                pred_class = int(pred["predictions"][0])
+                proba = pred["probabilities"][0]
+                results.append(
+                    {
+                        "temperature": float(temp),
+                        "solvent_smiles": solvent_smiles,
+                        "solvent_name": solvent_info["name"],
+                        "solvent_logp": solvent_info["logp"],
+                        "predicted_class": pred_class,
+                        "predicted_class_name": CLASS_LABELS.get(pred_class, "unknown"),
+                        "class_probabilities": {
+                            CLASS_LABELS[i]: float(proba[i]) for i in range(len(proba))
+                        },
+                        "confidence": float(pred["confidence"][0]),
+                    }
+                )
+            except Exception as e:
+                print(f"Warning: Prediction failed for temp={temp}, solvent={solvent_smiles}: {e}")
+                continue
+    return results
+
+
+def _base_solvent_logp(base_solvent_smiles: str, calculate_solvent_features_func) -> float:
+    """Resolve the base solvent's logP, raising if it cannot be computed."""
+    base_logp = calculate_solvent_features_func(base_solvent_smiles).get("solvent_logP")
+    if base_logp is None:
+        base_logp = calculate_solvent_logp(base_solvent_smiles)
+    if base_logp is None:
+        raise ValueError(f"Could not determine logP for solvent: {base_solvent_smiles}")
+    return float(base_logp)
+
+
 def create_optimization_grid(
     monomer1_smiles: str,
     monomer2_smiles: str,
@@ -139,181 +359,136 @@ def create_optimization_grid(
     calculate_solvent_features_func,
     temperature_step: float = 20.0,
     n_solvents: int = 3,
+    solvent_set: str = "top3",
+    temperature_mode: str = "step20",
 ) -> List[Dict]:
     """
-    Create a 3x3 grid of predictions by varying temperature and solvent.
+    Predict a grid of (solvent x temperature) combinations.
 
-    Args:
-        monomer1_smiles: First monomer SMILES
-        monomer2_smiles: Second monomer SMILES
-        base_solvent_smiles: Base solvent SMILES
-        base_temperature: Base temperature in Celsius
-        method: Polymerization method
-        polytype: Polymerization type
-        dataset_df: Dataset DataFrame for finding similar solvents
-        method_embeddings: Method embeddings dictionary
-        polytype_embeddings: Polytype embeddings dictionary
-        predictor: CopolymerPredictor instance
-        load_monomer_features_func: Function to load monomer features
-        extract_monomer_features_func: Function to extract monomer features
-        calculate_solvent_features_func: Function to calculate solvent features
-        temperature_step: Temperature step size (default: 20.0°C)
-        n_solvents: Number of solvents to use (default: 3)
+    `solvent_set` and `temperature_mode` select which solvents / temperatures
+    to sweep; their defaults reproduce the original "base + nearest-logP,
+    base +/- step" 3x3 behaviour. See SOLVENT_SET_CHOICES /
+    TEMPERATURE_MODE_CHOICES for the accepted values.
 
-    Returns:
-        List of prediction results, each containing:
-            - temperature: Temperature used
-            - solvent_smiles: Solvent SMILES used
-            - solvent_name: Solvent name
-            - solvent_logp: Solvent logP
-            - predicted_class: Predicted class
-            - class_probabilities: Class probabilities
-            - confidence: Prediction confidence
+    Returns a list of prediction dicts: temperature, solvent_smiles,
+    solvent_name, solvent_logp, predicted_class, predicted_class_name,
+    class_probabilities, confidence.
     """
-    # Get base solvent logP
-    base_solvent_features = calculate_solvent_features_func(base_solvent_smiles)
-    base_logp = base_solvent_features.get("solvent_logP")
-
-    if base_logp is None:
-        # Fallback: calculate logP
-        base_logp = calculate_solvent_logp(base_solvent_smiles)
-
-    if base_logp is None:
-        raise ValueError(f"Could not determine logP for solvent: {base_solvent_smiles}")
-
-    # Find similar solvents (exclude base solvent, search for n_solvents - 1 additional ones)
-    # We want: base solvent + (n_solvents - 1) similar solvents = n_solvents total
-
-    # First, find similar solvents but exclude the base solvent
-    similar_solvents = find_similar_solvents(
-        target_logp=base_logp,
-        dataset_df=dataset_df,
-        n_solvents=n_solvents + 5,  # Get extra to filter out base
-        tolerance=1.0,
+    base_logp = _base_solvent_logp(base_solvent_smiles, calculate_solvent_features_func)
+    solvents = resolve_solvents(solvent_set, base_solvent_smiles, base_logp, dataset_df, n_solvents)
+    temperatures = resolve_temperatures(temperature_mode, base_temperature, temperature_step)
+    return _run_condition_grid(
+        monomer1_smiles,
+        monomer2_smiles,
+        solvents,
+        temperatures,
+        method,
+        polytype,
+        method_embeddings,
+        polytype_embeddings,
+        predictor,
+        load_monomer_features_func,
+        extract_monomer_features_func,
+        calculate_solvent_features_func,
     )
 
-    # Filter out the base solvent from similar solvents
-    similar_solvents = [s for s in similar_solvents if s["smiles"] != base_solvent_smiles]
 
-    # Take only (n_solvents - 1) most similar ones
-    similar_solvents = similar_solvents[: n_solvents - 1]
+def find_architecture_switches(
+    monomer1_smiles: str,
+    monomer2_smiles: str,
+    base_solvent_smiles: str,
+    base_temperature: float,
+    method: str,
+    polytype: str,
+    dataset_df: pd.DataFrame,
+    method_embeddings: Dict[str, Dict[str, float]],
+    polytype_embeddings: Dict[str, Dict[str, float]],
+    predictor,
+    load_monomer_features_func,
+    extract_monomer_features_func,
+    calculate_solvent_features_func,
+    solvent_set: str = "common",
+    temperature_mode: str = "40-80",
+    temperature_step: float = 20.0,
+    n_solvents: int = 3,
+    top_n: int = 5,
+) -> Dict[str, Any]:
+    """
+    Counterfactual search: find condition sets that flip the predicted
+    architecture, ranked by how little they change.
 
-    # Get base solvent name from dataset
-    base_solvent_name = base_solvent_smiles  # Fallback to SMILES
-    for _, row in dataset_df.iterrows():
-        if row.get("solvent_smiles") == base_solvent_smiles:
-            potential_name = row.get("solvent", "")
-            if pd.notna(potential_name) and potential_name:
-                base_solvent_name = str(potential_name)
-                break
+    The baseline reaction (base solvent + base temperature) is predicted,
+    then a solvent x temperature grid is swept. Cells whose predicted class
+    differs from the baseline are ranked by smallest |delta logP| from the
+    base solvent, with |delta temperature| as the tie-breaker.
 
-    # Create base solvent info
-    base_solvent_info = {
-        "smiles": base_solvent_smiles,
-        "name": base_solvent_name,
-        "logp": base_logp,
-        "logp_diff": 0.0,
+    Returns {baseline, counterfactuals, n_evaluated}: `baseline` is the
+    starting-point prediction; `counterfactuals` is the top-N ranked list,
+    each carrying delta_logp / delta_temperature.
+    """
+    base_logp = _base_solvent_logp(base_solvent_smiles, calculate_solvent_features_func)
+
+    # Search solvents — the chosen set plus the base solvent itself, so the
+    # baseline cell is always present in the grid.
+    solvents = resolve_solvents(solvent_set, base_solvent_smiles, base_logp, dataset_df, n_solvents)
+    if not any(s["smiles"] == base_solvent_smiles for s in solvents):
+        solvents = [
+            {
+                "smiles": base_solvent_smiles,
+                "name": base_solvent_smiles,
+                "logp": base_logp,
+                "logp_diff": 0.0,
+            }
+        ] + solvents
+
+    # Search temperatures — the chosen mode plus the base temperature.
+    temperatures = resolve_temperatures(temperature_mode, base_temperature, temperature_step)
+    if not any(abs(t - base_temperature) < 1e-9 for t in temperatures):
+        temperatures = [base_temperature] + temperatures
+
+    grid = _run_condition_grid(
+        monomer1_smiles,
+        monomer2_smiles,
+        solvents,
+        temperatures,
+        method,
+        polytype,
+        method_embeddings,
+        polytype_embeddings,
+        predictor,
+        load_monomer_features_func,
+        extract_monomer_features_func,
+        calculate_solvent_features_func,
+    )
+
+    # The baseline cell: base solvent at base temperature.
+    baseline = next(
+        (
+            c
+            for c in grid
+            if c["solvent_smiles"] == base_solvent_smiles
+            and abs(c["temperature"] - base_temperature) < 1e-9
+        ),
+        None,
+    )
+    if baseline is None:
+        raise ValueError("Baseline reaction could not be predicted")
+
+    # Counterfactuals: cells whose architecture differs from the baseline.
+    counterfactuals = []
+    for cell in grid:
+        if cell["predicted_class"] == baseline["predicted_class"]:
+            continue
+        enriched = dict(cell)
+        enriched["delta_logp"] = cell["solvent_logp"] - base_logp
+        enriched["delta_temperature"] = cell["temperature"] - base_temperature
+        counterfactuals.append(enriched)
+
+    # Rank: smallest |delta logP| first, |delta temperature| as tie-breaker.
+    counterfactuals.sort(key=lambda c: (abs(c["delta_logp"]), abs(c["delta_temperature"])))
+
+    return {
+        "baseline": baseline,
+        "counterfactuals": counterfactuals[:top_n],
+        "n_evaluated": len(grid),
     }
-
-    # Combine: base solvent + similar solvents, then sort by logP difference
-    all_solvents = [base_solvent_info] + similar_solvents
-    all_solvents.sort(key=lambda x: x["logp_diff"])
-
-    # Final list: base + (n_solvents - 1) similar = n_solvents total
-    similar_solvents = all_solvents[:n_solvents]
-
-    # Generate temperature grid
-    temperatures = generate_temperature_grid(base_temperature, temperature_step)
-
-    # Load monomer features once (they don't change)
-    from pathlib import Path
-
-    base_path = Path(__file__).parent / "molecule_properties"
-    m1_data = load_monomer_features_func(monomer1_smiles, base_path)
-    m2_data = load_monomer_features_func(monomer2_smiles, base_path)
-
-    if not m1_data or not m2_data:
-        raise ValueError("Could not load monomer features")
-
-    m1_features = extract_monomer_features_func(m1_data)
-    m2_features = extract_monomer_features_func(m2_data)
-
-    # Get embeddings
-    if method not in method_embeddings:
-        raise ValueError(f"Method '{method}' not found in embeddings")
-    method_emb = method_embeddings[method]
-
-    if polytype not in polytype_embeddings:
-        raise ValueError(f"Polytype '{polytype}' not found in embeddings")
-    polytype_emb = polytype_embeddings[polytype]
-
-    # Generate predictions for all combinations
-    results = []
-
-    for temp in temperatures:
-        for solvent_info in similar_solvents:
-            solvent_smiles = solvent_info["smiles"]
-            solvent_name = solvent_info["name"]
-            solvent_logp = solvent_info["logp"]
-
-            # Calculate solvent features
-            solvent_features = calculate_solvent_features_func(solvent_smiles)
-
-            if any(
-                v is None
-                for v in [
-                    solvent_features.get("solvent_logP"),
-                    solvent_features.get("solvent_TPSA"),
-                    solvent_features.get("solvent_HBD"),
-                    solvent_features.get("solvent_FractionCSP3"),
-                ]
-            ):
-                # Skip if solvent features can't be calculated
-                continue
-
-            # Build feature vector using the same model-aware helper as
-            # /preprocess_all so the optimizer feeds the model the columns it
-            # was actually trained on (e.g. `solvent_logp`, `charges_min_1`).
-            from app import assemble_model_features
-
-            features = assemble_model_features(
-                m1_features=m1_features,
-                m2_features=m2_features,
-                solvent_features=solvent_features,
-                polytype_emb=polytype_emb,
-                method_emb=method_emb,
-                temperature=temp,
-            )
-
-            # Make prediction
-            try:
-                pred_results = predictor.predict_with_confidence(features)
-
-                pred_class = int(pred_results["predictions"][0])
-                proba = pred_results["probabilities"][0]
-                confidence = float(pred_results["confidence"][0])
-
-                from app import CLASS_LABELS
-
-                predicted_class_name = CLASS_LABELS.get(pred_class, "unknown")
-
-                results.append(
-                    {
-                        "temperature": float(temp),
-                        "solvent_smiles": solvent_smiles,
-                        "solvent_name": solvent_name,
-                        "solvent_logp": solvent_logp,
-                        "predicted_class": pred_class,
-                        "predicted_class_name": predicted_class_name,
-                        "class_probabilities": {
-                            CLASS_LABELS[i]: float(proba[i]) for i in range(len(proba))
-                        },
-                        "confidence": confidence,
-                    }
-                )
-            except Exception as e:
-                # Skip this combination if prediction fails
-                print(f"Warning: Prediction failed for temp={temp}, solvent={solvent_smiles}: {e}")
-                continue
-
-    return results
