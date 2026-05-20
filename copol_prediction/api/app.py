@@ -20,7 +20,7 @@ import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Literal, Optional, Tuple
 
 # FastAPI dependencies
 try:
@@ -59,7 +59,7 @@ except ImportError:
 
 # Import reaction optimization module
 try:
-    from reaction_optimization import create_optimization_grid
+    from reaction_optimization import create_optimization_grid, find_architecture_switches
 
     REACTION_OPTIMIZATION_AVAILABLE = True
 except ImportError:
@@ -319,6 +319,13 @@ class PreprocessAllInput(BaseModel):
     temperature: float = Field(default=60.0, description="Temperature in Celsius")
 
 
+# Literal aliases keep the OpenAPI schema (and Swagger UI) showing exactly
+# the allowed values — a frontend <select> can forward its option value
+# verbatim.
+SolventSet = Literal["top3", "common", "chlorinated", "aromatic"]
+TemperatureMode = Literal["40-80", "20-100", "fixed60", "step20"]
+
+
 class OptimizeReactionInput(BaseModel):
     """Input schema for reaction optimization."""
 
@@ -329,9 +336,27 @@ class OptimizeReactionInput(BaseModel):
     polytype: str = Field(default="free radical", description="Polymerisation type")
     temperature: float = Field(default=60.0, description="Base temperature in Celsius")
     temperature_step: float = Field(
-        default=20.0, description="Temperature step size in Celsius (default: 20.0)"
+        default=20.0,
+        description="Temperature step in Celsius — only used when temperature_mode='step20'",
     )
-    n_solvents: int = Field(default=3, description="Number of solvents to use (default: 3)")
+    n_solvents: int = Field(
+        default=3, description="Number of solvents — only used when solvent_set='top3'"
+    )
+    solvent_set: SolventSet = Field(
+        default="top3",
+        description=(
+            "Which solvents to sweep. 'top3': dataset solvents nearest the base "
+            "solvent in logP (uses n_solvents). 'common'/'chlorinated'/'aromatic': "
+            "curated sets."
+        ),
+    )
+    temperature_mode: TemperatureMode = Field(
+        default="step20",
+        description=(
+            "Which temperatures to sweep. '40-80'=[40,60,80], '20-100'=[20,60,100], "
+            "'fixed60'=[60], 'step20'=base ± temperature_step."
+        ),
+    )
 
 
 class PreprocessAllOutput(BaseModel):
@@ -377,12 +402,74 @@ class OptimizeReactionOutput(BaseModel):
     success: bool = Field(..., description="Whether optimization was successful")
     error: Optional[str] = Field(None, description="Error message if optimization failed")
     predictions: List[OptimizationPrediction] = Field(
-        ..., description="3x3 grid of predictions (3 temperatures × 3 solvents)"
+        ...,
+        description="Grid of predictions, one per (temperature × solvent) combination",
     )
     base_temperature: float = Field(..., description="Base temperature used")
     temperature_step: float = Field(..., description="Temperature step size used")
     base_solvent_logp: float = Field(..., description="Base solvent logP value")
     timestamp: str = Field(..., description="Optimization timestamp")
+
+
+class ArchitectureSwitchInput(BaseModel):
+    """Input schema for the counterfactual architecture-switch search."""
+
+    monomer1_smiles: str = Field(..., description="SMILES string of monomer 1")
+    monomer2_smiles: str = Field(..., description="SMILES string of monomer 2")
+    solvent_smiles: str = Field(..., description="SMILES of the current/base solvent")
+    method: str = Field(default="solvent", description="Polymerisation method")
+    polytype: str = Field(default="free radical", description="Polymerisation type")
+    temperature: float = Field(default=60.0, description="Current/base temperature in Celsius")
+    solvent_set: SolventSet = Field(
+        default="common", description="Which solvents to search — see /optimize_reaction"
+    )
+    temperature_mode: TemperatureMode = Field(
+        default="40-80", description="Which temperatures to search — see /optimize_reaction"
+    )
+    temperature_step: float = Field(
+        default=20.0, description="Temperature step — only used when temperature_mode='step20'"
+    )
+    n_solvents: int = Field(
+        default=3, description="Number of solvents — only used when solvent_set='top3'"
+    )
+    top_n: int = Field(default=5, description="Max number of counterfactuals to return")
+
+
+class ArchitectureSwitchCandidate(BaseModel):
+    """A condition set that flips the predicted architecture."""
+
+    temperature: float = Field(..., description="Temperature in Celsius")
+    solvent_smiles: str = Field(..., description="Solvent SMILES")
+    solvent_name: str = Field(..., description="Solvent name")
+    solvent_logp: float = Field(..., description="Solvent logP value")
+    predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)")
+    predicted_class_name: str = Field(..., description="Human-readable class label")
+    class_probabilities: Dict[str, float] = Field(
+        ..., description="Probability per class, keyed by human-readable class name"
+    )
+    confidence: float = Field(..., description="Prediction confidence (0-1)")
+    delta_logp: float = Field(..., description="solvent_logp minus the base solvent's logP")
+    delta_temperature: float = Field(..., description="temperature minus the base temperature (°C)")
+
+
+class ArchitectureSwitchOutput(BaseModel):
+    """Output schema for the counterfactual architecture-switch search."""
+
+    success: bool = Field(..., description="Whether the search ran")
+    error: Optional[str] = Field(None, description="Error message if the search failed")
+    baseline: Optional[OptimizationPrediction] = Field(
+        None, description="Prediction for the unchanged (base solvent + base temperature) reaction"
+    )
+    counterfactuals: List[ArchitectureSwitchCandidate] = Field(
+        default_factory=list,
+        description=(
+            "Condition sets whose predicted architecture differs from the baseline, "
+            "ranked by smallest |delta_logp| (then |delta_temperature|). Empty if no "
+            "evaluated condition flips the architecture."
+        ),
+    )
+    n_evaluated: int = Field(0, description="Total (solvent × temperature) cells evaluated")
+    timestamp: str = Field(..., description="Search timestamp")
 
 
 class DOICheckInput(BaseModel):
@@ -1552,17 +1639,11 @@ async def check_doi(input_data: DOICheckInput):
 @app.post("/optimize_reaction", response_model=OptimizeReactionOutput)
 async def optimize_reaction(input_data: OptimizeReactionInput):
     """
-    Perform reaction optimization by exploring different solvent and temperature combinations.
+    Perform reaction optimization by exploring solvent × temperature combinations.
 
-    Creates a 3x3 grid of predictions:
-    - 3 temperatures: base_temp - step, base_temp, base_temp + step
-    - 3 solvents: similar solvents based on logP from the dataset
-
-    Args:
-        input_data: OptimizeReactionInput with monomers, base solvent, temperature, etc.
-
-    Returns:
-        OptimizeReactionOutput with 3x3 grid of predictions
+    `solvent_set` selects which solvents to sweep (logP-nearest from the
+    dataset, or a curated set); `temperature_mode` selects which temperatures.
+    Returns one prediction per (temperature × solvent) cell.
     """
     if not predictor:
         raise HTTPException(
@@ -1616,6 +1697,8 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
             calculate_solvent_features_func=calculate_solvent_features,
             temperature_step=input_data.temperature_step,
             n_solvents=input_data.n_solvents,
+            solvent_set=input_data.solvent_set,
+            temperature_mode=input_data.temperature_mode,
         )
 
         if not predictions:
@@ -1650,6 +1733,86 @@ async def optimize_reaction(input_data: OptimizeReactionInput):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Reaction optimization failed: {str(e)}",
+        )
+
+
+@app.post("/find_architecture_switch", response_model=ArchitectureSwitchOutput)
+async def find_architecture_switch(input_data: ArchitectureSwitchInput):
+    """
+    Counterfactual search: find the closest reaction conditions that flip the
+    predicted copolymer architecture.
+
+    Predicts the baseline reaction (the given solvent + temperature), then
+    sweeps a solvent × temperature grid and returns the condition sets whose
+    predicted architecture differs from the baseline — ranked by smallest
+    change in solvent logP (then temperature). `counterfactuals` is empty when
+    nothing in the searched space changes the architecture.
+    """
+    if not predictor:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Model not loaded"
+        )
+
+    if not REACTION_OPTIMIZATION_AVAILABLE:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Reaction optimization module not available",
+        )
+
+    if dataset_df is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Dataset not loaded. Architecture-switch search requires the dataset.",
+        )
+
+    try:
+        # Warm the monomer-feature cache (live XTB on miss) before the sweep.
+        base_path = Path(__file__).parent / "molecule_properties"
+        for label, smi in (
+            ("Monomer 1", input_data.monomer1_smiles),
+            ("Monomer 2", input_data.monomer2_smiles),
+        ):
+            _, err = get_or_compute_monomer_data(smi, base_path, label)
+            if err:
+                raise HTTPException(status_code=400, detail=err)
+
+        result = find_architecture_switches(
+            monomer1_smiles=input_data.monomer1_smiles,
+            monomer2_smiles=input_data.monomer2_smiles,
+            base_solvent_smiles=input_data.solvent_smiles,
+            base_temperature=input_data.temperature,
+            method=input_data.method,
+            polytype=input_data.polytype,
+            dataset_df=dataset_df,
+            method_embeddings=method_embeddings,
+            polytype_embeddings=polytype_embeddings,
+            predictor=predictor,
+            load_monomer_features_func=load_monomer_features,
+            extract_monomer_features_func=extract_monomer_features_for_model,
+            calculate_solvent_features_func=calculate_solvent_features,
+            solvent_set=input_data.solvent_set,
+            temperature_mode=input_data.temperature_mode,
+            temperature_step=input_data.temperature_step,
+            n_solvents=input_data.n_solvents,
+            top_n=input_data.top_n,
+        )
+
+        cleaned = clean_json_values(result, replace_with_zero=True)
+        return ArchitectureSwitchOutput(
+            success=True,
+            error=None,
+            baseline=OptimizationPrediction(**cleaned["baseline"]),
+            counterfactuals=[ArchitectureSwitchCandidate(**c) for c in cleaned["counterfactuals"]],
+            n_evaluated=cleaned["n_evaluated"],
+            timestamp=datetime.now().isoformat(),
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Architecture-switch search failed: {str(e)}",
         )
 
 
