@@ -22,20 +22,6 @@ docker compose down
 - API: http://localhost:8000
 - Docs: http://localhost:8000/docs
 
-### Public HTTPS Access (ngrok)
-
-To expose your API publicly with HTTPS for testing with external websites:
-
-```bash
-# 1. Install ngrok: https://ngrok.com/download
-# 2. Authenticate: ngrok config add-authtoken YOUR_TOKEN
-# 3. Start API: python app.py
-# 4. In another terminal: ngrok http 8000
-# 5. Use the https:// URL shown by ngrok
-```
-
-See `NGROK_SETUP.md` for detailed instructions.
-
 ### Local Development
 
 ```bash
@@ -53,8 +39,8 @@ Run comprehensive tests for all features:
 # Test against local API
 python test_all_features.py
 
-# Test against ngrok URL (for public HTTPS access)
-python test_all_features.py --url https://your-ngrok-url.ngrok-free.app
+# Test against a deployed API
+python test_all_features.py --url https://your-deployment.example.com
 ```
 
 ## 📊 Model
