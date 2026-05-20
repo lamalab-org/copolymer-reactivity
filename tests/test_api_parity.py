@@ -370,5 +370,12 @@ def test_find_architecture_switch(client):
         # delta fields must be present and self-consistent.
         assert "delta_logp" in cf and "delta_temperature" in cf
         deltas.append(abs(cf["delta_logp"]))
+        # Each counterfactual carries a nearest-neighbour literature
+        # reference; when it resolves to a DOI, doi_url is the matching link.
+        assert "reference" in cf
+        ref = cf["reference"]
+        if ref is not None and ref.get("doi"):
+            assert re.fullmatch(r"10\.\d{4,}/\S+", ref["doi"]), ref["doi"]
+            assert ref["doi_url"] == f"https://doi.org/{ref['doi']}"
     # Ranked by smallest |delta_logp|.
     assert deltas == sorted(deltas), deltas

@@ -451,6 +451,15 @@ class ArchitectureSwitchCandidate(BaseModel):
     confidence: float = Field(..., description="Prediction confidence (0-1)")
     delta_logp: float = Field(..., description="solvent_logp minus the base solvent's logP")
     delta_temperature: float = Field(..., description="temperature minus the base temperature (°C)")
+    reference: Optional[NearestNeighbor] = Field(
+        None,
+        description=(
+            "Closest real reaction in the training data for this counterfactual's "
+            "monomer pair + solvent — grounds the suggested condition change in a "
+            "literature data point (with `doi` / `doi_url` when available). Null "
+            "when baseline lookup is unavailable or no neighbour was found."
+        ),
+    )
 
 
 class ArchitectureSwitchOutput(BaseModel):
@@ -1812,6 +1821,31 @@ async def find_architecture_switch(input_data: ArchitectureSwitchInput):
             n_solvents=input_data.n_solvents,
             top_n=input_data.top_n,
         )
+
+        # Ground each counterfactual in literature: find the closest real
+        # reaction in the training data for this monomer pair + the
+        # counterfactual's solvent, so the UI can link to its DOI. NN lookup
+        # depends only on (monomers, solvent) — not temperature — so results
+        # are memoised per solvent across the counterfactual list.
+        if BASELINE_LOOKUP_AVAILABLE and train_df is not None and result["counterfactuals"]:
+            nn_by_solvent: Dict[str, Optional[Dict]] = {}
+            for cf in result["counterfactuals"]:
+                solvent = cf["solvent_smiles"]
+                if solvent not in nn_by_solvent:
+                    try:
+                        neighbors = find_top_k_nearest_neighbors(
+                            test_monomer1_smiles=input_data.monomer1_smiles,
+                            test_monomer2_smiles=input_data.monomer2_smiles,
+                            test_solvent_smiles=solvent,
+                            df_train=train_df,
+                            k=1,
+                            fp_dict=fingerprint_cache,
+                        )
+                        nn_by_solvent[solvent] = neighbors[0] if neighbors else None
+                    except Exception as e:
+                        print(f"⚠ NN reference lookup failed for solvent {solvent}: {e}")
+                        nn_by_solvent[solvent] = None
+                cf["reference"] = nn_by_solvent[solvent]
 
         cleaned = clean_json_values(result, replace_with_zero=True)
         return ArchitectureSwitchOutput(
