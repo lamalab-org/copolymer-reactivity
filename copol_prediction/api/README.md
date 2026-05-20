@@ -22,19 +22,13 @@ docker compose down
 - API: http://localhost:8000
 - Docs: http://localhost:8000/docs
 
-### Public HTTPS Access (ngrok)
+### Production deployment
 
-To expose your API publicly with HTTPS for testing with external websites:
-
-```bash
-# 1. Install ngrok: https://ngrok.com/download
-# 2. Authenticate: ngrok config add-authtoken YOUR_TOKEN
-# 3. Start API: python app.py
-# 4. In another terminal: ngrok http 8000
-# 5. Use the https:// URL shown by ngrok
-```
-
-See `NGROK_SETUP.md` for detailed instructions.
+For a full production setup — Docker Compose running this image behind an
+nginx reverse proxy, exposed via a Cloudflare tunnel — see
+[cheminfo-py/polycarp.cheminfo.org](https://github.com/cheminfo-py/polycarp.cheminfo.org).
+It pulls `ghcr.io/lamalab-org/copolymer-reactivity:latest` as the backend
+service and is the reference deployment for <https://polycarp.cheminfo.org>.
 
 ### Local Development
 
@@ -53,8 +47,8 @@ Run comprehensive tests for all features:
 # Test against local API
 python test_all_features.py
 
-# Test against ngrok URL (for public HTTPS access)
-python test_all_features.py --url https://your-ngrok-url.ngrok-free.app
+# Test against a deployed API
+python test_all_features.py --url https://your-deployment.example.com
 ```
 
 ## 📊 Model
