@@ -24,6 +24,7 @@ from __future__ import annotations
 import math
 import os
 import random
+import re
 import sys
 from pathlib import Path
 
@@ -137,6 +138,59 @@ def test_predict_response_uses_human_readable_class_names(client, test_df):
     assert pred["class_probabilities"][pred["predicted_class_name"]] == pytest.approx(
         pred["confidence"]
     )
+
+
+def test_doi_from_source_filename():
+    """Unit test for the DOI recovery rule (baseline_lookup)."""
+    import baseline_lookup as bl
+
+    assert bl.doi_from_source_filename("10.1002_pol.1959.1203512832.json") == (
+        "10.1002/pol.1959.1203512832"
+    )
+    # .json suffix optional; only the FIRST underscore becomes a slash.
+    assert bl.doi_from_source_filename("10.1016_0014-3057(84)90075-2") == (
+        "10.1016/0014-3057(84)90075-2"
+    )
+    # Non-DOI filename (a real paper with no DOI) and missing input -> None.
+    assert bl.doi_from_source_filename("Polymer_Science_USSR_2.6_(1961)__457.json") is None
+    assert bl.doi_from_source_filename(None) is None
+    assert bl.doi_from_source_filename("") is None
+
+    assert bl.doi_url("10.1002/pol.1959.1203512832") == (
+        "https://doi.org/10.1002/pol.1959.1203512832"
+    )
+    assert bl.doi_url(None) is None
+
+
+def test_nearest_neighbors_carry_resolvable_doi(client, test_df):
+    """`/preprocess_all` nearest-neighbour entries must carry `doi`/`doi_url`.
+    For a neighbour drawn from a real paper, `doi` is a well-formed DOI and
+    `doi_url` is the matching https://doi.org/ link; both may be null for
+    synthetic/augmented neighbours."""
+    row = test_df.iloc[0]
+    body = client.post(
+        "/preprocess_all",
+        json={
+            "monomer1_smiles": row["monomer1_smiles"],
+            "monomer2_smiles": row["monomer2_smiles"],
+            "solvent_smiles": row["solvent_smiles"],
+            "method": row["method"],
+            "polytype": row["polymerization_type"],
+            "temperature": float(row["temperature"]),
+        },
+    ).json()
+    neighbors = body.get("nearest_neighbors") or []
+    assert neighbors, "expected nearest_neighbors in /preprocess_all response"
+    resolved = 0
+    for nn in neighbors:
+        assert "doi" in nn and "doi_url" in nn
+        if nn["doi"] is not None:
+            assert re.fullmatch(r"10\.\d{4,}/\S+", nn["doi"]), nn["doi"]
+            assert nn["doi_url"] == f"https://doi.org/{nn['doi']}"
+            resolved += 1
+        else:
+            assert nn["doi_url"] is None
+    assert resolved > 0, "expected at least one neighbour with a recoverable DOI"
 
 
 def test_holdout_accuracy_matches_published(predictor, test_df):

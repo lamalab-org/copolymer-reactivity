@@ -8,6 +8,7 @@ to find the most similar data points based on Tanimoto similarity of monomers an
 import hashlib
 import os
 import pickle
+import re
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -16,6 +17,37 @@ import numpy as np
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import DataStructs, rdFingerprintGenerator
+
+# A DOI is `10.<registrant>/<suffix>`. Training-data JSON files are named
+# after the DOI with the single '/' replaced by '_' (dots preserved), e.g.
+# 10.1002/pol.1959.1203512832  ->  10.1002_pol.1959.1203512832.json
+_DOI_RE = re.compile(r"10\.\d{4,}/\S+")
+
+
+def doi_from_source_filename(filename: Optional[str]) -> Optional[str]:
+    """Recover the DOI from a training row's `source_filename`.
+
+    `source_filename` is the machine-assigned name of the extracted paper
+    (set in copolextractor/data_into_csv.py), derived from the DOI the
+    download pipeline fetched — so it is a far more reliable provenance
+    signal than the LLM-populated `original_source` column.
+
+    Returns the bare DOI (e.g. "10.1002/pol.1959.1203512832"), or None when
+    the input is missing or not DOI-shaped (a handful of old papers have no
+    DOI and are filed under a citation-style name instead).
+    """
+    if not isinstance(filename, str) or not filename:
+        return None
+    stem = filename[:-5] if filename.endswith(".json") else filename
+    # Restore only the registrant/suffix separator: the first '_'. DOI
+    # suffixes may legitimately contain '_', so a global replace is wrong.
+    candidate = stem.replace("_", "/", 1)
+    return candidate if _DOI_RE.fullmatch(candidate) else None
+
+
+def doi_url(doi: Optional[str]) -> Optional[str]:
+    """Resolvable https://doi.org/ link for a bare DOI, or None."""
+    return f"https://doi.org/{doi}" if doi else None
 
 
 def get_fingerprint_cache_path(cache_dir: Optional[Path] = None) -> Path:
@@ -307,6 +339,8 @@ def find_top_k_nearest_neighbors(
         r2_out = float(r2_val) if pd.notna(r2_val) else None
         r1r2_out = float(r1r2_val) if pd.notna(r1r2_val) else None
 
+        _nn_doi = doi_from_source_filename(train_row.get("source_filename"))
+
         result = {
             "rank": rank,
             "similarity": float(combined_similarity[valid_idx]),
@@ -339,6 +373,12 @@ def find_top_k_nearest_neighbors(
                 if pd.notna(train_row.get("original_source", train_row.get("doi", "")))
                 else None
             ),
+            # DOI recovered from the processed-paper filename — see
+            # doi_from_source_filename for why this beats `source`.
+            # None for synthetic/augmented rows (no source_filename) and for
+            # the rare real paper that has no DOI.
+            "doi": _nn_doi,
+            "doi_url": doi_url(_nn_doi),
             "reaction_id": (
                 str(train_row.get("reaction_id", ""))
                 if pd.notna(train_row.get("reaction_id"))

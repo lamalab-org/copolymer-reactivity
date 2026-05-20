@@ -197,7 +197,24 @@ class NearestNeighbor(BaseModel):
     temperature: Optional[float] = Field(None, description="Temperature in Celsius")
     method: Optional[str] = Field(None, description="Polymerization method")
     polytype: Optional[str] = Field(None, description="Polymerization type")
-    source: Optional[str] = Field(None, description="DOI or original source")
+    source: Optional[str] = Field(
+        None,
+        description=(
+            "Raw provenance string as extracted by the LLM — may be a DOI, "
+            "a citation, or free text. Prefer `doi` / `doi_url` below."
+        ),
+    )
+    doi: Optional[str] = Field(
+        None,
+        description=(
+            "DOI of the source paper, recovered from the processed-paper "
+            "filename. Null for synthetic/augmented neighbours and for the "
+            "rare real paper that has no DOI."
+        ),
+    )
+    doi_url: Optional[str] = Field(
+        None, description="Resolvable https://doi.org/ link, or null when `doi` is null"
+    )
     reaction_id: Optional[str] = Field(None, description="Reaction ID")
 
     model_config = ConfigDict(populate_by_name=True)
