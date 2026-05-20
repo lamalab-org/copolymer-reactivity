@@ -6,6 +6,7 @@ This module provides functionality to:
 2. Generate a 3x3 grid of predictions (3 temperatures × 3 solvents)
 """
 
+import functools
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -14,19 +15,64 @@ from rdkit import Chem
 from rdkit.Chem import Descriptors
 
 
-def calculate_solvent_logp(smiles: str) -> Optional[float]:
-    """Calculate logP for a solvent SMILES string."""
+@functools.lru_cache(maxsize=256)
+def _logp_of(smiles: str) -> Optional[float]:
+    """RDKit MolLogP for a SMILES string — memoised (pure function)."""
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
     try:
-        if pd.isna(smiles) or not smiles:
-            return None
-
-        mol = Chem.MolFromSmiles(str(smiles))
-        if mol is None:
-            return None
-
         return float(Descriptors.MolLogP(mol))
     except Exception:
         return None
+
+
+def calculate_solvent_logp(smiles: str) -> Optional[float]:
+    """Calculate logP for a solvent SMILES string (memoised via _logp_of)."""
+    if pd.isna(smiles) or not smiles:
+        return None
+    return _logp_of(str(smiles))
+
+
+# Memo for the dataset's distinct (smiles, name, logp) solvents. The dataset
+# is loaded once at startup and never mutated, so memoising by id() is safe
+# for the process lifetime — keyed by id() so a (hypothetical) reload yields
+# a fresh table.
+_UNIQUE_SOLVENTS_MEMO: Dict[int, List[Dict[str, Any]]] = {}
+
+
+def _unique_solvents(dataset_df: pd.DataFrame) -> List[Dict[str, Any]]:
+    """Distinct solvents from the dataset as {smiles, name, logp} dicts.
+
+    Computed once per DataFrame (memoised). Replaces a per-call
+    .iterrows() scan over the full ~5000-row dataset — the unique-solvent
+    table is static at runtime, so there is nothing to recompute.
+    """
+    cached = _UNIQUE_SOLVENTS_MEMO.get(id(dataset_df))
+    if cached is not None:
+        return cached
+
+    keep = [c for c in ("solvent_smiles", "solvent", "solvent_logP") if c in dataset_df.columns]
+    sub = dataset_df[keep].drop_duplicates("solvent_smiles")
+
+    out: List[Dict[str, Any]] = []
+    for record in sub.itertuples(index=False):
+        row = record._asdict()
+        smiles = row.get("solvent_smiles")
+        if pd.isna(smiles) or not smiles:
+            continue
+        logp = row.get("solvent_logP")
+        if logp is None or pd.isna(logp):
+            logp = calculate_solvent_logp(smiles)
+        if logp is None or pd.isna(logp):
+            continue
+        name = row.get("solvent")
+        if name is None or pd.isna(name) or not name:
+            name = smiles
+        out.append({"smiles": smiles, "name": str(name), "logp": float(logp)})
+
+    _UNIQUE_SOLVENTS_MEMO[id(dataset_df)] = out
+    return out
 
 
 def find_similar_solvents(
@@ -35,69 +81,24 @@ def find_similar_solvents(
     """
     Find solvents with similar logP values from the dataset.
 
-    Args:
-        target_logp: Target logP value
-        dataset_df: DataFrame containing solvent data
-        n_solvents: Number of similar solvents to return (default: 3)
-        tolerance: Maximum logP difference to consider (default: 1.0)
-
-    Returns:
-        List of dictionaries with solvent information:
-            - smiles: Solvent SMILES
-            - name: Solvent name
-            - logp: logP value
-            - logp_diff: Difference from target logP
+    Returns a list of {smiles, name, logp, logp_diff} dicts, where
+    logp_diff = |logp - target_logp|. Solvents at exactly the target logP
+    are excluded (we want similar-but-not-identical solvents).
     """
     if dataset_df is None or len(dataset_df) == 0:
         return []
 
-    # Get unique solvents with their logP values
-    solvents = []
-    seen_smiles = set()
-
-    for _, row in dataset_df.iterrows():
-        solvent_smiles = row.get("solvent_smiles")
-        if pd.isna(solvent_smiles) or not solvent_smiles:
-            continue
-
-        # Skip if we've already seen this SMILES
-        if solvent_smiles in seen_smiles:
-            continue
-        seen_smiles.add(solvent_smiles)
-
-        # Get logP (prefer from dataset, calculate if needed)
-        logp = row.get("solvent_logP")
-        if pd.isna(logp):
-            logp = calculate_solvent_logp(solvent_smiles)
-
-        if logp is None or pd.isna(logp):
-            continue
-
-        solvent_name = row.get("solvent", "")
-        if pd.isna(solvent_name) or not solvent_name:
-            solvent_name = solvent_smiles
-
-        solvents.append(
-            {
-                "smiles": solvent_smiles,
-                "name": str(solvent_name),
-                "logp": float(logp),
-                "logp_diff": abs(float(logp) - target_logp),
-            }
-        )
-
-    # Filter by tolerance, exclude solvents with exactly the same logP (logp_diff == 0.0)
-    # We want solvents that are similar but not identical
-    similar_solvents = [
-        s
-        for s in solvents
-        if s["logp_diff"] <= tolerance and s["logp_diff"] > 0.0  # Exclude exact matches
+    # The distinct-solvent table is static; only logp_diff depends on the
+    # per-call target_logp, so recompute just that.
+    solvents = [
+        {**s, "logp_diff": abs(s["logp"] - target_logp)} for s in _unique_solvents(dataset_df)
     ]
+
+    similar_solvents = [s for s in solvents if 0.0 < s["logp_diff"] <= tolerance]
     similar_solvents.sort(key=lambda x: x["logp_diff"])
 
-    # If we don't have enough within tolerance, expand search (still exclude exact matches)
+    # If too few within tolerance, expand to the nearest n regardless.
     if len(similar_solvents) < n_solvents:
-        # Sort all solvents by logP difference, excluding exact matches
         all_solvents = [s for s in solvents if s["logp_diff"] > 0.0]
         all_solvents.sort(key=lambda x: x["logp_diff"])
         similar_solvents = all_solvents[:n_solvents]
@@ -285,20 +286,28 @@ def _run_condition_grid(
     # imports this module at startup.
     from app import CLASS_LABELS, assemble_model_features
 
+    # Solvent features do not depend on temperature — compute them once per
+    # solvent up front rather than once per (solvent × temperature) cell.
+    # Solvents whose features can't be computed are dropped here.
+    solvent_feature_map: Dict[str, Dict] = {}
+    for solvent_info in solvents:
+        smi = solvent_info["smiles"]
+        if smi in solvent_feature_map:
+            continue
+        sf = calculate_solvent_features_func(smi)
+        if any(
+            sf.get(k) is None
+            for k in ("solvent_logP", "solvent_TPSA", "solvent_HBD", "solvent_FractionCSP3")
+        ):
+            continue
+        solvent_feature_map[smi] = sf
+
     results: List[Dict] = []
     for temp in temperatures:
         for solvent_info in solvents:
             solvent_smiles = solvent_info["smiles"]
-            solvent_features = calculate_solvent_features_func(solvent_smiles)
-            if any(
-                v is None
-                for v in [
-                    solvent_features.get("solvent_logP"),
-                    solvent_features.get("solvent_TPSA"),
-                    solvent_features.get("solvent_HBD"),
-                    solvent_features.get("solvent_FractionCSP3"),
-                ]
-            ):
+            solvent_features = solvent_feature_map.get(solvent_smiles)
+            if solvent_features is None:
                 continue
 
             features = assemble_model_features(

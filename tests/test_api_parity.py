@@ -263,6 +263,44 @@ def test_preprocess_all_to_predict_matches_direct_predictor(predictor, test_df, 
         )
 
 
+def test_intermediate_results_are_cached(client, test_df):
+    """The memoised helpers must actually serve repeat calls from cache, and
+    do so without changing the result. Catches an lru_cache being dropped or
+    the unique-solvent memo silently never populating."""
+    import app as app_mod
+    import reaction_optimization as ro
+
+    # Solvent features: same SMILES twice -> identical result, cache hit.
+    app_mod.calculate_solvent_features.cache_clear()
+    first = app_mod.calculate_solvent_features("Cc1ccccc1")
+    second = app_mod.calculate_solvent_features("Cc1ccccc1")
+    assert first == second
+    assert app_mod.calculate_solvent_features.cache_info().hits >= 1
+
+    # Monomer JSON parse is memoised: a /preprocess_all call followed by an
+    # /optimize_reaction call for the same monomers must reuse the parsed JSON.
+    app_mod._load_monomer_json.cache_clear()
+    row = test_df.iloc[0]
+    payload = {
+        "monomer1_smiles": row["monomer1_smiles"],
+        "monomer2_smiles": row["monomer2_smiles"],
+        "solvent_smiles": row["solvent_smiles"],
+        "method": row["method"],
+        "polytype": row["polymerization_type"],
+        "temperature": float(row["temperature"]),
+    }
+    assert client.post("/preprocess_all", json=payload).status_code == 200
+    assert client.post("/optimize_reaction", json=payload).status_code == 200
+    assert app_mod._load_monomer_json.cache_info().hits >= 1
+
+    # Unique-solvent table is memoised by dataset identity.
+    ro._UNIQUE_SOLVENTS_MEMO.clear()
+    once = ro._unique_solvents(app_mod.dataset_df)
+    twice = ro._unique_solvents(app_mod.dataset_df)
+    assert once is twice  # same object — served from the memo
+    assert len(once) > 0
+
+
 def test_resolve_temperatures():
     """The temperature_mode keys must map to the documented temperature lists."""
     import reaction_optimization as ro
