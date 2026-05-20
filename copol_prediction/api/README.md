@@ -22,6 +22,14 @@ docker compose down
 - API: http://localhost:8000
 - Docs: http://localhost:8000/docs
 
+### Production deployment
+
+For a full production setup — Docker Compose running this image behind an
+nginx reverse proxy, exposed via a Cloudflare tunnel — see
+[cheminfo-py/polycarp.cheminfo.org](https://github.com/cheminfo-py/polycarp.cheminfo.org).
+It pulls `ghcr.io/lamalab-org/copolymer-reactivity:latest` as the backend
+service and is the reference deployment for <https://polycarp.cheminfo.org>.
+
 ### Local Development
 
 ```bash
