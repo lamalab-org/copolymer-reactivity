@@ -9,6 +9,7 @@ Usage:
     uvicorn app:app --reload --host 0.0.0.0 --port 8000
 """
 
+import functools
 import hashlib
 import json
 import math
@@ -1042,6 +1043,7 @@ async def preprocess_all(input_data: PreprocessAllInput):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_detail)
 
 
+@functools.lru_cache(maxsize=256)
 def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
     """
     Calculate solvent features from SMILES string.
@@ -1050,6 +1052,11 @@ def calculate_solvent_features(smiles: str) -> Dict[str, Optional[float]]:
     - solvent_TPSA
     - solvent_HBD
     - solvent_FractionCSP3
+
+    Memoised: solvent descriptors are a pure function of the SMILES and the
+    same handful of solvents are hit repeatedly across /preprocess_all,
+    /optimize_reaction and /find_architecture_switch. Callers must treat the
+    returned dict as read-only — it is shared across cache hits.
     """
 
     def is_invalid(smiles):
@@ -1185,6 +1192,33 @@ def get_smiles_md5(smiles: str) -> str:
     return hashlib.md5(smiles.encode("utf-8")).hexdigest()
 
 
+@functools.lru_cache(maxsize=512)
+def _load_monomer_json(file_path_str: str, _mtime: float) -> Optional[Dict]:
+    """Parse a monomer-properties JSON and attach min/max/mean aggregates.
+
+    Memoised on (path, mtime): these JSONs carry conformer-coordinate
+    arrays so the parse is not free, and the same monomers are read on
+    every request that touches them. `_mtime` is in the key purely so a
+    regenerated cache file invalidates the stale entry. The returned dict
+    is shared across cache hits — callers must treat it as read-only.
+    """
+    try:
+        with open(file_path_str, "r") as f:
+            data = json.load(f)
+    except Exception as e:
+        print(f"Error loading monomer features from {file_path_str}: {e}")
+        return None
+
+    for key in ("charges", "fukui_electrophilicity", "fukui_nucleophilicity", "fukui_radical"):
+        values = data.get(key)
+        if isinstance(values, dict) and values:
+            nums = list(values.values())
+            data[key + "_min"] = min(nums)
+            data[key + "_max"] = max(nums)
+            data[key + "_mean"] = sum(nums) / len(nums)
+    return data
+
+
 def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Optional[Dict]:
     """
     Load monomer features from JSON file if it exists.
@@ -1197,30 +1231,12 @@ def load_monomer_features(smiles: str, base_path: Optional[Path] = None) -> Opti
     elif isinstance(base_path, str):
         base_path = Path(base_path)
 
-    # 1) Fast path: MD5 hash lookup
+    # 1) Fast path: MD5 hash lookup (parse + aggregates are memoised).
     md5_hash = get_smiles_md5(smiles)
     file_path = base_path / f"{md5_hash}.json"
 
     if file_path.exists():
-        try:
-            with open(file_path, "r") as f:
-                data = json.load(f)
-
-            for key in [
-                "charges",
-                "fukui_electrophilicity",
-                "fukui_nucleophilicity",
-                "fukui_radical",
-            ]:
-                if key in data and isinstance(data[key], dict) and data[key]:
-                    data[key + "_min"] = min(data[key].values())
-                    data[key + "_max"] = max(data[key].values())
-                    data[key + "_mean"] = sum(data[key].values()) / len(data[key].values())
-
-            return data
-        except Exception as e:
-            print(f"Error loading monomer features from {file_path}: {e}")
-            return None
+        return _load_monomer_json(str(file_path), file_path.stat().st_mtime)
 
     # 2) Fallback: canonical SMILES-based lookup (for backward compatibility)
     try:
