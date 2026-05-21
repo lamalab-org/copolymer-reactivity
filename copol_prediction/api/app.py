@@ -455,9 +455,20 @@ class ArchitectureSwitchCandidate(BaseModel):
         None,
         description=(
             "Closest real reaction in the training data for this counterfactual's "
-            "monomer pair + solvent — grounds the suggested condition change in a "
-            "literature data point (with `doi` / `doi_url` when available). Null "
-            "when baseline lookup is unavailable or no neighbour was found."
+            "solvent — grounds the suggested condition change in a literature data "
+            "point (with `doi` / `doi_url` when available). Preferentially the "
+            "closest reaction with the *same* monomer pair; null when baseline "
+            "lookup is unavailable or no neighbour was found."
+        ),
+    )
+    reference_same_monomers: Optional[bool] = Field(
+        None,
+        description=(
+            "True when `reference` is a reaction with the same monomer pair as "
+            "the query. False when the training data has no reaction for this "
+            "monomer pair and `reference` is the closest *different*-monomer "
+            "reaction instead (treat as a weaker analogy). Null when there is "
+            "no reference."
         ),
     )
 
@@ -1113,6 +1124,34 @@ def canonicalize_smiles(smiles: str) -> str:
     if mol is None:
         raise ValueError(f"Invalid SMILES string: {smiles}")
     return Chem.MolToSmiles(mol)
+
+
+def monomer_pair_key(smiles1: str, smiles2: str) -> Optional[frozenset]:
+    """Order-insensitive canonical key for a monomer pair, or None if either
+    SMILES can't be parsed. Two reactions share a key iff they use the same
+    two monomers (regardless of which is labelled 1 vs 2)."""
+    try:
+        return frozenset({canonicalize_smiles(smiles1), canonicalize_smiles(smiles2)})
+    except Exception:
+        return None
+
+
+# Per-row monomer_pair_key for the lookup pool, memoised by DataFrame identity
+# (the pool is built once at startup). Canonicalising ~thousands of SMILES is
+# not free, so the first /find_architecture_switch call pays it once.
+_train_monomer_pairs_memo: Dict[int, List[Optional[frozenset]]] = {}
+
+
+def train_monomer_pair_keys(df: pd.DataFrame) -> List[Optional[frozenset]]:
+    """monomer_pair_key for every row of `df`, in row order (memoised)."""
+    cached = _train_monomer_pairs_memo.get(id(df))
+    if cached is not None:
+        return cached
+    keys = [
+        monomer_pair_key(m1, m2) for m1, m2 in zip(df["monomer1_smiles"], df["monomer2_smiles"])
+    ]
+    _train_monomer_pairs_memo[id(df)] = keys
+    return keys
 
 
 class SolventPreprocessInput(BaseModel):
@@ -1823,11 +1862,26 @@ async def find_architecture_switch(input_data: ArchitectureSwitchInput):
         )
 
         # Ground each counterfactual in literature: find the closest real
-        # reaction in the training data for this monomer pair + the
-        # counterfactual's solvent, so the UI can link to its DOI. NN lookup
-        # depends only on (monomers, solvent) — not temperature — so results
-        # are memoised per solvent across the counterfactual list.
+        # reaction for this counterfactual's solvent, so the UI can link to
+        # its DOI. The reference should use the *same* monomer pair as the
+        # query (a different-monomer reaction is only a weak analogy), so the
+        # lookup pool is pre-filtered to same-monomer rows when any exist.
+        # NN lookup depends only on (monomers, solvent) — not temperature —
+        # so results are memoised per solvent across the counterfactual list.
         if BASELINE_LOOKUP_AVAILABLE and train_df is not None and result["counterfactuals"]:
+            query_pair = monomer_pair_key(input_data.monomer1_smiles, input_data.monomer2_smiles)
+            same_monomer_df = None
+            if query_pair is not None:
+                pair_keys = train_monomer_pair_keys(train_df)
+                positions = [i for i, k in enumerate(pair_keys) if k == query_pair]
+                if positions:
+                    same_monomer_df = train_df.iloc[positions]
+
+            # When the pair is in the training data, search only those rows;
+            # otherwise fall back to the full pool and flag the mismatch.
+            lookup_pool = same_monomer_df if same_monomer_df is not None else train_df
+            same_monomers = same_monomer_df is not None and query_pair is not None
+
             nn_by_solvent: Dict[str, Optional[Dict]] = {}
             for cf in result["counterfactuals"]:
                 solvent = cf["solvent_smiles"]
@@ -1837,7 +1891,7 @@ async def find_architecture_switch(input_data: ArchitectureSwitchInput):
                             test_monomer1_smiles=input_data.monomer1_smiles,
                             test_monomer2_smiles=input_data.monomer2_smiles,
                             test_solvent_smiles=solvent,
-                            df_train=train_df,
+                            df_train=lookup_pool,
                             k=1,
                             fp_dict=fingerprint_cache,
                         )
@@ -1845,7 +1899,11 @@ async def find_architecture_switch(input_data: ArchitectureSwitchInput):
                     except Exception as e:
                         print(f"⚠ NN reference lookup failed for solvent {solvent}: {e}")
                         nn_by_solvent[solvent] = None
-                cf["reference"] = nn_by_solvent[solvent]
+                ref = nn_by_solvent[solvent]
+                cf["reference"] = ref
+                cf["reference_same_monomers"] = (
+                    same_monomers if (ref is not None and query_pair is not None) else None
+                )
 
         cleaned = clean_json_values(result, replace_with_zero=True)
         return ArchitectureSwitchOutput(
