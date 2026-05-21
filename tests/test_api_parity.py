@@ -372,10 +372,15 @@ def test_find_architecture_switch(client):
         deltas.append(abs(cf["delta_logp"]))
         # Each counterfactual carries a nearest-neighbour literature
         # reference; when it resolves to a DOI, doi_url is the matching link.
-        assert "reference" in cf
+        assert "reference" in cf and "reference_same_monomers" in cf
         ref = cf["reference"]
-        if ref is not None and ref.get("doi"):
-            assert re.fullmatch(r"10\.\d{4,}/\S+", ref["doi"]), ref["doi"]
-            assert ref["doi_url"] == f"https://doi.org/{ref['doi']}"
+        if ref is not None:
+            # styrene + methyl methacrylate is well represented in the
+            # training data, so the reference must be a same-monomer
+            # reaction (not just the closest by fingerprint).
+            assert cf["reference_same_monomers"] is True
+            if ref.get("doi"):
+                assert re.fullmatch(r"10\.\d{4,}/\S+", ref["doi"]), ref["doi"]
+                assert ref["doi_url"] == f"https://doi.org/{ref['doi']}"
     # Ranked by smallest |delta_logp|.
     assert deltas == sorted(deltas), deltas
