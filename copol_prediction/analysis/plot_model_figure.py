@@ -48,6 +48,7 @@ from copol_prediction.analysis.analyze_model import get_class_label
 from copol_prediction.analysis.plot_config import (
     CLASS_CURVES_FIGSIZE_INCH,
     CLASS_LABELS_SHORT,
+    TWO_COL_WIDTH_INCH,
     setup_plot_style,
 )
 from copol_prediction.utils import load_data_split
@@ -146,10 +147,11 @@ def _plot_confusion_matrix_unfiltered(ax, predictor: CopolymerPredictor, df_test
     )
     disp.plot(ax=ax, cmap="Blues", colorbar=False, values_format="d")
     ax.set_aspect("auto")
-    ax.set_title("A", fontsize=12, loc="left")
-    ax.set_xlabel("Predicted", fontsize=12)
-    ax.set_ylabel("True", fontsize=12)
-    ax.tick_params(labelsize=12)
+    ax.set_title("A", fontsize=10, loc="left")
+    ax.set_xlabel("Predicted", fontsize=8)
+    ax.set_ylabel("True", fontsize=8)
+    ax.tick_params(labelsize=8)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
 
 
 def _draw_sankey_on_ax(
@@ -167,7 +169,7 @@ def _draw_sankey_on_ax(
     x_left = 0.15
     x_right = 0.85
     node_w = 0.08
-    y_top = 0.95
+    y_top = 0.82
     y_bottom = 0.05
     gap = 0.03
     usable_h = y_top - y_bottom - 2 * gap
@@ -205,7 +207,7 @@ def _draw_sankey_on_ax(
             f"{class_labels[i]}\n(n={int(left_totals[i])})",
             ha="right",
             va="center",
-            fontsize=10,
+            fontsize=8,
         )
 
     for j in range(n_classes):
@@ -227,7 +229,7 @@ def _draw_sankey_on_ax(
             f"{class_labels[j]}\n(n={int(right_totals[j])})",
             ha="left",
             va="center",
-            fontsize=10,
+            fontsize=8,
         )
 
     left_offsets = left_y0.copy()
@@ -284,10 +286,10 @@ def _draw_sankey_on_ax(
             if n_ij >= 8:
                 xm = 0.5 * (x0 + x1)
                 ym = 0.5 * ((y0b + y0t) / 2 + (y1b + y1t) / 2)
-                ax.text(xm, ym, str(n_ij), ha="center", va="center", fontsize=7, color="#1f1f1f")
+                ax.text(xm, ym, str(n_ij), ha="center", va="center", fontsize=8, color="#1f1f1f")
 
-    ax.text(x_left, y_top + 0.01, "Pred. without conditions", ha="center", va="bottom", fontsize=12)
-    ax.text(x_right, y_top + 0.01, "Pred. with conditions", ha="center", va="bottom", fontsize=12)
+    ax.text(x_left, y_top + 0.07, "w/o cond.", ha="center", va="bottom", fontsize=8)
+    ax.text(x_right, y_top + 0.07, "w/ cond.", ha="center", va="bottom", fontsize=8)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
@@ -306,9 +308,9 @@ def _plot_sankey_from_csv(ax, csv_path: str) -> None:
             ha="center",
             va="center",
             transform=ax.transAxes,
-            fontsize=10,
+            fontsize=8,
         )
-        ax.set_title("B", fontsize=12, loc="left")
+        ax.set_title("B", fontsize=10, loc="left")
         return
 
     # Columns are like "with_0", "with_1", "with_2", "with_-1"
@@ -333,15 +335,15 @@ def _plot_sankey_from_csv(ax, csv_path: str) -> None:
     colors = [color_map.get(c, "#999999") for c in class_order]
 
     _draw_sankey_on_ax(ax, flow, class_order, labels, colors)
-    ax.set_title("B", fontsize=12, loc="left")
+    ax.set_title("B", fontsize=10, loc="left")
 
 
 def _plot_shap_topn(ax, csv_path: str, top_n: int):
     def _shap_bar_color(label: str) -> str:
         condition_keywords = {"temperature", "polymerization", "polytype", "method_emb", "solvent"}
         if any(kw in str(label).lower() for kw in condition_keywords):
-            return "#661124"
-        return "#143D60"
+            return "#ffbc57"
+        return "#9ed5f2"
 
     try:
         df = pd.read_csv(csv_path)
@@ -354,7 +356,7 @@ def _plot_shap_topn(ax, csv_path: str, top_n: int):
             ha="center",
             va="center",
             transform=ax.transAxes,
-            fontsize=12,
+            fontsize=8,
         )
         return
 
@@ -372,11 +374,11 @@ def _plot_shap_topn(ax, csv_path: str, top_n: int):
 
     ax.barh(y_pos, means, xerr=stds, capsize=3, alpha=0.85, color=bar_colors)
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(labels, fontsize=10)
+    ax.set_yticklabels(labels, fontsize=8)
     ax.invert_yaxis()
-    ax.set_title("C", fontsize=12, loc="left")
-    ax.set_xlabel("sum |SHAP| across classes (mean ± std)", fontsize=10)
-    ax.tick_params(axis="x", labelsize=12)
+    ax.set_title("C", fontsize=10, loc="left")
+    ax.set_xlabel("|SHAP| importance (mean ± std)", fontsize=8)
+    ax.tick_params(axis="x", labelsize=8)
     ax.grid(False)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -385,11 +387,13 @@ def _plot_shap_topn(ax, csv_path: str, top_n: int):
 
     ax.legend(
         handles=[
-            Patch(facecolor="#143D60", alpha=0.85, label="Monomer descriptor"),
-            Patch(facecolor="#661124", alpha=0.85, label="Reaction condition"),
+            Patch(facecolor="#9ed5f2", alpha=0.85, label="Monomer descriptor"),
+            Patch(facecolor="#ffbc57", alpha=0.85, label="Reaction condition"),
         ],
-        fontsize=11,
-        loc="lower right",
+        fontsize=8,
+        loc="upper left",
+        bbox_to_anchor=(0.0, -0.18),
+        ncol=1,
         frameon=False,
     )
 
@@ -437,12 +441,12 @@ def main():
     setup_plot_style()
     plt.rcParams.update(
         {
-            "font.size": 12,
-            "axes.labelsize": 12,
-            "xtick.labelsize": 12,
-            "ytick.labelsize": 12,
-            "axes.titlesize": 12,
-            "legend.fontsize": 12,
+            "font.size": 8,
+            "axes.labelsize": 8,
+            "xtick.labelsize": 8,
+            "ytick.labelsize": 8,
+            "axes.titlesize": 8,
+            "legend.fontsize": 8,
         }
     )
 
@@ -469,8 +473,8 @@ def main():
     fig2, axes2 = plt.subplots(
         1,
         3,
-        figsize=(15.0, 4.5),
-        gridspec_kw={"width_ratios": [1, 1, 1]},
+        figsize=(TWO_COL_WIDTH_INCH, TWO_COL_WIDTH_INCH / 3.0),
+        gridspec_kw={"width_ratios": [1.3, 1, 1]},
         constrained_layout=True,
     )
     _plot_confusion_matrix_unfiltered(axes2[0], predictor, df_test)

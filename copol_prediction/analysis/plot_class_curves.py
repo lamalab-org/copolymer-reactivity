@@ -37,7 +37,7 @@ if PROJECT_ROOT not in sys.path:
 if WORKSPACE_ROOT not in sys.path:
     sys.path.insert(0, WORKSPACE_ROOT)
 
-from copol_prediction.analysis.plot_config import CLASS_CURVES_FIGSIZE_INCH, setup_plot_style
+from copol_prediction.analysis.plot_config import TWO_COL_WIDTH_INCH, setup_plot_style
 from copol_prediction.mayo_lewis_classification import (
     classify_reactivity_curve,
     compute_curve_descriptors,
@@ -204,7 +204,7 @@ def _plot_dual_band(
 ):
     ax.plot(f1, f1, "--", lw=1.2, alpha=0.8, color="gray")
     if curves.size == 0:
-        ax.set_title(label)
+        ax.set_title(label, loc="left", fontsize=10)
         return
 
     upper, lower = _split_upper_lower(f1, curves)
@@ -212,9 +212,9 @@ def _plot_dual_band(
 
     # individual curves (faded)
     for c in upper:
-        ax.plot(f1, c, alpha=0.03, lw=1.0, color="#661124")
+        ax.plot(f1, c, alpha=0.03, lw=1.0, color="#ffbc57")
     for c in lower:
-        ax.plot(f1, c, alpha=0.03, lw=1.0, color="#143D60")
+        ax.plot(f1, c, alpha=0.03, lw=1.0, color="#9ed5f2")
 
     def _band_and_mean(mat: np.ndarray):
         q_low, q_high = np.percentile(mat, band_quantiles, axis=0)
@@ -229,9 +229,9 @@ def _plot_dual_band(
             _downsample(f1, q_low_u, f1_plot),
             _downsample(f1, q_high_u, f1_plot),
             alpha=0.22,
-            color="#661124",
+            color="#ffbc57",
         )
-        ax.plot(f1_plot, _downsample(f1, mean_u, f1_plot), lw=2.2, color="#661124")
+        ax.plot(f1_plot, _downsample(f1, mean_u, f1_plot), lw=2.2, color="#ffbc57")
 
     # lower band: mirror trick (match notebook logic)
     if len(lower) > 0:
@@ -245,11 +245,11 @@ def _plot_dual_band(
             _downsample(f1, q_low_l, f1_plot),
             _downsample(f1, q_high_l, f1_plot),
             alpha=0.22,
-            color="#143D60",
+            color="#9ed5f2",
         )
-        ax.plot(f1_plot, _downsample(f1, mean_l, f1_plot), lw=2.2, color="#143D60")
+        ax.plot(f1_plot, _downsample(f1, mean_l, f1_plot), lw=2.2, color="#9ed5f2")
 
-    ax.set_title(label)
+    ax.set_title(label, loc="left", fontsize=10)
 
 
 def _plot_class_split_explanation(ax):
@@ -260,12 +260,23 @@ def _plot_class_split_explanation(ax):
     """
     f1 = np.linspace(1e-4, 1.0 - 1e-4, 1500)
 
-    # Two representative examples (fixed for reproducibility / paper stability)
+    # Three representative examples (fixed for reproducibility / paper stability)
     examples = [
-        # Random-like: close to diagonal
-        {"r1": 0.5, "r2": 0.5, "color": "#661124", "label": "example: random-like"},
-        # Gradient-like: strong deviation with shifted / no interior intersection
-        {"r1": 6.0, "r2": 0.2, "color": "#143D60", "label": "example: gradient-like"},
+        {
+            "r1": 0.5, "r2": 0.5, "color": "#ffbc57",
+            "label": "example: random-like",
+            "text_x": 0.66, "text_y": 0.50, "extra": "\nIntersection = 0.5",
+        },
+        {
+            "r1": 6.0, "r2": 0.2, "color": "#9ed5f2",
+            "label": "example: gradient-like",
+            "text_x": 0.02, "text_y": 0.96, "extra": "\nno intersection",
+        },
+        {
+            "r1": 0.1, "r2": 0.1, "color": "#3e3888",
+            "label": "example: alternating",
+            "text_x": 0.36, "text_y": 0.18, "extra": "\nIntersection = 0.5",
+        },
     ]
 
     ax.plot(f1, f1, "--", lw=1.2, alpha=0.8, color="gray", label="random line (F1=f1)")
@@ -278,65 +289,39 @@ def _plot_class_split_explanation(ax):
 
         # Shade |F1 - f1| area (I_rand)
         above = F1 >= f1
-        ax.fill_between(
-            f1,
-            F1,
-            f1,
-            where=above,
-            interpolate=True,
-            color=ex["color"],
-            alpha=0.12,
-        )
-        ax.fill_between(
-            f1,
-            F1,
-            f1,
-            where=~above,
-            interpolate=True,
-            color=ex["color"],
-            alpha=0.12,
-        )
+        ax.fill_between(f1, F1, f1, where=above, interpolate=True, color=ex["color"], alpha=0.12)
+        ax.fill_between(f1, F1, f1, where=~above, interpolate=True, color=ex["color"], alpha=0.12)
 
-        # Mark main interior diagonal intersection (if present), but no label/arrow
+        # Mark main interior diagonal intersection (if present)
         if desc["has_crossing"] and desc["crossing_main"] is not None:
             x = float(desc["crossing_main"])
             ax.scatter([x], [x], s=28, color=ex["color"], zorder=5)
 
-        # Small text with integral value (kept compact)
-        # Place text boxes in opposite corners to avoid overlap
-        is_first = ex is examples[0]
-        # random-like (first): top-right, below diagonal
-        # gradient-like (second): top-left, above diagonal
-        x_pos = 0.66 if is_first else 0.02
-        y_pos = 0.5 if is_first else 0.96
-        ha = "left"
-
-        extra_line = ""
-        if is_first:
-            extra_line = "\nIntersection = 0.5"
-        else:
-            extra_line = "\nno intersection"
-
         ax.text(
-            x_pos,
-            y_pos,
+            ex["text_x"],
+            ex["text_y"],
             f"$r_1$={ex['r1']:.2g}, $r_2$={ex['r2']:.2g}\n"
             + f"Integral = {desc['I_rand']:.3f}"
-            + extra_line,
+            + ex["extra"],
             transform=ax.transAxes,
             va="top",
-            ha=ha,
+            ha="left",
+            fontsize=8,
             color=ex["color"],
             bbox=dict(boxstyle="round,pad=0.2", facecolor="white", edgecolor="none", alpha=0.7),
         )
 
-    ax.set_title("D")
+    ax.set_title("D", loc="left", fontsize=10)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_xlabel(r"$f_1$ (feed conc. monomer 1)")
+    ax.set_xlabel(r"$f_1$", fontsize=8)
+    ax.set_ylabel(r"$F_1$", fontsize=8)
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
+    ax.tick_params(labelsize=8)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.legend(frameon=False, loc="lower right")
+    ax.legend(frameon=False, loc="lower right", fontsize=8)
 
 
 def plot_class_curves(
@@ -353,15 +338,22 @@ def plot_class_curves(
     class_curves = _sample_per_class(df_all, f1=f1, max_curves_per_class=max_curves_per_class)
 
     classes = ["alternating", "random (to blocky)", "gradient"]
-    fig, axes = plt.subplots(1, 4, figsize=CLASS_CURVES_FIGSIZE_INCH, sharex=True, sharey=True)
-
     panel_titles = {
         "alternating": "A  Alternating",
         "random (to blocky)": "B  Random",
         "gradient": "C  Gradient",
     }
 
-    for ax, label in zip(axes[:3], classes):
+    fig = plt.figure(figsize=(TWO_COL_WIDTH_INCH, TWO_COL_WIDTH_INCH * 0.75), layout="constrained")
+    gs = fig.add_gridspec(3, 2, width_ratios=[1, 2.5])
+
+    ax_a = fig.add_subplot(gs[0, 0])
+    ax_b = fig.add_subplot(gs[1, 0], sharex=ax_a, sharey=ax_a)
+    ax_c = fig.add_subplot(gs[2, 0], sharex=ax_a, sharey=ax_a)
+    ax_d = fig.add_subplot(gs[:, 1])
+
+    axes_abc = [ax_a, ax_b, ax_c]
+    for ax, label in zip(axes_abc, classes):
         _plot_dual_band(
             ax,
             f1,
@@ -371,13 +363,19 @@ def plot_class_curves(
         )
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
-        ax.set_xlabel(r"$f_1$ (feed conc. monomer 1)")
+        ax.set_xticks([0, 1])
+        ax.set_yticks([0, 1])
+        ax.tick_params(labelsize=8)
+        ax.set_ylabel(r"$F_1$", fontsize=8)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
 
-    axes[0].set_ylabel(r"$F_1$ (monomer 1 proportion in polymer)")
-    _plot_class_split_explanation(axes[3])
-    plt.tight_layout()
+    # Only bottom panel gets x-axis label; hide tick labels on upper two
+    for ax in [ax_a, ax_b]:
+        plt.setp(ax.get_xticklabels(), visible=False)
+    ax_c.set_xlabel(r"$f_1$", fontsize=8)
+
+    _plot_class_split_explanation(ax_d)
 
     out_png = os.path.join(output_dir, "class_curves.png")
     out_pdf = os.path.join(output_dir, "class_curves.pdf")

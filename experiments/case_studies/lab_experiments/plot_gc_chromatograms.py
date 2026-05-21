@@ -233,7 +233,7 @@ def _default_files() -> list[Path]:
     return [
         base / "MWH_017_ASCII" / "MWH_017_gc_t2h.txt",
         base / "MWH_018_ASCII" / "MWH_018_gc_t240m_01.txt",
-        base / "MWH_022_ASCII" / "MWH_022_gc_t480m_01.txt",
+        base / "MWH_027_ASCII" / "MWH_027_gc_t300m_01.txt",
     ]
 
 

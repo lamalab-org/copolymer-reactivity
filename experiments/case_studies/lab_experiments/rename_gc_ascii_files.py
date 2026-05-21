@@ -92,7 +92,11 @@ def _plan_renames(gc_folder: Path) -> list[tuple[Path, Path, ParsedInfo]]:
     folder_mwh = _extract_folder_mwh(gc_folder)
 
     # Support re-running the script after an earlier rename.
-    files = sorted(set(gc_folder.glob("ASCII_*.txt")) | set(gc_folder.glob("MWH_*_gc_*.txt")))
+    files = sorted(
+        set(gc_folder.glob("ASCII_*.txt"))
+        | set(gc_folder.glob("ASCIIData*.txt"))
+        | set(gc_folder.glob("MWH_*_gc_*.txt"))
+    )
     infos: list[ParsedInfo] = []
     for p in files:
         infos.append(_parse_file(p, folder_mwh=folder_mwh))

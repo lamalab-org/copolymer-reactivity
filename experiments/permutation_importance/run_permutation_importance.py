@@ -503,12 +503,12 @@ def format_feature_name(name):
     name = str(name)
 
     # 1. Embedding features (specific suffixes before base)
-    name = name.replace("polytype_emb_1", "polymerization type emb. 1")
-    name = name.replace("polytype_emb_2", "polymerization type emb. 2")
-    name = name.replace("method_emb_1", "polymerization method emb. 1")
-    name = name.replace("method_emb_2", "polymerization method emb. 2")
-    name = name.replace("polytype_emb", "polymerization type emb.")
-    name = name.replace("method_emb", "polymerization method emb.")
+    name = name.replace("polytype_emb_1", "polym. type emb. 1")
+    name = name.replace("polytype_emb_2", "polym. type emb. 2")
+    name = name.replace("method_emb_1", "polym. method emb. 1")
+    name = name.replace("method_emb_2", "polym. method emb. 2")
+    name = name.replace("polytype_emb", "polym. type emb.")
+    name = name.replace("method_emb", "polym. method emb.")
 
     # 2. HOMO-LUMO differences
     name = name.replace("delta_HOMO_LUMO", "Δ HOMO-LUMO")
@@ -550,7 +550,7 @@ def format_feature_name(name):
     name = name.replace("solvent_logP", "solvent LogP")
     name = name.replace("solvent_TPSA", "solvent TPSA")
     name = name.replace("solvent_HBD", "solvent H-bond donors")
-    name = name.replace("solvent_FractionCSP3", "solvent fraction Csp3")
+    name = name.replace("solvent_FractionCSP3", "solvent fraction Csp$^3$")
 
     # 7. Remaining underscores → spaces (so 'ip_1' becomes 'ip 1')
     name = name.replace("_", " ")
@@ -949,7 +949,7 @@ def run_shap_per_class_analysis(predictor, df_val, config):
             f"SHAP ({class_names.get(col_idx, str(col_idx))})",
             fontsize=8,
         )
-        ax.tick_params(axis="x", labelsize=7)
+        ax.tick_params(axis="x", labelsize=8)
         ax.set_yticks(y_pos)
         ax.set_ylim(n_groups - 0.5, -0.5)  # inverted, same range on all axes
         ax.grid(False, axis="y")
@@ -958,7 +958,7 @@ def run_shap_per_class_analysis(predictor, df_val, config):
         ax.spines["right"].set_visible(False)
 
         if col_idx == 0:
-            ax.set_yticklabels(y_labels, fontsize=7)
+            ax.set_yticklabels(y_labels, fontsize=8)
         else:
             ax.set_yticklabels([])
             ax.tick_params(axis="y", length=0)
@@ -969,9 +969,9 @@ def run_shap_per_class_analysis(predictor, df_val, config):
     sm.set_array([])
     cbar = fig.colorbar(sm, cax=cbar_ax, orientation="horizontal")
     cbar.set_ticks([0, 1])
-    cbar.set_ticklabels(["low", "high"], fontsize=7)
-    cbar.set_label("Feature value", fontsize=7, labelpad=3)
-    cbar.ax.tick_params(labelsize=7)
+    cbar.set_ticklabels(["low", "high"], fontsize=8)
+    cbar.set_label("Feature value", fontsize=8, labelpad=3)
+    cbar.ax.tick_params(labelsize=8)
 
     for ext in ("pdf", "png"):
         out = os.path.join(config["output_dir"], f"shap_per_class_beeswarm.{ext}")

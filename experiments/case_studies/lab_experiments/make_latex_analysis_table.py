@@ -21,7 +21,7 @@ import argparse
 import re
 from pathlib import Path
 
-SAMPLE_ORDER: list[str] = ["MWH-017", "MWH-018", "MWH-022"]
+SAMPLE_ORDER: list[str] = ["MWH-017", "MWH-018", "MWH-027"]
 
 # Names taken from the lab case study definitions (see lab_experiments_case_study.py)
 # Monomer names hard-coded (incl. manual line breaks where needed).
@@ -30,7 +30,7 @@ SAMPLE_TO_MONOMERS_LATEX: dict[str, tuple[str, str]] = {
     # Use \shortstack (built-in LaTeX) to avoid requiring extra packages like `makecell`.
     "MWH-017": (r"acrylonitrile", r"\shortstack[l]{N-vinyl-2-\\pyrrolidone}"),
     "MWH-018": (r"butyl acrylate", r"vinyl acetate"),
-    "MWH-022": (r"styrene", r"1-octene"),
+    "MWH-027": (r"acrylonitrile", r"\shortstack[l]{ethyl\\methacrylate}"),
 }
 
 # Molar masses (g/mol) provided by you.
@@ -41,13 +41,14 @@ MONOMER_MOLAR_MASS_G_PER_MOL: dict[str, float] = {
     "vinyl acetate": 86.09,
     "vinyl pyrrolidone": 111.14,  # N-vinyl-2-pyrrolidone
     "acrylonitrile": 53.06,
+    "ethyl methacrylate": 114.14,
 }
 
 # Keys for the DP calculation: (monomer1_key, monomer2_key)
 SAMPLE_TO_MONOMER_KEYS: dict[str, tuple[str, str]] = {
     "MWH-017": ("acrylonitrile", "vinyl pyrrolidone"),
     "MWH-018": ("butyl acrylate", "vinyl acetate"),
-    "MWH-022": ("styrene", "octene"),
+    "MWH-027": ("acrylonitrile", "ethyl methacrylate"),
 }
 
 # Values hard-coded from your updated LaTeX table.
@@ -63,10 +64,10 @@ SAMPLE_TO_VALUES_LATEX: dict[str, dict[str, str]] = {
         "ratio_nmr": r"$1:0.15$",
         "mn": r"$8.5 \times 10^{4}$",
     },
-    "MWH-022": {
-        "ratio_gc": r"",  # not provided
-        "ratio_nmr": r"$1:0.034$",
-        "mn": r"$1.3 \times 10^{4}$",
+    "MWH-027": {
+        "ratio_gc": r"$1:1.6$",
+        "ratio_nmr": r"$1:1.7$",
+        "mn": r"$6.1 \times 10^{4}$",
     },
 }
 

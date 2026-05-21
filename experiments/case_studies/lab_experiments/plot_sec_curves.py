@@ -44,6 +44,7 @@ SAMPLE_DISPLAY_NAMES: dict[str, str] = {
     "MWH-018": "Poly(butyl acrylate-co-vinyl acetate)",
     "MWH-019": "Poly(butyl acrylate-co-vinyl acetate)",
     "MWH-022": "Poly(styrene-co-1-octene)",
+    "MWH-027": "Poly(acrylonitrile-co-ethyl methacrylate)",
 }
 
 
@@ -85,6 +86,67 @@ def _iter_xy_numeric(lines: Iterable[str]) -> tuple[np.ndarray, np.ndarray]:
     y_arr = np.asarray(ys, dtype=float)
     order = np.argsort(x_arr)
     return x_arr[order], y_arr[order]
+
+
+def _iter_xy_from_raw_section(lines: Iterable[str]) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Parse the RAWstart section of WinGPC injection export files.
+    Format after the 'RAWstart :' marker:
+        Volume    RID    Timestamp
+         0.00000E+0    2.48658E-2    10:34:34:50
+    Takes column 0 (Volume) as x and column 1 (RID signal) as y.
+    """
+    xs: list[float] = []
+    ys: list[float] = []
+    in_raw = False
+    past_header = False
+    for raw in lines:
+        line = raw.strip()
+        if not line:
+            continue
+        if "RAWstart" in line:
+            in_raw = True
+            past_header = False
+            continue
+        if not in_raw:
+            continue
+        # Skip the column-header line (Volume / RID / Time)
+        if not past_header:
+            past_header = True
+            continue
+        parts = line.replace(",", ".").split()
+        if len(parts) < 2:
+            continue
+        try:
+            x = float(parts[0])
+            y = float(parts[1])
+        except ValueError:
+            continue
+        if not (np.isfinite(x) and np.isfinite(y)):
+            continue
+        xs.append(x)
+        ys.append(y)
+    if not xs:
+        raise ValueError("No curve data found in RAWstart section.")
+    x_arr = np.asarray(xs, dtype=float)
+    y_arr = np.asarray(ys, dtype=float)
+    order = np.argsort(x_arr)
+    return x_arr[order], y_arr[order]
+
+
+def _is_inj_file(path: Path) -> bool:
+    """True if the file is a WinGPC injection export (contains a RAWstart section)."""
+    try:
+        with path.open("r", encoding="utf-8", errors="replace") as f:
+            for _ in range(200):
+                line = f.readline()
+                if not line:
+                    break
+                if "RAWstart" in line:
+                    return True
+    except OSError:
+        pass
+    return False
 
 
 def read_sec_xy(path: Path) -> tuple[np.ndarray, np.ndarray]:
@@ -131,6 +193,11 @@ def _normalize_0_1(y: np.ndarray) -> np.ndarray:
 
 
 def _collect_sec_files(data_dir: Path) -> dict[str, list[Path]]:
+    """
+    Collect SEC curve files (*_SEC*.TXT) per sample tag.
+    MWH-022 (styrene/1-octene) is excluded; replaced by MWH-027.
+    """
+    excluded = {"MWH-022"}
     groups: dict[str, list[Path]] = {}
     for p in sorted(data_dir.iterdir()):
         if not p.is_file():
@@ -140,7 +207,7 @@ def _collect_sec_files(data_dir: Path) -> dict[str, list[Path]]:
         if "sec" not in p.name.lower():
             continue
         tag = _infer_mwh_tag(p.name) or _infer_mwh_tag(str(p))
-        if not tag:
+        if not tag or tag in excluded:
             continue
         groups.setdefault(tag, []).append(p)
     return groups
@@ -233,7 +300,10 @@ def _collect_inj_info(
         if not tag:
             continue
         variant = _inj_variant_label(p)
-        info[(tag, variant)] = _parse_mn_d_from_inj_file(p)
+        mn_d = _parse_mn_d_from_inj_file(p)
+        info[(tag, variant)] = mn_d
+        # Also store under (tag, None) so samples without a variant suffix are found.
+        info.setdefault((tag, None), mn_d)
     return info
 
 
