@@ -99,6 +99,23 @@ def client():
         yield c
 
 
+def test_paper_metrics_endpoint(client):
+    """/paper_metrics serves the precomputed train/test performance artifact:
+    aggregate metrics + per-row individual predictions. The test split's
+    voting macro-F1 must match the paper (tab:train_test_voting_performance)."""
+    body = client.get("/paper_metrics").json()
+    assert body["classes"] == ["Alternating", "Random", "Gradient"]
+    test = body["splits"]["test"]
+    assert test["n"] == 1358
+    assert test["voting"]["per_class"]["Macro"]["f1"] == pytest.approx(0.785, abs=0.005)
+    assert test["xgboost"]["accuracy"] == pytest.approx(0.7401, abs=0.005)
+    # Individual predictions: one record per split row, with the expected keys.
+    preds = test["predictions"]
+    assert len(preds) == 1358
+    for key in ("true_class", "xgb_class", "confidence", "lookup_class", "agree", "doi_url"):
+        assert key in preds[0]
+
+
 def test_health_returns_build_and_runtime_info(client):
     """/health must include build provenance and runtime info — used for
     debugging "which build am I hitting" in production. Outside Docker the
