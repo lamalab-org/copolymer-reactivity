@@ -37,17 +37,14 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import pandas as pd
+
+# Canonical class -> human-readable label mapping, shared with the lookup and
+# reaction-optimization modules (single source of truth — see class_labels.py).
+from class_labels import CLASS_LABELS
 from rdkit import Chem
 from rdkit.Chem import Descriptors, rdMolDescriptors
 
 from copolpredictor.inference import CopolymerPredictor
-
-# Canonical class -> human-readable label mapping used across all endpoints.
-CLASS_LABELS: Dict[int, str] = {
-    0: "alternating",
-    1: "random to block like",
-    2: "gradient",
-}
 
 # Import baseline lookup module
 try:
