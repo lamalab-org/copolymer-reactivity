@@ -263,19 +263,31 @@ def _plot_class_split_explanation(ax):
     # Three representative examples (fixed for reproducibility / paper stability)
     examples = [
         {
-            "r1": 0.5, "r2": 0.5, "color": "#ffbc57",
+            "r1": 0.5,
+            "r2": 0.5,
+            "color": "#ffbc57",
             "label": "example: random-like",
-            "text_x": 0.66, "text_y": 0.50, "extra": "\nIntersection = 0.5",
+            "text_x": 0.66,
+            "text_y": 0.50,
+            "extra": "\nIntersection = 0.5",
         },
         {
-            "r1": 6.0, "r2": 0.2, "color": "#9ed5f2",
+            "r1": 6.0,
+            "r2": 0.2,
+            "color": "#9ed5f2",
             "label": "example: gradient-like",
-            "text_x": 0.02, "text_y": 0.96, "extra": "\nno intersection",
+            "text_x": 0.02,
+            "text_y": 0.96,
+            "extra": "\nno intersection",
         },
         {
-            "r1": 0.1, "r2": 0.1, "color": "#3e3888",
+            "r1": 0.1,
+            "r2": 0.1,
+            "color": "#3e3888",
             "label": "example: alternating",
-            "text_x": 0.36, "text_y": 0.18, "extra": "\nIntersection = 0.5",
+            "text_x": 0.36,
+            "text_y": 0.18,
+            "extra": "\nIntersection = 0.5",
         },
     ]
 

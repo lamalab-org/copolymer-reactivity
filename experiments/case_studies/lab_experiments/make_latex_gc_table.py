@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-
 # ---------------------------------------------------------------------------
 # Data
 # ---------------------------------------------------------------------------
@@ -76,10 +75,7 @@ def make_table() -> str:
         r"\multicolumn{3}{c}{Retention time (min)} \\"
     )
     lines.append(r"\cmidrule(lr){5-7}")
-    lines.append(
-        r" &  &  &  & "
-        r"Monomer 1 & Monomer 2 & Trioxane \\"
-    )
+    lines.append(r" &  &  &  & " r"Monomer 1 & Monomer 2 & Trioxane \\")
     lines.append(r"\midrule")
 
     for tag in SAMPLE_ORDER:
