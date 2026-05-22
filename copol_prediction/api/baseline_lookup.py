@@ -311,15 +311,11 @@ def find_top_k_nearest_neighbors(
     # happen to share a very similar solvent. To avoid silently dropping them,
     # we guarantee every exact same-monomer-pair row a slot in the results
     # (see GitHub issue #5).
-    same_monomer_valid_idx = {
-        pos
-        for pos, idx in enumerate(valid_indices)
-        if {
-            str(df_train.iloc[idx].get("monomer1_smiles", "")),
-            str(df_train.iloc[idx].get("monomer2_smiles", "")),
-        }
-        == {str(test_monomer1_smiles), str(test_monomer2_smiles)}
-    }
+    m1_col = df_train["monomer1_smiles"].astype(str).to_numpy()
+    m2_col = df_train["monomer2_smiles"].astype(str).to_numpy()
+    q1, q2 = str(test_monomer1_smiles), str(test_monomer2_smiles)
+    same_pair_mask = ((m1_col == q1) & (m2_col == q2)) | ((m1_col == q2) & (m2_col == q1))
+    same_monomer_valid_idx = {pos for pos, idx in enumerate(valid_indices) if same_pair_mask[idx]}
 
     # Take the plain top-k, then merge in any same-monomer rows that the cutoff
     # missed. Same-monomer rows keep their natural similarity-based position, so
