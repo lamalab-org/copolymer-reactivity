@@ -15,6 +15,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+from class_labels import CLASS_LABELS
 from rdkit import Chem
 from rdkit.Chem import DataStructs, rdFingerprintGenerator
 
@@ -330,14 +331,6 @@ def find_top_k_nearest_neighbors(
     selected.sort(key=lambda pos: combined_similarity[pos], reverse=True)
     top_k_valid_indices = selected
 
-    # Canonical class -> label mapping. Imported here (not at module top) to
-    # avoid a circular import: app.py imports this module at startup. This keeps
-    # app.CLASS_LABELS as the single source of truth (see GitHub issue #4).
-    try:
-        from app import CLASS_LABELS as class_names
-    except ImportError:
-        class_names = {0: "alternating", 1: "random to block like", 2: "gradient"}
-
     # Build result list
     results = []
     for rank, valid_idx in enumerate(top_k_valid_indices, start=1):
@@ -346,7 +339,7 @@ def find_top_k_nearest_neighbors(
 
         # Get predicted class
         predicted_class = int(train_row.get("r_product_class", -1))
-        predicted_class_name = class_names.get(predicted_class, "unknown")
+        predicted_class_name = CLASS_LABELS.get(predicted_class, "unknown")
 
         # Get names, fallback to SMILES if names not available
         monomer1_name = train_row.get("monomer1_name", "")

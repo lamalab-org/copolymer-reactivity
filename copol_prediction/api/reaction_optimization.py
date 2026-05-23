@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
+from class_labels import CLASS_LABELS
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 
@@ -282,9 +283,10 @@ def _run_condition_grid(
         raise ValueError(f"Polytype '{polytype}' not found in embeddings")
     polytype_emb = polytype_embeddings[polytype]
 
-    # Imported here (not at module top) to avoid a circular import: app.py
-    # imports this module at startup.
-    from app import CLASS_LABELS, assemble_model_features
+    # `assemble_model_features` is imported here (not at module top) to avoid a
+    # circular import: app.py imports this module at startup. `CLASS_LABELS`
+    # lives in a leaf module, so it is safe to import at the top level.
+    from app import assemble_model_features
 
     # Solvent features do not depend on temperature — compute them once per
     # solvent up front rather than once per (solvent × temperature) cell.
