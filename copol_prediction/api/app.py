@@ -373,6 +373,14 @@ class PreprocessAllOutput(BaseModel):
         None,
         description="Predicted class from the Lookup (nearest-neighbor) model (top-1 neighbor)",
     )
+    lookup_class_name: Optional[str] = Field(
+        None,
+        description=(
+            "Human-readable label for `lookup_class` (resolved via CLASS_LABELS). "
+            "Lets the frontend flag agreement/disagreement with the model prediction "
+            "without re-encoding the class-index -> name mapping."
+        ),
+    )
 
 
 class OptimizationPrediction(BaseModel):
@@ -1008,6 +1016,9 @@ async def preprocess_all(input_data: PreprocessAllInput):
                 error=err,
                 nearest_neighbors=cleaned_nearest_neighbors,
                 lookup_class=lookup_class_value,
+                lookup_class_name=(
+                    CLASS_LABELS.get(lookup_class_value) if lookup_class_value is not None else None
+                ),
             )
         m1_features = extract_monomer_features_for_model(m1_data)
 
@@ -1026,6 +1037,9 @@ async def preprocess_all(input_data: PreprocessAllInput):
                 error=err,
                 nearest_neighbors=cleaned_nearest_neighbors,
                 lookup_class=lookup_class_value,
+                lookup_class_name=(
+                    CLASS_LABELS.get(lookup_class_value) if lookup_class_value is not None else None
+                ),
             )
         m2_features = extract_monomer_features_for_model(m2_data)
 
@@ -1082,6 +1096,9 @@ async def preprocess_all(input_data: PreprocessAllInput):
             error=None,
             nearest_neighbors=cleaned_nearest_neighbors,
             lookup_class=lookup_class_value,
+            lookup_class_name=(
+                CLASS_LABELS.get(lookup_class_value) if lookup_class_value is not None else None
+            ),
         )
 
     except Exception as e:
