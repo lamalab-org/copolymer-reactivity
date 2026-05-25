@@ -138,4 +138,4 @@ The weighted confidence metric was chosen because:
 
 For more information about the prediction model and classes, see:
 - `README.md` - API documentation
-- Model classes: alternating (<1), random to block like (1-25), homopolymer (>25)
+- Model classes: alternating (r1·r2 < 1), random (1 ≤ r1·r2 ≤ 25), gradient (r1·r2 > 25)
