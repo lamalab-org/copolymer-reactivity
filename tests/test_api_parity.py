@@ -150,7 +150,7 @@ def test_predict_response_uses_human_readable_class_names(client, test_df):
     pred = client.post("/predict", json={"features": features}).json()
 
     keys = set(pred["class_probabilities"])
-    assert keys == {"alternating", "random to block like", "gradient"}, keys
+    assert keys == {"alternating", "random", "gradient"}, keys
     # The named-class key for the predicted class must reproduce confidence.
     assert pred["class_probabilities"][pred["predicted_class_name"]] == pytest.approx(
         pred["confidence"]
@@ -360,7 +360,7 @@ def test_optimize_reaction_named_solvent_set(client):
     for p in preds:
         assert set(p["class_probabilities"]) == {
             "alternating",
-            "random to block like",
+            "random",
             "gradient",
         }
 
