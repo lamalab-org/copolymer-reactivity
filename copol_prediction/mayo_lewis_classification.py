@@ -110,7 +110,7 @@ def classify_curve(
 ) -> str:
     """
     3 classes:
-      - random (to blocky)
+      - random
       - gradient
       - alternating
 
@@ -120,12 +120,12 @@ def classify_curve(
       3) gradient if deviation is sufficiently large and
          - no inner crossing exists, OR
          - crossing is far from 0.5
-      4) else random (to blocky)
+      4) else random
     """
 
     # 1) nearly random / weak blocky
     if I_rand < rand_threshold:
-        return "random (to blocky)"
+        return "random"
 
     # 2) true alternating: strong deviation + central crossing
     if has_crossing and crossing_distance is not None:
@@ -142,7 +142,7 @@ def classify_curve(
             return "gradient"
 
     # 4) fallback
-    return "random (to blocky)"
+    return "random"
 
 
 def classify_reactivity_curve(
@@ -160,12 +160,12 @@ def classify_reactivity_curve(
 
     Returns a dictionary with:
       - class_id   : int in {0, 1, 2}
-      - class_name : str in {"alternating", "gradient", "random (to blocky)"}
+      - class_name : str in {"alternating", "gradient", "random"}
       - I_rand, crossings, has_crossing, crossing_main, crossing_distance, f1, F1, D
 
     Mapping to existing numeric classes:
       0 -> alternating
-      1 -> random / block-like
+      1 -> random
       2 -> gradient
     """
     desc = compute_curve_descriptors(r1, r2, n_points=n_points)
@@ -183,7 +183,7 @@ def classify_reactivity_curve(
 
     label_to_id = {
         "alternating": 0,
-        "random (to blocky)": 1,
+        "random": 1,
         "gradient": 2,
     }
     class_id = label_to_id[label]

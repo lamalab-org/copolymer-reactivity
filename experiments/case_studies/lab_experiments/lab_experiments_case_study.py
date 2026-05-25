@@ -258,7 +258,7 @@ def main():
 
     class_map = {
         0: "Alternating",
-        1: "Random / block-like",
+        1: "Random",
         2: "Gradient",
     }
 

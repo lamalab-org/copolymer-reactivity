@@ -410,7 +410,7 @@ def _plot_class_curves_row(
 
     panels = [
         ("alternating", "A  Alternating"),
-        ("random (to blocky)", "B  Random"),
+        ("random", "B  Random"),
         ("gradient", "C  Gradient"),
     ]
 
