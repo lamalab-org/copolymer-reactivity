@@ -13,22 +13,57 @@ type: software
 authors:
   - family-names: Schilling-Wilhelmi
     given-names: Mara
-  - family-names: Patiny
-    given-names: Luc
-    affiliation: "Zakodium Sàrl"
-    website: "https://zakodium.com"
-  - family-names: Jablonka
-    given-names: Kevin Maik
-    website: "https://kjablonka.com"
-  - family-names: Kapoor
-    given-names: Sarthak
+    orcid: "https://orcid.org/0009-0007-4392-5918"
+    email: mara.wilhelmi@uni-jena.de
+    affiliation: >-
+      Laboratory of Organic and Macromolecular Chemistry (IOMC),
+      Friedrich Schiller University Jena, Humboldtstrasse 10,
+      07743 Jena, Germany
   - family-names: Bulgakov
     given-names: Boris
+    orcid: "https://orcid.org/0000-0001-6208-3962"
+    email: boris.bulgakov@uni-jena.de
+    affiliation: >-
+      Laboratory of Organic and Macromolecular Chemistry (IOMC) &
+      Jena Center for Soft Matter (JCSM), Friedrich Schiller University
+      Jena, 07743 Jena, Germany
+  - family-names: Patiny
+    given-names: Luc
+    orcid: "https://orcid.org/0000-0002-4943-2643"
+    affiliation: "Zakodium Sàrl, Lonay, Switzerland"
+    website: "https://zakodium.com"
+  - family-names: Kapoor
+    given-names: Sarthak
+    orcid: "https://orcid.org/0000-0002-1889-6998"
+    affiliation: >-
+      Physics Department and CSMB, Humboldt-Universität zu Berlin,
+      Zum Großen Windkanal 2, D-12489 Berlin, Germany
+  - family-names: Jablonka
+    given-names: Kevin Maik
+    orcid: "https://orcid.org/0000-0003-4894-4660"
+    email: mail@kjablonka.com
+    website: "https://kjablonka.com"
+    affiliation: >-
+      Laboratory of Organic and Macromolecular Chemistry (IOMC) &
+      Jena Center for Soft Matter (JCSM), Friedrich Schiller University
+      Jena, 07743 Jena, Germany; Center for Energy and Environmental
+      Chemistry Jena (CEEC Jena) & Helmholtz Institute for Polymers in
+      Energy Applications Jena (HIPOLE Jena), 07743 Jena, Germany
 version: 0.1.0
 date-released: 2026-05-25
 license: MIT
 url: "https://github.com/lamalab-org/copolymer-reactivity"
 repository-code: "https://github.com/lamalab-org/copolymer-reactivity"
+contact:
+  - family-names: Schilling-Wilhelmi
+    given-names: Mara
+    email: mara.wilhelmi@uni-jena.de
+  - family-names: Bulgakov
+    given-names: Boris
+    email: boris.bulgakov@uni-jena.de
+  - family-names: Jablonka
+    given-names: Kevin Maik
+    email: mail@kjablonka.com
 identifiers:
   - description: "Web application (PolyCarp)"
     type: url
