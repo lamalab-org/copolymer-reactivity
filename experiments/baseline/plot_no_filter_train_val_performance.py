@@ -184,7 +184,7 @@ def plot_validation_metric_bars(df_metrics, output_dir):
         "macro_acc",
         "macro_f1",
     ]
-    class_1_label = get_class_label(1, style="short").replace("Random / block-like", "Random")
+    class_1_label = get_class_label(1, style="short")
     metric_labels = {
         "class_0_acc": f"{get_class_label(0, style='short')} Recall",
         "class_1_acc": f"{class_1_label} Recall",
