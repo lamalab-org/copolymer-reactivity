@@ -12,8 +12,12 @@ consumer can import it at module level without risking a circular import.
 from typing import Dict
 
 # Class index as produced by the multiclass model -> human-readable label.
+# Class 1 is the catch-all "random" class — covers everything not unambiguously
+# alternating or gradient (see PR #37 for the rationale behind dropping the
+# earlier "(to blocky)" qualifier across the analysis pipeline; this is the
+# matching rename for the API/UI-facing labels).
 CLASS_LABELS: Dict[int, str] = {
     0: "alternating",
-    1: "random to block like",
+    1: "random",
     2: "gradient",
 }
