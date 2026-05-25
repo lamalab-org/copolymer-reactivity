@@ -5,6 +5,7 @@ This module implements the database lookup approach from experiments/baseline
 to find the most similar data points based on Tanimoto similarity of monomers and solvents.
 """
 
+import functools
 import hashlib
 import os
 import pickle
@@ -23,6 +24,27 @@ from rdkit.Chem import DataStructs, rdFingerprintGenerator
 # after the DOI with the single '/' replaced by '_' (dots preserved), e.g.
 # 10.1002/pol.1959.1203512832  ->  10.1002_pol.1959.1203512832.json
 _DOI_RE = re.compile(r"10\.\d{4,}/\S+")
+
+
+@functools.lru_cache(maxsize=20000)
+def _canonical_smiles(smiles) -> str:
+    """RDKit-canonical SMILES (cached per process).
+
+    Same-molecule SMILES can be written many ways (e.g. methyl methacrylate
+    as `CC(=C)C(=O)OC` vs the canonical `C=C(C)C(=O)OC`). Comparisons
+    elsewhere in this module must canonicalise both sides or they silently
+    miss matches. Returns the input stringified if RDKit can't parse it.
+    """
+    if smiles is None:
+        return ""
+    s = str(smiles)
+    if not s or s == "nan":
+        return ""
+    try:
+        mol = Chem.MolFromSmiles(s)
+        return Chem.MolToSmiles(mol) if mol is not None else s
+    except Exception:
+        return s
 
 
 def doi_from_source_filename(filename: Optional[str]) -> Optional[str]:
@@ -312,9 +334,15 @@ def find_top_k_nearest_neighbors(
     # happen to share a very similar solvent. To avoid silently dropping them,
     # we guarantee every exact same-monomer-pair row a slot in the results
     # (see GitHub issue #5).
-    m1_col = df_train["monomer1_smiles"].astype(str).to_numpy()
-    m2_col = df_train["monomer2_smiles"].astype(str).to_numpy()
-    q1, q2 = str(test_monomer1_smiles), str(test_monomer2_smiles)
+    #
+    # Compare RDKit-canonical SMILES, not raw strings — the UI sometimes sends
+    # non-canonical forms (e.g. `CC(=C)C(=O)OC` for methyl methacrylate, while
+    # the dataset stores the canonical `C=C(C)C(=O)OC`). String equality would
+    # silently miss every such pair (152 styrene+MMA rows, in the MMA case).
+    m1_col = np.array([_canonical_smiles(s) for s in df_train["monomer1_smiles"]])
+    m2_col = np.array([_canonical_smiles(s) for s in df_train["monomer2_smiles"]])
+    q1 = _canonical_smiles(test_monomer1_smiles)
+    q2 = _canonical_smiles(test_monomer2_smiles)
     same_pair_mask = ((m1_col == q1) & (m2_col == q2)) | ((m1_col == q2) & (m2_col == q1))
     same_monomer_valid_idx = {pos for pos, idx in enumerate(valid_indices) if same_pair_mask[idx]}
 

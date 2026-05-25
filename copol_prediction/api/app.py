@@ -184,6 +184,14 @@ class NearestNeighbor(BaseModel):
 
     rank: int = Field(..., description="Ranking (1-10)")
     similarity: float = Field(..., description="Similarity score (0-1), higher is more similar")
+    same_monomer: Optional[bool] = Field(
+        False,
+        description=(
+            "True when this literature reaction uses the exact same monomer pair as "
+            "the query (compared via canonical SMILES, in either orientation). Such "
+            "rows are guaranteed a slot in the result regardless of the top-k cutoff."
+        ),
+    )
     predicted_class: int = Field(..., description="Predicted class (0, 1, or 2)", alias="class")
     predicted_class_name: str = Field(..., description="Human-readable class label")
     monomer1_name: str = Field(..., description="First monomer name")
