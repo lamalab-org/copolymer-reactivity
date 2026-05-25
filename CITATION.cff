@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "copolymer-reactivity: Condition-aware prediction of radical copolymer architecture"
+abstract: >-
+  A condition-aware machine-learning model and FastAPI service that
+  predicts the microstructure of radical copolymers (alternating,
+  random, or gradient) from two monomer structures and the reaction
+  conditions (solvent, temperature, polymerisation mechanism). Combines
+  an XGBoost classifier on XTB-derived monomer descriptors with a
+  nearest-neighbour literature lookup over a curated dataset of
+  ~3,800 copolymerisations extracted from ~1,200 publications.
+type: software
+authors:
+  - family-names: Schilling-Wilhelmi
+    given-names: Mara
+  - family-names: Patiny
+    given-names: Luc
+    affiliation: "Zakodium Sàrl"
+    website: "https://zakodium.com"
+  - family-names: Jablonka
+    given-names: Kevin Maik
+    website: "https://kjablonka.com"
+  - family-names: Kapoor
+    given-names: Sarthak
+  - family-names: Bulgakov
+    given-names: Boris
+version: 0.1.0
+date-released: 2026-05-25
+license: MIT
+url: "https://github.com/lamalab-org/copolymer-reactivity"
+repository-code: "https://github.com/lamalab-org/copolymer-reactivity"
+identifiers:
+  - description: "Web application (PolyCarp)"
+    type: url
+    value: "https://polycarp.cheminfo.org"
+keywords:
+  - copolymer
+  - polymer informatics
+  - reactivity ratios
+  - architecture prediction
+  - machine learning
+  - XTB
+  - XGBoost
+  - cheminformatics
