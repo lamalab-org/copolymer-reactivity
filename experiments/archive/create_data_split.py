@@ -75,7 +75,9 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
     )
 
     # Load processed data
-    processed_path = "output/processed_data.csv"
+    # Historical script: the current generator lives at
+    # copol_prediction/create_data_split.py; left here for provenance only.
+    processed_path = "../copol_prediction/paper_dataset/processed_data.csv"
 
     if not os.path.exists(processed_path):
         print("Processed data not found. Processing from scratch...")

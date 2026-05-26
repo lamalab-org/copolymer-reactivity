@@ -167,7 +167,10 @@ def main(input_file_paper, output_folder):
 
 
 if __name__ == "__main__":
-    input_file = "../../data_extraction/output/selected_papers.json"
-    output_folder = "../../data_extraction/output_2/PDF2"
+    # Historical paths kept for one-off manual runs; the orchestrated pipeline
+    # in `data_extraction/obtain_data.py` passes its own paths via
+    # ExtractionConfig and does not rely on these defaults.
+    input_file = "../../data_extraction/provenance/selected_200_papers.json"
+    output_folder = "../../data_extraction/provenance/PDF2"
 
     main(input_file, output_folder)
