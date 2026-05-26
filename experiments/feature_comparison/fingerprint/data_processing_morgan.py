@@ -38,7 +38,7 @@ def _load_specialized_cache(cache_path: str) -> dict:
         with open(cache_path, "r", encoding="utf-8") as f:
             data = json.load(f)
             return data if isinstance(data, dict) else {}
-    except:
+    except Exception:
         return {}
 
 

@@ -285,7 +285,7 @@ def convert_with_custom_name(
     try:
         with open(source_file, "r", encoding="utf-8") as f:
             data = json.load(f)
-    except:
+    except Exception:
         # If not valid JSON, create minimal structure
         data = {"smiles": smiles or source_file.stem, "name": custom_name}
 
@@ -386,7 +386,7 @@ def find_failed_files(source_dir: Path, target_dir: Path) -> list[tuple[Path, st
                 smiles = json_file.stem
                 failed.append((json_file, smiles))
                 continue
-        except:
+        except Exception:
             # Invalid JSON, try to use filename as SMILES
             smiles = json_file.stem
             failed.append((json_file, smiles))
@@ -407,7 +407,7 @@ def find_failed_files(source_dir: Path, target_dir: Path) -> list[tuple[Path, st
                     archive_file = target_dir / f"monomer_{sanitized}.archive.json"
                     if not archive_file.exists():
                         failed.append((json_file, smiles))
-        except:
+        except Exception:
             failed.append((json_file, None))
 
     return failed
@@ -487,7 +487,7 @@ def main():
                         iupac = get_iupac_name(smiles)
                         if iupac:
                             print(f"    Suggested IUPAC: {iupac}")
-                    except:
+                    except Exception:
                         pass
             print()
         sys.exit(0)

@@ -30,7 +30,7 @@ def get_morgan_fingerprint(smiles, radius=2, n_bits=2048):
             return None
         fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=n_bits)
         return np.array(fp, dtype=np.int8)
-    except:
+    except Exception:
         return None
 
 
