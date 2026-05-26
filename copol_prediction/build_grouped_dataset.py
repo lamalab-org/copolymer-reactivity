@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
-"""Regenerate `paper_dataset/grouped_by_unique_monomer_pairs.csv`.
+"""Build the "one row per unique reaction" view of the dataset.
 
-This is the canonical "one row per unique reaction" view of the dataset —
-3,791 rows, 1,206 publications — that the paper cites and the public Zenodo
-record archives. The frozen file is committed at
-``copol_prediction/paper_dataset/grouped_by_unique_monomer_pairs.csv``;
-this script is the recipe so anyone can rebuild it from any snapshot of
-``processed_data.csv``.
+Takes a ``processed_data.csv`` snapshot and writes a deduplicated CSV with:
 
-The recipe (originally implemented as
-``analyze_monomer_pairs()`` in the now-deleted
-``copol_prediction/analysis/data_analysis.py``):
+  - exactly one row per unique ``reaction_id`` (multiple measurement rows
+    for the same reaction collapse to one),
+  - an order-insensitive ``monomer_pair_key`` column,
+  - a contiguous integer ``group_id`` per distinct monomer pair.
 
-  1. Drop rows with NaN ``monomer1_smiles`` or ``monomer2_smiles``.
-  2. Deduplicate by ``reaction_id`` — the canonical reaction key. Multiple
-     measurement rows per reaction (different temperatures, methods, etc.)
-     collapse to one.
-  3. Add an order-insensitive ``monomer_pair_key`` and a contiguous
-     integer ``group_id`` for the unique monomer pair the row represents.
+Rows with missing ``monomer1_smiles`` or ``monomer2_smiles`` are dropped.
+
+The output is the canonical view for citing dataset size — the paper's
+*"3,791 reactions from 1,206 publications"* is the row and PDF-name count
+of this file when run against ``paper_dataset/processed_data.csv``.
 
 Usage::
 
-    # Default: rebuild from the live dataset and write next to it.
+    # Rebuild from the live dataset (the default).
     python copol_prediction/build_grouped_dataset.py
 
-    # Or supply an explicit source (e.g. the frozen paper snapshot).
+    # Or from a specific snapshot.
     python copol_prediction/build_grouped_dataset.py \\
         --source copol_prediction/paper_dataset/processed_data.csv \\
         --output copol_prediction/paper_dataset/grouped_by_unique_monomer_pairs.csv
