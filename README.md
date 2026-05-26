@@ -49,6 +49,7 @@ The **dataset** (`processed_data.csv`) is the hand-off point between the two pip
 | [`copol_prediction/`](copol_prediction/) | Pipeline 2 — descriptors, splits, training, analysis, deployed API | [README](copol_prediction/README.md) |
 | [`copol_prediction/api/`](copol_prediction/api/) | The FastAPI service that powers the web app | [README](copol_prediction/api/README.md) |
 | [`copol_prediction/artifacts/`](copol_prediction/artifacts/) | The trained `model_bundle/`, `data_splits/`, and `paper_metrics.json` | — |
+| [`copol_prediction/paper_dataset/`](copol_prediction/paper_dataset/) | Frozen Nov 2025 snapshot underlying the paper's 3,791-reaction count and the trained model | [README](copol_prediction/paper_dataset/README.md) |
 | [`database/`](database/) | Dataset-summary figures used in the paper | [README](database/README.md) |
 | [`experiments/`](experiments/) | Per-study code: permutation importance, baselines, case studies | [README](experiments/README.md) |
 | [`src/copolpredictor/`](src/copolpredictor/) | Inference + data-loading library imported by the API and scripts | — |

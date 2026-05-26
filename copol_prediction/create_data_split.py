@@ -64,8 +64,12 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
         f"Split sizes: Train ~{1-test_size-val_size:.1%}, Validation ~{val_size:.1%}, Test ~{test_size:.1%}\n"
     )
 
-    # Load processed data
-    processed_path = "output/processed_data.csv"
+    # Read the frozen Nov 2025 snapshot, not the live
+    # `copol_prediction/processed_data.csv` — keeping the splits stable against
+    # the paper's reported metrics. See `paper_dataset/README.md` for the
+    # lineage; rebuild the snapshot from the live data only when intentionally
+    # cutting a new paper release.
+    processed_path = "paper_dataset/processed_data.csv"
 
     if not os.path.exists(processed_path):
         print("Processed data not found. Processing from scratch...")

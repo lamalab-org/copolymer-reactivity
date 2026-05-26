@@ -403,7 +403,7 @@ def classify_csv(
 
 
 if __name__ == "__main__":
-    input_csv = "../output/processed_data.csv"
+    input_csv = "../paper_dataset/processed_data.csv"
     output_csv = "classified_output.csv"
     local_json = "../../data_extraction/obtain_data/output/collected_doi_metadata.json"
     cache_json = "classification_cache.json"  # persistent cache file
