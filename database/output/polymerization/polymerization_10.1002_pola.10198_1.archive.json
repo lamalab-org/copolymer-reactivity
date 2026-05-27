@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pola.10198"
+        },
+        "monomers": [
+            {
+                "name": "octafluorocyclopentene",
+                "smiles": "FC1=C(F)C(F)(F)C(F)(F)C1(F)F"
+            },
+            {
+                "name": "ethyl vinyl ether",
+                "smiles": "C=COCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "solvent": {
+                "smile": "C1CCOC1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.7968,
+                "TPSA": 9.23,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 20.052999999999997,
+                "labute_ASA": 31.941791446997026,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Yamada\u2013Itahashi\u2013Otsu nonlinear least-squares",
+            "reaction_constants": [
+                {
+                    "reaction_constant": -0.008,
+                    "reaction_constant_confi": 0.01
+                },
+                {
+                    "reaction_constant": 0.192,
+                    "reaction_constant_confi": 0.015
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

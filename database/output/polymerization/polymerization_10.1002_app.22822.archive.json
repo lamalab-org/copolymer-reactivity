@@ -1,0 +1,54 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.22822"
+        },
+        "r_product": 1.0,
+        "monomers": [
+            {
+                "name": "o-toluidine",
+                "smiles": "Cc1ccccc1N"
+            },
+            {
+                "name": "vinyl acetate",
+                "smiles": "C=COC(C)=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 283.15,
+            "solvent": {
+                "smile": "ClCCl"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.4215,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 16.573,
+                "labute_ASA": 29.3457834815929,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 3.0
+            },
+            "polymerization_method": "suspension solution",
+            "polymerization_type": "oxidative",
+            "calculation_method": "EVM Program",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.52,
+                    "reaction_constant_confi": 0.03
+                },
+                {
+                    "reaction_constant": 1.92,
+                    "reaction_constant_confi": 0.05
+                }
+            ],
+            "polytype_emb_1": -2.5213731629627807,
+            "polytype_emb_2": 1.9435000889401555,
+            "method_emb_1": -2.388246824234921,
+            "method_emb_2": -4.430423209624388
+        }
+    }
+}

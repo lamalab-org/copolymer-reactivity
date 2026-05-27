@@ -1,0 +1,29 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/macp.1974.021750518"
+        },
+        "monomers": [
+            {
+                "name": "Vinylchlorid",
+                "smiles": "C=CCl"
+            },
+            {
+                "name": "Propen",
+                "smiles": "C=CC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 296.15,
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.67
+                },
+                {
+                    "reaction_constant": 0.39
+                }
+            ]
+        }
+    }
+}

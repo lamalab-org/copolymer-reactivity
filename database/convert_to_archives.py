@@ -1,375 +1,181 @@
 #!/usr/bin/env python3
-"""
-Script to convert JSON files to NOMAD archive files using the nomad-polymerization CLI tool.
-Converts all polymerization and monomer JSON files to archive.json files.
+"""Convert per-reaction / per-monomer JSON files to NOMAD ``.archive.json``.
+
+Thin wrapper around the upstream ``nomad-polymerization archive`` CLI from
+``FAIRmat-NFDI/nomad-polymerization-reactions``. Reads the JSONs produced by
+``create_database_json.py`` (and ``convert_monomers.py``), normalises a small
+set of legacy field names, then shells out to the CLI for each file.
 """
 
+import argparse
 import json
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
+
+NOMAD_CLI = "nomad-polymerization"
+DEFAULT_INPUT_DIR = Path("dump/database_json")
+DEFAULT_OUTPUT_DIR = Path(__file__).parent / "output"
+INSTALL_HINT = (
+    "Install with:\n"
+    "  pip install git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git\n"
+    "Note: the CLI needs numpy<2.0 — use a dedicated venv/conda env if your "
+    "main environment has numpy 2.x."
+)
 
 
-def check_nomad_polymerization_installed() -> tuple[bool, Optional[str]]:
-    """
-    Check if nomad-polymerization CLI tool is installed.
-    Returns (is_installed, error_message).
-    """
-    try:
-        # Try to find the executable first
-        import shutil
-
-        exe_path = shutil.which("nomad-polymerization")
-        if not exe_path:
-            return (
-                False,
-                "nomad-polymerization CLI not found in PATH. Please install it with:\n  pip install git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git",
-            )
-
-        # Try to run it with a longer timeout (tool can be slow to start)
-        result = subprocess.run(
-            ["nomad-polymerization", "--help"],
-            capture_output=True,
-            text=True,
-            timeout=30,  # Increased timeout
-        )
-        if result.returncode == 0:
-            return True, None
-        else:
-            # Check for numpy compatibility issues
-            error_output = result.stderr or result.stdout
-            if (
-                "numpy" in error_output.lower()
-                or "np.round_" in error_output
-                or "AttributeError" in error_output
-            ):
-                return False, (
-                    "numpy_compatibility: nomad-polymerization requires numpy < 2.0. "
-                    "Please use a virtual environment with numpy < 2.0, e.g.:\n"
-                    "  python -m venv nomad_env\n"
-                    "  source nomad_env/bin/activate  # or 'nomad_env\\Scripts\\activate' on Windows\n"
-                    "  pip install 'numpy<2.0' git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git"
-                )
-            return False, f"CLI returned error: {error_output[:500]}"
-    except FileNotFoundError:
-        return (
-            False,
-            "nomad-polymerization CLI not found. Please install it with:\n  pip install git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git",
-        )
-    except subprocess.TimeoutExpired:
-        # Even if timeout, the tool might still work - try a quick test conversion instead
-        return True, None  # Assume it's installed, let the actual conversion fail if not
-    except Exception as e:
-        return False, f"Error checking installation: {e}"
+def nomad_cli_available() -> bool:
+    """True iff the ``nomad-polymerization`` executable is on PATH."""
+    return shutil.which(NOMAD_CLI) is not None
 
 
 def normalize_json_fields(data: dict) -> dict:
-    """
-    Normalize JSON field names to match what generate_pr_archive_from_json expects.
+    """Promote legacy field names to the canonical NOMAD schema keys.
 
-    Mapping:
-    - monomer1_smiles -> monomer1_s
-    - monomer2_smiles -> monomer2_s
-    - calculation_method -> determination_method
-    - r-product stays as is (already correct)
-
-    Args:
-        data: Original JSON data
-
-    Returns:
-        Normalized JSON data
+    Upstream ``PolymerizationReactionInput`` (see
+    https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions/blob/main/src/nomad_polymerization_reactions/models.py)
+    expects ``monomer{1,2}_smiles`` and ``calculation_method``; we adapt the
+    legacy ``monomer{1,2}_s`` / ``determination_method`` aliases without
+    overwriting an existing canonical value.
     """
     normalized = data.copy()
-
-    # Map SMILES fields
-    if "monomer1_smiles" in normalized and "monomer1_s" not in normalized:
-        normalized["monomer1_s"] = normalized.pop("monomer1_smiles")
-    if "monomer2_smiles" in normalized and "monomer2_s" not in normalized:
-        normalized["monomer2_s"] = normalized.pop("monomer2_smiles")
-
-    # Map calculation_method to determination_method
-    if "calculation_method" in normalized and "determination_method" not in normalized:
-        normalized["determination_method"] = normalized.pop("calculation_method")
-
+    for legacy, canonical in (
+        ("monomer1_s", "monomer1_smiles"),
+        ("monomer2_s", "monomer2_smiles"),
+        ("determination_method", "calculation_method"),
+    ):
+        if legacy in normalized and canonical not in normalized:
+            normalized[canonical] = normalized.pop(legacy)
     return normalized
+
+
+def determine_mode_from_filename(filename: str) -> Optional[str]:
+    """Polymerization vs monomer mode (``None`` == monomer, the CLI default)."""
+    if filename.startswith("monomer_"):
+        return None
+    return "polymerization"
 
 
 def convert_json_to_archive(
     json_file: Path,
-    output_dir: Optional[Path] = None,
-    mode: Optional[str] = None,
-    same_dir: bool = False,
+    output_dir: Optional[Path],
+    mode: Optional[str],
+    same_dir: bool,
 ) -> bool:
+    """Run the CLI on one JSON; place the resulting archive next to it (or in `output_dir`).
+
+    The CLI only supports ``--same-dir``, so we feed it a normalised copy
+    sitting next to the input, then move the produced archive to its final
+    destination under the right ``polymerization/`` or ``monomers/`` subdir.
     """
-    Convert a single JSON file to an archive file using nomad-polymerization CLI.
-
-    Args:
-        json_file: Path to the JSON file to convert
-        output_dir: Base directory to save archive files (if not same_dir)
-        mode: Mode for conversion ('polymerization' or None for monomer)
-        same_dir: If True, save archive in same directory as JSON file
-
-    Returns:
-        True if conversion successful, False otherwise
-    """
-    import shutil
-    import tempfile
-
-    # Determine output directory based on mode
     if same_dir:
-        # Use same directory as JSON file
-        temp_output_dir = json_file.parent
         final_output_dir = json_file.parent
     else:
-        # Use separate subdirectories based on mode
-        if output_dir is None:
-            output_dir = Path("database/output")
-
-        if mode == "polymerization":
-            subdir = "polymerization"
-        else:  # monomer
-            subdir = "monomers"
-
-        temp_output_dir = output_dir / subdir
-        final_output_dir = temp_output_dir
-
-    # Create output directory
+        base = output_dir if output_dir is not None else DEFAULT_OUTPUT_DIR
+        final_output_dir = base / ("polymerization" if mode == "polymerization" else "monomers")
     final_output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Read and normalize JSON fields before conversion
     try:
-        with open(json_file, "r", encoding="utf-8") as f:
-            original_data = json.load(f)
+        original_data = json.loads(json_file.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"Exception reading {json_file.name}: {e}")
+        return False
+    normalized_data = normalize_json_fields(original_data)
 
-        # Normalize field names to match expected format
-        normalized_data = normalize_json_fields(original_data)
+    with tempfile.NamedTemporaryFile(
+        mode="w", suffix=".json", delete=False, dir=json_file.parent
+    ) as tmp:
+        json.dump(normalized_data, tmp, indent=2, ensure_ascii=False)
+        tmp_path = Path(tmp.name)
 
-        # Create temporary file with normalized data
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, dir=json_file.parent
-        ) as tmp_file:
-            json.dump(normalized_data, tmp_file, indent=2, ensure_ascii=False)
-            tmp_file_path = Path(tmp_file.name)
+    try:
+        cmd = [NOMAD_CLI, "archive", str(tmp_path)]
+        if mode:
+            cmd.extend(["--mode", mode])
+        cmd.append("--same-dir")
 
         try:
-            # The CLI tool only supports --same-dir, so we need to:
-            # 1. Create archive in same directory as JSON file (temporarily)
-            # 2. Move it to the final destination
-            cmd = ["nomad-polymerization", "archive", str(tmp_file_path)]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        except subprocess.TimeoutExpired:
+            print(f"Timeout converting {json_file.name}")
+            return False
 
-            if mode:
-                cmd.extend(["--mode", mode])
+        if result.returncode != 0:
+            print(f"Error converting {json_file.name}: {result.stderr}")
+            return False
 
-            # Always use --same-dir since CLI doesn't support --output
-            cmd.append("--same-dir")
+        produced = tmp_path.with_suffix("").with_suffix(".archive.json")
+        if not produced.exists():
+            print(f"Warning: No archive file created for {json_file.name}")
+            return False
 
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=120  # Increased timeout for conversion
-            )
-
-            if result.returncode == 0:
-                # Find the created archive file (it will be in the same directory as temp file)
-                archive_file = tmp_file_path.parent / (tmp_file_path.stem + ".archive.json")
-
-                if archive_file.exists():
-                    # Determine final archive filename (based on original filename, not temp file)
-                    final_archive_name = json_file.stem + ".archive.json"
-
-                    # Move to final destination if needed
-                    if not same_dir:
-                        target_file = final_output_dir / final_archive_name
-                        # Create target directory if it doesn't exist
-                        target_file.parent.mkdir(parents=True, exist_ok=True)
-                        shutil.move(str(archive_file), str(target_file))
-                    else:
-                        # Rename to match original filename
-                        final_archive = json_file.parent / final_archive_name
-                        if archive_file != final_archive:
-                            shutil.move(str(archive_file), str(final_archive))
-                    return True
-                else:
-                    print(f"Warning: No archive file created for {json_file.name}")
-                    return False
-            else:
-                print(f"Error converting {json_file.name}: {result.stderr}")
-                return False
-        finally:
-            # Clean up temporary file
-            if tmp_file_path.exists():
-                tmp_file_path.unlink()
-
-    except subprocess.TimeoutExpired:
-        print(f"Timeout converting {json_file.name}")
-        return False
-    except Exception as e:
-        print(f"Exception converting {json_file.name}: {e}")
-        return False
+        target = final_output_dir / (json_file.stem + ".archive.json")
+        if produced != target:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(produced), str(target))
+        return True
+    finally:
+        if tmp_path.exists():
+            tmp_path.unlink()
 
 
 def convert_directory(
     input_dir: Path,
-    output_dir: Optional[Path] = None,
-    same_dir: bool = False,
-    mode: Optional[str] = None,
-) -> tuple[int, int]:
+    output_dir: Optional[Path],
+    same_dir: bool,
+    mode: Optional[str],
+) -> Tuple[int, int]:
+    """Convert every ``*.json`` under `input_dir`.
+
+    When `mode` is ``None`` the per-file mode is inferred from the filename
+    (``monomer_*`` → monomer, anything else → polymerization).
     """
-    Convert all JSON files in a directory to archive files.
-
-    Args:
-        input_dir: Directory containing JSON files
-        output_dir: Directory to save archive files (if not same_dir)
-        same_dir: If True, save archives in same directory as JSON files
-        mode: Mode for conversion ('polymerization' or None for monomer)
-
-    Returns:
-        Tuple of (successful_count, failed_count)
-    """
-    json_files = list(input_dir.glob("*.json"))
-
+    json_files = sorted(input_dir.glob("*.json"))
     if not json_files:
         print(f"No JSON files found in {input_dir}")
         return 0, 0
 
     print(f"Found {len(json_files)} JSON files to convert")
+    if not same_dir:
+        target_base = output_dir if output_dir is not None else DEFAULT_OUTPUT_DIR
+        print(f"Output directory: {target_base}")
+        print(f"  - Polymerization files → {target_base}/polymerization/")
+        print(f"  - Monomer files → {target_base}/monomers/")
+    else:
+        print("Output mode: same directory as JSON files")
+    print()
 
-    successful = 0
-    failed = 0
-
+    successful = failed = 0
     for json_file in json_files:
-        print(f"Converting {json_file.name}...", end=" ", flush=True)
-        if convert_json_to_archive(json_file, output_dir, mode, same_dir):
-            print("✓")
+        file_mode = mode if mode is not None else determine_mode_from_filename(json_file.name)
+        print(f"  {json_file.name}...", end=" ", flush=True)
+        if convert_json_to_archive(json_file, output_dir, file_mode, same_dir):
+            print("ok")
             successful += 1
         else:
-            print("✗")
+            print("fail")
             failed += 1
-
     return successful, failed
 
 
-def determine_mode_from_filename(filename: str) -> Optional[str]:
-    """Determine conversion mode from filename."""
-    if filename.startswith("polymerization_"):
-        return "polymerization"
-    elif filename.startswith("monomer_"):
-        return None  # Default mode for monomers
-    else:
-        # Default to polymerization for unknown patterns
-        return "polymerization"
-
-
-def convert_all_files(
-    json_dir: Path, output_dir: Optional[Path] = None, same_dir: bool = False
-) -> None:
-    """
-    Convert all JSON files in directory, automatically determining mode from filename.
-
-    Args:
-        json_dir: Directory containing JSON files
-        output_dir: Base directory to save archive files (default: database/output)
-        same_dir: If True, save archives in same directory as JSON files
-    """
-    json_files = list(json_dir.glob("*.json"))
-
-    if not json_files:
-        print(f"No JSON files found in {json_dir}")
-        return
-
-    # Set default output directory
-    if output_dir is None and not same_dir:
-        script_dir = Path(__file__).parent
-        output_dir = script_dir / "output"
-
-    print(f"Found {len(json_files)} JSON files to convert")
-    if same_dir:
-        print(f"Output mode: same directory as JSON files")
-    else:
-        print(f"Output directory: {output_dir}")
-        print(f"  - Polymerization files → {output_dir}/polymerization/")
-        print(f"  - Monomer files → {output_dir}/monomers/")
-    print()
-
-    successful = 0
-    failed = 0
-
-    # Group by mode for better progress reporting
-    polymerization_files = []
-    monomer_files = []
-    unknown_files = []
-
-    for json_file in json_files:
-        mode = determine_mode_from_filename(json_file.name)
-        if mode == "polymerization":
-            polymerization_files.append(json_file)
-        elif mode is None:
-            monomer_files.append(json_file)
-        else:
-            unknown_files.append(json_file)
-
-    # Convert polymerization files
-    if polymerization_files:
-        print(f"Converting {len(polymerization_files)} polymerization files...")
-        for json_file in polymerization_files:
-            print(f"  {json_file.name}...", end=" ", flush=True)
-            if convert_json_to_archive(json_file, output_dir, "polymerization", same_dir):
-                print("✓")
-                successful += 1
-            else:
-                print("✗")
-                failed += 1
-
-    # Convert monomer files
-    if monomer_files:
-        print(f"\nConverting {len(monomer_files)} monomer files...")
-        for json_file in monomer_files:
-            print(f"  {json_file.name}...", end=" ", flush=True)
-            if convert_json_to_archive(json_file, output_dir, None, same_dir):
-                print("✓")
-                successful += 1
-            else:
-                print("✗")
-                failed += 1
-
-    # Convert unknown files (default to polymerization mode)
-    if unknown_files:
-        print(
-            f"\nConverting {len(unknown_files)} files (unknown type, using polymerization mode)..."
-        )
-        for json_file in unknown_files:
-            print(f"  {json_file.name}...", end=" ", flush=True)
-            if convert_json_to_archive(json_file, output_dir, "polymerization", same_dir):
-                print("✓")
-                successful += 1
-            else:
-                print("✗")
-                failed += 1
-
-    print(f"\n{'='*60}")
-    print(f"Conversion complete!")
-    print(f"  Successful: {successful}")
-    print(f"  Failed: {failed}")
-    print(f"  Total: {len(json_files)}")
-
-
-def main():
-    """Main function."""
-    import argparse
-
+def main() -> None:
     parser = argparse.ArgumentParser(description="Convert JSON files to NOMAD archive files")
     parser.add_argument(
         "input_path",
-        type=str,
+        type=Path,
         nargs="?",
-        default="dump/database_json",
-        help="Path to JSON file or directory containing JSON files (default: dump/database_json)",
+        default=DEFAULT_INPUT_DIR,
+        help=f"Path to a JSON file or directory of JSON files (default: {DEFAULT_INPUT_DIR})",
     )
     parser.add_argument(
         "--output",
         "-o",
-        type=str,
+        type=Path,
         default=None,
-        help="Base output directory for archive files (default: database/output)",
+        help=f"Base output directory for archive files (default: {DEFAULT_OUTPUT_DIR})",
     )
     parser.add_argument(
         "--same-dir",
@@ -383,68 +189,36 @@ def main():
         default=None,
         help="Conversion mode (auto-detected from filename if not specified)",
     )
-    parser.add_argument(
-        "--skip-check",
-        action="store_true",
-        help="Skip installation check (useful if check times out)",
-    )
-
     args = parser.parse_args()
 
-    # Check if nomad-polymerization is installed (non-blocking check)
-    if not args.skip_check:
-        is_installed, error_msg = check_nomad_polymerization_installed()
-        if not is_installed:
-            if error_msg and "Timeout" not in error_msg:
-                # Only fail if it's a real error, not a timeout
-                print("WARNING: Could not verify nomad-polymerization installation.")
-                print(f"  {error_msg}")
-                print("  Attempting to proceed anyway...")
-                print("  (Use --skip-check to skip this check in the future)")
-                print()
-            # If timeout, assume it's installed and proceed
-    else:
-        print("Skipping installation check...")
-        print()
+    if not nomad_cli_available():
+        print(
+            f"WARNING: '{NOMAD_CLI}' not found on PATH.\n{INSTALL_HINT}\n"
+            "Continuing anyway in case it's available via another mechanism...\n"
+        )
 
-    input_path = Path(args.input_path)
-
-    if not input_path.exists():
-        print(f"ERROR: Path does not exist: {input_path}")
+    if not args.input_path.exists():
+        print(f"ERROR: Path does not exist: {args.input_path}")
         sys.exit(1)
 
-    # Set output directory (default to database/output)
-    if args.output:
-        output_dir = Path(args.output)
-    elif not args.same_dir:
-        script_dir = Path(__file__).parent
-        output_dir = script_dir / "output"
-    else:
-        output_dir = None
+    # `--mode monomer` maps to the CLI's "no --mode" default.
+    cli_mode = "polymerization" if args.mode == "polymerization" else None
 
-    same_dir = args.same_dir
-
-    if input_path.is_file():
-        # Single file conversion
-        mode = args.mode or determine_mode_from_filename(input_path.name)
-        print(f"Converting single file: {input_path.name}")
-        print(f"Mode: {mode or 'monomer (default)'}")
-        success = convert_json_to_archive(input_path, output_dir, mode, same_dir)
+    if args.input_path.is_file():
+        mode = cli_mode if args.mode else determine_mode_from_filename(args.input_path.name)
+        print(f"Converting single file: {args.input_path.name} (mode={mode or 'monomer'})")
+        success = convert_json_to_archive(args.input_path, args.output, mode, args.same_dir)
         sys.exit(0 if success else 1)
-    elif input_path.is_dir():
-        # Directory conversion
-        if args.mode:
-            # Use specified mode for all files
-            successful, failed = convert_directory(input_path, output_dir, same_dir, args.mode)
-            print(f"\nConversion complete: {successful} successful, {failed} failed")
-            sys.exit(0 if failed == 0 else 1)
-        else:
-            # Auto-detect mode from filenames
-            convert_all_files(input_path, output_dir, same_dir)
-            sys.exit(0)
-    else:
-        print(f"ERROR: Path is neither a file nor a directory: {input_path}")
-        sys.exit(1)
+
+    if args.input_path.is_dir():
+        successful, failed = convert_directory(
+            args.input_path, args.output, args.same_dir, cli_mode if args.mode else None
+        )
+        print(f"\nConversion complete: {successful} successful, {failed} failed")
+        sys.exit(0 if failed == 0 else 1)
+
+    print(f"ERROR: Path is neither a file nor a directory: {args.input_path}")
+    sys.exit(1)
 
 
 if __name__ == "__main__":

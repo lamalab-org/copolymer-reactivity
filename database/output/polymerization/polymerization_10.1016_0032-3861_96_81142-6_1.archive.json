@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/0032-3861_96_81142-6"
+        },
+        "monomers": [
+            {
+                "name": "allyl methacrylate",
+                "smiles": "C=CCOC(=O)C(=C)C"
+            },
+            {
+                "name": "methyl methacrylate",
+                "smiles": "C=C(C)C(=O)OC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 313.15,
+            "solvent": {
+                "smile": "CCCCCCC"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.976700000000002,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 34.432999999999986,
+                "labute_ASA": 46.92890371420919,
+                "num_rotatable_bonds": 4.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 7.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "non-linear least squares",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.55,
+                    "reaction_constant_confi": 0.16
+                },
+                {
+                    "reaction_constant": 0.99,
+                    "reaction_constant_confi": 0.19
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

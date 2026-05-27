@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/macp.1996.021970904"
+        },
+        "monomers": [
+            {
+                "name": "methacrylonitrile",
+                "smiles": "C=C(C)C#N"
+            },
+            {
+                "name": "methyl methacrylate",
+                "smiles": "C=C(C)C(=O)OC"
+            }
+        ],
+        "reaction_conditions": {
+            "solvent": {
+                "smile": "[Na+]"
+            },
+            "solvent_descriptors": {
+                "log_P": -2.996,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 0.0,
+                "labute_ASA": 29.78187738261566,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_type": "group transfer polymerization",
+            "calculation_method": "extended Kelen-Tudos method",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 3.19,
+                    "reaction_constant_confi": 0.79
+                },
+                {
+                    "reaction_constant": -0.037,
+                    "reaction_constant_confi": 0.018
+                }
+            ],
+            "polytype_emb_1": -2.87938183185667,
+            "polytype_emb_2": -6.022819736465332,
+            "method_emb_1": 4.59470933256899,
+            "method_emb_2": -8.714039184444726
+        }
+    }
+}

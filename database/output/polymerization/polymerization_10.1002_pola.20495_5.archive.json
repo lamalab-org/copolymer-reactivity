@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pola.20495"
+        },
+        "monomers": [
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "acrylonitrile",
+                "smiles": "C=CC#N"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "O"
+            },
+            "solvent_descriptors": {
+                "log_P": -0.8247,
+                "TPSA": 31.5,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 3.6138,
+                "labute_ASA": 6.84923118831809,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_method": "microemulsion",
+            "polymerization_type": "free radical",
+            "calculation_method": "carbon 13 nuclear magnetic resonance",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.44
+                },
+                {
+                    "reaction_constant": 0.058
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -10.07160594256725,
+            "method_emb_2": 4.106737671420214
+        }
+    }
+}

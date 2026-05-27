@@ -1,0 +1,38 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/0014-3057(79)90175-7"
+        },
+        "monomers": [
+            {
+                "name": "Styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "Vinylmethyldiethoxysilane",
+                "smiles": "C=CC[SiH](OCC)OCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "Bulk",
+            "polymerization_type": "Free radical",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.17,
+                    "reaction_constant_confi": 0.01
+                },
+                {
+                    "reaction_constant": 0.0,
+                    "reaction_constant_confi": 0.0
+                }
+            ],
+            "polytype_emb_1": 5.79912604668028,
+            "polytype_emb_2": 6.51492902416655,
+            "method_emb_1": 15.331750999090334,
+            "method_emb_2": 11.481993634068832
+        }
+    }
+}

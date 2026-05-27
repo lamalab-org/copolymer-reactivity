@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pola.10411"
+        },
+        "monomers": [
+            {
+                "name": "vinylidene fluoride",
+                "smiles": "C=C(F)F"
+            },
+            {
+                "name": "2,3,3-trifluoroprop-2-en-1-ol",
+                "smiles": "OCC(F)=C(F)F"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 323.15,
+            "solvent": {
+                "smile": "CC#N"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.52988,
+                "TPSA": 23.79,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.5,
+                "mol_MR": 11.287,
+                "labute_ASA": 19.496772823694872,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 3.0
+            },
+            "polymerization_method": "solution",
+            "polymerization_type": "free radical",
+            "calculation_method": "Tidwell-Mortimer",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.83,
+                    "reaction_constant_confi": 0.77
+                },
+                {
+                    "reaction_constant": 0.11,
+                    "reaction_constant_confi": 0.22
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -3.4032362061893435,
+            "method_emb_2": 2.568907970220068
+        }
+    }
+}

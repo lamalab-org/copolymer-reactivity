@@ -1,43 +1,65 @@
 # Database Scripts
 
-This folder contains all scripts for preparing and converting data for NOMAD upload.
+Pipeline for converting the curated reaction dataset into NOMAD archive files for upload to the polymerization OASIS.
+
+```
+copol_prediction/processed_data.csv                              ← input
+            │
+            │ ↓ create_database_json.py
+            ▼
+dump/database_json/polymerization_*.json                         per-measurement JSONs
+dump/database_json/monomers/*.json                               (schema-compliant with
+            │                                                     PolymerizationReactionInput
+            │                                                     from FAIRmat-NFDI/nomad-
+            │                                                     polymerization-reactions)
+            │
+            │ ↓ convert_to_archives.py + convert_monomers.py
+            ▼
+database/output/polymerization/*.archive.json                    NOMAD archives
+database/output/monomers/*.archive.json                          (ready to upload)
+```
 
 ## Quickstart (clean rebuild)
 
 From the repository root:
 
 ```bash
-# Remove previous outputs (optional but recommended for a clean rebuild)
 rm -rf dump/database_json
 rm -rf database/output/polymerization database/output/monomers
 mkdir -p database/output/polymerization database/output/monomers
 
-# 1) Create reaction + monomer JSON files
+# 1) processed_data.csv → schema-compliant per-reaction JSONs
 python database/create_database_json.py
 
-# 2) Convert reaction JSONs to NOMAD archives
+# 2) JSONs → NOMAD archives (needs the nomad-polymerization CLI, see below)
 python database/convert_to_archives.py
 
-# 3) Convert monomer *property files* to monomer archives
+# 3) Monomer property files → monomer archives
 python database/convert_monomers.py --source copol_prediction/api/molecule_properties
-
-# 4) Split archives into upload batches
-python database/split_archives.py --both
 ```
 
 ## Scripts
 
 ### `create_database_json.py`
-Creates cleaned JSON files from processed reaction data for database upload.
 
-**Usage:**
+Reads `copol_prediction/processed_data.csv` and writes one schema-compliant JSON per measurement to `dump/database_json/`. The output validates against `PolymerizationReactionInput` in [FAIRmat-NFDI/nomad-polymerization-reactions](https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions/blob/main/src/nomad_polymerization_reactions/models.py): reactivity ratios are nested under `r_values` and `conf_intervals`, the schema-canonical key names (`monomer1_smiles`, `polymerization_method`, `calculation_method`, `r-product`) are used, and PCA-reduced polymerisation-type / method embeddings + RDKit solvent descriptors are added.
+
+DOIs in the `source` field are recovered from `source_filename` where the LLM-populated `source` column is empty (~half the rows) — every output JSON carries a canonical `https://doi.org/<DOI>` URL when one exists.
+
 ```bash
+# Default: reads copol_prediction/processed_data.csv
 python database/create_database_json.py
+
+# Or point at the paper-frozen snapshot:
+python database/create_database_json.py --input copol_prediction/paper_dataset/processed_data.csv
+
+# Or use a legacy per-reaction JSON-directory input layout:
+python database/create_database_json.py --input dump/processed_reactions/
 ```
 
-**Output:**
-- `dump/database_json/polymerization_*.json` - Polymerization reactions
-- `dump/database_json/monomers/*.json` - Monomers
+**Output**:
+- `dump/database_json/polymerization_<doi>_<idx>.json` — one per measurement row in the CSV.
+- `dump/database_json/monomers/monomer_*.json` — copied from `copol_prediction/api/molecule_properties/` for every monomer that appears in the dataset.
 
 ### `convert_to_archives.py`
 Converts JSON files to NOMAD archive files (`.archive.json`) using the `nomad-polymerization` CLI tool.
@@ -146,67 +168,6 @@ Convert single file with custom name:
 ```bash
 python database/convert_monomers.py --fix "C=COCC1CO1.OCCO.json" "2-(oxiran-2-ylmethoxy)ethanol"
 ```
-
-### `split_archives.py`
-Splits archive files into batches of maximum 1000 files each (for upload limits).
-
-**Usage:**
-
-Split polymerization archives:
-```bash
-python database/split_archives.py --polymerization
-```
-
-Split monomer archives:
-```bash
-python database/split_archives.py --monomers
-```
-
-Split both:
-```bash
-python database/split_archives.py --both
-```
-
-Custom batch size:
-```bash
-python database/split_archives.py --polymerization --batch-size 500
-```
-
-**Output:**
-Files are moved into subdirectories:
-- `database/output/polymerization/batch_1/` - first 1000 files
-- `database/output/polymerization/batch_2/` - next 1000 files
-- `database/output/polymerization/batch_3/` - remaining files
-- etc.
-
-Each batch can then be uploaded separately to NOMAD.
-
-## Workflow
-
-1. **Create JSON files:**
-   ```bash
-   python database/create_database_json.py
-   ```
-
-2. **Convert to archive files:**
-   ```bash
-   python database/convert_to_archives.py
-   ```
-
-   Archive files are saved in `database/output/`:
-   - `database/output/polymerization/*.archive.json` - Polymerization reactions
-   - `database/output/monomers/*.archive.json` - Monomers
-
-3. **Convert monomer files:**
-   ```bash
-   python database/convert_monomers.py
-   ```
-
-4. **Split archives into batches (if needed):**
-   ```bash
-   python database/split_archives.py --polymerization
-   python database/split_archives.py --monomers
-   ```
 
 The archive files can then be uploaded directly to NOMAD.
 

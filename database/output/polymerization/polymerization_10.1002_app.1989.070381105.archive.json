@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.1989.070381105"
+        },
+        "monomers": [
+            {
+                "name": "pyrrole",
+                "smiles": "c1cc[nH]c1"
+            },
+            {
+                "name": "N-methylpyrrole",
+                "smiles": "Cn1cccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 298.15,
+            "solvent": {
+                "smile": "CC#N"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.52988,
+                "TPSA": 23.79,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.5,
+                "mol_MR": 11.287,
+                "labute_ASA": 19.496772823694872,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 3.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "oxidative",
+            "calculation_method": "least squares linear fit",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.13
+                },
+                {
+                    "reaction_constant": 0.35
+                }
+            ],
+            "polytype_emb_1": -2.5213731629627807,
+            "polytype_emb_2": 1.9435000889401555,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

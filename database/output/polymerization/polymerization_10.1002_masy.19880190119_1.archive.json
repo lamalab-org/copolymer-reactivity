@@ -1,0 +1,54 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/masy.19880190119"
+        },
+        "r_product": 0.063,
+        "monomers": [
+            {
+                "name": "3-methyl-2,5-morpholinedione",
+                "smiles": "CC1NC(=O)COC1=O"
+            },
+            {
+                "name": "D,L-lactide",
+                "smiles": "CC1OC(=O)C(C)OC1=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 418.15,
+            "solvent": {
+                "smile": "[Na+]"
+            },
+            "solvent_descriptors": {
+                "log_P": -2.996,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 0.0,
+                "labute_ASA": 29.78187738261566,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "ring-opening polymerization",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.19,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.33,
+                    "reaction_constant_confi": 0.03
+                }
+            ],
+            "polytype_emb_1": -6.962278884755882,
+            "polytype_emb_2": 7.601088782274935,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}
