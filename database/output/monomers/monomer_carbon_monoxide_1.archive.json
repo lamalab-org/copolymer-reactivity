@@ -1,0 +1,48 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.Monomer",
+        "name": "carbon monoxide",
+        "smiles": "[C-]#[O+]",
+        "xtb_features": {
+            "energy": -6.121850245626992,
+            "ionization_potential": 18.616446884160958,
+            "ionization_potential_corrected": 13.770446884160958,
+            "electron_affinity": 1.3208361455988495,
+            "homo_energy": -0.47319617408277087,
+            "lumo_energy": -0.28137949587695893,
+            "global_electrophilicity": 0.758616058335061,
+            "global_nucleophilicity": -13.770446884160958,
+            "dipole_moment": [
+                -0.24211686269185187,
+                3.093094404907309e-14,
+                8.647952916511737e-15
+            ],
+            "atomic_features": [
+                {
+                    "positions": [
+                        0.5636594543239901,
+                        3.824574243925229e-14,
+                        1.0999631665407939e-14
+                    ],
+                    "element": "C",
+                    "charge": 0.04893101073819761,
+                    "fukui_electrophilicity": 0.46676445891931184,
+                    "fukui_nucleophilicity": 0.4997936492435928,
+                    "fukui_radical": 0.48327905408145233
+                },
+                {
+                    "positions": [
+                        -0.5636594543239901,
+                        -3.824574243925229e-14,
+                        -1.099963166540848e-14
+                    ],
+                    "element": "O",
+                    "charge": -0.04893101073819989,
+                    "fukui_electrophilicity": 0.533235541080685,
+                    "fukui_nucleophilicity": 0.5002063507564103,
+                    "fukui_radical": 0.5167209459185476
+                }
+            ]
+        }
+    }
+}

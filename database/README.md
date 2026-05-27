@@ -162,6 +162,15 @@ Display names are taken from the CSV's `monomer{1,2}_name` columns, with
 `copolextractor.utils.smiles_to_name()` as a fallback and the SMILES as last
 resort. The archive files can then be uploaded directly to NOMAD.
 
+For a single bundle suitable for upload, tar+gzip the output directory:
+
+```bash
+tar czf database/output/monomers.tar.gz -C database/output monomers/
+```
+
+The shipped `database/output/monomers.tar.gz` is regenerated from
+`monomers/` this way and tracks it 1:1.
+
 ## Analysis (plots + dataset statistics)
 
 ### `analysis/plot_combined_database_figure.py` (dataset analysis)
