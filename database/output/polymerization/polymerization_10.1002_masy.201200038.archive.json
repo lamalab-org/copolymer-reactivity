@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/masy.201200038"
+        },
+        "monomers": [
+            {
+                "name": "methyl acrylate",
+                "smiles": "C=CC(=O)OC"
+            },
+            {
+                "name": "vinyl acetate",
+                "smiles": "C=COC(C)=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "CCC(C)(C)O"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.1673,
+                "TPSA": 20.23,
+                "HBA": 1.0,
+                "HBD": 1.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 26.58879999999999,
+                "labute_ASA": 38.99325323761199,
+                "num_rotatable_bonds": 1.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "reversible addition fragmentation chain transfer",
+            "calculation_method": "sum of residual space method",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 8.2,
+                    "reaction_constant_confi": 1.0
+                },
+                {
+                    "reaction_constant": 0.17,
+                    "reaction_constant_confi": 0.05
+                }
+            ],
+            "polytype_emb_1": -10.675144270291947,
+            "polytype_emb_2": -0.26239403391180544,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

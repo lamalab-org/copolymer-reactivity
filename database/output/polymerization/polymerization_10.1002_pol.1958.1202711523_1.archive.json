@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.1958.1202711523"
+        },
+        "monomers": [
+            {
+                "name": "Vinylene Carbonate",
+                "smiles": "O=c1occo1"
+            },
+            {
+                "name": "Vinyl Acetate",
+                "smiles": "C=COC(C)=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "solvent": {
+                "smile": "CC(C)=O"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.5952999999999999,
+                "TPSA": 17.07,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.6666666666666666,
+                "mol_MR": 16.355,
+                "labute_ASA": 25.63065735666653,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "integrated equation",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 3.0
+                },
+                {
+                    "reaction_constant": 0.27
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

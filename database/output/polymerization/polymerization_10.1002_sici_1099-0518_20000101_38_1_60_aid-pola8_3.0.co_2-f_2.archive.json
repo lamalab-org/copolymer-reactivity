@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/(sici)1099-0518(20000101)38_1_60__aid-pola8_3.0.co;2-f"
+        },
+        "monomers": [
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "butyl acrylate",
+                "smiles": "C=CC(=O)OCCCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 323.15,
+            "solvent": {
+                "smile": "N#Cc1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.5582799999999999,
+                "TPSA": 23.79,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 31.156999999999996,
+                "labute_ASA": 48.188924915362286,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 8.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "nonlinear least-squares analysis",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.734
+                },
+                {
+                    "reaction_constant": 0.33
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.3390/molecules200915597"
+        },
+        "monomers": [
+            {
+                "name": "norbornene",
+                "smiles": "C1=CC2CCC1C2"
+            },
+            {
+                "name": "cyclopentene",
+                "smiles": "C1=CCCC1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 298.15,
+            "solvent": {
+                "smile": "ClCCl"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.4215,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 16.573,
+                "labute_ASA": 29.3457834815929,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 3.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "ring opening metathesis polymerization",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.87,
+                    "reaction_constant_confi": 0.07
+                },
+                {
+                    "reaction_constant": 0.02,
+                    "reaction_constant_confi": 0.004
+                }
+            ],
+            "polytype_emb_1": 6.391062604198366,
+            "polytype_emb_2": 8.957494939574435,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

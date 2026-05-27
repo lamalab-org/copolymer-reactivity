@@ -1,0 +1,52 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pola.1991.080290703"
+        },
+        "monomers": [
+            {
+                "name": "1,8-bis(4-(1-naphthoxy)phenylsulfonyl)perfluorooctane",
+                "smiles": "O=S(=O)(c1ccc(Oc2cccc3ccccc23)cc1)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)S(=O)(=O)c1ccc(Oc2cccc3ccccc23)cc1"
+            },
+            {
+                "name": "1,5-bis(1-naphthoxy)pentane",
+                "smiles": "c1ccc2c(OCCCCCOc3cccc4ccccc34)cccc2c1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 298.15,
+            "solvent": {
+                "smile": "O=[N+]([O-])c1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.5948,
+                "TPSA": 43.14,
+                "HBA": 2.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 33.0964,
+                "labute_ASA": 52.08437884199676,
+                "num_rotatable_bonds": 1.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 9.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "radical-cation",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.0,
+                    "reaction_constant_confi": 0.1
+                },
+                {
+                    "reaction_constant": 0.2,
+                    "reaction_constant_confi": 0.05
+                }
+            ],
+            "polytype_emb_1": 0.9887993031325529,
+            "polytype_emb_2": 7.469319627467238,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

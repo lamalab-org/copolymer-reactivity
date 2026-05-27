@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.17721/1728-2209.2019.1(56).11"
+        },
+        "monomers": [
+            {
+                "name": "4-vinylpyridine",
+                "smiles": "C=Cc1ccncc1"
+            },
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 348.15,
+            "solvent": {
+                "smile": "ClC(Cl)(Cl)Cl"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.5529,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 26.143,
+                "labute_ASA": 49.952315935356246,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "precipitation",
+            "polymerization_type": "free radical",
+            "calculation_method": "Alfrey-Price",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.97
+                },
+                {
+                    "reaction_constant": 0.93
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -6.473132822824679,
+            "method_emb_2": 9.608890312566556
+        }
+    }
+}

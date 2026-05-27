@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/0032-3950(69)90429-8"
+        },
+        "monomers": [
+            {
+                "name": "vinyltrimethylsilane",
+                "smiles": "C=C[Si](C)(C)C"
+            },
+            {
+                "name": "acrylonitrile",
+                "smiles": "C=CC#N"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Finemann-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 3.85
+                },
+                {
+                    "reaction_constant": 0.08
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

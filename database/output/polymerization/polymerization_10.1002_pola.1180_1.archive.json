@@ -1,0 +1,35 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pola.1180"
+        },
+        "monomers": [
+            {
+                "name": "2-Hydroxyethyl Methacrylate",
+                "smiles": "C=C(C)C(=O)OCCO"
+            },
+            {
+                "name": "t-Butyl Acrylate",
+                "smiles": "C=CC(=O)OC(C)(C)C"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 323.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 4.363
+                },
+                {
+                    "reaction_constant": 0.355
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

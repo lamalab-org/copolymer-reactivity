@@ -1,0 +1,35 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.1993.070491003"
+        },
+        "monomers": [
+            {
+                "name": "ethylene",
+                "smiles": "C=C"
+            },
+            {
+                "name": "1-hexene",
+                "smiles": "C=CCCCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 458.15,
+            "polymerization_method": "solvent",
+            "calculation_method": "Mayo-Lewis",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 15.8
+                },
+                {
+                    "reaction_constant": -0.78
+                }
+            ],
+            "polytype_emb_1": 5.239696440796716,
+            "polytype_emb_2": 3.9056625761735506,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

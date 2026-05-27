@@ -1,0 +1,38 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.3390/polym11030527"
+        },
+        "monomers": [
+            {
+                "name": "butadiene",
+                "smiles": "C=CC=C"
+            },
+            {
+                "name": "isoprene",
+                "smiles": "C=CC(=C)C"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "solvent",
+            "polymerization_type": "coordination",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.13,
+                    "reaction_constant_confi": 0.05
+                },
+                {
+                    "reaction_constant": 0.31,
+                    "reaction_constant_confi": 0.05
+                }
+            ],
+            "polytype_emb_1": -6.727730914114285,
+            "polytype_emb_2": 3.6059111936796886,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

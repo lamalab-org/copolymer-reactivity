@@ -1,0 +1,49 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/masy.200651105"
+        },
+        "monomers": [
+            {
+                "name": "isobutylene",
+                "smiles": "C=C(C)C"
+            },
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "solvent": {
+                "smile": "[Na+]"
+            },
+            "solvent_descriptors": {
+                "log_P": -2.996,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 0.0,
+                "labute_ASA": 29.78187738261566,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_type": "cationic",
+            "calculation_method": "pseudo-kinetic rate constants",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 38.43
+                },
+                {
+                    "reaction_constant": 7.23
+                }
+            ],
+            "polytype_emb_1": -0.9889533523703218,
+            "polytype_emb_2": 4.807344842127502,
+            "method_emb_1": 4.59470933256899,
+            "method_emb_2": -8.714039184444726
+        }
+    }
+}

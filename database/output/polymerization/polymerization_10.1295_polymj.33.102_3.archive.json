@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1295/polymj.33.102"
+        },
+        "monomers": [
+            {
+                "name": "triisobutylsilyl methacrylate",
+                "smiles": "C=C(C)C(=O)O[Si](CC(C)C)(CC(C)C)CC(C)C"
+            },
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 353.15,
+            "solvent": {
+                "smile": "Cc1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.99502,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.14285714285714285,
+                "mol_MR": 31.17899999999999,
+                "labute_ASA": 43.79634523389357,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 7.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.2
+                },
+                {
+                    "reaction_constant": 0.7
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1021/jo01346a010"
+        },
+        "r_product": 0.11,
+        "monomers": [
+            {
+                "name": "Methallyl Chloride",
+                "smiles": "C=C(C)CCl"
+            },
+            {
+                "name": "Vinyl Acetate",
+                "smiles": "C=COC(C)=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 423.15,
+            "polymerization_method": "Bulk",
+            "polymerization_type": "Radiation-Initiated",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.73,
+                    "reaction_constant_confi": 0.06
+                },
+                {
+                    "reaction_constant": 0.15,
+                    "reaction_constant_confi": 0.02
+                }
+            ],
+            "polytype_emb_1": 5.8950101442209375,
+            "polytype_emb_2": -13.783548202656128,
+            "method_emb_1": 15.331750999090334,
+            "method_emb_2": 11.481993634068832
+        }
+    }
+}

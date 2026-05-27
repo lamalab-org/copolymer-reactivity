@@ -1,0 +1,54 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.20200174"
+        },
+        "r_product": 1.42,
+        "monomers": [
+            {
+                "name": "epsilon-caprolactone",
+                "smiles": "O=C1CCCCCO1"
+            },
+            {
+                "name": "delta-valerolactone",
+                "smiles": "O=C1CCCCO1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 298.15,
+            "solvent": {
+                "smile": "[Na+]"
+            },
+            "solvent_descriptors": {
+                "log_P": -2.996,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 0.0,
+                "labute_ASA": 29.78187738261566,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "ring-opening",
+            "calculation_method": "13C NMR spectroscopy",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.42,
+                    "reaction_constant_confi": 0.1
+                },
+                {
+                    "reaction_constant": 1.0,
+                    "reaction_constant_confi": 0.1
+                }
+            ],
+            "polytype_emb_1": 6.198264067610976,
+            "polytype_emb_2": -11.39081462130162,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

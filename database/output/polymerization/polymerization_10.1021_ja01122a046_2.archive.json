@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1021/ja01122a046"
+        },
+        "monomers": [
+            {
+                "name": "2-Vinylpyridine",
+                "smiles": "C=Cc1ccccn1"
+            },
+            {
+                "name": "Methacrylic Acid",
+                "smiles": "C=C(C)C(=O)O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "bulk",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.55,
+                    "reaction_constant_confi": 0.1
+                },
+                {
+                    "reaction_constant": 0.05
+                }
+            ],
+            "polytype_emb_1": 1.6228767574413854,
+            "polytype_emb_2": 7.238249323845892,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

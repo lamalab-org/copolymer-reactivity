@@ -1,0 +1,54 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.1991.070420601"
+        },
+        "r_product": 0.8113,
+        "monomers": [
+            {
+                "name": "Pentyl Methacrylate",
+                "smiles": "C=C(C)C(=O)OCCCCC"
+            },
+            {
+                "name": "Triallyl Cyanurate",
+                "smiles": "C=CCOc1nc(OCC=C)nc(OCC=C)n1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "c1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.6866,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 26.441999999999993,
+                "labute_ASA": 37.43140311949697,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 29.52,
+                    "reaction_constant_confi": 0.0262
+                },
+                {
+                    "reaction_constant": -0.021,
+                    "reaction_constant_confi": 0.0236
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

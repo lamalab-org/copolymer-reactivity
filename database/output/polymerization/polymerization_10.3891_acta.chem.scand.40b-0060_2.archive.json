@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.3891/acta.chem.scand.40b-0060"
+        },
+        "monomers": [
+            {
+                "name": "ethylene",
+                "smiles": "C=C"
+            },
+            {
+                "name": "1-dodecene",
+                "smiles": "C=CCCCCCCCCCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 363.15,
+            "solvent": {
+                "smile": "CCCCCCC"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.976700000000002,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 34.432999999999986,
+                "labute_ASA": 46.92890371420919,
+                "num_rotatable_bonds": 4.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 7.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "Ziegler-Natta",
+            "calculation_method": "nonlinear optimization algorithm",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 350.0,
+                    "reaction_constant_confi": 95.0
+                },
+                {
+                    "reaction_constant": 0.018,
+                    "reaction_constant_confi": 95.0
+                }
+            ],
+            "polytype_emb_1": -6.860667679013127,
+            "polytype_emb_2": -3.383223732125806,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

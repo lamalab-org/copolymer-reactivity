@@ -1,0 +1,52 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pi.1036"
+        },
+        "monomers": [
+            {
+                "name": "beta butyrolactone",
+                "smiles": "CC1CC(=O)O1"
+            },
+            {
+                "name": "delta valerolactone",
+                "smiles": "O=C1CCCCO1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 373.15,
+            "solvent": {
+                "smile": "CCCCCC"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.5866000000000007,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 29.81599999999998,
+                "labute_ASA": 40.563961599812586,
+                "num_rotatable_bonds": 3.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "ring opening",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.34,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.4,
+                    "reaction_constant_confi": 0.02
+                }
+            ],
+            "polytype_emb_1": 1.9952547503946394,
+            "polytype_emb_2": -2.2841416347473693,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

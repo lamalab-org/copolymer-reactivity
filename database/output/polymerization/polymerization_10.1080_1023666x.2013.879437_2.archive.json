@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1080/1023666x.2013.879437"
+        },
+        "monomers": [
+            {
+                "name": "methyl methacrylate",
+                "smiles": "C=C(C)C(=O)OC"
+            },
+            {
+                "name": "sec-butyl acrylate",
+                "smiles": "C=CC(=O)OC(C)CC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 351.15,
+            "solvent": {
+                "smile": "CCC(C)=O"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.9854,
+                "TPSA": 17.07,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.75,
+                "mol_MR": 20.971999999999994,
+                "labute_ASA": 31.995599471063137,
+                "num_rotatable_bonds": 1.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Jaacks method",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 2.295,
+                    "reaction_constant_confi": 0.06
+                },
+                {
+                    "reaction_constant": 0.467,
+                    "reaction_constant_confi": 0.014
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

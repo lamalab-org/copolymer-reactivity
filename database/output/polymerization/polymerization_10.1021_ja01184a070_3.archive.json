@@ -1,0 +1,35 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1021/ja01184a070"
+        },
+        "monomers": [
+            {
+                "name": "Vinyl acetate",
+                "smiles": "C=COC(C)=O"
+            },
+            {
+                "name": "Allyl acetate",
+                "smiles": "C=CCOC(C)=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.25
+                },
+                {
+                    "reaction_constant": 0.02
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

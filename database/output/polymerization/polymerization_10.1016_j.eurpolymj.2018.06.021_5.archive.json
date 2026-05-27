@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/j.eurpolymj.2018.06.021"
+        },
+        "monomers": [
+            {
+                "name": "2-acrylamido-2-methylpropane sulfonic acid",
+                "smiles": "C=CC(=O)NC(C)(C)CS(=O)(=O)O"
+            },
+            {
+                "name": "acrylic acid",
+                "smiles": "C=CC(=O)O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 313.15,
+            "solvent": {
+                "smile": "O"
+            },
+            "solvent_descriptors": {
+                "log_P": -0.8247,
+                "TPSA": 31.5,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 3.6138,
+                "labute_ASA": 6.84923118831809,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_method": "solution",
+            "polymerization_type": "free radical",
+            "calculation_method": "error-in-variables-model",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.19,
+                    "reaction_constant_confi": 0.04
+                },
+                {
+                    "reaction_constant": 0.86,
+                    "reaction_constant_confi": 0.1
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -3.4032362061893435,
+            "method_emb_2": 2.568907970220068
+        }
+    }
+}

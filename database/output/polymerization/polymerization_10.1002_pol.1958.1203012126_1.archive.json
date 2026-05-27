@@ -1,0 +1,37 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.1958.1203012126"
+        },
+        "monomers": [
+            {
+                "name": "2-Vinyl pyridine",
+                "smiles": "C=Cc1ccccn1"
+            },
+            {
+                "name": "Styrene",
+                "smiles": "C=Cc1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.81,
+                    "reaction_constant_confi": 0.05
+                },
+                {
+                    "reaction_constant": 0.55,
+                    "reaction_constant_confi": 0.03
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}
