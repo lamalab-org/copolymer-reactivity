@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-"""
-Script to create individual JSON files for each reaction for database upload.
-Each JSON contains all extracted/preprocessed data except monomer xtb features.
-Monomer data only includes name and SMILES.
-Includes PCA-reduced features for method and polymerization_type, and solvent features.
+"""Build per-reaction JSONs for the NOMAD polymerization-reactions archive.
+
+Reads `copol_prediction/processed_data.csv` (or a directory of legacy
+per-reaction JSONs) and emits one schema-compliant JSON per reaction under
+`dump/database_json/`, ready for `convert_to_archives.py` to lift into
+`.archive.json`.
 """
 
 import hashlib
 import json
-import os
+import math
 import re
 import shutil
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+import pandas as pd
 
 try:
     from rdkit import Chem
@@ -24,42 +27,10 @@ except ImportError:
     RDKIT_AVAILABLE = False
     print("Warning: RDKit not available. Solvent features will not be calculated.")
 
-try:
-    import sys
-
-    sys.path.insert(0, str(Path(__file__).parent / "src"))
-    from copolextractor import utils as copol_utils
-
-    COPOL_UTILS_AVAILABLE = True
-except ImportError:
-    COPOL_UTILS_AVAILABLE = False
-    print(
-        "Warning: copolextractor.utils not available. IUPAC names will use monomer names from reactions."
-    )
-
 
 def get_smiles_md5(smiles: str) -> str:
     """Create MD5 hash from SMILES string for consistent filename."""
     return hashlib.md5(smiles.encode("utf-8")).hexdigest()
-
-
-def get_iupac_name(smiles: str, fallback_name: Optional[str] = None) -> Optional[str]:
-    """
-    Get IUPAC name from SMILES. Falls back to monomer name from reactions if available.
-    """
-    if COPOL_UTILS_AVAILABLE:
-        try:
-            iupac_name = copol_utils.smiles_to_name(smiles)
-            if iupac_name:
-                return iupac_name
-        except Exception:
-            pass
-
-    # Fallback to provided name if available
-    if fallback_name:
-        return fallback_name
-
-    return None
 
 
 def sanitize_filename(name: str) -> str:
@@ -113,49 +84,38 @@ def normalize_doi(source: str) -> str:
     return s
 
 
+_SOLVENT_FEATURE_KEYS = (
+    "solvent_logP",
+    "solvent_TPSA",
+    "solvent_HBA",
+    "solvent_HBD",
+    "solvent_FractionCSP3",
+    "solvent_MolMR",
+    "solvent_LabuteASA",
+    "solvent_NumRotatableBonds",
+    "solvent_RingCount",
+    "solvent_HeavyAtomCount",
+)
+_EMPTY_SOLVENT_FEATURES: Dict[str, Optional[float]] = {k: None for k in _SOLVENT_FEATURE_KEYS}
+
+
+def _is_invalid_smiles_string(smiles: Any) -> bool:
+    if not smiles or not isinstance(smiles, str):
+        return True
+    return smiles.strip().lower() in {"", "na", "nan", "none"}
+
+
 def calculate_solvent_features(solvent_smiles: Optional[str]) -> Dict[str, Optional[float]]:
-    """
-    Calculate solvent features from SMILES string.
-    """
+    """Compute RDKit descriptors for a solvent SMILES; returns Nones if invalid."""
     if not RDKIT_AVAILABLE:
         return {}
-
-    def is_invalid(smiles):
-        if not smiles or not isinstance(smiles, str):
-            return True
-        smiles_clean = smiles.strip().lower()
-        return smiles_clean in {"", "na", "nan", "none"}
-
-    if is_invalid(solvent_smiles):
-        return {
-            "solvent_logP": None,
-            "solvent_TPSA": None,
-            "solvent_HBA": None,
-            "solvent_HBD": None,
-            "solvent_FractionCSP3": None,
-            "solvent_MolMR": None,
-            "solvent_LabuteASA": None,
-            "solvent_NumRotatableBonds": None,
-            "solvent_RingCount": None,
-            "solvent_HeavyAtomCount": None,
-        }
+    if _is_invalid_smiles_string(solvent_smiles):
+        return dict(_EMPTY_SOLVENT_FEATURES)
 
     try:
         mol = Chem.MolFromSmiles(solvent_smiles)
         if mol is None:
-            return {
-                "solvent_logP": None,
-                "solvent_TPSA": None,
-                "solvent_HBA": None,
-                "solvent_HBD": None,
-                "solvent_FractionCSP3": None,
-                "solvent_MolMR": None,
-                "solvent_LabuteASA": None,
-                "solvent_NumRotatableBonds": None,
-                "solvent_RingCount": None,
-                "solvent_HeavyAtomCount": None,
-            }
-
+            return dict(_EMPTY_SOLVENT_FEATURES)
         return {
             "solvent_logP": float(Descriptors.MolLogP(mol)),
             "solvent_TPSA": float(rdMolDescriptors.CalcTPSA(mol)),
@@ -169,18 +129,7 @@ def calculate_solvent_features(solvent_smiles: Optional[str]) -> Dict[str, Optio
             "solvent_HeavyAtomCount": float(Descriptors.HeavyAtomCount(mol)),
         }
     except Exception:
-        return {
-            "solvent_logP": None,
-            "solvent_TPSA": None,
-            "solvent_HBA": None,
-            "solvent_HBD": None,
-            "solvent_FractionCSP3": None,
-            "solvent_MolMR": None,
-            "solvent_LabuteASA": None,
-            "solvent_NumRotatableBonds": None,
-            "solvent_RingCount": None,
-            "solvent_HeavyAtomCount": None,
-        }
+        return dict(_EMPTY_SOLVENT_FEATURES)
 
 
 def load_pca_mappings(polytype_path: str, method_path: str) -> tuple:
@@ -204,22 +153,12 @@ def load_pca_mappings(polytype_path: str, method_path: str) -> tuple:
 
 
 def is_valid_smiles(smiles: Any) -> bool:
-    """
-    Check if SMILES is valid (not None, not 'none', not empty).
-    """
+    """True if `smiles` is a non-placeholder string (or any non-None non-string)."""
     if smiles is None:
         return False
     if isinstance(smiles, str):
-        smiles = smiles.strip().lower()
-        return smiles not in ("", "none", "na", "nan", "null")
+        return smiles.strip().lower() not in ("", "none", "na", "nan", "null")
     return True
-
-
-def is_valid_monomer_data(monomer_name: Any, monomer_smiles: Any) -> bool:
-    """
-    Check if monomer has valid SMILES (required - name alone is not enough).
-    """
-    return is_valid_smiles(monomer_smiles)
 
 
 def clean_reaction_data(
@@ -492,6 +431,17 @@ def _doi_url_from_source_filename(filename: Any) -> Optional[str]:
     return None
 
 
+def _clean_csv_value(v: Any) -> Any:
+    """Map CSV-style placeholders (NaN, empty, ``"none"``…) to ``None``."""
+    if v is None:
+        return None
+    if isinstance(v, float) and math.isnan(v):
+        return None
+    if isinstance(v, str) and v.strip().lower() in ("", "nan", "none", "null", "na"):
+        return None
+    return v
+
+
 def _reaction_dict_from_csv_row(row) -> Dict[str, Any]:
     """Build a single reaction dict from one `processed_data.csv` row.
 
@@ -508,16 +458,7 @@ def _reaction_dict_from_csv_row(row) -> Dict[str, Any]:
       - ``calculation_method``              → preferred over ``determination_method``
       - ``r-product``                       → with the dash, matching the Pydantic alias
     """
-    import math
-
-    def _clean(v):
-        if v is None:
-            return None
-        if isinstance(v, float) and math.isnan(v):
-            return None
-        if isinstance(v, str) and v.strip().lower() in ("", "nan", "none", "null", "na"):
-            return None
-        return v
+    _clean = _clean_csv_value
 
     # First, pull the constants + conf intervals into nested sub-dicts.
     r_values = {}
@@ -629,8 +570,6 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
       string for the handful of pre-DOI papers). Every reaction from a given
       paper carries that single source string in the output.
     """
-    import pandas as pd
-
     df = pd.read_csv(csv_path)
     print(f"\nReading {len(df):,} rows from {csv_path}")
 

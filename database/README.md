@@ -16,11 +16,7 @@ dump/database_json/monomers/*.json                               (schema-complia
             │ ↓ convert_to_archives.py + convert_monomers.py
             ▼
 database/output/polymerization/*.archive.json                    NOMAD archives
-database/output/monomers/*.archive.json
-            │
-            │ ↓ split_archives.py --both
-            ▼
-database/output/polymerization/batch_{1,2,3,…}/*.archive.json    upload-sized batches
+database/output/monomers/*.archive.json                          (ready to upload)
 ```
 
 ## Quickstart (clean rebuild)
@@ -40,9 +36,6 @@ python database/convert_to_archives.py
 
 # 3) Monomer property files → monomer archives
 python database/convert_monomers.py --source copol_prediction/api/molecule_properties
-
-# 4) Split archives into upload batches
-python database/split_archives.py --both
 ```
 
 ## Scripts
@@ -175,67 +168,6 @@ Convert single file with custom name:
 ```bash
 python database/convert_monomers.py --fix "C=COCC1CO1.OCCO.json" "2-(oxiran-2-ylmethoxy)ethanol"
 ```
-
-### `split_archives.py`
-Splits archive files into batches of maximum 1000 files each (for upload limits).
-
-**Usage:**
-
-Split polymerization archives:
-```bash
-python database/split_archives.py --polymerization
-```
-
-Split monomer archives:
-```bash
-python database/split_archives.py --monomers
-```
-
-Split both:
-```bash
-python database/split_archives.py --both
-```
-
-Custom batch size:
-```bash
-python database/split_archives.py --polymerization --batch-size 500
-```
-
-**Output:**
-Files are moved into subdirectories:
-- `database/output/polymerization/batch_1/` - first 1000 files
-- `database/output/polymerization/batch_2/` - next 1000 files
-- `database/output/polymerization/batch_3/` - remaining files
-- etc.
-
-Each batch can then be uploaded separately to NOMAD.
-
-## Workflow
-
-1. **Create JSON files:**
-   ```bash
-   python database/create_database_json.py
-   ```
-
-2. **Convert to archive files:**
-   ```bash
-   python database/convert_to_archives.py
-   ```
-
-   Archive files are saved in `database/output/`:
-   - `database/output/polymerization/*.archive.json` - Polymerization reactions
-   - `database/output/monomers/*.archive.json` - Monomers
-
-3. **Convert monomer files:**
-   ```bash
-   python database/convert_monomers.py
-   ```
-
-4. **Split archives into batches (if needed):**
-   ```bash
-   python database/split_archives.py --polymerization
-   python database/split_archives.py --monomers
-   ```
 
 The archive files can then be uploaded directly to NOMAD.
 
