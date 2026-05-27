@@ -88,7 +88,7 @@ def add_orbital_interaction_features(df):
     def safe_diff(row, a, b):
         try:
             return row[a] - row[b]
-        except:
+        except Exception:
             return None
 
     df["delta_HOMO_LUMO_AA"] = df.apply(lambda row: safe_diff(row, "homo_1", "lumo_1"), axis=1)

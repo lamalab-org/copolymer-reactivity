@@ -452,3 +452,5 @@ nomad_env/
 # entirely so anyone cloning fresh doesn't pull it back as untracked.
 dump/
 
+# Runtime caches — regenerated on demand
+copol_prediction/api/cache/
