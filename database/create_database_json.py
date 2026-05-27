@@ -465,18 +465,239 @@ def copy_monomer_files(
     return copied_count
 
 
+# A DOI is `10.<registrant>/<suffix>` — the dataset's `source_filename` is
+# the DOI with the single `/` replaced by `_` (dots preserved), e.g.
+# `10.1002/pol.1959.1203512832` → `10.1002_pol.1959.1203512832.json`.
+_DOI_RE = re.compile(r"10\.\d{4,}/\S+")
+
+
+def _doi_url_from_source_filename(filename: Any) -> Optional[str]:
+    """Recover a canonical `https://doi.org/...` URL from `source_filename`.
+
+    `source_filename` is the machine-assigned name of the extracted paper —
+    a far more reliable provenance signal than the LLM-populated `source`
+    column (the latter is empty for ~half the rows).
+
+    Returns ``None`` when the input is missing or not DOI-shaped (a handful
+    of old papers have no DOI and are filed under a citation-style name).
+    """
+    if not isinstance(filename, str) or not filename:
+        return None
+    stem = filename[:-5] if filename.endswith(".json") else filename
+    # Restore only the registrant/suffix separator: the first `_`. DOI
+    # suffixes may legitimately contain `_`, so a global replace is wrong.
+    candidate = stem.replace("_", "/", 1)
+    if _DOI_RE.fullmatch(candidate):
+        return f"https://doi.org/{candidate}"
+    return None
+
+
+def _reaction_dict_from_csv_row(row) -> Dict[str, Any]:
+    """Build a single reaction dict from one `processed_data.csv` row.
+
+    Produces the field shape that the NOMAD ``PolymerizationReactionInput``
+    schema expects (see
+    https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions/blob/main/src/nomad_polymerization_reactions/models.py):
+
+      - ``monomer1``/``monomer2``           → names
+      - ``monomer1_smiles``/``monomer2_smiles`` → SMILES (canonical schema keys)
+      - ``r_values: {constant_1, constant_2}``    → nested reactivity ratios
+      - ``conf_intervals: {constant_conf_1, ...}`` → nested confidence intervals
+      - ``solvent``                         → solvent SMILES (schema treats it that way)
+      - ``polymerization_method``           → preferred over the legacy ``method``
+      - ``calculation_method``              → preferred over ``determination_method``
+      - ``r-product``                       → with the dash, matching the Pydantic alias
+    """
+    import math
+
+    def _clean(v):
+        if v is None:
+            return None
+        if isinstance(v, float) and math.isnan(v):
+            return None
+        if isinstance(v, str) and v.strip().lower() in ("", "nan", "none", "null", "na"):
+            return None
+        return v
+
+    # First, pull the constants + conf intervals into nested sub-dicts.
+    r_values = {}
+    for k in ("constant_1", "constant_2"):
+        v = _clean(row.get(k))
+        if v is not None:
+            r_values[k] = v
+    conf_intervals = {}
+    for k in ("constant_conf_1", "constant_conf_2"):
+        v = _clean(row.get(k))
+        if v is not None:
+            conf_intervals[k] = v
+
+    out: Dict[str, Any] = {}
+    # Fields handled specially / nested — exclude from the pass-through loop.
+    handled = {
+        "monomer1_name",
+        "monomer2_name",
+        "monomer1_smiles",
+        "monomer2_smiles",
+        "solvent",
+        "solvent_smiles",
+        "method",
+        "determination_method",
+        "constant_1",
+        "constant_2",
+        "constant_conf_1",
+        "constant_conf_2",
+        "r_product",
+    }
+
+    for col, val in row.items():
+        if col in handled:
+            continue
+        cleaned_val = _clean(val)
+        if cleaned_val is None:
+            continue
+        out[col] = cleaned_val
+
+    # Schema-canonical field names
+    if (n := _clean(row.get("monomer1_name"))) is not None:
+        out["monomer1"] = n
+    if (n := _clean(row.get("monomer2_name"))) is not None:
+        out["monomer2"] = n
+    if (s := _clean(row.get("monomer1_smiles"))) is not None:
+        # Set both the canonical schema key and the legacy `monomer1_s` key
+        # that this module's existing `clean_reaction_data()` reads from.
+        out["monomer1_smiles"] = s
+        out["monomer1_s"] = s
+    if (s := _clean(row.get("monomer2_smiles"))) is not None:
+        out["monomer2_smiles"] = s
+        out["monomer2_s"] = s
+    if (s := _clean(row.get("solvent_smiles"))) is not None:
+        # The schema's `solvent` field holds the SMILES (utils.py wraps it as
+        # `{"smile": ...}` in the archive); keep the human name under
+        # `solvent_name` for our own provenance.
+        out["solvent"] = s
+    if (n := _clean(row.get("solvent"))) is not None:
+        out["solvent_name"] = n
+    if (m := _clean(row.get("method"))) is not None:
+        out["polymerization_method"] = m
+    if (m := _clean(row.get("determination_method"))) is not None:
+        out["calculation_method"] = m
+    if (rp := _clean(row.get("r_product"))) is not None:
+        # The schema uses the dashed alias `r-product`.
+        out["r-product"] = rp
+    if r_values:
+        out["r_values"] = r_values
+    if conf_intervals:
+        out["conf_intervals"] = conf_intervals
+
+    return out
+
+
+def _collect_reactions_from_json_dir(input_dir: Path) -> "defaultdict[str, list]":
+    """Group per-reaction JSON files (legacy input) by normalised DOI."""
+    reactions_by_doi: "defaultdict[str, list]" = defaultdict(list)
+    json_files = list(input_dir.glob("*.json"))
+    print(f"\nFound {len(json_files)} JSON files to process")
+    for json_file in json_files:
+        try:
+            with open(json_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            entries = data if isinstance(data, list) else [data]
+            for reaction_data in entries:
+                if isinstance(reaction_data, dict):
+                    source = reaction_data.get("source", "")
+                    normalized_doi = normalize_doi(source)
+                    reactions_by_doi[normalized_doi].append(
+                        {"file": json_file, "data": reaction_data}
+                    )
+        except Exception as e:
+            print(f"Error reading {json_file}: {e}")
+    return reactions_by_doi
+
+
+def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
+    """Group reactions from `processed_data.csv` by normalised DOI.
+
+    Guarantees:
+
+    - **Exactly one reaction per unique `reaction_id`.** Rows with a missing
+      reaction_id are treated as malformed and dropped (the dataset has at
+      most one such row).
+    - **Exactly one source per paper.** A per-paper canonical source is
+      assembled in this order: (1) the first `source_filename` that resolves
+      to a `10.<…>/…` DOI URL; (2) the first non-empty `source` column on
+      any row; (3) the first non-empty `original_source` (a citation-style
+      string for the handful of pre-DOI papers). Every reaction from a given
+      paper carries that single source string in the output.
+    """
+    import pandas as pd
+
+    df = pd.read_csv(csv_path)
+    print(f"\nReading {len(df):,} rows from {csv_path}")
+
+    if "reaction_id" in df.columns:
+        before = len(df)
+        df = df[df["reaction_id"].notna()]
+        df = df.drop_duplicates(subset="reaction_id", keep="first")
+        print(
+            f"Deduplicated by reaction_id (dropping NaN ids): "
+            f"{before:,} measurement rows → {len(df):,} unique reactions"
+        )
+
+    # Pick one canonical source per paper. DOI URL recovered from
+    # source_filename is preferred; fall back to `source`, then
+    # `original_source` (citation-style) for the rare pre-DOI papers.
+    paper_to_source: Dict[str, str] = {}
+    if "PDF_name" in df.columns:
+        for paper, group in df.groupby("PDF_name", sort=False):
+            chosen: Optional[str] = None
+            if "source_filename" in group.columns:
+                for fn in group["source_filename"]:
+                    url = _doi_url_from_source_filename(fn)
+                    if url is not None:
+                        chosen = url
+                        break
+            if chosen is None and "source" in group.columns:
+                for s in group["source"]:
+                    if isinstance(s, str) and s.strip():
+                        chosen = s.strip()
+                        break
+            if chosen is None and "original_source" in group.columns:
+                for s in group["original_source"]:
+                    if isinstance(s, str) and s.strip():
+                        chosen = s.strip()
+                        break
+            if chosen is not None:
+                paper_to_source[paper] = chosen
+    n_doi = sum(1 for v in paper_to_source.values() if v.startswith("http") or v.startswith("10."))
+    print(f"Assigned canonical sources to {len(paper_to_source):,} papers ({n_doi:,} DOI URLs)")
+
+    reactions_by_doi: "defaultdict[str, list]" = defaultdict(list)
+    for _, row in df.iterrows():
+        reaction = _reaction_dict_from_csv_row(row)
+        canonical = paper_to_source.get(row.get("PDF_name"))
+        if canonical is not None:
+            reaction["source"] = canonical
+        source = reaction.get("source", "") or reaction.get("original_source", "")
+        normalized_doi = normalize_doi(source)
+        reactions_by_doi[normalized_doi].append({"file": csv_path, "data": reaction})
+    return reactions_by_doi
+
+
 def process_reactions(
-    input_dir: Path,
+    input_source: Path,
     output_dir: Path,
     polytype_pca_path: Optional[str] = None,
     method_pca_path: Optional[str] = None,
     monomer_source_dir: Optional[Path] = None,
     create_monomer_files: bool = True,
 ):
+    """Build per-reaction JSON files for the NOMAD pipeline.
+
+    `input_source` may be either a directory of legacy per-reaction JSON
+    files or a single `processed_data.csv`-shaped CSV. The format is detected
+    by the path suffix.
     """
-    Process all reaction JSON files and create cleaned versions for database.
-    """
-    input_dir = Path(input_dir)
+    input_source = Path(input_source)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -491,34 +712,16 @@ def process_reactions(
     print(f"  Loaded {len(polytype_pca_map)} polytype mappings")
     print(f"  Loaded {len(method_pca_map)} method mappings")
 
-    # Group reactions by DOI to assign indices
-    reactions_by_doi = defaultdict(list)
-
-    # First pass: collect all reactions grouped by DOI
-    json_files = list(input_dir.glob("*.json"))
-    print(f"\nFound {len(json_files)} JSON files to process")
-
-    for json_file in json_files:
-        try:
-            with open(json_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-
-            # Handle case where file contains a list of reactions
-            if isinstance(data, list):
-                for reaction_data in data:
-                    if isinstance(reaction_data, dict):
-                        source = reaction_data.get("source", "")
-                        normalized_doi = normalize_doi(source)
-                        reactions_by_doi[normalized_doi].append(
-                            {"file": json_file, "data": reaction_data}
-                        )
-            elif isinstance(data, dict):
-                source = data.get("source", "")
-                normalized_doi = normalize_doi(source)
-                reactions_by_doi[normalized_doi].append({"file": json_file, "data": data})
-        except Exception as e:
-            print(f"Error reading {json_file}: {e}")
-            continue
+    # Collect reactions grouped by DOI from whichever input format was supplied.
+    if input_source.is_file() and input_source.suffix.lower() == ".csv":
+        reactions_by_doi = _collect_reactions_from_csv(input_source)
+    elif input_source.is_dir():
+        reactions_by_doi = _collect_reactions_from_json_dir(input_source)
+    else:
+        raise FileNotFoundError(
+            f"Input source not found or unsupported: {input_source} "
+            "(expected a .csv file or a directory of .json files)"
+        )
 
     print(f"Found {len(reactions_by_doi)} unique DOIs")
 
@@ -639,29 +842,59 @@ def validate_created_files(output_dir: Path) -> List[str]:
 
 
 if __name__ == "__main__":
-    # Set paths (relative to project root, script is in database/ folder)
+    import argparse
+
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
-    input_directory = project_root / "dump/processed_reactions"
-    output_directory = project_root / "dump/database_json"
+
+    parser = argparse.ArgumentParser(
+        description=(
+            "Create per-reaction JSON files for NOMAD archive conversion. "
+            "Reads either a processed_data.csv (default) or a directory of "
+            "legacy per-reaction JSONs."
+        )
+    )
+    parser.add_argument(
+        "--input",
+        type=Path,
+        default=project_root / "copol_prediction" / "processed_data.csv",
+        help=(
+            "Input source. Either a processed_data.csv-shaped CSV or a "
+            "directory of per-reaction JSONs. "
+            "Default: copol_prediction/processed_data.csv."
+        ),
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=project_root / "dump" / "database_json",
+        help="Output directory for per-reaction JSONs (default: dump/database_json).",
+    )
+    parser.add_argument(
+        "--no-monomers",
+        action="store_true",
+        help="Skip the monomer-file copy step.",
+    )
+    args = parser.parse_args()
+
     polytype_pca_path = str(project_root / "copol_prediction/api/data/polytype_emb_pca_values.json")
     method_pca_path = str(project_root / "copol_prediction/api/data/method_emb_pca_values.json")
     monomer_source_directory = project_root / "copol_prediction/api/molecule_properties"
 
     print("Starting database JSON creation...")
-    print(f"Input directory: {input_directory}")
-    print(f"Output directory: {output_directory}")
-    print(f"Polytype PCA path: {polytype_pca_path}")
-    print(f"Method PCA path: {method_pca_path}")
-    print(f"Monomer source directory: {monomer_source_directory}")
+    print(f"Input:               {args.input}")
+    print(f"Output directory:    {args.output}")
+    print(f"Polytype PCA path:   {polytype_pca_path}")
+    print(f"Method PCA path:     {method_pca_path}")
+    print(f"Monomer source dir:  {monomer_source_directory}")
     print()
 
     process_reactions(
-        input_directory,
-        output_directory,
+        args.input,
+        args.output,
         polytype_pca_path,
         method_pca_path,
         monomer_source_directory,
-        create_monomer_files=True,
+        create_monomer_files=not args.no_monomers,
     )
     print("\nDone!")

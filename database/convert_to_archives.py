@@ -65,32 +65,29 @@ def check_nomad_polymerization_installed() -> tuple[bool, Optional[str]]:
 
 
 def normalize_json_fields(data: dict) -> dict:
-    """
-    Normalize JSON field names to match what generate_pr_archive_from_json expects.
+    """Adapt input keys to the names ``generate_pr_archive_from_json`` reads.
 
-    Mapping:
-    - monomer1_smiles -> monomer1_s
-    - monomer2_smiles -> monomer2_s
-    - calculation_method -> determination_method
-    - r-product stays as is (already correct)
-
-    Args:
-        data: Original JSON data
-
-    Returns:
-        Normalized JSON data
+    The upstream ``PolymerizationReactionInput`` schema (see
+    https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions/blob/main/src/nomad_polymerization_reactions/models.py)
+    accepts the canonical key ``monomer{1,2}_smiles`` and ``calculation_method``
+    (with ``determination_method`` as a deprecated fallback). For inputs that
+    only carry the legacy ``monomer{1,2}_s`` or only ``determination_method``,
+    we promote them to the canonical names so the SMILES + calculation method
+    survive into the generated archive.
     """
     normalized = data.copy()
 
-    # Map SMILES fields
-    if "monomer1_smiles" in normalized and "monomer1_s" not in normalized:
-        normalized["monomer1_s"] = normalized.pop("monomer1_smiles")
-    if "monomer2_smiles" in normalized and "monomer2_s" not in normalized:
-        normalized["monomer2_s"] = normalized.pop("monomer2_smiles")
+    # Promote legacy SMILES keys to the canonical names if the canonical ones
+    # are absent. Never overwrite an existing canonical key.
+    if "monomer1_s" in normalized and "monomer1_smiles" not in normalized:
+        normalized["monomer1_smiles"] = normalized.pop("monomer1_s")
+    if "monomer2_s" in normalized and "monomer2_smiles" not in normalized:
+        normalized["monomer2_smiles"] = normalized.pop("monomer2_s")
 
-    # Map calculation_method to determination_method
-    if "calculation_method" in normalized and "determination_method" not in normalized:
-        normalized["determination_method"] = normalized.pop("calculation_method")
+    # Promote the deprecated determination_method fallback to the canonical
+    # calculation_method if no canonical value is present.
+    if "determination_method" in normalized and "calculation_method" not in normalized:
+        normalized["calculation_method"] = normalized.pop("determination_method")
 
     return normalized
 
