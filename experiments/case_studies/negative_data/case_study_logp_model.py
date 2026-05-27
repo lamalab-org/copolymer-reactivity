@@ -63,7 +63,7 @@ def evaluate_model_on_dataset(model, df_test, features, dataset_name):
             model_features = booster.feature_names
             if not model_features:
                 model_features = features
-        except:
+        except Exception:
             model_features = features
     else:
         model_features = features
