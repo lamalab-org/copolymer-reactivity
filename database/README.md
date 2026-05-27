@@ -126,50 +126,50 @@ python database/convert_to_archives.py --same-dir
 - Without `--mode`, the mode is automatically detected from the filename
 
 ### `convert_monomers.py`
-Converts monomer *property files* (molecule properties) to NOMAD monomer archive files.
 
-**Usage:**
+Builds one NOMAD monomer archive per distinct monomer in the curated reaction
+table. **Coverage is driven by `--reactions-csv`, not by the source directory**:
+every `monomer{1,2}_smiles` in `processed_data.csv` is guaranteed an archive,
+even if its precomputed quantum-feature file is missing — those become minimal
+`{smiles, name}` stubs (valid per the upstream `MonomerInput` schema).
 
-Standard usage (uses `copol_prediction/api/molecule_properties/`):
 ```bash
+# Default: writes 865 archives to database/output/monomers/
 python database/convert_monomers.py
 ```
 
-Monomer files are:
-1. Renamed from MD5 hash to `monomer_<IUPAC_name>.json`
-2. Converted to archive files
-3. Saved in `database/output/monomers/`
+The run ends with a coverage report listing how many archives carry rich
+features vs. are stubbed, plus the SMILES of any stub-only entries — rerun
+`copol_prediction/monomer_feature_calculation.py` to backfill descriptors.
 
-Different source directory:
+Useful flags:
+
 ```bash
+# Different feature-file source (default: copol_prediction/api/molecule_properties)
 python database/convert_monomers.py --source copol_prediction/output/molecule_properties
-```
 
-Custom output directory:
-```bash
+# Custom output directory
 python database/convert_monomers.py --output dump/monomer_archives
-```
 
-Reconvert all files (including existing ones):
-```bash
+# Re-archive monomers even if a target archive already exists
 python database/convert_monomers.py --no-skip
-```
 
-**Note:** The script uses `copol_utils.smiles_to_name()` to calculate IUPAC names. If not available, SMILES-based names are used.
-
-**Fixing Failed Files:**
-
-List failed files:
-```bash
-python database/convert_monomers.py --list-failed
-```
-
-Convert single file with custom name:
-```bash
+# One-off: re-archive a single source file under a custom name
 python database/convert_monomers.py --fix "C=COCC1CO1.OCCO.json" "2-(oxiran-2-ylmethoxy)ethanol"
 ```
 
-The archive files can then be uploaded directly to NOMAD.
+Display names are taken from the CSV's `monomer{1,2}_name` columns, with
+`copolextractor.utils.smiles_to_name()` as a fallback and the SMILES as last
+resort. The archive files can then be uploaded directly to NOMAD.
+
+For a single bundle suitable for upload, tar+gzip the output directory:
+
+```bash
+tar czf database/output/monomers.tar.gz -C database/output monomers/
+```
+
+The shipped `database/output/monomers.tar.gz` is regenerated from
+`monomers/` this way and tracks it 1:1.
 
 ## Analysis (plots + dataset statistics)
 

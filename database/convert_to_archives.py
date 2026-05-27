@@ -107,7 +107,9 @@ def convert_json_to_archive(
             print(f"Error converting {json_file.name}: {result.stderr}")
             return False
 
-        produced = tmp_path.with_suffix("").with_suffix(".archive.json")
+        # `with_suffix("")` is unsafe for stems containing dots — pathlib
+        # treats whatever follows the last dot as the suffix. Build by stem.
+        produced = tmp_path.parent / f"{tmp_path.stem}.archive.json"
         if not produced.exists():
             print(f"Warning: No archive file created for {json_file.name}")
             return False
