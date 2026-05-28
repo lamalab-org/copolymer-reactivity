@@ -29,7 +29,7 @@ rm -rf database/output/polymerization database/output/monomers
 mkdir -p database/output/polymerization database/output/monomers
 
 # Install optional dependencies for database scripts
-pip install .[database]
+pip install '.[database]'
 
 # 1) processed_data.csv → schema-compliant per-reaction JSONs
 python database/create_database_json.py
@@ -67,8 +67,8 @@ python database/create_database_json.py --input dump/processed_reactions/
 ### `convert_to_archives.py`
 Converts JSON files to NOMAD archive files (`.archive.json`) using the `nomad-polymerization` CLI tool.
 
-`nomad-polymerization-reactions` package installed as part of the `[database]` extras provides the 
-`nomad-polymerization` command, which is used under the hood by this script to convert each JSON file 
+`nomad-polymerization-reactions` package installed as part of the `[database]` extras provides the
+`nomad-polymerization` command, which is used under the hood by this script to convert each JSON file
 to an archive.
 
 **Usage:**
