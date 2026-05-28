@@ -48,7 +48,7 @@ extraction = [
     "pyyaml",
 ]
 database = [
-    "nomad-polymerization-reactions",
+    "nomad-polymerization-reactions>=1.0.0",
 ]
 testing = [
     "pytest>=7.0",
