@@ -47,6 +47,9 @@ extraction = [
     "backoff",
     "pyyaml",
 ]
+database = [
+    "nomad-polymerization-reactions",
+]
 testing = [
     "pytest>=7.0",
     "pytest-cov",
