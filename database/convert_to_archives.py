@@ -19,10 +19,7 @@ from typing import Optional, Tuple
 NOMAD_CLI = "nomad-polymerization"
 DEFAULT_INPUT_DIR = Path("dump/database_json")
 DEFAULT_OUTPUT_DIR = Path(__file__).parent / "output"
-INSTALL_HINT = (
-    "Install with:\n"
-    "  pip install '.[database]'\n"
-)
+INSTALL_HINT = "Install with:\n" "  pip install '.[database]'\n"
 
 
 def nomad_cli_available() -> bool:
