@@ -21,9 +21,7 @@ DEFAULT_INPUT_DIR = Path("dump/database_json")
 DEFAULT_OUTPUT_DIR = Path(__file__).parent / "output"
 INSTALL_HINT = (
     "Install with:\n"
-    "  pip install git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git\n"
-    "Note: the CLI needs numpy<2.0 — use a dedicated venv/conda env if your "
-    "main environment has numpy 2.x."
+    "  pip install '.[database]'\n"
 )
 
 
