@@ -582,8 +582,9 @@ def _collect_reactions_from_json_dir(input_dir: Path) -> "defaultdict[str, list]
 
 
 @functools.lru_cache(maxsize=20000)
-def _validate_doi_url(url: str, timeout: int = 6) -> bool:
-    """Return True if *url* resolves to an HTTP 200 response.
+def _validate_doi_url(url: str, timeout: int = 6) -> bool | None:
+    """Return True if *url* resolves to an HTTP 200 response, else False.
+    If the request fails (network error, timeout, etc.) returns None.
 
     Results are cached via ``@lru_cache`` so each unique URL is only
     fetched once per process run, along with a manual in-memory cache
@@ -591,13 +592,16 @@ def _validate_doi_url(url: str, timeout: int = 6) -> bool:
     """
     if _DOI_VALIDATION_CACHE.get(url) is not None:
         return _DOI_VALIDATION_CACHE[url]
+
     try:
         crossref_url = f"https://api.crossref.org/works/{url}"
         resp = requests.head(crossref_url, timeout=timeout)
-        valid = resp.status_code == 200
-        _DOI_VALIDATION_CACHE[url] = valid
     except Exception:
-        valid = False
+        return None
+
+    valid = resp.status_code == 200
+    _DOI_VALIDATION_CACHE[url] = valid
+
     return valid
 
 
