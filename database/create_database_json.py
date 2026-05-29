@@ -632,7 +632,7 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
     # source_filename is preferred; fall back to `source`, then
     # `original_source` (citation-style) for the rare pre-DOI papers.
     paper_to_source: Dict[str, str] = {}
-    source_not_resolved: Dict[str, str] = {}
+    invalid_paper_to_source: Dict[str, str] = {}
     if "PDF_name" in df.columns:
         for paper, group in df.groupby("PDF_name", sort=False):
             chosen: Optional[str] = None
@@ -655,13 +655,13 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
                         break
             if chosen is not None:
                 paper_to_source[paper] = chosen
-            if not _validate_doi_url(chosen):
-                source_not_resolved[paper] = chosen
+                if not _validate_doi_url(chosen):
+                    invalid_paper_to_source[paper] = chosen
     save_doi_validation_cache(_DOI_VALIDATION_CACHE)
     print()
-    print(f"Unable to assign valid DOI to {len(source_not_resolved):,} records: ")
-    for paper, source in source_not_resolved.items():
-        print(f'  - source: "{source}", paper: "{paper}"')
+    print(f"Invalid DOI chosen as source for {len(invalid_paper_to_source):,} records: ")
+    for paper, source in invalid_paper_to_source.items():
+        print(f'  - chosen source: "{source}", paper: "{paper}"')
     print()
     n_doi = sum(1 for v in paper_to_source.values() if v.startswith("http") or v.startswith("10."))
     print(f"Assigned canonical sources to {len(paper_to_source):,} papers ({n_doi:,} DOI URLs)")
