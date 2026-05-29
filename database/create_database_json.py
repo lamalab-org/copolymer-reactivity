@@ -16,6 +16,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import requests
 import pandas as pd
 
 try:
@@ -555,6 +556,40 @@ def _collect_reactions_from_json_dir(input_dir: Path) -> "defaultdict[str, list]
     return reactions_by_doi
 
 
+# In-process cache: url -> bool (True = resolves OK, False = broken).
+_doi_validity_cache: Dict[str, bool] = {}
+
+
+def _validate_doi_url(url: str, timeout: int = 6) -> bool:
+    """Return True if *url* resolves to an HTTP 2xx/3xx response.
+
+    Uses a HEAD request (cheap) and follows up to two redirects, which is
+    sufficient to confirm that ``https://doi.org/<doi>`` is live.  Falls back
+    to ``True`` when the ``requests`` library is unavailable so the rest of
+    the pipeline is unaffected in offline environments.
+
+    Results are cached in ``_doi_validity_cache`` so each unique URL is only
+    fetched once per process run.
+    """
+
+    if url in _doi_validity_cache:
+        return _doi_validity_cache[url]
+    try:
+        resp = requests.head(
+            url,
+            allow_redirects=True,
+            timeout=timeout,
+            headers={"User-Agent": "copolymer-reactivity-doi-check/1.0"},
+        )
+        valid = resp.status_code < 400
+    except Exception:
+        # Network error, timeout, SSL issue — treat as invalid so we fall back
+        # to the `source` column rather than silently storing a broken URL.
+        valid = False
+    _doi_validity_cache[url] = valid
+    return valid
+
+
 def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
     """Group reactions from `processed_data.csv` by normalised DOI.
 
@@ -593,8 +628,10 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
                 for fn in group["source_filename"]:
                     url = _doi_url_from_source_filename(fn)
                     if url is not None:
-                        chosen = url
-                        break
+                        if _validate_doi_url(url):
+                            chosen = url
+                            break
+                        # URL didn't resolve 
             if chosen is None and "source" in group.columns:
                 for s in group["source"]:
                     if isinstance(s, str) and s.strip():
