@@ -7,6 +7,7 @@ per-reaction JSONs) and emits one schema-compliant JSON per reaction under
 `.archive.json`.
 """
 
+import functools
 import hashlib
 import json
 import math
@@ -84,6 +85,30 @@ def normalize_doi(source: str) -> str:
 
     return s
 
+
+def load_doi_validation_cache() -> Dict[str, bool]:
+    """Load DOI validation cache from disk, if it exists."""
+    cache_path = Path("database/doi_validation_cache.json")
+    if cache_path.exists():
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: could not load DOI validation cache: {cache_path} ({e})")
+    return {}
+
+
+def save_doi_validation_cache(cache: Dict[str, bool]) -> None:
+    """Save DOI validation cache to disk."""
+    cache_path = Path("database/doi_validation_cache.json")
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2)
+    except Exception as e:
+        print(f"Warning: could not save DOI validation cache: {e}")
+
+
+_DOI_VALIDATION_CACHE = load_doi_validation_cache()
 
 _SOLVENT_FEATURE_KEYS = (
     "solvent_logP",
@@ -556,37 +581,23 @@ def _collect_reactions_from_json_dir(input_dir: Path) -> "defaultdict[str, list]
     return reactions_by_doi
 
 
-# In-process cache: url -> bool (True = resolves OK, False = broken).
-_doi_validity_cache: Dict[str, bool] = {}
-
-
+@functools.lru_cache(maxsize=20000)
 def _validate_doi_url(url: str, timeout: int = 6) -> bool:
-    """Return True if *url* resolves to an HTTP 2xx/3xx response.
+    """Return True if *url* resolves to an HTTP 200 response.
 
-    Uses a HEAD request (cheap) and follows up to two redirects, which is
-    sufficient to confirm that ``https://doi.org/<doi>`` is live.  Falls back
-    to ``True`` when the ``requests`` library is unavailable so the rest of
-    the pipeline is unaffected in offline environments.
-
-    Results are cached in ``_doi_validity_cache`` so each unique URL is only
-    fetched once per process run.
+    Results are cached via ``@lru_cache`` so each unique URL is only
+    fetched once per process run, along with a manual in-memory cache
+    to persist results across runs via `doi_validation_cache.json`.
     """
-
-    if url in _doi_validity_cache:
-        return _doi_validity_cache[url]
+    if _DOI_VALIDATION_CACHE.get(url) is not None:
+        return _DOI_VALIDATION_CACHE[url]
     try:
-        resp = requests.head(
-            url,
-            allow_redirects=True,
-            timeout=timeout,
-            headers={"User-Agent": "copolymer-reactivity-doi-check/1.0"},
-        )
-        valid = resp.status_code < 400
+        crossref_url = f"https://api.crossref.org/works/{url}"
+        resp = requests.head(crossref_url, timeout=timeout)
+        valid = resp.status_code == 200
+        _DOI_VALIDATION_CACHE[url] = valid
     except Exception:
-        # Network error, timeout, SSL issue — treat as invalid so we fall back
-        # to the `source` column rather than silently storing a broken URL.
         valid = False
-    _doi_validity_cache[url] = valid
     return valid
 
 
@@ -621,17 +632,17 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
     # source_filename is preferred; fall back to `source`, then
     # `original_source` (citation-style) for the rare pre-DOI papers.
     paper_to_source: Dict[str, str] = {}
+    source_not_resolved: Dict[str, str] = {}
     if "PDF_name" in df.columns:
         for paper, group in df.groupby("PDF_name", sort=False):
             chosen: Optional[str] = None
             if "source_filename" in group.columns:
                 for fn in group["source_filename"]:
                     url = _doi_url_from_source_filename(fn)
-                    if url is not None:
-                        if _validate_doi_url(url):
-                            chosen = url
-                            break
-                        # URL didn't resolve
+                    if url is not None and _validate_doi_url(url):
+                        chosen = url
+                        break
+                    # URL didn't resolve
             if chosen is None and "source" in group.columns:
                 for s in group["source"]:
                     if isinstance(s, str) and s.strip():
@@ -644,6 +655,16 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
                         break
             if chosen is not None:
                 paper_to_source[paper] = chosen
+            if not _validate_doi_url(chosen):
+                source_not_resolved[paper] = chosen
+    save_doi_validation_cache(_DOI_VALIDATION_CACHE)
+    print()
+    print(
+        f"Unable to assign valid DOI {len(source_not_resolved):,} records: "
+    )
+    for paper, source in source_not_resolved.items():
+        print(f'  - "{paper}": {source}')
+    print()
     n_doi = sum(1 for v in paper_to_source.values() if v.startswith("http") or v.startswith("10."))
     print(f"Assigned canonical sources to {len(paper_to_source):,} papers ({n_doi:,} DOI URLs)")
 
