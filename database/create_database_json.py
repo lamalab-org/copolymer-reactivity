@@ -659,11 +659,9 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
                 source_not_resolved[paper] = chosen
     save_doi_validation_cache(_DOI_VALIDATION_CACHE)
     print()
-    print(
-        f"Unable to assign valid DOI {len(source_not_resolved):,} records: "
-    )
+    print(f"Unable to assign valid DOI to {len(source_not_resolved):,} records: ")
     for paper, source in source_not_resolved.items():
-        print(f'  - "{paper}": {source}')
+        print(f'  - source: "{source}", paper: "{paper}"')
     print()
     n_doi = sum(1 for v in paper_to_source.values() if v.startswith("http") or v.startswith("10."))
     print(f"Assigned canonical sources to {len(paper_to_source):,} papers ({n_doi:,} DOI URLs)")
