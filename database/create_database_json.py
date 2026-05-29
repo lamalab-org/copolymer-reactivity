@@ -7,6 +7,7 @@ per-reaction JSONs) and emits one schema-compliant JSON per reaction under
 `.archive.json`.
 """
 
+import functools
 import hashlib
 import json
 import math
@@ -17,6 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
+import requests
 
 try:
     from rdkit import Chem
@@ -83,6 +85,30 @@ def normalize_doi(source: str) -> str:
 
     return s
 
+
+def load_doi_validation_cache() -> Dict[str, bool]:
+    """Load DOI validation cache from disk, if it exists."""
+    cache_path = Path("database/doi_validation_cache.json")
+    if cache_path.exists():
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: could not load DOI validation cache: {cache_path} ({e})")
+    return {}
+
+
+def save_doi_validation_cache(cache: Dict[str, bool]) -> None:
+    """Save DOI validation cache to disk."""
+    cache_path = Path("database/doi_validation_cache.json")
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2)
+    except Exception as e:
+        print(f"Warning: could not save DOI validation cache: {e}")
+
+
+_DOI_VALIDATION_CACHE = load_doi_validation_cache()
 
 _SOLVENT_FEATURE_KEYS = (
     "solvent_logP",
@@ -555,6 +581,30 @@ def _collect_reactions_from_json_dir(input_dir: Path) -> "defaultdict[str, list]
     return reactions_by_doi
 
 
+@functools.lru_cache(maxsize=20000)
+def _validate_doi_url(url: str, timeout: int = 6) -> bool | None:
+    """Return True if *url* resolves to an HTTP 200 response, else False.
+    If the request fails (network error, timeout, etc.) returns None.
+
+    Results are cached via ``@lru_cache`` so each unique URL is only
+    fetched once per process run, along with a manual in-memory cache
+    to persist results across runs via `doi_validation_cache.json`.
+    """
+    if _DOI_VALIDATION_CACHE.get(url) is not None:
+        return _DOI_VALIDATION_CACHE[url]
+
+    try:
+        crossref_url = f"https://api.crossref.org/works/{url}"
+        resp = requests.head(crossref_url, timeout=timeout)
+    except Exception:
+        return None
+
+    valid = resp.status_code == 200
+    _DOI_VALIDATION_CACHE[url] = valid
+
+    return valid
+
+
 def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
     """Group reactions from `processed_data.csv` by normalised DOI.
 
@@ -586,15 +636,17 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
     # source_filename is preferred; fall back to `source`, then
     # `original_source` (citation-style) for the rare pre-DOI papers.
     paper_to_source: Dict[str, str] = {}
+    invalid_paper_to_source: Dict[str, str] = {}
     if "PDF_name" in df.columns:
         for paper, group in df.groupby("PDF_name", sort=False):
             chosen: Optional[str] = None
             if "source_filename" in group.columns:
                 for fn in group["source_filename"]:
                     url = _doi_url_from_source_filename(fn)
-                    if url is not None:
+                    if url is not None and _validate_doi_url(url):
                         chosen = url
                         break
+                    # URL didn't resolve
             if chosen is None and "source" in group.columns:
                 for s in group["source"]:
                     if isinstance(s, str) and s.strip():
@@ -607,6 +659,14 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
                         break
             if chosen is not None:
                 paper_to_source[paper] = chosen
+                if not _validate_doi_url(chosen):
+                    invalid_paper_to_source[paper] = chosen
+    save_doi_validation_cache(_DOI_VALIDATION_CACHE)
+    print()
+    print(f"Invalid DOI chosen as source for {len(invalid_paper_to_source):,} records: ")
+    for paper, source in invalid_paper_to_source.items():
+        print(f'  - chosen source: "{source}", paper: "{paper}"')
+    print()
     n_doi = sum(1 for v in paper_to_source.values() if v.startswith("http") or v.startswith("10."))
     print(f"Assigned canonical sources to {len(paper_to_source):,} papers ({n_doi:,} DOI URLs)")
 
