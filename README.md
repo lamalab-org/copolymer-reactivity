@@ -91,6 +91,7 @@ pip install -e .                # core deps
 pip install -e ".[extraction]"  # also install the extraction pipeline
 pip install -e ".[training]"    # also install training-only deps
 pip install -e ".[testing]"     # also install pytest + plugins
+pip install -e ".[database]"    # also install database deps
 ```
 
 ## Reproducing the paper's numbers
