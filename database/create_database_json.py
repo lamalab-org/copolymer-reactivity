@@ -16,8 +16,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import requests
 import pandas as pd
+import requests
 
 try:
     from rdkit import Chem
@@ -631,7 +631,7 @@ def _collect_reactions_from_csv(csv_path: Path) -> "defaultdict[str, list]":
                         if _validate_doi_url(url):
                             chosen = url
                             break
-                        # URL didn't resolve 
+                        # URL didn't resolve
             if chosen is None and "source" in group.columns:
                 for s in group["source"]:
                     if isinstance(s, str) and s.strip():
