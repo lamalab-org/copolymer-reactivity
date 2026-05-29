@@ -28,6 +28,9 @@ rm -rf dump/database_json
 rm -rf database/output/polymerization database/output/monomers
 mkdir -p database/output/polymerization database/output/monomers
 
+# Install optional dependencies for database scripts
+pip install '.[database]'
+
 # 1) processed_data.csv → schema-compliant per-reaction JSONs
 python database/create_database_json.py
 
@@ -64,30 +67,9 @@ python database/create_database_json.py --input dump/processed_reactions/
 ### `convert_to_archives.py`
 Converts JSON files to NOMAD archive files (`.archive.json`) using the `nomad-polymerization` CLI tool.
 
-**⚠️ IMPORTANT: NumPy Compatibility**
-
-The `nomad-polymerization` tool requires NumPy < 2.0. If you have NumPy 2.x installed, create a separate virtual environment:
-
-```bash
-# Create virtual environment
-python -m venv nomad_env
-
-# Activate (Linux/Mac)
-source nomad_env/bin/activate
-
-# Activate (Windows)
-nomad_env\Scripts\activate
-
-# Install dependencies
-pip install 'numpy<2.0' git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git
-```
-
-Then run the script (it should automatically find the correct environment, or specify with `--python-env`).
-
-**Standard Installation (if NumPy < 2.0 is already installed):**
-```bash
-pip install git+https://github.com/FAIRmat-NFDI/nomad-polymerization-reactions.git
-```
+`nomad-polymerization-reactions` package installed as part of the `[database]` extras provides the
+`nomad-polymerization` command, which is used under the hood by this script to convert each JSON file
+to an archive.
 
 **Usage:**
 
