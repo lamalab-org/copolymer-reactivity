@@ -28,6 +28,20 @@ def _logp_of(smiles: str) -> Optional[float]:
         return None
 
 
+@functools.lru_cache(maxsize=2048)
+def _canonical_smiles(smiles: str) -> Optional[str]:
+    """Canonical SMILES for `smiles`, or ``None`` if it can't be parsed."""
+    if not isinstance(smiles, str) or not smiles:
+        return None
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+    except Exception:
+        return None
+    if mol is None:
+        return None
+    return Chem.MolToSmiles(mol)
+
+
 def calculate_solvent_logp(smiles: str) -> Optional[float]:
     """Calculate logP for a solvent SMILES string (memoised via _logp_of)."""
     if pd.isna(smiles) or not smiles:
@@ -165,6 +179,77 @@ SOLVENT_SETS: Dict[str, List[Dict[str, str]]] = {
 # logP to the base solvent" (the original behaviour of this module).
 SOLVENT_SET_CHOICES = ("top3",) + tuple(SOLVENT_SETS)
 
+
+# Canonical-SMILES → curated display name. Built lazily from SOLVENT_SETS so
+# that any solvent the user passes — in any RDKit-equivalent SMILES form —
+# resolves to a human-readable name (e.g. `CS(=O)C` → "dimethyl sulfoxide",
+# stored in the curated table as `CS(C)=O`).
+_CURATED_NAME_BY_CANONICAL: Dict[str, str] = {}
+
+
+def _curated_name_lookup() -> Dict[str, str]:
+    if not _CURATED_NAME_BY_CANONICAL:
+        for entries in SOLVENT_SETS.values():
+            for entry in entries:
+                canon = _canonical_smiles(entry["smiles"])
+                if canon and canon not in _CURATED_NAME_BY_CANONICAL:
+                    _CURATED_NAME_BY_CANONICAL[canon] = entry["name"]
+    return _CURATED_NAME_BY_CANONICAL
+
+
+# Dataset-derived canonical-SMILES → first non-empty `solvent` name, memoised
+# per DataFrame identity. Falls back to dataset names for solvents that aren't
+# in the curated sets (e.g. the long CoA-style solvents that appear in the
+# corpus but aren't part of the UI's `common`/`aromatic`/etc. menus).
+_DATASET_NAME_MEMO: Dict[int, Dict[str, str]] = {}
+
+
+def _dataset_name_lookup(dataset_df: Optional[pd.DataFrame]) -> Dict[str, str]:
+    if dataset_df is None:
+        return {}
+    cached = _DATASET_NAME_MEMO.get(id(dataset_df))
+    if cached is not None:
+        return cached
+    out: Dict[str, str] = {}
+    for entry in _unique_solvents(dataset_df):
+        canon = _canonical_smiles(entry["smiles"])
+        name = entry.get("name")
+        if not canon or not name:
+            continue
+        # Skip the SMILES-as-name placeholder that `_unique_solvents` falls
+        # back to when the dataset row has no `solvent` value.
+        if name == entry["smiles"]:
+            continue
+        out.setdefault(canon, name)
+    _DATASET_NAME_MEMO[id(dataset_df)] = out
+    return out
+
+
+def resolve_solvent_name(
+    smiles: str,
+    dataset_df: Optional[pd.DataFrame] = None,
+) -> str:
+    """Best human-readable name for a solvent SMILES.
+
+    Lookup order: curated `SOLVENT_SETS` (canonical-SMILES match, so
+    `CS(=O)C` resolves the same as `CS(C)=O`) → first matching `solvent`
+    column in `dataset_df` → the raw SMILES string. The endpoint used to
+    fall straight to the raw SMILES whenever the caller's solvent wasn't
+    an exact-string match for the chosen `solvent_set` curated list AND
+    the dataset, which surfaced in the UI as e.g. "Baseline: random in
+    CS(=O)C at 60°C".
+    """
+    canon = _canonical_smiles(smiles)
+    if canon:
+        curated = _curated_name_lookup().get(canon)
+        if curated:
+            return curated
+        dataset_name = _dataset_name_lookup(dataset_df).get(canon)
+        if dataset_name:
+            return dataset_name
+    return smiles
+
+
 # Temperature schemes. Each maps to an explicit list of temperatures (°C).
 TEMPERATURE_MODE_CHOICES = ("40-80", "20-100", "fixed60", "step20")
 
@@ -211,16 +296,9 @@ def resolve_solvents(
             target_logp=base_logp, dataset_df=dataset_df, n_solvents=n_solvents + 5, tolerance=1.0
         )
         similar = [s for s in similar if s["smiles"] != base_solvent_smiles]
-        base_name = base_solvent_smiles
-        for _, row in dataset_df.iterrows():
-            if row.get("solvent_smiles") == base_solvent_smiles:
-                potential = row.get("solvent", "")
-                if pd.notna(potential) and potential:
-                    base_name = str(potential)
-                    break
         base_info = {
             "smiles": base_solvent_smiles,
-            "name": base_name,
+            "name": resolve_solvent_name(base_solvent_smiles, dataset_df),
             "logp": base_logp,
             "logp_diff": 0.0,
         }
@@ -446,7 +524,7 @@ def find_architecture_switches(
         solvents = [
             {
                 "smiles": base_solvent_smiles,
-                "name": base_solvent_smiles,
+                "name": resolve_solvent_name(base_solvent_smiles, dataset_df),
                 "logp": base_logp,
                 "logp_diff": 0.0,
             }

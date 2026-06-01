@@ -401,3 +401,42 @@ def test_find_architecture_switch(client):
                 assert ref["doi_url"] == f"https://doi.org/{ref['doi']}"
     # Ranked by smallest |delta_logp|.
     assert deltas == sorted(deltas), deltas
+
+
+def test_find_architecture_switch_baseline_name_canonicalized(client):
+    """`baseline.solvent_name` must resolve to a human-readable name even when
+
+    - the user's solvent isn't part of the chosen `solvent_set` curated list
+      (e.g. ethanol with `solvent_set='aromatic'`), AND
+    - the user's SMILES is RDKit-equivalent but not byte-equal to the
+      curated/stored form (e.g. DMSO as `CS(=O)C` vs. curated `CS(C)=O`).
+
+    Used to fall back to the raw SMILES, surfacing in the UI as
+    "Baseline: random in CCO at 60°C" / "in CS(=O)C at 60°C".
+    """
+    # Ethanol not in the aromatic set — must still resolve to "ethanol".
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "CCO",
+            "solvent_set": "aromatic",
+            "temperature_mode": "40-80",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["baseline"]["solvent_name"] == "ethanol"
+
+    # DMSO via the alternative `CS(=O)C` form — canonical-SMILES match against
+    # the curated `CS(C)=O` entry must still return "dimethyl sulfoxide".
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "CS(=O)C",
+            "solvent_set": "top3",
+            "temperature_mode": "40-80",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["baseline"]["solvent_name"] == "dimethyl sulfoxide"
