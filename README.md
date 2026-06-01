@@ -94,6 +94,37 @@ pip install -e ".[testing]"     # also install pytest + plugins
 pip install -e ".[database]"    # also install database deps
 ```
 
+### Install with `uv` (reproducible environment)
+
+To install the package with the same core dependencies as those used during
+development, we recommend syncing with `uv`, which will create a virtual environment
+and install the exact versions of all dependencies as specified in `pyproject.toml`
+and `uv.lock`. First,
+[install `uv`](https://docs.astral.sh/uv/getting-started/installation/) if you
+haven't already. Then, run the following command in the root of the repository:
+
+```bash
+uv sync --frozen
+```
+
+To install with optional dependencies, use:
+
+```bash
+uv sync --frozen --extra extraction
+uv sync --frozen --extra training
+uv sync --frozen --extra testing
+uv sync --frozen --extra database
+
+# or all at once:
+uv sync --frozen --all-extras
+```
+
+To use the virtual environment created by `uv` for running Python scripts, use:
+
+```bash
+uv run python <script_path>
+```
+
 ## Reproducing the paper's numbers
 
 ```bash
