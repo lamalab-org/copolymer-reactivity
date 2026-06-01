@@ -116,7 +116,13 @@ uv sync --frozen --extra testing
 uv sync --frozen --extra database
 
 # or all at once:
-uv sync --frozen --all-extra
+uv sync --frozen --all-extras
+```
+
+To use the virtual environment created by `uv` for running Python scripts, use:
+
+```bash
+uv run python <script_path>
 ```
 
 ## Reproducing the paper's numbers
