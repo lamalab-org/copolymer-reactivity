@@ -28,8 +28,19 @@ def _logp_of(smiles: str) -> Optional[float]:
         return None
 
 
-@functools.lru_cache(maxsize=2048)
-def _canonical_smiles(smiles: str) -> Optional[str]:
+# ----------------------------------------------------------------------------
+# Solvent identity primitives.
+#
+# Anywhere we compare or look up solvents, we go through `canonical_smiles` so
+# that RDKit-equivalent inputs (``CS(=O)C`` vs. ``CS(C)=O``, ``OCC`` vs.
+# ``CCO``, …) are treated as the same molecule. Byte-string SMILES comparison
+# is never correct for chemistry; centralising it here keeps the rest of the
+# module honest.
+# ----------------------------------------------------------------------------
+
+
+@functools.lru_cache(maxsize=4096)
+def canonical_smiles(smiles: str) -> Optional[str]:
     """Canonical SMILES for `smiles`, or ``None`` if it can't be parsed."""
     if not isinstance(smiles, str) or not smiles:
         return None
@@ -40,6 +51,20 @@ def _canonical_smiles(smiles: str) -> Optional[str]:
     if mol is None:
         return None
     return Chem.MolToSmiles(mol)
+
+
+def same_solvent(a: Optional[str], b: Optional[str]) -> bool:
+    """``True`` iff two SMILES strings denote the same molecule.
+
+    Falls back to byte-equality when either side can't be parsed, so callers
+    using this for both valid and placeholder strings still get a sensible
+    answer.
+    """
+    ca = canonical_smiles(a or "")
+    cb = canonical_smiles(b or "")
+    if ca is None or cb is None:
+        return (a or "") == (b or "")
+    return ca == cb
 
 
 def calculate_solvent_logp(smiles: str) -> Optional[float]:
@@ -180,48 +205,47 @@ SOLVENT_SETS: Dict[str, List[Dict[str, str]]] = {
 SOLVENT_SET_CHOICES = ("top3",) + tuple(SOLVENT_SETS)
 
 
-# Canonical-SMILES → curated display name. Built lazily from SOLVENT_SETS so
-# that any solvent the user passes — in any RDKit-equivalent SMILES form —
-# resolves to a human-readable name (e.g. `CS(=O)C` → "dimethyl sulfoxide",
-# stored in the curated table as `CS(C)=O`).
-_CURATED_NAME_BY_CANONICAL: Dict[str, str] = {}
+# Canonical SMILES → display name, sourced (in this order, curated wins) from:
+#   1. SOLVENT_SETS — the UI's curated common names ("dimethyl sulfoxide" etc.)
+#   2. The dataset's `solvent` column — for anything else seen in the corpus.
+#
+# Built once per dataset DataFrame and memoised by `id()`; the dataset is
+# loaded at startup and never mutated, so this is safe for the process
+# lifetime. The curated table is process-global (lru_cache).
 
 
-def _curated_name_lookup() -> Dict[str, str]:
-    if not _CURATED_NAME_BY_CANONICAL:
-        for entries in SOLVENT_SETS.values():
-            for entry in entries:
-                canon = _canonical_smiles(entry["smiles"])
-                if canon and canon not in _CURATED_NAME_BY_CANONICAL:
-                    _CURATED_NAME_BY_CANONICAL[canon] = entry["name"]
-    return _CURATED_NAME_BY_CANONICAL
+@functools.lru_cache(maxsize=None)
+def _curated_names() -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for entries in SOLVENT_SETS.values():
+        for entry in entries:
+            canon = canonical_smiles(entry["smiles"])
+            if canon:
+                out.setdefault(canon, entry["name"])
+    return out
 
 
-# Dataset-derived canonical-SMILES → first non-empty `solvent` name, memoised
-# per DataFrame identity. Falls back to dataset names for solvents that aren't
-# in the curated sets (e.g. the long CoA-style solvents that appear in the
-# corpus but aren't part of the UI's `common`/`aromatic`/etc. menus).
-_DATASET_NAME_MEMO: Dict[int, Dict[str, str]] = {}
+_DATASET_NAMES_BY_ID: Dict[int, Dict[str, str]] = {}
 
 
-def _dataset_name_lookup(dataset_df: Optional[pd.DataFrame]) -> Dict[str, str]:
+def _dataset_names(dataset_df: Optional[pd.DataFrame]) -> Dict[str, str]:
     if dataset_df is None:
         return {}
-    cached = _DATASET_NAME_MEMO.get(id(dataset_df))
+    cached = _DATASET_NAMES_BY_ID.get(id(dataset_df))
     if cached is not None:
         return cached
     out: Dict[str, str] = {}
-    for entry in _unique_solvents(dataset_df):
-        canon = _canonical_smiles(entry["smiles"])
-        name = entry.get("name")
-        if not canon or not name:
-            continue
-        # Skip the SMILES-as-name placeholder that `_unique_solvents` falls
-        # back to when the dataset row has no `solvent` value.
-        if name == entry["smiles"]:
-            continue
-        out.setdefault(canon, name)
-    _DATASET_NAME_MEMO[id(dataset_df)] = out
+    if {"solvent_smiles", "solvent"} <= set(dataset_df.columns):
+        for sm, nm in zip(dataset_df["solvent_smiles"], dataset_df["solvent"]):
+            if not isinstance(sm, str) or not isinstance(nm, str):
+                continue
+            nm = nm.strip()
+            if not nm:
+                continue
+            canon = canonical_smiles(sm)
+            if canon:
+                out.setdefault(canon, nm)
+    _DATASET_NAMES_BY_ID[id(dataset_df)] = out
     return out
 
 
@@ -229,25 +253,16 @@ def resolve_solvent_name(
     smiles: str,
     dataset_df: Optional[pd.DataFrame] = None,
 ) -> str:
-    """Best human-readable name for a solvent SMILES.
+    """Human-readable name for a solvent SMILES.
 
-    Lookup order: curated `SOLVENT_SETS` (canonical-SMILES match, so
-    `CS(=O)C` resolves the same as `CS(C)=O`) → first matching `solvent`
-    column in `dataset_df` → the raw SMILES string. The endpoint used to
-    fall straight to the raw SMILES whenever the caller's solvent wasn't
-    an exact-string match for the chosen `solvent_set` curated list AND
-    the dataset, which surfaced in the UI as e.g. "Baseline: random in
-    CS(=O)C at 60°C".
+    Lookup is by canonical SMILES — so ``CS(=O)C`` and ``CS(C)=O`` resolve
+    the same. Curated SOLVENT_SETS names win over dataset names; the raw
+    SMILES is the final fallback.
     """
-    canon = _canonical_smiles(smiles)
-    if canon:
-        curated = _curated_name_lookup().get(canon)
-        if curated:
-            return curated
-        dataset_name = _dataset_name_lookup(dataset_df).get(canon)
-        if dataset_name:
-            return dataset_name
-    return smiles
+    canon = canonical_smiles(smiles)
+    if canon is None:
+        return smiles
+    return _curated_names().get(canon) or _dataset_names(dataset_df).get(canon) or smiles
 
 
 # Temperature schemes. Each maps to an explicit list of temperatures (°C).
@@ -295,7 +310,7 @@ def resolve_solvents(
         similar = find_similar_solvents(
             target_logp=base_logp, dataset_df=dataset_df, n_solvents=n_solvents + 5, tolerance=1.0
         )
-        similar = [s for s in similar if s["smiles"] != base_solvent_smiles]
+        similar = [s for s in similar if not same_solvent(s["smiles"], base_solvent_smiles)]
         base_info = {
             "smiles": base_solvent_smiles,
             "name": resolve_solvent_name(base_solvent_smiles, dataset_df),
@@ -520,7 +535,7 @@ def find_architecture_switches(
     # Search solvents — the chosen set plus the base solvent itself, so the
     # baseline cell is always present in the grid.
     solvents = resolve_solvents(solvent_set, base_solvent_smiles, base_logp, dataset_df, n_solvents)
-    if not any(s["smiles"] == base_solvent_smiles for s in solvents):
+    if not any(same_solvent(s["smiles"], base_solvent_smiles) for s in solvents):
         solvents = [
             {
                 "smiles": base_solvent_smiles,
@@ -550,12 +565,14 @@ def find_architecture_switches(
         calculate_solvent_features_func,
     )
 
-    # The baseline cell: base solvent at base temperature.
+    # The baseline cell: base solvent at base temperature. Compare by
+    # canonical SMILES so the grid cell can carry the curated SMILES form
+    # (e.g. `CCO`) even when the caller passed an equivalent (`OCC`).
     baseline = next(
         (
             c
             for c in grid
-            if c["solvent_smiles"] == base_solvent_smiles
+            if same_solvent(c["solvent_smiles"], base_solvent_smiles)
             and abs(c["temperature"] - base_temperature) < 1e-9
         ),
         None,
