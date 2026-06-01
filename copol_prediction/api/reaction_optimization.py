@@ -28,6 +28,45 @@ def _logp_of(smiles: str) -> Optional[float]:
         return None
 
 
+# ----------------------------------------------------------------------------
+# Solvent identity primitives.
+#
+# Anywhere we compare or look up solvents, we go through `canonical_smiles` so
+# that RDKit-equivalent inputs (``CS(=O)C`` vs. ``CS(C)=O``, ``OCC`` vs.
+# ``CCO``, …) are treated as the same molecule. Byte-string SMILES comparison
+# is never correct for chemistry; centralising it here keeps the rest of the
+# module honest.
+# ----------------------------------------------------------------------------
+
+
+@functools.lru_cache(maxsize=4096)
+def canonical_smiles(smiles: str) -> Optional[str]:
+    """Canonical SMILES for `smiles`, or ``None`` if it can't be parsed."""
+    if not isinstance(smiles, str) or not smiles:
+        return None
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+    except Exception:
+        return None
+    if mol is None:
+        return None
+    return Chem.MolToSmiles(mol)
+
+
+def same_solvent(a: Optional[str], b: Optional[str]) -> bool:
+    """``True`` iff two SMILES strings denote the same molecule.
+
+    Falls back to byte-equality when either side can't be parsed, so callers
+    using this for both valid and placeholder strings still get a sensible
+    answer.
+    """
+    ca = canonical_smiles(a or "")
+    cb = canonical_smiles(b or "")
+    if ca is None or cb is None:
+        return (a or "") == (b or "")
+    return ca == cb
+
+
 def calculate_solvent_logp(smiles: str) -> Optional[float]:
     """Calculate logP for a solvent SMILES string (memoised via _logp_of)."""
     if pd.isna(smiles) or not smiles:
@@ -165,6 +204,67 @@ SOLVENT_SETS: Dict[str, List[Dict[str, str]]] = {
 # logP to the base solvent" (the original behaviour of this module).
 SOLVENT_SET_CHOICES = ("top3",) + tuple(SOLVENT_SETS)
 
+
+# Canonical SMILES → display name, sourced (in this order, curated wins) from:
+#   1. SOLVENT_SETS — the UI's curated common names ("dimethyl sulfoxide" etc.)
+#   2. The dataset's `solvent` column — for anything else seen in the corpus.
+#
+# Built once per dataset DataFrame and memoised by `id()`; the dataset is
+# loaded at startup and never mutated, so this is safe for the process
+# lifetime. The curated table is process-global (lru_cache).
+
+
+@functools.lru_cache(maxsize=None)
+def _curated_names() -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for entries in SOLVENT_SETS.values():
+        for entry in entries:
+            canon = canonical_smiles(entry["smiles"])
+            if canon:
+                out.setdefault(canon, entry["name"])
+    return out
+
+
+_DATASET_NAMES_BY_ID: Dict[int, Dict[str, str]] = {}
+
+
+def _dataset_names(dataset_df: Optional[pd.DataFrame]) -> Dict[str, str]:
+    if dataset_df is None:
+        return {}
+    cached = _DATASET_NAMES_BY_ID.get(id(dataset_df))
+    if cached is not None:
+        return cached
+    out: Dict[str, str] = {}
+    if {"solvent_smiles", "solvent"} <= set(dataset_df.columns):
+        for sm, nm in zip(dataset_df["solvent_smiles"], dataset_df["solvent"]):
+            if not isinstance(sm, str) or not isinstance(nm, str):
+                continue
+            nm = nm.strip()
+            if not nm:
+                continue
+            canon = canonical_smiles(sm)
+            if canon:
+                out.setdefault(canon, nm)
+    _DATASET_NAMES_BY_ID[id(dataset_df)] = out
+    return out
+
+
+def resolve_solvent_name(
+    smiles: str,
+    dataset_df: Optional[pd.DataFrame] = None,
+) -> str:
+    """Human-readable name for a solvent SMILES.
+
+    Lookup is by canonical SMILES — so ``CS(=O)C`` and ``CS(C)=O`` resolve
+    the same. Curated SOLVENT_SETS names win over dataset names; the raw
+    SMILES is the final fallback.
+    """
+    canon = canonical_smiles(smiles)
+    if canon is None:
+        return smiles
+    return _curated_names().get(canon) or _dataset_names(dataset_df).get(canon) or smiles
+
+
 # Temperature schemes. Each maps to an explicit list of temperatures (°C).
 TEMPERATURE_MODE_CHOICES = ("40-80", "20-100", "fixed60", "step20")
 
@@ -210,17 +310,10 @@ def resolve_solvents(
         similar = find_similar_solvents(
             target_logp=base_logp, dataset_df=dataset_df, n_solvents=n_solvents + 5, tolerance=1.0
         )
-        similar = [s for s in similar if s["smiles"] != base_solvent_smiles]
-        base_name = base_solvent_smiles
-        for _, row in dataset_df.iterrows():
-            if row.get("solvent_smiles") == base_solvent_smiles:
-                potential = row.get("solvent", "")
-                if pd.notna(potential) and potential:
-                    base_name = str(potential)
-                    break
+        similar = [s for s in similar if not same_solvent(s["smiles"], base_solvent_smiles)]
         base_info = {
             "smiles": base_solvent_smiles,
-            "name": base_name,
+            "name": resolve_solvent_name(base_solvent_smiles, dataset_df),
             "logp": base_logp,
             "logp_diff": 0.0,
         }
@@ -442,11 +535,11 @@ def find_architecture_switches(
     # Search solvents — the chosen set plus the base solvent itself, so the
     # baseline cell is always present in the grid.
     solvents = resolve_solvents(solvent_set, base_solvent_smiles, base_logp, dataset_df, n_solvents)
-    if not any(s["smiles"] == base_solvent_smiles for s in solvents):
+    if not any(same_solvent(s["smiles"], base_solvent_smiles) for s in solvents):
         solvents = [
             {
                 "smiles": base_solvent_smiles,
-                "name": base_solvent_smiles,
+                "name": resolve_solvent_name(base_solvent_smiles, dataset_df),
                 "logp": base_logp,
                 "logp_diff": 0.0,
             }
@@ -472,12 +565,14 @@ def find_architecture_switches(
         calculate_solvent_features_func,
     )
 
-    # The baseline cell: base solvent at base temperature.
+    # The baseline cell: base solvent at base temperature. Compare by
+    # canonical SMILES so the grid cell can carry the curated SMILES form
+    # (e.g. `CCO`) even when the caller passed an equivalent (`OCC`).
     baseline = next(
         (
             c
             for c in grid
-            if c["solvent_smiles"] == base_solvent_smiles
+            if same_solvent(c["solvent_smiles"], base_solvent_smiles)
             and abs(c["temperature"] - base_temperature) < 1e-9
         ),
         None,

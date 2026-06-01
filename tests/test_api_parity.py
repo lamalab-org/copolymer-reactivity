@@ -401,3 +401,68 @@ def test_find_architecture_switch(client):
                 assert ref["doi_url"] == f"https://doi.org/{ref['doi']}"
     # Ranked by smallest |delta_logp|.
     assert deltas == sorted(deltas), deltas
+
+
+def test_find_architecture_switch_canonical_solvent_handling(client):
+    """Every solvent identity question — name lookup, dedup, baseline match —
+    must go through canonical SMILES so RDKit-equivalent inputs are treated
+    as the same molecule.
+
+    The previous implementation compared SMILES byte-by-byte, which produced
+    two visible failures in the UI:
+
+      1. `baseline.solvent_name` fell back to the raw SMILES whenever the
+         caller's solvent wasn't an exact-string match for the chosen
+         `solvent_set` curated list (e.g. ``"in CCO at 60°C"``).
+      2. A non-canonical SMILES equivalent to a curated entry (e.g. ``OCC``
+         for ethanol, ``CS(=O)C`` for DMSO) produced a duplicate grid cell:
+         the curated `CCO`/`CS(C)=O` cell **plus** a prepended cell for the
+         user's input — wasted compute and ghost "counterfactual" risk.
+    """
+    # (1) Name resolution: ethanol not in the aromatic curated set, still
+    # resolves to "ethanol" via the curated SOLVENT_SETS lookup.
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "CCO",
+            "solvent_set": "aromatic",
+            "temperature_mode": "40-80",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["baseline"]["solvent_name"] == "ethanol"
+
+    # (1') Name resolution under non-canonical SMILES: DMSO as ``CS(=O)C`` vs.
+    # curated ``CS(C)=O`` — canonical match must still return the common name.
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "CS(=O)C",
+            "solvent_set": "top3",
+            "temperature_mode": "40-80",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["baseline"]["solvent_name"] == "dimethyl sulfoxide"
+
+    # (2) Dedup: ethanol via non-canonical ``OCC`` with the ``common`` set
+    # (which already contains ``CCO``). n_evaluated must match the bare set
+    # size — no duplicate ethanol cell.
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "OCC",
+            "solvent_set": "common",
+            "temperature_mode": "fixed60",
+        },
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["baseline"]["solvent_name"] == "ethanol"
+    # ``common`` has 8 solvents × 1 temperature (fixed60). Without canonical
+    # dedup we would see 9 because the prepended ``OCC`` would slip past the
+    # ``s["smiles"] == base_solvent_smiles`` check.
+    assert body["n_evaluated"] == 8, body["n_evaluated"]
