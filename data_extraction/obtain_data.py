@@ -56,6 +56,7 @@ class ExtractionConfig:
     crossref_metadata_output_file: Path
     keywords_filter: Dict[str, int]
     output_file_pre_download_filter: Path
+    pdf_download_input_file: Path
     score_limit: int
     number_of_selected_papers: int
     input_folder_images: Path
@@ -171,7 +172,7 @@ def obtain_data(
 
     if steps.pdf_download:
         pdf_download(
-            str(config.output_file_pre_download_filter),
+            str(config.pdf_download_input_file),
             str(config.pdf_folder),
         )
 
@@ -235,6 +236,7 @@ def main() -> None:
             "reactivity ratios": 40,
         },
         output_file_pre_download_filter=metadata_dir / "selected_papers.json",
+        pdf_download_input_file=metadata_dir / "selected_papers_merged.json",
         score_limit=65,
         number_of_selected_papers=2000,
         input_folder_images=llm_images_dir,
