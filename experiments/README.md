@@ -7,19 +7,20 @@ Systematic experiments for copolymer microstructure prediction model development
 ```
 experiments/
 ├── feature_comparison/         # Compare different molecular features
-│   ├── baseline/              # Quantum chemical descriptors
-│   ├── fingerprint/           # Morgan fingerprints
-│   └── comparison/            # Analysis and plots
+│   ├── data/                  # Morgan fingerprint train/test data
+│   ├── fingerprint/           # Morgan fingerprint feature processing
+│   ├── results/               # Metrics, plots
+│   └── run_comparison.py      # Trains + compares both variants
 ├── filter_comparison/         # Compare data filtering strategies
 │   └── sweep_filters.py
 ├── reaction_conditions_comparison/  # Compare with/without reaction conditions
-│   ├── full_model/            # Model with all features
-│   ├── no_reaction_conditions/ # Model without reaction condition features
-│   └── comparison/            # Analysis and plots
-├── data/                      # Shared train/test splits
-├── archive/                   # Old/deprecated scripts
-├── create_train_test_split.py # Split generation script
-└── run_all.sh                 # Run all experiments
+│   ├── results/               # Metrics, plots
+│   └── run_comparison.py      # Trains + compares both variants
+├── baseline/                   # Database-lookup baseline vs full model
+├── case_studies/                # Lab experiments, solvent & negative-data case studies
+├── permutation_importance/      # SHAP / permutation feature importance
+├── archive/                    # Old/deprecated scripts
+└── run_all.sh                  # Run all experiments
 ```
 
 ## 🚀 Quick Start
@@ -57,11 +58,9 @@ All scripts should use the central split directly from `copol_prediction/artifac
 
 **Option B: Run specific experiments**
 
-Feature comparison:
+Feature comparison (quantum-chemical descriptors vs Morgan fingerprints):
 ```bash
-cd feature_comparison/baseline && python train.py
-cd ../fingerprint && python train.py
-cd ../comparison && python compare.py
+cd feature_comparison && python run_comparison.py
 ```
 
 Filter comparison:
@@ -69,11 +68,9 @@ Filter comparison:
 cd filter_comparison && python sweep_filters.py
 ```
 
-Reaction conditions comparison:
+Reaction conditions comparison (with vs without reaction condition features):
 ```bash
-cd reaction_conditions_comparison/full_model && python train.py
-cd ../no_reaction_conditions && python train.py
-cd ../comparison && python compare.py
+cd reaction_conditions_comparison && python run_comparison.py
 ```
 
 ## 📊 Experiments
@@ -85,7 +82,10 @@ cd ../comparison && python compare.py
 - **Baseline**: 15 quantum chemical descriptors (Fukui indices, HOMO-LUMO gaps)
 - **Morgan Fingerprint**: 2048-bit Morgan fingerprints + other features
 
-**Results**: See `feature_comparison/README.md` and plots in `feature_comparison/comparison/plots/`
+Both variants use the same voting model (XGBoost + Tanimoto-similarity lookup);
+`run_comparison.py` trains and compares them in one go.
+
+**Results**: See `feature_comparison/results/`
 
 ### Filter Comparison
 
@@ -96,7 +96,7 @@ cd ../comparison && python compare.py
 - Method filtering
 - Combined filters
 
-**Results**: See `filter_comparison/README.md`
+**Results**: See `filter_comparison/output/`
 
 ### Reaction Conditions Comparison
 
@@ -107,7 +107,20 @@ cd ../comparison && python compare.py
 
 **Excluded features**: `temperature`, `polytype_emb_1`, `polytype_emb_2`, `method_emb_1`, `method_emb_2`, `solvent_logP`, `solvent_TPSA`, `solvent_HBD`, `solvent_FractionCSP3`
 
-**Results**: Plots saved to `reaction_conditions_comparison/comparison/plots/`
+Both variants use the same voting model; `run_comparison.py` trains and
+compares them in one go.
+
+**Results**: Plots saved to `reaction_conditions_comparison/results/`
+
+### Other Experiments
+
+- **`baseline/`**: Compares a pure database-lookup baseline (Tanimoto similarity)
+  against the full model and a model trained using only the baseline
+  prediction as a feature. See `baseline/README.md`.
+- **`case_studies/`**: Lab-experiment validation, solvent case study, and
+  negative-data case study.
+- **`permutation_importance/`**: SHAP-based and permutation-based feature
+  importance analysis.
 
 ## 📝 Notes
 

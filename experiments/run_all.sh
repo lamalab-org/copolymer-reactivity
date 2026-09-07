@@ -28,19 +28,18 @@ echo "FEATURE COMPARISON EXPERIMENTS"
 echo "=========================================="
 echo ""
 
-# Baseline (Quantum Features)
-echo ">> Training Baseline Model (Quantum Features)"
-cd feature_comparison/baseline && python train.py && cd ../..
+echo ">> Comparing quantum-chemical descriptors vs Morgan fingerprints"
+cd feature_comparison && python run_comparison.py && cd ..
 echo ""
 
-# Morgan Fingerprint
-echo ">> Training Fingerprint Model (Morgan)"
-cd feature_comparison/fingerprint && python train.py && cd ../..
+# Reaction Conditions Comparison Experiments
+echo "=========================================="
+echo "REACTION CONDITIONS COMPARISON EXPERIMENTS"
+echo "=========================================="
 echo ""
 
-# Compare Feature Models
-echo ">> Comparing Feature Models"
-cd feature_comparison/comparison && python compare.py && cd ../..
+echo ">> Comparing model with vs without reaction condition features"
+cd reaction_conditions_comparison && python run_comparison.py && cd ..
 echo ""
 
 # Filter Comparison Experiments
@@ -59,7 +58,8 @@ echo "COMPLETE!"
 echo "=========================================="
 echo ""
 echo "Results:"
-echo "  - Feature comparison plots: feature_comparison/comparison/plots/"
-echo "  - Filter comparison results: filter_comparison/results/"
+echo "  - Feature comparison results: feature_comparison/results/"
+echo "  - Reaction conditions comparison results: reaction_conditions_comparison/results/"
+echo "  - Filter comparison results: filter_comparison/output/"
 echo ""
 
