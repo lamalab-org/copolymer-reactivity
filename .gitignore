@@ -454,4 +454,8 @@ nomad_env/
 # `dump/` was a legacy-code archive — keep it out of the working tree
 # entirely so anyone cloning fresh doesn't pull it back as untracked.
 dump/
+# Vendored xtb source checkout — not used by the build (the API installs
+# xtb-python via conda-forge instead, see api/Dockerfile), kept out like
+# nomad_env/ and dump/ above.
+xtb/
 
