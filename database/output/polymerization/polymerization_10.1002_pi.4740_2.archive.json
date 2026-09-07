@@ -1,0 +1,54 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pi.4740"
+        },
+        "r_product": 1.34,
+        "monomers": [
+            {
+                "name": "2,2-dimethyltrimethylene carbonate",
+                "smiles": "CC1(C)COC(=O)OC1"
+            },
+            {
+                "name": "ethyl diazoacetate",
+                "smiles": "CCOC(=O)C=[N+]=[N-]"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 473.15,
+            "solvent": {
+                "smile": "ClC(Cl)Cl"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.9864,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 21.346999999999998,
+                "labute_ASA": 39.64904970847457,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "carbene polymerization",
+            "calculation_method": "EVM Program",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.47,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.91,
+                    "reaction_constant_confi": 0.01
+                }
+            ],
+            "polytype_emb_1": 1.2228673954769058,
+            "polytype_emb_2": -7.324597253677013,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

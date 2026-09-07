@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.2307/3572476"
+        },
+        "monomers": [
+            {
+                "name": "bis(beta-chloroethyl) vinylphosphonate",
+                "smiles": "C=CP(=O)(OCCCl)OCCCl"
+            },
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 303.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.16
+                },
+                {
+                    "reaction_constant": 2.3
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

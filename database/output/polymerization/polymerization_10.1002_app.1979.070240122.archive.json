@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.1979.070240122"
+        },
+        "r_product": 0.04,
+        "monomers": [
+            {
+                "name": "ethylene chlorophosphonite",
+                "smiles": "ClP1OCCO1"
+            },
+            {
+                "name": "2-phenyl-1,3-dioxolane",
+                "smiles": "c1ccc(C2OCCO2)cc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 293.15,
+            "solvent": {
+                "smile": "ClCCCl"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.464,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 21.439999999999994,
+                "labute_ASA": 35.71072559598951,
+                "num_rotatable_bonds": 1.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "bulk",
+            "calculation_method": "EVM Program",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.18,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.22,
+                    "reaction_constant_confi": 0.02
+                }
+            ],
+            "polytype_emb_1": 5.239696440796716,
+            "polytype_emb_2": 3.9056625761735506,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

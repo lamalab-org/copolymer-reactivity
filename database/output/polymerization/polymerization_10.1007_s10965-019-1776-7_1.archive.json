@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1007/s10965-019-1776-7"
+        },
+        "monomers": [
+            {
+                "name": "N-vinylpyrrolidone",
+                "smiles": "C=CN1CCCC1=O"
+            },
+            {
+                "name": "Stearyl methacrylate",
+                "smiles": "C=C(C)C(=O)OCCCCCCCCCCCCCCCCCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "C1CCOC1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.7968,
+                "TPSA": 9.23,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 20.052999999999997,
+                "labute_ASA": 31.941791446997026,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "reversible addition-fragmentation chain transfer polymerization",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.185
+                },
+                {
+                    "reaction_constant": 0.791
+                }
+            ],
+            "polytype_emb_1": -1.1707708504083354,
+            "polytype_emb_2": 8.981992615962193,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

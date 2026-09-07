@@ -1,0 +1,36 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pola.10017"
+        },
+        "monomers": [
+            {
+                "name": "N-Isopropylacrylamide",
+                "smiles": "C=CC(=O)NC(C)C"
+            },
+            {
+                "name": "Glycidyl Methacrylate",
+                "smiles": "C=C(C)C(=O)OCC1CO1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.39
+                },
+                {
+                    "reaction_constant": 2.69
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

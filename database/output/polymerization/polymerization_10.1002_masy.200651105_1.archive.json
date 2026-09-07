@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/masy.200651105"
+        },
+        "monomers": [
+            {
+                "name": "isobutylene",
+                "smiles": "C=C(C)C"
+            },
+            {
+                "name": "isoprene",
+                "smiles": "C=CC(=C)C"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 193.14999999999998,
+            "solvent": {
+                "smile": "CC1CCCCC1"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.5866000000000007,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 32.24899999999998,
+                "labute_ASA": 45.92307256067996,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 7.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "cationic",
+            "calculation_method": "Kelen-Tudos and Non-linear Least Square",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.17,
+                    "reaction_constant_confi": 0.01
+                },
+                {
+                    "reaction_constant": 0.99,
+                    "reaction_constant_confi": 0.02
+                }
+            ],
+            "polytype_emb_1": -0.9889533523703218,
+            "polytype_emb_2": 4.807344842127502,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

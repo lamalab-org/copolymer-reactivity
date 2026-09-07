@@ -1,0 +1,37 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.1971.070150717"
+        },
+        "monomers": [
+            {
+                "name": "ethylene",
+                "smiles": "C=C"
+            },
+            {
+                "name": "vinyl acetate",
+                "smiles": "C=COC(C)=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 398.15,
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.26,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.26,
+                    "reaction_constant_confi": 0.02
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

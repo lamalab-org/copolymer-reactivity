@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.1994.070531307"
+        },
+        "monomers": [
+            {
+                "name": "Methacrylic Acid",
+                "smiles": "C=C(C)C(=O)O"
+            },
+            {
+                "name": "Ethyl Acrylate",
+                "smiles": "C=CC(=O)OCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 323.15,
+            "solvent": {
+                "smile": "O"
+            },
+            "solvent_descriptors": {
+                "log_P": -0.8247,
+                "TPSA": 31.5,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 3.6138,
+                "labute_ASA": 6.84923118831809,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_method": "emulsion",
+            "polymerization_type": "semicontinuous emulsion",
+            "calculation_method": "Kelen-Tudos method",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 2.9
+                },
+                {
+                    "reaction_constant": 0.162
+                }
+            ],
+            "polytype_emb_1": -9.905316129707295,
+            "polytype_emb_2": -2.529351047643987,
+            "method_emb_1": -4.911729965574156,
+            "method_emb_2": 0.0790518146698325
+        }
+    }
+}

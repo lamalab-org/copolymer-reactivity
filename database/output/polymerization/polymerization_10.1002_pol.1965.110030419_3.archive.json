@@ -1,0 +1,32 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.1965.110030419"
+        },
+        "monomers": [
+            {
+                "name": "Ethylene",
+                "smiles": "C=C"
+            },
+            {
+                "name": "Isobutylene",
+                "smiles": "C=C(C)C"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 403.15,
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 2.1
+                },
+                {
+                    "reaction_constant": 0.49
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577
+        }
+    }
+}

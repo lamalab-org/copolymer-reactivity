@@ -1,0 +1,49 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1080/00222338008081032"
+        },
+        "monomers": [
+            {
+                "name": "Ethyl methacrylate",
+                "smiles": "C=C(C)C(=O)OCC"
+            },
+            {
+                "name": "Naphthalene",
+                "smiles": "c1ccc2ccccc2c1"
+            }
+        ],
+        "reaction_conditions": {
+            "solvent": {
+                "smile": "[Na+]"
+            },
+            "solvent_descriptors": {
+                "log_P": -2.996,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 0.0,
+                "labute_ASA": 29.78187738261566,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 1.0
+            },
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-T\u00fcd\u00f6s",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 85.0
+                },
+                {
+                    "reaction_constant": -0.574
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 4.59470933256899,
+            "method_emb_2": -8.714039184444726
+        }
+    }
+}

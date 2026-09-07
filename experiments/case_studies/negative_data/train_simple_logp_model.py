@@ -805,7 +805,7 @@ def print_detailed_predictions(model, df_test, features, dataset_name="Test Set"
             model_features = booster.feature_names
             if not model_features:
                 model_features = features
-        except:
+        except Exception:
             model_features = features
     else:
         model_features = features
@@ -835,7 +835,7 @@ def print_detailed_predictions(model, df_test, features, dataset_name="Test Set"
     # Get prediction probabilities
     try:
         y_proba = model.predict_proba(X_test)
-    except:
+    except Exception:
         y_proba = None
 
     # Print for each data point
@@ -915,7 +915,7 @@ def evaluate_on_test(model, df_test, features, is_binary=True, dataset_name="Tes
             model_features = booster.feature_names
             if not model_features:
                 model_features = features
-        except:
+        except Exception:
             model_features = features
     else:
         model_features = features

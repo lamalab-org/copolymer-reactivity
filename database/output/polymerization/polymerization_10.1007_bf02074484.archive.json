@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1007/bf02074484"
+        },
+        "monomers": [
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "methyl methacrylate",
+                "smiles": "C=C(C)C(=O)OC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "O=C(OOC(=O)c1ccccc1)c1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.615400000000001,
+                "TPSA": 52.6,
+                "HBA": 4.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 63.71500000000003,
+                "labute_ASA": 103.69781152919381,
+                "num_rotatable_bonds": 2.0,
+                "ring_count": 2.0,
+                "heavy_atom_count": 18.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-Tudos",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.511
+                },
+                {
+                    "reaction_constant": 0.488
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

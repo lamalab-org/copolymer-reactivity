@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/macp.1996.021971025"
+        },
+        "monomers": [
+            {
+                "name": "ethylene",
+                "smiles": "C=C"
+            },
+            {
+                "name": "1-hexene",
+                "smiles": "C=CCCCC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 383.15,
+            "solvent": {
+                "smile": "CC(C)C"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.6622999999999999,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 20.511999999999997,
+                "labute_ASA": 27.834077371019372,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "slurry",
+            "polymerization_type": "coordination",
+            "calculation_method": "least-squares regression",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.5
+                },
+                {
+                    "reaction_constant": 1.0
+                }
+            ],
+            "polytype_emb_1": -6.727730914114285,
+            "polytype_emb_2": 3.6059111936796886,
+            "method_emb_1": 1.7126398769455735,
+            "method_emb_2": 6.032860174761046
+        }
+    }
+}

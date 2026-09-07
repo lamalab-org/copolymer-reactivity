@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.34012"
+        },
+        "monomers": [
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "methyl acrylate",
+                "smiles": "C=CC(=O)OC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 363.15,
+            "solvent": {
+                "smile": "C1CCOC1"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.7968,
+                "TPSA": 9.23,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 20.052999999999997,
+                "labute_ASA": 31.941791446997026,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 5.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "controlled/living radical",
+            "calculation_method": "extended Kelen-Tudor",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.018,
+                    "reaction_constant_confi": 0.06
+                },
+                {
+                    "reaction_constant": 0.177,
+                    "reaction_constant_confi": 0.025
+                }
+            ],
+            "polytype_emb_1": -0.25999378241877424,
+            "polytype_emb_2": 0.9153154695461616,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1134/s1560090420030148"
+        },
+        "monomers": [
+            {
+                "name": "acrylonitrile",
+                "smiles": "C=CC#N"
+            },
+            {
+                "name": "methyl acrylate",
+                "smiles": "C=CC(=O)OC"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "solvent": {
+                "smile": "CS(C)=O"
+            },
+            "solvent_descriptors": {
+                "log_P": -0.005299999999999971,
+                "TPSA": 17.07,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 19.990399999999998,
+                "labute_ASA": 28.478447345802074,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "controlled radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.3,
+                    "reaction_constant_confi": 0.1
+                },
+                {
+                    "reaction_constant": 1.1,
+                    "reaction_constant_confi": 0.1
+                }
+            ],
+            "polytype_emb_1": 0.35998281951277883,
+            "polytype_emb_2": 1.472774061492173,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

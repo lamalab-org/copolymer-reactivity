@@ -5,6 +5,7 @@ This module implements the database lookup approach from experiments/baseline
 to find the most similar data points based on Tanimoto similarity of monomers and solvents.
 """
 
+import functools
 import hashlib
 import os
 import pickle
@@ -15,6 +16,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+from class_labels import CLASS_LABELS
 from rdkit import Chem
 from rdkit.Chem import DataStructs, rdFingerprintGenerator
 
@@ -22,6 +24,27 @@ from rdkit.Chem import DataStructs, rdFingerprintGenerator
 # after the DOI with the single '/' replaced by '_' (dots preserved), e.g.
 # 10.1002/pol.1959.1203512832  ->  10.1002_pol.1959.1203512832.json
 _DOI_RE = re.compile(r"10\.\d{4,}/\S+")
+
+
+@functools.lru_cache(maxsize=20000)
+def _canonical_smiles(smiles) -> str:
+    """RDKit-canonical SMILES (cached per process).
+
+    Same-molecule SMILES can be written many ways (e.g. methyl methacrylate
+    as `CC(=C)C(=O)OC` vs the canonical `C=C(C)C(=O)OC`). Comparisons
+    elsewhere in this module must canonicalise both sides or they silently
+    miss matches. Returns the input stringified if RDKit can't parse it.
+    """
+    if smiles is None:
+        return ""
+    s = str(smiles)
+    if not s or s == "nan":
+        return ""
+    try:
+        mol = Chem.MolFromSmiles(s)
+        return Chem.MolToSmiles(mol) if mol is not None else s
+    except Exception:
+        return s
 
 
 def doi_from_source_filename(filename: Optional[str]) -> Optional[str]:
@@ -164,7 +187,9 @@ def find_top_k_nearest_neighbors(
         test_monomer2_smiles: SMILES string of second monomer
         test_solvent_smiles: SMILES string of solvent
         df_train: Training DataFrame (must contain monomer1_smiles, monomer2_smiles, solvent_smiles)
-        k: Number of nearest neighbors to return (default: 10)
+        k: Number of nearest neighbors to return (default: 10). Exact
+            same-monomer-pair matches are always included even if they fall
+            outside the top k, so the result may occasionally exceed k.
         feature_cols: Optional list of feature columns to use for tie-breaking
         fp_dict: Optional precomputed fingerprint dictionary {smiles: fp}
 
@@ -172,6 +197,8 @@ def find_top_k_nearest_neighbors(
         List of dictionaries, each containing:
             - rank: Ranking (1-based)
             - similarity: Combined similarity score (0-1)
+            - same_monomer: True if the row uses the exact same monomer pair
+              as the query (either orientation); such rows are always included
             - predicted_class: Predicted class (r_product_class)
             - monomer1_name: First monomer name (falls back to SMILES if name not available)
             - monomer2_name: Second monomer name (falls back to SMILES if name not available)
@@ -296,12 +323,41 @@ def find_top_k_nearest_neighbors(
     # Handle NaN values
     combined_similarity = np.nan_to_num(combined_similarity, nan=0.0)
 
-    # Get top k indices (from valid_indices)
-    top_k_valid_indices = np.argsort(combined_similarity)[::-1][:k]
-    top_k_indices = [valid_indices[i] for i in top_k_valid_indices]
+    # Rank valid training points by combined similarity (best first).
+    ranked_valid_indices = list(np.argsort(combined_similarity)[::-1])
 
-    # Class name mapping
-    class_names = {0: "alternating", 1: "random to block like", 2: "homopolymer"}
+    # Identify literature reactions that use the EXACT same monomer pair as the
+    # query (matching SMILES in either orientation). These have the highest
+    # possible chemical relevance, but because `combined_similarity` averages in
+    # the solvent term, a same-monomer row run in an unusual solvent can be
+    # pushed out of the plain top-k by only-moderately-similar reactions that
+    # happen to share a very similar solvent. To avoid silently dropping them,
+    # we guarantee every exact same-monomer-pair row a slot in the results
+    # (see GitHub issue #5).
+    #
+    # Compare RDKit-canonical SMILES, not raw strings — the UI sometimes sends
+    # non-canonical forms (e.g. `CC(=C)C(=O)OC` for methyl methacrylate, while
+    # the dataset stores the canonical `C=C(C)C(=O)OC`). String equality would
+    # silently miss every such pair (152 styrene+MMA rows, in the MMA case).
+    m1_col = np.array([_canonical_smiles(s) for s in df_train["monomer1_smiles"]])
+    m2_col = np.array([_canonical_smiles(s) for s in df_train["monomer2_smiles"]])
+    q1 = _canonical_smiles(test_monomer1_smiles)
+    q2 = _canonical_smiles(test_monomer2_smiles)
+    same_pair_mask = ((m1_col == q1) & (m2_col == q2)) | ((m1_col == q2) & (m2_col == q1))
+    same_monomer_valid_idx = {pos for pos, idx in enumerate(valid_indices) if same_pair_mask[idx]}
+
+    # Take the plain top-k, then merge in any same-monomer rows that the cutoff
+    # missed. Same-monomer rows keep their natural similarity-based position, so
+    # `rank` stays consistent with the final ordering.
+    selected = list(ranked_valid_indices[:k])
+    selected_set = set(selected)
+    for pos in ranked_valid_indices:
+        if pos in same_monomer_valid_idx and pos not in selected_set:
+            selected.append(pos)
+            selected_set.add(pos)
+    # Re-sort the final selection by similarity so ranks are monotonic.
+    selected.sort(key=lambda pos: combined_similarity[pos], reverse=True)
+    top_k_valid_indices = selected
 
     # Build result list
     results = []
@@ -311,7 +367,7 @@ def find_top_k_nearest_neighbors(
 
         # Get predicted class
         predicted_class = int(train_row.get("r_product_class", -1))
-        predicted_class_name = class_names.get(predicted_class, "unknown")
+        predicted_class_name = CLASS_LABELS.get(predicted_class, "unknown")
 
         # Get names, fallback to SMILES if names not available
         monomer1_name = train_row.get("monomer1_name", "")
@@ -344,6 +400,10 @@ def find_top_k_nearest_neighbors(
         result = {
             "rank": rank,
             "similarity": float(combined_similarity[valid_idx]),
+            # True when this literature reaction uses the exact same monomer
+            # pair as the query (matching SMILES in either orientation). Such
+            # rows are guaranteed a slot regardless of the `k` cutoff.
+            "same_monomer": bool(valid_idx in same_monomer_valid_idx),
             "predicted_class": predicted_class,
             "predicted_class_name": predicted_class_name,
             "monomer1_name": str(monomer1_name),

@@ -3,7 +3,7 @@
 Create the "class curves" figure:
 Mayo–Lewis F1(f1) families grouped by architecture class.
 
-Figure: 1x3 subplots (random/blocky, gradient, alternating).
+Figure: 3 stacked class panels (random, alternating, gradient) + an assignment-rule panel D.
 Each panel shows:
   - individual curves (faded)
   - diagonal reference (F1 = f1)
@@ -151,7 +151,7 @@ def _sample_per_class(
     curve_mat = np.vstack(curves) if curves else np.empty((0, len(f1)))
 
     out: Dict[str, np.ndarray] = {}
-    for label in ["random (to blocky)", "gradient", "alternating"]:
+    for label in ["random", "gradient", "alternating"]:
         idx = np.where(df_idx["label"].values == label)[0]
         if len(idx) == 0:
             out[label] = np.empty((0, len(f1)))
@@ -263,19 +263,31 @@ def _plot_class_split_explanation(ax):
     # Three representative examples (fixed for reproducibility / paper stability)
     examples = [
         {
-            "r1": 0.5, "r2": 0.5, "color": "#ffbc57",
+            "r1": 0.5,
+            "r2": 0.5,
+            "color": "#ffbc57",
             "label": "example: random-like",
-            "text_x": 0.66, "text_y": 0.50, "extra": "\nIntersection = 0.5",
+            "text_x": 0.66,
+            "text_y": 0.50,
+            "extra": "\nIntersection = 0.5",
         },
         {
-            "r1": 6.0, "r2": 0.2, "color": "#9ed5f2",
+            "r1": 6.0,
+            "r2": 0.2,
+            "color": "#9ed5f2",
             "label": "example: gradient-like",
-            "text_x": 0.02, "text_y": 0.96, "extra": "\nno intersection",
+            "text_x": 0.02,
+            "text_y": 0.96,
+            "extra": "\nno intersection",
         },
         {
-            "r1": 0.1, "r2": 0.1, "color": "#3e3888",
+            "r1": 0.1,
+            "r2": 0.1,
+            "color": "#3e3888",
             "label": "example: alternating",
-            "text_x": 0.36, "text_y": 0.18, "extra": "\nIntersection = 0.5",
+            "text_x": 0.36,
+            "text_y": 0.18,
+            "extra": "\nIntersection = 0.5",
         },
     ]
 
@@ -337,10 +349,10 @@ def plot_class_curves(
     f1 = np.linspace(0, 1, int(n_f1))
     class_curves = _sample_per_class(df_all, f1=f1, max_curves_per_class=max_curves_per_class)
 
-    classes = ["alternating", "random (to blocky)", "gradient"]
+    classes = ["random", "alternating", "gradient"]
     panel_titles = {
-        "alternating": "A  Alternating",
-        "random (to blocky)": "B  Random",
+        "random": "A  Random",
+        "alternating": "B  Alternating",
         "gradient": "C  Gradient",
     }
 

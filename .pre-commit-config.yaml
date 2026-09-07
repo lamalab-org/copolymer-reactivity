@@ -22,6 +22,10 @@ repos:
       - id: check-merge-conflict
       - id: check-added-large-files
         args: ['--maxkb=2000']
+        # copol_prediction/artifacts/ holds intentional large model + data
+        # artifacts (the model bundle, paper_metrics.json) — exempt them
+        # from the accidental-large-file guard.
+        exclude: '^copol_prediction/artifacts/'
 
   - repo: https://github.com/psf/black
     rev: 24.10.0

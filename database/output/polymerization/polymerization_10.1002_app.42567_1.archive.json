@@ -1,0 +1,54 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/app.42567"
+        },
+        "r_product": 0.11,
+        "monomers": [
+            {
+                "name": "glycolide",
+                "smiles": "O=C1COC(=O)CO1"
+            },
+            {
+                "name": "epsilon-caprolactone",
+                "smiles": "O=C1CCCCCO1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 413.15,
+            "solvent": {
+                "smile": "Cc1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.99502,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.14285714285714285,
+                "mol_MR": 31.17899999999999,
+                "labute_ASA": 43.79634523389357,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 7.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "ring-opening polymerization",
+            "calculation_method": "1H NMR",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.31,
+                    "reaction_constant_confi": 0.02
+                },
+                {
+                    "reaction_constant": 0.36,
+                    "reaction_constant_confi": 0.03
+                }
+            ],
+            "polytype_emb_1": -6.962278884755882,
+            "polytype_emb_2": 7.601088782274935,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/pol.1970.150080607"
+        },
+        "monomers": [
+            {
+                "name": "styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "p-chloranil",
+                "smiles": "O=C1C(Cl)=C(Cl)C(=O)C(Cl)=C1Cl"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "solvent": {
+                "smile": "C=Cc1ccccc1"
+            },
+            "solvent_descriptors": {
+                "log_P": 2.3296,
+                "TPSA": 0.0,
+                "HBA": 0.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.0,
+                "mol_MR": 36.53300000000001,
+                "labute_ASA": 49.47168431610592,
+                "num_rotatable_bonds": 1.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 8.0
+            },
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 1.23,
+                    "reaction_constant_confi": 0.05
+                },
+                {
+                    "reaction_constant": 0.81,
+                    "reaction_constant_confi": 0.05
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

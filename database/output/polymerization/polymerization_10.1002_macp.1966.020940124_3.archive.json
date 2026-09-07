@@ -1,0 +1,51 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1002/macp.1966.020940124"
+        },
+        "monomers": [
+            {
+                "name": "para-Methoxystyrene",
+                "smiles": "C=Cc1ccc(OC)cc1"
+            },
+            {
+                "name": "para-Cyanostyrene",
+                "smiles": "C=Cc1ccc(C#N)cc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 303.15,
+            "solvent": {
+                "smile": "CC(=O)N(C)C"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.09450000000000003,
+                "TPSA": 20.310000000000002,
+                "HBA": 1.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 0.75,
+                "mol_MR": 24.36799999999999,
+                "labute_ASA": 37.75543314126651,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 6.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Fineman-Ross",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.093
+                },
+                {
+                    "reaction_constant": 0.85
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

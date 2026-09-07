@@ -2818,7 +2818,7 @@ def create_latex_per_class_table(predictor, output_dir, confidence_threshold=0.7
         ]
 
         # --- Compute per-class metrics: macro accuracy (= recall) and precision ---
-        class_names = {0: "0 (Alternating)", 1: "1 (Random / block-like)", 2: "2 (Gradient)"}
+        class_names = {0: "0 (Alternating)", 1: "1 (Random)", 2: "2 (Gradient)"}
         per_class_prec = {}
         per_class_acc = {}
         for name, yt, yp in datasets:

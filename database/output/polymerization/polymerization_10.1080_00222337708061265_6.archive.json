@@ -1,0 +1,35 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1080/00222337708061265"
+        },
+        "monomers": [
+            {
+                "name": "Styrene",
+                "smiles": "C=Cc1ccccc1"
+            },
+            {
+                "name": "alpha-Methylstyrene",
+                "smiles": "C=C(C)c1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "radical",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.13
+                },
+                {
+                    "reaction_constant": 0.52
+                }
+            ],
+            "polytype_emb_1": 2.232015378422759,
+            "polytype_emb_2": 4.6151798364176715,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1080/00222338508063314"
+        },
+        "monomers": [
+            {
+                "name": "3,3-Dimethoxycyclopropene",
+                "smiles": "COC1(OC)C=C1"
+            },
+            {
+                "name": "Styrene",
+                "smiles": "C=Cc1ccccc1"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 333.15,
+            "polymerization_method": "bulk",
+            "polymerization_type": "free radical",
+            "calculation_method": "Kelen-Tudor",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.241,
+                    "reaction_constant_confi": 0.053
+                },
+                {
+                    "reaction_constant": 1.4,
+                    "reaction_constant_confi": 0.045
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": -7.23088245290138,
+            "method_emb_2": -0.5848044902383194
+        }
+    }
+}

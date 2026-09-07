@@ -1,0 +1,96 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.Monomer",
+        "name": "vinyl bromide",
+        "smiles": "C=CBr",
+        "xtb_features": {
+            "energy": -9.851863667915692,
+            "ionization_potential": 14.930524586514297,
+            "ionization_potential_corrected": 10.084524586514297,
+            "electron_affinity": 2.728591031057668,
+            "homo_energy": -0.40830703795543977,
+            "lumo_energy": -0.24646408125892907,
+            "global_electrophilicity": 0.6502548446038448,
+            "global_nucleophilicity": -10.084524586514297,
+            "dipole_moment": [
+                -0.9182780080739554,
+                0.6607899094976536,
+                0.46872718230152915
+            ],
+            "atomic_features": [
+                {
+                    "positions": [
+                        -0.7512326189583258,
+                        -0.04576458640363149,
+                        0.018903390867187345
+                    ],
+                    "element": "C",
+                    "charge": -0.0852514281116096,
+                    "fukui_electrophilicity": 0.10605212105266931,
+                    "fukui_nucleophilicity": 0.08451301421060034,
+                    "fukui_radical": 0.09528256763163483
+                },
+                {
+                    "positions": [
+                        0.5394308116311708,
+                        0.20276295242785078,
+                        0.09206062475428663
+                    ],
+                    "element": "C",
+                    "charge": 0.046279524017555404,
+                    "fukui_electrophilicity": 0.10831996601030369,
+                    "fukui_nucleophilicity": 0.044107242256469004,
+                    "fukui_radical": 0.07621360413338635
+                },
+                {
+                    "positions": [
+                        1.8488629213004,
+                        -0.9218877633129215,
+                        -0.6897255292534777
+                    ],
+                    "element": "Br",
+                    "charge": -0.15501087623716808,
+                    "fukui_electrophilicity": 0.3113697774501421,
+                    "fukui_nucleophilicity": 0.4846972129955768,
+                    "fukui_radical": 0.39803349522285947
+                },
+                {
+                    "positions": [
+                        -1.143438032374617,
+                        -0.9080554865187179,
+                        -0.4924933042685
+                    ],
+                    "element": "H",
+                    "charge": 0.07048499502148474,
+                    "fukui_electrophilicity": 0.14884564457238048,
+                    "fukui_nucleophilicity": 0.11501604510717466,
+                    "fukui_radical": 0.13193084483977757
+                },
+                {
+                    "positions": [
+                        -1.463688981187206,
+                        0.6187970028804995,
+                        0.47700077089118037
+                    ],
+                    "element": "H",
+                    "charge": 0.06060562337223205,
+                    "fukui_electrophilicity": 0.16512419911689585,
+                    "fukui_nucleophilicity": 0.1387423608957466,
+                    "fukui_radical": 0.15193328000632123
+                },
+                {
+                    "positions": [
+                        0.9700658995885793,
+                        1.0541478756351481,
+                        0.594254052301094
+                    ],
+                    "element": "H",
+                    "charge": 0.06289216193750286,
+                    "fukui_electrophilicity": 0.16028829179760803,
+                    "fukui_nucleophilicity": 0.1329241245335327,
+                    "fukui_radical": 0.14660620816557035
+                }
+            ]
+        }
+    }
+}

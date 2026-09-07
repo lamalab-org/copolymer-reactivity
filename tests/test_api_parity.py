@@ -99,6 +99,23 @@ def client():
         yield c
 
 
+def test_paper_metrics_endpoint(client):
+    """/paper_metrics serves the precomputed train/test performance artifact:
+    aggregate metrics + per-row individual predictions. The test split's
+    voting macro-F1 must match the paper (tab:train_test_voting_performance)."""
+    body = client.get("/paper_metrics").json()
+    assert body["classes"] == ["Alternating", "Random", "Gradient"]
+    test = body["splits"]["test"]
+    assert test["n"] == 1358
+    assert test["voting"]["per_class"]["Macro"]["f1"] == pytest.approx(0.785, abs=0.005)
+    assert test["xgboost"]["accuracy"] == pytest.approx(0.7401, abs=0.005)
+    # Individual predictions: one record per split row, with the expected keys.
+    preds = test["predictions"]
+    assert len(preds) == 1358
+    for key in ("true_class", "xgb_class", "confidence", "lookup_class", "agree", "doi_url"):
+        assert key in preds[0]
+
+
 def test_health_returns_build_and_runtime_info(client):
     """/health must include build provenance and runtime info — used for
     debugging "which build am I hitting" in production. Outside Docker the
@@ -133,7 +150,7 @@ def test_predict_response_uses_human_readable_class_names(client, test_df):
     pred = client.post("/predict", json={"features": features}).json()
 
     keys = set(pred["class_probabilities"])
-    assert keys == {"alternating", "random to block like", "gradient"}, keys
+    assert keys == {"alternating", "random", "gradient"}, keys
     # The named-class key for the predicted class must reproduce confidence.
     assert pred["class_probabilities"][pred["predicted_class_name"]] == pytest.approx(
         pred["confidence"]
@@ -343,7 +360,7 @@ def test_optimize_reaction_named_solvent_set(client):
     for p in preds:
         assert set(p["class_probabilities"]) == {
             "alternating",
-            "random to block like",
+            "random",
             "gradient",
         }
 
@@ -384,3 +401,68 @@ def test_find_architecture_switch(client):
                 assert ref["doi_url"] == f"https://doi.org/{ref['doi']}"
     # Ranked by smallest |delta_logp|.
     assert deltas == sorted(deltas), deltas
+
+
+def test_find_architecture_switch_canonical_solvent_handling(client):
+    """Every solvent identity question — name lookup, dedup, baseline match —
+    must go through canonical SMILES so RDKit-equivalent inputs are treated
+    as the same molecule.
+
+    The previous implementation compared SMILES byte-by-byte, which produced
+    two visible failures in the UI:
+
+      1. `baseline.solvent_name` fell back to the raw SMILES whenever the
+         caller's solvent wasn't an exact-string match for the chosen
+         `solvent_set` curated list (e.g. ``"in CCO at 60°C"``).
+      2. A non-canonical SMILES equivalent to a curated entry (e.g. ``OCC``
+         for ethanol, ``CS(=O)C`` for DMSO) produced a duplicate grid cell:
+         the curated `CCO`/`CS(C)=O` cell **plus** a prepended cell for the
+         user's input — wasted compute and ghost "counterfactual" risk.
+    """
+    # (1) Name resolution: ethanol not in the aromatic curated set, still
+    # resolves to "ethanol" via the curated SOLVENT_SETS lookup.
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "CCO",
+            "solvent_set": "aromatic",
+            "temperature_mode": "40-80",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["baseline"]["solvent_name"] == "ethanol"
+
+    # (1') Name resolution under non-canonical SMILES: DMSO as ``CS(=O)C`` vs.
+    # curated ``CS(C)=O`` — canonical match must still return the common name.
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "CS(=O)C",
+            "solvent_set": "top3",
+            "temperature_mode": "40-80",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["baseline"]["solvent_name"] == "dimethyl sulfoxide"
+
+    # (2) Dedup: ethanol via non-canonical ``OCC`` with the ``common`` set
+    # (which already contains ``CCO``). n_evaluated must match the bare set
+    # size — no duplicate ethanol cell.
+    r = client.post(
+        "/find_architecture_switch",
+        json={
+            **_RXN_OPT_PAYLOAD,
+            "solvent_smiles": "OCC",
+            "solvent_set": "common",
+            "temperature_mode": "fixed60",
+        },
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["baseline"]["solvent_name"] == "ethanol"
+    # ``common`` has 8 solvents × 1 temperature (fixed60). Without canonical
+    # dedup we would see 9 because the prepended ``OCC`` would slip past the
+    # ``s["smiles"] == base_solvent_smiles`` check.
+    assert body["n_evaluated"] == 8, body["n_evaluated"]

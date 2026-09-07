@@ -1,0 +1,50 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1295/polymj.10.87"
+        },
+        "monomers": [
+            {
+                "name": "gamma-Benzyl L-glutamate N-carboxyanhydride",
+                "smiles": "O=C(CCC1NC(=O)OC1=O)OCc1ccccc1"
+            },
+            {
+                "name": "L-valine N-carboxyanhydride",
+                "smiles": "CC(C)C1NC(=O)OC1=O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 298.15,
+            "solvent": {
+                "smile": "C1COCCO1.ClCCl"
+            },
+            "solvent_descriptors": {
+                "log_P": 1.4547,
+                "TPSA": 18.46,
+                "HBA": 2.0,
+                "HBD": 0.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 38.21100000000001,
+                "labute_ASA": 65.03264239819309,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 1.0,
+                "heavy_atom_count": 9.0
+            },
+            "polymerization_method": "solvent",
+            "calculation_method": "Skeist",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 2.96
+                },
+                {
+                    "reaction_constant": 0.17
+                }
+            ],
+            "polytype_emb_1": 5.239696440796716,
+            "polytype_emb_2": 3.9056625761735506,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "data": {
+        "m_def": "nomad_polymerization_reactions.schema_packages.polymerization.PolymerizationReaction",
+        "publication_reference": {
+            "DOI_number": "https://doi.org/10.1016/0014-3057(94)90272-0"
+        },
+        "monomers": [
+            {
+                "name": "Methyl Methacrylate",
+                "smiles": "C=C(C)C(=O)OC"
+            },
+            {
+                "name": "Methacrylic Acid",
+                "smiles": "C=C(C)C(=O)O"
+            }
+        ],
+        "reaction_conditions": {
+            "temperature": 343.15,
+            "solvent": {
+                "smile": "CC(C)O"
+            },
+            "solvent_descriptors": {
+                "log_P": 0.38710000000000006,
+                "TPSA": 20.23,
+                "HBA": 1.0,
+                "HBD": 1.0,
+                "fraction_CSP3": 1.0,
+                "mol_MR": 17.354800000000004,
+                "labute_ASA": 26.263369008818774,
+                "num_rotatable_bonds": 0.0,
+                "ring_count": 0.0,
+                "heavy_atom_count": 4.0
+            },
+            "polymerization_method": "solvent",
+            "polymerization_type": "free radical",
+            "calculation_method": "Yserielve-Brokhina-Roskin",
+            "reaction_constants": [
+                {
+                    "reaction_constant": 0.58,
+                    "reaction_constant_confi": 0.09
+                },
+                {
+                    "reaction_constant": 0.29,
+                    "reaction_constant_confi": 0.08
+                }
+            ],
+            "polytype_emb_1": 7.496725795633088,
+            "polytype_emb_2": -0.4631906941937577,
+            "method_emb_1": 6.958462891419976,
+            "method_emb_2": 6.651678436014861
+        }
+    }
+}
