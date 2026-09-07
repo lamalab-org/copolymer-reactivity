@@ -431,6 +431,9 @@ data_extraction/artifacts/**
 !data_extraction/artifacts/metadata/output/selected_papers.json
 !data_extraction/artifacts/metadata/output/selected_200_papers.json
 
+# Data extraction notebooks (local exploration + heavy local PDF caches)
+data_extraction/notebooks/**
+
 # Evaluation archives raw caches/images
 data_extraction/archive/evaluations/llm_comparison/artifacts/**
 
