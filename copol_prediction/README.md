@@ -35,10 +35,10 @@ pip install pandas numpy scikit-learn xgboost joblib morfeus-ml
 ### Setup (First Time)
 ```bash
 # 1. Create central train/test split
-cd ../experiments && python create_data_split.py
+python create_data_split.py
 
 # 2. Calculate molecular features (cached, ~1-5 min/monomer)
-cd ../copol_prediction && python monomer_feature_calculation.py
+python monomer_feature_calculation.py
 ```
 
 ### Training
@@ -47,7 +47,7 @@ cd ../copol_prediction && python monomer_feature_calculation.py
 python train_final_model.py
 
 # Or test all filter combinations (~3 hours)
-cd ../experiments && python sweep_filters.py
+cd ../experiments/filter_comparison && python sweep_filters.py
 ```
 
 ### Prediction
@@ -68,7 +68,6 @@ cd api && python app.py  # http://localhost:8000/docs
 All scripts use a **central train/test split** (created once, reused everywhere):
 
 ```bash
-cd ../experiments
 python create_data_split.py [--remove-specialized]
 ```
 
@@ -91,10 +90,10 @@ df_train, df_test = load_data_split.load_train_test_split()
 |--------|---------|------|
 | `train_final_model.py` | Train production model + analysis | ~20 min |
 | `analysis/analyze_model.py` | Generate analysis plots | < 1 min |
-| `../experiments/sweep_filters.py` | Test 16 filter combinations | ~3 hours |
-| `../experiments/create_data_split.py` | Create central split | < 1 min |
+| `../experiments/filter_comparison/sweep_filters.py` | Test 16 filter combinations | ~3 hours |
+| `create_data_split.py` | Create central split | < 1 min |
 | `monomer_feature_calculation.py` | Calculate molecular features | 1-5 min/monomer |
-| `api.py` | REST API server | Instant |
+| `api/app.py` | REST API server | Instant |
 
 ### train_final_model.py
 
@@ -141,12 +140,12 @@ Key options:
 - Confidence vs r-product
 - Confidence filtering analysis
 
-### ../experiments/sweep_filters.py
+### experiments/filter_comparison/sweep_filters.py
 
 Tests all 16 filter combinations (4×4 matrix) on same holdout set.
 
 ```bash
-cd ../experiments
+cd ../experiments/filter_comparison
 python sweep_filters.py [--n-iter N]
 ```
 
@@ -240,11 +239,14 @@ copol_prediction/
 ├── api/                        # REST API
 │   ├── app.py                  # FastAPI application
 │   ├── README.md               # API documentation
-│   ├── test_api.py             # API tests
-│   ├── example_client.py       # Usage examples
+│   ├── baseline_lookup.py      # Nearest-neighbor lookup
+│   ├── reaction_optimization.py # Solvent / temperature grid search
+│   ├── morfeus_patch.py        # XTB compatibility patch
+│   ├── requirements.txt
 │   ├── Dockerfile              # Docker deployment
-│   ├── docker-compose.yml      # Docker Compose
-│   └── compose.yaml            # Docker Compose config
+│   ├── compose.yaml            # Docker Compose config
+│   ├── data/                   # PCA embeddings
+│   └── molecule_properties/    # Precomputed monomer features
 ├── analysis/                   # Analysis tools
 │   ├── analyze_model.py       # Main analysis script
 │   ├── plot_config.py          # Plot styling
@@ -284,7 +286,7 @@ src/copolpredictor/             # Core library
 |-------|----------|
 | Model not found | `python train_final_model.py` |
 | Missing features | `python monomer_feature_calculation.py` |
-| No train/test split | `cd ../experiments && python create_data_split.py` |
+| No train/test split | `python create_data_split.py` |
 | API port in use | `lsof -ti:8000 \| xargs kill` |
 | Quick test | `python train_final_model.py --hyperparam-iter 5` |
 
@@ -298,7 +300,7 @@ python train_final_model.py --hyperparam-iter 5
 python analysis/analyze_model.py --all --compare-holdout
 
 # Recreate data split
-cd ../experiments && python create_data_split.py
+python create_data_split.py
 
 # Kill API
 lsof -ti:8000 | xargs kill
