@@ -41,7 +41,7 @@ class CopolymerPredictor:
 
         self._load_model()
 
-    def _load_model(self):
+    def _load_model(self) -> None:
         """Load model bundle."""
         if not os.path.exists(self.bundle_path):
             raise FileNotFoundError(f"Model bundle not found at: {self.bundle_path}")

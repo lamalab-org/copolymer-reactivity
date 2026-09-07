@@ -150,6 +150,7 @@ def save_extracted_data(output_file_path: Path, extracted_data: Sequence[dict]) 
 
 
 def _default_base_dir() -> Path:
+    """Return the repository's `data_extraction` directory, derived from this file's location."""
     return Path(__file__).resolve().parents[2] / "data_extraction"
 
 

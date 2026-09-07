@@ -136,7 +136,19 @@ Reads the committed `artifacts/model_bundle/` and the `artifacts/data_splits/`, 
 
 ## Citation
 
-See [`CITATION.cff`](CITATION.cff) for the canonical machine-readable citation (BibTeX is rendered automatically by GitHub's *"Cite this repository"* button on the right side of the repo page). Each release is also archived on Zenodo with a versioned DOI.
+```bibtex
+@article{SchillingWilhelmi2026,
+  title = {Condition-aware prediction of copolymer architecture},
+  url = {http://dx.doi.org/10.26434/chemrxiv.15004102/v2},
+  DOI = {10.26434/chemrxiv.15004102/v2},
+  publisher = {ChemRxiv},
+  author = {Schilling-Wilhelmi,  Mara and Bulgakov,  Boris and Patiny,  Luc and Kapoor,  Sarthak and Jablonka,  Kevin Maik},
+  year = {2026},
+  month = June 
+}
+```
+
+
 
 ## License
 

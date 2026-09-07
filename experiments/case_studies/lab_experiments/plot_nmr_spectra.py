@@ -57,7 +57,13 @@ def _infer_sample_tag(*paths: Path) -> str:
     Infer a short sample tag from filenames (e.g. "MWH-017").
     Falls back to "sample" if nothing useful is found.
     """
-    joined = " ".join(p.name for p in paths if p is not None)
+    parts: list[str] = []
+    for p in paths:
+        if p is None:
+            continue
+        parts.append(p.name)
+        parts.append(p.parent.name)
+    joined = " ".join(parts)
     m = re.search(r"\bmwh[-_ ]?(\d{1,4})", joined, flags=re.IGNORECASE)
     if m:
         try:
@@ -357,6 +363,37 @@ def _detect_nucleus(path: Path) -> str | None:
     return _detect_nucleus_from_filename(path) or _detect_nucleus_from_header(path)
 
 
+def _is_nmr_spectrum_file(path: Path) -> bool:
+    name_l = path.name.lower()
+    if "integral" in name_l:
+        return False
+    if "ascii-spec" in name_l:
+        return True
+    if name_l.endswith(".1r.txt") or name_l.endswith(".1r"):
+        return True
+    if name_l == "ascii-spec.txt":
+        return True
+    return _detect_nucleus(path) is not None
+
+
+def _nmr_file_priority(path: Path, nucleus: str) -> tuple[int, str]:
+    """
+    Lower tuple sorts first (higher priority).
+    Prefer SPECMAN .1r.txt exports for 13C over older ascii-spec files.
+    """
+    name_l = path.name.lower()
+    if nucleus == "13C" and (name_l.endswith(".1r.txt") or name_l.endswith(".1r")):
+        return (0, name_l)
+    strict_pat = f"_{nucleus.lower()}_ascii-spec.txt"
+    if strict_pat in name_l:
+        return (1, name_l)
+    if "ascii-spec" in name_l:
+        return (2, name_l)
+    if name_l == "ascii-spec.txt":
+        return (3, name_l)
+    return (4, name_l)
+
+
 def _collect_nmr_pairs(data_dir: Path) -> dict[str, dict[str, Path]]:
     """
     Returns mapping: sample_tag -> {"1H": path, "13C": path}
@@ -364,25 +401,19 @@ def _collect_nmr_pairs(data_dir: Path) -> dict[str, dict[str, Path]]:
     pairs: dict[str, dict[str, Path]] = {}
     # Recursive scan: new lab export folders often have nested structure.
     for p in sorted(data_dir.rglob("*.txt")):
-        name_l = p.name.lower()
-        if "integral" in name_l:
-            continue
-        # Prefer the new export naming to avoid accidentally picking unrelated txt files.
-        if "ascii-spec" not in name_l:
+        if not _is_nmr_spectrum_file(p):
             continue
         tag = _infer_sample_tag(p)
         nucleus = _detect_nucleus(p)
+        if nucleus is None and p.name.lower() == "ascii-spec.txt":
+            nucleus = "1H"
         if tag == "sample" or nucleus is None:
             continue
         pairs.setdefault(tag, {})
-        # If multiple candidates exist, prefer the strict pattern first.
         existing = pairs[tag].get(nucleus)
-        if existing is None:
-            pairs[tag][nucleus] = p
-            continue
-        # Replace a less specific match with the stricter one.
-        strict_pat = f"_{nucleus.lower()}_ascii-spec.txt"
-        if strict_pat in p.name.lower() and strict_pat not in existing.name.lower():
+        if existing is None or _nmr_file_priority(p, nucleus) < _nmr_file_priority(
+            existing, nucleus
+        ):
             pairs[tag][nucleus] = p
     return pairs
 

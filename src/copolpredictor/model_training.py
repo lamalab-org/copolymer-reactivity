@@ -9,6 +9,7 @@ import datetime
 import json
 import os
 from pathlib import Path
+from typing import Any, Dict, Optional, Sequence, Union
 
 import joblib
 import numpy as np
@@ -18,7 +19,7 @@ from sklearn.metrics import f1_score, make_scorer
 from sklearn.model_selection import GroupKFold, RandomizedSearchCV
 
 
-def calculate_class_weights(y_train):
+def calculate_class_weights(y_train: Any) -> Dict[int, float]:
     """
     Calculate balanced class weights.
 
@@ -40,7 +41,7 @@ def calculate_class_weights(y_train):
     return class_weights
 
 
-def create_sample_weights(y_train, class_weights):
+def create_sample_weights(y_train: Any, class_weights: Dict[int, float]) -> np.ndarray:
     """
     Create sample weights array based on class weights.
 
@@ -55,16 +56,16 @@ def create_sample_weights(y_train, class_weights):
 
 
 def train_xgboost_with_cv(
-    X_train,
-    y_train,
-    groups=None,
-    param_grid=None,
-    n_iter=10,
-    cv=5,
-    random_state=42,
-    class_weights=None,
-    n_jobs=-1,
-):
+    X_train: pd.DataFrame,
+    y_train: Any,
+    groups: Optional[Any] = None,
+    param_grid: Optional[Dict[str, list]] = None,
+    n_iter: int = 10,
+    cv: Union[int, Any] = 5,
+    random_state: int = 42,
+    class_weights: Optional[Dict[int, float]] = None,
+    n_jobs: int = -1,
+) -> Dict[str, Any]:
     """
     Train XGBoost classifier with cross-validation and hyperparameter search.
 
@@ -151,7 +152,13 @@ def train_xgboost_with_cv(
     }
 
 
-def train_final_model(X_train, y_train, params, class_weights=None, random_state=42):
+def train_final_model(
+    X_train: pd.DataFrame,
+    y_train: Any,
+    params: Dict[str, Any],
+    class_weights: Optional[Dict[int, float]] = None,
+    random_state: int = 42,
+) -> xgb.XGBClassifier:
     """
     Train final model with given parameters on full training set.
 
@@ -191,8 +198,12 @@ def train_final_model(X_train, y_train, params, class_weights=None, random_state
 
 
 def save_model_bundle(
-    model, feature_list, class_labels, out_dir="artifacts/model_bundle", metadata=None
-):
+    model: xgb.XGBClassifier,
+    feature_list: Sequence[str],
+    class_labels: Sequence[Any],
+    out_dir: str = "artifacts/model_bundle",
+    metadata: Optional[Dict[str, Any]] = None,
+) -> str:
     """
     Save trained model bundle with metadata.
 
@@ -239,7 +250,7 @@ def save_model_bundle(
     return out_dir
 
 
-def load_model_bundle(bundle_dir="artifacts/model_bundle"):
+def load_model_bundle(bundle_dir: str = "artifacts/model_bundle") -> Dict[str, Any]:
     """
     Load trained model bundle.
 

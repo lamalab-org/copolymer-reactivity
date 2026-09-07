@@ -6,6 +6,7 @@ WITHOUT applying train-only filters.
 """
 
 import os
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -13,12 +14,12 @@ from sklearn.model_selection import GroupShuffleSplit
 
 
 def get_or_create_holdout_groups(
-    base_df,
-    group_col="reaction_id",
-    test_groups_path="artifacts/test_ids.csv",
-    test_size=0.2,
-    random_state=42,
-):
+    base_df: pd.DataFrame,
+    group_col: str = "reaction_id",
+    test_groups_path: str = "artifacts/test_ids.csv",
+    test_size: float = 0.2,
+    random_state: int = 42,
+) -> pd.Series:
     """
     Create or load a persistent global hold-out at the GROUP level.
 
@@ -26,6 +27,17 @@ def get_or_create_holdout_groups(
     - If a saved list of test groups exists, intersect with current groups.
       If intersection is empty or tiny, fall back to creating a new split.
     - Otherwise, create a new grouped split with approx. `test_size`, save it, and return.
+
+    Args:
+        base_df: DataFrame containing `group_col`.
+        group_col: Column identifying the group each row belongs to.
+        test_groups_path: Path to persist/read the holdout group IDs as CSV.
+        test_size: Target fraction of groups to hold out (used only when a new
+            split is created).
+        random_state: Random seed for the group split.
+
+    Raises:
+        ValueError: If `group_col` is not a column of `base_df`.
 
     Returns:
         pd.Series of unique group IDs for the holdout set (dtype=str)
@@ -63,13 +75,20 @@ def get_or_create_holdout_groups(
     return holdout_groups.reset_index(drop=True)
 
 
-def make_base_dataset_for_holdout(df):
+def make_base_dataset_for_holdout(df: pd.DataFrame) -> pd.DataFrame:
     """
     Build the base dataset used ONLY to determine group-level holdout IDs.
 
     IMPORTANT:
     - Do NOT apply train-only filters here (e.g., removing 'specialized').
     - Keep only minimal sanity checks needed for target creation.
+
+    Args:
+        df: Source DataFrame with "r1r2", "constant_1", "constant_2" and
+            "reaction_id" columns.
+
+    Raises:
+        ValueError: If "constant_1"/"constant_2" or "reaction_id" are missing.
 
     Returns:
         base_df (minimal-cleaned copy of df)
@@ -110,10 +129,20 @@ def make_base_dataset_for_holdout(df):
     return base
 
 
-def split_train_holdout(df, holdout_groups, group_col="reaction_id"):
+def split_train_holdout(
+    df: pd.DataFrame, holdout_groups: pd.Series, group_col: str = "reaction_id"
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Split dataframe into train and holdout sets based on group IDs.
     No additional filtering; this just partitions by group membership.
+
+    Args:
+        df: DataFrame to split, containing `group_col`.
+        holdout_groups: Group IDs to place in the holdout set.
+        group_col: Column identifying the group each row belongs to.
+
+    Returns:
+        A (df_train, df_holdout) tuple.
     """
     holdout_set = set(pd.Series(holdout_groups).astype(str))
     df_holdout = df[df[group_col].astype(str).isin(holdout_set)].reset_index(drop=True)
@@ -122,14 +151,14 @@ def split_train_holdout(df, holdout_groups, group_col="reaction_id"):
 
 
 def get_or_create_train_val_test_groups(
-    base_df,
-    group_col="reaction_id",
-    test_groups_path="artifacts/test_ids.csv",
-    val_groups_path="artifacts/val_ids.csv",
-    test_size=0.2,
-    val_size=0.1,
-    random_state=42,
-):
+    base_df: pd.DataFrame,
+    group_col: str = "reaction_id",
+    test_groups_path: str = "artifacts/test_ids.csv",
+    val_groups_path: str = "artifacts/val_ids.csv",
+    test_size: float = 0.2,
+    val_size: float = 0.1,
+    random_state: int = 42,
+) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """
     Create or load persistent train/validation/test splits at the GROUP level.
 
@@ -141,6 +170,18 @@ def get_or_create_train_val_test_groups(
     Behavior:
     - If saved lists exist, load and intersect with current groups.
     - Otherwise, create new grouped splits and save them.
+
+    Args:
+        base_df: DataFrame containing `group_col`.
+        group_col: Column identifying the group each row belongs to.
+        test_groups_path: Path to persist/read the test group IDs as CSV.
+        val_groups_path: Path to persist/read the validation group IDs as CSV.
+        test_size: Target fraction of groups for the test split.
+        val_size: Target fraction of groups for the validation split.
+        random_state: Random seed for the group splits.
+
+    Raises:
+        ValueError: If `group_col` is not a column of `base_df`.
 
     Returns:
         tuple: (train_groups, val_groups, test_groups) as pd.Series
@@ -218,10 +259,23 @@ def get_or_create_train_val_test_groups(
     )
 
 
-def split_train_val_test(df, train_groups, val_groups, test_groups, group_col="reaction_id"):
+def split_train_val_test(
+    df: pd.DataFrame,
+    train_groups: pd.Series,
+    val_groups: pd.Series,
+    test_groups: pd.Series,
+    group_col: str = "reaction_id",
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Split dataframe into train, validation, and test sets based on group IDs.
     No additional filtering; this just partitions by group membership.
+
+    Args:
+        df: DataFrame to split, containing `group_col`.
+        train_groups: Group IDs to place in the train set.
+        val_groups: Group IDs to place in the validation set.
+        test_groups: Group IDs to place in the test set.
+        group_col: Column identifying the group each row belongs to.
 
     Returns:
         tuple: (df_train, df_val, df_test)

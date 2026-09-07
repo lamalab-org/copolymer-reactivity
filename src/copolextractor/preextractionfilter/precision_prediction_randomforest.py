@@ -3,6 +3,7 @@ import os
 import time
 import warnings
 from collections import Counter
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -19,9 +20,22 @@ import copolextractor.utils as utils
 warnings.filterwarnings("ignore", category=UserWarning, module="xgboost")
 
 
-def preprocess_data(data, features, target, threshold):
+def preprocess_data(
+    data: List[dict], features: Sequence[str], target: str, threshold: float
+) -> pd.DataFrame:
     """
     Prepare data for training by converting it into a DataFrame.
+
+    Args:
+        data: List of scored entry dicts.
+        features: Feature column names (currently unused, kept for call-site
+            documentation/compatibility).
+        target: Key holding the numeric precision value used for thresholding.
+        threshold: Minimum `target` value classified as "precise" (class 1).
+
+    Returns:
+        A DataFrame of entries with a non-null `target` value, with an added
+        "precision_class" column (1 if `target` > `threshold`, else 0).
     """
     filtered_data = [entry for entry in data if target in entry and entry[target] is not None]
     df = pd.DataFrame(filtered_data)
@@ -29,9 +43,19 @@ def preprocess_data(data, features, target, threshold):
     return df
 
 
-def build_pipeline(numeric_features, categorical_features, seed_rf):
+def build_pipeline(
+    numeric_features: Sequence[str], categorical_features: Sequence[str], seed_rf: int
+) -> Pipeline:
     """
     Build a preprocessing and modeling pipeline with XGBoost.
+
+    Args:
+        numeric_features: Numeric column names, passed through unchanged.
+        categorical_features: Categorical column names, one-hot encoded.
+        seed_rf: Random seed for the XGBoost classifier.
+
+    Returns:
+        An unfitted scikit-learn `Pipeline` with a "preprocessor" and "model" step.
     """
     numeric_transformer = "passthrough"  # No transformation needed for numerical features
     categorical_transformer = OneHotEncoder(handle_unknown="ignore")
@@ -48,9 +72,23 @@ def build_pipeline(numeric_features, categorical_features, seed_rf):
     return pipeline
 
 
-def train_model(training_data, features, target, seed_rf):
+def train_model(
+    training_data: pd.DataFrame, features: Sequence[str], target: str, seed_rf: int
+) -> Pipeline:
     """
     Train the XGBoost model.
+
+    Runs a grid search over XGBoost hyperparameters with 5-fold stratified CV and
+    saves the resulting statistics to "./model_training_stats.json".
+
+    Args:
+        training_data: DataFrame containing `features` and `target` columns.
+        features: Feature column names to train on (mixture of numeric/categorical).
+        target: Name of the binary target column to predict.
+        seed_rf: Random seed for the XGBoost classifier.
+
+    Returns:
+        The best-performing fitted pipeline found by grid search.
     """
     numeric_features = [
         "table_quality",
@@ -115,9 +153,14 @@ def train_model(training_data, features, target, seed_rf):
     return grid_search.best_estimator_
 
 
-def save_training_stats(stats_file_path, stats):
+def save_training_stats(stats_file_path: Union[str, os.PathLike], stats: Dict[str, Any]) -> None:
     """
     Save or update training statistics in a JSON file.
+
+    Args:
+        stats_file_path: Path to the training-statistics JSON file; appended to if
+            it already exists and contains a "runs" list.
+        stats: Statistics dict for the current run to append/persist.
     """
     if os.path.exists(stats_file_path):
         try:
@@ -138,9 +181,21 @@ def save_training_stats(stats_file_path, stats):
     print(f"Training statistics saved to {stats_file_path}")
 
 
-def prepare_entries_for_scoring(data, features):
+def prepare_entries_for_scoring(
+    data: List[dict], features: Sequence[str]
+) -> Tuple[List[dict], Dict[str, Any]]:
     """
     Prepare entries for scoring by standardizing field names and logging statistics.
+
+    Args:
+        data: List of entry dicts to prepare in place (adds/normalizes
+            "rxn_number" from "number_of_reactions"/"rxn_count" where available).
+        features: Feature names required to be present (and non-null) for an entry
+            to be considered complete.
+
+    Returns:
+        A (data, stats) tuple. `data` is the same list, updated in place. `stats`
+        summarizes completeness and the count of missing values per feature.
     """
     # Statistics counters
     stats = {
@@ -194,9 +249,21 @@ def prepare_entries_for_scoring(data, features):
     return data, stats
 
 
-def update_scores(data, model, features):
+def update_scores(
+    data: List[dict], model: Pipeline, features: Sequence[str]
+) -> Tuple[List[dict], Dict[str, Any]]:
     """
     Update entries with predictions.
+
+    Args:
+        data: List of entry dicts to annotate in place with a "precision_score" key.
+        model: Fitted pipeline (as returned by `train_model`) used for prediction.
+        features: Feature names the model expects; entries missing any of them are
+            skipped (their "precision_score" is set to None).
+
+    Returns:
+        A (data, prediction_stats) tuple. `data` is the same list, updated in
+        place. `prediction_stats` summarizes prediction successes/failures.
     """
     prediction_stats = {
         "total_entries": len(data),
@@ -261,10 +328,27 @@ def update_scores(data, model, features):
     return data, prediction_stats
 
 
-def check_json_files(scoring_file, output_file, pdf_folder=None, scoring_data=None):
+def check_json_files(
+    scoring_file: Union[str, os.PathLike],
+    output_file: Union[str, os.PathLike],
+    pdf_folder: Optional[Union[str, os.PathLike]] = None,
+    scoring_data: Optional[List[dict]] = None,
+) -> Dict[str, Any]:
     """
     Check if JSON files exist and are valid.
     If pdf_folder and scoring_data are provided, also check for missing JSON files.
+
+    Args:
+        scoring_file: Path to the scoring-data JSON file to validate.
+        output_file: Path to the output JSON file to validate (may not exist yet).
+        pdf_folder: Optional directory of source PDFs; if given together with
+            `scoring_data`, also checks that a JSON result exists for each entry.
+        scoring_data: Optional list of scored entry dicts (with "filename" keys)
+            used for the missing-JSON check.
+
+    Returns:
+        A dict summarizing file existence/validity and, if applicable, the count
+        and names of missing per-paper JSON result files.
     """
     file_stats = {
         "scoring_file_exists": os.path.exists(scoring_file),
@@ -336,9 +420,74 @@ def check_json_files(scoring_file, output_file, pdf_folder=None, scoring_data=No
     return file_stats
 
 
-def main(training_file, scoring_file, output_file, seed_rf, threshold, pdf_folder=None):
+def check_missing_pdfs(
+    pdf_folder: Union[str, os.PathLike], scoring_data: List[dict]
+) -> Dict[str, Any]:
+    """
+    Check which scoring entries don't have a matching PDF file in `pdf_folder`.
+
+    Papers that the open-access download step (see `PDF_download.py`) couldn't
+    resolve are expected to be downloaded manually and dropped into `pdf_folder`
+    before this pipeline continues; this reports which ones are still missing.
+
+    Args:
+        pdf_folder: Directory expected to contain one PDF per scoring entry
+            (filename taken from each entry's "filename" key).
+        scoring_data: List of entry dicts with "filename" keys (PDF filenames).
+
+    Returns:
+        A dict with "pdfs_expected", "pdfs_found", "pdfs_missing" counts and a
+        "missing_pdf_filenames" list of the filenames not found in `pdf_folder`.
+    """
+    existing_pdfs = {f for f in os.listdir(pdf_folder) if f.lower().endswith(".pdf")}
+
+    expected_filenames = [entry["filename"] for entry in scoring_data if entry.get("filename")]
+    missing_filenames = [f for f in expected_filenames if f not in existing_pdfs]
+
+    stats = {
+        "pdfs_expected": len(expected_filenames),
+        "pdfs_found": len(expected_filenames) - len(missing_filenames),
+        "pdfs_missing": len(missing_filenames),
+        "missing_pdf_filenames": missing_filenames,
+    }
+
+    print("\nPDF availability:")
+    print(f"Expected PDFs: {stats['pdfs_expected']}")
+    print(f"Found PDFs: {stats['pdfs_found']}")
+    print(f"Missing PDFs: {stats['pdfs_missing']}")
+    if missing_filenames:
+        print(f"Download these manually and place them in {pdf_folder}, then re-run:")
+        for filename in missing_filenames[:10]:
+            print(f"  - {filename}")
+        if len(missing_filenames) > 10:
+            print(f"  ... and {len(missing_filenames) - 10} more")
+
+    return stats
+
+
+def main(
+    training_file: Union[str, os.PathLike],
+    scoring_file: Union[str, os.PathLike],
+    output_file: Union[str, os.PathLike],
+    seed_rf: int,
+    threshold: float,
+    pdf_folder: Optional[Union[str, os.PathLike]] = None,
+) -> None:
     """
     Main function to run the filtering pipeline.
+
+    Trains an XGBoost precision classifier on `training_file`, applies it to
+    `scoring_file`, and writes the annotated entries to `output_file`. Also
+    persists per-run statistics to "./execution_summary.json".
+
+    Args:
+        training_file: Path to the JSON file with labelled training examples.
+        scoring_file: Path to the JSON file with entries to score.
+        output_file: Destination path for the scored entries JSON file.
+        seed_rf: Random seed for the XGBoost classifier.
+        threshold: Minimum precision value classified as "precise" (class 1).
+        pdf_folder: Optional directory of source PDFs, used to additionally check
+            for missing PDFs/JSON results.
     """
     start_time = time.time()
     print(f"Starting pipeline at {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")

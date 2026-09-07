@@ -6,6 +6,8 @@ sigmoid (Platt scaling) or isotonic regression methods.
 """
 
 import numpy as np
+from numpy.typing import ArrayLike
+from typing import Any, Dict, Optional
 from sklearn.isotonic import IsotonicRegression
 from sklearn.linear_model import LogisticRegression
 
@@ -17,7 +19,7 @@ class CalibratedModel:
     Provides predict_proba and predict methods with calibrated probabilities.
     """
 
-    def __init__(self, base_model, calibrator):
+    def __init__(self, base_model: Any, calibrator: Any) -> None:
         """
         Initialize calibrated model.
 
@@ -28,7 +30,7 @@ class CalibratedModel:
         self.base_model = base_model
         self.calibrator = calibrator
 
-    def predict_proba(self, X):
+    def predict_proba(self, X: ArrayLike) -> np.ndarray:
         """
         Predict calibrated probabilities.
 
@@ -50,7 +52,7 @@ class CalibratedModel:
         calibrated = np.clip(calibrated, 1e-6, 1 - 1e-6)
         return np.vstack([1 - calibrated, calibrated]).T
 
-    def predict(self, X):
+    def predict(self, X: ArrayLike) -> np.ndarray:
         """
         Predict class labels.
 
@@ -64,8 +66,13 @@ class CalibratedModel:
 
 
 def calibrate_model_with_weights(
-    model, X_calib, y_calib, class_weight_dict=None, method="sigmoid", calibrator_kwargs=None
-):
+    model: Any,
+    X_calib: ArrayLike,
+    y_calib: ArrayLike,
+    class_weight_dict: Optional[Dict[int, float]] = None,
+    method: str = "sigmoid",
+    calibrator_kwargs: Optional[Dict[str, Any]] = None,
+) -> CalibratedModel:
     """
     Calibrate a classifier using sigmoid (Platt scaling) or isotonic regression.
 

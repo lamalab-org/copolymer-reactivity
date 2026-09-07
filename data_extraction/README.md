@@ -2,7 +2,28 @@
 
 Mines ~300 k Crossref records for copolymerisation papers, filters them down to ~1.8 k downloadable PDFs, and extracts reactivity-ratio measurements with a vision–language model. The output is the curated `extracted_reactions.csv` that Pipeline 2 (`copol_prediction/`) ingests.
 
-## Stages
+- **Configuration:** All paths and thresholds are defined in
+  `data_extraction/obtain_data.py` via the `ExtractionConfig` class. The default
+  configuration mirrors the curated layout beneath `data_extraction/artifacts`.
+- **Step selection:** `ExtractionSteps` lets you control which parts of the
+  pipeline should run (for example, trigger only the LLM extraction without
+  re-running Crossref). By default only the extraction and the CSV export run to
+  avoid accidental API calls or downloads.
+- **Manual PDF download:** The `pdf_download` step only resolves papers
+  available through open-access sources (OpenAlex, Unpaywall, Semantic
+  Scholar, CORE). In practice, **most papers are not open access**, so expect
+  the majority of PDFs to remain unresolved after this step. The unresolved
+  DOIs are written to `unresolved_papers.json` in `config.pdf_folder`. By
+  default (`ExtractionSteps.pause_for_manual_pdf_download=True`), the script
+  prints that list and **stops with an interactive prompt** so you can
+  download those PDFs by hand from the publisher and place them into
+  `config.pdf_folder` before continuing to the quality filter / extraction
+  steps. Set `pause_for_manual_pdf_download=False` to skip the pause (the
+  unresolved papers are then simply skipped further down the pipeline).
+- **Working directories:** The script makes sure that every required folder
+  exists before a step runs. Intermediate artefacts now accumulate under
+  `data_extraction/artifacts`, while historic experiments are preserved in
+  `data_extraction/archive`.
 
 ```
 Crossref query ──┐

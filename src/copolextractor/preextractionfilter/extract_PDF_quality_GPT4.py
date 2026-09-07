@@ -3,6 +3,8 @@ import json
 import os
 import time
 import traceback
+from pathlib import Path
+from typing import Any, Dict, Union
 
 from pdf2image import convert_from_path
 
@@ -10,9 +12,16 @@ import copolextractor.image_processer as ip
 import copolextractor.prompter as prompter
 
 
-def is_valid_pdf(file_path):
+def is_valid_pdf(file_path: Union[str, Path]) -> bool:
     """
     Check if the file is a valid PDF.
+
+    Args:
+        file_path: Path to the file to check.
+
+    Returns:
+        True if the file starts with the PDF signature, False otherwise
+        (including on read errors).
     """
     try:
         with open(file_path, "rb") as f:
@@ -22,9 +31,16 @@ def is_valid_pdf(file_path):
         return False
 
 
-def load_or_create_token_stats(stats_file_path):
+def load_or_create_token_stats(stats_file_path: Union[str, Path]) -> Dict[str, Any]:
     """
     Load existing token statistics or create a new file if it doesn't exist.
+
+    Args:
+        stats_file_path: Path to the token-statistics JSON file.
+
+    Returns:
+        The parsed statistics dict (with a "runs" list), or `{"runs": []}` if the
+        file does not exist or is corrupted/empty.
     """
     if os.path.exists(stats_file_path):
         try:
@@ -38,25 +54,45 @@ def load_or_create_token_stats(stats_file_path):
         return {"runs": []}
 
 
-def save_token_stats(stats_file_path, stats_data):
+def save_token_stats(stats_file_path: Union[str, Path], stats_data: Dict[str, Any]) -> None:
     """
     Save token statistics to the JSON file.
+
+    Args:
+        stats_file_path: Destination path for the token-statistics JSON file.
+        stats_data: Statistics dict to persist.
     """
     with open(stats_file_path, "w", encoding="utf-8") as file:
         json.dump(stats_data, file, indent=4)
 
 
 def process_pdfs(
-    input_folder,
-    output_folder_images,
-    output_folder,
-    selected_entries_path,
-    log_file_path,
-    output_file,
-    stats_file_path,
-):
+    input_folder: Union[str, Path],
+    output_folder_images: Union[str, Path],
+    output_folder: Union[str, Path],
+    selected_entries_path: Union[str, Path],
+    log_file_path: Union[str, Path],
+    output_file: Union[str, Path],
+    stats_file_path: Union[str, Path],
+) -> None:
     """
     Process PDFs and update the JSON entries with extracted information.
+
+    For each entry in `selected_entries_path`, converts the referenced PDF to page
+    images (downscaling if needed to stay under a 50 MB request size), asks the
+    vision LLM to rate the PDF's extraction quality, and stores the result both as
+    a standalone JSON file per paper and merged back into `output_file`. Entries
+    with an already-existing per-paper result, a missing PDF, or an invalid PDF are
+    skipped (and flagged accordingly) rather than reprocessed.
+
+    Args:
+        input_folder: Directory containing the source PDF files.
+        output_folder_images: Directory deskewed page images are written to.
+        output_folder: Directory per-paper quality-score JSON files are written to.
+        selected_entries_path: Path to the JSON file listing candidate entries.
+        log_file_path: Path to the text file image-processing errors are appended to.
+        output_file: Destination path for the updated entries JSON file.
+        stats_file_path: Path to the token-statistics JSON file to update.
     """
     # Load the selected entries from the JSON file
     with open(selected_entries_path, "r", encoding="utf-8") as file:
@@ -269,14 +305,21 @@ def process_pdfs(
 
 
 def main(
-    input_folder,
-    output_folder_images,
-    output_folder,
-    selected_entries_path,
-    output_file,
-):
+    input_folder: Union[str, Path],
+    output_folder_images: Union[str, Path],
+    output_folder: Union[str, Path],
+    selected_entries_path: Union[str, Path],
+    output_file: Union[str, Path],
+) -> None:
     """
     Main function to process PDFs and update JSON entries.
+
+    Args:
+        input_folder: Directory containing the source PDF files.
+        output_folder_images: Directory deskewed page images are written to.
+        output_folder: Directory per-paper quality-score JSON files are written to.
+        selected_entries_path: Path to the JSON file listing candidate entries.
+        output_file: Destination path for the updated entries JSON file.
     """
     # Define log file path
     log_file_path = "./error_log.txt"

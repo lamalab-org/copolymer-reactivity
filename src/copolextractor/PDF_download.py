@@ -1,14 +1,28 @@
 import json
 import os
+import time
+from pathlib import Path
+from typing import List, Optional, Union
 
 import copolextractor.utils as utils
-from copolextractor.doi2pdf import doi2pdf
+import requests
+from dotenv import load_dotenv
 
 
-def is_valid_pdf(file_path):
+REQUEST_TIMEOUT_SECONDS = 20
+SLEEP_BETWEEN_REQUESTS_SECONDS = 0.2
+
+
+def is_valid_pdf(file_path: Union[str, Path]) -> bool:
     """
     Check if a PDF file is valid and not corrupted.
-    Returns True if the file is a valid PDF, False otherwise.
+
+    Args:
+        file_path: Path to the PDF file to check.
+
+    Returns:
+        True if the file starts with the PDF signature and contains an EOF marker
+        near the end, False otherwise (including on read errors).
     """
     try:
         # Try to read the first few bytes to check for PDF signature
@@ -32,10 +46,20 @@ def is_valid_pdf(file_path):
         return False
 
 
-def generate_filename(base_name, output_folder, extension=".pdf"):
+def generate_filename(base_name: str, output_folder: Union[str, Path], extension: str = ".pdf") -> Optional[str]:
     """
     Generate a sanitized filename and check if it exists in the output folder.
     If it exists, check if it's a valid PDF.
+
+    Args:
+        base_name: Raw name to sanitize into a filename (e.g. a DOI).
+        output_folder: Directory the file would be saved in.
+        extension: File extension to append to the sanitized name.
+
+    Returns:
+        The sanitized filename if the file doesn't exist yet, or is corrupted and
+        was deleted so it can be re-downloaded. None if a valid PDF already exists
+        at that path (nothing to do).
     """
     sanitized_name = utils.sanitize_filename(base_name)
     unique_name = sanitized_name + extension
@@ -61,87 +85,193 @@ def generate_filename(base_name, output_folder, extension=".pdf"):
         return unique_name
 
 
-def download_papers(input_file, output_folder):
-    """
-    Download papers based on the DOIs in the input JSON file using doi2pdf
-    and update the file with download status.
-    """
-    data = utils.load_json(input_file)
-    paper_count = 0
-    failed_download_count = 0
-    downloaded_paper_count = 0
-    redownloaded_count = 0
+def get_openalex_pdf_url(doi: str) -> Optional[str]:
+    """Return an open-access URL for a DOI from OpenAlex, or None if unavailable.
 
-    for index, entry in enumerate(data):
-        doi = entry.get("DOI", "").strip()
+    Args:
+        doi: DOI to look up (without the "https://doi.org/" prefix).
+
+    Returns:
+        The open-access PDF URL, or None if OpenAlex has no known open-access
+        location or the request failed.
+    """
+    try:
+        response = requests.get(
+            f"https://api.openalex.org/works/https://doi.org/{doi}",
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return None
+
+    metadata = response.json()
+    best_location = metadata.get("best_oa_location") or {}
+    return best_location.get("pdf_url") or (metadata.get("open_access") or {}).get("oa_url")
+
+
+def get_unpaywall_pdf_url(doi: str, email: str) -> Optional[str]:
+    """Return an open-access URL for a DOI from Unpaywall, or None if unavailable.
+
+    Args:
+        doi: DOI to look up (without the "https://doi.org/" prefix).
+        email: Contact email required by the Unpaywall API's usage policy.
+
+    Returns:
+        The open-access PDF URL, or None if Unpaywall has no known open-access
+        location or the request failed.
+    """
+    try:
+        response = requests.get(
+            f"https://api.unpaywall.org/v2/{doi}",
+            params={"email": email},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return None
+
+    best_location = (response.json().get("best_oa_location") or {})
+    return best_location.get("url_for_pdf") or best_location.get("url")
+
+
+def get_semantic_scholar_pdf_url(doi: str) -> Optional[str]:
+    """Return an open-access URL for a DOI from Semantic Scholar, or None if unavailable.
+
+    Args:
+        doi: DOI to look up (without the "https://doi.org/" prefix).
+
+    Returns:
+        The open-access PDF URL, or None if Semantic Scholar has no known
+        open-access PDF or the request failed.
+    """
+    try:
+        response = requests.get(
+            f"https://api.semanticscholar.org/graph/v1/paper/DOI:{doi}",
+            params={"fields": "openAccessPdf"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return None
+
+    return (response.json().get("openAccessPdf") or {}).get("url")
+
+
+def get_core_pdf_url(doi: str, api_key: str) -> Optional[str]:
+    """Return an open-access URL for a DOI from CORE, or None if unavailable.
+
+    Args:
+        doi: DOI to look up (without the "https://doi.org/" prefix).
+        api_key: CORE API key. If falsy, the lookup is skipped and None is returned.
+
+    Returns:
+        The download URL of the best matching CORE record, or None if no API key
+        was given, no record matched, or the request failed.
+    """
+    if not api_key:
+        return None
+
+    try:
+        response = requests.post(
+            "https://api.core.ac.uk/v3/search/works",
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={"q": f'doi:"{doi}"'},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return None
+
+    records = (response.json() or {}).get("results") or []
+    return records[0].get("downloadUrl") if records else None
+
+
+def download_open_access_papers(input_file: Union[str, Path], output_folder: Union[str, Path]) -> List[str]:
+    """Download PDFs through legal open-access APIs and save unresolved DOIs separately.
+
+    For each paper marked "downloaded" in `input_file`, tries OpenAlex, then
+    Unpaywall, then Semantic Scholar, then CORE (in that order) until an
+    open-access PDF URL is found and successfully downloaded.
+
+    Args:
+        input_file: Path to the paper-list JSON file; a sibling/ancestor ".env"
+            file (if present) is loaded for the `UNPAYWALL_EMAIL`/`CORE_API_KEY`
+            environment variables.
+        output_folder: Directory PDFs and "unresolved_papers.json" are written to.
+
+    Returns:
+        The list of DOIs that could not be resolved to a downloadable PDF.
+    """
+    input_path = Path(input_file)
+    output_path = Path(output_folder)
+    output_path.mkdir(parents=True, exist_ok=True)
+    load_dotenv(input_path.parent / ".env")
+    load_dotenv(Path(__file__).resolve().parents[2] / "data_extraction" / "notebooks" / ".env")
+
+    papers = utils.load_json(str(input_path))
+    downloadable_papers = [paper for paper in papers if paper.get("downloaded") is True]
+    unresolved_dois = []
+    email = os.environ.get("UNPAYWALL_EMAIL", "mara.wilhelmi@uni-jena.de")
+    core_api_key = os.environ.get("CORE_API_KEY", "")
+
+    for paper in downloadable_papers:
+        doi = paper.get("DOI", "").strip()
         if not doi:
-            print(f"Skipping entry {index + 1}: No DOI found.")
+            continue
+        doi = doi.removeprefix("https://doi.org/").removeprefix("http://doi.org/")
+        target = output_path / f"{utils.sanitize_filename(doi)}.pdf"
+        if target.exists() and is_valid_pdf(str(target)):
             continue
 
-        paper_count += 1
+        pdf_url = get_openalex_pdf_url(doi)
+        time.sleep(SLEEP_BETWEEN_REQUESTS_SECONDS)
+        if not pdf_url and email:
+            pdf_url = get_unpaywall_pdf_url(doi, email)
+            time.sleep(SLEEP_BETWEEN_REQUESTS_SECONDS)
+        if not pdf_url:
+            pdf_url = get_semantic_scholar_pdf_url(doi)
+            time.sleep(SLEEP_BETWEEN_REQUESTS_SECONDS)
+        if not pdf_url:
+            pdf_url = get_core_pdf_url(doi, core_api_key)
+            time.sleep(SLEEP_BETWEEN_REQUESTS_SECONDS)
 
-        # Generate a sanitized filename for the PDF
-        base_name = f"paper_{index + 1}" if not doi else utils.sanitize_filename(doi)
-        pdf_name = generate_filename(base_name, output_folder)
-
-        # Check if the file already exists and is valid
-        if pdf_name is None:
-            print(f"Skipping paper {index + 1}/{len(data)}: Valid file already exists.")
-            entry["downloaded"] = True
+        content = None if not pdf_url else _download_open_access_pdf(pdf_url)
+        if content is None:
+            unresolved_dois.append(doi)
             continue
-        elif entry.get("downloaded", False) and entry.get("pdf_name", "") == pdf_name:
-            # This is a redownload case
-            redownloaded_count += 1
-            print(f"Re-downloading paper {index + 1}/{len(data)}: Previous file was corrupted.")
-        else:
-            print(f"Processing paper {index + 1}/{len(data)}: {doi}")
+        target.write_bytes(content)
 
-        output_path = os.path.join(output_folder, pdf_name)
-
-        # Extract just the DOI part if it's a full URL
-        if doi.startswith("https://doi.org/"):
-            doi = doi.replace("https://doi.org/", "")
-
-        try:
-            # Download using doi2pdf
-            doi2pdf(doi, output=output_path)
-
-            # Check if file was created and is valid
-            if os.path.exists(output_path) and is_valid_pdf(output_path):
-                print(f"Download successful: Valid PDF saved in {output_path}")
-                entry["downloaded"] = True
-                entry["pdf_name"] = pdf_name
-                downloaded_paper_count += 1
-            else:
-                if os.path.exists(output_path):
-                    print(f"Downloaded file is corrupted: {output_path}")
-                    try:
-                        os.remove(output_path)
-                        print(f"Deleted corrupted download: {output_path}")
-                    except Exception as e:
-                        print(f"Error deleting corrupted download {output_path}: {str(e)}")
-                else:
-                    print(f"Failed to download DOI {doi}")
-
-                entry["downloaded"] = False
-                failed_download_count += 1
-        except Exception as e:
-            print(f"Error downloading DOI {doi}: {str(e)}")
-            entry["downloaded"] = False
-            failed_download_count += 1
-
-        # Update the JSON file after each paper
-        with open(input_file, "w") as file:
-            json.dump(data, file, indent=4)
-
-    print(
-        f"Out of {paper_count} papers, {downloaded_paper_count} were successfully downloaded "
-        f"({redownloaded_count} were re-downloaded due to corruption), "
-        f"{failed_download_count} downloads failed."
-    )
+    unresolved_path = output_path / "unresolved_papers.json"
+    unresolved_path.write_text(json.dumps(unresolved_dois, indent=2), encoding="utf-8")
+    print(f"Open-access downloads complete: {len(downloadable_papers) - len(unresolved_dois)} successful")
+    print(f"Unresolved papers: {len(unresolved_dois)}")
+    print(f"Saved unresolved DOIs to {unresolved_path}")
+    return unresolved_dois
 
 
-def main(input_file_paper, output_folder):
+def _download_open_access_pdf(pdf_url: str) -> Optional[bytes]:
+    """Return PDF bytes from a URL, or None when the response is not a valid PDF.
+
+    Args:
+        pdf_url: URL to download the PDF from.
+
+    Returns:
+        The raw PDF bytes, or None if the request failed or the content does not
+        start with the PDF signature.
+    """
+    try:
+        response = requests.get(
+            pdf_url,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; copolextractor/1.0)"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return None
+    return response.content if response.content.startswith(b"%PDF") else None
+
+
+def main(input_file_paper: Union[str, Path], output_folder: Union[str, Path]) -> None:
     """
     Main function to handle the download process and update the JSON file.
     Args:
@@ -152,8 +282,8 @@ def main(input_file_paper, output_folder):
     os.makedirs(output_folder, exist_ok=True)
     print(f"Ensured folder exists: {output_folder}")
 
-    print(f"Starting the paper download process using doi2pdf...")
-    download_papers(input_file_paper, output_folder)
+    print("Starting the paper download process using open-access sources...")
+    download_open_access_papers(input_file_paper, output_folder)
 
     pdf_files = [f for f in os.listdir(output_folder) if f.endswith(".pdf")]
     valid_pdf_count = sum(1 for f in pdf_files if is_valid_pdf(os.path.join(output_folder, f)))

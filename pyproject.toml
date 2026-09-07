@@ -32,7 +32,6 @@ extraction = [
     "openai",
     "anthropic",
     "crossrefapi",
-    "doi2pdf",
     "pdf2image",
     "pytesseract",
     "opencv-python",
@@ -46,6 +45,7 @@ extraction = [
     "diskcache",
     "backoff",
     "pyyaml",
+    "python-dotenv",
 ]
 database = [
     "nomad-polymerization-reactions>=1.0.0",

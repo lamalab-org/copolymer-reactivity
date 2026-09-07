@@ -26,10 +26,23 @@ Typical usage::
 The default ``main`` function keeps the behaviour users are familiar with by
 only executing the expensive LLM-based extraction followed by persisting the
 results.  All other steps can be enabled via the ``ExtractionSteps`` flags.
+
+Manual PDF download step
+-------------------------
+The ``pdf_download`` step only retrieves PDFs from open-access sources
+(OpenAlex, Unpaywall, Semantic Scholar, CORE). In practice, a large share of
+papers are **not** open access, so most PDFs will remain unresolved after this
+step and must be downloaded by hand from the publisher. When
+``ExtractionSteps.pause_for_manual_pdf_download`` is enabled (the default),
+``obtain_data`` reads the "unresolved_papers.json" file the download step
+writes, prints the list of missing DOIs, and blocks with an ``input()`` prompt
+so you can fetch those PDFs manually and drop them into ``config.pdf_folder``
+before the pipeline continues to the quality filter / extraction steps.
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -56,6 +69,7 @@ class ExtractionConfig:
     crossref_metadata_output_file: Path
     keywords_filter: Dict[str, int]
     output_file_pre_download_filter: Path
+    pdf_download_input_file: Path
     score_limit: int
     number_of_selected_papers: int
     input_folder_images: Path
@@ -95,12 +109,24 @@ class ExtractionSteps:
     step and the persistence layer run automatically.  Enable additional steps
     when fresh metadata needs to be collected or the filters have to be
     re-computed.
+
+    Note on ``pdf_download``: this only fetches PDFs available via open-access
+    sources. Most papers are not open access, so expect a majority of them to
+    remain unresolved and require a manual download afterwards (see
+    ``pause_for_manual_pdf_download``).
     """
 
     crossref_search: bool = True
     crossref_substeps: Optional[CrossrefSteps] = None
     pre_download_filter: bool = False
     pdf_download: bool = False
+    pause_for_manual_pdf_download: bool = True
+    """If True (default) and `pdf_download` left unresolved DOIs, pause with an
+    interactive prompt so those PDFs can be downloaded by hand and placed in
+    `config.pdf_folder` before the pipeline continues. Set to False to skip the
+    pause (e.g. for fully automated/non-interactive runs), accepting that
+    unresolved papers will simply be skipped further down the pipeline.
+    """
     pdf_quality_filter: bool = False
     extraction: bool = True
     persist_results: bool = True
@@ -113,6 +139,33 @@ def _ensure_parent_dir(path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
     else:
         path.mkdir(parents=True, exist_ok=True)
+
+
+def _wait_for_manual_pdf_downloads(pdf_folder: Path) -> None:
+    """Pause and prompt the user to manually download PDFs listed as unresolved.
+
+    Reads "unresolved_papers.json" written by the open-access download step
+    (see `copolextractor.PDF_download.download_open_access_papers`). If it lists
+    any DOIs, blocks on `input()` so the user can fetch those PDFs by hand and
+    drop them into `pdf_folder` before the pipeline continues.
+
+    Args:
+        pdf_folder: Directory the PDF downloader wrote "unresolved_papers.json"
+            into, and where manually downloaded PDFs are expected to be placed.
+    """
+    unresolved_path = pdf_folder / "unresolved_papers.json"
+    if not unresolved_path.exists():
+        return
+
+    unresolved_dois = json.loads(unresolved_path.read_text(encoding="utf-8"))
+    if not unresolved_dois:
+        return
+
+    print(f"\n{len(unresolved_dois)} paper(s) could not be downloaded via open-access sources:")
+    for doi in unresolved_dois:
+        print(f"  - {doi}")
+    print(f"Please download these PDFs manually and place them in: {pdf_folder}")
+    input("Press Enter once you are done (or to skip and continue anyway)...")
 
 
 def obtain_data(
@@ -170,10 +223,14 @@ def obtain_data(
         )
 
     if steps.pdf_download:
+        # Only resolves open-access papers; most papers typically remain
+        # unresolved and need to be downloaded by hand (see the pause below).
         pdf_download(
-            str(config.output_file_pre_download_filter),
+            str(config.pdf_download_input_file),
             str(config.pdf_folder),
         )
+        if steps.pause_for_manual_pdf_download:
+            _wait_for_manual_pdf_downloads(config.pdf_folder)
 
     if steps.pdf_quality_filter:
         _ensure_parent_dir(config.output_file_xgboost_filter)
@@ -235,6 +292,7 @@ def main() -> None:
             "reactivity ratios": 40,
         },
         output_file_pre_download_filter=metadata_dir / "selected_papers.json",
+        pdf_download_input_file=metadata_dir / "selected_papers_merged.json",
         score_limit=65,
         number_of_selected_papers=2000,
         input_folder_images=llm_images_dir,

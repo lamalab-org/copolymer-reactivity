@@ -3,6 +3,7 @@ import json
 import os
 import time
 from pathlib import Path
+from typing import Any, Dict, Union
 
 from pdf2image import convert_from_path
 
@@ -14,9 +15,16 @@ import copolextractor.utils as utils
 failed_smiles_list = []
 
 
-def load_or_create_token_stats(stats_file_path):
+def load_or_create_token_stats(stats_file_path: Union[str, Path]) -> Dict[str, Any]:
     """
     Load existing token statistics or create a new file if it doesn't exist.
+
+    Args:
+        stats_file_path: Path to the token-statistics JSON file.
+
+    Returns:
+        The parsed statistics dict (with a "runs" list), or `{"runs": []}` if the
+        file does not exist or is corrupted/empty.
     """
     if os.path.exists(stats_file_path):
         try:
@@ -30,24 +38,42 @@ def load_or_create_token_stats(stats_file_path):
         return {"runs": []}
 
 
-def save_token_stats(stats_file_path, stats_data):
+def save_token_stats(stats_file_path: Union[str, Path], stats_data: Dict[str, Any]) -> None:
     """
     Save token statistics to the JSON file.
+
+    Args:
+        stats_file_path: Destination path for the token-statistics JSON file.
+        stats_data: Statistics dict to persist.
     """
     with open(stats_file_path, "w", encoding="utf-8") as file:
         json.dump(stats_data, file, indent=4)
 
 
 def process_pdf_files(
-    paper_list_path,
-    output_folder_images,
-    output_folder,
-    number_of_model_calls,
-    pdf_folder,
-    stats_file_path,
-):
+    paper_list_path: Union[str, Path],
+    output_folder_images: Union[str, Path],
+    output_folder: Union[str, Path],
+    number_of_model_calls: int,
+    pdf_folder: Union[str, Path],
+    stats_file_path: Union[str, Path],
+) -> None:
     """
     Process PDF files based on entries from paper_list.json and update the JSON file with extraction results.
+
+    For each selected paper (precision_score == 1, not yet extracted), converts the
+    PDF to page images, downscales them if needed to stay under a 50 MB request
+    size, calls the vision LLM, retries with an updated prompt while the NA-rate of
+    the parsed output stays above 40%, and writes the resulting JSON per paper.
+    Token usage statistics are tracked and persisted after every model call.
+
+    Args:
+        paper_list_path: Path to the paper-list JSON file with per-paper metadata.
+        output_folder_images: Directory deskewed page images are written to.
+        output_folder: Directory extraction result JSON files are written to.
+        number_of_model_calls: Maximum number of retry attempts per paper.
+        pdf_folder: Directory containing the source PDF files.
+        stats_file_path: Path to the token-statistics JSON file to update.
     """
     start = time.time()
 
@@ -301,7 +327,7 @@ def process_pdf_files(
     print("Execution time:", end - start)
 
 
-def decode_nested_json(data):
+def decode_nested_json(data: Any) -> Any:
     """
     Recursively decode string-encoded JSON fields in a dictionary or list.
     Args:
@@ -321,9 +347,17 @@ def decode_nested_json(data):
     return data
 
 
-def process_files(input_folder, output_file):
+def process_files(input_folder: Union[str, Path], output_file: Union[str, Path]) -> None:
     """
     Process JSON files in the input folder and generate extracted results.
+
+    Reads every extraction JSON file in `input_folder`, flattens each reaction's
+    conditions into one result record per condition (resolving monomer/solvent
+    SMILES and logP along the way), and writes the combined list to `output_file`.
+
+    Args:
+        input_folder: Directory containing per-paper extraction JSON files.
+        output_file: Destination path for the combined results JSON file.
     """
     results = []
     file_count = 0
@@ -420,9 +454,22 @@ def process_files(input_folder, output_file):
         print("All SMILES were successfully processed.")
 
 
-def main(input_folder_images, output_folder, paper_list_path, pdf_folder, extracted_data_file):
+def main(
+    input_folder_images: Union[str, Path],
+    output_folder: Union[str, Path],
+    paper_list_path: Union[str, Path],
+    pdf_folder: Union[str, Path],
+    extracted_data_file: Union[str, Path],
+) -> None:
     """
     Main function to process PDFs and extracted JSON files.
+
+    Args:
+        input_folder_images: Directory deskewed page images are written to.
+        output_folder: Directory extraction result JSON files are written to.
+        paper_list_path: Path to the paper-list JSON file with per-paper metadata.
+        pdf_folder: Directory containing the source PDF files.
+        extracted_data_file: Destination path for the combined results JSON file.
     """
     # Define token stats file path
     data_root = Path(__file__).resolve().parents[2] / "data_extraction"

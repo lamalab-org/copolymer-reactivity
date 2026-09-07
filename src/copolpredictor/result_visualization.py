@@ -5,6 +5,7 @@ Contains functions for creating static and interactive plots of model results
 """
 
 import os
+from typing import Any, Dict, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,8 +26,11 @@ except ImportError:
 
 
 def plot_model_performance(
-    predictions, title=None, save_path="model_performance.png", interactive=True
-):
+    predictions: Dict[str, Any],
+    title: Optional[str] = None,
+    save_path: str = "model_performance.png",
+    interactive: bool = True,
+) -> None:
     """
     Create a scatter plot of true vs predicted values
 
@@ -111,7 +115,11 @@ def plot_model_performance(
             print(f"Error creating interactive plot: {e}")
 
 
-def create_interactive_plot(predictions, df=None, save_path="interactive_model_performance.html"):
+def create_interactive_plot(
+    predictions: Dict[str, Any],
+    df: Optional[pd.DataFrame] = None,
+    save_path: str = "interactive_model_performance.html",
+) -> Optional[Any]:
     """
     Create an interactive scatter plot of true vs predicted values
 
@@ -275,12 +283,12 @@ def create_interactive_plot(predictions, df=None, save_path="interactive_model_p
 
 
 def plot_feature_importances(
-    importance_df,
-    n_features=20,
-    title="Feature Importances",
-    save_path="feature_importances.png",
-    interactive=True,
-):
+    importance_df: pd.DataFrame,
+    n_features: int = 20,
+    title: str = "Feature Importances",
+    save_path: str = "feature_importances.png",
+    interactive: bool = True,
+) -> None:
     """
     Plot feature importances
 
@@ -344,7 +352,9 @@ def plot_feature_importances(
             print(f"Error creating interactive feature importance plot: {e}")
 
 
-def plot_learning_curve(results_df, title="Learning Curve", save_path="learning_curve.png"):
+def plot_learning_curve(
+    results_df: pd.DataFrame, title: str = "Learning Curve", save_path: str = "learning_curve.png"
+) -> None:
     """
     Plot the learning curve from learning curve results
 

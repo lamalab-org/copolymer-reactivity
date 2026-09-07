@@ -2,7 +2,7 @@ import base64
 import json
 import os
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import anthropic
 import yaml
@@ -15,7 +15,13 @@ class RunTimeExpired(Exception):
     pass
 
 
-def get_prompt_pdf_quality():
+def get_prompt_pdf_quality() -> str:
+    """Return the LLM prompt used to rate a paper's PDF quality for data extraction.
+
+    Returns:
+        The prompt text, asking the model to score PDF/table/number quality and
+        report year, reaction count and language as a JSON object.
+    """
     prompt = """Question: The content of the pictures is a scientific paper about copolymerization of monomers.
     The main focus here is to find the copolymerizations which have r-values for a pair of two Monomers.
     Its possible, that there is also the beginning of a new paper about polymers in the PDF.
@@ -47,7 +53,13 @@ def get_prompt_pdf_quality():
     return prompt
 
 
-def get_prompt_template():
+def get_prompt_template() -> str:
+    """Return the main LLM extraction prompt describing the reaction JSON schema.
+
+    Returns:
+        The prompt text instructing the model to extract copolymerization reactions,
+        conditions and reaction constants from a PDF into the documented JSON schema.
+    """
     prompt = """The content of the pictures is a scientific paper about copolymerization of monomers.
     We only consider copolymerizations with 2 different monomers. If you find a polymerization with just one or more than 2 monomers ignore them.
     Its possible, that there is also the beginning of a new paper about polymers in the PDF.
@@ -116,6 +128,11 @@ def get_prompt_template():
 
 
 def get_prompt_addition() -> str:
+    """Return the prompt fragment used to ask the model to refine previously extracted data.
+
+    Returns:
+        A template string with a single `{}` placeholder for the prior extraction data.
+    """
     prompt_addition = """Here is the previously collected data from the same Markdowns: {}.
 Try to fill up the entries with NA and correct entries if they are wrong. Pay particular attention on numbers and at the decimal point.
 Combine different reaction if they belong to the same polymerization with the same reaction conditions.
@@ -123,30 +140,60 @@ Report every different polymerization and every different reaction condition sep
     return prompt_addition
 
 
-def get_prompt_addition_with_data(new_data) -> str:
+def get_prompt_addition_with_data(new_data: dict) -> str:
+    """Fill the refinement prompt template (`get_prompt_addition`) with prior extraction data.
+
+    Args:
+        new_data: Previously extracted data to embed in the prompt.
+
+    Returns:
+        The refinement prompt with `new_data` inserted.
+    """
     prompt_addition_base = get_prompt_addition()
     prompt_addition_with_data = prompt_addition_base.format(new_data)
     return prompt_addition_with_data
 
 
 def split_document(document: str, max_length: int) -> List[str]:
+    """Split a document into fixed-size, non-overlapping character chunks.
+
+    Args:
+        document: Full text to split.
+        max_length: Maximum number of characters per chunk.
+
+    Returns:
+        The list of chunks, in order.
+    """
     return [document[j : j + max_length] for j in range(0, len(document), max_length)]
 
 
 def format_prompt(template: str, data: dict) -> str:
+    """Fill a prompt template's named placeholders with values from `data`.
+
+    Args:
+        template: Prompt template using `str.format`-style `{key}` placeholders.
+        data: Mapping of placeholder names to values.
+
+    Returns:
+        The formatted prompt string.
+    """
     return template.format(**data)
 
 
-def call_openai(prompt, model="chatgpt-4o-latest", temperature: float = 0.0, **kwargs):
+def call_openai(
+    prompt: Union[str, list], model: str = "chatgpt-4o-latest", temperature: float = 0.0, **kwargs
+) -> Tuple[str, int, int]:
     """Call chat openai model
 
     Args:
-        prompt (str): Prompt to send to model
+        prompt (Union[str, list]): Prompt to send to model. Either plain text, or a
+            list of vision message content blocks (see `get_prompt_vision_model`).
         model (str, optional): Name of the API. Defaults to ""gpt-4-vision-preview".
         temperature (float, optional): inference temperature. Defaults to 0.
 
     Returns:
-        dict: new data
+        A (message_content, input_tokens, output_tokens) tuple, where
+        `message_content` is the raw JSON string returned by the model.
     """
     client = OpenAI()
     completion = client.chat.completions.create(
@@ -171,7 +218,9 @@ def call_openai(prompt, model="chatgpt-4o-latest", temperature: float = 0.0, **k
     return message_content, input_tokens, output_token
 
 
-def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs):
+def call_openai_chucked(
+    prompt: str, model: str = "gpt-3.5-turbo-1106", temperature: float = 0.0, **kwargs
+) -> Tuple[dict, int, int]:
     """Call chat openai model
 
     Args:
@@ -180,7 +229,8 @@ def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float =
         temperature (float, optional): inference temperature. Defaults to 0.
 
     Returns:
-        dict: new data
+        A (new_data, input_tokens, output_tokens) tuple, where `new_data` is the
+        model's response parsed from JSON.
     """
     client = OpenAI()
     completion = client.chat.completions.create(
@@ -205,7 +255,21 @@ def call_openai_chucked(prompt, model="gpt-3.5-turbo-1106", temperature: float =
     return new_data, input_tokens, output_token
 
 
-def call_openai_agent(assistant, file, prompt, **kwargs):
+def call_openai_agent(assistant, file, prompt: str, **kwargs) -> Tuple[str, int, int]:
+    """Run a prompt through an OpenAI Assistants-API thread and poll until completion.
+
+    Args:
+        assistant: OpenAI assistant object (as returned by the Assistants API) to run.
+        file: Currently unused by this function; kept for call-site compatibility.
+        prompt: User message content to send to the assistant.
+
+    Raises:
+        RunTimeExpired: If the run status becomes "expired" or "failed".
+
+    Returns:
+        A (output_text, input_tokens, output_tokens) tuple with the assistant's
+        latest reply and token usage for the run.
+    """
     print("openai call has started")
     client = OpenAI()
     thread = client.beta.threads.create()
@@ -233,28 +297,81 @@ def call_openai_agent(assistant, file, prompt, **kwargs):
 
 
 def update_data(new_data: dict) -> str:
+    """Build the refinement prompt fragment for a round of previously extracted data.
+
+    Args:
+        new_data: Previously extracted data to embed in the prompt.
+
+    Returns:
+        The refinement prompt fragment with `new_data` inserted.
+    """
     old_data_template = get_prompt_addition_with_data(new_data)
     return old_data_template
 
 
-def update_prompt(prompt, data):
+def update_prompt(prompt: str, data: dict) -> str:
+    """Prefix a base prompt with a refinement fragment built from prior extraction data.
+
+    Args:
+        prompt: Base prompt to append after the refinement fragment.
+        data: Previously extracted data to embed in the refinement fragment.
+
+    Returns:
+        The combined prompt (refinement fragment followed by `prompt`).
+    """
     new_prompt = update_data(data) + prompt
     return new_prompt
 
 
-def update_prompt_chucked(prompt, data):
+def update_prompt_chucked(prompt: str, data: dict) -> str:
+    """Prefix a base prompt with the chunked-mode refinement fragment.
+
+    Args:
+        prompt: Base prompt to append after the refinement fragment.
+        data: Previously extracted data to embed in the refinement fragment.
+
+    Returns:
+        The combined prompt (refinement fragment followed by `prompt`).
+    """
     new_prompt = update_data_chucked(data) + prompt
     return new_prompt
 
 
 def update_data_chucked(new_data: dict) -> str:
+    """Build the chunked-mode refinement prompt fragment for prior extraction data.
+
+    Args:
+        new_data: Previously extracted data to embed in the prompt.
+
+    Returns:
+        The refinement prompt fragment with `new_data` inserted.
+    """
     old_data_template = f"""Here are the previously collected data: {new_data}. Please add more information based on"""
     return old_data_template
 
 
 def repeated_call_model(
-    text, prompt_template, max_length: int, model_call_fn
+    text: str, prompt_template: str, max_length: int, model_call_fn
 ) -> Tuple[dict, int, int, int]:
+    """Extract data from a long document by prompting the model chunk-by-chunk.
+
+    Each chunk's result is merged into a running output dict and fed back into the
+    prompt for the next chunk via `update_data`, so later chunks can refine earlier
+    extractions.
+
+    Args:
+        text: Full document text to process.
+        prompt_template: Prompt template with a `{text}` placeholder for the chunk.
+        max_length: Maximum number of characters per chunk (see `split_document`).
+        model_call_fn: Callable taking a prompt string and returning
+            (new_data, input_tokens, output_tokens).
+
+    Returns:
+        A (output, input_tokens, output_tokens, number_of_model_calls) tuple, where
+        `output` is the merged extraction result and the token counts are only from
+        the last chunk call (accumulators `input_tokens`/`output_tokens` are tracked
+        but not returned).
+    """
     chunks = split_document(text, max_length=max_length)
     output = {}
     extracted = ""
@@ -274,7 +391,22 @@ def repeated_call_model(
     return output, input_token, output_token, number_of_model_calls
 
 
-def format_output_as_json_and_yaml(i, output, output_folder, pdf_name):
+def format_output_as_json_and_yaml(
+    i: int, output: str, output_folder: str, pdf_name: str
+) -> Union[dict, None]:
+    """Parse a fenced-code-block model response and persist it as JSON and YAML.
+
+    Args:
+        i: Zero-based index used to derive the output filenames.
+        output: Raw model response, expected to contain the JSON payload inside a
+            ``` fenced code block (optionally prefixed with "json\\n").
+        output_folder: Directory the JSON/YAML files are written to.
+        pdf_name: Source PDF filename, stored under the "source_pdf" key.
+
+    Returns:
+        The parsed data dict (with "source_pdf" added), or None if the response
+        could not be parsed as JSON.
+    """
     parts = output.split("```")
 
     if len(parts) >= 3:
@@ -304,7 +436,21 @@ def format_output_as_json_and_yaml(i, output, output_folder, pdf_name):
         print("error at parsing the output_2 to JSON-file:", e)
 
 
-def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
+def format_output_claude_as_json_and_yaml(
+    i: int, content_blocks: list, output_folder: str
+) -> Union[dict, None]:
+    """Parse the first Claude content block containing JSON text and persist it.
+
+    Args:
+        i: Zero-based index used to derive the output filenames.
+        content_blocks: Anthropic message content blocks; the first block exposing
+            a "text" attribute or key is used.
+        output_folder: Directory the JSON/YAML files are written to.
+
+    Returns:
+        The parsed data dict, or None if no usable text block was found or parsing
+        failed.
+    """
     for content_block in content_blocks:
         if hasattr(content_block, "text"):
             json_str = content_block.text
@@ -330,7 +476,16 @@ def format_output_claude_as_json_and_yaml(i, content_blocks, output_folder):
             print(f"Error parsing the output_2: {e}")
 
 
-def call_claude3(prompt):
+def call_claude3(prompt: list) -> Tuple[list, int, int]:
+    """Call the Claude 3 Opus chat model with a pre-built message list.
+
+    Args:
+        prompt: List of Anthropic message dicts (as accepted by `messages.create`).
+
+    Returns:
+        A (content_blocks, input_tokens, output_tokens) tuple with the model's
+        response content blocks and token usage.
+    """
     client = anthropic.Anthropic(
         api_key=os.environ.get("ANTHROPIC_API_KEY"),
     )
@@ -349,7 +504,18 @@ def call_claude3(prompt):
     return message.content, input_token, output_token
 
 
-def update_prompt_with_text_and_images(original_prompt, data, prompt):
+def update_prompt_with_text_and_images(original_prompt: list, data: dict, prompt: str) -> str:
+    """Replace the trailing text block of a Claude vision prompt with a refined prompt.
+
+    Args:
+        original_prompt: Claude message list (as built by `get_prompt_claude_vision`)
+            whose last content block's "text" value is replaced in place.
+        data: Previously extracted data to embed via `update_prompt`.
+        prompt: Base prompt text to combine with the refinement fragment.
+
+    Returns:
+        The updated `original_prompt` serialized as a JSON string.
+    """
     new_text = update_prompt(prompt, data)
     original_prompt[-1]["text"] = new_text
     updated_prompt_str = json.dumps(original_prompt)
@@ -357,14 +523,33 @@ def update_prompt_with_text_and_images(original_prompt, data, prompt):
     return updated_prompt_str
 
 
-def create_image_content(image, detail="high"):
+def create_image_content(image: str, detail: str = "high") -> dict:
+    """Build an OpenAI vision message content block for a base64-encoded image.
+
+    Args:
+        image: Base64-encoded JPEG image data.
+        detail: OpenAI image detail level ("low", "high" or "auto").
+
+    Returns:
+        An "image_url" content block as expected by the OpenAI chat completions API.
+    """
     return {
         "type": "image_url",
         "image_url": {"url": f"data:image/jpeg;base64,{image}", "detail": detail},
     }
 
 
-def get_prompt_vision_model(images_base64, prompt_text):
+def get_prompt_vision_model(images_base64: List[str], prompt_text: str) -> list:
+    """Build the OpenAI vision message content list from images and prompt text.
+
+    Args:
+        images_base64: Base64-encoded JPEG images to include, in order.
+        prompt_text: Text prompt appended after the images.
+
+    Returns:
+        A list of content blocks (images followed by the text block) as expected by
+        the OpenAI chat completions API.
+    """
     content = []
     for data in images_base64:
         content.append(create_image_content(data))
@@ -373,12 +558,37 @@ def get_prompt_vision_model(images_base64, prompt_text):
     return content
 
 
-def encode_image_to_base64(filepath):
+def encode_image_to_base64(filepath: str) -> str:
+    """Read an image file and return its base64-encoded content.
+
+    Args:
+        filepath: Path to the image file.
+
+    Returns:
+        The base64-encoded image data as a UTF-8 string.
+    """
     with open(filepath, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 
-def get_prompt_claude_vision(output_folder_images, filename, pdf_images, prompt_text):
+def get_prompt_claude_vision(
+    output_folder_images: str, filename: str, pdf_images: list, prompt_text: str
+) -> list:
+    """Build a Claude vision message list from previously saved, deskewed page images.
+
+    Args:
+        output_folder_images: Directory containing the deskewed page PNGs produced by
+            `image_processer.correct_text_orientation`.
+        filename: Original PDF filename, used to derive the page image filenames.
+        pdf_images: List of page images; only its length is used to determine how
+            many page images to load.
+        prompt_text: Text prompt appended after the images.
+
+    Returns:
+        A single-element list containing one Anthropic user message dict, whose
+        content alternates "Image N:" labels with base64-encoded image blocks,
+        followed by the text prompt.
+    """
     name_without_ext, _ = os.path.splitext(filename)
     images = [
         (

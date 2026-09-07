@@ -3,7 +3,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Union
+from typing import Any, Union
 
 import backoff
 import diskcache as dc
@@ -21,33 +21,68 @@ embedding_cache = {}
 
 
 def load_yaml(file_path: Union[str, Path]) -> dict:
+    """Load a YAML file from disk.
+
+    Args:
+        file_path: Path to the YAML file.
+
+    Returns:
+        The parsed YAML content.
+    """
     with open(file_path, "r") as file:
         data = yaml.safe_load(file)
     return data
 
 
-def load_json(file_path: Union[str, Path]) -> dict:
+def load_json(file_path: Union[str, os.PathLike]) -> Any:
+    """Load a JSON file from disk.
+
+    Args:
+        file_path: Path to the JSON file.
+
+    Returns:
+        The parsed JSON content (typically a dict or list, depending on the file).
+    """
     with open(file_path, "r") as file:
         data = json.load(file)
     return data
 
 
-def save_json(data, file_path):
+def save_json(data: object, file_path: Union[str, os.PathLike]) -> None:
     """
     Save JSON data to a file.
+
+    Args:
+        data: JSON-serializable object to save.
+        file_path: Destination path for the JSON file.
     """
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
 
-def sanitize_filename(filename):
-    """Replace invalid characters in filename with underscores."""
+def sanitize_filename(filename: str) -> str:
+    """Replace invalid characters in filename with underscores.
+
+    Args:
+        filename: Raw filename or path segment.
+
+    Returns:
+        The filename with characters invalid on common filesystems (< > : " / \\ | ? *)
+        replaced by underscores.
+    """
     return re.sub(r'[<>:"/\\|?*]', "_", filename)
 
 
-def calculate_logP(smiles):
+def calculate_logP(smiles: str) -> Union[float, None]:
     """
     Calculate the logP value for a given SMILES string.
+
+    Args:
+        smiles: SMILES string of the molecule.
+
+    Returns:
+        The calculated logP (octanol-water partition coefficient), or None if the
+        SMILES string could not be parsed or an error occurred.
     """
     try:
         mol = Chem.MolFromSmiles(smiles)
@@ -72,7 +107,17 @@ def canonicalize_smiles(smiles: str) -> str:
 
 
 @backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_time=10)
-def cactus_request_w_backoff(inp, rep="SMILES"):
+def cactus_request_w_backoff(inp: str, rep: str = "SMILES") -> Union[str, None]:
+    """Query the CACTUS chemical structure resolver, retrying with exponential backoff.
+
+    Args:
+        inp: Input identifier to resolve (e.g. a chemical name or SMILES string).
+        rep: Output representation to request from CACTUS (e.g. "SMILES", "name").
+
+    Returns:
+        The resolved value as returned by CACTUS, or None if CACTUS returned an
+        HTML (error) page instead of the requested representation.
+    """
     url = CACTUS.format(inp, rep)
     response = requests.get(url, allow_redirects=True, timeout=5)
     response.raise_for_status()
@@ -160,7 +205,17 @@ def smiles_to_name(smiles: str) -> str:
     return None
 
 
-def cactus_request_w_backoff_name(smiles, rep="name"):
+def cactus_request_w_backoff_name(smiles: str, rep: str = "name") -> Union[str, None]:
+    """Query the CACTUS chemical structure resolver to convert a SMILES string to a name.
+
+    Args:
+        smiles: SMILES string to resolve.
+        rep: Output representation to request from CACTUS (defaults to "name").
+
+    Returns:
+        The resolved value as returned by CACTUS, or None if CACTUS returned an
+        HTML (error) page instead of the requested representation.
+    """
     url = CACTUS.format(smiles, rep)
     response = requests.get(url, allow_redirects=True, timeout=10)
     response.raise_for_status()
@@ -179,8 +234,15 @@ except Exception as e:
     client = None
 
 
-def load_embeddings(file_path="embeddings.json"):
-    """Load embeddings from a JSON file if it exists."""
+def load_embeddings(file_path: Union[str, Path] = "embeddings.json") -> dict:
+    """Load embeddings from a JSON file if it exists, populating the global cache.
+
+    Args:
+        file_path: Path to a JSON file containing a list of {"name", "embedding"} entries.
+
+    Returns:
+        A dict mapping name to embedding vector. Empty if `file_path` does not exist.
+    """
     global embedding_cache
 
     if os.path.exists(file_path):
@@ -192,8 +254,14 @@ def load_embeddings(file_path="embeddings.json"):
     return {}
 
 
-def save_embeddings(embeddings_dict, file_path="output_2/embeddings.json"):
-    """Save embeddings to a JSON file."""
+def save_embeddings(embeddings_dict: dict, file_path: Union[str, Path] = "output_2/embeddings.json") -> None:
+    """Save embeddings to a JSON file.
+
+    Args:
+        embeddings_dict: Mapping of name to embedding vector.
+        file_path: Destination path for the JSON file; parent directories are created
+            if needed.
+    """
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     embeddings_list = [
         {"name": name, "embedding": embedding} for name, embedding in embeddings_dict.items()
@@ -203,10 +271,19 @@ def save_embeddings(embeddings_dict, file_path="output_2/embeddings.json"):
     print(f"Saved {len(embeddings_list)} embeddings to {file_path}.")
 
 
-def get_or_create_embedding(text, model="text-embedding-3-small"):
+def get_or_create_embedding(text: Union[str, None], model: str = "text-embedding-3-small") -> Union[list, None]:
     """
     Retrieve embeddings for a given text.
     Uses cache if available, otherwise generates new embeddings.
+
+    Args:
+        text: Text to embed. If None/NaN, no embedding is generated.
+        model: OpenAI embedding model name to use when the API is available.
+
+    Returns:
+        The embedding vector as a list of floats, or None if `text` is None/NaN or
+        embedding generation failed. Falls back to a deterministic hash-based
+        pseudo-embedding when no OpenAI client is available.
     """
     global embedding_cache
     global client
@@ -247,8 +324,18 @@ def get_or_create_embedding(text, model="text-embedding-3-small"):
         return None
 
 
-def is_within_deviation(actual_product, expected_product, deviation=0.10):
-    """Check if product is within acceptable deviation"""
+def is_within_deviation(actual_product: float, expected_product: float, deviation: float = 0.10) -> bool:
+    """Check if product is within acceptable deviation.
+
+    Args:
+        actual_product: Observed value.
+        expected_product: Reference value to compare against.
+        deviation: Maximum allowed relative deviation (fraction of `expected_product`).
+
+    Returns:
+        True if `actual_product` is within `deviation` of `expected_product` (exact
+        equality required when `expected_product` is 0).
+    """
     if expected_product == 0:
         return actual_product == 0
     return abs(actual_product - expected_product) / abs(expected_product) <= deviation
