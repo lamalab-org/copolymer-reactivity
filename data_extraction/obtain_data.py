@@ -26,6 +26,18 @@ Typical usage::
 The default ``main`` function keeps the behaviour users are familiar with by
 only executing the expensive LLM-based extraction followed by persisting the
 results.  All other steps can be enabled via the ``ExtractionSteps`` flags.
+
+Manual PDF download step
+-------------------------
+The ``pdf_download`` step only retrieves PDFs from open-access sources
+(OpenAlex, Unpaywall, Semantic Scholar, CORE). In practice, a large share of
+papers are **not** open access, so most PDFs will remain unresolved after this
+step and must be downloaded by hand from the publisher. When
+``ExtractionSteps.pause_for_manual_pdf_download`` is enabled (the default),
+``obtain_data`` reads the "unresolved_papers.json" file the download step
+writes, prints the list of missing DOIs, and blocks with an ``input()`` prompt
+so you can fetch those PDFs manually and drop them into ``config.pdf_folder``
+before the pipeline continues to the quality filter / extraction steps.
 """
 
 from __future__ import annotations
@@ -97,6 +109,11 @@ class ExtractionSteps:
     step and the persistence layer run automatically.  Enable additional steps
     when fresh metadata needs to be collected or the filters have to be
     re-computed.
+
+    Note on ``pdf_download``: this only fetches PDFs available via open-access
+    sources. Most papers are not open access, so expect a majority of them to
+    remain unresolved and require a manual download afterwards (see
+    ``pause_for_manual_pdf_download``).
     """
 
     crossref_search: bool = True
@@ -104,6 +121,12 @@ class ExtractionSteps:
     pre_download_filter: bool = False
     pdf_download: bool = False
     pause_for_manual_pdf_download: bool = True
+    """If True (default) and `pdf_download` left unresolved DOIs, pause with an
+    interactive prompt so those PDFs can be downloaded by hand and placed in
+    `config.pdf_folder` before the pipeline continues. Set to False to skip the
+    pause (e.g. for fully automated/non-interactive runs), accepting that
+    unresolved papers will simply be skipped further down the pipeline.
+    """
     pdf_quality_filter: bool = False
     extraction: bool = True
     persist_results: bool = True
@@ -200,6 +223,8 @@ def obtain_data(
         )
 
     if steps.pdf_download:
+        # Only resolves open-access papers; most papers typically remain
+        # unresolved and need to be downloaded by hand (see the pause below).
         pdf_download(
             str(config.pdf_download_input_file),
             str(config.pdf_folder),
