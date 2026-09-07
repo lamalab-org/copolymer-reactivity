@@ -13,6 +13,7 @@ Run this ONCE before any training/experiments.
 import argparse
 import json
 import os
+import shutil
 import sys
 
 import numpy as np
@@ -82,6 +83,13 @@ def create_split(remove_specialized=False, test_size=0.2, val_size=0.1):
         df = pd.read_csv(processed_path)
 
     print(f"Total samples: {len(df)}")
+
+    # Keep the API/Docker/test dataset copy (copol_prediction/processed_data.csv)
+    # in sync with the freshly (re)generated processed_path, since they used to
+    # silently drift apart.
+    api_dataset_path = "processed_data.csv"
+    shutil.copyfile(processed_path, api_dataset_path)
+    print(f"Synced {processed_path} -> {api_dataset_path}")
 
     # Load and merge specialized_filter classifications
     print("\nLoading specialized_filter classifications...")

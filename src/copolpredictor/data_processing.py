@@ -749,10 +749,6 @@ def load_and_preprocess_data(
                 f"JSON filename column found: {col} with {combined_df[col].nunique()} unique values"
             )
 
-    # Save processed data
-    combined_df.to_csv("processed_data.csv", index=False)
-    print("Data saved to processed_data.csv")
-
     return combined_df
 
 
