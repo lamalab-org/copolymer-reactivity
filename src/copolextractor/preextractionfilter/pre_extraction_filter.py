@@ -10,16 +10,16 @@ from copolextractor.preextractionfilter.precision_prediction_randomforest import
 
 
 def run_combined_pipeline(
-    training_file,
-    input_file_xgboost_filter,
-    output_file,
-    pdf_input_folder,
-    output_folder_images,
-    output_folder_LLM_score,
-    seed,
-    threshold,
-    enable_pdf_processing,
-):
+    training_file: Union[str, os.PathLike],
+    input_file_xgboost_filter: Union[str, os.PathLike],
+    output_file: Union[str, os.PathLike],
+    pdf_input_folder: Union[str, os.PathLike],
+    output_folder_images: Union[str, os.PathLike],
+    output_folder_LLM_score: Union[str, os.PathLike],
+    seed: int,
+    threshold: float,
+    enable_pdf_processing: bool,
+) -> None:
     """
     Combined pipeline that first processes PDFs for scoring and then performs RF filtering.
 
@@ -54,6 +54,7 @@ def run_combined_pipeline(
         output_file=output_file,
         seed_rf=seed,
         threshold=threshold,
+        pdf_folder=pdf_input_folder,
     )
     print(f"RF filtering completed. Results saved to {output_file}.")
 

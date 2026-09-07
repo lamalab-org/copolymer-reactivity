@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import xgboost as xgb
+from numpy.typing import ArrayLike
+from typing import Dict, List, Optional, Sequence, Tuple
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import GroupKFold
 
@@ -98,7 +101,9 @@ feature_columns_all = [
 ]
 
 
-def compute_quality_weighted_accuracy(y_true, y_pred, num_classes=4):
+def compute_quality_weighted_accuracy(
+    y_true: ArrayLike, y_pred: ArrayLike, num_classes: int = 4
+) -> float:
     """
     Compute the quality-weighted accuracy:
     For each class: (class proportion) * (class accuracy), then average over all classes.
@@ -130,7 +135,9 @@ def compute_quality_weighted_accuracy(y_true, y_pred, num_classes=4):
     return quality_weighted_accuracy
 
 
-def create_grouped_kfold_splits(df, n_splits=5, id_column="reaction_id"):
+def create_grouped_kfold_splits(
+    df: pd.DataFrame, n_splits: int = 5, id_column: str = "reaction_id"
+) -> List[Tuple[np.ndarray, np.ndarray]]:
     """
     Create K-Fold splits that ensure no data leakage by keeping all rows
     with the same group ID (e.g., reaction_id) in the same fold.
@@ -165,16 +172,16 @@ def create_grouped_kfold_splits(df, n_splits=5, id_column="reaction_id"):
 
 
 def plot_weighted_accuracy_learning_curve(
-    X_train,
-    y_train,
-    X_val,
-    y_val,
-    class_weights,
-    best_params,
-    output_path="output/learning_curve_accuracy.png",
-    train_sizes=None,
-    random_state=42,
-):
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    X_val: pd.DataFrame,
+    y_val: pd.Series,
+    class_weights: Dict[int, float],
+    best_params: dict,
+    output_path: str = "output/learning_curve_accuracy.png",
+    train_sizes: Optional[Sequence[int]] = None,
+    random_state: int = 42,
+) -> Tuple[List[int], List[float]]:
     """
     Train XGBoost models on increasing amounts of training data and plot weighted class accuracy.
 

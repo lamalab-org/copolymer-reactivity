@@ -2,10 +2,18 @@ import numpy as np
 import pandas as pd
 
 
-def fill_missing_confidences(df):
+def fill_missing_confidences(df: pd.DataFrame) -> pd.DataFrame:
     """
     Fills missing confidence values for constant_1 and constant_2 using the mean relative uncertainty
     from non-missing values.
+
+    Args:
+        df: DataFrame with "constant_1"/"constant_conf_1" and "constant_2"/
+            "constant_conf_2" columns, updated in place.
+
+    Returns:
+        The same `df`, with missing confidence values filled where the
+        corresponding constant is available.
     """
     for const, conf in [("constant_1", "constant_conf_1"), ("constant_2", "constant_conf_2")]:
         valid_mask = df[const].notna() & df[conf].notna()
@@ -23,8 +31,12 @@ def fill_missing_confidences(df):
 
 
 def augment_with_gaussian_samples(
-    df, r1r2_col="r1r2", num_samples=3, std_factor=0.5, random_state=42
-):
+    df: pd.DataFrame,
+    r1r2_col: str = "r1r2",
+    num_samples: int = 3,
+    std_factor: float = 0.5,
+    random_state: int = 42,
+) -> pd.DataFrame:
     """
     Augment data using Gaussian sampling for constant_1 and constant_2 with relative stddev only.
 
@@ -94,8 +106,12 @@ def augment_with_gaussian_samples(
 
 
 def augment_to_balance_classes(
-    df, r1r2_col="r1r2", max_samples_per_row=10, std_factor=0.5, random_state=42
-):
+    df: pd.DataFrame,
+    r1r2_col: str = "r1r2",
+    max_samples_per_row: int = 10,
+    std_factor: float = 0.5,
+    random_state: int = 42,
+) -> pd.DataFrame:
     """
     Gaussian augment minority classes (1 & 2) to balance dataset up to the size of the largest class,
     with a maximum of N samples per original row.

@@ -1,12 +1,23 @@
 import csv
 import json
 import os
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from copolextractor import utils
 
 
-def load_existing_csv(output_file):
-    """Load existing CSV and return data and set of already processed sources."""
+def load_existing_csv(output_file: str) -> Tuple[List[Dict[str, str]], set]:
+    """Load existing CSV and return data and set of already processed sources.
+
+    Args:
+        output_file: Path to a previously written CSV file.
+
+    Returns:
+        A (existing_rows, processed_sources) tuple. `existing_rows` is the list of
+        rows (as dicts) read from the CSV, and `processed_sources` is the set of
+        "PDF_name"/"source_filename" values already present, or empty values if the
+        file does not exist.
+    """
     if not os.path.exists(output_file):
         return [], set()
 
@@ -23,7 +34,17 @@ def load_existing_csv(output_file):
     return existing_data, processed_sources
 
 
-def load_data(data_path):
+def load_data(data_path: str) -> List[dict]:
+    """Load and flatten all extraction JSON files in a directory into a list of reactions.
+
+    Args:
+        data_path: Directory containing `*.json` extraction output files.
+
+    Returns:
+        A list of reaction dicts, each tagged with "source_filename" (and, when
+        present in the file, "original_source"/"PDF_name"). Files without a
+        "reactions" list are appended as-is (legacy format).
+    """
     combined_data = []
     # Loop through all JSON files in the directory
     for filename in os.listdir(data_path):
@@ -50,7 +71,21 @@ def load_data(data_path):
     return combined_data
 
 
-def extract_monomers(monomers):
+def extract_monomers(
+    monomers: Union[list, dict],
+) -> Tuple[Optional[str], Optional[str]]:
+    """Extract the two monomer names from any of the extraction pipeline's monomer formats.
+
+    Supports: [monomer1, monomer2]; [m1_key, monomer1, m2_key, monomer2];
+    {"monomer1": ..., "monomer2": ...}; and [{"monomer1": ..., "monomer2": ...}].
+
+    Args:
+        monomers: Monomer data in one of the supported formats.
+
+    Returns:
+        A (monomer1_name, monomer2_name) tuple; either entry is None if it could
+        not be extracted from `monomers`.
+    """
     monomer1_name = None
     monomer2_name = None
 
@@ -84,7 +119,18 @@ def extract_monomers(monomers):
     return monomer1_name, monomer2_name
 
 
-def unnest_data(combined_data):
+def unnest_data(combined_data: List[dict]) -> List[dict]:
+    """Flatten reactions with multiple reaction conditions into one row per condition.
+
+    Also normalizes numeric fields to floats and computes the `r_product_filter`,
+    `conf_filter` and `actual_r_product` derived fields for each row.
+
+    Args:
+        combined_data: Reaction dicts as produced by `load_data`.
+
+    Returns:
+        A flat list of data-point dicts, one per reaction condition.
+    """
     result = []
 
     # Fields to be converted to float
@@ -102,7 +148,8 @@ def unnest_data(combined_data):
     ]
 
     # Helper function for safe conversion to float
-    def safe_float(value):
+    def safe_float(value: Any) -> Optional[float]:
+        """Convert `value` to float, treating None/empty/"na" and invalid values as None."""
         if value is None or value == "" or (isinstance(value, str) and value.lower() == "na"):
             return None
         try:
@@ -204,7 +251,18 @@ def unnest_data(combined_data):
     return result
 
 
-def process_chemicals(data):
+def process_chemicals(data: List[dict]) -> List[dict]:
+    """Resolve SMILES strings and solvent logP for each data point, in place.
+
+    Args:
+        data: List of data points as produced by `unnest_data`, each with
+            "monomer1_name", "monomer2_name" and "solvent" keys.
+
+    Returns:
+        The same `data` list, with each entry updated in place with
+        "monomer1_smiles", "monomer2_smiles", "monomer1_json", "monomer2_json",
+        "solvent_smiles" and "solvent_logp".
+    """
     for entry in data:
         monomer1_name = entry["monomer1_name"]
         monomer2_name = entry["monomer2_name"]
@@ -232,14 +290,24 @@ def process_chemicals(data):
     return data
 
 
-def is_within_deviation(calc_product, expected_product, deviation=0.10):
-    """Check if actual product is within allowed deviation."""
+def is_within_deviation(calc_product: float, expected_product: float, deviation: float = 0.10) -> bool:
+    """Check if actual product is within allowed deviation.
+
+    Args:
+        calc_product: Product computed from the extracted reaction constants.
+        expected_product: Reported r-product value to compare against.
+        deviation: Maximum allowed relative deviation (fraction of `expected_product`).
+
+    Returns:
+        True if `calc_product` is within `deviation` of `expected_product` (exact
+        equality required when `expected_product` is 0).
+    """
     if expected_product == 0:
         return calc_product == 0
     return abs(calc_product - expected_product) / abs(expected_product) <= deviation
 
 
-def r_product_filter(entry):
+def r_product_filter(entry: dict) -> bool:
     """
     Check if the product of reaction constants is within allowed deviation of the reported r-product.
     Returns True if within deviation, False otherwise.
@@ -265,7 +333,7 @@ def r_product_filter(entry):
         return False
 
 
-def conf_filter(entry):
+def conf_filter(entry: dict) -> bool:
     """
     Also checks if confidence values are less than or equal to the actual constants.
     Returns True if valid confidence values exist and satisfy the condition, False otherwise.
@@ -307,7 +375,15 @@ def conf_filter(entry):
     return False
 
 
-def filter_data(data):
+def filter_data(data: List[dict]) -> List[dict]:
+    """Annotate each data point with `r_product_filter` and `conf_filter` flags, in place.
+
+    Args:
+        data: List of data points as produced by `process_chemicals`.
+
+    Returns:
+        The same `data` list, with each entry updated in place.
+    """
     for entry in data:
         r_product_filter_value = r_product_filter(entry)
         conf_filter_value = conf_filter(entry)
@@ -315,7 +391,13 @@ def filter_data(data):
     return data
 
 
-def write_to_csv(data, output_file="output_2.csv"):
+def write_to_csv(data: List[dict], output_file: str = "output_2.csv") -> None:
+    """Write a list of flat dicts to a CSV file, using the union of all keys as columns.
+
+    Args:
+        data: List of data points to write. If empty, nothing is written.
+        output_file: Destination path for the CSV file.
+    """
     if not data:
         print("No data available to write.")
         return
@@ -334,7 +416,12 @@ def write_to_csv(data, output_file="output_2.csv"):
     print(f"Data successfully written to {output_file}.")
 
 
-def main(data_path):
+def main(data_path: str) -> None:
+    """Convert extraction JSON output into `extracted_reactions.csv`, skipping already-processed papers.
+
+    Args:
+        data_path: Directory containing `*.json` extraction output files.
+    """
     output_file = "extracted_reactions.csv"
     backup_file = output_file.replace(".csv", "_old.csv")
 

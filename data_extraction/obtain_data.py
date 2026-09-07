@@ -30,6 +30,7 @@ results.  All other steps can be enabled via the ``ExtractionSteps`` flags.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -102,6 +103,7 @@ class ExtractionSteps:
     crossref_substeps: Optional[CrossrefSteps] = None
     pre_download_filter: bool = False
     pdf_download: bool = False
+    pause_for_manual_pdf_download: bool = True
     pdf_quality_filter: bool = False
     extraction: bool = True
     persist_results: bool = True
@@ -114,6 +116,33 @@ def _ensure_parent_dir(path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
     else:
         path.mkdir(parents=True, exist_ok=True)
+
+
+def _wait_for_manual_pdf_downloads(pdf_folder: Path) -> None:
+    """Pause and prompt the user to manually download PDFs listed as unresolved.
+
+    Reads "unresolved_papers.json" written by the open-access download step
+    (see `copolextractor.PDF_download.download_open_access_papers`). If it lists
+    any DOIs, blocks on `input()` so the user can fetch those PDFs by hand and
+    drop them into `pdf_folder` before the pipeline continues.
+
+    Args:
+        pdf_folder: Directory the PDF downloader wrote "unresolved_papers.json"
+            into, and where manually downloaded PDFs are expected to be placed.
+    """
+    unresolved_path = pdf_folder / "unresolved_papers.json"
+    if not unresolved_path.exists():
+        return
+
+    unresolved_dois = json.loads(unresolved_path.read_text(encoding="utf-8"))
+    if not unresolved_dois:
+        return
+
+    print(f"\n{len(unresolved_dois)} paper(s) could not be downloaded via open-access sources:")
+    for doi in unresolved_dois:
+        print(f"  - {doi}")
+    print(f"Please download these PDFs manually and place them in: {pdf_folder}")
+    input("Press Enter once you are done (or to skip and continue anyway)...")
 
 
 def obtain_data(
@@ -175,6 +204,8 @@ def obtain_data(
             str(config.pdf_download_input_file),
             str(config.pdf_folder),
         )
+        if steps.pause_for_manual_pdf_download:
+            _wait_for_manual_pdf_downloads(config.pdf_folder)
 
     if steps.pdf_quality_filter:
         _ensure_parent_dir(config.output_file_xgboost_filter)

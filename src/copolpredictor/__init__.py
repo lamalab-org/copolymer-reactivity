@@ -36,6 +36,19 @@ _LAZY_ATTRS = {
 
 
 def __getattr__(name: str) -> Any:
+    """Lazily resolve submodules and re-exported helpers on first access (PEP 562).
+
+    Args:
+        name: Attribute name being accessed on this package (a submodule name or
+            one of the re-exported helper names in `_LAZY_ATTRS`).
+
+    Raises:
+        AttributeError: If `name` is neither a known submodule nor a re-exported
+            helper.
+
+    Returns:
+        The imported submodule, or the resolved helper object.
+    """
     if name in _SUBMODULES:
         return importlib.import_module(f"{__name__}.{name}")
     if name in _LAZY_ATTRS:

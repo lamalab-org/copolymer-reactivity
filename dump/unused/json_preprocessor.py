@@ -4,11 +4,12 @@
 import argparse
 import json
 import os
+from typing import Any, Dict
 
 from mongodb_storage import CoPolymerDB
 
 
-def process_directory(directory_path, reset_db=False):
+def process_directory(directory_path: str, reset_db: bool = False) -> None:
     """
     Process all JSON files in a directory and import them into MongoDB
 
@@ -83,13 +84,17 @@ def process_directory(directory_path, reset_db=False):
     print(f"Failed entries: {stats['failed_entries']}")
 
 
-def process_file(file_path, reset_db=False):
+def process_file(file_path: str, reset_db: bool = False) -> Dict[str, Any]:
     """
     Process a single JSON file and import it into MongoDB
 
     Args:
         file_path: Path to the JSON file
         reset_db: Whether to reset the database before processing
+
+    Returns:
+        A result dict with at least a "success" key, and a "message" key describing
+        the outcome (or the caught exception message on failure).
     """
     # Initialize the database
     db = CoPolymerDB(reset_db=reset_db)
@@ -131,7 +136,7 @@ def process_file(file_path, reset_db=False):
         return {"success": False, "message": str(e)}
 
 
-def main(default_path="../../data_extraction/model_output_GPT4-o"):
+def main(default_path: str = "../../data_extraction/model_output_GPT4-o") -> None:
     """
     Main function to handle command line arguments
 

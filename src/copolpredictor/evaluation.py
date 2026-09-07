@@ -8,10 +8,12 @@ and results visualization.
 import datetime
 import json
 import os
+from typing import Any, Dict, List, Optional, Sequence
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from numpy.typing import ArrayLike
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
@@ -24,8 +26,12 @@ from sklearn.metrics import (
 
 
 def save_holdout_metrics_json(
-    y_true, y_pred, labels=None, out_dir="artifacts/experiments_holdout", filename=None
-):
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+    labels: Optional[Sequence[int]] = None,
+    out_dir: str = "artifacts/experiments_holdout",
+    filename: Optional[str] = None,
+) -> str:
     """
     Save hold-out evaluation results to JSON.
 
@@ -67,18 +73,18 @@ def save_holdout_metrics_json(
 
 
 def save_results_with_confidence(
-    fold_scores_df,
-    features,
-    class_counts,
-    overall_accuracy,
-    overall_f1,
-    y_true,
-    y_pred,
-    y_pred_proba,
-    confidence_scores,
-    df_clean,
-    output_dir="output",
-):
+    fold_scores_df: pd.DataFrame,
+    features: Sequence[str],
+    class_counts: Any,
+    overall_accuracy: float,
+    overall_f1: float,
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+    y_pred_proba: np.ndarray,
+    confidence_scores: ArrayLike,
+    df_clean: pd.DataFrame,
+    output_dir: str = "output",
+) -> None:
     """
     Save classification results with confidence scores.
 
@@ -177,8 +183,8 @@ def save_results_with_confidence(
 
 
 def plot_feature_importance(
-    model, feature_names, top_n=10, output_path="output/feature_importance.png"
-):
+    model: Any, feature_names: Sequence[str], top_n: int = 10, output_path: str = "output/feature_importance.png"
+) -> None:
     """
     Plot feature importance for XGBoost model.
 
@@ -216,7 +222,9 @@ def plot_feature_importance(
     print(f"Feature importance plot saved to {output_path}")
 
 
-def evaluate_model(model, X_test, y_test, labels=None):
+def evaluate_model(
+    model: Any, X_test: ArrayLike, y_test: ArrayLike, labels: Optional[Sequence[int]] = None
+) -> Dict[str, Any]:
     """
     Evaluate a trained model on test data.
 
@@ -252,7 +260,7 @@ def evaluate_model(model, X_test, y_test, labels=None):
     return results
 
 
-def print_evaluation_results(results, title="Evaluation Results"):
+def print_evaluation_results(results: Dict[str, Any], title: str = "Evaluation Results") -> None:
     """
     Print evaluation results in a formatted way.
 

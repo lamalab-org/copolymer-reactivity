@@ -1,6 +1,7 @@
 import json
 import os
 from collections import Counter
+from typing import Dict, List, Union
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -9,7 +10,20 @@ from selenium import webdriver
 import copolextractor.utils as utils
 
 
-def fetch_journals(output_journal_file):
+def fetch_journals(output_journal_file: str) -> List[str]:
+    """Load the supported-journal list from a JSON file, or scrape and cache it.
+
+    If `output_journal_file` already exists, its contents are loaded and returned
+    directly. Otherwise, journal names are scraped from the ChemSearch supported
+    journals page and saved to `output_journal_file`.
+
+    Args:
+        output_journal_file: Path to the cached journal-list JSON file (read if it
+            exists, written to after scraping otherwise).
+
+    Returns:
+        The list of journal names.
+    """
     if output_journal_file:
         with open(output_journal_file, "r") as f:
             journal_list = json.load(f)
@@ -38,8 +52,20 @@ def fetch_journals(output_journal_file):
     print(f"Journals saved to {output_journal_file}.")
 
 
-def calculate_score(entry, journal_list, keywords):
-    """Calculate the score for a given paper."""
+def calculate_score(entry: dict, journal_list: List[str], keywords: Dict[str, int]) -> dict:
+    """Calculate the score for a given paper.
+
+    Args:
+        entry: Paper metadata dict, updated in place with a "Score" key. Should
+            contain "Journal", "Title" and/or "Abstract" keys where available.
+        journal_list: Supported journal names; +40 points if `entry["Journal"]`
+            contains any of them (case-insensitive substring match).
+        keywords: Mapping of keyword to point weight; each keyword found in the
+            title+abstract text (case-insensitive) adds its weight to the score.
+
+    Returns:
+        The same `entry` dict, with "Score" set.
+    """
     score = 0
 
     # Check if 'Journal' key exists and if journal is in the list
@@ -60,8 +86,24 @@ def calculate_score(entry, journal_list, keywords):
     return entry
 
 
-def process_papers(input_file, journal_file, keywords, output_file, existing_doi_csv):
-    """Process papers, calculate scores, and save results to a JSON file."""
+def process_papers(
+    input_file: str,
+    journal_file: str,
+    keywords: Dict[str, int],
+    output_file: str,
+    existing_doi_csv: Union[str, None],
+) -> None:
+    """Process papers, calculate scores, and save results to a JSON file.
+
+    Args:
+        input_file: Path to the JSON file with paper metadata ("DOI", "Title",
+            "Abstract", "Journal", ...).
+        journal_file: Path to the supported-journal list JSON file.
+        keywords: Mapping of keyword to point weight, passed to `calculate_score`.
+        output_file: Destination path for the scored papers JSON file.
+        existing_doi_csv: Optional path to a CSV with an "original_source" column
+            of already-extracted DOIs; matching papers are skipped from scoring.
+    """
     # Load journals
     with open(journal_file, "r") as f:
         journal_list = json.load(f)
@@ -123,7 +165,22 @@ def process_papers(input_file, journal_file, keywords, output_file, existing_doi
     print(f"Scored papers saved to {output_file}.")
 
 
-def main(input_file, journal_file, keywords, output_file, existing_doi_csv):
+def main(
+    input_file: str,
+    journal_file: str,
+    keywords: Dict[str, int],
+    output_file: str,
+    existing_doi_csv: Union[str, None],
+) -> None:
+    """Fetch the supported-journal list and score candidate papers by keyword/journal match.
+
+    Args:
+        input_file: Path to the JSON file with paper metadata.
+        journal_file: Path to the supported-journal list JSON file (created if missing).
+        keywords: Mapping of keyword to point weight, passed to `calculate_score`.
+        output_file: Destination path for the scored papers JSON file.
+        existing_doi_csv: Optional path to a CSV of already-extracted DOIs to skip.
+    """
     # Step 1: Fetch journals and save to a JSON file
     fetch_journals(journal_file)
 

@@ -6,6 +6,7 @@ Contains functions for loading, preprocessing, and transforming data
 import json
 import os
 import re
+from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
 import pandas as pd
@@ -30,11 +31,28 @@ def _normalize_doi_for_key(s: str) -> str:
 
 
 def _build_cache_key_from_row(original_source: str) -> str:
+    """Build the specialized-filter cache key ("doi::<normalized doi>") for a row's source.
+
+    Args:
+        original_source: Raw "original_source" value from a data row (DOI/URL).
+
+    Returns:
+        The cache key, or an empty string if `original_source` has no usable DOI.
+    """
     doi = _normalize_doi_for_key(original_source)
     return f"doi::{doi}" if doi else ""
 
 
 def _load_specialized_cache(cache_path: str) -> dict:
+    """Load the specialized-filter classification cache from disk.
+
+    Args:
+        cache_path: Path to the cache JSON file.
+
+    Returns:
+        The cache dict, or an empty dict if the file is missing, not found, or
+        does not contain a JSON object.
+    """
     try:
         with open(cache_path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -47,8 +65,19 @@ def _load_specialized_cache(cache_path: str) -> dict:
         return {}
 
 
-def load_molecular_data(smiles, base_path="./output/molecule_properties"):
-    """Load molecular properties from JSON file"""
+def load_molecular_data(smiles: str, base_path: str = "./output/molecule_properties") -> Optional[dict]:
+    """Load molecular properties from JSON file
+
+    Args:
+        smiles: SMILES string identifying the molecule; the properties file is
+            expected at `{base_path}/{smiles}.json`.
+        base_path: Directory containing per-molecule property JSON files.
+
+    Returns:
+        The property dict (augmented with "json_filename", min/max/mean summaries
+        of charge/Fukui dicts, and split "dipole_x/y/z" components), or None if
+        the file is missing or could not be processed.
+    """
     try:
         file_path = os.path.join(base_path, f"{smiles}.json")
         with open(file_path, "r") as handle:
@@ -79,13 +108,21 @@ def load_molecular_data(smiles, base_path="./output/molecule_properties"):
         return None
 
 
-def add_orbital_interaction_features(df):
+def add_orbital_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     Add Δ(HOMO-LUMO) interaction features for all four combinations:
     A•→A, A•→B, B•→B, B•→A
+
+    Args:
+        df: DataFrame with "homo_1"/"lumo_1"/"homo_2"/"lumo_2" columns.
+
+    Returns:
+        The same `df`, with "delta_HOMO_LUMO_AA/AB/BB/BA" columns added (None
+        where the underlying HOMO/LUMO values are missing).
     """
 
     def safe_diff(row, a, b):
+        """Return `row[a] - row[b]`, or None if either value is missing/invalid."""
         try:
             return row[a] - row[b]
         except:
@@ -99,8 +136,17 @@ def add_orbital_interaction_features(df):
     return df
 
 
-def molecular_features(smiles):
-    """Extract numerical features from molecular data"""
+def molecular_features(smiles: str) -> Optional[dict]:
+    """Extract numerical features from molecular data
+
+    Args:
+        smiles: SMILES string identifying the molecule.
+
+    Returns:
+        A dict of the molecule's float-valued properties (plus "json_filename"),
+        or None if the underlying data could not be loaded (see
+        `load_molecular_data`).
+    """
     d = load_molecular_data(smiles)
     if d is None:
         return None
@@ -118,8 +164,19 @@ def molecular_features(smiles):
     return d
 
 
-def add_molecular_features(df):
-    """Add molecular features to DataFrame for both monomers"""
+def add_molecular_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Add molecular features to DataFrame for both monomers
+
+    Rows whose SMILES are missing, or whose molecular property files can't be
+    loaded, are dropped from the result.
+
+    Args:
+        df: DataFrame with "monomer1_smiles" and "monomer2_smiles" columns.
+
+    Returns:
+        A new DataFrame with per-monomer feature columns (suffixed "_1"/"_2") and
+        "json_filename_1"/"json_filename_2" added.
+    """
     new_rows = []
     for index, row in df.iterrows():
         try:
@@ -195,11 +252,24 @@ def add_molecular_features(df):
 
 
 def enrich_df_with_molecular_features(
-    df, base_path="./output/molecule_properties", feature_columns=None
-):
+    df: pd.DataFrame,
+    base_path: str = "./output/molecule_properties",
+    feature_columns: Optional[Sequence[str]] = None,
+) -> pd.DataFrame:
     """
     Add missing molecular feature columns to an existing DataFrame by loading from monomer JSON files.
     Keeps all rows; fills NaN for missing JSON or missing keys.
+
+    Args:
+        df: DataFrame with "monomer1_smiles"/"monomer2_smiles" columns, updated
+            in place with any missing feature columns.
+        base_path: Directory containing per-molecule property JSON files.
+        feature_columns: Feature column names required; defaults to
+            `prediction_utils.feature_columns_all`.
+
+    Returns:
+        The same `df`, with missing feature columns added (values may be NaN/None
+        where the underlying molecular data is unavailable).
     """
     from copolpredictor import prediction_utils
 
@@ -271,8 +341,17 @@ def enrich_df_with_molecular_features(
     return df
 
 
-def create_flipped_dataset(df):
-    """Create another dataset with flipped monomers, preserving reaction_id for proper train/test splits"""
+def create_flipped_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    """Create another dataset with flipped monomers, preserving reaction_id for proper train/test splits
+
+    Args:
+        df: DataFrame with monomer1/monomer2 paired columns (constants, SMILES,
+            names, orbital deltas, JSON filenames, etc.).
+
+    Returns:
+        A new DataFrame with the same rows as `df`, but with each monomer-1/
+        monomer-2 paired value swapped.
+    """
     flipped_rows = []
 
     for index, row in df.iterrows():
@@ -327,9 +406,23 @@ def create_flipped_dataset(df):
     return pd.DataFrame(flipped_rows)
 
 
-def process_embeddings(df, column_name, prefix):
+def process_embeddings(df: pd.DataFrame, column_name: str, prefix: str) -> pd.DataFrame:
     """
     Processes a specified column into embeddings and applies PCA
+
+    Rows whose `column_name` value could not be embedded are dropped. Embeddings
+    and their 2-component PCA projection are also persisted to
+    "output/{prefix}_embeddings.json" and "output/{prefix}_pca_values.json".
+
+    Args:
+        df: DataFrame containing `column_name`.
+        column_name: Name of the categorical column to embed.
+        prefix: Prefix used for the new "{prefix}_1"/"{prefix}_2" PCA columns and
+            the output filenames.
+
+    Returns:
+        The (possibly row-filtered) DataFrame, with "{prefix}_1"/"{prefix}_2"
+        columns added when at least two distinct values could be embedded.
     """
     from copolextractor import utils
 
@@ -419,16 +512,24 @@ def process_embeddings(df, column_name, prefix):
     return df
 
 
-def add_solvent_features(df):
+def add_solvent_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds molecular features derived from the 'solvent_smiles' column.
     Handles invalid values like 'Na', NaN, or empty strings cleanly.
+
+    Args:
+        df: DataFrame with a "solvent_smiles" column.
+
+    Returns:
+        A new DataFrame with 10 additional "solvent_*" descriptor columns (logP,
+        TPSA, HBA/HBD counts, etc.), None for rows with an invalid/unparsable SMILES.
     """
 
     from rdkit import Chem
     from rdkit.Chem import Descriptors, rdMolDescriptors
 
-    def is_invalid(smiles):
+    def is_invalid(smiles: Any) -> bool:
+        """Return True if `smiles` is not a usable SMILES string (NaN, non-str, or a known placeholder)."""
         if pd.isna(smiles):
             return True
         if not isinstance(smiles, str):
@@ -436,7 +537,8 @@ def add_solvent_features(df):
         smiles = smiles.strip().lower()
         return smiles in {"", "na", "nan", "none"}
 
-    def calc_features(smiles):
+    def calc_features(smiles: Any) -> List[Optional[float]]:
+        """Compute the 10 RDKit-derived solvent descriptors for a SMILES string."""
         if is_invalid(smiles):
             return [None] * 10
 
@@ -481,17 +583,24 @@ def add_solvent_features(df):
 
 
 def load_and_preprocess_data(
-    input_path="../data_extraction/extracted_reactions.csv",
-    specialized_cache_path="llm_specialized_filter/classification_cache.json",
-):
+    input_path: str = "../data_extraction/extracted_reactions.csv",
+    specialized_cache_path: str = "llm_specialized_filter/classification_cache.json",
+) -> Optional[pd.DataFrame]:
     """
     Main function to load and preprocess data
 
     Loads the data, adds molecular properties, creates reaction IDs,
     creates flipped datasets, and processes embeddings
 
+    Args:
+        input_path: Path to the raw extracted-reactions CSV file.
+        specialized_cache_path: Path to the specialized-filter classification
+            cache JSON file.
+
     Returns:
-        DataFrame: The preprocessed DataFrame, ready for model training
+        DataFrame: The preprocessed DataFrame, ready for model training. None if
+        the input CSV could not be loaded, or if no rows remain after adding
+        molecular features.
     """
     print(f"Loading data from {input_path}")
 
@@ -506,7 +615,8 @@ def load_and_preprocess_data(
     print("\nMerging specialized_filter from cache...")
     cache = _load_specialized_cache(specialized_cache_path)
 
-    def _lookup_specialized(row):
+    def _lookup_specialized(row: pd.Series) -> str:
+        """Return the cached specialized-filter classification for a row's source DOI."""
         key = _build_cache_key_from_row(row.get("original_source", ""))
         if key and key in cache:
             cls = str(cache[key].get("classification", "")).strip().lower()
@@ -646,7 +756,7 @@ def load_and_preprocess_data(
     return combined_df
 
 
-def convert_numeric_columns(df, columns):
+def convert_numeric_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     """
     Ensure specified columns contain valid numeric values.
     Tries to convert to float and sets invalid entries to NaN.

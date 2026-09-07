@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -10,8 +11,16 @@ from scipy.spatial.distance import cdist
 import copolextractor.utils as utils
 
 
-def save_embedding_file(output_dir, paper, doi_list_path):
-    """Save individual embedding JSON files and update DOI list."""
+def save_embedding_file(output_dir: str, paper: dict, doi_list_path: str) -> None:
+    """Save individual embedding JSON files and update DOI list.
+
+    Args:
+        output_dir: Base directory; embeddings are written to its "embeddings"
+            subdirectory (created if needed).
+        paper: Paper dict with "DOI", "Title", "Abstract" and "Embedding" keys.
+        doi_list_path: Path to the JSON file tracking DOIs that have an embedding;
+            updated in place with `paper["DOI"]` if not already present.
+    """
     embeddings_dir = os.path.join(output_dir, "embeddings")
     os.makedirs(embeddings_dir, exist_ok=True)
 
@@ -40,28 +49,59 @@ def save_embedding_file(output_dir, paper, doi_list_path):
         json.dump(doi_list, f, indent=2)
 
 
-def load_failed_crossref(failed_path="output/failed_crossref.json"):
+def load_failed_crossref(failed_path: str = "output/failed_crossref.json") -> set:
+    """Load the set of DOIs for which CrossRef lookups previously failed.
+
+    Args:
+        failed_path: Path to the JSON file with a list of failed DOIs.
+
+    Returns:
+        The set of failed DOIs, or an empty set if the file does not exist.
+    """
     if os.path.exists(failed_path):
         with open(failed_path, "r") as f:
             return set(json.load(f))
     return set()
 
 
-def save_failed_crossref(failed_dois, failed_path="output/failed_crossref.json"):
+def save_failed_crossref(failed_dois: set, failed_path: str = "output/failed_crossref.json") -> None:
+    """Persist the set of DOIs for which CrossRef lookups failed.
+
+    Args:
+        failed_dois: DOIs to persist.
+        failed_path: Destination path for the JSON file.
+    """
     with open(failed_path, "w") as f:
         json.dump(list(failed_dois), f, indent=2)
 
 
-def load_existing_doi_list(doi_list_path):
-    """Load the existing DOI list from file."""
+def load_existing_doi_list(doi_list_path: str) -> list:
+    """Load the existing DOI list from file.
+
+    Args:
+        doi_list_path: Path to the JSON file with a list of DOIs.
+
+    Returns:
+        The list of DOIs, or an empty list if the file does not exist.
+    """
     if os.path.exists(doi_list_path):
         with open(doi_list_path, "r") as f:
             return json.load(f)
     return []
 
 
-def load_existing_embedding(output_dir, doi):
-    """Check if an embedding already exists for a given DOI and load it."""
+def load_existing_embedding(output_dir: str, doi: str) -> Tuple[Optional[list], str]:
+    """Check if an embedding already exists for a given DOI and load it.
+
+    Args:
+        output_dir: Base directory whose "embeddings" subdirectory is searched.
+        doi: DOI to look up.
+
+    Returns:
+        A (embedding, filename) tuple. `embedding` is the stored embedding vector,
+        or None if no cached file exists for this DOI. `filename` is the path the
+        embedding is (or would be) stored at.
+    """
     embeddings_dir = os.path.join(output_dir, "embeddings")
     print(doi)
     sanitized_doi = utils.sanitize_filename(doi)
@@ -73,8 +113,19 @@ def load_existing_embedding(output_dir, doi):
     return None, filename
 
 
-def process_embeddings(file_path, output_dir, client, score, doi_list_path):
-    """Process and save embeddings for each paper."""
+def process_embeddings(
+    file_path: str, output_dir: str, client: OpenAI, score: float, doi_list_path: str
+) -> None:
+    """Process and save embeddings for each paper.
+
+    Args:
+        file_path: Path to a JSON file containing a list of scored paper dicts.
+        output_dir: Base directory embeddings are stored under.
+        client: OpenAI client used to create new embeddings.
+        score: Minimum "Score" value a paper needs to be embedded.
+        doi_list_path: Path to the JSON file tracking DOIs that already have an
+            embedding.
+    """
     try:
         with open(file_path, "r") as f:
             data = json.load(f)
@@ -131,8 +182,30 @@ def process_embeddings(file_path, output_dir, client, score, doi_list_path):
 
 
 def embed_filtered_papers(
-    new_papers_path, output_dir, client, key, values, failed_path="failed_crossref.json"
-):
+    new_papers_path: str,
+    output_dir: str,
+    client: OpenAI,
+    key: str,
+    values: Sequence[Any],
+    failed_path: str = "failed_crossref.json",
+) -> List[dict]:
+    """Embed papers from a CSV, filtered by a column value, fetching missing metadata from CrossRef.
+
+    Args:
+        new_papers_path: Path to a CSV with at least an "original_source" (DOI)
+            column.
+        output_dir: Base directory embeddings are stored under.
+        client: OpenAI client used to create new embeddings.
+        key: Column name to filter rows on.
+        values: Allowed values for `key`; rows are kept only if `key` is missing
+            from the CSV or its value is one of `values`.
+        failed_path: Path to the JSON file tracking DOIs with failed CrossRef
+            lookups (loaded before processing, updated afterward).
+
+    Returns:
+        List of paper dicts augmented with "Embedding", "filename" and "DOI" keys.
+        Papers without title/abstract that CrossRef also cannot resolve are skipped.
+    """
     print(f"Loading new papers from CSV: {new_papers_path}")
     failed_dois = load_failed_crossref(failed_path)
     try:
@@ -221,9 +294,20 @@ def embed_filtered_papers(
     return embedded_papers
 
 
-def get_crossref_data(doi, source, format_type):
+def get_crossref_data(doi: str, source: str, format_type: str) -> Dict[str, Any]:
     """
     Fetch metadata from CrossRef API for a given DOI.
+
+    Args:
+        doi: DOI to look up.
+        source: Value stored under the "Source" key of the returned dict.
+        format_type: Value stored under the "Format" key of the returned dict.
+
+    Returns:
+        A dict with "DOI", "Title", "Abstract", "Keywords", "Journal", "Source",
+        "Format" (with placeholder values such as "No title" if unavailable), or an
+        "Error" key describing the failed HTTP status if the request did not
+        succeed.
     """
     url = f"https://api.crossref.org/works/{doi}"
     response = requests.get(url)
@@ -255,15 +339,26 @@ def get_crossref_data(doi, source, format_type):
 
 
 def find_nearest_paper_with_new(
-    output_dir,
-    selected_papers_path,
-    key,
-    values,
-    number_of_selected_paper,
-    new_papers_path,
-    client,
-    output_folder=None,
-):
+    output_dir: str,
+    selected_papers_path: str,
+    key: str,
+    values: Sequence[Any],
+    number_of_selected_paper: int,
+    new_papers_path: str,
+    client: OpenAI,
+) -> None:
+    """Select the previously-processed papers most similar (by embedding) to new candidate papers.
+
+    Args:
+        output_dir: Base directory containing "embeddings/embedded_papers.json".
+        selected_papers_path: Destination path for the selected-papers JSON file.
+        key: Metadata key copied into each selected paper's result entry.
+        values: Candidate filter values, forwarded to `embed_filtered_papers`.
+        number_of_selected_paper: Maximum number of nearest papers to select.
+        new_papers_path: Path to the CSV of new candidate papers, forwarded to
+            `embed_filtered_papers`.
+        client: OpenAI client used to embed new candidate papers.
+    """
     embeddings_path = os.path.join(output_dir, "embeddings/embedded_papers.json")
 
     # Load processed data
@@ -301,7 +396,8 @@ def find_nearest_paper_with_new(
     output_folder = "./model_output_GPT4-o"
 
     # Generate filename for each processed paper
-    def get_filename_for_paper(doi):
+    def get_filename_for_paper(doi: str) -> str:
+        """Return the sanitized JSON filename used for a paper's DOI in the database."""
         sanitized_doi = utils.sanitize_filename(doi)
         return f"{sanitized_doi}.json"
 
@@ -352,8 +448,18 @@ def find_nearest_paper_with_new(
     )
 
 
-def get_embedding(client, text, model="text-embedding-3-small"):
-    """Get embeddings for a given text."""
+def get_embedding(client: OpenAI, text: str, model: str = "text-embedding-3-small") -> Tuple[list, int]:
+    """Get embeddings for a given text.
+
+    Args:
+        client: OpenAI client used to create the embedding.
+        text: Text to embed (newlines are replaced with spaces).
+        model: OpenAI embedding model name.
+
+    Returns:
+        A (embedding, token_usage) tuple with the embedding vector and the total
+        number of tokens billed for the request.
+    """
     text = text.replace("\n", " ")
     response = client.embeddings.create(input=[text], model=model)
     embedding = response.data[0].embedding
@@ -362,16 +468,30 @@ def get_embedding(client, text, model="text-embedding-3-small"):
 
 
 def main(
-    file_path,
-    output_dir,
-    doi_list_path,
-    selected_papers_path,
-    score_limit,
-    number_of_selected_paper,
-    key,
-    values,
-    new_papers_path,
-):
+    file_path: str,
+    output_dir: str,
+    doi_list_path: str,
+    selected_papers_path: str,
+    score_limit: float,
+    number_of_selected_paper: int,
+    key: str,
+    values: Sequence[Any],
+    new_papers_path: str,
+) -> None:
+    """Embed scored papers and select the ones most similar to new candidate papers.
+
+    Args:
+        file_path: Path to the JSON file with scored papers to embed.
+        output_dir: Base directory embeddings and results are stored under.
+        doi_list_path: Path to the JSON file tracking DOIs that already have an
+            embedding.
+        selected_papers_path: Destination path for the selected-papers JSON file.
+        score_limit: Minimum "Score" value a paper needs to be embedded.
+        number_of_selected_paper: Maximum number of nearest papers to select.
+        key: Metadata key used to filter/annotate candidate papers.
+        values: Allowed values for `key`.
+        new_papers_path: Path to the CSV of new candidate papers.
+    """
     # Ensure output_2 directory exists
     os.makedirs(output_dir, exist_ok=True)
 
