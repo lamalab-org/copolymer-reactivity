@@ -58,12 +58,14 @@ cat copol_prediction/artifacts/model_bundle/all_metrics.txt
 ## Citation
 
 ```bibtex
-@article{TODO_paper_key,
-  title   = {TODO: paper title},
-  author  = {TODO: full author list},
-  journal = {TODO: journal / arXiv ID},
-  year    = {TODO},
-  doi     = {TODO},
+@article{SchillingWilhelmi2026,
+  title = {Condition-aware prediction of copolymer architecture},
+  url = {http://dx.doi.org/10.26434/chemrxiv.15004102/v2},
+  DOI = {10.26434/chemrxiv.15004102/v2},
+  publisher = {ChemRxiv},
+  author = {Schilling-Wilhelmi,  Mara and Bulgakov,  Boris and Patiny,  Luc and Kapoor,  Sarthak and Jablonka,  Kevin Maik},
+  year = {2026},
+  month = June 
 }
 ```
 
